@@ -5,6 +5,16 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="Just the Bible: 116 versions in 48 languages, fast and thorough search, works offline. No plans, no accounts." />
     <meta name="theme-color" content="#faf8f3" />
+    <script>
+      // Apply the saved theme before the first paint, so the status bar and
+      // page start in the right colour.
+      try {
+        var t = (JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').theme) || 'system'
+        if (t === 'system') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        document.documentElement.dataset.theme = t
+        document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]
+      } catch (e) {}
+    </script>
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon-192.png" />
     <title>Plain Bible</title>

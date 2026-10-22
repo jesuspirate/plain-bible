@@ -39,8 +39,14 @@ export function App() {
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
     // Match the phone's status bar (and the browser bar) to the chosen theme.
-    const tint = () => document.querySelector('meta[name="theme-color"]')
-      ?.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim())
+    // A fresh tag, because iOS home-screen apps may ignore edits to the old one.
+    const tint = () => {
+      const meta = document.createElement('meta')
+      meta.name = 'theme-color'
+      meta.content = getComputedStyle(root).getPropertyValue('--bg').trim()
+      document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove())
+      document.head.appendChild(meta)
+    }
     tint()
     const dark = matchMedia('(prefers-color-scheme: dark)')
     dark.addEventListener('change', tint)
