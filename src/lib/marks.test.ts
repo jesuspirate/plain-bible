@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { htmlToText, mergeImport, parseRefList } from './marks'
+import { htmlToText, Mark, mergeImport, mergeMark, parseNotes, parseRefList, setNote } from './marks'
 
 // Same shape as a typical Bible app export.
 const HIGHLIGHTS = `<!DOCTYPE html><html><head><style>body {margin: 2em;}</style></head>
@@ -31,5 +31,38 @@ describe('reference list import', () => {
   })
   it('expands verse ranges', () => {
     expect(parseRefList('John 3:16-18').items.length).toBe(3)
+  })
+})
+
+describe('notes', () => {
+  it('sets, edits and deletes a note, keeping a record of the deletion', () => {
+    let m = setNote({ 'John.3.16': { c: '#fff193', t: 1 } }, 'John.3.16', '  For God so loved  ', 5)
+    expect(m['John.3.16']).toEqual({ c: '#fff193', n: 'For God so loved', t: 5, nt: 5 })
+    m = setNote(m, 'John.3.16', '', 6)
+    expect(m['John.3.16']).toEqual({ c: '#fff193', t: 6, nt: 6 })
+    m = setNote({}, 'Gen.1.1', 'x', 7)
+    expect(setNote(m, 'Gen.1.1', '', 8)['Gen.1.1']).toEqual({ t: 8, nt: 8 })
+  })
+  it('merges notes separately from highlights', () => {
+    // Note written on one device, highlight added later on another.
+    const a: Mark = { n: 'mine', nt: 10, t: 10 }
+    const b: Mark = { c: '#b3e487', t: 20 }
+    expect(mergeMark(a, b)).toEqual({ c: '#b3e487', n: 'mine', nt: 10, t: 20 })
+    expect(mergeMark(b, a)).toEqual({ c: '#b3e487', n: 'mine', nt: 10, t: 20 })
+    // A later deletion wins over the older note.
+    expect(mergeMark({ c: '#b3e487', t: 20, nt: 30 }, a)).toEqual({ c: '#b3e487', t: 20, nt: 30 })
+  })
+  it('reads a notes export', () => {
+    const html = `<html><head><style>h3{}</style></head><body>
+      <h3>Trust</h3>Isaiah 41:10 NIV<blockquote>So do not fear, for I am with you</blockquote>Read this when anxious.<br>Second line<hr>
+      <h3>Love</h3>1 Corinthiens 13:4-7 LBS21<br>Patience first<hr>Nowhere 1:1<br>text</body></html>`
+    const r = parseNotes(html)
+    expect(r.items).toEqual([
+      { book: 'Isa', chapter: 41, verse: 10, note: 'Trust\nRead this when anxious.\nSecond line' },
+      { book: '1Cor', chapter: 13, verse: 4, note: 'Love\nPatience first' },
+    ])
+    const merged = mergeImport({ 'Isa.41.10': { n: 'old', nt: 1, t: 1 } }, r.items, 9)
+    expect(merged.notes).toBe(2)
+    expect(merged.marks['Isa.41.10'].n).toBe('old\n\nTrust\nRead this when anxious.\nSecond line')
   })
 })

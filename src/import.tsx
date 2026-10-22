@@ -2,7 +2,7 @@
 // and back up / restore this app's own data.
 import { unzipSync, strFromU8 } from 'fflate'
 import { useState } from 'preact/hooks'
-import { Backup, htmlToText, ImportItem, isBackup, mergeImport, parseRefList } from './lib/marks'
+import { Backup, htmlToText, ImportItem, isBackup, mergeImport, parseNotes, parseRefList } from './lib/marks'
 import { useApp } from './state'
 
 interface Preview { items: ImportItem[]; skipped: string[]; files: string[]; backup?: Backup }
@@ -24,6 +24,13 @@ async function readImport(file: File): Promise<Preview> {
       continue
     }
     const base = f.name.split('/').pop()!.toLowerCase()
+    if (/note/.test(base)) {
+      const r = parseNotes(/\.html?$/i.test(f.name) ? f.text : f.text.replace(/\n\s*\n/g, '<hr>').replace(/\n/g, '<br>'))
+      if (r.items.length) out.files.push(f.name.split('/').pop()!)
+      out.items.push(...r.items)
+      out.skipped.push(...r.skipped)
+      continue
+    }
     const kind = /highlight/.test(base) ? 'highlight' : /save|bookmark|favou?rite/.test(base) ? 'bookmark' : 'auto'
     const r = parseRefList(/\.html?$/i.test(f.name) ? htmlToText(f.text) : f.text, kind)
     if (r.items.length) out.files.push(f.name.split('/').pop()!)
@@ -47,7 +54,7 @@ export function DataTools() {
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
   const count = Object.values(marks)
-  const hl = count.filter(m => m.c).length, bm = count.filter(m => m.b).length
+  const hl = count.filter(m => m.c).length, bm = count.filter(m => m.b).length, nt = count.filter(m => m.n).length
 
   const pick = async (e: Event) => {
     const input = e.target as HTMLInputElement
@@ -65,12 +72,13 @@ export function DataTools() {
 
   const hlCount = preview ? preview.items.filter(i => i.color).length + (preview.backup ? Object.values(preview.backup.marks).filter(x => x.c).length : 0) : 0
   const bmCount = preview ? preview.items.filter(i => i.bookmark).length + (preview.backup ? Object.values(preview.backup.marks).filter(x => x.b).length : 0) : 0
+  const ntCount = preview ? preview.items.filter(i => i.note).length + (preview.backup ? Object.values(preview.backup.marks).filter(x => x.n).length : 0) : 0
 
   const apply = () => {
     if (!preview) return
     setMarks(m => mergeImport(preview.backup ? { ...m, ...preview.backup.marks } : m, preview.items).marks)
     if (preview.backup?.settings && typeof preview.backup.settings === 'object') update(preview.backup.settings as Partial<typeof settings>)
-    setMsg(`Imported ${hlCount} highlights and ${bmCount} bookmarks.`)
+    setMsg(`Imported ${hlCount} highlights, ${bmCount} bookmarks and ${ntCount} notes.`)
     setPreview(undefined)
   }
 
@@ -82,19 +90,19 @@ export function DataTools() {
 
   return (
     <div class="datatools">
-      <p class="muted">You have <strong>{hl}</strong> highlighted verses and <strong>{bm}</strong> bookmarks on this device.</p>
+      <p class="muted">You have <strong>{hl}</strong> highlighted verses, <strong>{bm}</strong> bookmarks and <strong>{nt}</strong> notes on this device.</p>
       <div class="row wrap">
         <label class={'button primary' + (busy ? ' disabled' : '')}>
-          {busy ? 'Reading…' : 'Import highlights…'}
+          {busy ? 'Reading…' : 'Import highlights and notes…'}
           <input type="file" accept=".zip,.html,.htm,.txt,.json,application/zip,text/html" onChange={pick} hidden />
         </label>
         <button onClick={backup}>Back up my data</button>
       </div>
-      <p class="muted small">Import highlights and bookmarks exported from another Bible app (a .zip, .html or .txt export with one reference per line), or a Plain Bible backup.
-        Highlights belong to the verse, so they appear in every version.</p>
+      <p class="muted small">Import highlights, bookmarks and notes exported from another Bible app (a .zip, .html or .txt export), or a Plain Bible backup.
+        They belong to the verse, so they appear in every version.</p>
       {preview && (
         <div class="import-preview">
-          <p>Found <strong>{hlCount}</strong> highlights and <strong>{bmCount}</strong> bookmarks in {preview.files.join(', ')}.
+          <p>Found <strong>{hlCount}</strong> highlights, <strong>{bmCount}</strong> bookmarks and <strong>{ntCount}</strong> notes in {preview.files.join(', ')}.
             {preview.skipped.length > 0 && <> {preview.skipped.length} lines were not recognized.</>}</p>
           {preview.skipped.length > 0 && <details class="small"><summary>Show unrecognized lines</summary><pre>{preview.skipped.slice(0, 50).join('\n')}</pre></details>}
           <div class="row">
