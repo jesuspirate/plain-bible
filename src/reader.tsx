@@ -2,6 +2,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
+import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { markKey, PALETTE } from './lib/marks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
@@ -31,12 +32,76 @@ export function Reader({ route }: { route: Route }) {
       .catch(e => setError(String(e.message || e)))
   }, [versions.join()])
 
+  const loaded = versions.every(v => bibles[v])
+
+  // The verse at the top of the screen is saved as you read, so the app
+  // reopens on it, and stays put when you switch versions or text size.
+  const topVerse = useRef(0)
+  const here = useRef({ book, chapter })
+  here.current = { book, chapter }
+  // While a version loads the page is briefly empty and jumps to the top;
+  // that's not you scrolling, so it isn't counted until your verse is back.
+  const settling = useRef(true)
+  if (!loaded) settling.current = true
+  useEffect(() => {
+    let frame = 0, timer = 0
+    const save = () => {
+      clearTimeout(timer)
+      if (!topVerse.current) return
+      savePlace({ ...here.current, verse: topVerse.current })
+      // From here on the address leads to where you are, not to a verse you
+      // jumped to, so a reload or a restored tab lands on the right verse.
+      if (/[?&]v=/.test(location.hash)) history.replaceState(history.state, '', withoutVerse(location.hash))
+    }
+    const measure = () => {
+      frame = 0
+      if (settling.current) return
+      const top = headerBottom()
+      // Ignore the moment between chapters or versions when no verses show.
+      const els = [...document.querySelectorAll<HTMLElement>('.chapter [id^="v"]')]
+      for (let i = 0; i < els.length; i++) {
+        const lines = els[i].getClientRects()
+        if (!lines.length || lines[lines.length - 1].bottom <= top + 12) continue
+        let n = +els[i].id.slice(1)
+        // In paragraph layout, when only a verse's last words share the top
+        // line with the next verse, the next verse is the one you're on.
+        const first = lines[0], last = lines[lines.length - 1], next = els[i + 1]?.getClientRects()[0]
+        if (first.bottom <= top + 12 && last.top <= top + 12 && next && Math.abs(next.top - last.top) < 2) n = +els[i + 1].id.slice(1)
+        if (n !== topVerse.current) { topVerse.current = n; clearTimeout(timer); timer = window.setTimeout(save, 300) }
+        return
+      }
+    }
+    const onScroll = () => { frame ||= requestAnimationFrame(measure) }
+    const onHide = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save() }
+    addEventListener('scroll', onScroll, { passive: true })
+    document.addEventListener('visibilitychange', onHide)
+    addEventListener('pagehide', onHide)
+    return () => {
+      save(); cancelAnimationFrame(frame)
+      removeEventListener('scroll', onScroll)
+      document.removeEventListener('visibilitychange', onHide)
+      removeEventListener('pagehide', onHide)
+    }
+  }, [])
+
+  const shown = useRef<{ book: string; chapter: number; target: number }>()
   useEffect(() => {
     document.title = `${formatRef({ book, chapter })} (${version}) · Plain Bible`
-    if (target) {
-      requestAnimationFrame(() => document.getElementById('v' + target)?.scrollIntoView({ block: 'center' }))
-    } else window.scrollTo(0, 0)
-  }, [book, chapter, version, target, Object.keys(bibles).length])
+    if (!loaded) return
+    const prev = shown.current
+    shown.current = { book, chapter, target }
+    const same = prev && prev.book === book && prev.chapter === chapter
+    if (!same) topVerse.current = 0
+    requestAnimationFrame(() => {
+      // Same chapter, different version, columns, layout or text size: keep your verse.
+      if (same && prev.target === target) toVerse(topVerse.current)
+      else if (target) document.getElementById('v' + target)?.scrollIntoView({ block: 'center' })
+      // Opening the app, or coming back from Settings: the verse you were on.
+      else if (!prev) { const p = loadPlace(); toVerse(p && p.book === book && p.chapter === chapter ? p.verse : 1) }
+      else window.scrollTo(0, 0)
+      settling.current = false
+    })
+  }, [book, chapter, version, target, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
 
   useEffect(() => setSelected([]), [book, chapter, version])
 
@@ -134,7 +199,6 @@ export function Reader({ route }: { route: Route }) {
     return () => window.removeEventListener('wheel', onWheel)
   })
 
-  const loaded = versions.every(v => bibles[v])
   const rows = loaded ? Math.max(...versions.map(v => bibles[v].books[book]?.[chapter - 1]?.length ?? 0)) : 0
   const showStrongs = settings.strongs
   const t = byId.get(version)
@@ -188,6 +252,22 @@ export function Reader({ route }: { route: Route }) {
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])} />}
     </div>
   )
+}
+
+function headerBottom() {
+  return document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0
+}
+
+/** Scrolls so verse `v` sits just under the top bar (verse 1: the top of the page). */
+function toVerse(v: number) {
+  const el = v > 1 && document.getElementById('v' + v)
+  if (!el) return window.scrollTo(0, 0)
+  const place = () => window.scrollTo(0, el.getBoundingClientRect().top + scrollY - headerBottom() - 4)
+  place()
+  // The reading font may still be loading; once it has, line up again
+  // (unless you've already scrolled on).
+  const y = scrollY
+  document.fonts?.ready.then(() => { if (Math.abs(scrollY - y) < 2) place() })
 }
 
 /** "16–18, 20" for a sorted list of verse numbers. */

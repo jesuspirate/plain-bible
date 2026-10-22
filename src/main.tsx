@@ -4,6 +4,10 @@ import './fonts'
 import './styles.css'
 import { initNative, isNative } from './lib/native'
 
+// The reader puts you back on your verse itself; the browser's own scroll
+// restoration would fight it.
+if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
+
 render(<App />, document.getElementById('app')!)
 initNative()
 

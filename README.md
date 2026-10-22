@@ -22,7 +22,7 @@ no reading plans, devotionals, accounts, or feeds.
 - **Reading fonts**: Literata, Source Serif, EB Garamond, Inter, Atkinson Hyperlegible, or the system font.
   Light, dark and sepia themes.
 - **Parallel reading** of up to six versions side by side.
-- **Works offline** as an installable web app (PWA). Settings, highlights and bookmarks stay on your device.
+- **Works offline** as an installable web app (PWA): the app itself, your Default Bible and any version you open or save are kept on the device. It reopens on the exact verse you were reading. Settings, highlights and bookmarks stay on your device; only passkey sign-in and sync use the network.
 
 ## iOS app
 
