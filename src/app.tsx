@@ -47,6 +47,16 @@ export function App() {
     return () => dark.removeEventListener('change', tint)
   }, [settings])
 
+  // Keep the Default Bible (or, before one is chosen, the current version)
+  // saved for offline use, and ask the browser not to clear saved Bibles.
+  const offlineId = settings && (settings.favorite || settings.version)
+  useEffect(() => {
+    if (!offlineId || !('caches' in window)) return
+    navigator.storage?.persist?.().catch(() => {})
+    const url = data.url(`bibles/${offlineId}.json`)
+    caches.open('bible-data').then(async c => { if (!(await c.match(url))) await c.add(url) }).catch(() => {})
+  }, [offlineId])
+
   // The reader manages its own scroll position; other pages start at the top.
   const page = route.path[0] || 'read'
   useEffect(() => { if (page !== 'read') window.scrollTo(0, 0) }, [page])
@@ -198,7 +208,7 @@ function SettingsView() {
       <div class="field"><span>Default Bible</span>
         <div class="col">
           <button class="pick" onClick={() => setPickFav(true)}>★ {fav} · {byId.get(fav)?.name} ▾</button>
-          <span class="muted small">The app always opens in this version{settings.favorite ? '' : ' (not pinned yet: it follows the last version you used)'}.</span>
+          <span class="muted small">The app always opens in this version, and it’s saved for offline use automatically{settings.favorite ? '' : ' (not pinned yet: it follows the last version you used)'}.</span>
         </div>
         {pickFav && <VersionPicker title="Default Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
       </div>
