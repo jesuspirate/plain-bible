@@ -252,6 +252,11 @@ main.with-bar { padding-bottom: 120px; }
 .verse.hl .cell { padding: 1px 4px; margin: 0 -4px; }
 :root[data-theme='dark'] .hl { --hl-mix: 32%; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl { --hl-mix: 32%; } }
+/* note marker: a small page icon right after the verse number */
+.note-mark { all: unset; cursor: pointer; display: inline-flex; vertical-align: super; font-size: .78em; color: var(--accent); margin: 0 4px 0 -2px; padding: 2px; border-radius: 4px; }
+.note-mark:hover { background: var(--chip); }
+.note-verse { font-family: var(--reading); margin: 0 0 12px; line-height: 1.5; }
+.note-text { width: 100%; box-sizing: border-box; font: 16px/1.5 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; margin-bottom: 12px; }
 .bm .vn::after, .bm > .vn::after { content: '🔖'; font-size: .9em; margin-left: 2px; }
 .picked .cell, .pv.picked { outline: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); outline-offset: 2px; border-radius: 4px; }
 .menu-verse { font-family: var(--reading); font-size: 17px; line-height: 1.5; margin: 0 0 14px; max-height: 7.5em; overflow: auto; }
@@ -272,6 +277,8 @@ main.with-bar { padding-bottom: 120px; }
 .saved-list li.hl { background: color-mix(in srgb, var(--hl) 28%, var(--surface)); border-color: color-mix(in srgb, var(--hl) 60%, var(--line)); }
 .saved-head { display: flex; align-items: center; gap: 8px; }
 .saved-text { margin: 4px 0 0; font-family: var(--reading); font-size: calc(var(--font-size) * .9); line-height: 1.55; }
+.saved-note { margin: 8px 0 0; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; white-space: pre-wrap; font-size: 15px; cursor: pointer; }
+.saved-head button.small { padding: 3px 8px; font-size: 13px; }
 .datatools .button { display: inline-block; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
 .datatools .button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
 .import-preview { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 8px 0; }
@@ -313,6 +320,7 @@ button.danger { color: #b3261e; }
 .selbar .swatch { flex: none; }
 .selbar .actions { gap: 6px; }
 .selbar .actions button { flex: 1; padding: 8px 6px; white-space: nowrap; }
+@media (max-width: 420px) { .selbar .actions button { padding: 8px 4px; font-size: 14px; } }
 .selbar-note { margin: 6px 0 0; text-align: center; }
 body.selecting .sb { display: none; }
 body.selecting main { padding-bottom: 200px; }

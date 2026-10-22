@@ -9,7 +9,12 @@ export interface Mark {
   b?: 1
   /** version it was made in (informational) */
   v?: string
-  /** last changed, ms since epoch. A mark with no color and no bookmark
+  /** your note on this verse */
+  n?: string
+  /** when the note last changed. Kept after a note is deleted, so the
+   *  deletion syncs; notes and highlights on one verse merge separately. */
+  nt?: number
+  /** last changed, ms since epoch. A mark with no color, bookmark or note
    *  records a removal, so that it syncs to other devices. */
   t: number
 }
@@ -37,6 +42,35 @@ export function compareKeys(a: string, b: string) {
   return BOOK_INDEX[x.book] - BOOK_INDEX[y.book] || x.chapter - y.chapter || x.verse - y.verse
 }
 
+/** Whether a mark holds anything to show (not just a removal record). */
+export const hasContent = (m: Mark | undefined) => !!(m && (m.c || m.b || m.n))
+
+/** A mark with nothing left becomes a bare removal record. */
+export function tidy(m: Mark): Mark {
+  if (hasContent(m)) return m
+  return m.nt ? { t: m.t, nt: m.nt } : { t: m.t }
+}
+
+/** Merge two versions of one verse's mark: the newer one wins, except
+ *  that the note keeps whichever note was edited last. */
+export function mergeMark(a: Mark | undefined, b: Mark | undefined): Mark | undefined {
+  if (!a || !b) return a ?? b
+  const out: Mark = { ...((b.t ?? 0) > (a.t ?? 0) ? b : a) }
+  const note = (b.nt ?? 0) > (a.nt ?? 0) ? b : (a.nt ?? 0) > (b.nt ?? 0) ? a : out
+  delete out.n; delete out.nt
+  if (note.n) out.n = note.n
+  if (note.nt) out.nt = note.nt
+  return tidy(out)
+}
+
+/** Set or clear (empty text) the note on one verse. */
+export function setNote(marks: Marks, key: string, text: string, now = Date.now()): Marks {
+  const m: Mark = { ...marks[key], t: now, nt: now }
+  const n = text.trim()
+  if (n) m.n = n; else delete m.n
+  return { ...marks, [key]: tidy(m) }
+}
+
 const KEY = 'plain-bible:marks'
 export function loadMarks(): Marks {
   try { return JSON.parse(localStorage.getItem(KEY) || '{}') } catch { return {} }
@@ -48,7 +82,7 @@ export function saveMarks(m: Marks) {
 // ---------------------------------------------------------------------------
 // Importing
 
-export interface ImportItem { book: string; chapter: number; verse: number; color?: string; bookmark?: boolean; version?: string }
+export interface ImportItem { book: string; chapter: number; verse: number; color?: string; bookmark?: boolean; version?: string; note?: string }
 export interface ImportResult { items: ImportItem[]; skipped: string[] }
 
 const LINE = /^(.+?)\s+(\d+)\s*[:.]\s*(\d+)(?:\s*[-–]\s*(\d+))?(?:\s+([A-Za-z0-9-]{2,12}))?(?:\s+(#[0-9a-fA-F]{6}))?$/
@@ -75,6 +109,29 @@ export function parseRefList(text: string, kind: 'highlight' | 'bookmark' | 'aut
   return { items, skipped }
 }
 
+const REF = /^(.+?)\s+(\d+)\s*[:.]\s*(\d+)(?:\s*[-–]\s*\d+)?(?:\s+[A-Za-z0-9-]{2,12})?$/
+
+/** A notes export: entries separated by a rule or a heading, each with a
+ *  reference line ("John 3:16 NIV") and the note's text. A quoted verse
+ *  (blockquote) and the date line are left out. The note goes on the first
+ *  verse of a range. */
+export function parseNotes(html: string): ImportResult {
+  const items: ImportItem[] = [], skipped: string[] = []
+  const body = html.replace(/<(script|style|head)[\s\S]*?<\/\1>/gi, '').replace(/<blockquote[\s\S]*?<\/blockquote>/gi, '\n')
+  for (const chunk of body.split(/<hr\s*\/?>|<h[1-4][^>]*>/i)) {
+    const lines = htmlToText(chunk).split('\n').map(l => l.replace(/\s+/g, ' ').trim()).filter(Boolean)
+    const at = lines.findIndex(l => REF.test(l) && findBook(l.match(REF)![1]))
+    if (at < 0) { if (lines.length) skipped.push(lines[0]); continue }
+    const m = lines[at].match(REF)!
+    // Anything before the reference is a title; keep it as the first line.
+    const text = [...lines.slice(0, at), ...lines.slice(at + 1)]
+      .filter(l => !/^\d{4}-\d\d-\d\d|^(created|updated|date)\b/i.test(l)).join('\n').trim()
+    if (!text) { skipped.push(lines[at]); continue }
+    items.push({ book: findBook(m[1])!, chapter: +m[2], verse: +m[3], note: text })
+  }
+  return { items, skipped }
+}
+
 /** Visible text of an HTML export, one line per <br>, <p>, <li> or <div>. */
 export function htmlToText(html: string): string {
   return html
@@ -86,17 +143,22 @@ export function htmlToText(html: string): string {
 }
 
 /** Merge imported items into marks. Existing marks keep their other fields. */
-export function mergeImport(marks: Marks, items: ImportItem[], now = Date.now()): { marks: Marks; highlights: number; bookmarks: number } {
+export function mergeImport(marks: Marks, items: ImportItem[], now = Date.now()): { marks: Marks; highlights: number; bookmarks: number; notes: number } {
   const out = { ...marks }
-  let highlights = 0, bookmarks = 0
+  let highlights = 0, bookmarks = 0, notes = 0
   for (const it of items) {
     const k = markKey(it.book, it.chapter, it.verse)
     const m: Mark = { ...out[k], t: now }
     if (it.color) { m.c = it.color; highlights++; if (it.version) m.v = it.version }
     if (it.bookmark) { m.b = 1; bookmarks++ }
+    if (it.note) {
+      // Don't overwrite a note you already have; add the imported one under it.
+      m.n = m.n && !m.n.includes(it.note) ? `${m.n}\n\n${it.note}` : it.note
+      m.nt = now; notes++
+    }
     out[k] = m
   }
-  return { marks: out, highlights, bookmarks }
+  return { marks: out, highlights, bookmarks, notes }
 }
 
 /** Our own backup format. */

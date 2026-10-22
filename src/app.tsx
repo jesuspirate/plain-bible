@@ -8,7 +8,7 @@ import { SearchBar } from './searchbar'
 import { Saved } from './saved'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { loadMarks, Marks, saveMarks } from './lib/marks'
+import { hasContent, loadMarks, Marks, saveMarks } from './lib/marks'
 import { AccountSection, touchSettings, useSync } from './account'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 
@@ -226,7 +226,7 @@ function ThemeToggle() {
 function SettingsView() {
   const { settings, update, catalog, marks, sync, byId } = useApp()
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
-  const saved = Object.values(marks).filter(m => m.c || m.b).length
+  const saved = Object.values(marks).filter(hasContent).length
   const [pickFav, setPickFav] = useState(false)
   const fav = settings.favorite || settings.version
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
@@ -240,7 +240,7 @@ function SettingsView() {
     <div class="settings">
       <h1>Settings</h1>
       <div class="shortcuts">
-        <a class="shortcut" href="#/saved"><strong>Saved</strong><span class="muted">{saved ? `${saved} highlights and bookmarks` : 'Your highlights and bookmarks'}</span></a>
+        <a class="shortcut" href="#/saved"><strong>Saved</strong><span class="muted">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'}</span></a>
         <a class="shortcut" href="#/search"><strong>Advanced search</strong><span class="muted">Search many versions at once, with filters</span></a>
       </div>
       {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}

@@ -3,7 +3,7 @@ import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { markKey, PALETTE } from './lib/marks'
+import { markKey, PALETTE, setNote, tidy } from './lib/marks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
@@ -23,6 +23,7 @@ export function Reader({ route }: { route: Route }) {
   const [error, setError] = useState('')
   const [lex, setLex] = useState<string>()
   const [selected, setSelected] = useState<number[]>([])
+  const [noteFor, setNoteFor] = useState<number>()
 
   useEffect(() => {
     if (version !== settings.version || parallel.join() !== settings.parallel.join()) update({ version, parallel })
@@ -130,6 +131,12 @@ export function Reader({ route }: { route: Route }) {
   const mark = (v: number) => marks[markKey(book, chapter, v)]
   const verseClass = (base: string, v: number) =>
     base + (target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (selected.includes(v) ? ' picked' : '')
+  // A small note icon after the verse number; tap it to read or edit the note.
+  const noteMark = (v: number) => mark(v)?.n && (
+    <button class="note-mark" aria-label={`Note on verse ${v}`} title={mark(v)!.n} onClick={e => { e.stopPropagation(); setNoteFor(v) }}>
+      <svg viewBox="0 0 16 16" width="1em" height="1em" aria-hidden="true"><path d="M3 2.5h7l3 3v8H3z" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /><path d="M5.5 8h5M5.5 10.5h3.5" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" /></svg>
+    </button>
+  )
   const hlStyle = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
   const tapVerse = (e: MouseEvent, v: number) => {
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
@@ -220,7 +227,7 @@ export function Reader({ route }: { route: Route }) {
             <p class="para" dir={t?.rtl ? 'rtl' : undefined}>
               {primary.books[book][chapter - 1].map((raw, i) => raw && (
                 <span id={'v' + (i + 1)} class={verseClass('pv', i + 1)} style={hlStyle(i + 1)} onClick={e => tapVerse(e, i + 1)}>
-                  <sup class="vn">{i + 1}</sup>
+                  <sup class="vn">{i + 1}</sup>{noteMark(i + 1)}
                   <VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={setLex} />{' '}
                 </span>
               ))}
@@ -232,7 +239,7 @@ export function Reader({ route }: { route: Route }) {
                 const tv = byId.get(v)
                 return (
                   <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
-                    <button class="vn" aria-label={`Verse ${i + 1} options`}>{i + 1}</button>
+                    <button class="vn" aria-label={`Verse ${i + 1} options`}>{i + 1}</button>{v === version && noteMark(i + 1)}
                     {raw ? <VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={setLex} /> : <span class="muted">—</span>}
                   </div>
                 )
@@ -249,7 +256,9 @@ export function Reader({ route }: { route: Route }) {
       {t && <p class="credit muted small">{t.name}. {t.license}.</p>}
 
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
-      {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])} />}
+      {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
+        onNote={v => { setSelected([]); setNoteFor(v) }} />}
+      {noteFor && <NoteSheet book={book} chapter={chapter} verse={noteFor} text={plain(primary?.books[book]?.[chapter - 1]?.[noteFor - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
     </div>
   )
 }
@@ -284,8 +293,8 @@ export function verseRanges(vs: number[]) {
 
 // Shown while verses are selected: tap more verses to add them, then
 // highlight, bookmark, copy, share or compare them together.
-function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
-  book: string; chapter: number; verses: number[]; versions: string[]; bibles: Record<string, Bible>; onClose: () => void
+function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote }: {
+  book: string; chapter: number; verses: number[]; versions: string[]; bibles: Record<string, Bible>; onClose: () => void; onNote: (v: number) => void
 }) {
   const { settings, byId, data, marks, setMarks } = useApp()
   const [compare, setCompare] = useState<Bible[]>()
@@ -310,7 +319,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
       const next = { ...all[key], t } as Record<string, unknown>
       for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
       if (patch.c) next.v = version
-      out[key] = (!next.c && !next.b ? { t } : next) as never
+      out[key] = tidy(next as never)
     }
     return out
   }) }
@@ -350,6 +359,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
             ? <button onClick={() => share({ title: ref, text: quote, url: link })}>Share</button>
             : <button onClick={() => copy(link)}>Link</button>}
           <button onClick={showCompare}>Compare</button>
+          <button class={marks[keys[0]]?.n ? 'on' : ''} onClick={() => onNote(verses[0])}>Note</button>
         </div>
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
@@ -366,5 +376,33 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
         </Sheet>
       )}
     </>
+  )
+}
+
+/** Write, edit or delete the note on one verse. Saved as you type. */
+export function NoteSheet({ book, chapter, verse, text, onClose }: { book: string; chapter: number; verse: number; text?: string; onClose: () => void }) {
+  const { marks, setMarks } = useApp()
+  const key = markKey(book, chapter, verse)
+  const [draft, setDraft] = useState(marks[key]?.n ?? '')
+  const area = useRef<HTMLTextAreaElement>(null)
+  const saved = useRef(marks[key]?.n ?? '')
+  const save = (s: string) => {
+    if (s.trim() === saved.current.trim()) return
+    saved.current = s
+    setMarks(m => setNote(m, key, s))
+  }
+  useEffect(() => { if (!draft) area.current?.focus() }, [])
+  useEffect(() => { const t = setTimeout(() => save(draft), 600); return () => clearTimeout(t) }, [draft])
+  const close = () => { save(draft); onClose() }
+  return (
+    <Sheet title={`Note · ${formatRef({ book, chapter, verse })}`} onClose={close}>
+      {text && <p class="note-verse muted">{text}</p>}
+      <textarea ref={area} class="note-text" rows={6} placeholder="Write a note on this verse…" value={draft}
+        onInput={e => setDraft((e.target as HTMLTextAreaElement).value)} />
+      <div class="row">
+        <button class="primary" onClick={close}>Done</button>
+        {saved.current && <button onClick={() => { setDraft(''); save(''); onClose() }}>Delete note</button>}
+      </div>
+    </Sheet>
   )
 }
