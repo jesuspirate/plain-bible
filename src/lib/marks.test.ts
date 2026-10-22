@@ -66,3 +66,11 @@ describe('notes', () => {
     expect(merged.marks['Isa.41.10'].n).toBe('old\n\nTrust\nRead this when anxious.\nSecond line')
   })
 })
+
+describe('note merge', () => {
+  it('keeps a note both sides already share (every sync after writing one)', () => {
+    const a: Mark = { n: 'x', nt: 5, t: 5 }
+    expect(mergeMark(a, { ...a })).toEqual(a)
+    expect(mergeMark({ c: '#fff193', t: 9 }, { n: 'x', nt: 9, t: 9 })).toMatchObject({ n: 'x', nt: 9 })
+  })
+})
