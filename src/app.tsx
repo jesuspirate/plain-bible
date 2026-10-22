@@ -38,7 +38,27 @@ export function App() {
     root.dataset.theme = settings.theme
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
+    // Match the phone's status bar (and the browser bar) to the chosen theme.
+    const tint = () => document.querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim())
+    tint()
+    const dark = matchMedia('(prefers-color-scheme: dark)')
+    dark.addEventListener('change', tint)
+    return () => dark.removeEventListener('change', tint)
   }, [settings])
+
+  // Keep the Default Bible (or, before one is chosen, the current version)
+  // saved for offline use, and ask the browser not to clear saved Bibles.
+  const offlineId = settings && (settings.favorite || settings.version)
+  useEffect(() => {
+    if (!offlineId) return
+    // The iOS app keeps every version it has opened, so loading it is enough.
+    if (data.native) { data.bible(offlineId).catch(() => {}); return }
+    if (!('caches' in window)) return
+    navigator.storage?.persist?.().catch(() => {})
+    const url = data.url(`bibles/${offlineId}.json`)
+    caches.open('bible-data').then(async c => { if (!(await c.match(url))) await c.add(url) }).catch(() => {})
+  }, [offlineId])
 
   // The reader manages its own scroll position; other pages start at the top.
   const page = route.path[0] || 'read'
@@ -191,7 +211,7 @@ function SettingsView() {
       <div class="field"><span>Default Bible</span>
         <div class="col">
           <button class="pick" onClick={() => setPickFav(true)}>★ {fav} · {byId.get(fav)?.name} ▾</button>
-          <span class="muted small">The app always opens in this version{settings.favorite ? '' : ' (not pinned yet: it follows the last version you used)'}.</span>
+          <span class="muted small">The app always opens in this version, and it’s saved for offline use automatically{settings.favorite ? '' : ' (not pinned yet: it follows the last version you used)'}.</span>
         </div>
         {pickFav && <VersionPicker title="Default Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
       </div>
