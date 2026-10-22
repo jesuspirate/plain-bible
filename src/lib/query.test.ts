@@ -100,3 +100,13 @@ describe('references', () => {
     expect(parseRef('faith')).toBeUndefined()
   })
 })
+
+describe('French references', () => {
+  it('parses French book names, with or without accents', () => {
+    expect(parseRef('Jean 3:16')).toEqual({ book: 'John', chapter: 3, verse: 16 })
+    expect(parseRef('Ésaïe 53')).toEqual({ book: 'Isa', chapter: 53 })
+    expect(parseRef('esaie 53')).toEqual({ book: 'Isa', chapter: 53 })
+    expect(parseRef('1 Jean 4:8')).toEqual({ book: '1John', chapter: 4, verse: 8 })
+    expect(parseRef('Psaume 23')).toEqual({ book: 'Ps', chapter: 23 })
+  })
+})

@@ -234,6 +234,28 @@ def build_oshb():
     return books
 
 
+# Public-domain texts from github.com/Beblia/Holy-Bible-XML-Format (books numbered 1–66).
+BEBLIA = {"LSG": ("FrenchBible.xml", "fr", "La Sainte Bible, Louis Segond (1910)")}
+
+
+def build_beblia(fname):
+    root = ET.parse(os.path.join(SRC, "beblia", fname)).getroot()
+    books = {}
+    for book in root.iter("book"):
+        code = BOOKS[int(book.get("number")) - 1][0]
+        chapters = []
+        for ch in book.iter("chapter"):
+            verses = []
+            for v in ch.iter("verse"):
+                n = int(v.get("number"))
+                while len(verses) < n - 1:
+                    verses.append("")
+                verses.append(re.sub(r"\s+", " ", v.text or "").strip())
+            chapters.append(verses)
+        books[code] = chapters
+    return books
+
+
 def load_lexicon(name, var):
     text = open(os.path.join(SRC, "strongs", name), encoding="utf-8").read()
     body = text[text.index(var) + len(var):].strip().lstrip("=").strip()
@@ -275,6 +297,16 @@ def main():
                         "books": list(books.keys()),
                         "source": "https://github.com/scrollmapper/bible_databases/tree/master/sources/%s/%s" % (lang, tid)})
 
+    for tid, (fname, lang, name) in BEBLIA.items():
+        if only and tid not in only:
+            continue
+        print("•", tid, file=sys.stderr)
+        books = build_beblia(fname)
+        write_json(os.path.join(OUT, "bibles", tid + ".json"), {"id": tid, "books": books})
+        catalog.append({"id": tid, "name": name, "lang": lang, "license": "Public Domain",
+                        "strongs": False, "rtl": False, "books": list(books.keys()),
+                        "source": "https://github.com/Beblia/Holy-Bible-XML-Format"})
+
     if not only or "OSHB" in only:
         print("• OSHB", file=sys.stderr)
         write_json(os.path.join(OUT, "bibles", "OSHB.json"), {"id": "OSHB", "books": build_oshb()})
@@ -286,7 +318,8 @@ def main():
     for c in catalog:
         en, native = LANGS.get(c["lang"], (c["lang"], c["lang"]))
         c["langName"], c["langNative"] = en, native
-    catalog.sort(key=lambda c: (c["lang"] != "en", c["langName"], c["id"]))
+    featured = ["KJV", "BSB", "LSG"]
+    catalog.sort(key=lambda c: (c["lang"] != "en", c["langName"], c["id"] not in featured, c["id"]))
 
     write_json(os.path.join(OUT, "catalog.json"), {
         "books": [{"id": code, "name": name} for code, name, _ in BOOKS],

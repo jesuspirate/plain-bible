@@ -3,10 +3,22 @@ import { useContext, useEffect, useState } from 'preact/hooks'
 import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
 
+export type FontId = 'literata' | 'source-serif' | 'garamond' | 'inter' | 'atkinson' | 'system'
+
+export const FONTS: { id: FontId; label: string; note: string; family: string }[] = [
+  { id: 'literata', label: 'Literata', note: 'Book serif made for long reading', family: "'Literata Variable', Georgia, serif" },
+  { id: 'source-serif', label: 'Source Serif', note: 'Crisp, modern serif', family: "'Source Serif 4 Variable', Georgia, serif" },
+  { id: 'garamond', label: 'Garamond', note: 'Classic printed-Bible feel', family: "'EB Garamond Variable', Garamond, Georgia, serif" },
+  { id: 'inter', label: 'Inter', note: 'Clean sans-serif', family: "'Inter Variable', system-ui, sans-serif" },
+  { id: 'atkinson', label: 'Atkinson Hyperlegible', note: 'Designed for low vision; very easy to read', family: "'Atkinson Hyperlegible', system-ui, sans-serif" },
+  { id: 'system', label: 'System', note: "Your device's own font", family: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" },
+]
+
 export interface Settings {
   theme: 'system' | 'light' | 'dark' | 'sepia'
   fontSize: number
-  font: 'serif' | 'sans'
+  font: FontId
+  searchBar: boolean
   layout: 'paragraph' | 'verses'
   strongs: boolean
   strongsNumbers: boolean
@@ -23,7 +35,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'system', fontSize: 19, font: 'serif', layout: 'verses', strongs: false, strongsNumbers: false,
+    theme: 'system', fontSize: 19, font: 'literata', searchBar: true, layout: 'verses', strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -31,7 +43,14 @@ export function defaultSettings(catalog?: Catalog): Settings {
 }
 
 export function loadSettings(): Partial<Settings> {
-  try { return JSON.parse(localStorage.getItem(KEY) || '{}') } catch { return {} }
+  try {
+    const s = JSON.parse(localStorage.getItem(KEY) || '{}')
+    // Fonts were once just 'serif' or 'sans'.
+    if (s.font === 'serif') s.font = 'literata'
+    if (s.font === 'sans') s.font = 'inter'
+    if (s.font && !FONTS.some(f => f.id === s.font)) delete s.font
+    return s
+  } catch { return {} }
 }
 export function saveSettings(s: Settings) {
   try { localStorage.setItem(KEY, JSON.stringify(s)) } catch { /* private mode */ }

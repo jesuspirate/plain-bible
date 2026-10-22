@@ -3,13 +3,17 @@
 Just the Bible. Many versions and languages, thorough search, and nothing else:
 no reading plans, devotionals, accounts, or feeds.
 
-- **115 versions in 48 languages**, all public domain or openly licensed
+- **116 versions in 48 languages**, all public domain or openly licensed
   (KJV, Berean Standard Bible, ASV, YLT, Douay-Rheims, Reina-Valera 1909, Luther 1545,
-  French (Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
+  French (Louis Segond 1910, Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
   the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more).
 - **Strong's numbers** in KJV, BSB, the Hebrew OT (Open Scriptures Hebrew Bible) and the Greek NT
   (Statistical Restoration GNT). Tap a word to see the Hebrew or Greek and its dictionary entry.
 - **Search** across one or many versions at once, with a per-book breakdown of results.
+- **Floating search bar** in the style of the iOS search field: instant results as you type, a verse preview
+  when you type a reference (English or French book names), recent searches, and voice input where supported.
+- **Reading fonts**: Literata, Source Serif, EB Garamond, Inter, Atkinson Hyperlegible, or the system font.
+  Light, dark and sepia themes.
 - **Parallel reading** of up to six versions side by side.
 - **Works offline** as an installable web app (PWA). Settings stay on your device.
 
@@ -49,6 +53,7 @@ The Bible data is generated, not committed. `scripts/build_data.py` reads:
   plus KJV, BSB and the Greek NT with Strong's tagging. Only translations whose license is public domain,
   CC0, CC BY, CC BY-SA or GPL are included; non-commercial and no-derivatives licenses are skipped.
 - [openscriptures/morphhb](https://github.com/openscriptures/morphhb): Hebrew Bible with Strong's (CC BY 4.0).
+- [Beblia/Holy-Bible-XML-Format](https://github.com/Beblia/Holy-Bible-XML-Format): Louis Segond 1910 (public domain).
 - [openscriptures/strongs](https://github.com/openscriptures/strongs): Strong's dictionary (CC BY-SA).
 
 ## Deploying

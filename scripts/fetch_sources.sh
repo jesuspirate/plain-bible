@@ -16,3 +16,7 @@ if [ ! -d strongs ]; then
   curl -fsSL -o strongs/strongs-hebrew-dictionary.js $base/hebrew/strongs-hebrew-dictionary.js
   curl -fsSL -o strongs/strongs-greek-dictionary.js $base/greek/strongs-greek-dictionary.js
 fi
+mkdir -p beblia
+for f in FrenchBible; do
+  [ -f beblia/$f.xml ] || curl -fsSL -o beblia/$f.xml https://raw.githubusercontent.com/Beblia/Holy-Bible-XML-Format/master/$f.xml
+done

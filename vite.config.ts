@@ -26,13 +26,19 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png,woff2}', 'data/catalog.json'],
+        globPatterns: ['**/*.{js,css,html,svg,png}', 'data/catalog.json'],
         runtimeCaching: [
           {
             // Bibles you open, or save from the Versions page, stay available offline.
             urlPattern: ({ url }) => /\/data\/(bibles\/|strongs-)/.test(url.pathname),
             handler: 'CacheFirst',
             options: { cacheName: 'bible-data', cacheableResponse: { statuses: [0, 200] } },
+          },
+          {
+            // Fonts: only the scripts and styles actually used get downloaded.
+            urlPattern: ({ url }) => url.pathname.endsWith('.woff2'),
+            handler: 'CacheFirst',
+            options: { cacheName: 'fonts' },
           },
           {
             urlPattern: ({ url }) => url.pathname.endsWith('/data/catalog.json'),
