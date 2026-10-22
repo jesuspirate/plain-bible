@@ -9,7 +9,8 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, readPath, useApp } from './state'
+import { go, readPath, resumePath, useApp } from './state'
+import { loadTrail, stepTo, Trail } from './lib/history'
 import { VerseText } from './ui'
 
 const RECENT = 'plain-bible:recent'
@@ -39,6 +40,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   const [micOk, setMicOk] = useState(() => !!SpeechRecognition && !micBroken())
   const [micNote, setMicNote] = useState('')
   const [recent, setRecent] = useState<string[]>(loadRecent)
+  const [trail, setTrail] = useState<Trail>()
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
@@ -95,7 +97,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   useEffect(() => {
     if (open) data.bible(version).then(b => setLens(Object.fromEntries(Object.entries(b.books).map(([k, v]) => [k, v.length]))))
   }, [open, version])
-  useEffect(() => { if (!open) setBrowse(undefined) }, [open])
+  useEffect(() => { if (!open) setBrowse(undefined); else setTrail(loadTrail()) }, [open])
   const browseBook = browse ?? here?.book ?? 'Gen'
   const chapters = lens[browseBook] ?? 0
 
@@ -156,6 +158,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   }, [trimmed, version])
 
   const close = () => { setOpen(false); input.current?.blur() }
+  const parallelOf = () => new URLSearchParams(location.hash.split('?')[1] || '').get('p')?.split(',') ?? []
 
   // Pull the panel down from its top to close it, like an iOS sheet.
   const pull = useRef<{ y: number; dy: number }>()
@@ -258,9 +261,19 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             )}
             {!trimmed && (
               <>
+                {trail && trail.items.length > 1 && (
+                  <div class="sb-books sb-read">
+                    <div class="sb-kicker">Recently read</div>
+                    {trail.items.map((_, i) => i).reverse().filter(i => !(here && trail.items[i].book === here.book && trail.items[i].chapter === here.chapter)).slice(0, 8).map(i => {
+                      const p = trail.items[i]
+                      return <button class="sb-chip" onClick={() => { stepTo(i); finish(resumePath(version, p.book, p.chapter, p.verse, here ? parallelOf() : [])) }}>
+                        {formatRef({ book: p.book, chapter: p.chapter, verse: p.verse > 1 ? p.verse : undefined }, true)}</button>
+                    })}
+                  </div>
+                )}
                 {recent.length > 0 && (
                   <div class="sb-recent">
-                    <div class="sb-kicker">Recent <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button></div>
+                    <div class="sb-kicker">Recent searches <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button></div>
                     {recent.map(r => <button class="sb-row" onClick={() => searchAll(r)}><Glass small />{r}</button>)}
                   </div>
                 )}

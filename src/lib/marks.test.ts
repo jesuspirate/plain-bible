@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { htmlToText, Mark, mergeImport, mergeMark, parseNotes, parseRefList, setNote } from './marks'
+import { htmlToText, Mark, mergeImport, mergeMark, noteCovering, parseNotes, parseRefList, setNote } from './marks'
 
 // Same shape as a typical Bible app export.
 const HIGHLIGHTS = `<!DOCTYPE html><html><head><style>body {margin: 2em;}</style></head>
@@ -72,5 +72,20 @@ describe('note merge', () => {
     const a: Mark = { n: 'x', nt: 5, t: 5 }
     expect(mergeMark(a, { ...a })).toEqual(a)
     expect(mergeMark({ c: '#fff193', t: 9 }, { n: 'x', nt: 9, t: 9 })).toMatchObject({ n: 'x', nt: 9 })
+  })
+})
+
+describe('passage notes', () => {
+  it('keeps the verses a note covers and finds it from any of them', () => {
+    const m = setNote({}, 'John.3.16', 'For God so loved', 5, [16, 17, 18])
+    expect(m['John.3.16']).toEqual({ n: 'For God so loved', nt: 5, t: 5, nv: [16, 17, 18] })
+    expect(noteCovering(m, 'John', 3, 17)).toBe(16)
+    expect(noteCovering(m, 'John', 3, 19)).toBeUndefined()
+    expect(setNote(m, 'John.3.16', 'Just this one', 6)['John.3.16'].nv).toBeUndefined()
+  })
+  it('merges the verses along with the note, and keeps a note both sides share', () => {
+    const a: Mark = { n: 'x', nt: 5, t: 5, nv: [1, 2] }
+    expect(mergeMark(a, { c: '#fff193', t: 9 })).toEqual({ c: '#fff193', t: 9, n: 'x', nt: 5, nv: [1, 2] })
+    expect(mergeMark(a, { ...a })).toEqual(a)
   })
 })

@@ -2,7 +2,9 @@
 import { useEffect, useMemo, useState } from 'preact/hooks'
 import { Bible } from './lib/data'
 import { compareKeys, hasContent, PALETTE, parseKey } from './lib/marks'
-import { NoteSheet } from './reader'
+import { NoteSheet, verseRanges } from './reader'
+import { BookmarkIcon } from './icons'
+import { bookById } from './lib/books'
 import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
 import { readPath, useApp } from './state'
@@ -51,7 +53,7 @@ export function Saved() {
       <h1>Saved</h1>
       <div class="chips" role="tablist">
         <button class={'chip' + (filter === 'all' ? ' on' : '')} onClick={() => setFilter('all')}>All {keys.length}</button>
-        {bookmarks > 0 && <button class={'chip' + (filter === 'bookmarks' ? ' on' : '')} onClick={() => setFilter('bookmarks')}>🔖 {bookmarks}</button>}
+        {bookmarks > 0 && <button class={'chip' + (filter === 'bookmarks' ? ' on' : '')} onClick={() => setFilter('bookmarks')} aria-label={`${bookmarks} bookmarks`}><BookmarkIcon class="bm-mark" /> {bookmarks}</button>}
         {notes > 0 && <button class={'chip' + (filter === 'notes' ? ' on' : '')} onClick={() => setFilter('notes')}>Notes {notes}</button>}
         {colors.map(([c, n]) => (
           <button class={'chip swatch-chip' + (filter === c ? ' on' : '')} onClick={() => setFilter(c)} aria-label={`${PALETTE.find(p => p.color === c)?.name ?? c} highlights`}>
@@ -62,18 +64,20 @@ export function Saved() {
       <ol class="saved-list">
         {shown.slice(0, limit).map(k => {
           const r = parseKey(k), m = marks[k]
-          const raw = bible?.books[r.book]?.[r.chapter - 1]?.[r.verse - 1]
+          // A passage note shows every verse it is about.
+          const vs = m.n && m.nv ? m.nv : [r.verse]
+          const text = vs.map(v => { const raw = bible?.books[r.book]?.[r.chapter - 1]?.[v - 1]; return raw ? (vs.length > 1 ? `${v} ` : '') + plain(raw) : '' }).filter(Boolean).join(' ')
           return (
             <li style={m.c ? { '--hl': m.c } : undefined} class={m.c ? 'hl' : ''}>
               <div class="saved-head">
-                <a class="ref" href={'#/' + readPath(version, r.book, r.chapter, r.verse)}>{formatRef(r)}</a>
-                {m.b && <span title="Bookmarked">🔖</span>}
+                <a class="ref" href={'#/' + readPath(version, r.book, r.chapter, r.verse)}>{vs.length > 1 ? `${bookById(r.book).name} ${r.chapter}:${verseRanges(vs)}` : formatRef(r)}</a>
+                {m.b && <span title="Bookmarked" class="bm-mark"><BookmarkIcon /></span>}
                 <span class="spacer" />
                 <button class="small" onClick={() => setEditing(k)}>{m.n ? 'Edit note' : 'Add note'}</button>
                 {(m.c || m.b) && <button class="icon small" aria-label={`Remove highlight and bookmark from ${formatRef(r)}`} onClick={() => remove(k)}>✕</button>}
               </div>
               <p class="saved-text" dir={byId.get(version)?.rtl ? 'rtl' : undefined}>
-                {raw ? plain(raw) : <span class="muted">Not in {version}</span>}
+                {text || <span class="muted">Not in {version}</span>}
               </p>
               {m.n && <p class="saved-note" onClick={() => setEditing(k)}>{m.n}</p>}
             </li>
@@ -82,8 +86,9 @@ export function Saved() {
       </ol>
       {shown.length > limit && <button class="more" onClick={() => setLimit(l => l + PAGE)}>Show more ({shown.length - limit} left)</button>}
       {editing && (() => {
-        const r = parseKey(editing), raw = bible?.books[r.book]?.[r.chapter - 1]?.[r.verse - 1]
-        return <NoteSheet {...r} text={raw ? plain(raw) : undefined} onClose={() => setEditing(undefined)} />
+        const r = parseKey(editing), vs = marks[editing]?.nv ?? [r.verse]
+        const lines = vs.map(v => [v, plain(bible?.books[r.book]?.[r.chapter - 1]?.[v - 1] ?? '')] as [number, string])
+        return <NoteSheet book={r.book} chapter={r.chapter} verses={vs} lines={lines} dir={byId.get(version)?.rtl ? 'rtl' : undefined} onClose={() => setEditing(undefined)} />
       })()}
     </div>
   )

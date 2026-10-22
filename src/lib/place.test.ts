@@ -17,5 +17,7 @@ describe('reading place', () => {
     expect(withoutVerse('#/read/KJV/John/3?v=16')).toBe('#/read/KJV/John/3')
     expect(withoutVerse('#/read/KJV/John/3?v=16&p=BSB')).toBe('#/read/KJV/John/3?p=BSB')
     expect(withoutVerse('#/read/KJV/John/3?p=BSB')).toBe('#/read/KJV/John/3?p=BSB')
+    expect(withoutVerse('#/read/KJV/John/3?at=7&p=BSB')).toBe('#/read/KJV/John/3?p=BSB')
+    expect(withoutVerse('#/read/KJV/John/3?p=BSB&v=16')).toBe('#/read/KJV/John/3?p=BSB')
   })
 })

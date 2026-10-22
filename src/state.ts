@@ -22,6 +22,8 @@ export interface Settings {
   font: FontId
   searchBar: boolean
   layout: 'paragraph' | 'verses'
+  /** how highlights look: behind the letters like a pen, a full block, or coloured letters */
+  highlight: 'marker' | 'block' | 'text'
   strongs: boolean
   strongsNumbers: boolean
   myVersions: string[]
@@ -39,7 +41,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'system', fontSize: 19, font: 'literata', searchBar: true, layout: 'verses', strongs: false, strongsNumbers: false,
+    theme: 'system', fontSize: 19, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -107,4 +109,10 @@ export function readPath(version: string, book: string, chapter: number, verse?:
   if (parallel.length) q.set('p', parallel.join(','))
   const qs = q.toString()
   return `read/${version}/${book}/${chapter}${qs ? '?' + qs : ''}`
+}
+/** Like readPath, but opens with `verse` at the top of the screen (where you
+ *  left off) instead of marking it as a verse you jumped to. */
+export function resumePath(version: string, book: string, chapter: number, verse: number, parallel: string[] = []) {
+  const p = readPath(version, book, chapter, undefined, parallel)
+  return verse > 1 ? `${p}${p.includes('?') ? '&' : '?'}at=${verse}` : p
 }
