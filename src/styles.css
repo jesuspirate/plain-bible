@@ -342,3 +342,13 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
   .sb-chapter-row::-webkit-scrollbar { display: block; height: 6px; }
   .sb-chapter-row::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 3px; }
 }
+
+/* ---- chapter turns ---- */
+article.chapter { touch-action: pan-y pinch-zoom; }
+/* Keep sideways swipes for turning chapters, not the browser's back/forward. */
+html, body { overscroll-behavior-x: none; }
+article.chapter.enter-next { animation: ch-in-next .26s cubic-bezier(.2, .8, .2, 1); }
+article.chapter.enter-prev { animation: ch-in-prev .26s cubic-bezier(.2, .8, .2, 1); }
+@keyframes ch-in-next { from { opacity: 0; transform: translateX(48px); } }
+@keyframes ch-in-prev { from { opacity: 0; transform: translateX(-48px); } }
+@media (prefers-reduced-motion: reduce) { article.chapter.enter-next, article.chapter.enter-prev { animation: none; } }
