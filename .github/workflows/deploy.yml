@@ -44,6 +44,9 @@ jobs:
       # secrets are set in the repository.
       - name: Deploy sync service
         if: github.event_name != 'pull_request' && env.HAS_SYNC_SECRETS == 'true'
+        # A sync problem must never block the Bible itself from deploying;
+        # without VITE_SYNC_URL the app simply hides the account section.
+        continue-on-error: true
         env:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
