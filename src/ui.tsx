@@ -8,10 +8,13 @@ import { useApp } from './state'
 
 export function Sheet({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ComponentChildren; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null)
+  // Keep the latest onClose: callers close over state that changes while open.
+  const latest = useRef(onClose)
+  latest.current = onClose
   useEffect(() => {
     const d = ref.current!
     d.showModal()
-    const close = () => onClose()
+    const close = () => latest.current()
     d.addEventListener('close', close)
     return () => d.removeEventListener('close', close)
   }, [])
@@ -135,8 +138,10 @@ export function BookPicker({ version, onPick, onClose }: { version?: Translation
   )
 }
 
-export function VersionPicker({ title, selected, multi, onChange, onClose, max = 20 }: {
+export function VersionPicker({ title, selected, multi, onChange, onClose, max = 20, extra }: {
   title: string; selected: string[]; multi?: boolean; onChange: (ids: string[]) => void; onClose: () => void; max?: number
+  /** shown above the list, e.g. compare and Strong's options */
+  extra?: ComponentChildren
 }) {
   const { catalog, settings } = useApp()
   const [filter, setFilter] = useState('')
@@ -156,15 +161,16 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
   }
   const row = (t: Translation) => (
     <label class={'vrow' + (sel.includes(t.id) ? ' on' : '')}>
-      <input type={multi ? 'checkbox' : 'radio'} name="ver" checked={sel.includes(t.id)} onChange={() => toggle(t.id)} />
+      <input type={multi ? 'checkbox' : 'radio'} checked={sel.includes(t.id)} onChange={() => toggle(t.id)} />
       <span class="vid">{t.id}</span>
       <span class="vname">{t.name}{t.strongs && <span class="badge">Strong's</span>}</span>
     </label>
   )
   return (
     <Sheet title={title} onClose={() => { if (multi) onChange(sel); onClose() }} wide>
+      {extra}
       <input class="filter" type="search" placeholder={`Filter ${catalog.translations.length} versions by name or language`} value={filter}
-        onInput={e => setFilter((e.target as HTMLInputElement).value)} autoFocus />
+        onInput={e => setFilter((e.target as HTMLInputElement).value)} autoFocus={!matchMedia('(pointer: coarse)').matches} />
       {multi && <p class="muted small">{sel.length} selected (up to {max}). Close to apply.</p>}
       {mine.length > 0 && !f && <section><h3>My versions</h3>{mine.map(row)}</section>}
       {[...byLang.entries()].map(([lang, ts]) => <section><h3>{lang}</h3>{ts.map(row)}</section>)}

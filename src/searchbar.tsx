@@ -25,7 +25,9 @@ const SpeechRecognition: (new () => Recognition) | undefined =
 
 export function SearchBar({ here }: { here?: { version: string; book: string; chapter: number } }) {
   const { settings, data, byId } = useApp()
-  const [chapters, setChapters] = useState(0)
+  // Chapter counts per book in the current version, for the book and chapter browser.
+  const [lens, setLens] = useState<Record<string, number>>({})
+  const [browse, setBrowse] = useState<string>()
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
   const [listening, setListening] = useState(false)
@@ -38,15 +40,19 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   const t = byId.get(version)
 
   const chapterRow = useRef<HTMLDivElement>(null)
+  const panel = useRef<HTMLDivElement>(null)
+  useEffect(() => { if (browse) panel.current?.scrollTo({ top: 0, behavior: 'smooth' }) }, [browse])
   useEffect(() => {
     const row = chapterRow.current, on = row?.querySelector<HTMLElement>('.on')
     if (row && on) row.scrollLeft = on.offsetLeft - row.clientWidth / 2 + on.clientWidth / 2
-  }, [open, chapters])
+  }, [open, browse, lens])
 
   useEffect(() => {
-    setChapters(0)
-    if (here) data.bible(version).then(b => setChapters(b.books[here.book]?.length ?? 0))
-  }, [here?.book, version])
+    if (open) data.bible(version).then(b => setLens(Object.fromEntries(Object.entries(b.books).map(([k, v]) => [k, v.length]))))
+  }, [open, version])
+  useEffect(() => { if (!open) setBrowse(undefined) }, [open])
+  const browseBook = browse ?? here?.book ?? 'Gen'
+  const chapters = lens[browseBook] ?? 0
 
   // "/" or Cmd/Ctrl+K focuses the bar.
   useEffect(() => {
@@ -136,7 +142,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
       {open && <div class="sb-scrim" onClick={close} />}
       <div class={'sb' + (open ? ' sb-open' : '') + ''}>
         {open && (
-          <div class="sb-panel" role="listbox" aria-label="Suggestions">
+          <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions">
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
                 <span class="sb-kicker">Go to · {version}</span>
@@ -163,13 +169,13 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
                 {live.total > live.verses.length && <button class="sb-more" onClick={() => searchAll()}>See all {live.total.toLocaleString()} results, by book →</button>}
               </div>
             )}
-            {!trimmed && here && chapters > 1 && (
+            {!trimmed && chapters > 0 && (
               <div class="sb-chapters">
-                <div class="sb-kicker">{bookById(here.book).name}</div>
+                <div class="sb-kicker">{bookById(browseBook).name}</div>
                 <div class="sb-chapter-row" ref={chapterRow}>
                   {Array.from({ length: chapters }, (_, i) => (
-                    <button class={'sb-ch' + (i + 1 === here.chapter ? ' on' : '')} onClick={() => finish(readPath(version, here.book, i + 1))}
-                      >{i + 1}</button>
+                    <button class={'sb-ch' + (here?.book === browseBook && i + 1 === here.chapter ? ' on' : '')}
+                      onClick={() => finish(readPath(version, browseBook, i + 1))}>{i + 1}</button>
                   ))}
                 </div>
               </div>
@@ -182,6 +188,22 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
                     {recent.map(r => <button class="sb-row" onClick={() => searchAll(r)}><Glass small />{r}</button>)}
                   </div>
                 )}
+                <div class="sb-allbooks">
+                  {([['Old Testament', (i: number) => i < 39], ['New Testament', (i: number) => i >= 39 && i < 66], ['Deuterocanon', (i: number) => i >= 66]] as const).map(([label, inGroup]) => {
+                    const list = BOOKS.filter((b, i) => inGroup(i) && lens[b.id])
+                    return list.length > 0 && (
+                      <>
+                        <div class="sb-kicker">{label}</div>
+                        <div class="sb-bookgrid">
+                          {list.map(b => (
+                            <button class={'sb-book' + (b.id === browseBook ? ' on' : '')} title={b.name}
+                              onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : setBrowse(b.id)}>{b.abbr}</button>
+                          ))}
+                        </div>
+                      </>
+                    )
+                  })}
+                </div>
                 <div class="sb-tips">
                   <div class="sb-kicker">Try</div>
                   {['John 3:16', '"born again"', 'love NEAR/5 neighbour', 'H430', 'grace in:pauline'].map(x => (

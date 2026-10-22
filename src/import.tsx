@@ -90,7 +90,7 @@ export function DataTools() {
         </label>
         <button onClick={backup}>Back up my data</button>
       </div>
-      <p class="muted small">Import a Life Bible export (the whole .zip or one of its .html files), a list of references with one per line, or a Plain Bible backup.
+      <p class="muted small">Import highlights and bookmarks exported from another Bible app (a .zip, .html or .txt export with one reference per line), or a Plain Bible backup.
         Highlights belong to the verse, so they appear in every version.</p>
       {preview && (
         <div class="import-preview">

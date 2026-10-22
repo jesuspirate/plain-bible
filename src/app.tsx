@@ -7,6 +7,7 @@ import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
 import { DataTools } from './import'
+import { VersionPicker } from './ui'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
@@ -55,10 +56,7 @@ export function App() {
       <header class="top">
         <a class="brand" href={'#/' + readPath(settings.version, 'John', 1)}>Plain Bible</a>
         <nav>
-          <a class={view === 'read' ? 'on' : ''} href="#/read">Read</a>
-          <a class={view === 'search' ? 'on' : ''} href="#/search">Search</a>
-          <a class={view === 'saved' ? 'on' : ''} href="#/saved">Saved</a>
-          <a class={view === 'versions' ? 'on' : ''} href="#/versions">Versions</a>
+          <VersionMenu route={route} />
           <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
             <svg class="gear" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
           </a>
@@ -84,20 +82,69 @@ function ReaderRoute({ route }: { route: Route }) {
   useEffect(() => {
     if (route.path.length < 4) {
       const last = loadLast()
-      go(readPath(route.path[1] || settings.version, last?.[0] ?? 'John', last?.[1] ?? 1), true)
+      go(readPath(route.path[1] || settings.version, last?.[0] ?? 'Gen', last?.[1] ?? 1), true)
     } else saveLast(route.path[2], +route.path[3])
   }, [route.path.join('/')])
   return route.path.length >= 4 ? <Reader route={route} /> : null
 }
 
+// The version button in the top bar: switch version, compare side by side,
+// Strong's numbers, and a way to the full Versions page.
+function VersionMenu({ route }: { route: Route }) {
+  const { settings, update, byId } = useApp()
+  const [open, setOpen] = useState<'' | 'version' | 'compare'>('')
+  const reading = route.path[0] === 'read' && route.path.length >= 4
+  const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.version
+  const parallel = ((reading && route.params.get('p')?.split(',')) || settings.parallel).filter(id => byId.has(id) && id !== version)
+  const goTo = (v: string, p: string[]) => {
+    const others = p.filter(id => id !== v)
+    if (reading) go(readPath(v, route.path[2], +route.path[3], +(route.params.get('v') || 0) || undefined, others))
+    else { update({ version: v, parallel: others }); go('read/' + v) }
+  }
+  const tagged = [version, ...parallel].some(v => byId.get(v)?.strongs)
+  return (
+    <>
+      <button class={'version-btn' + (route.path[0] === 'versions' ? ' on' : '')} onClick={() => setOpen('version')}
+        aria-label={`Version: ${byId.get(version)?.name ?? version}. Change version`}>
+        {version}{parallel.length > 0 && <span class="muted"> +{parallel.length}</span>} <span aria-hidden="true">▾</span>
+      </button>
+      {open === 'version' && (
+        <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)}
+          extra={
+            <div class="vm-extra">
+              <button class="vm-row" onClick={() => setOpen('compare')}>
+                <strong>Compare side by side</strong><span class="muted">{parallel.length ? parallel.join(', ') : 'Off'} ›</span>
+              </button>
+              {tagged && (
+                <label class="vm-row">
+                  <strong>Strong's numbers</strong>
+                  <input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} />
+                </label>
+              )}
+              <a class="vm-row" href="#/versions" onClick={() => setOpen('')}><strong>Download and manage versions</strong><span class="muted">›</span></a>
+            </div>
+          } />
+      )}
+      {open === 'compare' && (
+        <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setOpen('')}
+          onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
+      )}
+    </>
+  )
+}
+
 function ThemeToggle() {
   const { settings, update } = useApp()
   const prefersDark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches
-  const dark = settings.theme === 'dark' || (settings.theme === 'system' && prefersDark)
+  const current = settings.theme === 'system' ? (prefersDark ? 'dark' : 'light') : settings.theme
+  const next = ({ light: 'sepia', sepia: 'dark', dark: 'light' } as const)[current]
+  const label = { light: 'Light', sepia: 'Sepia', dark: 'Dark' }
   return (
-    <button class="icon theme-toggle" aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Light mode' : 'Dark mode'}
-      onClick={() => update({ theme: dark ? 'light' : 'dark' })}>
-      {dark
+    <button class="icon theme-toggle" aria-label={`${label[current]} mode. Switch to ${label[next].toLowerCase()} mode`} title={`${label[current]} · tap for ${label[next].toLowerCase()}`}
+      onClick={() => update({ theme: next })}>
+      {current === 'sepia'
+        ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 5.5C6.5 4.3 9.3 4.4 12 6c2.7-1.6 5.5-1.7 8-.5v13c-2.5-1.2-5.3-1.1-8 .5-2.7-1.6-5.5-1.7-8-.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /><path d="M12 6v13" stroke="currentColor" stroke-width="1.8" /></svg>
+        : current === 'dark'
         ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor" /><g stroke="currentColor" stroke-width="2" stroke-linecap="round">{[0, 45, 90, 135, 180, 225, 270, 315].map(a => <line x1="12" y1="2.5" x2="12" y2="4.5" transform={`rotate(${a} 12 12)`} />)}</g></svg>
         : <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor" /></svg>}
     </button>
@@ -109,8 +156,9 @@ function loadLast(): [string, number] | undefined { try { return JSON.parse(loca
 function saveLast(book: string, ch: number) { try { localStorage.setItem(LAST, JSON.stringify([book, ch])) } catch { /* ignore */ } }
 
 function SettingsView() {
-  const { settings, update, catalog } = useApp()
+  const { settings, update, catalog, marks } = useApp()
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
+  const saved = Object.values(marks).filter(m => m.c || m.b).length
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
       {opts.map(([v, label]) => (
@@ -121,7 +169,11 @@ function SettingsView() {
   return (
     <div class="settings">
       <h1>Settings</h1>
-      <div class="field"><span>Theme</span>{sel('theme', [['system', 'Auto'], ['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark']])}</div>
+      <div class="shortcuts">
+        <a class="shortcut" href="#/saved"><strong>Saved</strong><span class="muted">{saved ? `${saved} highlights and bookmarks` : 'Your highlights and bookmarks'}</span></a>
+        <a class="shortcut" href="#/search"><strong>Advanced search</strong><span class="muted">Search many versions at once, with filters</span></a>
+      </div>
+      <div class="field"><span>Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
       <div class="field"><span>Text size</span>
         <div class="row">
           <button onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller">A−</button>

@@ -17,7 +17,7 @@ no reading plans, devotionals, accounts, or feeds.
 - **Tap a verse** to highlight it in one of eight colors, bookmark, copy, share or compare it. Swipe left or right
   to change chapters. Highlights belong to the verse, so they show in every version.
 - **Saved** page listing your highlights and bookmarks in Bible order, filterable by color.
-- **Import** highlights and saved verses from a Life Bible export (the whole .zip or a single .html file) or any
+- **Import** highlights and saved verses exported from other Bible apps (a .zip, .html or .txt export) or any
   list of references, and back up your data to a JSON file.
 - **Reading fonts**: Literata, Source Serif, EB Garamond, Inter, Atkinson Hyperlegible, or the system font.
   Light, dark and sepia themes.

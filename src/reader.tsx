@@ -5,13 +5,13 @@ import { formatRef } from './lib/refs'
 import { markKey, PALETTE } from './lib/marks'
 import { plain } from './lib/text'
 import { go, readPath, Route, useApp } from './state'
-import { BookPicker, LexiconSheet, Sheet, VerseText, VersionPicker } from './ui'
+import { LexiconSheet, Sheet, VerseText } from './ui'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks } = useApp()
   const [, , bookParam, chParam] = route.path
   const version = byId.has(route.path[1]) ? route.path[1] : settings.version
-  const book = bookParam && BOOK_INDEX[bookParam] !== undefined ? bookParam : 'John'
+  const book = bookParam && BOOK_INDEX[bookParam] !== undefined ? bookParam : 'Gen'
   const chapter = Math.max(1, +chParam || 1)
   const target = +(route.params.get('v') || 0)
   const parallel = (route.params.get('p')?.split(',') ?? settings.parallel).filter(id => byId.has(id) && id !== version)
@@ -19,7 +19,6 @@ export function Reader({ route }: { route: Route }) {
 
   const [bibles, setBibles] = useState<Record<string, Bible>>({})
   const [error, setError] = useState('')
-  const [picker, setPicker] = useState<'' | 'book' | 'version' | 'parallel'>('')
   const [lex, setLex] = useState<string>()
   const [verseMenu, setVerseMenu] = useState<number>()
 
@@ -87,20 +86,6 @@ export function Reader({ route }: { route: Route }) {
 
   return (
     <div class="reader">
-      <div class="toolbar">
-        <button class="pick" onClick={() => setPicker('book')}>{bookById(book).name} {chapter} ▾</button>
-        <button class="pick" onClick={() => setPicker('version')}>{version} ▾</button>
-        <button class="pick ghost" onClick={() => setPicker('parallel')} title="Show other versions side by side">
-          {parallel.length ? `+ ${parallel.join(', ')}` : '+ Compare'}
-        </button>
-        <span class="spacer" />
-        {versions.some(v => byId.get(v)?.strongs) && (
-          <label class="toggle" title="Tap tagged words to see the Hebrew or Greek behind them">
-            <input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> Strong's
-          </label>
-        )}
-      </div>
-
       {error && <p class="error">{error}</p>}
       {!loaded && !error && <p class="muted center">Loading…</p>}
       {loaded && rows === 0 && <p class="muted center">{t?.name} does not include {bookById(book).name} {chapter}.</p>}
@@ -143,11 +128,6 @@ export function Reader({ route }: { route: Route }) {
       </nav>
       {t && <p class="credit muted small">{t.name}. {t.license}.</p>}
 
-      {picker === 'book' && <BookPicker version={t} onClose={() => setPicker('')} onPick={(b, c) => { setPicker(''); nav(b, c) }} />}
-      {picker === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setPicker('')}
-        onChange={([id]) => go(readPath(id, book, chapter, target || undefined, parallel.filter(p => p !== id)))} />}
-      {picker === 'parallel' && <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setPicker('')}
-        onChange={ids => { update({ parallel: ids }); go(readPath(version, book, chapter, target || undefined, ids.filter(i => i !== version)), true) }} />}
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {verseMenu && <VerseMenu book={book} chapter={chapter} verse={verseMenu} versions={versions} bibles={bibles} onClose={() => setVerseMenu(undefined)} />}
     </div>
