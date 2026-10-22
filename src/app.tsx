@@ -9,6 +9,7 @@ import { Saved } from './saved'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
+import { AccountSection, saveSettingsT, useSync } from './account'
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -44,15 +45,22 @@ export function App() {
   useEffect(() => { if (page !== 'read') window.scrollTo(0, 0) }, [page])
 
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
+  const sync = useSync(marks, setMarksState, settings, setSettings, id => byId.has(id))
 
   if (error) return <p class="error center">Could not load the library: {error}</p>
   if (!catalog || !settings) return <p class="muted center">Loading…</p>
 
-  const update = (patch: Partial<Settings>) => setSettings(s => ({ ...s!, ...patch }))
+  const update = (patch: Partial<Settings>) => {
+    setSettings(s => {
+      const next = { ...s!, ...patch }
+      if (JSON.stringify(next) !== JSON.stringify(s)) saveSettingsT(Date.now())
+      return next
+    })
+  }
   const view = route.path[0] || 'read'
 
   return (
-    <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks }}>
+    <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
         <a class="brand" href="#/read">Plain Bible</a>
         <nav>
@@ -156,7 +164,7 @@ function loadLast(): [string, number] | undefined { try { return JSON.parse(loca
 function saveLast(book: string, ch: number) { try { localStorage.setItem(LAST, JSON.stringify([book, ch])) } catch { /* ignore */ } }
 
 function SettingsView() {
-  const { settings, update, catalog, marks } = useApp()
+  const { settings, update, catalog, marks, sync } = useApp()
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
   const saved = Object.values(marks).filter(m => m.c || m.b).length
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
@@ -173,6 +181,7 @@ function SettingsView() {
         <a class="shortcut" href="#/saved"><strong>Saved</strong><span class="muted">{saved ? `${saved} highlights and bookmarks` : 'Your highlights and bookmarks'}</span></a>
         <a class="shortcut" href="#/search"><strong>Advanced search</strong><span class="muted">Search many versions at once, with filters</span></a>
       </div>
+      {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
       <div class="field"><span>Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
       <div class="field"><span>Text size</span>
         <div class="row">
@@ -205,7 +214,7 @@ function SettingsView() {
       <h2>Your data</h2>
       <DataTools />
       <h2>About</h2>
-      <p>Plain Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No accounts, no plans, no tracking. Your highlights and settings are stored on your device.</p>
+      <p>Plain Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
       <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
         the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
         Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).

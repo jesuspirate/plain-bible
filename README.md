@@ -45,6 +45,21 @@ Options: match case, match accents and Hebrew vowel points, match inside words.
 Accents and vowel points are ignored by default, so `θεος` finds `Θεὸς` and `אלהים` finds `אֱלֹהִ֑ים`.
 Chinese and Japanese text is matched without needing word breaks.
 
+## Optional account sync
+
+Signing in is optional and passkey-only (no email, no password). A small Cloudflare Worker in
+[`worker/`](worker) keeps one JSON document per account in D1: highlights, bookmarks and settings.
+Each verse keeps its newest change, so edits on two devices merge cleanly.
+
+To turn it on, add two repository secrets: `CLOUDFLARE_API_TOKEN` (an API token from the
+"Edit Cloudflare Workers" template plus Account → D1 → Edit) and `CLOUDFLARE_ACCOUNT_ID`.
+The next push to `main` creates the database, deploys the Worker and builds the app pointing at it.
+Passkeys are tied to the `RP_ID` domain in `worker/wrangler.toml`.
+
+Local development: `cd worker && npm install && npx wrangler d1 migrations apply plain-bible-sync --local &&
+npx wrangler dev --var RP_ID:localhost --var ORIGINS:http://localhost:5173`, then run the app with
+`VITE_SYNC_URL=http://localhost:8787 npm run dev`.
+
 ## Development
 
 ```sh

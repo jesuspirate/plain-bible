@@ -9,7 +9,8 @@ export interface Mark {
   b?: 1
   /** version it was made in (informational) */
   v?: string
-  /** last changed, ms since epoch */
+  /** last changed, ms since epoch. A mark with no color and no bookmark
+   *  records a removal, so that it syncs to other devices. */
   t: number
 }
 /** key: "John.3.16" */

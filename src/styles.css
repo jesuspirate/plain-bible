@@ -280,3 +280,10 @@ main.with-bar { padding-bottom: 120px; }
 .vm-extra > .vm-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: none; border-radius: 0; background: var(--surface); color: var(--text); text-decoration: none; text-align: left; font: inherit; font-size: 16px; cursor: pointer; margin: 0; width: 100%; box-sizing: border-box; }
 .vm-extra > .vm-row + .vm-row { border-top: 1px solid var(--line); }
 .vm-extra > .vm-row strong { font-weight: 600; }
+
+/* ---- account ---- */
+.account p { margin: 0 0 10px; }
+.account .row { margin: 4px 0 10px; }
+button.danger { color: #b3261e; }
+:root[data-theme='dark'] button.danger { color: #ff8a80; }
+.account-box { margin: 0 0 20px; } .account-box h2 { margin-top: 0; }
