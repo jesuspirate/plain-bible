@@ -156,6 +156,25 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   }, [trimmed, version])
 
   const close = () => { setOpen(false); input.current?.blur() }
+
+  // Pull the panel down from its top to close it, like an iOS sheet.
+  const pull = useRef<{ y: number; dy: number }>()
+  const onPanelTouchStart = (e: TouchEvent) => {
+    pull.current = panel.current && panel.current.scrollTop <= 0 ? { y: e.touches[0].clientY, dy: 0 } : undefined
+  }
+  const onPanelTouchMove = (e: TouchEvent) => {
+    const p = pull.current, el = panel.current
+    if (!p || !el) return
+    p.dy = Math.max(0, e.touches[0].clientY - p.y)
+    if (p.dy > 0 && el.scrollTop <= 0) { el.style.transition = 'none'; el.style.transform = `translateY(${p.dy * .6}px)`; el.style.opacity = String(1 - Math.min(p.dy / 400, .5)) }
+  }
+  const onPanelTouchEnd = () => {
+    const p = pull.current, el = panel.current
+    pull.current = undefined
+    if (!p || !el) return
+    el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''
+    if (p.dy > 90) close()
+  }
   const finish = (path: string) => { close(); setQ(''); go(path) }
   const searchAll = (query = trimmed) => {
     if (!query) return
@@ -194,7 +213,9 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
       {open && <div class="sb-scrim" onClick={close} />}
       <div class={'sb' + (open ? ' sb-open' : '') + ''}>
         {open && (
-          <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions">
+          <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
+            onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}>
+            <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
             {micNote && <p class="sb-note">{micNote}</p>}
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
@@ -269,10 +290,11 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             )}
           </div>
         )}
+        <div class="sb-bar">
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={`Search ${version} or go to a passage`}
-            placeholder={listening ? 'Listening…' : here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or go to John 3:16`}
+            placeholder={listening ? 'Listening…' : here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
@@ -281,8 +303,9 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
               <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" /></svg>
             </button>
           )}
-          {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </form>
+        {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
+        </div>
       </div>
     </>
   )
