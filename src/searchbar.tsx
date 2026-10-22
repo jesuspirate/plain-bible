@@ -1,9 +1,10 @@
 // Floating search bar at the bottom of the screen, in the style of the iOS
 // search field. Tapping it opens a panel with instant results: a reference
 // jump with the verse itself, matching books, live search hits, and recent
-// searches. It tucks away while scrolling down and returns on scroll up.
+// searches, and the chapters of the book you are reading. It stays pinned
+// while you read, showing where you are.
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { BOOKS } from './lib/books'
+import { BOOKS, bookById } from './lib/books'
 import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
@@ -22,39 +23,37 @@ type Recognition = { lang: string; interimResults: boolean; start(): void; stop(
 const SpeechRecognition: (new () => Recognition) | undefined =
   typeof window !== 'undefined' ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : undefined
 
-export function SearchBar() {
+export function SearchBar({ here }: { here?: { version: string; book: string; chapter: number } }) {
   const { settings, data, byId } = useApp()
+  const [chapters, setChapters] = useState(0)
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
-  const [hidden, setHidden] = useState(false)
   const [listening, setListening] = useState(false)
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
   const recognizer = useRef<Recognition>()
-  const version = settings.version
+  const version = here?.version ?? settings.version
   const t = byId.get(version)
 
-  // Hide while scrolling down, show again when scrolling up.
+  const chapterRow = useRef<HTMLDivElement>(null)
   useEffect(() => {
-    let last = scrollY
-    const on = () => {
-      const y = scrollY
-      if (Math.abs(y - last) < 8) return
-      setHidden(y > last && y > 120)
-      last = y
-    }
-    addEventListener('scroll', on, { passive: true })
-    return () => removeEventListener('scroll', on)
-  }, [])
+    const row = chapterRow.current, on = row?.querySelector<HTMLElement>('.on')
+    if (row && on) row.scrollLeft = on.offsetLeft - row.clientWidth / 2 + on.clientWidth / 2
+  }, [open, chapters])
+
+  useEffect(() => {
+    setChapters(0)
+    if (here) data.bible(version).then(b => setChapters(b.books[here.book]?.length ?? 0))
+  }, [here?.book, version])
 
   // "/" or Cmd/Ctrl+K focuses the bar.
   useEffect(() => {
     const on = (e: KeyboardEvent) => {
       const typing = (e.target as HTMLElement).closest('input, textarea, select, dialog')
       if ((e.key === '/' && !typing) || (e.key === 'k' && (e.metaKey || e.ctrlKey))) {
-        e.preventDefault(); setHidden(false); input.current?.focus()
+        e.preventDefault(); input.current?.focus()
       }
     }
     addEventListener('keydown', on)
@@ -135,7 +134,7 @@ export function SearchBar() {
   return (
     <>
       {open && <div class="sb-scrim" onClick={close} />}
-      <div class={'sb' + (open ? ' sb-open' : '') + (hidden && !open ? ' sb-hidden' : '')}>
+      <div class={'sb' + (open ? ' sb-open' : '') + ''}>
         {open && (
           <div class="sb-panel" role="listbox" aria-label="Suggestions">
             {preview && (
@@ -164,6 +163,17 @@ export function SearchBar() {
                 {live.total > live.verses.length && <button class="sb-more" onClick={() => searchAll()}>See all {live.total.toLocaleString()} results, by book →</button>}
               </div>
             )}
+            {!trimmed && here && chapters > 1 && (
+              <div class="sb-chapters">
+                <div class="sb-kicker">{bookById(here.book).name}</div>
+                <div class="sb-chapter-row" ref={chapterRow}>
+                  {Array.from({ length: chapters }, (_, i) => (
+                    <button class={'sb-ch' + (i + 1 === here.chapter ? ' on' : '')} onClick={() => finish(readPath(version, here.book, i + 1))}
+                      >{i + 1}</button>
+                  ))}
+                </div>
+              </div>
+            )}
             {!trimmed && (
               <>
                 {recent.length > 0 && (
@@ -185,7 +195,7 @@ export function SearchBar() {
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={`Search ${version} or go to a passage`}
-            placeholder={listening ? 'Listening…' : `Search ${version} or go to John 3:16`}
+            placeholder={listening ? 'Listening…' : here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or go to John 3:16`}
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}

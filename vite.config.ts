@@ -26,7 +26,7 @@ export default defineConfig({
         ],
       },
       workbox: {
-        globPatterns: ['**/*.{js,css,html,svg,png}', 'data/catalog.json'],
+        globPatterns: ['**/*.{js,css,html,svg,png}'],
         runtimeCaching: [
           {
             // Bibles you open, or save from the Versions page, stay available offline.
@@ -41,9 +41,10 @@ export default defineConfig({
             options: { cacheName: 'fonts' },
           },
           {
+            // The list of versions: always fresh when online, so new versions appear right away.
             urlPattern: ({ url }) => url.pathname.endsWith('/data/catalog.json'),
-            handler: 'StaleWhileRevalidate',
-            options: { cacheName: 'bible-catalog' },
+            handler: 'NetworkFirst',
+            options: { cacheName: 'bible-catalog', networkTimeoutSeconds: 4 },
           },
         ],
       },

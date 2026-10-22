@@ -49,10 +49,12 @@ header.top {
 header.top nav { display: flex; gap: 2px; margin-left: auto; overflow-x: auto; }
 header.top nav a { padding: 6px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; white-space: nowrap; }
 header.top nav a.on { color: var(--text); background: var(--chip); }
+header.top nav .gear { display: block; margin: 2px 0; }
 main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 @media (max-width: 520px) {
   .brand { display: none; }
   header.top nav { margin: 0 auto; }
+  header.top nav a { padding: 6px 8px; }
 }
 
 /* ---- reader ---- */
@@ -177,7 +179,6 @@ main.with-bar { padding-bottom: 120px; }
   width: min(640px, calc(100vw - 24px)); transform: translateX(-50%);
   transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s;
 }
-.sb-hidden { transform: translate(-50%, calc(100% + 40px)); opacity: 0; pointer-events: none; }
 .sb-field {
   display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 8px 0 16px; border-radius: 26px;
   background: color-mix(in srgb, var(--surface) 72%, transparent);
@@ -224,3 +225,42 @@ main.with-bar { padding-bottom: 120px; }
 .sb-row .sb-glass { color: var(--muted); }
 .sb-open .sb-field { box-shadow: 0 10px 30px rgba(0,0,0,.2); }
 @media (prefers-reduced-motion: reduce) { .sb, .sb-panel, .sb-scrim { transition: none; animation: none; } }
+
+.sb-chapters { padding-bottom: 6px; }
+.sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; scroll-behavior: smooth; }
+.sb-chapter-row::-webkit-scrollbar { display: none; }
+.sb-ch { flex: none; min-width: 40px; height: 40px; border-radius: 12px; border: none; background: var(--chip); font-variant-numeric: tabular-nums; }
+.sb-ch.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+
+/* ---- highlights & bookmarks ---- */
+.verse, .pv { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.hl { --hl-mix: 55%; }
+.verse.hl .cell, .pv.hl { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+.verse.hl .cell { padding: 1px 4px; margin: 0 -4px; }
+:root[data-theme='dark'] .hl { --hl-mix: 32%; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl { --hl-mix: 32%; } }
+.bm .vn::after, .bm > .vn::after { content: '🔖'; font-size: .9em; margin-left: 2px; }
+.picked .cell, .pv.picked { outline: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); outline-offset: 2px; border-radius: 4px; }
+.menu-verse { font-family: var(--reading); font-size: 17px; line-height: 1.5; margin: 0 0 14px; max-height: 7.5em; overflow: auto; }
+.swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
+.swatch { width: 34px; height: 34px; border-radius: 50%; border: 2px solid transparent; padding: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.08) inset; }
+.swatch.on { border-color: var(--text); }
+.swatch.none { display: grid; place-items: center; background: var(--chip); color: var(--muted); font-size: 14px; }
+.actions button.on { background: var(--chip); }
+
+/* ---- saved ---- */
+.saved { max-width: 46rem; margin: 0 auto; }
+.chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 16px; }
+.chip.on { background: var(--accent); color: var(--accent-ink); }
+.swatch-chip { display: inline-flex; align-items: center; gap: 6px; }
+.dot { width: 14px; height: 14px; border-radius: 50%; box-shadow: 0 0 0 1px rgba(0,0,0,.1) inset; }
+.saved-list { list-style: none; padding: 0; margin: 0; }
+.saved-list li { padding: 10px 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid var(--line); }
+.saved-list li.hl { background: color-mix(in srgb, var(--hl) 28%, var(--surface)); border-color: color-mix(in srgb, var(--hl) 60%, var(--line)); }
+.saved-head { display: flex; align-items: center; gap: 8px; }
+.saved-text { margin: 4px 0 0; font-family: var(--reading); font-size: calc(var(--font-size) * .9); line-height: 1.55; }
+.datatools .button { display: inline-block; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); cursor: pointer; }
+.datatools .button.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.import-preview { padding: 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); margin: 8px 0; }
+.import-preview pre { white-space: pre-wrap; font-size: 12px; }
+.note { padding: 8px 12px; border-radius: 8px; background: var(--chip); }

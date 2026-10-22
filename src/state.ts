@@ -2,6 +2,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useState } from 'preact/hooks'
 import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
+import type { Marks } from './lib/marks'
 
 export type FontId = 'literata' | 'source-serif' | 'garamond' | 'inter' | 'atkinson' | 'system'
 
@@ -62,6 +63,8 @@ export interface AppState {
   byId: Map<string, Translation>
   settings: Settings
   update: (patch: Partial<Settings>) => void
+  marks: Marks
+  setMarks: (fn: (m: Marks) => Marks) => void
 }
 export const AppContext = createContext<AppState>(null!)
 export const useApp = () => useContext(AppContext)

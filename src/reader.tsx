@@ -1,13 +1,14 @@
-import { useEffect, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
+import { markKey, PALETTE } from './lib/marks'
 import { plain } from './lib/text'
 import { go, readPath, Route, useApp } from './state'
 import { BookPicker, LexiconSheet, Sheet, VerseText, VersionPicker } from './ui'
 
 export function Reader({ route }: { route: Route }) {
-  const { settings, update, byId, data } = useApp()
+  const { settings, update, byId, data, marks } = useApp()
   const [, , bookParam, chParam] = route.path
   const version = byId.has(route.path[1]) ? route.path[1] : settings.version
   const book = bookParam && BOOK_INDEX[bookParam] !== undefined ? bookParam : 'John'
@@ -59,6 +60,26 @@ export function Reader({ route }: { route: Route }) {
     return () => window.removeEventListener('keydown', onKey)
   })
 
+  const mark = (v: number) => marks[markKey(book, chapter, v)]
+  const verseClass = (base: string, v: number) =>
+    base + (target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (verseMenu === v ? ' picked' : '')
+  const hlStyle = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
+  const tapVerse = (e: MouseEvent, v: number) => {
+    if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
+    if (String(getSelection() ?? '').trim()) return
+    setVerseMenu(v)
+  }
+  // Swipe left/right to change chapter.
+  const touch = useRef<{ x: number; y: number; t: number }>()
+  const onTouchStart = (e: TouchEvent) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now() } }
+  const onTouchEnd = (e: TouchEvent) => {
+    const s = touch.current, p = e.changedTouches[0]
+    touch.current = undefined
+    if (!s || Date.now() - s.t > 600) return
+    const dx = p.clientX - s.x, dy = p.clientY - s.y
+    if (Math.abs(dx) > 70 && Math.abs(dy) < Math.abs(dx) * 0.5) step(dx < 0 ? 1 : -1)
+  }
+
   const loaded = versions.every(v => bibles[v])
   const rows = loaded ? Math.max(...versions.map(v => bibles[v].books[book]?.[chapter - 1]?.length ?? 0)) : 0
   const showStrongs = settings.strongs
@@ -85,7 +106,7 @@ export function Reader({ route }: { route: Route }) {
       {loaded && rows === 0 && <p class="muted center">{t?.name} does not include {bookById(book).name} {chapter}.</p>}
 
       {loaded && rows > 0 && (
-        <article class={`chapter ${settings.layout} cols-${versions.length}`} style={{ '--cols': versions.length }}>
+        <article onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} class={`chapter ${settings.layout} cols-${versions.length}`} style={{ '--cols': versions.length }}>
           <h1 class="chapter-title">{bookById(book).name} {chapter}</h1>
           {versions.length > 1 && (
             <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
@@ -93,20 +114,20 @@ export function Reader({ route }: { route: Route }) {
           {versions.length === 1 && settings.layout === 'paragraph' ? (
             <p class="para" dir={t?.rtl ? 'rtl' : undefined}>
               {primary.books[book][chapter - 1].map((raw, i) => raw && (
-                <span id={'v' + (i + 1)} class={'pv' + (target === i + 1 ? ' target' : '')}>
-                  <sup class="vn" onClick={() => setVerseMenu(i + 1)}>{i + 1}</sup>
+                <span id={'v' + (i + 1)} class={verseClass('pv', i + 1)} style={hlStyle(i + 1)} onClick={e => tapVerse(e, i + 1)}>
+                  <sup class="vn">{i + 1}</sup>
                   <VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={setLex} />{' '}
                 </span>
               ))}
             </p>
           ) : Array.from({ length: rows }, (_, i) => (
-            <div id={'v' + (i + 1)} class={'verse' + (target === i + 1 ? ' target' : '')}>
+            <div id={'v' + (i + 1)} class={verseClass('verse', i + 1)} style={hlStyle(i + 1)} onClick={e => tapVerse(e, i + 1)}>
               {versions.map(v => {
                 const raw = bibles[v].books[book]?.[chapter - 1]?.[i]
                 const tv = byId.get(v)
                 return (
                   <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
-                    <button class="vn" onClick={() => setVerseMenu(i + 1)} aria-label={`Verse ${i + 1} options`}>{i + 1}</button>
+                    <button class="vn" aria-label={`Verse ${i + 1} options`}>{i + 1}</button>
                     {raw ? <VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={setLex} /> : <span class="muted">—</span>}
                   </div>
                 )
@@ -136,7 +157,18 @@ export function Reader({ route }: { route: Route }) {
 function VerseMenu({ book, chapter, verse, versions, bibles, onClose }: {
   book: string; chapter: number; verse: number; versions: string[]; bibles: Record<string, Bible>; onClose: () => void
 }) {
-  const { settings, byId, data } = useApp()
+  const { settings, byId, data, marks, setMarks } = useApp()
+  const key = markKey(book, chapter, verse)
+  const m = marks[key]
+  const setMark = (patch: { c?: string | null; b?: 1 | null }) => setMarks(all => {
+    const next = { ...all[key], t: Date.now() } as Record<string, unknown>
+    for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
+    if (versions[0] && patch.c) next.v = versions[0]
+    const out = { ...all }
+    if (!next.c && !next.b) delete out[key]
+    else out[key] = next as never
+    return out
+  })
   const [compare, setCompare] = useState<Bible[]>()
   const [copied, setCopied] = useState('')
   const ref = formatRef({ book, chapter, verse })
@@ -151,10 +183,21 @@ function VerseMenu({ book, chapter, verse, versions, bibles, onClose }: {
   const link = `${location.origin}${location.pathname}#/${readPath(versions[0], book, chapter, verse)}`
   return (
     <Sheet title={ref} onClose={onClose}>
-      <div class="row wrap">
-        <button onClick={() => copy(`${text(bibles[versions[0]])}\n${ref} (${versions[0]})`, 'Copied verse')}>Copy verse</button>
-        <button onClick={() => copy(link, 'Copied link')}>Copy link</button>
-        <button onClick={showAll}>Compare in my versions</button>
+      <p class="menu-verse">{text(bibles[versions[0]])}</p>
+      <div class="swatches" role="radiogroup" aria-label="Highlight color">
+        {PALETTE.map(p => (
+          <button role="radio" aria-checked={m?.c === p.color} aria-label={p.name} class={'swatch' + (m?.c === p.color ? ' on' : '')}
+            style={{ background: p.color }} onClick={() => { setMark({ c: m?.c === p.color ? null : p.color }); onClose() }} />
+        ))}
+        {m?.c && <button class="swatch none" aria-label="Remove highlight" onClick={() => { setMark({ c: null }); onClose() }}>✕</button>}
+      </div>
+      <div class="row wrap actions">
+        <button class={m?.b ? 'on' : ''} onClick={() => setMark({ b: m?.b ? null : 1 })}>{m?.b ? '🔖 Bookmarked' : '🔖 Bookmark'}</button>
+        <button onClick={() => copy(`${text(bibles[versions[0]])}\n${ref} (${versions[0]})`, 'Copied verse')}>Copy</button>
+        {'share' in navigator
+          ? <button onClick={() => navigator.share({ title: ref, text: `${text(bibles[versions[0]])}\n${ref} (${versions[0]})`, url: link }).catch(() => {})}>Share</button>
+          : <button onClick={() => copy(link, 'Copied link')}>Copy link</button>}
+        <button onClick={showAll}>Compare</button>
       </div>
       {copied && <p class="muted small">{copied}</p>}
       {compare && (

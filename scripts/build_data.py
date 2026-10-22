@@ -124,6 +124,11 @@ def read_license(readme):
     return m.group(1).strip() if m else ""
 
 
+def read_title(readme):
+    m = re.search(r"^#\s+(.*)", open(readme, encoding="utf-8").read(), flags=re.M)
+    return m.group(1).strip() if m else ""
+
+
 def clean_name(full, tid):
     name = full.split(":", 1)[1].strip() if full.startswith(tid + ":") else full.strip()
     return re.sub(r"\s+", " ", name)
@@ -292,7 +297,8 @@ def main():
         if not books:
             continue
         write_json(os.path.join(OUT, "bibles", tid + ".json"), {"id": tid, "books": books})
-        catalog.append({"id": tid, "name": clean_name(full, tid), "lang": lang,
+        name = re.sub(r"\s+with Strong.*$", "", clean_name(full or read_title(readme), tid), flags=re.I)
+        catalog.append({"id": tid, "name": name, "lang": lang,
                         "license": lic, "strongs": tagged, "rtl": lang in RTL,
                         "books": list(books.keys()),
                         "source": "https://github.com/scrollmapper/bible_databases/tree/master/sources/%s/%s" % (lang, tid)})
