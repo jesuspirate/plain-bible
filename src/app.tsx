@@ -97,7 +97,12 @@ export function App() {
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
   const sync = useSync(marks, setMarksState, settings, setSettings, id => byId.has(id))
 
-  if (error) return <p class="error center">Could not load the library: {error}</p>
+  if (error) return (
+    <div class="center">
+      <p class="error">Could not load the list of versions: {error}</p>
+      <p><button onClick={() => location.reload()}>Try again</button></p>
+    </div>
+  )
   if (!catalog || !settings) return <p class="muted center">Loading…</p>
 
   const update = (patch: Partial<Settings>) => {
