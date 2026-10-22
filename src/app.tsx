@@ -62,7 +62,7 @@ export function App() {
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
-        <a class="brand" href="#/read">Plain Bible</a>
+        <a class="brand" href={'#/' + readPath(settings.version, 'John', 1)}>Plain Bible</a>
         <nav>
           <VersionMenu route={route} />
           <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
