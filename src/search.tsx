@@ -3,6 +3,7 @@ import { BOOKS, SCOPES, bookById } from './lib/books'
 import { parseQuery, queryStrongs, SearchOptions } from './lib/query'
 import { formatRef, parseRef } from './lib/refs'
 import { plain } from './lib/text'
+import { copyText } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
 import { LexiconSheet, VerseText, VersionPicker } from './ui'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
@@ -99,7 +100,7 @@ export function Search({ route }: { route: Route }) {
 
   const copyAll = async () => {
     const lines = shown.map(v => `${formatRef(v)} ${v.texts.map(t => `(${t.version}) ${plain(t.text)}`).join(' ')}`)
-    try { await navigator.clipboard.writeText(lines.join('\n')) } catch { /* ignore */ }
+    try { await copyText(lines.join('\n')) } catch { /* ignore */ }
   }
 
   return (

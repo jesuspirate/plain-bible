@@ -1,10 +1,12 @@
 import { useEffect, useMemo, useState } from 'preact/hooks'
-import { Translation } from './lib/data'
+import { saved, Translation } from './lib/data'
 import { go, readPath, useApp } from './state'
 
 const CACHE = 'bible-data'
 
-async function cachedIds(): Promise<Set<string>> {
+async function cachedIds(native: boolean): Promise<Set<string>> {
+  // The iOS app keeps downloaded versions in IndexedDB instead.
+  if (native) return new Set(await saved.ids().catch(() => []))
   if (!('caches' in window)) return new Set()
   try {
     const keys = await (await caches.open(CACHE)).keys()
@@ -17,7 +19,7 @@ export function Versions() {
   const [filter, setFilter] = useState('')
   const [offline, setOffline] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState<Record<string, boolean>>({})
-  useEffect(() => { cachedIds().then(setOffline); document.title = 'Versions · Plain Bible' }, [])
+  useEffect(() => { cachedIds(data.native).then(setOffline); document.title = 'Versions · Plain Bible' }, [])
 
   const f = filter.toLowerCase()
   const groups = useMemo(() => {
@@ -36,20 +38,24 @@ export function Versions() {
   const download = async (id: string) => {
     setBusy(b => ({ ...b, [id]: true }))
     try {
-      if ('caches' in window) await (await caches.open(CACHE)).add(data.url(`bibles/${id}.json`))
-      setOffline(await cachedIds())
-    } finally { setBusy(b => ({ ...b, [id]: false })) }
+      if (data.native) await data.bible(id)
+      else if ('caches' in window) await (await caches.open(CACHE)).add(data.url(`bibles/${id}.json`))
+      setOffline(await cachedIds(data.native))
+    } catch { /* offline: the button stays, so they can try again */ } finally { setBusy(b => ({ ...b, [id]: false })) }
   }
   const remove = async (id: string) => {
-    await (await caches.open(CACHE)).delete(data.url(`bibles/${id}.json`))
-    setOffline(await cachedIds())
+    if (data.native) await saved.delete(id)
+    else await (await caches.open(CACHE)).delete(data.url(`bibles/${id}.json`))
+    setOffline(await cachedIds(data.native))
   }
 
   return (
     <div class="versions">
       <h1>Versions</h1>
       <p class="muted">{catalog.translations.length} versions in {langs} languages. All are public domain or openly licensed.
-        Star a version to keep it at the top of every list. Save it for offline use and it works without a connection.</p>
+        Star a version to keep it at the top of every list. {data.native
+          ? 'Versions marked Built in are always here. Download any other once and it works without a connection.'
+          : 'Save it for offline use and it works without a connection.'}</p>
       <input class="filter" type="search" placeholder="Filter by name or language" value={filter} onInput={e => setFilter((e.target as HTMLInputElement).value)} />
       {groups.map(([lang, ts]) => (
         <section>
@@ -66,9 +72,11 @@ export function Versions() {
                     {t.books.length} books · <a href={t.source} target="_blank" rel="noopener">{t.license}</a>
                   </div>
                 </div>
-                {offline.has(t.id)
-                  ? <button class="small" onClick={() => remove(t.id)} title="Remove offline copy">Saved ✓</button>
-                  : <button class="small" disabled={busy[t.id]} onClick={() => download(t.id)}>{busy[t.id] ? 'Saving…' : 'Save offline'}</button>}
+                {t.bundled
+                  ? <span class="muted small">Built in</span>
+                  : offline.has(t.id)
+                  ? <button class="small" onClick={() => remove(t.id)} title="Remove offline copy">{data.native ? 'Downloaded ✓' : 'Saved ✓'}</button>
+                  : <button class="small" disabled={busy[t.id]} onClick={() => download(t.id)}>{busy[t.id] ? (data.native ? 'Downloading…' : 'Saving…') : (data.native ? 'Download' : 'Save offline')}</button>}
               </li>
             ))}
           </ul>

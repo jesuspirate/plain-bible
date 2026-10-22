@@ -24,6 +24,11 @@ no reading plans, devotionals, accounts, or feeds.
 - **Parallel reading** of up to six versions side by side.
 - **Works offline** as an installable web app (PWA). Settings, highlights and bookmarks stay on your device.
 
+## iOS app
+
+The same app also builds for the App Store with Capacitor, on GitHub's Macs (no Mac needed).
+See [ios/README.md](ios/README.md).
+
 ## Search syntax
 
 | Query | Finds |
