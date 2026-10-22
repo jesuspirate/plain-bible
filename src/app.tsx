@@ -55,6 +55,7 @@ export function App() {
     const root = document.documentElement
     root.dataset.theme = settings.theme
     root.dataset.hl = settings.highlight
+    root.dataset.vn = settings.verseNumbers
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
     // Match the phone's status bar (and the browser bar) to the chosen theme.
@@ -392,6 +393,7 @@ function SettingsView() {
       </div>
       <div class="field"><span>Highlights</span>
         <div class="col">
+          <span class="muted small">Tap a verse twice quickly to highlight it in the last color you used.</span>
           {sel('highlight', [['marker', 'Marker'], ['text', 'Colored text'], ['block', 'Block']])}
           <p class="hl-preview" aria-hidden="true">
             <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">In the beginning was the Word, and the Word was with God,</span></span>{' '}
@@ -399,6 +401,7 @@ function SettingsView() {
           </p>
         </div>
       </div>
+      <div class="field"><span>Verse numbers</span>{sel('verseNumbers', [['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']])}</div>
       <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
       <div class="field"><span>Strong's numbers</span>
         <div class="col">

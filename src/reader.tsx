@@ -3,7 +3,7 @@ import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { markKey, noteCovering, PALETTE, setNote, tidy } from './lib/marks'
+import { lastColor, markKey, noteCovering, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
@@ -12,7 +12,7 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { BookmarkIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
 
 export function Reader({ route }: { route: Route }) {
-  const { settings, update, byId, data, marks } = useApp()
+  const { settings, update, byId, data, marks, setMarks } = useApp()
   const [, , bookParam, chParam] = route.path
   const version = byId.has(route.path[1]) ? route.path[1] : settings.version
   const book = bookParam && BOOK_INDEX[bookParam] !== undefined ? bookParam : 'Gen'
@@ -157,9 +157,26 @@ export function Reader({ route }: { route: Route }) {
     setNoteFor(on ? mark(on)?.nv ?? [on] : vs)
   }
   const hlStyle = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
+  // One tap selects a verse; a quick second tap on it instead highlights it
+  // in the colour you used last, or takes its highlight off.
+  const lastTap = useRef<{ v: number; t: number; before: number[] }>()
   const tapVerse = (e: MouseEvent, v: number) => {
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     if (String(getSelection() ?? '').trim()) return
+    const now = Date.now(), prev = lastTap.current
+    if (prev && prev.v === v && now - prev.t < 350) {
+      lastTap.current = undefined
+      setSelected(prev.before)
+      const key = markKey(book, chapter, v), had = marks[key]?.c
+      tap()
+      setMarks(all => {
+        const next = { ...all[key], t: now } as Record<string, unknown>
+        if (had) delete next.c; else { next.c = lastColor(); next.v = version }
+        return { ...all, [key]: tidy(next as never) }
+      })
+      return
+    }
+    lastTap.current = { v, t: now, before: selected }
     setSelected(s => s.includes(v) ? s.filter(x => x !== v) : [...s, v].sort((a, b) => a - b))
   }
   // Swipe left/right to change chapter: the page follows the finger, then
@@ -369,7 +386,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
         <div class="swatches" role="radiogroup" aria-label="Highlight color">
           {PALETTE.map(p => (
             <button role="radio" aria-checked={current === p.color} aria-label={p.name} class={'swatch' + (current === p.color ? ' on' : '')}
-              style={{ background: p.color }} onClick={() => { apply({ c: current === p.color ? null : p.color }); onClose() }}>
+              style={{ background: p.color }} onClick={() => { if (current !== p.color) rememberColor(p.color); apply({ c: current === p.color ? null : p.color }); onClose() }}>
               {current === p.color && <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>}
             </button>
           ))}

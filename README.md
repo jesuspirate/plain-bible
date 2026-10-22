@@ -16,7 +16,8 @@ no reading plans, devotionals, accounts, or feeds.
   Press `/` or Cmd/Ctrl+K to focus it.
 - **Tap a verse** to highlight it in one of eight colors, bookmark, copy, share or compare it. Swipe left or right
   to change chapters. Highlights belong to the verse, so they show in every version. Highlights can look like a
-  marker pen (default), colored text, or a full block (Settings). Select several verses to write one note on all of them.
+  marker pen (default), colored text, or a full block (Settings). Double-tap a verse to highlight it in the last color
+  you used (or take the highlight off). Select several verses to write one note on all of them.
 - **Reading history**: the history button (top right) goes back to the last place you jumped from, at the verse you
   left; "Plain Bible" goes forward again. Hold the button for the full list; recent places also show in the search bar.
   Reading on to the next chapter doesn't add to the history. Kept on the device only.

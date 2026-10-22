@@ -35,6 +35,15 @@ export const PALETTE: { color: string; name: string }[] = [
   { color: '#ffadaf', name: 'Red' },
 ]
 
+/** The colour last picked, for double-tap highlighting. */
+const LAST_COLOR = 'plain-bible:last-color'
+export function lastColor() {
+  try { return localStorage.getItem(LAST_COLOR) || PALETTE[0].color } catch { return PALETTE[0].color }
+}
+export function rememberColor(c: string) {
+  try { localStorage.setItem(LAST_COLOR, c) } catch { /* private mode */ }
+}
+
 export const markKey = (book: string, chapter: number, verse: number) => `${book}.${chapter}.${verse}`
 export function parseKey(key: string) {
   const [book, c, v] = key.split('.')
