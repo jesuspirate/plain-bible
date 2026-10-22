@@ -27,7 +27,7 @@ export function Saved() {
   const shown = keys.filter(k => filter === 'all' || (filter === 'bookmarks' ? marks[k].b : marks[k].c === filter))
   const bookmarks = keys.filter(k => marks[k].b).length
 
-  const remove = (k: string) => setMarks(m => { const n = { ...m }; delete n[k]; return n })
+  const remove = (k: string) => setMarks(m => ({ ...m, [k]: { t: Date.now() } }))
 
   if (!keys.length) {
     return (

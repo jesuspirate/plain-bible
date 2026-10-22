@@ -1,3 +1,4 @@
+import type { SyncApi } from './account'
 import { createContext } from 'preact'
 import { useContext, useEffect, useState } from 'preact/hooks'
 import { Catalog, DataSource, Translation } from './lib/data'
@@ -65,6 +66,7 @@ export interface AppState {
   update: (patch: Partial<Settings>) => void
   marks: Marks
   setMarks: (fn: (m: Marks) => Marks) => void
+  sync: SyncApi
 }
 export const AppContext = createContext<AppState>(null!)
 export const useApp = () => useContext(AppContext)

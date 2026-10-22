@@ -145,8 +145,7 @@ function VerseMenu({ book, chapter, verse, versions, bibles, onClose }: {
     for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
     if (versions[0] && patch.c) next.v = versions[0]
     const out = { ...all }
-    if (!next.c && !next.b) delete out[key]
-    else out[key] = next as never
+    out[key] = (!next.c && !next.b ? { t: next.t } : next) as never
     return out
   })
   const [compare, setCompare] = useState<Bible[]>()
