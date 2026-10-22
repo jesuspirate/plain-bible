@@ -2,8 +2,9 @@ import { useEffect, useMemo, useState } from 'preact/hooks'
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, go, loadSettings, readPath, Route, saveSettings, Settings, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, readPath, Route, saveSettings, Settings, useApp, useRoute } from './state'
 import { Versions } from './versions'
+import { SearchBar } from './searchbar'
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -29,7 +30,7 @@ export function App() {
     const root = document.documentElement
     root.dataset.theme = settings.theme
     root.style.setProperty('--font-size', settings.fontSize + 'px')
-    root.dataset.font = settings.font
+    root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
   }, [settings])
 
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
@@ -50,13 +51,15 @@ export function App() {
           <a class={view === 'versions' ? 'on' : ''} href="#/versions">Versions</a>
           <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings">Settings</a>
         </nav>
+        <ThemeToggle />
       </header>
-      <main>
+      <main class={settings.searchBar && view !== 'search' ? 'with-bar' : ''}>
         {view === 'search' ? <Search route={route} />
           : view === 'versions' ? <Versions />
           : view === 'settings' ? <SettingsView />
           : <ReaderRoute route={route} />}
       </main>
+      {settings.searchBar && view !== 'search' && <SearchBar />}
     </AppContext.Provider>
   )
 }
@@ -71,6 +74,20 @@ function ReaderRoute({ route }: { route: Route }) {
     } else saveLast(route.path[2], +route.path[3])
   }, [route.path.join('/')])
   return route.path.length >= 4 ? <Reader route={route} /> : null
+}
+
+function ThemeToggle() {
+  const { settings, update } = useApp()
+  const prefersDark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches
+  const dark = settings.theme === 'dark' || (settings.theme === 'system' && prefersDark)
+  return (
+    <button class="icon theme-toggle" aria-label={dark ? 'Switch to light mode' : 'Switch to dark mode'} title={dark ? 'Light mode' : 'Dark mode'}
+      onClick={() => update({ theme: dark ? 'light' : 'dark' })}>
+      {dark
+        ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor" /><g stroke="currentColor" stroke-width="2" stroke-linecap="round">{[0, 45, 90, 135, 180, 225, 270, 315].map(a => <line x1="12" y1="2.5" x2="12" y2="4.5" transform={`rotate(${a} 12 12)`} />)}</g></svg>
+        : <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor" /></svg>}
+    </button>
+  )
 }
 
 const LAST = 'plain-bible:last'
@@ -98,7 +115,20 @@ function SettingsView() {
           <button onClick={() => update({ fontSize: Math.min(32, settings.fontSize + 1) })} aria-label="Larger">A+</button>
         </div>
       </div>
-      <div class="field"><span>Font</span>{sel('font', [['serif', 'Serif'], ['sans', 'Sans-serif']])}</div>
+      <div class="field"><span>Font</span>
+        <div class="fonts" role="radiogroup" aria-label="Reading font">
+          {FONTS.map(f => (
+            <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
+              style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
+              <span class="font-sample">In the beginning was the Word</span>
+              <span class="font-name">{f.label}<span class="muted"> · {f.note}</span></span>
+            </button>
+          ))}
+        </div>
+      </div>
+      <div class="field"><span>Search bar</span>
+        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the floating search bar at the bottom of the screen</label>
+      </div>
       <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
       <div class="field"><span>Strong's numbers</span>
         <div class="col">

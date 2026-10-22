@@ -129,7 +129,23 @@ SCOPES.torah = SCOPES.law
 SCOPES.poetry = SCOPES.wisdom
 SCOPES.apocrypha = SCOPES.deutero
 
-const normName = (s: string) => s.toLowerCase().replace(/\./g, '').replace(/^(first|1st)\s+/, '1 ')
+// French names, so "Jean 3:16" works as well as "John 3:16".
+const FRENCH: Record<string, string> = {
+  Gen: 'genèse', Exod: 'exode', Lev: 'lévitique', Num: 'nombres', Deut: 'deutéronome', Josh: 'josué', Judg: 'juges',
+  '1Sam': '1 samuel', '2Sam': '2 samuel', '1Kgs': '1 rois', '2Kgs': '2 rois', '1Chr': '1 chroniques', '2Chr': '2 chroniques',
+  Ezra: 'esdras', Neh: 'néhémie', Ps: 'psaumes', Prov: 'proverbes', Eccl: 'ecclésiaste', Song: 'cantique des cantiques',
+  Isa: 'ésaïe', Jer: 'jérémie', Ezek: 'ézéchiel', Hos: 'osée', Obad: 'abdias', Jonah: 'jonas', Mic: 'michée',
+  Hab: 'habacuc', Zeph: 'sophonie', Hag: 'aggée', Zech: 'zacharie', Mal: 'malachie', Matt: 'matthieu', Mark: 'marc',
+  Luke: 'luc', John: 'jean', Acts: 'actes', Rom: 'romains', '1Cor': '1 corinthiens', '2Cor': '2 corinthiens',
+  Gal: 'galates', Eph: 'éphésiens', Phil: 'philippiens', Col: 'colossiens', '1Thess': '1 thessaloniciens',
+  '2Thess': '2 thessaloniciens', '1Tim': '1 timothée', '2Tim': '2 timothée', Titus: 'tite', Phlm: 'philémon',
+  Heb: 'hébreux', Jas: 'jacques', '1Pet': '1 pierre', '2Pet': '2 pierre', '1John': '1 jean', '2John': '2 jean',
+  '3John': '3 jean', Rev: 'apocalypse',
+}
+for (const [id, name] of Object.entries(FRENCH)) BOOKS[BOOKS.findIndex(b => b.id === id)].aliases.push(name)
+BOOKS[BOOKS.findIndex(b => b.id === 'Ps')].aliases.push('psaume')
+
+const normName = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/\./g, '').replace(/^(first|1st)\s+/, '1 ')
   .replace(/^(second|2nd)\s+/, '2 ').replace(/^(third|3rd)\s+/, '3 ').replace(/\s+/g, ' ').trim()
 
 const NAME_MAP = new Map<string, string>()

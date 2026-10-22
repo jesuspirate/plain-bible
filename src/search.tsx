@@ -6,32 +6,10 @@ import { plain } from './lib/text'
 import { go, readPath, Route, useApp } from './state'
 import { LexiconSheet, VerseText, VersionPicker } from './ui'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import SearchWorker from './search.worker?worker'
+import { call } from './searchClient'
+import { rememberSearch } from './searchbar'
 
 const PAGE = 40
-
-let worker: Worker | undefined
-let seq = 0
-const pending = new Map<number, { resolve: (r: any) => void; reject: (e: Error) => void; progress?: (m: string) => void }>()
-
-function call<T>(msg: object, progress?: (m: string) => void): Promise<T> {
-  if (!worker) {
-    worker = new SearchWorker()
-    worker.onmessage = e => {
-      const r = e.data, p = pending.get(r.seq)
-      if (!p) return
-      if (r.type === 'progress') return p.progress?.(r.message)
-      pending.delete(r.seq)
-      if (r.type === 'error') p.reject(new Error(r.message))
-      else p.resolve(r)
-    }
-  }
-  const id = ++seq
-  return new Promise((resolve, reject) => {
-    pending.set(id, { resolve, reject, progress })
-    worker!.postMessage({ ...msg, seq: id })
-  })
-}
 
 const SCOPE_KEYS = ['ot', 'nt', 'law', 'history', 'wisdom', 'prophets', 'gospels', 'acts', 'pauline', 'general', 'deutero']
 
@@ -80,6 +58,7 @@ export function Search({ route }: { route: Route }) {
     if (!q.trim() || !versions.length) return
     document.title = `${q} · Search · Plain Bible`
     if (versions.join() !== settings.searchVersions.join()) update({ searchVersions: versions })
+    rememberSearch(q.trim())
     let books = scopeBooks()
     if (bookFilter) books = [bookFilter]
     setBusy('Searching…')
