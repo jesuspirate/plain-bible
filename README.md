@@ -10,12 +10,19 @@ no reading plans, devotionals, accounts, or feeds.
 - **Strong's numbers** in KJV, BSB, the Hebrew OT (Open Scriptures Hebrew Bible) and the Greek NT
   (Statistical Restoration GNT). Tap a word to see the Hebrew or Greek and its dictionary entry.
 - **Search** across one or many versions at once, with a per-book breakdown of results.
-- **Floating search bar** in the style of the iOS search field: instant results as you type, a verse preview
-  when you type a reference (English or French book names), recent searches, and voice input where supported.
+- **Always-there search bar** in the style of the iOS search field, pinned while you read. It shows where you
+  are, opens to a strip of the book's chapters, and gives instant results as you type, a verse preview when you
+  type a reference (English or French book names), recent searches, and voice input where supported.
+  Press `/` or Cmd/Ctrl+K to focus it.
+- **Tap a verse** to highlight it in one of eight colors, bookmark, copy, share or compare it. Swipe left or right
+  to change chapters. Highlights belong to the verse, so they show in every version.
+- **Saved** page listing your highlights and bookmarks in Bible order, filterable by color.
+- **Import** highlights and saved verses from a Life Bible export (the whole .zip or a single .html file) or any
+  list of references, and back up your data to a JSON file.
 - **Reading fonts**: Literata, Source Serif, EB Garamond, Inter, Atkinson Hyperlegible, or the system font.
   Light, dark and sepia themes.
 - **Parallel reading** of up to six versions side by side.
-- **Works offline** as an installable web app (PWA). Settings stay on your device.
+- **Works offline** as an installable web app (PWA). Settings, highlights and bookmarks stay on your device.
 
 ## Search syntax
 

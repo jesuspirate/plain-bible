@@ -5,6 +5,9 @@ import { Search } from './search'
 import { AppContext, defaultSettings, FONTS, go, loadSettings, readPath, Route, saveSettings, Settings, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
+import { Saved } from './saved'
+import { DataTools } from './import'
+import { loadMarks, Marks, saveMarks } from './lib/marks'
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -12,7 +15,9 @@ export function App() {
   const [catalog, setCatalog] = useState<Catalog>()
   const [error, setError] = useState('')
   const [settings, setSettings] = useState<Settings>()
+  const [marks, setMarksState] = useState<Marks>(loadMarks)
   const route = useRoute()
+  const setMarks = (fn: (m: Marks) => Marks) => setMarksState(m => { const n = fn(m); saveMarks(n); return n })
 
   useEffect(() => {
     data.catalog().then(c => {
@@ -33,6 +38,10 @@ export function App() {
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
   }, [settings])
 
+  // The reader manages its own scroll position; other pages start at the top.
+  const page = route.path[0] || 'read'
+  useEffect(() => { if (page !== 'read') window.scrollTo(0, 0) }, [page])
+
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
 
   if (error) return <p class="error center">Could not load the library: {error}</p>
@@ -42,24 +51,29 @@ export function App() {
   const view = route.path[0] || 'read'
 
   return (
-    <AppContext.Provider value={{ data, catalog, byId, settings, update }}>
+    <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks }}>
       <header class="top">
         <a class="brand" href={'#/' + readPath(settings.version, 'John', 1)}>Plain Bible</a>
         <nav>
           <a class={view === 'read' ? 'on' : ''} href="#/read">Read</a>
           <a class={view === 'search' ? 'on' : ''} href="#/search">Search</a>
+          <a class={view === 'saved' ? 'on' : ''} href="#/saved">Saved</a>
           <a class={view === 'versions' ? 'on' : ''} href="#/versions">Versions</a>
-          <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings">Settings</a>
+          <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
+            <svg class="gear" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
+          </a>
         </nav>
         <ThemeToggle />
       </header>
       <main class={settings.searchBar && view !== 'search' ? 'with-bar' : ''}>
         {view === 'search' ? <Search route={route} />
           : view === 'versions' ? <Versions />
+          : view === 'saved' ? <Saved />
           : view === 'settings' ? <SettingsView />
           : <ReaderRoute route={route} />}
       </main>
-      {settings.searchBar && view !== 'search' && <SearchBar />}
+      {settings.searchBar && view !== 'search' && <SearchBar here={view === 'read' && route.path.length >= 4
+        ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
     </AppContext.Provider>
   )
 }
@@ -136,8 +150,10 @@ function SettingsView() {
           <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> Show the numbers inline</label>
         </div>
       </div>
+      <h2>Your data</h2>
+      <DataTools />
       <h2>About</h2>
-      <p>Plain Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No accounts, no plans, no tracking. Everything is stored on your device.</p>
+      <p>Plain Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No accounts, no plans, no tracking. Your highlights and settings are stored on your device.</p>
       <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
         the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
         Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).

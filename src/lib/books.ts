@@ -51,7 +51,7 @@ export const BOOKS: BookInfo[] = [
   B('Mark', 'Mark', 'Mark', 'gospels', ['mk', 'mr', 'mrk']),
   B('Luke', 'Luke', 'Luke', 'gospels', ['lk', 'luk']),
   B('John', 'John', 'John', 'gospels', ['jn', 'jhn', 'joh']),
-  B('Acts', 'Acts', 'Acts', 'acts', ['ac', 'act']),
+  B('Acts', 'Acts', 'Acts', 'acts', ['ac', 'act', 'actes des apotres', 'actes des apôtres']),
   B('Rom', 'Romans', 'Rom', 'pauline', ['ro', 'rm']),
   B('1Cor', '1 Corinthians', '1 Cor', 'pauline', ['1co', 'i corinthians']),
   B('2Cor', '2 Corinthians', '2 Cor', 'pauline', ['2co', 'ii corinthians']),
