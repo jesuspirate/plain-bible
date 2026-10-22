@@ -38,6 +38,13 @@ export function App() {
     root.dataset.theme = settings.theme
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
+    // Match the phone's status bar (and the browser bar) to the chosen theme.
+    const tint = () => document.querySelector('meta[name="theme-color"]')
+      ?.setAttribute('content', getComputedStyle(root).getPropertyValue('--bg').trim())
+    tint()
+    const dark = matchMedia('(prefers-color-scheme: dark)')
+    dark.addEventListener('change', tint)
+    return () => dark.removeEventListener('change', tint)
   }, [settings])
 
   // The reader manages its own scroll position; other pages start at the top.
