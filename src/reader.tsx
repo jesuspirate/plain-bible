@@ -54,8 +54,8 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
       if ((e.target as HTMLElement).closest('input, textarea, dialog')) return
-      if (e.key === 'ArrowRight') step(1)
-      if (e.key === 'ArrowLeft') step(-1)
+      if (e.key === 'ArrowRight') turn(1)
+      if (e.key === 'ArrowLeft') turn(-1)
     }
     window.addEventListener('keydown', onKey)
     return () => window.removeEventListener('keydown', onKey)
@@ -70,16 +70,68 @@ export function Reader({ route }: { route: Route }) {
     if (String(getSelection() ?? '').trim()) return
     setSelected(s => s.includes(v) ? s.filter(x => x !== v) : [...s, v].sort((a, b) => a - b))
   }
-  // Swipe left/right to change chapter.
-  const touch = useRef<{ x: number; y: number; t: number }>()
-  const onTouchStart = (e: TouchEvent) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now() } }
-  const onTouchEnd = (e: TouchEvent) => {
-    const s = touch.current, p = e.changedTouches[0]
-    touch.current = undefined
-    if (!s || Date.now() - s.t > 600) return
-    const dx = p.clientX - s.x, dy = p.clientY - s.y
-    if (Math.abs(dx) > 70 && Math.abs(dy) < Math.abs(dx) * 0.5) step(dx < 0 ? 1 : -1)
+  // Swipe left/right to change chapter: the page follows the finger, then
+  // slides out, and the next chapter slides in from the other side.
+  const article = useRef<HTMLElement>(null)
+  const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number }>()
+  const [enter, setEnter] = useState<'' | 'next' | 'prev'>('')
+  const turn = (dir: 1 | -1) => { setEnter(dir === 1 ? 'next' : 'prev'); step(dir) }
+  const setDrag = (dx: number, ms = 0) => {
+    const el = article.current
+    if (!el) return
+    el.style.transition = ms ? `transform ${ms}ms cubic-bezier(.2, .8, .2, 1), opacity ${ms}ms` : 'none'
+    el.style.transform = dx ? `translateX(${dx}px)` : ''
+    el.style.opacity = dx ? String(1 - Math.min(Math.abs(dx) / innerWidth, .6)) : ''
   }
+  const onTouchStart = (e: TouchEvent) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 } }
+  const onTouchMove = (e: TouchEvent) => {
+    const s = touch.current, p = e.touches[0]
+    if (!s || e.touches.length > 1) return
+    const dx = p.clientX - s.x, dy = p.clientY - s.y
+    if (!s.axis && Math.hypot(dx, dy) > 10) s.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
+    if (s.axis === 'x') { s.dx = dx; setDrag(dx * .85) }
+  }
+  const onTouchEnd = () => {
+    const s = touch.current
+    touch.current = undefined
+    if (!s || s.axis !== 'x') return
+    const fast = Date.now() - s.t < 300 && Math.abs(s.dx) > 40
+    if (Math.abs(s.dx) > innerWidth * .25 || fast) {
+      const dir = s.dx < 0 ? 1 : -1
+      setDrag(-dir * innerWidth * .5, 160)
+      const el = article.current
+      setTimeout(() => {
+        turn(dir)
+        // Nowhere to go (start or end of the Bible): bring the page back.
+        setTimeout(() => { if (article.current === el) setDrag(0, 220) }, 120)
+      }, 150)
+    } else setDrag(0, 220)
+  }
+
+  // Two-finger swipe on a trackpad does the same as a touch swipe.
+  const wheel = useRef({ dx: 0, done: false, timer: 0 })
+  useEffect(() => {
+    const onWheel = (e: WheelEvent) => {
+      const w = wheel.current
+      if (Math.abs(e.deltaX) <= Math.abs(e.deltaY) && !w.dx && !w.done) return
+      if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .sb-chapter-row')) return
+      e.preventDefault()
+      clearTimeout(w.timer)
+      // A gesture ends when the events (including the trackpad's glide) stop.
+      w.timer = window.setTimeout(() => { if (!w.done) setDrag(0, 220); w.dx = 0; w.done = false }, 160)
+      if (w.done) return
+      w.dx -= e.deltaX
+      setDrag(w.dx * .85)
+      if (Math.abs(w.dx) > Math.min(innerWidth * .25, 160)) {
+        w.done = true
+        const dir = w.dx < 0 ? 1 : -1, el = article.current
+        setDrag(-dir * Math.min(innerWidth * .5, 320), 160)
+        setTimeout(() => { turn(dir); setTimeout(() => { if (article.current === el) setDrag(0, 220) }, 120) }, 150)
+      }
+    }
+    window.addEventListener('wheel', onWheel, { passive: false })
+    return () => window.removeEventListener('wheel', onWheel)
+  })
 
   const loaded = versions.every(v => bibles[v])
   const rows = loaded ? Math.max(...versions.map(v => bibles[v].books[book]?.[chapter - 1]?.length ?? 0)) : 0
@@ -93,7 +145,8 @@ export function Reader({ route }: { route: Route }) {
       {loaded && rows === 0 && <p class="muted center">{t?.name} does not include {bookById(book).name} {chapter}.</p>}
 
       {loaded && rows > 0 && (
-        <article onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} class={`chapter ${settings.layout} cols-${versions.length}`} style={{ '--cols': versions.length }}>
+        <article key={`${book}.${chapter}`} ref={article} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}
+          onAnimationEnd={() => setEnter('')} class={`chapter ${settings.layout} cols-${versions.length}${enter ? ' enter-' + enter : ''}`} style={{ '--cols': versions.length }}>
           <h1 class="chapter-title">{bookById(book).name} {chapter}</h1>
           {versions.length > 1 && (
             <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
@@ -125,8 +178,8 @@ export function Reader({ route }: { route: Route }) {
       )}
 
       <nav class="pager">
-        <button onClick={() => step(-1)}>← Previous</button>
-        <button onClick={() => step(1)}>Next →</button>
+        <button onClick={() => turn(-1)}>← Previous</button>
+        <button onClick={() => turn(1)}>Next →</button>
       </nav>
       {t && <p class="credit muted small">{t.name}. {t.license}.</p>}
 
