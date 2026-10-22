@@ -52,7 +52,7 @@ export interface ImportResult { items: ImportItem[]; skipped: string[] }
 
 const LINE = /^(.+?)\s+(\d+)\s*[:.]\s*(\d+)(?:\s*[-–]\s*(\d+))?(?:\s+([A-Za-z0-9-]{2,12}))?(?:\s+(#[0-9a-fA-F]{6}))?$/
 
-/** One reference per line, as exported by Life Bible and similar apps:
+/** One reference per line, as exported by many Bible apps:
  *  "Genèse 2:5 LBS21  #b3e487" (highlight) or "Genesis 22:2" (bookmark). */
 export function parseRefList(text: string, kind: 'highlight' | 'bookmark' | 'auto' = 'auto'): ImportResult {
   const items: ImportItem[] = [], skipped: string[] = []
