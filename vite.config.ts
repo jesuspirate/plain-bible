@@ -44,7 +44,12 @@ export default defineConfig({
             // The list of versions: always fresh when online, so new versions appear right away.
             urlPattern: ({ url }) => url.pathname.endsWith('/data/catalog.json'),
             handler: 'NetworkFirst',
-            options: { cacheName: 'bible-catalog', networkTimeoutSeconds: 4 },
+            options: {
+              cacheName: 'bible-catalog', networkTimeoutSeconds: 4,
+              // An error page (say a 404 while the site is mid-update) counts as
+              // offline, so the saved copy is used instead.
+              plugins: [{ fetchDidSucceed: async ({ response }) => { if (!response.ok) throw new Error(`HTTP ${response.status}`); return response } }],
+            },
           },
         ],
       },

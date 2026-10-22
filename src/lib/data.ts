@@ -12,6 +12,8 @@ export interface Bible { id: string; books: Record<string, string[][]> }
 
 export interface LexEntry { lemma?: string; xlit?: string; translit?: string; pron?: string; derivation?: string; strongs_def?: string; kjv_def?: string }
 
+const CATALOG_KEY = 'plain-bible:catalog'
+
 export class DataSource {
   private bibles = new Map<string, Promise<Bible>>()
   private lex = new Map<string, Promise<Record<string, LexEntry>>>()
@@ -25,7 +27,22 @@ export class DataSource {
     return res.json()
   }
 
-  catalog() { return this.json<Catalog>('catalog.json') }
+  /** The list of versions. If it can't be fetched (offline, or the site is
+   *  mid-update and briefly answers 404), the last copy that loaded is used. */
+  async catalog(): Promise<Catalog> {
+    try {
+      const c = await this.json<Catalog>('catalog.json')
+      if (!c?.translations?.length) throw new Error('The list of versions is empty')
+      try { localStorage.setItem(CATALOG_KEY, JSON.stringify(c)) } catch { /* storage full or blocked */ }
+      return c
+    } catch (e) {
+      try {
+        const kept: Catalog = JSON.parse(localStorage.getItem(CATALOG_KEY) || 'null')
+        if (kept?.translations?.length) return kept
+      } catch { /* fall through */ }
+      throw e
+    }
+  }
 
   /** In the iOS app (served from capacitor://), only a few versions ship
    *  inside the app. The rest download from the website once and are kept
