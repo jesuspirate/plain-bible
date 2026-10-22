@@ -52,6 +52,13 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
+      # Lets the iOS app use this site's passkeys, so one passkey signs in on
+      # both. Set the APPLE_TEAM_ID repository variable to turn it on.
+      - name: Apple app site association
+        if: vars.APPLE_TEAM_ID != ''
+        run: |
+          mkdir -p dist/.well-known
+          printf '{"webcredentials":{"apps":["%s.community.chama.plainbible"]}}\n' "${{ vars.APPLE_TEAM_ID }}" > dist/.well-known/apple-app-site-association
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:

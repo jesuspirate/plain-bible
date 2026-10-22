@@ -51,7 +51,10 @@ export function App() {
   // saved for offline use, and ask the browser not to clear saved Bibles.
   const offlineId = settings && (settings.favorite || settings.version)
   useEffect(() => {
-    if (!offlineId || !('caches' in window)) return
+    if (!offlineId) return
+    // The iOS app keeps every version it has opened, so loading it is enough.
+    if (data.native) { data.bible(offlineId).catch(() => {}); return }
+    if (!('caches' in window)) return
     navigator.storage?.persist?.().catch(() => {})
     const url = data.url(`bibles/${offlineId}.json`)
     caches.open('bible-data').then(async c => { if (!(await c.match(url))) await c.add(url) }).catch(() => {})

@@ -10,7 +10,9 @@ compatibility_flags = ["nodejs_compat"]
 RP_ID = "bible.chama.community"
 RP_NAME = "Plain Bible"
 # Comma-separated origins allowed to call this API and to use passkeys.
-ORIGINS = "https://bible.chama.community"
+# capacitor://localhost is the iOS app; its passkeys still report the website
+# origin, so it only matters for CORS.
+ORIGINS = "https://bible.chama.community,capacitor://localhost"
 
 [[d1_databases]]
 binding = "DB"

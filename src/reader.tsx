@@ -4,6 +4,7 @@ import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
 import { markKey, PALETTE } from './lib/marks'
 import { plain } from './lib/text'
+import { canShare, copyText, share, shareLink, tap } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 
@@ -223,7 +224,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
     return () => { document.body.classList.remove('selecting'); removeEventListener('keydown', onKey) }
   }, [])
 
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { tap(); setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>
@@ -232,14 +233,14 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
       out[key] = (!next.c && !next.b ? { t } : next) as never
     }
     return out
-  })
+  }) }
   const textOf = (b: Bible | undefined) => verses.length === 1
     ? plain(b?.books[book]?.[chapter - 1]?.[verses[0] - 1] ?? '')
     : verses.map(v => { const raw = b?.books[book]?.[chapter - 1]?.[v - 1]; return raw ? `${v} ${plain(raw)}` : '' }).filter(Boolean).join(' ')
   const quote = `${textOf(bibles[version])}\n${ref} (${version})`
-  const link = `${location.origin}${location.pathname}#/${readPath(version, book, chapter, verses[0])}`
+  const link = shareLink(`#/${readPath(version, book, chapter, verses[0])}`)
   const copy = async (s: string) => {
-    try { await navigator.clipboard.writeText(s); setNote('Copied') } catch { setNote('Copy failed') }
+    try { await copyText(s); setNote('Copied') } catch { setNote('Copy failed') }
   }
   const showCompare = () => {
     const ids = settings.myVersions.filter(id => byId.get(id)?.books.includes(book))
@@ -265,8 +266,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
         <div class="row actions">
           <button class={allBookmarked ? 'on' : ''} onClick={() => { apply({ b: allBookmarked ? null : 1 }); onClose() }}>{allBookmarked ? '🔖 Saved' : '🔖 Bookmark'}</button>
           <button onClick={() => copy(quote)}>Copy</button>
-          {'share' in navigator
-            ? <button onClick={() => navigator.share({ title: ref, text: quote, url: link }).catch(() => {})}>Share</button>
+          {canShare
+            ? <button onClick={() => share({ title: ref, text: quote, url: link })}>Share</button>
             : <button onClick={() => copy(link)}>Link</button>}
           <button onClick={showCompare}>Compare</button>
         </div>
