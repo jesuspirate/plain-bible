@@ -80,18 +80,22 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     }
   }
 
-  // On start (once settings exist) and whenever the app returns to the foreground.
-  useEffect(() => { if (settings) run() }, [!!settings])
+  // Everything works offline; changes made then are sent once back online.
+  const auto = () => { if (navigator.onLine !== false) run() }
+  // On start (once settings exist), whenever the app returns to the
+  // foreground, and when the connection comes back.
+  useEffect(() => { if (settings) auto() }, [!!settings])
   useEffect(() => {
-    const on = () => { if (document.visibilityState === 'visible') run() }
+    const on = () => { if (document.visibilityState === 'visible') auto() }
     document.addEventListener('visibilitychange', on)
-    return () => document.removeEventListener('visibilitychange', on)
+    addEventListener('online', auto)
+    return () => { document.removeEventListener('visibilitychange', on); removeEventListener('online', auto) }
   }, [])
   // Shortly after local changes.
   useEffect(() => {
     const local = localDoc()
     if (!account || !local || docKey(local) === account.synced) return
-    const t = setTimeout(run, 2000)
+    const t = setTimeout(auto, 2000)
     return () => clearTimeout(t)
   }, [marks, settings, account?.token])
 

@@ -10,20 +10,11 @@ import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { AccountSection, touchSettings, useSync } from './account'
+import { loadPlace, savePlace, withoutVerse } from './lib/place'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
 const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
-const SCROLL_KEY = 'plain-bible:tint-scroll'
-/** After that reload, return to the same spot on the page once it has drawn. */
-function restoreScroll() {
-  let y: number
-  try { y = Number(sessionStorage.getItem(SCROLL_KEY)); sessionStorage.removeItem(SCROLL_KEY) } catch { return }
-  if (!y) return
-  const start = Date.now()
-  const tick = () => document.querySelector('.verse, .pv') ? setTimeout(() => scrollTo(0, y), 50) : Date.now() - start < 3000 && requestAnimationFrame(tick)
-  tick()
-}
 /** At most one reload every few seconds, so a broken setup can't loop. */
 function reloadOk() {
   try {
@@ -54,8 +45,6 @@ export function App() {
     }).catch(e => setError(String(e.message || e)))
   }, [])
 
-  useEffect(restoreScroll, [])
-
   useEffect(() => {
     if (!settings) return
     saveSettings(settings)
@@ -69,7 +58,9 @@ export function App() {
     const tint = () => {
       const bg = getComputedStyle(root).getPropertyValue('--bg').trim()
       if (IOS_HOME_SCREEN && bg !== LOAD_TINT && reloadOk()) {
-        try { sessionStorage.setItem(SCROLL_KEY, String(scrollY)) } catch { /* ignore */ }
+        // The reader saves the verse on top as the page goes; drop any
+        // jump-to verse so it comes back on that one.
+        history.replaceState(history.state, '', withoutVerse(location.hash))
         return location.reload()
       }
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
@@ -82,16 +73,22 @@ export function App() {
 
   // Keep the Default Bible (or, before one is chosen, the current version)
   // saved for offline use, and ask the browser not to clear saved Bibles.
+  // With Strong's numbers on, the Hebrew and Greek lexicons are kept too.
   const offlineId = settings && (settings.favorite || settings.version)
+  const strongs = !!settings?.strongs
   useEffect(() => {
     if (!offlineId) return
-    // The iOS app keeps every version it has opened, so loading it is enough.
+    // The iOS app ships everything else inside the app, and keeps every version
+    // it has opened, so loading it is enough.
     if (data.native) { data.bible(offlineId).catch(() => {}); return }
     if (!('caches' in window)) return
     navigator.storage?.persist?.().catch(() => {})
-    const url = data.url(`bibles/${offlineId}.json`)
-    caches.open('bible-data').then(async c => { if (!(await c.match(url))) await c.add(url) }).catch(() => {})
-  }, [offlineId])
+    const paths = [`bibles/${offlineId}.json`, ...(strongs ? ['strongs-hebrew.json', 'strongs-greek.json'] : [])]
+    caches.open('bible-data').then(c => Promise.all(paths.map(async p => {
+      const url = data.url(p)
+      if (!(await c.match(url))) await c.add(url)
+    }))).catch(() => {})
+  }, [offlineId, strongs])
 
   // The reader manages its own scroll position; other pages start at the top.
   const page = route.path[0] || 'read'
@@ -142,9 +139,14 @@ function ReaderRoute({ route }: { route: Route }) {
   // "#/read" with no reference resumes the last place read.
   useEffect(() => {
     if (route.path.length < 4) {
-      const last = loadLast()
-      go(readPath(route.path[1] || settings.favorite || settings.version, last?.[0] ?? 'Gen', last?.[1] ?? 1), true)
-    } else saveLast(route.path[2], +route.path[3])
+      const last = loadPlace()
+      go(readPath(route.path[1] || settings.favorite || settings.version, last?.book ?? 'Gen', last?.chapter ?? 1), true)
+    } else {
+      // A new chapter starts at its top (or the verse you jumped to); the
+      // reader keeps the verse up to date as you scroll.
+      const last = loadPlace(), book = route.path[2], chapter = +route.path[3]
+      if (last?.book !== book || last.chapter !== chapter) savePlace({ book, chapter, verse: +(route.params.get('v') || 0) || 1 })
+    }
   }, [route.path.join('/')])
   return route.path.length >= 4 ? <Reader route={route} /> : null
 }
@@ -215,10 +217,6 @@ function ThemeToggle() {
     </button>
   )
 }
-
-const LAST = 'plain-bible:last'
-function loadLast(): [string, number] | undefined { try { return JSON.parse(localStorage.getItem(LAST) || 'null') ?? undefined } catch { return undefined } }
-function saveLast(book: string, ch: number) { try { localStorage.setItem(LAST, JSON.stringify([book, ch])) } catch { /* ignore */ } }
 
 function SettingsView() {
   const { settings, update, catalog, marks, sync, byId } = useApp()
