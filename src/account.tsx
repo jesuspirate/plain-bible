@@ -19,8 +19,20 @@ export interface SyncApi {
 }
 
 const T_KEY = 'plain-bible:settings-t'
-export const loadSettingsT = () => { try { return +(localStorage.getItem(T_KEY) || 0) } catch { return 0 } }
-export const saveSettingsT = (t: number) => { try { localStorage.setItem(T_KEY, String(t)) } catch { /* ignore */ } }
+/** Per-setting change times. An older single number applies to every setting. */
+export function loadSettingsT(): Record<string, number> {
+  try {
+    const v = JSON.parse(localStorage.getItem(T_KEY) || '{}')
+    return typeof v === 'number' ? { '*': v } : v
+  } catch { return {} }
+}
+export function saveSettingsT(t: Record<string, number>) {
+  try { localStorage.setItem(T_KEY, JSON.stringify(t)) } catch { /* ignore */ }
+}
+/** Record that these settings changed now. */
+export function touchSettings(keys: string[]) {
+  if (keys.length) saveSettingsT({ ...loadSettingsT(), ...Object.fromEntries(keys.map(k => [k, Date.now()])) })
+}
 
 /** The sync engine: syncs on start, when the app comes back to the
  *  foreground, and a moment after any change. */
@@ -47,11 +59,16 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       const { doc, account: next } = await syncNow(acct, local)
       // Merge again with the current state, in case something changed while syncing.
       setMarksState(cur => { const m = mergeDocs({ ...doc, marks: cur }, doc).marks; saveMarks(m); return m })
-      if (doc.settingsT > local.settingsT) {
+      if (JSON.stringify(doc.settings) !== JSON.stringify(local.settings)) {
         const remote = doc.settings as Partial<Settings>
-        setSettings(s => s && ({ ...s, ...remote, version: remote.version && validVersion(remote.version) ? remote.version : s.version }))
-        saveSettingsT(doc.settingsT)
+        const ok = (id: unknown) => typeof id === 'string' && validVersion(id)
+        setSettings(s => s && ({
+          ...s, ...remote,
+          version: ok(remote.version) ? remote.version! : s.version,
+          favorite: ok(remote.favorite) ? remote.favorite : s.favorite,
+        }))
       }
+      saveSettingsT(doc.settingsT as Record<string, number>)
       setAccount(next); setError('')
     } catch (e) {
       if (e instanceof SyncError && e.status === 401) { setAccount(null); setError('You were signed out. Sign in again to keep syncing.') }

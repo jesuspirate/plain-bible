@@ -9,26 +9,40 @@ export interface SyncDoc {
   v: 1
   marks: Marks
   settings: Record<string, unknown>
-  /** when settings last changed, ms since epoch */
-  settingsT: number
+  /** when each setting last changed, ms since epoch. Older documents used
+   *  one number for all settings. */
+  settingsT: SettingsT
+}
+export type SettingsT = Record<string, number> | number
+
+/** When `key` last changed according to `t`. */
+export function changedAt(t: SettingsT | undefined, key: string) {
+  return typeof t === 'number' ? t : t?.[key] ?? t?.['*'] ?? 0
 }
 
 /** Merge two documents: each verse keeps its newest mark (removals included),
- *  and the newer settings win as a whole. */
+ *  and each setting keeps its newest value. */
 export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
   if (!b) return a
   const marks: Marks = { ...a.marks }
   for (const [k, m] of Object.entries(b.marks ?? {})) {
     if (!marks[k] || (m.t ?? 0) > (marks[k].t ?? 0)) marks[k] = m
   }
-  const newer = (b.settingsT ?? 0) > a.settingsT
-  return { v: 1, marks, settings: newer ? b.settings : a.settings, settingsT: newer ? b.settingsT : a.settingsT }
+  const settings: Record<string, unknown> = {}, settingsT: Record<string, number> = {}
+  for (const k of new Set([...Object.keys(a.settings ?? {}), ...Object.keys(b.settings ?? {})])) {
+    const ta = changedAt(a.settingsT, k), tb = changedAt(b.settingsT, k)
+    const useB = k in (b.settings ?? {}) && (!(k in (a.settings ?? {})) || tb > ta)
+    settings[k] = useB ? b.settings[k] : a.settings[k]
+    settingsT[k] = useB ? tb : ta
+  }
+  return { v: 1, marks, settings, settingsT }
 }
 
 /** Stable text for comparing documents without caring about key order. */
 export function docKey(d: SyncDoc) {
   const marks = Object.keys(d.marks).sort().map(k => [k, d.marks[k].c ?? '', d.marks[k].b ?? 0, d.marks[k].t])
-  return JSON.stringify([marks, d.settingsT])
+  const settings = Object.keys(d.settings ?? {}).sort().map(k => [k, d.settings[k], changedAt(d.settingsT, k)])
+  return JSON.stringify([marks, settings])
 }
 
 // ---------------------------------------------------------------------------

@@ -9,7 +9,7 @@ import { Saved } from './saved'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
-import { AccountSection, saveSettingsT, useSync } from './account'
+import { AccountSection, touchSettings, useSync } from './account'
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -53,7 +53,7 @@ export function App() {
   const update = (patch: Partial<Settings>) => {
     setSettings(s => {
       const next = { ...s!, ...patch }
-      if (JSON.stringify(next) !== JSON.stringify(s)) saveSettingsT(Date.now())
+      touchSettings(Object.keys(patch).filter(k => JSON.stringify((next as any)[k]) !== JSON.stringify((s as any)[k])))
       return next
     })
   }
@@ -62,7 +62,7 @@ export function App() {
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
-        <a class="brand" href={'#/' + readPath(settings.version, 'John', 1)}>Plain Bible</a>
+        <a class="brand" href="#/read" title="Back to where you were reading">Plain Bible</a>
         <nav>
           <VersionMenu route={route} />
           <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
@@ -90,7 +90,7 @@ function ReaderRoute({ route }: { route: Route }) {
   useEffect(() => {
     if (route.path.length < 4) {
       const last = loadLast()
-      go(readPath(route.path[1] || settings.version, last?.[0] ?? 'Gen', last?.[1] ?? 1), true)
+      go(readPath(route.path[1] || settings.favorite || settings.version, last?.[0] ?? 'Gen', last?.[1] ?? 1), true)
     } else saveLast(route.path[2], +route.path[3])
   }, [route.path.join('/')])
   return route.path.length >= 4 ? <Reader route={route} /> : null
@@ -129,6 +129,10 @@ function VersionMenu({ route }: { route: Route }) {
                   <input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} />
                 </label>
               )}
+              <button class="vm-row" onClick={() => update({ favorite: version })} disabled={settings.favorite === version}>
+                <strong>{settings.favorite === version ? `★ ${version} is your default` : `☆ Make ${version} my default`}</strong>
+                <span class="muted small">{settings.favorite && settings.favorite !== version ? `Now: ${settings.favorite}` : 'Opens every time'}</span>
+              </button>
               <a class="vm-row" href="#/versions" onClick={() => setOpen('')}><strong>Download and manage versions</strong><span class="muted">›</span></a>
             </div>
           } />
@@ -164,9 +168,11 @@ function loadLast(): [string, number] | undefined { try { return JSON.parse(loca
 function saveLast(book: string, ch: number) { try { localStorage.setItem(LAST, JSON.stringify([book, ch])) } catch { /* ignore */ } }
 
 function SettingsView() {
-  const { settings, update, catalog, marks, sync } = useApp()
+  const { settings, update, catalog, marks, sync, byId } = useApp()
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
   const saved = Object.values(marks).filter(m => m.c || m.b).length
+  const [pickFav, setPickFav] = useState(false)
+  const fav = settings.favorite || settings.version
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
       {opts.map(([v, label]) => (
@@ -182,6 +188,13 @@ function SettingsView() {
         <a class="shortcut" href="#/search"><strong>Advanced search</strong><span class="muted">Search many versions at once, with filters</span></a>
       </div>
       {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
+      <div class="field"><span>Default Bible</span>
+        <div class="col">
+          <button class="pick" onClick={() => setPickFav(true)}>★ {fav} · {byId.get(fav)?.name} ▾</button>
+          <span class="muted small">The app always opens in this version{settings.favorite ? '' : ' (not pinned yet: it follows the last version you used)'}.</span>
+        </div>
+        {pickFav && <VersionPicker title="Default Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
+      </div>
       <div class="field"><span>Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
       <div class="field"><span>Text size</span>
         <div class="row">
