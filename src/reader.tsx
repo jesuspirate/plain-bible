@@ -20,7 +20,7 @@ export function Reader({ route }: { route: Route }) {
   const [bibles, setBibles] = useState<Record<string, Bible>>({})
   const [error, setError] = useState('')
   const [lex, setLex] = useState<string>()
-  const [verseMenu, setVerseMenu] = useState<number>()
+  const [selected, setSelected] = useState<number[]>([])
 
   useEffect(() => {
     if (version !== settings.version || parallel.join() !== settings.parallel.join()) update({ version, parallel })
@@ -36,6 +36,8 @@ export function Reader({ route }: { route: Route }) {
       requestAnimationFrame(() => document.getElementById('v' + target)?.scrollIntoView({ block: 'center' }))
     } else window.scrollTo(0, 0)
   }, [book, chapter, version, target, Object.keys(bibles).length])
+
+  useEffect(() => setSelected([]), [book, chapter, version])
 
   const nav = (b: string, c: number, v?: number) => go(readPath(version, b, c, v, parallel))
   const primary = bibles[version]
@@ -61,12 +63,12 @@ export function Reader({ route }: { route: Route }) {
 
   const mark = (v: number) => marks[markKey(book, chapter, v)]
   const verseClass = (base: string, v: number) =>
-    base + (target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (verseMenu === v ? ' picked' : '')
+    base + (target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (selected.includes(v) ? ' picked' : '')
   const hlStyle = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
   const tapVerse = (e: MouseEvent, v: number) => {
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     if (String(getSelection() ?? '').trim()) return
-    setVerseMenu(v)
+    setSelected(s => s.includes(v) ? s.filter(x => x !== v) : [...s, v].sort((a, b) => a - b))
   }
   // Swipe left/right to change chapter.
   const touch = useRef<{ x: number; y: number; t: number }>()
@@ -129,66 +131,106 @@ export function Reader({ route }: { route: Route }) {
       {t && <p class="credit muted small">{t.name}. {t.license}.</p>}
 
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
-      {verseMenu && <VerseMenu book={book} chapter={chapter} verse={verseMenu} versions={versions} bibles={bibles} onClose={() => setVerseMenu(undefined)} />}
+      {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])} />}
     </div>
   )
 }
 
-function VerseMenu({ book, chapter, verse, versions, bibles, onClose }: {
-  book: string; chapter: number; verse: number; versions: string[]; bibles: Record<string, Bible>; onClose: () => void
+/** "16–18, 20" for a sorted list of verse numbers. */
+export function verseRanges(vs: number[]) {
+  const out: string[] = []
+  for (let i = 0; i < vs.length; i++) {
+    let j = i
+    while (j + 1 < vs.length && vs[j + 1] === vs[j] + 1) j++
+    out.push(i === j ? `${vs[i]}` : `${vs[i]}–${vs[j]}`)
+    i = j
+  }
+  return out.join(', ')
+}
+
+// Shown while verses are selected: tap more verses to add them, then
+// highlight, bookmark, copy, share or compare them together.
+function SelectionBar({ book, chapter, verses, versions, bibles, onClose }: {
+  book: string; chapter: number; verses: number[]; versions: string[]; bibles: Record<string, Bible>; onClose: () => void
 }) {
   const { settings, byId, data, marks, setMarks } = useApp()
-  const key = markKey(book, chapter, verse)
-  const m = marks[key]
-  const setMark = (patch: { c?: string | null; b?: 1 | null }) => setMarks(all => {
-    const next = { ...all[key], t: Date.now() } as Record<string, unknown>
-    for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
-    if (versions[0] && patch.c) next.v = versions[0]
-    const out = { ...all }
-    out[key] = (!next.c && !next.b ? { t: next.t } : next) as never
+  const [compare, setCompare] = useState<Bible[]>()
+  const [note, setNote] = useState('')
+  const version = versions[0]
+  const keys = verses.map(v => markKey(book, chapter, v))
+  const ref = `${bookById(book).name} ${chapter}:${verseRanges(verses)}`
+  const colors = new Set(keys.map(k => marks[k]?.c).filter(Boolean))
+  const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
+  const allBookmarked = keys.every(k => marks[k]?.b)
+
+  useEffect(() => {
+    document.body.classList.add('selecting')
+    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    addEventListener('keydown', onKey)
+    return () => { document.body.classList.remove('selecting'); removeEventListener('keydown', onKey) }
+  }, [])
+
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => setMarks(all => {
+    const out = { ...all }, t = Date.now()
+    for (const key of keys) {
+      const next = { ...all[key], t } as Record<string, unknown>
+      for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
+      if (patch.c) next.v = version
+      out[key] = (!next.c && !next.b ? { t } : next) as never
+    }
     return out
   })
-  const [compare, setCompare] = useState<Bible[]>()
-  const [copied, setCopied] = useState('')
-  const ref = formatRef({ book, chapter, verse })
-  const text = (b: Bible) => plain(b.books[book]?.[chapter - 1]?.[verse - 1] ?? '')
-  const copy = async (s: string, what: string) => {
-    try { await navigator.clipboard.writeText(s); setCopied(what) } catch { setCopied('Copy failed') }
+  const textOf = (b: Bible | undefined) => verses.length === 1
+    ? plain(b?.books[book]?.[chapter - 1]?.[verses[0] - 1] ?? '')
+    : verses.map(v => { const raw = b?.books[book]?.[chapter - 1]?.[v - 1]; return raw ? `${v} ${plain(raw)}` : '' }).filter(Boolean).join(' ')
+  const quote = `${textOf(bibles[version])}\n${ref} (${version})`
+  const link = `${location.origin}${location.pathname}#/${readPath(version, book, chapter, verses[0])}`
+  const copy = async (s: string) => {
+    try { await navigator.clipboard.writeText(s); setNote('Copied') } catch { setNote('Copy failed') }
   }
-  const showAll = () => {
+  const showCompare = () => {
     const ids = settings.myVersions.filter(id => byId.get(id)?.books.includes(book))
     Promise.all(ids.map(id => data.bible(id))).then(setCompare)
   }
-  const link = `${location.origin}${location.pathname}#/${readPath(versions[0], book, chapter, verse)}`
+
   return (
-    <Sheet title={ref} onClose={onClose}>
-      <p class="menu-verse">{text(bibles[versions[0]])}</p>
-      <div class="swatches" role="radiogroup" aria-label="Highlight color">
-        {PALETTE.map(p => (
-          <button role="radio" aria-checked={m?.c === p.color} aria-label={p.name} class={'swatch' + (m?.c === p.color ? ' on' : '')}
-            style={{ background: p.color }} onClick={() => { setMark({ c: m?.c === p.color ? null : p.color }); onClose() }} />
-        ))}
-        {m?.c && <button class="swatch none" aria-label="Remove highlight" onClick={() => { setMark({ c: null }); onClose() }}>✕</button>}
-      </div>
-      <div class="row wrap actions">
-        <button class={m?.b ? 'on' : ''} onClick={() => setMark({ b: m?.b ? null : 1 })}>{m?.b ? '🔖 Bookmarked' : '🔖 Bookmark'}</button>
-        <button onClick={() => copy(`${text(bibles[versions[0]])}\n${ref} (${versions[0]})`, 'Copied verse')}>Copy</button>
-        {'share' in navigator
-          ? <button onClick={() => navigator.share({ title: ref, text: `${text(bibles[versions[0]])}\n${ref} (${versions[0]})`, url: link }).catch(() => {})}>Share</button>
-          : <button onClick={() => copy(link, 'Copied link')}>Copy link</button>}
-        <button onClick={showAll}>Compare</button>
-      </div>
-      {copied && <p class="muted small">{copied}</p>}
-      {compare && (
-        <dl class="compare">
-          {compare.map(b => (
-            <>
-              <dt>{b.id} <span class="muted small">{byId.get(b.id)?.name}</span></dt>
-              <dd dir={byId.get(b.id)?.rtl ? 'rtl' : undefined}>{text(b) || <span class="muted">—</span>}</dd>
-            </>
+    <>
+      <div class="selbar" role="toolbar" aria-label={`${ref} selected`}>
+        <div class="selbar-head">
+          <strong>{ref}</strong>
+          <span class="muted small">{verses.length > 1 ? `${verses.length} verses` : 'Tap more verses to add them'}</span>
+          <span class="spacer" />
+          <button class="icon" aria-label="Clear selection" onClick={onClose}>✕</button>
+        </div>
+        <div class="swatches" role="radiogroup" aria-label="Highlight color">
+          {PALETTE.map(p => (
+            <button role="radio" aria-checked={current === p.color} aria-label={p.name} class={'swatch' + (current === p.color ? ' on' : '')}
+              style={{ background: p.color }} onClick={() => { apply({ c: current === p.color ? null : p.color }); onClose() }} />
           ))}
-        </dl>
+          {colors.size > 0 && <button class="swatch none" aria-label="Remove highlight" onClick={() => { apply({ c: null }); onClose() }}>✕</button>}
+        </div>
+        <div class="row actions">
+          <button class={allBookmarked ? 'on' : ''} onClick={() => { apply({ b: allBookmarked ? null : 1 }); onClose() }}>{allBookmarked ? '🔖 Saved' : '🔖 Bookmark'}</button>
+          <button onClick={() => copy(quote)}>Copy</button>
+          {'share' in navigator
+            ? <button onClick={() => navigator.share({ title: ref, text: quote, url: link }).catch(() => {})}>Share</button>
+            : <button onClick={() => copy(link)}>Link</button>}
+          <button onClick={showCompare}>Compare</button>
+        </div>
+        {note && <p class="muted small selbar-note">{note}</p>}
+      </div>
+      {compare && (
+        <Sheet title={ref} onClose={() => setCompare(undefined)}>
+          <dl class="compare">
+            {compare.map(b => (
+              <>
+                <dt>{b.id} <span class="muted small">{byId.get(b.id)?.name}</span></dt>
+                <dd dir={byId.get(b.id)?.rtl ? 'rtl' : undefined}>{textOf(b) || <span class="muted">—</span>}</dd>
+              </>
+            ))}
+          </dl>
+        </Sheet>
       )}
-    </Sheet>
+    </>
   )
 }

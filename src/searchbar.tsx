@@ -19,9 +19,14 @@ export function rememberSearch(q: string) {
   try { localStorage.setItem(RECENT, JSON.stringify(list)) } catch { /* ignore */ }
 }
 
-type Recognition = { lang: string; interimResults: boolean; start(): void; stop(): void; onresult: (e: any) => void; onend: () => void; onerror: () => void }
+type Recognition = { lang: string; interimResults: boolean; start(): void; stop(): void; onresult: (e: any) => void; onend: () => void; onerror: (e: any) => void }
+// iPhone and iPad expose speech recognition but refuse it inside home-screen
+// apps; their keyboard has its own dictation key, so we leave voice to that.
+const IOS = typeof navigator !== 'undefined' && (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
+const MIC_OFF = 'plain-bible:mic-off'
+const micBroken = () => { try { return localStorage.getItem(MIC_OFF) === '1' } catch { return false } }
 const SpeechRecognition: (new () => Recognition) | undefined =
-  typeof window !== 'undefined' ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : undefined
+  typeof window !== 'undefined' && !IOS ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : undefined
 
 export function SearchBar({ here }: { here?: { version: string; book: string; chapter: number } }) {
   const { settings, data, byId } = useApp()
@@ -31,6 +36,8 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
   const [listening, setListening] = useState(false)
+  const [micOk, setMicOk] = useState(() => !!SpeechRecognition && !micBroken())
+  const [micNote, setMicNote] = useState('')
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
@@ -41,6 +48,44 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
 
   const chapterRow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLDivElement>(null)
+
+  // While open, pin the bar and panel to the visible part of the screen, so
+  // the iPhone keyboard doesn't push the page around or cut the panel off.
+  useEffect(() => {
+    if (!open) return
+    const root = document.documentElement, vv = window.visualViewport
+    const fit = () => {
+      if (!vv) return
+      root.style.setProperty('--vv-top', vv.offsetTop + 'px')
+      root.style.setProperty('--vv-h', vv.height + 'px')
+    }
+    fit()
+    root.classList.add('sb-lock')
+    vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
+    return () => {
+      root.classList.remove('sb-lock')
+      vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit)
+    }
+  }, [open])
+
+  // Chapter strip: a mouse wheel or a drag scrolls it sideways on desktop.
+  const drag = useRef<{ x: number; left: number; moved: boolean }>()
+  const onWheel = (e: WheelEvent) => {
+    const row = chapterRow.current
+    if (!row || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return
+    row.scrollBy({ left: e.deltaY, behavior: 'auto' }); e.preventDefault()
+  }
+  const onPointerDown = (e: PointerEvent) => {
+    if (e.pointerType !== 'mouse' || !chapterRow.current) return
+    drag.current = { x: e.clientX, left: chapterRow.current.scrollLeft, moved: false }
+  }
+  const onPointerMove = (e: PointerEvent) => {
+    const d = drag.current, row = chapterRow.current
+    if (!d || !row) return
+    const dx = e.clientX - d.x
+    if (Math.abs(dx) > 4) { d.moved = true; row.scrollLeft = d.left - dx }
+  }
+  const endDrag = () => { setTimeout(() => { drag.current = undefined }, 0) }
   useEffect(() => { if (browse) panel.current?.scrollTo({ top: 0, behavior: 'smooth' }) }, [browse])
   useEffect(() => {
     const row = chapterRow.current, on = row?.querySelector<HTMLElement>('.on')
@@ -131,10 +176,17 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
     r.interimResults = true
     r.onresult = (e: any) => setQ(Array.from(e.results).map((x: any) => x[0].transcript).join(''))
     r.onend = () => setListening(false)
-    r.onerror = () => setListening(false)
+    r.onerror = (e: any) => {
+      setListening(false)
+      if (e?.error === 'not-allowed' || e?.error === 'service-not-allowed') {
+        setMicNote('Voice input is blocked here. Allow the microphone for this site, or use your keyboard’s dictation key.')
+        if (e.error === 'service-not-allowed') { try { localStorage.setItem(MIC_OFF, '1') } catch { /* ignore */ } setMicOk(false) }
+      } else if (e?.error === 'no-speech') setMicNote('Didn’t catch that. Tap the mic and try again.')
+      else if (e?.error !== 'aborted') setMicNote('Voice input isn’t working in this browser right now.')
+    }
     recognizer.current = r
-    setListening(true); setOpen(true)
-    r.start()
+    setMicNote(''); setListening(true); setOpen(true)
+    try { r.start() } catch { setListening(false); setMicNote('Voice input isn’t available in this browser.') }
   }
 
   return (
@@ -143,6 +195,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
       <div class={'sb' + (open ? ' sb-open' : '') + ''}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions">
+            {micNote && <p class="sb-note">{micNote}</p>}
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
                 <span class="sb-kicker">Go to · {version}</span>
@@ -172,7 +225,9 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             {!trimmed && chapters > 0 && (
               <div class="sb-chapters">
                 <div class="sb-kicker">{bookById(browseBook).name}</div>
-                <div class="sb-chapter-row" ref={chapterRow}>
+                <div class="sb-chapter-row" ref={chapterRow} onWheel={onWheel} onPointerDown={onPointerDown}
+                  onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerLeave={endDrag}
+                  onClickCapture={e => { if (drag.current?.moved) { e.stopPropagation(); e.preventDefault() } }}>
                   {Array.from({ length: chapters }, (_, i) => (
                     <button class={'sb-ch' + (here?.book === browseBook && i + 1 === here.chapter ? ' on' : '')}
                       onClick={() => finish(readPath(version, browseBook, i + 1))}>{i + 1}</button>
@@ -221,7 +276,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
-          {SpeechRecognition && (
+          {micOk && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} aria-label={listening ? 'Stop dictation' : 'Search by voice'} onClick={toggleMic}>
               <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" /></svg>
             </button>

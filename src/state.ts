@@ -26,6 +26,8 @@ export interface Settings {
   strongsNumbers: boolean
   myVersions: string[]
   version: string
+  /** the version the app always opens in */
+  favorite?: string
   parallel: string[]
   searchVersions: string[]
   searchOptions: SearchOptions
