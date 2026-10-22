@@ -56,7 +56,9 @@ export function tidy(m: Mark): Mark {
 export function mergeMark(a: Mark | undefined, b: Mark | undefined): Mark | undefined {
   if (!a || !b) return a ?? b
   const out: Mark = { ...((b.t ?? 0) > (a.t ?? 0) ? b : a) }
-  const note = (b.nt ?? 0) > (a.nt ?? 0) ? b : (a.nt ?? 0) > (b.nt ?? 0) ? a : out
+  // Copied: when both notes are the same age the note comes from `out`,
+  // which is cleared next.
+  const note = { ...((b.nt ?? 0) > (a.nt ?? 0) ? b : (a.nt ?? 0) > (b.nt ?? 0) ? a : out) }
   delete out.n; delete out.nt
   if (note.n) out.n = note.n
   if (note.nt) out.nt = note.nt
