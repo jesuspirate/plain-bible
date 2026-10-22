@@ -11,6 +11,9 @@ export interface Mark {
   v?: string
   /** your note on this verse */
   n?: string
+  /** the verses the note is about, when it covers more than this one
+   *  (sorted, includes this verse). The note lives on the first of them. */
+  nv?: number[]
   /** when the note last changed. Kept after a note is deleted, so the
    *  deletion syncs; notes and highlights on one verse merge separately. */
   nt?: number
@@ -59,18 +62,32 @@ export function mergeMark(a: Mark | undefined, b: Mark | undefined): Mark | unde
   // Copied: when both notes are the same age the note comes from `out`,
   // which is cleared next.
   const note = { ...((b.nt ?? 0) > (a.nt ?? 0) ? b : (a.nt ?? 0) > (b.nt ?? 0) ? a : out) }
-  delete out.n; delete out.nt
+  delete out.n; delete out.nt; delete out.nv
   if (note.n) out.n = note.n
+  if (note.n && note.nv) out.nv = note.nv
   if (note.nt) out.nt = note.nt
   return tidy(out)
 }
 
-/** Set or clear (empty text) the note on one verse. */
-export function setNote(marks: Marks, key: string, text: string, now = Date.now()): Marks {
+/** Set or clear (empty text) the note on one verse, or on a passage:
+ *  `verses` are all the verses it is about; the note is kept on `key`. */
+export function setNote(marks: Marks, key: string, text: string, now = Date.now(), verses?: number[]): Marks {
   const m: Mark = { ...marks[key], t: now, nt: now }
   const n = text.trim()
-  if (n) m.n = n; else delete m.n
+  delete m.nv
+  if (n) { m.n = n; if (verses && verses.length > 1) m.nv = verses } else delete m.n
   return { ...marks, [key]: tidy(m) }
+}
+
+/** The note in this chapter that covers verse `v`: its own, or a passage
+ *  note that starts on an earlier verse. Returns the verse it lives on. */
+export function noteCovering(marks: Marks, book: string, chapter: number, v: number): number | undefined {
+  if (marks[markKey(book, chapter, v)]?.n) return v
+  for (let s = v - 1; s >= Math.max(1, v - 200); s--) {
+    const m = marks[markKey(book, chapter, s)]
+    if (m?.n && m.nv?.includes(v)) return s
+  }
+  return undefined
 }
 
 const KEY = 'plain-bible:marks'

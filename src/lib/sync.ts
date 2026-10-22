@@ -41,7 +41,7 @@ export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
 
 /** Stable text for comparing documents without caring about key order. */
 export function docKey(d: SyncDoc) {
-  const marks = Object.keys(d.marks).sort().map(k => [k, d.marks[k].c ?? '', d.marks[k].b ?? 0, d.marks[k].t, d.marks[k].n ?? '', d.marks[k].nt ?? 0])
+  const marks = Object.keys(d.marks).sort().map(k => [k, d.marks[k].c ?? '', d.marks[k].b ?? 0, d.marks[k].t, d.marks[k].n ?? '', d.marks[k].nt ?? 0, ...(d.marks[k].nv ? [d.marks[k].nv!.join()] : [])])
   const settings = Object.keys(d.settings ?? {}).sort().map(k => [k, d.settings[k], changedAt(d.settingsT, k)])
   return JSON.stringify([marks, settings])
 }

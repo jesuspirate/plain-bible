@@ -28,5 +28,5 @@ export function savePlace(p: Place) {
 /** A reader address without its "?v=" verse, e.g. before a reload, so the page
  *  comes back where you scrolled to rather than on the verse you jumped to. */
 export function withoutVerse(hash: string) {
-  return hash.replace(/([?&])v=\d+(&|$)/, (_, a, b) => b ? a : '').replace(/\?$/, '')
+  return hash.replace(/([?&])(?:v|at)=\d+(?=&|$)&?/g, '$1').replace(/[?&]$/, '')
 }

@@ -1,6 +1,8 @@
 :root {
   --bg: #faf8f3; --surface: #ffffff; --text: #22211f; --muted: #6b675f; --line: #e4dfd4;
   --accent: #7a4b1e; --accent-ink: #ffffff; --mark: #fde9a6; --mark-ink: #22211f; --chip: #f1ece1;
+  /* bookmark ribbon, and how much of a highlight colour tints letters */
+  --ribbon: #b3261e; --hl-ink: 30%;
   --font-size: 19px;
   --serif: 'Literata Variable', Georgia, 'Noto Serif', serif;
   --sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
@@ -8,9 +10,9 @@
   color-scheme: light;
 }
 :root[data-theme='sepia'] { --bg: #f4ecd8; --surface: #fbf5e6; --text: #3b2f22; --muted: #7a6a55; --line: #e0d3b6; --chip: #ebe0c6; --mark: #f2d88b; }
-:root[data-theme='dark'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; color-scheme: dark; }
+:root[data-theme='dark'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; --ribbon: #ff8a7a; --hl-ink: 75%; color-scheme: dark; }
 @media (prefers-color-scheme: dark) {
-  :root[data-theme='system'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; color-scheme: dark; }
+  :root[data-theme='system'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; --ribbon: #ff8a7a; --hl-ink: 75%; color-scheme: dark; }
 }
 
 * { box-sizing: border-box; }
@@ -43,11 +45,32 @@ button.icon { background: none; border: none; font-size: 18px; padding: 4px 8px;
 header.top {
   position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px;
   padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
-  background: var(--bg); border-bottom: 1px solid var(--line);
+  background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--line);
+  -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
 }
-.brand { font: 600 18px var(--serif); color: var(--text); text-decoration: none; white-space: nowrap; }
+.brand { font: 600 19px var(--serif); letter-spacing: .01em; color: var(--text); text-decoration: none; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
+.brand-fwd { display: inline-block; margin-left: 6px; padding: 0 7px; border-radius: 99px; background: var(--accent); color: var(--accent-ink); font: 700 15px/1.35 var(--sans); vertical-align: 2px; animation: sb-pop .2s; }
+.history-btn { color: var(--text); display: grid; place-items: center; width: 40px; height: 40px; border-radius: 10px; padding: 0; -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; -webkit-tap-highlight-color: transparent; }
+.history-btn:hover { background: var(--chip); }
+.history-btn.idle { color: var(--muted); }
+.toast {
+  position: fixed; z-index: 40; left: 50%; transform: translateX(-50%); top: calc(max(10px, env(safe-area-inset-top)) + 58px);
+  display: flex; align-items: center; gap: 10px; white-space: nowrap; max-width: calc(100vw - 24px);
+  padding: 8px 8px 8px 16px; border-radius: 99px; background: var(--text); color: var(--bg); font-size: 15px;
+  box-shadow: 0 10px 30px rgba(0,0,0,.25); animation: toast-in .25s cubic-bezier(.2, .8, .2, 1);
+}
+.toast > span { overflow: hidden; text-overflow: ellipsis; }
+.toast button { flex: none; border: none; border-radius: 99px; background: var(--bg); color: var(--text); font-weight: 600; padding: 7px 14px; }
+@keyframes toast-in { from { opacity: 0; transform: translate(-50%, -8px); } }
+.history { list-style: none; padding: 0; margin: 0 0 12px; }
+.history-row { display: flex; flex-direction: column; gap: 3px; width: 100%; text-align: left; border: none; border-radius: 12px; padding: 11px 12px; background: none; }
+.history-row:hover { background: var(--chip); }
+.history-row.on { background: var(--chip); box-shadow: inset 3px 0 0 var(--accent); }
+.hr-head { display: flex; justify-content: space-between; align-items: baseline; gap: 12px; }
+.hr-head strong { font-size: 17px; }
+.hr-line { font-family: var(--reading); color: var(--muted); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; line-height: 1.45; }
 header.top nav { display: flex; align-items: center; gap: 6px; margin-left: auto; }
-header.top nav a { padding: 6px 10px; border-radius: 8px; color: var(--muted); text-decoration: none; white-space: nowrap; }
+header.top nav a { padding: 6px 10px; border-radius: 8px; color: var(--text); text-decoration: none; white-space: nowrap; }
 header.top nav a.on { color: var(--text); background: var(--chip); }
 header.top nav .gear { display: block; margin: 2px 0; }
 main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
@@ -61,7 +84,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .toggle { display: flex; align-items: center; gap: 6px; color: var(--muted); font-size: 14px; }
 .chapter { font-family: var(--reading); font-size: var(--font-size); line-height: 1.7; max-width: 44rem; margin: 0 auto; }
 .chapter:not(.cols-1) { max-width: none; }
-.chapter-title { font: 600 1.4em var(--reading); margin: 8px 0 16px; text-align: center; }
+.chapter-title { margin: 20px 0 22px; text-align: center; font-family: var(--reading); font-weight: 400; line-height: 1.1; }
+.ct-book { display: block; font: 600 .72em var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
+.ct-num { display: block; font-size: 1.9em; font-weight: 500; margin-top: 4px; }
 .vrow-head, .chapter:not(.cols-1) .verse { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 0 28px; }
 .colhead { font: 600 13px var(--sans); color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-bottom: 8px; }
 .verse { padding: 2px 0; scroll-margin-top: 80px; }
@@ -77,7 +102,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .w-mark { color: var(--accent); font-weight: 600; text-decoration-style: solid; }
 .sn { font: .55em var(--sans); color: var(--muted); margin-left: 1px; }
 mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padding: 0 1px; }
-.pager { display: flex; justify-content: space-between; max-width: 44rem; margin: 32px auto 8px; }
+.pager { display: flex; justify-content: space-between; max-width: 44rem; margin: 40px auto 8px; }
+.pager button { border-radius: 99px; padding: 10px 20px; background: none; font-weight: 500; }
+.pager button span { font-size: 1.25em; line-height: 0; }
 .credit { text-align: center; }
 @media (max-width: 720px) {
   .chapter:not(.cols-1) .verse, .vrow-head { grid-template-columns: 1fr; }
@@ -167,7 +194,7 @@ dialog.sheet::backdrop { background: rgba(0,0,0,.35); }
 .font-card.on { border-color: var(--accent); box-shadow: 0 0 0 1px var(--accent) inset; }
 .font-sample { font-size: 19px; line-height: 1.3; }
 .font-name { font: 500 12px var(--sans); }
-.theme-toggle { color: var(--muted); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; }
+.theme-toggle { color: var(--text); display: grid; place-items: center; width: 36px; height: 36px; border-radius: 10px; }
 .theme-toggle:hover { color: var(--text); background: var(--chip); }
 
 /* ---- floating search bar ---- */
@@ -228,7 +255,7 @@ main.with-bar { padding-bottom: 120px; }
 .sb-verse { font-family: var(--reading); font-size: 16px; line-height: 1.5; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .sb-verse sup { font: 600 10px var(--sans); color: var(--muted); margin-right: 3px; }
 .sb-books, .sb-tips { display: flex; flex-wrap: wrap; gap: 6px; padding: 4px 6px 8px; }
-.sb-tips .sb-kicker { width: 100%; padding: 4px 4px 0; }
+.sb-tips .sb-kicker, .sb-read .sb-kicker { width: 100%; padding: 4px 4px 0; }
 .sb-chip { border-radius: 99px; padding: 6px 12px; font-size: 14px; background: var(--chip); border: none; }
 .sb-more { all: unset; cursor: pointer; display: block; padding: 10px 12px; color: var(--accent); font-weight: 600; font-size: 14px; }
 .sb-row { all: unset; cursor: pointer; display: flex; gap: 10px; align-items: center; width: 100%; box-sizing: border-box; padding: 9px 12px; border-radius: 12px; }
@@ -248,23 +275,43 @@ main.with-bar { padding-bottom: 120px; }
 /* ---- highlights & bookmarks ---- */
 .verse, .pv { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .hl { --hl-mix: 55%; }
-.verse.hl .cell, .pv.hl { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-.verse.hl .cell { padding: 1px 4px; margin: 0 -4px; }
+/* Marker (default): colour behind the letters only, line by line, like a highlighter pen. */
+.hl .vt { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: .3em; padding: .04em .12em; margin: 0 -.06em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+/* Block: the whole verse. */
+:root[data-hl='block'] .hl .vt { background: none; padding: 0; margin: 0; }
+:root[data-hl='block'] .verse.hl .cell, :root[data-hl='block'] .pv.hl { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+:root[data-hl='block'] .verse.hl .cell { padding: 1px 4px; margin: 0 -4px; }
+/* Colored text: the letters take the colour, with a line of it underneath. */
+:root[data-hl='text'] .hl .vt { background: none; padding: 0; margin: 0; color: color-mix(in srgb, var(--hl) var(--hl-ink), var(--text));
+  text-decoration: underline; text-decoration-color: var(--hl); text-decoration-thickness: .16em; text-underline-offset: .22em; text-decoration-skip-ink: none; }
+.hl-preview { margin: 4px 0 0; font-family: var(--reading); font-size: 18px; line-height: 1.7; }
+.hl-preview .pv { cursor: default; }
 :root[data-theme='dark'] .hl { --hl-mix: 32%; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl { --hl-mix: 32%; } }
-/* note marker: a small page icon right after the verse number */
-.note-mark { all: unset; cursor: pointer; display: inline-flex; vertical-align: super; font-size: .78em; color: var(--accent); margin: 0 4px 0 -2px; padding: 2px; border-radius: 4px; }
+/* After the verse number: a bookmark ribbon and a note icon */
+.note-mark { all: unset; cursor: pointer; display: inline-flex; vertical-align: -.08em; font-size: .9em; color: var(--accent); margin: 0 5px 0 -1px; padding: 2px; border-radius: 5px; }
 .note-mark:hover { background: var(--chip); }
-.note-verse { font-family: var(--reading); margin: 0 0 12px; line-height: 1.5; }
+.bm-mark { display: inline-block; vertical-align: -.1em; width: .85em; height: .95em; color: var(--ribbon); margin: 0 4px 0 -1px; }
+.bm-mark svg { width: 100%; height: 100%; display: block; }
+.chip .bm-mark, .saved-head .bm-mark { width: 16px; height: 18px; }
+.chip.on .bm-mark { color: inherit; }
+/* Note editor: the verses it is about, as a quiet quote above the note */
+.note-passage { margin: 0 0 14px; position: relative; }
+.note-passage blockquote { margin: 0; padding: 10px 14px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--bg);
+  font-family: var(--reading); font-size: 17px; line-height: 1.55; max-height: 60vh; overflow: auto; transition: max-height .3s ease; }
+.note-passage.folded blockquote { max-height: 7.4em; overflow: hidden; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
+.note-passage sup { font: 700 .62em var(--sans); color: var(--accent); margin-right: 3px; }
+.np-more { display: block; margin: 4px 0 0 auto; font-weight: 600; font-size: 15px; }
 .note-text { width: 100%; box-sizing: border-box; font: 16px/1.5 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; margin-bottom: 12px; }
-.bm .vn::after, .bm > .vn::after { content: '🔖'; font-size: .9em; margin-left: 2px; }
-.picked .cell, .pv.picked { outline: 2px solid color-mix(in srgb, var(--accent) 50%, transparent); outline-offset: 2px; border-radius: 4px; }
+/* Selected verses: a dotted underline, so the highlight colours stay visible */
+.picked .vt { text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: .28em; }
+.picked .vn { color: var(--accent); }
 .menu-verse { font-family: var(--reading); font-size: 17px; line-height: 1.5; margin: 0 0 14px; max-height: 7.5em; overflow: auto; }
 .swatches { display: flex; flex-wrap: wrap; gap: 8px; margin-bottom: 14px; }
-.swatch { width: 34px; height: 34px; border-radius: 50%; border: 2px solid transparent; padding: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.08) inset; }
+.swatch { width: 38px; height: 38px; border-radius: 50%; border: 2px solid transparent; padding: 0; box-shadow: 0 0 0 1px rgba(0,0,0,.08) inset; display: grid; place-items: center; transition: transform .12s; }
+.swatch:active { transform: scale(.9); }
 .swatch.on { border-color: var(--text); }
 .swatch.none { display: grid; place-items: center; background: var(--chip); color: var(--muted); font-size: 14px; }
-.actions button.on { background: var(--chip); }
 
 /* ---- saved ---- */
 .saved { max-width: 46rem; margin: 0 auto; }
@@ -315,12 +362,14 @@ button.danger { color: #b3261e; }
   border: 1px solid var(--line); border-radius: 22px; box-shadow: 0 10px 40px rgba(0,0,0,.18);
 }
 .selbar-head { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; }
-.selbar-head strong { font-weight: 600; }
+.selbar-head strong { font-weight: 600; font-size: 17px; }
 .selbar .swatches { flex-wrap: nowrap; overflow-x: auto; margin-bottom: 10px; scrollbar-width: none; }
 .selbar .swatch { flex: none; }
-.selbar .actions { gap: 6px; }
-.selbar .actions button { flex: 1; padding: 8px 6px; white-space: nowrap; }
-@media (max-width: 420px) { .selbar .actions button { padding: 8px 4px; font-size: 14px; } }
+.selbar .actions { display: flex; gap: 4px; }
+.selbar .actions button { flex: 1; min-width: 0; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 2px 6px; border: none; border-radius: 14px; background: none; font-size: 13px; font-weight: 500; white-space: nowrap; color: var(--text); }
+.selbar .actions button:hover { background: var(--chip); }
+.selbar .actions button.on { background: var(--chip); color: var(--accent); }
+.selbar .actions .bm-icon { color: var(--ribbon); }
 .selbar-note { margin: 6px 0 0; text-align: center; }
 body.selecting .sb { display: none; }
 body.selecting main { padding-bottom: 200px; }

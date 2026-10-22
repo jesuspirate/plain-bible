@@ -1,13 +1,17 @@
-import { useEffect, useMemo, useState } from 'preact/hooks'
+import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, readPath, Route, saveSettings, Settings, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
 import { DataTools } from './import'
-import { VersionPicker } from './ui'
+import { Sheet, VersionPicker } from './ui'
+import { HistoryIcon } from './icons'
+import { clearTrail, loadTrail, onTrail, step, stepTo, Trail, visit, Visit } from './lib/history'
+import { formatRef } from './lib/refs'
+import { plain } from './lib/text'
 import { hasContent, loadMarks, Marks, saveMarks } from './lib/marks'
 import { AccountSection, touchSettings, useSync } from './account'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
@@ -50,6 +54,7 @@ export function App() {
     saveSettings(settings)
     const root = document.documentElement
     root.dataset.theme = settings.theme
+    root.dataset.hl = settings.highlight
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
     // Match the phone's status bar (and the browser bar) to the chosen theme.
@@ -117,8 +122,9 @@ export function App() {
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
-        <a class="brand" href="#/read" title="Back to where you were reading">Plain Bible</a>
+        <Brand route={route} />
         <nav>
+          <HistoryButton route={route} />
           <VersionMenu route={route} />
           <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
             <svg class="gear" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
@@ -150,7 +156,9 @@ function ReaderRoute({ route }: { route: Route }) {
       // A new chapter starts at its top (or the verse you jumped to); the
       // reader keeps the verse up to date as you scroll.
       const last = loadPlace(), book = route.path[2], chapter = +route.path[3]
-      if (last?.book !== book || last.chapter !== chapter) savePlace({ book, chapter, verse: +(route.params.get('v') || 0) || 1 })
+      const verse = +(route.params.get('v') || route.params.get('at') || 0) || 1
+      if (last?.book !== book || last.chapter !== chapter) savePlace({ book, chapter, verse })
+      visit({ book, chapter, verse })
     }
   }, [route.path.join('/')])
   return route.path.length >= 4 ? <Reader route={route} /> : null
@@ -202,6 +210,115 @@ function VersionMenu({ route }: { route: Route }) {
           onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
       )}
     </>
+  )
+}
+
+/** The reading history as it changes. */
+function useTrail() {
+  const [trail, setTrail] = useState<Trail>(loadTrail)
+  useEffect(() => onTrail(setTrail), [])
+  return trail
+}
+
+/** Go to a place from your history, in the version (and side-by-side
+ *  versions) you're reading now. */
+function useGoTo(route: Route) {
+  const { settings, byId } = useApp()
+  const reading = route.path[0] === 'read' && byId.has(route.path[1])
+  const version = reading ? route.path[1] : settings.favorite || settings.version
+  const parallel = (reading && route.params.get('p')?.split(',')) || []
+  return (p: Visit | undefined) => { if (p) go(resumePath(version, p.book, p.chapter, p.verse, parallel)) }
+}
+
+const placeName = (p: Visit) => formatRef({ book: p.book, chapter: p.chapter, verse: p.verse > 1 ? p.verse : undefined })
+
+// "Plain Bible": back to where you're reading. After stepping back through
+// your history it steps forward again, one place per tap.
+function Brand({ route }: { route: Route }) {
+  const trail = useTrail(), goTo = useGoTo(route)
+  const reading = route.path[0] === 'read'
+  const ahead = reading && trail.i < trail.items.length - 1 ? trail.items[trail.i + 1] : undefined
+  return (
+    <a class="brand" href="#/read" title={ahead ? `Forward to ${placeName(ahead)}` : 'Back to where you were reading'}
+      onClick={e => { if (ahead) { e.preventDefault(); goTo(step(1)) } }}>
+      Plain Bible{ahead && <span class="brand-fwd" aria-hidden="true">›</span>}
+    </a>
+  )
+}
+
+// Top-right history button: tap to go back to the previous place you were
+// reading, at the verse you left it. Press and hold (or right-click) for the
+// whole list. With nowhere to go back to, a tap opens the list.
+function HistoryButton({ route }: { route: Route }) {
+  const trail = useTrail(), goTo = useGoTo(route)
+  const [list, setList] = useState(false)
+  const [toast, setToast] = useState<Visit>()
+  const hold = useRef<{ timer: number; fired: boolean }>()
+  const reading = route.path[0] === 'read'
+  // Not reading (Settings, Saved): back means the place you're reading now.
+  const back = reading ? trail.items[trail.i - 1] : trail.items[trail.i]
+  useEffect(() => { if (!toast) return; const t = setTimeout(() => setToast(undefined), 4000); return () => clearTimeout(t) }, [toast])
+  const goBack = () => {
+    if (!back) return setList(true)
+    const from = trail.items[trail.i]
+    goTo(reading ? step(-1) : back)
+    if (reading) setToast(from)
+  }
+  const down = () => { hold.current = { fired: false, timer: window.setTimeout(() => { hold.current!.fired = true; setList(true) }, 450) } }
+  const up = () => clearTimeout(hold.current?.timer)
+  return (
+    <>
+      <button class={'icon history-btn' + (back ? '' : ' idle')} aria-label={back ? `Back to ${placeName(back)}. Hold for reading history` : 'Reading history'}
+        title={back ? `Back to ${placeName(back)} · hold for history` : 'Reading history'}
+        onPointerDown={down} onPointerUp={up} onPointerLeave={up} onPointerCancel={up}
+        onContextMenu={e => { e.preventDefault(); up(); setList(true) }}
+        onClick={() => { if (!hold.current?.fired) goBack() }}>
+        <HistoryIcon size={24} />
+      </button>
+      {toast && !list && (
+        <div class="toast" role="status">
+          <span>Back to {placeName(trail.items[trail.i] ?? toast)}</span>
+          <button onClick={() => { setToast(undefined); goTo(step(1)) }} aria-label={`Return to ${placeName(toast)}`}>Return ›</button>
+        </div>
+      )}
+      {list && <HistoryList trail={trail} current={reading} onPick={i => { setList(false); goTo(stepTo(i)) }} onClose={() => setList(false)} />}
+    </>
+  )
+}
+
+function HistoryList({ trail, current, onPick, onClose }: { trail: Trail; current: boolean; onPick: (i: number) => void; onClose: () => void }) {
+  const { data, settings } = useApp()
+  const [lines, setLines] = useState<Record<number, string>>({})
+  // A line of each place's verse, from the Bible you read in (saved offline).
+  useEffect(() => {
+    data.bible(settings.favorite || settings.version).then(b => setLines(Object.fromEntries(trail.items.map((p, i) => {
+      const raw = b.books[p.book]?.[p.chapter - 1]?.[p.verse - 1]
+      return [i, raw ? plain(raw) : '']
+    })))).catch(() => {})
+  }, [])
+  const ago = (t: number) => {
+    const m = Math.round((Date.now() - t) / 60000)
+    return m < 1 ? 'just now' : m < 60 ? `${m} min ago` : m < 1440 ? `${Math.round(m / 60)} h ago` : new Date(t).toLocaleDateString(undefined, { month: 'short', day: 'numeric' })
+  }
+  const order = trail.items.map((_, i) => i).reverse()
+  return (
+    <Sheet title="Reading history" onClose={onClose}>
+      {trail.items.length === 0 ? <p class="muted">Places you jump to will be listed here, newest first.</p> : (
+        <ol class="history">
+          {order.map(i => {
+            const p = trail.items[i], here = current && i === trail.i
+            return (
+              <li><button class={'history-row' + (here ? ' on' : '')} aria-current={here || undefined} onClick={() => onPick(i)}>
+                <span class="hr-head"><strong>{placeName(p)}</strong><span class="muted small">{here ? 'Reading now' : ago(p.t)}</span></span>
+                {lines[i] && <span class="hr-line">{lines[i]}</span>}
+              </button></li>
+            )
+          })}
+        </ol>
+      )}
+      <p class="muted small">Tap the history button to go back one place, and “Plain Bible” to come forward again. Reading on to the next chapter doesn’t add to the list. Kept on this device only.</p>
+      {trail.items.length > 1 && <p><button onClick={() => { clearTrail(trail.items[trail.i]); onClose() }}>Clear history</button></p>}
+    </Sheet>
   )
 }
 
@@ -272,6 +389,15 @@ function SettingsView() {
       </div>
       <div class="field"><span>Search bar</span>
         <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the floating search bar at the bottom of the screen</label>
+      </div>
+      <div class="field"><span>Highlights</span>
+        <div class="col">
+          {sel('highlight', [['marker', 'Marker'], ['text', 'Colored text'], ['block', 'Block']])}
+          <p class="hl-preview" aria-hidden="true">
+            <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">In the beginning was the Word, and the Word was with God,</span></span>{' '}
+            <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">and the Word was God.</span></span>
+          </p>
+        </div>
       </div>
       <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
       <div class="field"><span>Strong's numbers</span>
