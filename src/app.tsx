@@ -11,6 +11,29 @@ import { VersionPicker } from './ui'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { AccountSection, touchSettings, useSync } from './account'
 
+// The status bar colour the page loaded with (set in index.html before first paint).
+const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
+const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
+const SCROLL_KEY = 'plain-bible:tint-scroll'
+/** After that reload, return to the same spot on the page once it has drawn. */
+function restoreScroll() {
+  let y: number
+  try { y = Number(sessionStorage.getItem(SCROLL_KEY)); sessionStorage.removeItem(SCROLL_KEY) } catch { return }
+  if (!y) return
+  const start = Date.now()
+  const tick = () => document.querySelector('.verse, .pv') ? setTimeout(() => scrollTo(0, y), 50) : Date.now() - start < 3000 && requestAnimationFrame(tick)
+  tick()
+}
+/** At most one reload every few seconds, so a broken setup can't loop. */
+function reloadOk() {
+  try {
+    const last = Number(sessionStorage.getItem('plain-bible:tint-reload') || 0)
+    if (Date.now() - last < 5000) return false
+    sessionStorage.setItem('plain-bible:tint-reload', String(Date.now()))
+    return true
+  } catch { return false }
+}
+
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
 export function App() {
@@ -31,6 +54,8 @@ export function App() {
     }).catch(e => setError(String(e.message || e)))
   }, [])
 
+  useEffect(restoreScroll, [])
+
   useEffect(() => {
     if (!settings) return
     saveSettings(settings)
@@ -39,13 +64,15 @@ export function App() {
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
     // Match the phone's status bar (and the browser bar) to the chosen theme.
-    // A fresh tag, because iOS home-screen apps may ignore edits to the old one.
+    // iPhone home-screen apps only read this colour when the page loads, so
+    // there a theme change reloads the page (it comes back on the same verse).
     const tint = () => {
-      const meta = document.createElement('meta')
-      meta.name = 'theme-color'
-      meta.content = getComputedStyle(root).getPropertyValue('--bg').trim()
-      document.querySelectorAll('meta[name="theme-color"]').forEach(m => m.remove())
-      document.head.appendChild(meta)
+      const bg = getComputedStyle(root).getPropertyValue('--bg').trim()
+      if (IOS_HOME_SCREEN && bg !== LOAD_TINT && reloadOk()) {
+        try { sessionStorage.setItem(SCROLL_KEY, String(scrollY)) } catch { /* ignore */ }
+        return location.reload()
+      }
+      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
     }
     tint()
     const dark = matchMedia('(prefers-color-scheme: dark)')
