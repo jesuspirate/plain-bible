@@ -5,7 +5,7 @@ no reading plans, devotionals, accounts, or feeds.
 
 - **115 versions in 48 languages**, all public domain or openly licensed
   (KJV, Berean Standard Bible, ASV, YLT, Douay-Rheims, Reina-Valera 1909, Luther 1545,
-  Louis Segond-era French Bibles, Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
+  French (Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
   the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more).
 - **Strong's numbers** in KJV, BSB, the Hebrew OT (Open Scriptures Hebrew Bible) and the Greek NT
   (Statistical Restoration GNT). Tap a word to see the Hebrew or Greek and its dictionary entry.
