@@ -41,6 +41,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   const [micNote, setMicNote] = useState('')
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [trail, setTrail] = useState<Trail>()
+  const [showRead, setShowRead] = useState(false)
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
@@ -97,7 +98,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   useEffect(() => {
     if (open) data.bible(version).then(b => setLens(Object.fromEntries(Object.entries(b.books).map(([k, v]) => [k, v.length]))))
   }, [open, version])
-  useEffect(() => { if (!open) setBrowse(undefined); else setTrail(loadTrail()) }, [open])
+  useEffect(() => { if (!open) { setBrowse(undefined); setShowRead(false) } else setTrail(loadTrail()) }, [open])
   const browseBook = browse ?? here?.book ?? 'Gen'
   const chapters = lens[browseBook] ?? 0
 
@@ -262,9 +263,12 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             {!trimmed && (
               <>
                 {trail && trail.items.length > 1 && (
+                  // Folded to one quiet line; tap to see the places.
                   <div class="sb-books sb-read">
-                    <div class="sb-kicker">Recently read</div>
-                    {trail.items.map((_, i) => i).reverse().filter(i => !(here && trail.items[i].book === here.book && trail.items[i].chapter === here.chapter)).slice(0, 8).map(i => {
+                    <button class="sb-fold" aria-expanded={showRead} onClick={() => setShowRead(x => !x)}>
+                      Recently read <span aria-hidden="true">{showRead ? '▴' : '▾'}</span>
+                    </button>
+                    {showRead && trail.items.map((_, i) => i).reverse().filter(i => !(here && trail.items[i].book === here.book && trail.items[i].chapter === here.chapter)).slice(0, 8).map(i => {
                       const p = trail.items[i]
                       return <button class="sb-chip" onClick={() => { stepTo(i); finish(resumePath(version, p.book, p.chapter, p.verse, here ? parallelOf() : [])) }}>
                         {formatRef({ book: p.book, chapter: p.chapter, verse: p.verse > 1 ? p.verse : undefined }, true)}</button>
