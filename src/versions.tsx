@@ -1,0 +1,80 @@
+import { useEffect, useMemo, useState } from 'preact/hooks'
+import { Translation } from './lib/data'
+import { go, readPath, useApp } from './state'
+
+const CACHE = 'bible-data'
+
+async function cachedIds(): Promise<Set<string>> {
+  if (!('caches' in window)) return new Set()
+  try {
+    const keys = await (await caches.open(CACHE)).keys()
+    return new Set(keys.map(r => r.url.match(/bibles\/([^/]+)\.json$/)?.[1]).filter(Boolean) as string[])
+  } catch { return new Set() }
+}
+
+export function Versions() {
+  const { catalog, settings, update, data } = useApp()
+  const [filter, setFilter] = useState('')
+  const [offline, setOffline] = useState<Set<string>>(new Set())
+  const [busy, setBusy] = useState<Record<string, boolean>>({})
+  useEffect(() => { cachedIds().then(setOffline); document.title = 'Versions · Plain Bible' }, [])
+
+  const f = filter.toLowerCase()
+  const groups = useMemo(() => {
+    const m = new Map<string, Translation[]>()
+    for (const t of catalog.translations) {
+      if (f && ![t.id, t.name, t.langName, t.langNative, t.lang].some(x => x.toLowerCase().includes(f))) continue
+      m.set(t.langName, [...(m.get(t.langName) ?? []), t])
+    }
+    return [...m.entries()]
+  }, [f])
+  const langs = new Set(catalog.translations.map(t => t.lang)).size
+
+  const toggleMine = (id: string) => update({
+    myVersions: settings.myVersions.includes(id) ? settings.myVersions.filter(x => x !== id) : [...settings.myVersions, id],
+  })
+  const download = async (id: string) => {
+    setBusy(b => ({ ...b, [id]: true }))
+    try {
+      if ('caches' in window) await (await caches.open(CACHE)).add(data.url(`bibles/${id}.json`))
+      setOffline(await cachedIds())
+    } finally { setBusy(b => ({ ...b, [id]: false })) }
+  }
+  const remove = async (id: string) => {
+    await (await caches.open(CACHE)).delete(data.url(`bibles/${id}.json`))
+    setOffline(await cachedIds())
+  }
+
+  return (
+    <div class="versions">
+      <h1>Versions</h1>
+      <p class="muted">{catalog.translations.length} versions in {langs} languages. All are public domain or openly licensed.
+        Star a version to keep it at the top of every list. Save it for offline use and it works without a connection.</p>
+      <input class="filter" type="search" placeholder="Filter by name or language" value={filter} onInput={e => setFilter((e.target as HTMLInputElement).value)} />
+      {groups.map(([lang, ts]) => (
+        <section>
+          <h2>{lang}{ts[0].langNative !== lang && <span class="muted"> · {ts[0].langNative}</span>}</h2>
+          <ul class="vlist">
+            {ts.map(t => (
+              <li>
+                <button class={'star' + (settings.myVersions.includes(t.id) ? ' on' : '')} aria-pressed={settings.myVersions.includes(t.id)}
+                  aria-label={`Add ${t.id} to my versions`} onClick={() => toggleMine(t.id)}>★</button>
+                <div class="vinfo">
+                  <a href={'#/' + readPath(t.id, t.books.includes('John') ? 'John' : t.books[0], 1)}><strong>{t.id}</strong> {t.name}</a>
+                  <div class="muted small">
+                    {t.strongs && <span class="badge">Strong's</span>}
+                    {t.books.length} books · <a href={t.source} target="_blank" rel="noopener">{t.license}</a>
+                  </div>
+                </div>
+                {offline.has(t.id)
+                  ? <button class="small" onClick={() => remove(t.id)} title="Remove offline copy">Saved ✓</button>
+                  : <button class="small" disabled={busy[t.id]} onClick={() => download(t.id)}>{busy[t.id] ? 'Saving…' : 'Save offline'}</button>}
+              </li>
+            ))}
+          </ul>
+        </section>
+      ))}
+      <p><button class="link" onClick={() => go(readPath(settings.version, 'John', 1))}>← Back to reading</button></p>
+    </div>
+  )
+}
