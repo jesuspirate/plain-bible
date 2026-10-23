@@ -6,7 +6,7 @@
 // It is built only while a turn happens, from a copy of the page, so it
 // costs nothing at startup or while reading.
 
-const MS = 340, STAGGER = 55, SHEETS = 3, BLUR = 5, EASE = 'cubic-bezier(.45, .05, .25, 1)'
+const MS = 340, STAGGER = 55, SHEETS = 3, BLUR = 8, EASE = 'cubic-bezier(.45, .05, .25, 1)'
 
 export interface Fold {
   /** Follow the finger: 0 is flat, 1 is folded all the way over. */
@@ -47,8 +47,9 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
   const liftX = dir === 1 ? spine : 0, stayX = dir === 1 ? 0 : spine
   const origin = dir === 1 ? 'left center' : 'right center'
   const angle = -180 * dir
-  // Shading darkens a page as it stands up toward you.
-  const shade = `linear-gradient(to ${dir === 1 ? 'right' : 'left'}, rgba(0,0,0,.28), rgba(0,0,0,.08))`
+  // Like a folding phone's screen, a page goes dark as it stands up toward
+  // you, darkest away from the crease.
+  const shade = `linear-gradient(to ${dir === 1 ? 'right' : 'left'}, rgba(0,0,0,.2), rgba(0,0,0,.6))`
 
   const face = (back: boolean, content?: Node) => {
     const s = div('fold-shade', { background: shade })
@@ -62,7 +63,18 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
     const el = div('fold-leaf', { ...lift, transformOrigin: origin, zIndex: String(100 - i) }, front.f, back.f)
     return { el, front, back }
   })
-  const root = div('fold-fx', {}, div('fold-face', { ...stay, zIndex: '1' }, slice(article, stayX)), ...leaves.map(l => l.el))
+  // Either side of the crease the flat page is blurred, fading out away from it.
+  const cw = W * .25
+  const crease = (side: 1 | -1, z: number) => {
+    const c = div('fold-crease', { left: (side === 1 ? spine : spine - cw) + 'px', width: cw + 'px', zIndex: String(z) })
+    const mask = `linear-gradient(to ${side === 1 ? 'left' : 'right'}, #000, transparent)`
+    c.style.setProperty('-webkit-mask-image', mask)
+    c.style.setProperty('mask-image', mask)
+    return c
+  }
+  const stayCrease = crease(dir === 1 ? -1 : 1, 2), liftCrease = crease(dir === 1 ? 1 : -1, 50)
+  const root = div('fold-fx', {}, div('fold-face', { ...stay, zIndex: '1' }, slice(article, stayX)), stayCrease,
+    liftCrease, ...leaves.map(l => l.el))
   document.body.append(root)
   article.style.visibility = 'hidden'
 
@@ -90,7 +102,8 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
       ...blur(l.front.f, false, t),
     ]
   }
-  const first = play(leaves[0], 0, 0)
+  const first = [...play(leaves[0], 0, 0),
+    stayCrease.animate([{ opacity: 0 }, { opacity: 1, offset: .5 }, { opacity: 1 }], { duration: MS, easing: EASE, fill: 'both' })]
   first.forEach(a => a.pause())
   let done = false
   const remove = () => { done = true; root.remove() }
@@ -105,6 +118,8 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
       if (done) return
       first.forEach(a => a.play())
       const rest = leaves.slice(1).flatMap((l, i) => play(l, i + 1, (i + 1) * STAGGER))
+      // The new chapter comes into focus as the last pages turn off it.
+      rest.push(liftCrease.animate([{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0 }], { duration: MS + SHEETS * STAGGER, fill: 'both' }))
       // The last page down carries the new chapter's first half.
       // Copied just before that page stands upright, by when the new
       // chapter is drawn and scrolled to its start.

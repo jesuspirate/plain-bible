@@ -427,6 +427,7 @@ article.chapter.enter-prev { animation: ch-in-prev .26s cubic-bezier(.2, .8, .2,
 .fold-leaf .fold-face { left: 0; right: 0; -webkit-backface-visibility: hidden; backface-visibility: hidden; box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 70%, transparent); }
 .fold-leaf .fold-back { transform: rotateY(180deg); }
 .fold-shade { position: absolute; inset: 0; opacity: 0; }
+.fold-crease { position: absolute; top: 0; bottom: 0; -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px); }
 
 /* Double-tap never zooms the page (a quick second tap on a verse highlights
    it instead); pinching to zoom still works everywhere. */
