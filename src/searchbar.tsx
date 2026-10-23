@@ -9,9 +9,9 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, readPath, useApp } from './state'
+import { go, openPrayer, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
-import { BookmarkIcon } from './icons'
+import { BookmarkIcon, PrayIcon } from './icons'
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -324,6 +324,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
                     <span>Settings</span>
                   </button>
                   <button class="sb-chip sb-tool" onClick={() => finish('saved')}><BookmarkIcon size={20} /><span>Saved</span></button>
+                  <button class="sb-chip sb-tool" onClick={() => { close(); setQ(''); openPrayer() }}><PrayIcon size={20} /><span>Pray</span></button>
                 </div>
               </>
             )}

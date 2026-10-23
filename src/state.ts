@@ -81,6 +81,10 @@ export interface AppState {
 export const AppContext = createContext<AppState>(null!)
 export const useApp = () => useContext(AppContext)
 
+/** Open the prayer overlay over whatever is on screen. */
+export const PRAY_EVENT = 'plain-bible:pray'
+export const openPrayer = () => window.dispatchEvent(new Event(PRAY_EVENT))
+
 // ---- hash routing ------------------------------------------------------------
 
 export interface Route { path: string[]; params: URLSearchParams }

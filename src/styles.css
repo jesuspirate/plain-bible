@@ -483,3 +483,4 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
   /* Not the verse numbers and Strong's words: they sit under your finger as you scroll. */
   :where(button, a, [role='button']):active:not(:disabled, .vn, .w) { opacity: .6; }
 }
+

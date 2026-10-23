@@ -2,7 +2,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, openPrayer, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -114,6 +114,15 @@ export function App() {
   const page = route.path[0] || 'read'
   useEffect(() => { if (page !== 'read') window.scrollTo(0, 0) }, [page])
 
+  // The prayer overlay loads only when first opened, so it costs nothing at startup.
+  const [Prayer, setPrayer] = useState<typeof import('./prayer').Prayer>()
+  const [praying, setPraying] = useState(false)
+  useEffect(() => {
+    const on = () => { setPraying(true); import('./prayer').then(m => setPrayer(() => m.Prayer)).catch(() => setPraying(false)) }
+    addEventListener(PRAY_EVENT, on)
+    return () => removeEventListener(PRAY_EVENT, on)
+  }, [])
+
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
   const sync = useSync(marks, setMarksState, settings, setSettings, id => byId.has(id))
 
@@ -156,6 +165,7 @@ export function App() {
       </main>
       {settings.searchBar && view !== 'search' && <SearchBar here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
+      {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
     </AppContext.Provider>
   )
 }
@@ -354,6 +364,7 @@ function SettingsView() {
       <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
       {more && <>
       <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
+      <div class="field"><span>Prayer</span><button class="link" onClick={openPrayer}>Pray out loud; kept on this device only ›</button></div>
       <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
       {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
       <div class="field"><span>Font</span>
