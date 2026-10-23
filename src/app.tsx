@@ -15,13 +15,29 @@ import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsView } from './settings'
-import { loadPlace, savePlace } from './lib/place'
+import { loadPlace, savePlace, withoutVerse } from './lib/place'
 
-/** Match the browser bar (and Android's status bar) to the theme. The
- *  iPhone home-screen app shows the page itself behind a see-through
- *  status bar instead (index.html), so it follows the theme at once. */
+// The status bar colour the page loaded with (set in index.html before first paint).
+const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
+const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
+
+/** Match the phone's status bar (and the browser bar) to the theme. iPhone
+ *  home-screen apps only read this colour when the page loads, and reloading
+ *  on the tap made every theme change pause. So the theme switches at once,
+ *  and the page reloads quietly the next time the app goes to the
+ *  background (it comes back on the same verse, with the bar matching). */
 function setTint(bg: string) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
+}
+if (IOS_HOME_SCREEN) {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'hidden') return
+    if (document.querySelector('meta[name="theme-color"]')?.getAttribute('content') === LOAD_TINT) return
+    // The reader saves the verse on top as the page goes; drop any
+    // jump-to verse so it comes back on that one.
+    history.replaceState(history.state, '', withoutVerse(location.hash))
+    location.reload()
+  })
 }
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
