@@ -358,6 +358,12 @@ function SettingsView() {
         </div>
       </div>
       <div class="field"><span>Verse numbers</span>{sel('verseNumbers', [['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']])}</div>
+      <div class="field"><span>Chapter turn</span>
+        <div class="col">
+          {sel('turn', [['fold', 'Fold'], ['slide', 'Slide'], ['off', 'None']])}
+          <span class="muted small">How the page moves when you swipe to the next or previous chapter.</span>
+        </div>
+      </div>
       <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
       <div class="field"><span>Strong's numbers</span>
         <div class="col">

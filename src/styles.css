@@ -420,6 +420,18 @@ article.chapter.enter-prev { animation: ch-in-prev .26s cubic-bezier(.2, .8, .2,
 @keyframes ch-in-next { from { opacity: 0; transform: translateX(48px); } }
 @keyframes ch-in-prev { from { opacity: 0; transform: translateX(-48px); } }
 @media (prefers-reduced-motion: reduce) { article.chapter.enter-next, article.chapter.enter-prev { animation: none; } }
+/* The fold turn (src/lib/fold.ts): page copies that turn over the middle of the screen. */
+.fold-fx { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.fold-leaf { position: absolute; top: 0; bottom: 0; transform-style: preserve-3d; will-change: transform; }
+.fold-fx .fold-face { position: absolute; top: 0; bottom: 0; overflow: hidden; background: var(--bg); }
+.fold-leaf .fold-face { left: 0; right: 0; -webkit-backface-visibility: hidden; backface-visibility: hidden; box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 70%, transparent); }
+.fold-leaf .fold-back { transform: rotateY(180deg); }
+.fold-shade { position: absolute; inset: 0; opacity: 0; }
+.fold-crease { position: absolute; top: 0; bottom: 0; -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px); }
+
+/* Double-tap never zooms the page (a quick second tap on a verse highlights
+   it instead); pinching to zoom still works everywhere. */
+html, body { touch-action: manipulation; }
 
 /* ---- settings: the essentials first, the rest folded ---- */
 .essentials { display: flex; flex-direction: column; gap: 22px; margin: 8px 0 20px; }
