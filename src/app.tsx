@@ -335,18 +335,18 @@ function UpdateButton() {
   )
 }
 
-// "Check for updates" in Settings, with what it found.
-function UpdateRow() {
+// The version, in one quiet line at the very bottom of Settings. Tapping it
+// is the whole update: it looks for a new version and switches to it if
+// there is one, or says you're up to date.
+function VersionLine() {
   const state = useUpdate()
-  if (isNative) return <p class="muted small">Version {__BUILD__}</p>
-  const label = { idle: 'Check for updates', checking: 'Checking…', ready: 'Update now', current: 'Up to date ✓', offline: 'Offline, try later' }[state]
+  if (isNative) return <p class="version-line muted">Version {__BUILD__}</p>
+  const note = { idle: 'Tap to check for updates', checking: 'Checking…', ready: 'New version: tap to update', current: 'Up to date', offline: 'Offline, try later' }[state]
   return (
-    <div class="update-row">
-      <button class={'check-update' + (state === 'ready' ? ' ready' : '')} disabled={state === 'checking'} onClick={() => checkForUpdate()}>
-        <RefreshIcon size={20} class={state === 'checking' ? 'spin' : undefined} /> {label}
-      </button>
-      <span class="muted small">Version {__BUILD__}</span>
-    </div>
+    <button class={'version-line' + (state === 'ready' ? ' ready' : '')} disabled={state === 'checking'} onClick={() => checkForUpdate()}>
+      <span>Version {__BUILD__}</span>
+      <span class="version-note"><RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}</span>
+    </button>
   )
 }
 
@@ -383,7 +383,6 @@ function SettingsView() {
           {pickFav && <VersionPicker title="Your Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
         </div>
       </div>
-      <UpdateRow />
       <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
       {more && <>
       <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
@@ -443,6 +442,7 @@ function SettingsView() {
         }
       }}>Reset settings</button></p>
       </>}
+      <VersionLine />
     </div>
   )
 }
