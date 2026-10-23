@@ -415,19 +415,18 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
 article.chapter { touch-action: pan-y pinch-zoom; }
 /* Keep sideways swipes for turning chapters, not the browser's back/forward. */
 html, body { overscroll-behavior-x: none; }
-article.chapter.enter-next { animation: ch-in-next .26s cubic-bezier(.2, .8, .2, 1); }
-article.chapter.enter-prev { animation: ch-in-prev .26s cubic-bezier(.2, .8, .2, 1); }
-@keyframes ch-in-next { from { opacity: 0; transform: translateX(48px); } }
-@keyframes ch-in-prev { from { opacity: 0; transform: translateX(-48px); } }
-@media (prefers-reduced-motion: reduce) { article.chapter.enter-next, article.chapter.enter-prev { animation: none; } }
-/* The fold turn (src/lib/fold.ts): page copies that turn over the middle of the screen. */
-.fold-fx { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
-.fold-leaf { position: absolute; top: 0; bottom: 0; transform-style: preserve-3d; will-change: transform; }
-.fold-fx .fold-face { position: absolute; top: 0; bottom: 0; overflow: hidden; background: var(--bg); }
-.fold-leaf .fold-face { left: 0; right: 0; -webkit-backface-visibility: hidden; backface-visibility: hidden; box-shadow: 0 0 0 1px color-mix(in srgb, var(--line) 70%, transparent); }
-.fold-leaf .fold-back { transform: rotateY(180deg); }
-.fold-shade { position: absolute; inset: 0; opacity: 0; }
-.fold-crease { position: absolute; top: 0; bottom: 0; -webkit-backdrop-filter: blur(7px); backdrop-filter: blur(7px); }
+/* Turning chapters: the chapter beside yours while you swipe. A page that
+   slides over another is a card with the page colour all round and a soft
+   shadow on its edge. */
+.turn-peek { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
+.turn-peek.under { background: var(--bg); }
+.turn-peek article { position: absolute; margin: 0; min-height: 100vh; background: var(--bg); }
+.turn-peek article > :first-child { margin-top: 0; }
+.turn-dim { position: absolute; inset: 0; z-index: 1; background: #000; opacity: 0; }
+.turn-peek article { z-index: 2; }
+.turn-peek.under article { z-index: 0; }
+article.chapter.turning { position: relative; z-index: 6; background: var(--bg); min-height: 100vh;
+  box-shadow: 0 0 0 16px var(--bg), 0 0 28px 16px rgba(0,0,0,.22); }
 
 /* Double-tap never zooms the page (a quick second tap on a verse highlights
    it instead); pinching to zoom still works everywhere. */

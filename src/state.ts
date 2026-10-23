@@ -26,8 +26,8 @@ export interface Settings {
   highlight: 'marker' | 'block' | 'text'
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'
-  /** how the page turns when you swipe to another chapter */
-  turn: 'fold' | 'slide' | 'off'
+  /** how the page turns when you swipe to another chapter: over the next one, or side by side */
+  turn: 'stack' | 'slide' | 'off'
   strongs: boolean
   strongsNumbers: boolean
   myVersions: string[]
@@ -45,7 +45,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'system', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'fold', strongs: false, strongsNumbers: false,
+    theme: 'system', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -59,6 +59,8 @@ export function loadSettings(): Partial<Settings> {
     if (s.font === 'serif') s.font = 'literata'
     if (s.font === 'sans') s.font = 'inter'
     if (s.font && !FONTS.some(f => f.id === s.font)) delete s.font
+    // The fold turn was tried and dropped.
+    if (s.turn === 'fold') s.turn = 'stack'
     return s
   } catch { return {} }
 }

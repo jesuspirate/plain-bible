@@ -5,7 +5,6 @@ import { formatRef } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { lastColor, markKey, noteCovering, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
-import { Fold, startFold } from './lib/fold'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
@@ -109,6 +108,7 @@ export function Reader({ route }: { route: Route }) {
       else if (!prev) { const p = loadPlace(); toVerse(p && p.book === book && p.chapter === chapter ? p.verse : 1) }
       else window.scrollTo(0, 0)
       settling.current = false
+      if (peekDir.current) close()
     })
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
 
@@ -139,8 +139,6 @@ export function Reader({ route }: { route: Route }) {
   })
 
   const mark = (v: number) => marks[markKey(book, chapter, v)]
-  const verseClass = (base: string, v: number) =>
-    base + (target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (selected.includes(v) ? ' picked' : '')
   // After the verse number: a ribbon if it's bookmarked, and a note icon
   // (tap it to read or edit the note). The note icon stays put while the
   // note is open, even before anything is typed.
@@ -159,7 +157,6 @@ export function Reader({ route }: { route: Route }) {
     const on = vs.length === 1 && noteCovering(marks, book, chapter, vs[0])
     setNoteFor(on ? mark(on)?.nv ?? [on] : vs)
   }
-  const hlStyle = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
   // One tap selects a verse; a quick second tap on it instead highlights it
   // in the colour you used last, or takes its highlight off.
   const lastTap = useRef<{ v: number; t: number; before: number[] }>()
@@ -182,48 +179,87 @@ export function Reader({ route }: { route: Route }) {
     lastTap.current = { v, t: now, before: selected }
     setSelected(s => s.includes(v) ? s.filter(x => x !== v) : [...s, v].sort((a, b) => a - b))
   }
-  // Swipe left/right to change chapter. How the page turns is a setting:
-  // the page folds over like a book (src/lib/fold.ts), slides, or just changes.
+  // Swipe left/right to change chapter. Two ways to turn (a setting):
+  // 'stack', as in Apple Books: going forward your page slides away over the
+  // next chapter, which waits underneath; going back, the previous chapter
+  // slides in over yours. 'slide', as in Kindle: the two chapters sit side by
+  // side and move across together. Off in Settings, or with reduced motion,
+  // the chapter just changes.
   const article = useRef<HTMLElement>(null)
   const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number }>()
-  const [enter, setEnter] = useState<'' | 'next' | 'prev'>('')
-  const style = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
-  const fold = useRef<{ fx: Fold; dir: 1 | -1 }>()
-  const turn = (dir: 1 | -1) => {
-    if (!dest(dir)) return
-    if (style === 'fold' && article.current) startFold(article.current, dir).commit(() => article.current)
-    if (style === 'slide') setEnter(dir === 1 ? 'next' : 'prev')
-    step(dir)
+  const mode = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
+  const animate = mode !== 'off'
+  const [peek, setPeek] = useState<{ dir: 1 | -1; b: string; c: number; top: number; left: number; width: number }>()
+  const peekDir = useRef<1 | -1>()
+  const peekEl = useRef<HTMLElement>(null), dimEl = useRef<HTMLDivElement>(null)
+  const x = useRef(0), busy = useRef(false)
+  // How far a page goes to be off screen; a stacked page has a shadow to hide too.
+  const away = () => innerWidth + (mode === 'stack' ? 24 : 0)
+  // Where the page and the chapter beside it are, dx pixels into a turn.
+  const peekAt = (dx: number) => {
+    const dir = peekDir.current ?? 1
+    if (mode === 'slide') return `translateX(${dx + dir * innerWidth}px)`
+    return dir === -1 ? `translateX(${dx - away()}px)` : ''
   }
-  const setDrag = (dx: number, ms = 0) => {
-    const el = article.current
-    if (!el) return
-    el.style.transition = ms ? `transform ${ms}ms cubic-bezier(.2, .8, .2, 1), opacity ${ms}ms` : 'none'
-    el.style.transform = dx ? `translateX(${dx}px)` : ''
-    el.style.opacity = dx ? String(1 - Math.min(Math.abs(dx) / innerWidth, .6)) : ''
+  const setX = (dx: number) => {
+    x.current = dx
+    const dir = peekDir.current, k = Math.min(1, Math.abs(dx) / innerWidth)
+    const pageMoves = mode === 'slide' || dir === 1
+    if (article.current) article.current.style.transform = pageMoves && dx ? `translateX(${dx}px)` : ''
+    if (peekEl.current) peekEl.current.style.transform = peekAt(dx)
+    // The page underneath is in shadow while it's covered.
+    if (dimEl.current) dimEl.current.style.opacity = mode === 'stack' ? String(.3 * (dir === -1 ? k : 1 - k)) : '0'
   }
-  // The page follows a sideways drag of dx pixels.
-  const follow = (dx: number) => {
-    const dir = dx < 0 ? 1 : -1
-    if (style !== 'fold' || !dest(dir)) return setDrag(style === 'slide' ? dx * .85 : style === 'fold' ? dx * .15 : 0)
-    if (fold.current?.dir !== dir) {
-      fold.current?.fx.cancel()
-      fold.current = dx && article.current ? { fx: startFold(article.current, dir), dir } : undefined
+  const open = (dir: 1 | -1) => {
+    const d = dest(dir), a = article.current
+    if (!d || !a || peekDir.current === dir) return
+    if (article.current) article.current.style.transform = ''
+    const r = a.getBoundingClientRect()
+    peekDir.current = dir
+    setPeek({ dir, b: d[0], c: d[1], top: r.top + scrollY, left: r.left, width: r.width })
+  }
+  const close = () => {
+    peekDir.current = undefined
+    x.current = 0
+    if (article.current) article.current.style.transform = ''
+    setPeek(undefined)
+  }
+  // Glide to dx, quick at first and settling at the end.
+  const glide = (to: number, then: () => void) => {
+    const from = x.current, t0 = performance.now()
+    const ms = 320 * Math.max(.45, Math.min(1, Math.abs(to - from) / innerWidth))
+    busy.current = true
+    const frame = (t: number) => {
+      const k = Math.min(1, (t - t0) / ms)
+      setX(from + (to - from) * (1 - Math.pow(1 - k, 3)))
+      if (k < 1) requestAnimationFrame(frame)
+      else { busy.current = false; then() }
     }
-    fold.current?.fx.drag(Math.abs(dx) / innerWidth)
+    requestAnimationFrame(frame)
+  }
+  const finish = (dir: 1 | -1) => glide(-dir * away(), () => step(dir))
+  const turn = (dir: 1 | -1) => {
+    if (!dest(dir) || busy.current) return
+    if (!animate) return step(dir)
+    open(dir)
+    // Let the chapter beside it be drawn first.
+    requestAnimationFrame(() => requestAnimationFrame(() => finish(dir)))
+  }
+  // The page follows a sideways drag of dx pixels; at the start or end of the
+  // Bible it only gives a little.
+  const follow = (dx: number) => {
+    if (!animate || busy.current || !dx) return
+    const dir = dx < 0 ? 1 : -1
+    if (!dest(dir)) { if (article.current) article.current.style.transform = `translateX(${dx * .2}px)`; return }
+    open(dir)
+    setX(dx)
   }
   // Let go: turn to the next (1) or previous (-1) chapter, or put the page back (0).
   const release = (dir: 1 | -1 | 0) => {
-    const f = fold.current
-    fold.current = undefined
-    if (f) {
-      if (dir === f.dir) { f.fx.commit(() => article.current); step(dir) } else f.fx.cancel()
-      return
-    }
-    if (!dir || !dest(dir)) return setDrag(0, 220)
-    if (style !== 'slide') return step(dir)
-    setDrag(-dir * Math.min(innerWidth * .5, 320), 160)
-    setTimeout(() => turn(dir), 150)
+    if (!animate || busy.current) return
+    if (dir && dest(dir) && peekDir.current === dir) return finish(dir)
+    if (!peekDir.current) { if (article.current) article.current.style.transform = ''; return }
+    glide(0, close)
   }
   const onTouchStart = (e: TouchEvent) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 } }
   const onTouchMove = (e: TouchEvent) => {
@@ -268,6 +304,52 @@ export function Reader({ route }: { route: Route }) {
   const showStrongs = settings.strongs
   const t = byId.get(version)
 
+  // A chapter's verses. The live page is the one you read; the other is the
+  // chapter beside it while you turn, which can't be tapped and has no ids.
+  const page = (b: string, c: number, live: boolean) => {
+    const mark = (v: number) => marks[markKey(b, c, v)]
+    const rowsOf = Math.max(...versions.map(v => bibles[v].books[b]?.[c - 1]?.length ?? 0))
+    const cls = (base: string, v: number) => base + (live && target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && selected.includes(v) ? ' picked' : '')
+    const verse = (v: number) => live
+      ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
+      : { id: undefined, onClick: undefined }
+    const hl = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
+    const after = (v: number) => live ? marksAfter(v) : <>
+      {mark(v)?.b && <BookmarkIcon class="bm-mark" />}
+      {mark(v)?.n && <span class="note-mark"><NoteIcon /></span>}
+    </>
+    const lex = live ? setLex : undefined
+    return <>
+      <h1 class="chapter-title"><span class="ct-book">{bookById(b).name}</span> <span class="ct-num">{c}</span></h1>
+      {versions.length > 1 && (
+        <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
+      )}
+      {versions.length === 1 && settings.layout === 'paragraph' ? (
+        <p class="para" dir={t?.rtl ? 'rtl' : undefined}>
+          {primary.books[b][c - 1].map((raw, i) => raw && (
+            <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
+              <sup class="vn">{i + 1}</sup>{after(i + 1)}
+              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span>{' '}
+            </span>
+          ))}
+        </p>
+      ) : Array.from({ length: rowsOf }, (_, i) => (
+        <div id={verse(i + 1).id} class={cls('verse', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
+          {versions.map(v => {
+            const raw = bibles[v].books[b]?.[c - 1]?.[i]
+            const tv = byId.get(v)
+            return (
+              <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
+                <button class="vn" aria-label={`Verse ${i + 1} options`} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
+                {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span> : <span class="muted">—</span>}
+              </div>
+            )
+          })}
+        </div>
+      ))}
+    </>
+  }
+
   return (
     <div class="reader">
       {error && <p class="error">{error}</p>}
@@ -276,35 +358,19 @@ export function Reader({ route }: { route: Route }) {
 
       {loaded && rows > 0 && (
         <article key={`${book}.${chapter}`} ref={article} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}
-          onAnimationEnd={() => setEnter('')} class={`chapter ${settings.layout} cols-${versions.length}${enter ? ' enter-' + enter : ''}`} style={{ '--cols': versions.length }}>
-          <h1 class="chapter-title"><span class="ct-book">{bookById(book).name}</span> <span class="ct-num">{chapter}</span></h1>
-          {versions.length > 1 && (
-            <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
-          )}
-          {versions.length === 1 && settings.layout === 'paragraph' ? (
-            <p class="para" dir={t?.rtl ? 'rtl' : undefined}>
-              {primary.books[book][chapter - 1].map((raw, i) => raw && (
-                <span id={'v' + (i + 1)} class={verseClass('pv', i + 1)} style={hlStyle(i + 1)} onClick={e => tapVerse(e, i + 1)}>
-                  <sup class="vn">{i + 1}</sup>{marksAfter(i + 1)}
-                  <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={setLex} /></span>{' '}
-                </span>
-              ))}
-            </p>
-          ) : Array.from({ length: rows }, (_, i) => (
-            <div id={'v' + (i + 1)} class={verseClass('verse', i + 1)} style={hlStyle(i + 1)} onClick={e => tapVerse(e, i + 1)}>
-              {versions.map(v => {
-                const raw = bibles[v].books[book]?.[chapter - 1]?.[i]
-                const tv = byId.get(v)
-                return (
-                  <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
-                    <button class="vn" aria-label={`Verse ${i + 1} options`}>{i + 1}</button>{v === version && marksAfter(i + 1)}
-                    {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={setLex} /></span> : <span class="muted">—</span>}
-                  </div>
-                )
-              })}
-            </div>
-          ))}
+          class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek?.dir === 1 ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
+          {page(book, chapter, true)}
         </article>
+      )}
+
+      {peek && (
+        <div class={'turn-peek' + (mode === 'stack' && peek.dir === 1 ? ' under' : '')} aria-hidden="true">
+          <div class="turn-dim" ref={dimEl} style={{ opacity: mode === 'stack' && peek.dir === 1 ? .3 : 0 }} />
+          <article ref={peekEl} class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek.dir === -1 ? ' turning' : ''}`}
+            style={{ '--cols': versions.length, top: peek.top + 'px', left: peek.left + 'px', width: peek.width + 'px', transform: peekAt(x.current) }}>
+            {page(peek.b, peek.c, false)}
+          </article>
+        </div>
       )}
 
       <nav class="pager">
