@@ -5,6 +5,7 @@ import { formatRef } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { lastColor, markKey, noteCovering, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
+import { Fold, startFold } from './lib/fold'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
@@ -116,14 +117,16 @@ export function Reader({ route }: { route: Route }) {
   const nav = (b: string, c: number, v?: number) => go(readPath(version, b, c, v, parallel))
   const primary = bibles[version]
   const chapterCount = (b: string) => primary?.books[b]?.length ?? 0
-  const step = (dir: 1 | -1) => {
+  // The chapter before or after this one, if there is one.
+  const dest = (dir: 1 | -1): [string, number] | undefined => {
     if (!primary) return
-    if (dir === 1 && chapter < chapterCount(book)) return nav(book, chapter + 1)
-    if (dir === -1 && chapter > 1) return nav(book, chapter - 1)
+    if (dir === 1 && chapter < chapterCount(book)) return [book, chapter + 1]
+    if (dir === -1 && chapter > 1) return [book, chapter - 1]
     const order = BOOKS.filter(b => primary.books[b.id])
     const i = order.findIndex(b => b.id === book) + dir
-    if (i >= 0 && i < order.length) nav(order[i].id, dir === 1 ? 1 : chapterCount(order[i].id))
+    if (i >= 0 && i < order.length) return [order[i].id, dir === 1 ? 1 : chapterCount(order[i].id)]
   }
+  const step = (dir: 1 | -1) => { const d = dest(dir); if (d) nav(...d) }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -179,12 +182,19 @@ export function Reader({ route }: { route: Route }) {
     lastTap.current = { v, t: now, before: selected }
     setSelected(s => s.includes(v) ? s.filter(x => x !== v) : [...s, v].sort((a, b) => a - b))
   }
-  // Swipe left/right to change chapter: the page follows the finger, then
-  // slides out, and the next chapter slides in from the other side.
+  // Swipe left/right to change chapter. How the page turns is a setting:
+  // the page folds over like a book (src/lib/fold.ts), slides, or just changes.
   const article = useRef<HTMLElement>(null)
   const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number }>()
   const [enter, setEnter] = useState<'' | 'next' | 'prev'>('')
-  const turn = (dir: 1 | -1) => { setEnter(dir === 1 ? 'next' : 'prev'); step(dir) }
+  const style = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
+  const fold = useRef<{ fx: Fold; dir: 1 | -1 }>()
+  const turn = (dir: 1 | -1) => {
+    if (!dest(dir)) return
+    if (style === 'fold' && article.current) startFold(article.current, dir).commit(() => article.current)
+    if (style === 'slide') setEnter(dir === 1 ? 'next' : 'prev')
+    step(dir)
+  }
   const setDrag = (dx: number, ms = 0) => {
     const el = article.current
     if (!el) return
@@ -192,29 +202,43 @@ export function Reader({ route }: { route: Route }) {
     el.style.transform = dx ? `translateX(${dx}px)` : ''
     el.style.opacity = dx ? String(1 - Math.min(Math.abs(dx) / innerWidth, .6)) : ''
   }
+  // The page follows a sideways drag of dx pixels.
+  const follow = (dx: number) => {
+    const dir = dx < 0 ? 1 : -1
+    if (style !== 'fold' || !dest(dir)) return setDrag(style === 'slide' ? dx * .85 : style === 'fold' ? dx * .15 : 0)
+    if (fold.current?.dir !== dir) {
+      fold.current?.fx.cancel()
+      fold.current = dx && article.current ? { fx: startFold(article.current, dir), dir } : undefined
+    }
+    fold.current?.fx.drag(Math.abs(dx) / innerWidth)
+  }
+  // Let go: turn to the next (1) or previous (-1) chapter, or put the page back (0).
+  const release = (dir: 1 | -1 | 0) => {
+    const f = fold.current
+    fold.current = undefined
+    if (f) {
+      if (dir === f.dir) { f.fx.commit(() => article.current); step(dir) } else f.fx.cancel()
+      return
+    }
+    if (!dir || !dest(dir)) return setDrag(0, 220)
+    if (style !== 'slide') return step(dir)
+    setDrag(-dir * Math.min(innerWidth * .5, 320), 160)
+    setTimeout(() => turn(dir), 150)
+  }
   const onTouchStart = (e: TouchEvent) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 } }
   const onTouchMove = (e: TouchEvent) => {
     const s = touch.current, p = e.touches[0]
     if (!s || e.touches.length > 1) return
     const dx = p.clientX - s.x, dy = p.clientY - s.y
     if (!s.axis && Math.hypot(dx, dy) > 10) s.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
-    if (s.axis === 'x') { s.dx = dx; setDrag(dx * .85) }
+    if (s.axis === 'x') { s.dx = dx; follow(dx) }
   }
   const onTouchEnd = () => {
     const s = touch.current
     touch.current = undefined
     if (!s || s.axis !== 'x') return
     const fast = Date.now() - s.t < 300 && Math.abs(s.dx) > 40
-    if (Math.abs(s.dx) > innerWidth * .25 || fast) {
-      const dir = s.dx < 0 ? 1 : -1
-      setDrag(-dir * innerWidth * .5, 160)
-      const el = article.current
-      setTimeout(() => {
-        turn(dir)
-        // Nowhere to go (start or end of the Bible): bring the page back.
-        setTimeout(() => { if (article.current === el) setDrag(0, 220) }, 120)
-      }, 150)
-    } else setDrag(0, 220)
+    release(Math.abs(s.dx) > innerWidth * .25 || fast ? s.dx < 0 ? 1 : -1 : 0)
   }
 
   // Two-finger swipe on a trackpad does the same as a touch swipe.
@@ -227,15 +251,13 @@ export function Reader({ route }: { route: Route }) {
       e.preventDefault()
       clearTimeout(w.timer)
       // A gesture ends when the events (including the trackpad's glide) stop.
-      w.timer = window.setTimeout(() => { if (!w.done) setDrag(0, 220); w.dx = 0; w.done = false }, 160)
+      w.timer = window.setTimeout(() => { if (!w.done) release(0); w.dx = 0; w.done = false }, 160)
       if (w.done) return
       w.dx -= e.deltaX
-      setDrag(w.dx * .85)
+      follow(w.dx)
       if (Math.abs(w.dx) > Math.min(innerWidth * .25, 160)) {
         w.done = true
-        const dir = w.dx < 0 ? 1 : -1, el = article.current
-        setDrag(-dir * Math.min(innerWidth * .5, 320), 160)
-        setTimeout(() => { turn(dir); setTimeout(() => { if (article.current === el) setDrag(0, 220) }, 120) }, 150)
+        release(w.dx < 0 ? 1 : -1)
       }
     }
     window.addEventListener('wheel', onWheel, { passive: false })
