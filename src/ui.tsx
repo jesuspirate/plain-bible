@@ -177,3 +177,23 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
     </Sheet>
   )
 }
+
+/** Light → Sepia → Dark, one tap each. */
+export function ThemeToggle({ label: showLabel }: { label?: boolean }) {
+  const { settings, update } = useApp()
+  const prefersDark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches
+  const current = settings.theme === 'system' ? (prefersDark ? 'dark' : 'light') : settings.theme
+  const next = ({ light: 'sepia', sepia: 'dark', dark: 'light' } as const)[current]
+  const label = { light: 'Light', sepia: 'Sepia', dark: 'Dark' }
+  return (
+    <button class={showLabel ? 'sb-chip sb-tool' : 'icon theme-toggle'} aria-label={`${label[current]} mode. Switch to ${label[next].toLowerCase()} mode`} title={`${label[current]} · tap for ${label[next].toLowerCase()}`}
+      onClick={() => update({ theme: next })}>
+      {current === 'sepia'
+        ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 5.5C6.5 4.3 9.3 4.4 12 6c2.7-1.6 5.5-1.7 8-.5v13c-2.5-1.2-5.3-1.1-8 .5-2.7-1.6-5.5-1.7-8-.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /><path d="M12 6v13" stroke="currentColor" stroke-width="1.8" /></svg>
+        : current === 'dark'
+        ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><circle cx="12" cy="12" r="4.5" fill="currentColor" /><g stroke="currentColor" stroke-width="2" stroke-linecap="round">{[0, 45, 90, 135, 180, 225, 270, 315].map(a => <line x1="12" y1="2.5" x2="12" y2="4.5" transform={`rotate(${a} 12 12)`} />)}</g></svg>
+        : <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor" /></svg>}
+      {showLabel && <span>{label[next]} mode</span>}
+    </button>
+  )
+}
