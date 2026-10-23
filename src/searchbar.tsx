@@ -158,16 +158,31 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
 
   const close = () => { setOpen(false); input.current?.blur() }
 
-  // A tap only counts in the panel if the finger also went down in the panel.
-  // The tap that opens search lands on the bar, but on a phone its click can
-  // arrive after the panel has appeared and the keyboard has moved things,
-  // and the Settings and Saved buttons sit right above the bar. Taps in the
-  // first moment after opening are ignored too, for the same reason.
-  const pressed = useRef(false), openedAt = useRef(0)
-  useEffect(() => { if (open) { pressed.current = false; openedAt.current = Date.now() } }, [open])
+  // A tap only counts in the panel if the finger went down on that same
+  // button and stayed put. The tap that opens search lands on the bar, but on
+  // a phone its click can arrive after the panel has appeared and the
+  // keyboard has moved things. And a swipe down that starts just above the
+  // bar starts on Settings, which sits at the bottom of the panel; where
+  // nothing scrolls, Safari can still treat that swipe as a tap. Taps in the
+  // first moment after opening are ignored too.
+  const press = useRef<{ x: number; y: number; target: Element | null; moved: boolean }>()
+  const openedAt = useRef(0)
+  useEffect(() => { if (open) { press.current = undefined; openedAt.current = Date.now() } }, [open])
+  const buttonOf = (t: EventTarget | null) => (t as Element | null)?.closest?.('button') ?? null
+  const onPanelPointerDown = (e: PointerEvent) => { press.current = { x: e.clientX, y: e.clientY, target: buttonOf(e.target), moved: false } }
+  const onPanelPointerMove = (e: PointerEvent) => {
+    const p = press.current
+    if (p && Math.hypot(e.clientX - p.x, e.clientY - p.y) > 10) p.moved = true
+  }
+  const onPanelPointerCancel = () => { if (press.current) press.current.moved = true }
   const guardClick = (e: MouseEvent) => {
-    if (e.detail === 0) return // keyboard or assistive tech, not a finger
-    if (!pressed.current || Date.now() - openedAt.current < 350) { e.stopPropagation(); e.preventDefault() }
+    const button = buttonOf(e.target)
+    // Keyboard or assistive tech: the button has focus, no finger involved.
+    if (e.detail === 0 && button && button === document.activeElement) return
+    const p = press.current
+    const ok = p && !p.moved && p.target === button && Date.now() - openedAt.current >= 350
+    press.current = undefined
+    if (!ok) { e.stopPropagation(); e.preventDefault() }
   }
 
   // Pull the panel down from its top to close it, like an iOS sheet.
@@ -179,6 +194,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
     const p = pull.current, el = panel.current
     if (!p || !el) return
     p.dy = Math.max(0, e.touches[0].clientY - p.y)
+    if (p.dy > 10 && press.current) press.current.moved = true
     if (p.dy > 0 && el.scrollTop <= 0) { el.style.transition = 'none'; el.style.transform = `translateY(${p.dy * .6}px)`; el.style.opacity = String(1 - Math.min(p.dy / 400, .5)) }
   }
   const onPanelTouchEnd = () => {
@@ -228,7 +244,8 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
-            onPointerDownCapture={() => { pressed.current = true }} onClickCapture={guardClick}>
+            onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
+            onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
             <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
             {micNote && <p class="sb-note">{micNote}</p>}
             {preview && (
