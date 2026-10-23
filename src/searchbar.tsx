@@ -41,37 +41,46 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const chapterRow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLDivElement>(null)
 
-  // While open, pin the bar and panel to the visible part of the screen, so
-  // the iPhone keyboard doesn't push the page around or cut the panel off.
-  // This runs before the first frame, so the panel never shows in last
-  // time's place. On a phone the panel waits, hidden, until the keyboard has
-  // finished moving the screen, then rises into its final place: before,
-  // its top showed at one height and then jumped to another.
-  const [settled, setSettled] = useState(true)
+  // While open, pin the bar and panel to the visible part of the screen,
+  // above the keyboard. Opening is one step: the panel appears at once in
+  // the place it will keep, and the keyboard rises into the space left for
+  // it below. The phone's keyboard height is remembered from last time (a
+  // close guess the very first time), so nothing has to move when it
+  // arrives, and iOS sees the field already clear of it and doesn't shift
+  // the screen. If the keyboard turns out a different size, the panel
+  // follows it.
   useLayoutEffect(() => {
     if (!open) return
     const root = document.documentElement, vv = window.visualViewport
-    let quiet = 0, cap = 0
-    const done = () => { clearTimeout(quiet); clearTimeout(cap); setSettled(true) }
+    const phone = !!vv && matchMedia('(pointer: coarse)').matches
+    const key = `${innerWidth}x${innerHeight}`
+    const set = (top: number, h: number) => {
+      root.style.setProperty('--vv-top', top + 'px')
+      root.style.setProperty('--vv-h', h + 'px')
+    }
+    // The screen's full height, keyboard down; the keyboard counts as up once
+    // it takes a good part of it.
+    const full = innerHeight, kb = phone ? keyboardHeight(key) : 0
+    if (vv && vv.height < full - 100) set(vv.offsetTop, vv.height) // keyboard already up
+    else if (kb) set(0, full - kb)
+    else if (vv) set(vv.offsetTop, vv.height)
+    let seen = false, last = 0
     const fit = () => {
       if (!vv) return
-      root.style.setProperty('--vv-top', vv.offsetTop + 'px')
-      root.style.setProperty('--vv-h', vv.height + 'px')
-    }
-    const moved = () => { fit(); clearTimeout(quiet); quiet = window.setTimeout(done, 90) }
-    fit()
-    if (vv && matchMedia('(pointer: coarse)').matches) {
-      setSettled(false)
-      quiet = window.setTimeout(done, 400)
-      cap = window.setTimeout(done, 700)
+      const h = vv.height, up = h < full - 100
+      // On a phone, ignore the in-between sizes while the keyboard is still
+      // on its way; after that, follow it (the ✓ button can put it away).
+      if (phone && !up && !seen) return
+      if (up) seen = true
+      if (phone && up && h !== last) { last = h; rememberKeyboard(key, full - h) }
+      set(vv.offsetTop, h)
     }
     root.classList.add('sb-lock')
-    vv?.addEventListener('resize', moved); vv?.addEventListener('scroll', moved)
+    vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
     return () => {
-      clearTimeout(quiet); clearTimeout(cap); setSettled(true)
       root.classList.remove('sb-lock')
       root.style.removeProperty('--vv-top'); root.style.removeProperty('--vv-h')
-      vv?.removeEventListener('resize', moved); vv?.removeEventListener('scroll', moved)
+      vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit)
     }
   }, [open])
 
@@ -224,7 +233,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   return (
     <>
       {open && <div class="sb-scrim" onClick={close} />}
-      <div class={'sb' + (open ? ' sb-open' + (settled ? '' : ' sb-settling') : mini ? ' sb-mini' : '')}>
+      <div class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
@@ -340,6 +349,24 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       {open && settingsOpen && <SettingsSheet onBack={() => setSettingsOpen(false)} onDone={() => { close(); setQ('') }} />}
     </>
   )
+}
+
+// The keyboard's height on this phone, per screen size and orientation.
+const KEYBOARD = 'plain-bible:keyboard'
+function keyboardHeight(key: string): number {
+  try {
+    const kb = JSON.parse(localStorage.getItem(KEYBOARD) || '{}')[key]
+    if (kb) return kb
+  } catch { /* ignore */ }
+  // First time on a phone held upright: about what an iPhone keyboard takes.
+  return innerWidth < 600 && innerHeight > innerWidth ? Math.round(innerHeight * .41) : 0
+}
+function rememberKeyboard(key: string, kb: number) {
+  try {
+    const all = JSON.parse(localStorage.getItem(KEYBOARD) || '{}')
+    all[key] = Math.round(kb)
+    localStorage.setItem(KEYBOARD, JSON.stringify(all))
+  } catch { /* ignore */ }
 }
 
 function Glass({ small }: { small?: boolean }) {
