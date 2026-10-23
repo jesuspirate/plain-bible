@@ -3,27 +3,34 @@
 // search (pull again, or Done, and you're back to the word). #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, Settings, useApp } from './state'
+import { defaultSettings, FONTS, go, openPrayer, Settings, useApp } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
-import { isNative } from './lib/native'
+import { copyText, isNative } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
 
-// The version, in one quiet line at the very bottom of Settings. Tapping it
-// is the whole update: it looks for a new version and switches to it if
-// there is one, or says you're up to date.
+// The version, quietly at the very bottom of Settings. Tap it to copy it
+// (handy for reporting a problem). The line under it is the whole update:
+// it looks for a new version and switches to it if there is one, or says
+// you're up to date.
 function VersionLine() {
   const state = useUpdate()
-  if (isNative) return <p class="version-line muted">Version {__BUILD__}</p>
+  const [copied, setCopied] = useState(false)
+  const version = `Plain Bible ${__BUILD__}`
+  const copy = async () => {
+    try { await copyText(version); setCopied(true); setTimeout(() => setCopied(false), 1500) } catch { /* nothing to do */ }
+  }
   const note = { idle: 'Tap to check for updates', checking: 'Checking…', ready: 'New version: tap to update', current: 'Up to date', offline: 'Offline, try later' }[state]
   return (
-    <button class={'version-line' + (state === 'ready' ? ' ready' : '')} disabled={state === 'checking'} onClick={() => checkForUpdate()}>
-      <span>Version {__BUILD__}</span>
-      <span class="version-note"><RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}</span>
-    </button>
+    <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
+      <button class="version-copy" onClick={copy} aria-label={`Version ${__BUILD__}. Tap to copy`}>{copied ? 'Copied ✓' : `Version ${__BUILD__}`}</button>
+      {!isNative && <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
+        <RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}
+      </button>}
+    </div>
   )
 }
 
@@ -112,8 +119,8 @@ export function SettingsSheet({ onBack, onDone }: { onBack: () => void; onDone: 
   }, [])
   return (
     <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
-      // A link inside (Saved, Advanced search) leaves Settings and search behind.
-      onClick={e => { if ((e.target as Element).closest?.('a[href^="#"]')) onDone() }}>
+      // A link inside (Saved, Advanced search, Prayer) leaves Settings and search behind.
+      onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onDone() }}>
       <div class="settings-head">
         <button type="button" class="settings-grabber" aria-label="Back to search" onClick={() => slideAway(box.current, onBack)} />
         <div class="settings-title">
@@ -181,6 +188,16 @@ function SettingsBody() {
       <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
       {more && <>
       <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
+      <div class="field"><span>Prayer</span>
+        <div class="col">
+          <button class="link pray-open" onClick={openPrayer}>Pray out loud; kept on this device only ›</button>
+          <div class="seg tones" role="radiogroup" aria-label="Prayer button">
+            {['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'].map(t => (
+              <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>🙏{t}</button>
+            ))}
+          </div>
+        </div>
+      </div>
       <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
       {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
       <div class="field"><span>Font</span>

@@ -47,3 +47,4 @@ export const RefreshIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M19.5 12a7.5 7.5 0 1 1-2.2-5.3" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" />
     <path d="M19.8 3.8v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
+

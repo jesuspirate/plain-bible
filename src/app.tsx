@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -17,17 +17,11 @@ import { touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsView } from './settings'
 import { loadPlace, savePlace } from './lib/place'
 
-/** Match the phone's status bar (and the browser bar) to the theme. A fresh
- *  meta tag rather than an edited one: iPhone home-screen apps reliably
- *  repaint the status bar when the tag is replaced. */
+/** Match the browser bar (and Android's status bar) to the theme. The
+ *  iPhone home-screen app shows the page itself behind a see-through
+ *  status bar instead (index.html), so it follows the theme at once. */
 function setTint(bg: string) {
-  const old = document.querySelector('meta[name="theme-color"]')
-  if (!bg || old?.getAttribute('content') === bg) return
-  const meta = document.createElement('meta')
-  meta.name = 'theme-color'
-  meta.content = bg
-  if (old) old.replaceWith(meta)
-  else document.head.append(meta)
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
 }
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
@@ -100,6 +94,15 @@ export function App() {
   const page = route.path[0] || 'read'
   useEffect(() => { if (page !== 'read') window.scrollTo(0, 0) }, [page])
 
+  // The prayer overlay loads only when first opened, so it costs nothing at startup.
+  const [Prayer, setPrayer] = useState<typeof import('./prayer').Prayer>()
+  const [praying, setPraying] = useState(false)
+  useEffect(() => {
+    const on = () => { setPraying(true); import('./prayer').then(m => setPrayer(() => m.Prayer)).catch(() => setPraying(false)) }
+    addEventListener(PRAY_EVENT, on)
+    return () => removeEventListener(PRAY_EVENT, on)
+  }, [])
+
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
   // Remember whether Settings was opened over the reader, so closing it can
   // step back in history instead of piling up another reader page.
@@ -147,6 +150,7 @@ export function App() {
           and opens the same panel (with Settings, Saved and the theme). */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
+      {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
     </AppContext.Provider>
   )
 }
