@@ -16,19 +16,29 @@ import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
 import { hasContent, loadMarks, Marks, saveMarks } from './lib/marks'
 import { AccountSection, touchSettings, useSync } from './account'
-import { loadPlace, savePlace } from './lib/place'
+import { loadPlace, savePlace, withoutVerse } from './lib/place'
 
-/** Match the phone's status bar (and the browser bar) to the theme. A fresh
- *  meta tag rather than an edited one: iPhone home-screen apps reliably
- *  repaint the status bar when the tag is replaced. */
+// The status bar colour the page loaded with (set in index.html before first paint).
+const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
+const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
+
+/** Match the phone's status bar (and the browser bar) to the theme. iPhone
+ *  home-screen apps only read this colour when the page loads, and reloading
+ *  on the tap made every theme change pause. So the theme switches at once,
+ *  and the page reloads quietly the next time the app goes to the
+ *  background (it comes back on the same verse, with the bar matching). */
 function setTint(bg: string) {
-  const old = document.querySelector('meta[name="theme-color"]')
-  if (!bg || old?.getAttribute('content') === bg) return
-  const meta = document.createElement('meta')
-  meta.name = 'theme-color'
-  meta.content = bg
-  if (old) old.replaceWith(meta)
-  else document.head.append(meta)
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
+}
+if (IOS_HOME_SCREEN) {
+  document.addEventListener('visibilitychange', () => {
+    if (document.visibilityState !== 'hidden') return
+    if (document.querySelector('meta[name="theme-color"]')?.getAttribute('content') === LOAD_TINT) return
+    // The reader saves the verse on top as the page goes; drop any
+    // jump-to verse so it comes back on that one.
+    history.replaceState(history.state, '', withoutVerse(location.hash))
+    location.reload()
+  })
 }
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
