@@ -5,7 +5,8 @@ let worker: Worker | undefined
 let seq = 0
 const pending = new Map<number, { resolve: (r: any) => void; reject: (e: Error) => void; progress?: (m: string) => void }>()
 
-export function call<T>(msg: object, progress?: (m: string) => void): Promise<T> {
+/** Starts the worker (ahead of the first search, or for it). */
+export function warmSearch() {
   if (!worker) {
     worker = new SearchWorker()
     worker.onmessage = e => {
@@ -17,6 +18,10 @@ export function call<T>(msg: object, progress?: (m: string) => void): Promise<T>
       else p.resolve(r)
     }
   }
+}
+
+export function call<T>(msg: object, progress?: (m: string) => void): Promise<T> {
+  warmSearch()
   const id = ++seq
   return new Promise((resolve, reject) => {
     pending.set(id, { resolve, reject, progress })

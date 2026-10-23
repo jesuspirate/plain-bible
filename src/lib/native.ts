@@ -13,6 +13,10 @@ export function shareLink(hash: string) {
 
 export const canShare = isNative || 'share' in navigator
 
+/** Safari on iPhone or iPad (iPads say they're Macs, but have touch). */
+export const isIOS = typeof navigator !== 'undefined' &&
+  (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
+
 export async function share(o: { title: string; text: string; url?: string }) {
   if (isNative) {
     const { Share } = await import('@capacitor/share')

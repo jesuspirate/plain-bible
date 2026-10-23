@@ -15,10 +15,12 @@ export function Saved() {
   const { marks, setMarks, settings, data, byId } = useApp()
   const [filter, setFilter] = useState<string>('all')
   const [bible, setBible] = useState<Bible>()
+  // The version isn't on the device and there's no connection to fetch it.
+  const [missing, setMissing] = useState(false)
   const [limit, setLimit] = useState(PAGE)
   const [editing, setEditing] = useState<string>()
   const version = settings.version
-  useEffect(() => { document.title = 'Saved · Plain Bible'; data.bible(version).then(setBible, () => {}) }, [version])
+  useEffect(() => { document.title = 'Saved · Plain Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
   useEffect(() => setLimit(PAGE), [filter])
 
   const keys = useMemo(() => Object.keys(marks).filter(k => hasContent(marks[k])).sort(compareKeys), [marks])
@@ -61,6 +63,7 @@ export function Saved() {
           </button>
         ))}
       </div>
+      {missing && <p class="note">{version} isn’t saved on this device yet, so the verses can’t be shown. Connect to the internet once and they will be.</p>}
       <ol class="saved-list">
         {shown.slice(0, limit).map(k => {
           const r = parseKey(k), m = marks[k]
@@ -77,7 +80,7 @@ export function Saved() {
                 {(m.c || m.b) && <button class="icon small" aria-label={`Remove highlight and bookmark from ${formatRef(r)}`} onClick={() => remove(k)}>✕</button>}
               </div>
               <p class="saved-text" dir={byId.get(version)?.rtl ? 'rtl' : undefined}>
-                {text || <span class="muted">Not in {version}</span>}
+                {text || (bible && <span class="muted">Not in {version}</span>)}
               </p>
               {m.n && <p class="saved-note" onClick={() => setEditing(k)}>{m.n}</p>}
             </li>
