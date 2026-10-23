@@ -187,30 +187,37 @@ function VersionMenu({ route }: { route: Route }) {
       </button>
       {open === 'version' && (
         <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)}
-          extra={
-            <div class="vm-extra">
-              <button class="vm-row" onClick={() => setOpen('compare')}>
-                <strong>Compare side by side</strong><span class="muted">{parallel.length ? parallel.join(', ') : 'Off'} ›</span>
-              </button>
-              {tagged && (
-                <label class="vm-row">
-                  <strong>Strong's numbers</strong>
-                  <input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} />
-                </label>
-              )}
-              <button class="vm-row" onClick={() => update({ favorite: version })} disabled={settings.favorite === version}>
-                <strong>{settings.favorite === version ? `★ ${version} is your default` : `☆ Make ${version} my default`}</strong>
-                <span class="muted small">{settings.favorite && settings.favorite !== version ? `Now: ${settings.favorite}` : 'Opens every time'}</span>
-              </button>
-              <a class="vm-row" href="#/versions" onClick={() => setOpen('')}><strong>Download and manage versions</strong><span class="muted">›</span></a>
-            </div>
-          } />
+          extra={<VersionOptions version={version} parallel={parallel} tagged={tagged} onCompare={() => setOpen('compare')} onClose={() => setOpen('')} />} />
       )}
       {open === 'compare' && (
         <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setOpen('')}
           onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
       )}
     </>
+  )
+}
+
+// Compare, Strong's, default and downloads: folded away under the list.
+function VersionOptions({ version, parallel, tagged, onCompare, onClose }: { version: string; parallel: string[]; tagged: boolean; onCompare: () => void; onClose: () => void }) {
+  const { settings, update } = useApp()
+  const [open, setOpen] = useState(parallel.length > 0)
+  if (!open) return <button class="more-toggle" onClick={() => setOpen(true)}>More options <span aria-hidden="true">▾</span></button>
+  return (
+    <div class="vm-extra">
+      <button class="vm-row" onClick={onCompare}>
+        <strong>Compare side by side</strong><span class="muted">{parallel.length ? parallel.join(', ') : 'Off'} ›</span>
+      </button>
+      {tagged && (
+        <label class="vm-row">
+          <strong>Strong's numbers</strong>
+          <input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} />
+        </label>
+      )}
+      <button class="vm-row" onClick={() => update({ favorite: version })} disabled={settings.favorite === version}>
+        <strong>{settings.favorite === version ? `★ ${version} opens every time` : `☆ Open ${version} every time`}</strong>
+      </button>
+      <a class="vm-row" href="#/versions" onClick={onClose}><strong>Download and manage versions</strong><span class="muted">›</span></a>
+    </div>
   )
 }
 
@@ -293,6 +300,8 @@ function SettingsView() {
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
   const saved = Object.values(marks).filter(hasContent).length
   const [pickFav, setPickFav] = useState(false)
+  // Three things most people want; the rest waits behind "More settings".
+  const [more, setMore] = useState(false)
   const fav = settings.favorite || settings.version
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
@@ -304,26 +313,26 @@ function SettingsView() {
   return (
     <div class="settings">
       <h1>Settings</h1>
-      <div class="shortcuts">
-        <a class="shortcut" href="#/saved"><strong>Saved</strong><span class="muted">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'}</span></a>
-        <a class="shortcut" href="#/search"><strong>Advanced search</strong><span class="muted">Search many versions at once, with filters</span></a>
+      <div class="essentials">
+        <div class="ess"><span class="ess-label">Text size</span>
+          <div class="size-row">
+            <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
+            <span class="size-sample" aria-label={`${settings.fontSize} pixels`}>In the beginning</span>
+            <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
+          </div>
+        </div>
+        <div class="ess"><span class="ess-label">Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
+        <div class="ess"><span class="ess-label">Bible</span>
+          <button class="pick big-pick" onClick={() => setPickFav(true)}><strong>{fav}</strong> <span class="muted">{byId.get(fav)?.name}</span> <span aria-hidden="true">▾</span></button>
+          <span class="muted small">Opens every time, and works offline.</span>
+          {pickFav && <VersionPicker title="Your Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
+        </div>
       </div>
+      <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
+      {more && <>
+      <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
+      <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
       {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
-      <div class="field"><span>Default Bible</span>
-        <div class="col">
-          <button class="pick" onClick={() => setPickFav(true)}>★ {fav} · {byId.get(fav)?.name} ▾</button>
-          <span class="muted small">The app always opens in this version, and it’s saved for offline use automatically{settings.favorite ? '' : ' (not pinned yet: it follows the last version you used)'}.</span>
-        </div>
-        {pickFav && <VersionPicker title="Default Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
-      </div>
-      <div class="field"><span>Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
-      <div class="field"><span>Text size</span>
-        <div class="row">
-          <button onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller">A−</button>
-          <span class="muted">{settings.fontSize}px</span>
-          <button onClick={() => update({ fontSize: Math.min(32, settings.fontSize + 1) })} aria-label="Larger">A+</button>
-        </div>
-      </div>
       <div class="field"><span>Font</span>
         <div class="fonts" role="radiogroup" aria-label="Reading font">
           {FONTS.map(f => (
@@ -365,6 +374,7 @@ function SettingsView() {
         Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
         Each version's license is listed on the Versions page.</p>
       <p><button onClick={() => { if (confirm('Reset all settings?')) { localStorage.clear(); location.reload() } }}>Reset settings</button></p>
+      </>}
     </div>
   )
 }

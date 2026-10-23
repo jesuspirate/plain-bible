@@ -294,7 +294,6 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
                     <span>Settings</span>
                   </button>
                   <button class="sb-chip sb-tool" onClick={() => finish('saved')}><BookmarkIcon size={20} /><span>Saved</span></button>
-                  <ThemeToggle label />
                 </div>
               </>
             )}
@@ -308,6 +307,8 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
+          {/* Light, sepia, dark: always one tap away, right in the bar. */}
+          {!open && <ThemeToggle class="sb-theme" />}
           {micOk && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} aria-label={listening ? 'Stop dictation' : 'Search by voice'} onClick={toggleMic}>
               <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" /></svg>

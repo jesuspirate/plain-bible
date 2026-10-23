@@ -20,7 +20,9 @@ no reading plans, devotionals, accounts, or feeds.
   you used (or take the highlight off). Select several verses to write one note on all of them.
 - **History button** (top right): one tap goes back to the previous chapter and verse, a second tap brings you back,
   so you can bounce between two passages. Hold it to see your last 3 places. Kept on the device only.
-- **Minimal top bar**: history and version. Settings, Saved and the theme sit at the bottom of the search panel.
+- **Minimal top bar**: history and version. The theme toggle sits in the search bar; Settings and Saved at the bottom of
+  the search panel. Settings shows text size, theme and your Bible; everything else is under "More settings". The version
+  picker shows the 5 versions you use most, with a search for the rest.
 - **Saved** page listing your highlights and bookmarks in Bible order, filterable by color.
 - **Import** highlights and saved verses exported from other Bible apps (a .zip, .html or .txt export) or any
   list of references, and back up your data to a JSON file.

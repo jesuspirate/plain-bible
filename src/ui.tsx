@@ -138,55 +138,72 @@ export function BookPicker({ version, onPick, onClose }: { version?: Translation
   )
 }
 
+const RECENT_VERSIONS = 'plain-bible:recent-versions'
+const recentVersions = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT_VERSIONS) || '[]') } catch { return [] } }
+function rememberVersion(id: string) {
+  try { localStorage.setItem(RECENT_VERSIONS, JSON.stringify([id, ...recentVersions().filter(x => x !== id)].slice(0, 5))) } catch { /* private mode */ }
+}
+
+// Picks a version. At first it shows only a handful (the ones you use),
+// with a search to find any of the others; the full list by language is
+// one tap further.
 export function VersionPicker({ title, selected, multi, onChange, onClose, max = 20, extra }: {
   title: string; selected: string[]; multi?: boolean; onChange: (ids: string[]) => void; onClose: () => void; max?: number
-  /** shown above the list, e.g. compare and Strong's options */
+  /** shown under the list, e.g. compare and Strong's options */
   extra?: ComponentChildren
 }) {
   const { catalog, settings } = useApp()
   const [filter, setFilter] = useState('')
   const [sel, setSel] = useState(selected)
+  const [all, setAll] = useState(false)
   const f = filter.toLowerCase()
   const list = useMemo(() => catalog.translations.filter(t =>
     !f || [t.id, t.name, t.langName, t.langNative, t.lang].some(x => x.toLowerCase().includes(f))), [f])
-  const mine = list.filter(t => settings.myVersions.includes(t.id))
+  const byId = useMemo(() => new Map(catalog.translations.map(t => [t.id, t])), [catalog])
+  const top = useMemo(() => [...new Set([...selected, ...recentVersions(), ...settings.myVersions])]
+    .map(id => byId.get(id)).filter((t): t is Translation => !!t).slice(0, Math.max(5, selected.length)), [])
   const byLang = new Map<string, Translation[]>()
   for (const t of list) {
     const k = `${t.langName}${t.langNative !== t.langName ? ' · ' + t.langNative : ''}`
     byLang.set(k, [...(byLang.get(k) ?? []), t])
   }
   const toggle = (id: string) => {
-    if (!multi) { onChange([id]); onClose(); return }
+    if (!multi) { rememberVersion(id); onChange([id]); onClose(); return }
     setSel(s => s.includes(id) ? s.filter(x => x !== id) : s.length >= max ? s : [...s, id])
   }
   const row = (t: Translation) => (
     <label class={'vrow' + (sel.includes(t.id) ? ' on' : '')}>
       <input type={multi ? 'checkbox' : 'radio'} checked={sel.includes(t.id)} onChange={() => toggle(t.id)} />
       <span class="vid">{t.id}</span>
-      <span class="vname">{t.name}{t.strongs && <span class="badge">Strong's</span>}</span>
+      <span class="vname">{t.name}</span>
     </label>
   )
   return (
     <Sheet title={title} onClose={() => { if (multi) onChange(sel); onClose() }} wide>
-      {extra}
-      <input class="filter" type="search" placeholder={`Filter ${catalog.translations.length} versions by name or language`} value={filter}
+      <input class="filter" type="search" placeholder={`Search ${catalog.translations.length} versions or a language`} value={filter}
         onInput={e => setFilter((e.target as HTMLInputElement).value)} autoFocus={!matchMedia('(pointer: coarse)').matches} />
       {multi && <p class="muted small">{sel.length} selected (up to {max}). Close to apply.</p>}
-      {mine.length > 0 && !f && <section><h3>My versions</h3>{mine.map(row)}</section>}
-      {[...byLang.entries()].map(([lang, ts]) => <section><h3>{lang}</h3>{ts.map(row)}</section>)}
+      {f || all
+        ? <>{[...byLang.entries()].map(([lang, ts]) => <section><h3>{lang}</h3>{ts.map(row)}</section>)}
+            {!list.length && <p class="muted">No version matches “{filter}”.</p>}</>
+        : <>
+            <section class="vtop">{top.map(row)}</section>
+            <button class="more-toggle" onClick={() => setAll(true)}>All {catalog.translations.length} versions, by language <span aria-hidden="true">›</span></button>
+            {extra}
+          </>}
     </Sheet>
   )
 }
 
 /** Light → Sepia → Dark, one tap each. */
-export function ThemeToggle({ label: showLabel }: { label?: boolean }) {
+export function ThemeToggle({ label: showLabel, class: cls }: { label?: boolean; class?: string }) {
   const { settings, update } = useApp()
   const prefersDark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches
   const current = settings.theme === 'system' ? (prefersDark ? 'dark' : 'light') : settings.theme
   const next = ({ light: 'sepia', sepia: 'dark', dark: 'light' } as const)[current]
   const label = { light: 'Light', sepia: 'Sepia', dark: 'Dark' }
   return (
-    <button class={showLabel ? 'sb-chip sb-tool' : 'icon theme-toggle'} aria-label={`${label[current]} mode. Switch to ${label[next].toLowerCase()} mode`} title={`${label[current]} · tap for ${label[next].toLowerCase()}`}
+    <button type="button" class={cls ?? (showLabel ? 'sb-chip sb-tool' : 'icon theme-toggle')} aria-label={`${label[current]} mode. Switch to ${label[next].toLowerCase()} mode`} title={`${label[current]} · tap for ${label[next].toLowerCase()}`}
       onClick={() => update({ theme: next })}>
       {current === 'sepia'
         ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 5.5C6.5 4.3 9.3 4.4 12 6c2.7-1.6 5.5-1.7 8-.5v13c-2.5-1.2-5.3-1.1-8 .5-2.7-1.6-5.5-1.7-8-.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /><path d="M12 6v13" stroke="currentColor" stroke-width="1.8" /></svg>
