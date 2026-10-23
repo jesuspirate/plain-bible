@@ -199,6 +199,32 @@ function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange
     el.src = urls[0]
     el.play().catch(release)
   }
+  // A copy you keep yourself: the share sheet on phones (Files, Voice
+  // Memos…), a download elsewhere. Each part is its own file.
+  const ready = useRef<{ id: string; files: File[] }>()
+  const [again, setAgain] = useState<string>()
+  const save = async (p: PrayerInfo) => {
+    let files = ready.current?.id === p.id ? ready.current.files : undefined
+    if (!files) {
+      const full = await prayers.get(p.id)
+      if (!full) return
+      const parts = partsOf(full), name = fileName(full.at)
+      files = parts.map((x, i) => new File([x.audio], `${name}${parts.length > 1 ? ` (${i + 1} of ${parts.length})` : ''}.${extension(x.type)}`, { type: x.type }))
+    }
+    if (navigator.canShare?.({ files })) {
+      try { await navigator.share({ files }); ready.current = undefined; setAgain(undefined) } catch (e) {
+        // Safari wants the share right after the tap; if reading the
+        // recording took too long, the next tap shares at once.
+        if ((e as Error).name === 'NotAllowedError') { ready.current = { id: p.id, files }; setAgain(p.id) }
+      }
+      return
+    }
+    for (const f of files) {
+      const a = document.createElement('a')
+      a.href = URL.createObjectURL(f); a.download = f.name; a.click()
+      setTimeout(() => URL.revokeObjectURL(a.href), 10_000)
+    }
+  }
   const remove = async (id: string) => {
     if (playing === id) release()
     setConfirm(undefined)
@@ -224,7 +250,10 @@ function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange
               <span class="pray-when">{when(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span></span>
               {confirm === p.id
                 ? <span class="pray-confirm"><button class="small" onClick={() => setConfirm(undefined)}>Keep</button><button class="small danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? 'Delete everywhere' : 'Delete'}</button></span>
-                : <button class="icon small" aria-label="Delete this prayer" onClick={() => setConfirm(p.id)}>✕</button>}
+                : <><button class="icon small pray-save" aria-label="Save a copy of this prayer" title="Save a copy" onClick={() => save(p)}>
+                    {again === p.id ? 'Save' : <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>}
+                  </button>
+                  <button class="icon small" aria-label="Delete this prayer" onClick={() => setConfirm(p.id)}>✕</button></>}
             </li>
           ))}
         </ol>
@@ -233,6 +262,13 @@ function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange
     </div>
   )
 }
+
+const pad = (n: number) => String(n).padStart(2, '0')
+function fileName(at: number) {
+  const d = new Date(at)
+  return `Prayer ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}.${pad(d.getMinutes())}`
+}
+const extension = (type: string) => type.includes('mp4') ? 'm4a' : type.includes('ogg') ? 'ogg' : 'webm'
 
 // Sync with your other devices: off until you turn it on, here.
 // Removing a home-screen web app on iPhone deletes its storage, prayers included.
