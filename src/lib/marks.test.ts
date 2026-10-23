@@ -107,6 +107,17 @@ describe('older single notes', () => {
     delete (globalThis as any).localStorage
     expect(notesCovering(m, 'Exod', 2, 3).map(x => [x.n, x.key, x.verses])).toEqual([['Moses', 'Exod.2.1', [1, 2, 3, 4]]])
   })
+  it('load even with odd entries saved', () => {
+    const load = (saved: string) => {
+      ;(globalThis as any).localStorage = { getItem: () => saved }
+      try { return loadMarks() } finally { delete (globalThis as any).localStorage }
+    }
+    expect(load(JSON.stringify({ 'Gen.1.1': null, 'Gen.1.2': 7, 'Gen.1.3': { c: '#fff193', t: 1, ns: { a: null } } })))
+      .toEqual({ 'Gen.1.3': { c: '#fff193', t: 1, ns: { a: null } } })
+    expect(notesOf(load(JSON.stringify({ 'Gen.1.3': { t: 1, ns: { a: null } } }))['Gen.1.3'])).toEqual([])
+    expect(load('null')).toEqual({})
+    expect(load('[1]')).toEqual({})
+  })
   it('merge with a device that already moved them, without doubling', () => {
     const old: Mark = { n: 'x', nt: 5, t: 5 }
     const moved = upgrade(old)

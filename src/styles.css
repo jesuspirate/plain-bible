@@ -483,3 +483,15 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
   /* Not the verse numbers and Strong's words: they sit under your finger as you scroll. */
   :where(button, a, [role='button']):active:not(:disabled, .vn, .w) { opacity: .6; }
 }
+
+/* ---- new version ---- */
+/* A round button in the top bar, only while a new version is waiting. */
+.update-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: none; background: var(--accent); color: var(--accent-ink); -webkit-tap-highlight-color: transparent; animation: update-in .25s ease-out; }
+.update-btn:active { transform: scale(.94); }
+.update-btn.busy svg, .spin { animation: update-spin .8s linear infinite; }
+@keyframes update-in { from { transform: scale(.6); opacity: 0; } }
+@keyframes update-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .update-btn, .update-btn.busy svg, .spin { animation: none; } }
+.update-row { display: flex; align-items: center; flex-wrap: wrap; gap: 6px 14px; margin: 16px 0 4px; }
+.check-update { display: inline-flex; align-items: center; gap: 8px; min-height: 48px; padding: 0 18px; border-radius: 24px; border: 1px solid var(--line); background: var(--surface); color: var(--text); font-weight: 600; }
+.check-update.ready { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
