@@ -2,7 +2,7 @@
 // and back up / restore this app's own data.
 import { unzipSync, strFromU8 } from 'fflate'
 import { useState } from 'preact/hooks'
-import { Backup, htmlToText, ImportItem, isBackup, mergeImport, parseNotes, parseRefList } from './lib/marks'
+import { Backup, htmlToText, ImportItem, isBackup, mergeImport, mergeMark, Marks, notesOf, parseNotes, parseRefList } from './lib/marks'
 import { isIOS } from './lib/native'
 import { useApp } from './state'
 
@@ -60,7 +60,7 @@ export function DataTools() {
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
   const count = Object.values(marks)
-  const hl = count.filter(m => m.c).length, bm = count.filter(m => m.b).length, nt = count.filter(m => m.n).length
+  const hl = count.filter(m => m.c).length, bm = count.filter(m => m.b).length, nt = count.reduce((n, m) => n + notesOf(m).length, 0)
 
   const pick = async (e: Event) => {
     const input = e.target as HTMLInputElement
@@ -78,11 +78,11 @@ export function DataTools() {
 
   const hlCount = preview ? preview.items.filter(i => i.color).length + (preview.backup ? Object.values(preview.backup.marks).filter(x => x.c).length : 0) : 0
   const bmCount = preview ? preview.items.filter(i => i.bookmark).length + (preview.backup ? Object.values(preview.backup.marks).filter(x => x.b).length : 0) : 0
-  const ntCount = preview ? preview.items.filter(i => i.note).length + (preview.backup ? Object.values(preview.backup.marks).filter(x => x.n).length : 0) : 0
+  const ntCount = preview ? preview.items.filter(i => i.note).length + (preview.backup ? Object.values(preview.backup.marks).reduce((n, x) => n + notesOf(x).length, 0) : 0) : 0
 
   const apply = () => {
     if (!preview) return
-    setMarks(m => mergeImport(preview.backup ? { ...m, ...preview.backup.marks } : m, preview.items).marks)
+    setMarks(m => mergeImport(preview.backup ? mergeBackup(m, preview.backup.marks) : m, preview.items).marks)
     if (preview.backup?.settings && typeof preview.backup.settings === 'object') update(preview.backup.settings as Partial<typeof settings>)
     setMsg(`Imported ${hlCount} highlights, ${bmCount} bookmarks and ${ntCount} notes.`)
     setPreview(undefined)
@@ -120,4 +120,12 @@ export function DataTools() {
       {msg && <p class="note">{msg}</p>}
     </div>
   )
+}
+
+/** A backup joins what's here: each verse keeps its newest highlight and
+ *  bookmark, and every note from both sides. */
+function mergeBackup(mine: Marks, theirs: Marks): Marks {
+  const out = { ...mine }
+  for (const [k, m] of Object.entries(theirs)) out[k] = mergeMark(out[k], m)!
+  return out
 }

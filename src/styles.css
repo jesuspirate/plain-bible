@@ -322,6 +322,11 @@ main.with-bar { padding-bottom: 120px; }
 .note-passage.folded blockquote { max-height: 7.4em; overflow: hidden; -webkit-mask-image: linear-gradient(#000 60%, transparent); mask-image: linear-gradient(#000 60%, transparent); }
 .note-passage sup { font: 700 .62em var(--sans); color: var(--accent); margin-right: 3px; }
 .np-more { display: block; margin: 4px 0 0 auto; font-weight: 600; font-size: 15px; }
+/* Notes on a verse: each a card to tap and edit */
+.note-list { list-style: none; padding: 0; margin: 0 0 12px; display: grid; gap: 8px; }
+.note-card { all: unset; box-sizing: border-box; display: block; width: 100%; cursor: pointer; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
+.nc-meta { display: block; margin-bottom: 3px; }
+.nc-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; white-space: pre-wrap; font: 16px/1.5 var(--sans); color: var(--text); }
 .note-text { width: 100%; box-sizing: border-box; font: 16px/1.5 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; margin-bottom: 12px; }
 /* Selected verses: a dotted underline, so the highlight colours stay visible */
 .picked .vt { text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: .28em; }
