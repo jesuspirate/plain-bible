@@ -58,6 +58,8 @@ export async function initNative() {
   new MutationObserver(tint).observe(root, { attributes: true, attributeFilter: ['data-theme'] })
   matchMedia('(prefers-color-scheme: dark)').addEventListener('change', tint)
   tint()
+  // A clean keyboard: no arrows and Done bar above it, as in other iPhone apps.
+  import('@capacitor/keyboard').then(({ Keyboard }) => Keyboard.setAccessoryBarVisible({ isVisible: false })).catch(() => {})
   setTimeout(() => SplashScreen.hide({ fadeOutDuration: 200 }).catch(() => {}), 150)
 }
 

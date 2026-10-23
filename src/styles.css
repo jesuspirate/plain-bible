@@ -259,7 +259,7 @@ main.with-bar { padding-bottom: 120px; }
 .sb-cancel:active { transform: scale(.96); filter: brightness(.92); }
 .sb-cancel:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
 @keyframes sb-pop { from { opacity: 0; transform: translateX(10px) scale(.9); } }
-.sb-scrim { position: fixed; inset: 0; z-index: 29; background: rgba(10,10,12,.5); -webkit-backdrop-filter: blur(10px) saturate(120%); backdrop-filter: blur(10px) saturate(120%); animation: sb-fade .2s; }
+.sb-scrim { position: fixed; inset: 0 0 -100vh; z-index: 29; background: rgba(10,10,12,.5); -webkit-backdrop-filter: blur(10px) saturate(120%); backdrop-filter: blur(10px) saturate(120%); animation: sb-fade .2s; }
 .sb-grabber { all: unset; cursor: pointer; display: block; width: 100%; height: 18px; position: relative; flex: none; }
 .sb-grabber::before { content: ''; position: absolute; left: 50%; top: 6px; width: 40px; height: 5px; margin-left: -20px; border-radius: 3px; background: color-mix(in srgb, var(--muted) 45%, transparent); }
 @keyframes sb-fade { from { opacity: 0; } }
@@ -459,6 +459,8 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
 }
 .sb.sb-open .sb-panel { padding-top: 0; transition: transform .2s, opacity .2s; touch-action: pan-y; }
 .sb.sb-open .sb-field { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent), 0 12px 32px rgba(0,0,0,.3); }
+/* Until the keyboard has settled the panel stays hidden, then rises in place. */
+.sb.sb-settling .sb-panel { opacity: 0; animation: none; }
 @media (min-width: 700px) { .sb.sb-open .sb-panel { max-height: min(70vh, 640px); } }
 /* Desktop: show a slim scrollbar on the chapter strip and a grab cursor. */
 @media (pointer: fine) {
