@@ -189,34 +189,37 @@ export function Reader({ route }: { route: Route }) {
   const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number }>()
   const mode = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
   const animate = mode !== 'off'
-  const [peek, setPeek] = useState<{ dir: 1 | -1; b: string; c: number; top: number; left: number; width: number }>()
+  const [peek, setPeek] = useState<{ dir: 1 | -1; from: string; b: string; c: number; top: number; left: number; width: number }>()
   const peekDir = useRef<1 | -1>()
   const peekEl = useRef<HTMLElement>(null), dimEl = useRef<HTMLDivElement>(null)
   const x = useRef(0), busy = useRef(false)
   // How far a page goes to be off screen; a stacked page has a shadow to hide too.
-  const away = () => innerWidth + (mode === 'stack' ? 24 : 0)
-  // Where the page and the chapter beside it are, dx pixels into a turn.
-  const peekAt = (dx: number) => {
-    const dir = peekDir.current ?? 1
-    if (mode === 'slide') return `translateX(${dx + dir * innerWidth}px)`
-    return dir === -1 ? `translateX(${dx - away()}px)` : ''
+  const away = () => innerWidth + (mode === 'stack' ? 48 : 0)
+  // Where the page, the chapter beside it and the shade over the page
+  // underneath are, dx pixels into a turn.
+  const looks = (dx: number) => {
+    const dir = peekDir.current ?? 1, k = Math.min(1, Math.abs(dx) / innerWidth)
+    return {
+      page: (mode === 'slide' || dir === 1) && dx ? `translateX(${dx}px)` : 'none',
+      peek: mode === 'slide' ? `translateX(${dx + dir * innerWidth}px)` : dir === -1 ? `translateX(${dx - away()}px)` : 'none',
+      // The page underneath is in shadow while it's covered.
+      dim: mode === 'stack' ? .3 * (dir === -1 ? k : 1 - k) : 0,
+    }
   }
   const setX = (dx: number) => {
     x.current = dx
-    const dir = peekDir.current, k = Math.min(1, Math.abs(dx) / innerWidth)
-    const pageMoves = mode === 'slide' || dir === 1
-    if (article.current) article.current.style.transform = pageMoves && dx ? `translateX(${dx}px)` : ''
-    if (peekEl.current) peekEl.current.style.transform = peekAt(dx)
-    // The page underneath is in shadow while it's covered.
-    if (dimEl.current) dimEl.current.style.opacity = mode === 'stack' ? String(.3 * (dir === -1 ? k : 1 - k)) : '0'
+    const l = looks(dx)
+    if (article.current) article.current.style.transform = l.page
+    if (peekEl.current) peekEl.current.style.transform = l.peek
+    if (dimEl.current) dimEl.current.style.opacity = String(l.dim)
   }
   const open = (dir: 1 | -1) => {
     const d = dest(dir), a = article.current
     if (!d || !a || peekDir.current === dir) return
-    if (article.current) article.current.style.transform = ''
+    a.style.transform = ''
     const r = a.getBoundingClientRect()
     peekDir.current = dir
-    setPeek({ dir, b: d[0], c: d[1], top: r.top + scrollY, left: r.left, width: r.width })
+    setPeek({ dir, from: `${book}.${chapter}`, b: d[0], c: d[1], top: r.top + scrollY, left: r.left, width: r.width })
   }
   const close = () => {
     peekDir.current = undefined
@@ -224,18 +227,20 @@ export function Reader({ route }: { route: Route }) {
     if (article.current) article.current.style.transform = ''
     setPeek(undefined)
   }
-  // Glide to dx, quick at first and settling at the end.
+  // Glide to dx, quick at first and settling at the end. Run as browser
+  // animations of transform and opacity, which stay smooth off the main thread.
   const glide = (to: number, then: () => void) => {
-    const from = x.current, t0 = performance.now()
-    const ms = 320 * Math.max(.45, Math.min(1, Math.abs(to - from) / innerWidth))
+    const from = looks(x.current), end = looks(to)
+    const opts = { duration: 340 * Math.max(.45, Math.min(1, Math.abs(to - x.current) / innerWidth)), easing: 'cubic-bezier(.2, .7, .25, 1)' }
+    const runs = [
+      article.current?.animate([{ transform: from.page }, { transform: end.page }], opts),
+      peekEl.current?.animate([{ transform: from.peek }, { transform: end.peek }], opts),
+      dimEl.current?.animate([{ opacity: from.dim }, { opacity: end.dim }], opts),
+    ].filter(a => a) as Animation[]
+    setX(to)
     busy.current = true
-    const frame = (t: number) => {
-      const k = Math.min(1, (t - t0) / ms)
-      setX(from + (to - from) * (1 - Math.pow(1 - k, 3)))
-      if (k < 1) requestAnimationFrame(frame)
-      else { busy.current = false; then() }
-    }
-    requestAnimationFrame(frame)
+    const done = () => { busy.current = false; then() }
+    Promise.all(runs.map(a => a.finished)).then(done, done)
   }
   const finish = (dir: 1 | -1) => glide(-dir * away(), () => step(dir))
   const turn = (dir: 1 | -1) => {
@@ -358,7 +363,7 @@ export function Reader({ route }: { route: Route }) {
 
       {loaded && rows > 0 && (
         <article key={`${book}.${chapter}`} ref={article} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}
-          class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek?.dir === 1 ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
+          class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
           {page(book, chapter, true)}
         </article>
       )}
@@ -367,7 +372,7 @@ export function Reader({ route }: { route: Route }) {
         <div class={'turn-peek' + (mode === 'stack' && peek.dir === 1 ? ' under' : '')} aria-hidden="true">
           <div class="turn-dim" ref={dimEl} style={{ opacity: mode === 'stack' && peek.dir === 1 ? .3 : 0 }} />
           <article ref={peekEl} class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek.dir === -1 ? ' turning' : ''}`}
-            style={{ '--cols': versions.length, top: peek.top + 'px', left: peek.left + 'px', width: peek.width + 'px', transform: peekAt(x.current) }}>
+            style={{ '--cols': versions.length, top: peek.top + 'px', left: peek.left + 'px', width: peek.width + 'px', transform: looks(x.current).peek }}>
             {page(peek.b, peek.c, false)}
           </article>
         </div>

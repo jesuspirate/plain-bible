@@ -425,8 +425,14 @@ html, body { overscroll-behavior-x: none; }
 .turn-dim { position: absolute; inset: 0; z-index: 1; background: #000; opacity: 0; }
 .turn-peek article { z-index: 2; }
 .turn-peek.under article { z-index: 0; }
-article.chapter.turning { position: relative; z-index: 6; background: var(--bg); min-height: 100vh;
-  box-shadow: 0 0 0 16px var(--bg), 0 0 28px 16px rgba(0,0,0,.22); }
+article.chapter.turning { position: relative; z-index: 6; background: var(--bg); min-height: 100vh; will-change: transform; }
+.turn-peek article, .turn-peek article.chapter.turning { position: absolute; z-index: 2; will-change: transform; }
+.turn-peek.under article.chapter { z-index: 0; }
+/* The page colour reaches past the margins and up under the top bar, and a
+   narrow shadow runs down the edge the page leads with. */
+.chapter.turning::before { content: ''; position: absolute; top: -200px; bottom: 0; left: -16px; right: -16px; z-index: -1; background: var(--bg); }
+.chapter.turning::after { content: ''; position: absolute; top: -200px; bottom: 0; right: -40px; width: 24px; pointer-events: none;
+  background: linear-gradient(to right, rgba(0,0,0,.16), rgba(0,0,0,0)); }
 
 /* Double-tap never zooms the page (a quick second tap on a verse highlights
    it instead); pinching to zoom still works everywhere. */
