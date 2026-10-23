@@ -11,7 +11,7 @@ import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, openPrayer, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
-import { BookmarkIcon } from './icons'
+import { BookmarkIcon, PrayIcon } from './icons'
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -307,7 +307,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
           {/* Prayer, always one tap away: opens the glowing microphone over the page. */}
           {!open && (
             <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" /></svg>
+              <PrayIcon size={23} />
             </button>
           )}
         </form>
