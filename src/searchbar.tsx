@@ -3,7 +3,7 @@
 // jump with the verse itself, matching books, live search hits, and recent
 // searches, and the chapters of the book you are reading. It stays pinned
 // while you read, showing where you are.
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { BOOKS, bookById } from './lib/books'
 import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
@@ -43,20 +43,35 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
 
   // While open, pin the bar and panel to the visible part of the screen, so
   // the iPhone keyboard doesn't push the page around or cut the panel off.
-  useEffect(() => {
+  // This runs before the first frame, so the panel never shows in last
+  // time's place. On a phone the panel waits, hidden, until the keyboard has
+  // finished moving the screen, then rises into its final place: before,
+  // its top showed at one height and then jumped to another.
+  const [settled, setSettled] = useState(true)
+  useLayoutEffect(() => {
     if (!open) return
     const root = document.documentElement, vv = window.visualViewport
+    let quiet = 0, cap = 0
+    const done = () => { clearTimeout(quiet); clearTimeout(cap); setSettled(true) }
     const fit = () => {
       if (!vv) return
       root.style.setProperty('--vv-top', vv.offsetTop + 'px')
       root.style.setProperty('--vv-h', vv.height + 'px')
     }
+    const moved = () => { fit(); clearTimeout(quiet); quiet = window.setTimeout(done, 90) }
     fit()
+    if (vv && matchMedia('(pointer: coarse)').matches) {
+      setSettled(false)
+      quiet = window.setTimeout(done, 400)
+      cap = window.setTimeout(done, 700)
+    }
     root.classList.add('sb-lock')
-    vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
+    vv?.addEventListener('resize', moved); vv?.addEventListener('scroll', moved)
     return () => {
+      clearTimeout(quiet); clearTimeout(cap); setSettled(true)
       root.classList.remove('sb-lock')
-      vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit)
+      root.style.removeProperty('--vv-top'); root.style.removeProperty('--vv-h')
+      vv?.removeEventListener('resize', moved); vv?.removeEventListener('scroll', moved)
     }
   }, [open])
 
@@ -209,7 +224,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   return (
     <>
       {open && <div class="sb-scrim" onClick={close} />}
-      <div class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
+      <div class={'sb' + (open ? ' sb-open' + (settled ? '' : ' sb-settling') : mini ? ' sb-mini' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
@@ -306,7 +321,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? 'Search' : `Search ${version} or go to a passage`}
             placeholder={here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
-            onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
+            onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {/* Light, sepia, dark: always one tap away, right in the bar. */}
           {!open && !mini && <ThemeToggle class="sb-theme" />}
