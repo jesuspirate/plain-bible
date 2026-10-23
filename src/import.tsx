@@ -3,6 +3,7 @@
 import { unzipSync, strFromU8 } from 'fflate'
 import { useState } from 'preact/hooks'
 import { Backup, htmlToText, ImportItem, isBackup, mergeImport, parseNotes, parseRefList } from './lib/marks'
+import { isIOS } from './lib/native'
 import { useApp } from './state'
 
 interface Preview { items: ImportItem[]; skipped: string[]; files: string[]; backup?: Backup }
@@ -41,6 +42,11 @@ async function readImport(file: File): Promise<Preview> {
 }
 
 function download(name: string, text: string) {
+  // A home-screen app on iPhone opens a downloaded file full screen with no
+  // way back to the app; the share sheet (Save to Files, AirDrop, Mail) is
+  // the way out there.
+  const file = new File([text], name, { type: 'application/json' })
+  if (isIOS && navigator.canShare?.({ files: [file] })) { navigator.share({ files: [file] }).catch(() => {}); return }
   const a = document.createElement('a')
   a.href = URL.createObjectURL(new Blob([text], { type: 'application/json' }))
   a.download = name

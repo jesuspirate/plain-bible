@@ -77,7 +77,13 @@ export function Reader({ route }: { route: Route }) {
       const top = headerBottom()
       // Ignore the moment between chapters or versions when no verses show.
       const els = [...document.querySelectorAll<HTMLElement>('.chapter [id^="v"]')]
-      for (let i = 0; i < els.length; i++) {
+      // The verses run down the page in order, so halve the list to find the
+      // first one still on screen rather than measuring every verse above it
+      // (Psalm 119 has 176) on every frame of a scroll.
+      const above = (el: HTMLElement) => { const r = el.getClientRects(); return !r.length || r[r.length - 1].bottom <= top + 12 }
+      let lo = 0, hi = els.length
+      while (lo < hi) { const mid = (lo + hi) >> 1; if (above(els[mid])) lo = mid + 1; else hi = mid }
+      for (let i = lo; i < els.length; i++) {
         const lines = els[i].getClientRects()
         if (!lines.length || lines[lines.length - 1].bottom <= top + 12) continue
         let n = +els[i].id.slice(1)
@@ -181,9 +187,23 @@ export function Reader({ route }: { route: Route }) {
   // One tap selects a verse; a quick second tap on it instead highlights it
   // in the colour you used last, or takes its highlight off.
   const lastTap = useRef<{ v: number; t: number; before: number[] }>()
+  // Whether words were already selected when the finger went down.
+  const selectedBefore = useRef(false)
+  useEffect(() => {
+    const down = () => { selectedBefore.current = !!String(getSelection() ?? '').trim() }
+    document.addEventListener('pointerdown', down, true)
+    return () => document.removeEventListener('pointerdown', down, true)
+  }, [])
   const tapVerse = (e: MouseEvent, v: number) => {
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
-    if (String(getSelection() ?? '').trim()) return
+    // Selecting words isn't a tap, and neither is a tap on the selected
+    // words (that's for the copy menu). A tap elsewhere while words are still
+    // selected clears them and counts, so it isn't lost.
+    const sel = getSelection()
+    if (String(sel ?? '').trim()) {
+      if (!selectedBefore.current || sel!.containsNode(e.target as Node, true)) return
+      sel!.removeAllRanges()
+    }
     const now = Date.now(), prev = lastTap.current
     if (prev && prev.v === v && now - prev.t < 350) {
       lastTap.current = undefined

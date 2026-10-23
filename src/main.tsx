@@ -3,6 +3,7 @@ import { App } from './app'
 import './fonts'
 import './styles.css'
 import { initNative, isNative } from './lib/native'
+import { warmSearch } from './searchClient'
 
 // The reader puts you back on your verse itself; the browser's own scroll
 // restoration would fight it.
@@ -39,9 +40,22 @@ if (import.meta.env.PROD && !isNative && 'serviceWorker' in navigator) {
     // so an installed app picks up updates without being force-closed.
     registerSW({
       immediate: true,
+      // A new version took over. Reloading right away could pull the page
+      // out from under you mid-sentence (search open, a note half typed), so
+      // it waits until you switch away from the app; you come back to the
+      // same verse on the new version.
+      onNeedReload() {
+        const reload = () => { if (document.visibilityState === 'hidden') location.reload() }
+        document.addEventListener('visibilitychange', reload)
+        reload()
+      },
       onRegisteredSW(_url, reg) {
         if (reg) document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}) })
       },
     })
   }).catch(() => {})
+  // Start the search worker once the page is up. Its file belongs to this
+  // version, and after an update (until the reload) the site only has the
+  // new one, so it has to be fetched while it is still there.
+  setTimeout(warmSearch, 2000)
 }
