@@ -260,17 +260,14 @@ export function Reader({ route }: { route: Route }) {
     a.style.transform = ''
     const r = a.getBoundingClientRect()
     peekDir.current = dir
-    document.documentElement.classList.add('page-turning')
     setPeek({ dir, from: `${book}.${chapter}`, b: d[0], c: d[1], top: r.top + scrollY, left: r.left, width: r.width })
   }
   const close = () => {
     peekDir.current = undefined
-    document.documentElement.classList.remove('page-turning')
     x.current = 0
     if (article.current) article.current.style.transform = ''
     setPeek(undefined)
   }
-  useEffect(() => () => document.documentElement.classList.remove('page-turning'), [])
   // Glide to dx, quick at first and settling at the end. Run as browser
   // animations of transform and opacity, which stay smooth off the main thread.
   const glide = (to: number, then: () => void) => {
