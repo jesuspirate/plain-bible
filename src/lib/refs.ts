@@ -23,3 +23,15 @@ export function formatRef(r: Ref, short = false): string {
   if (r.verseEnd && r.verseEnd !== r.verse) s += `–${r.verseEnd}`
   return s
 }
+
+/** "16–18, 20" for a sorted list of verse numbers. */
+export function verseRanges(vs: number[]) {
+  const out: string[] = []
+  for (let i = 0; i < vs.length; i++) {
+    let j = i
+    while (j + 1 < vs.length && vs[j + 1] === vs[j] + 1) j++
+    out.push(i === j ? `${vs[i]}` : `${vs[i]}–${vs[j]}`)
+    i = j
+  }
+  return out.join(', ')
+}

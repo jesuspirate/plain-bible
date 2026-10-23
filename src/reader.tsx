@@ -2,14 +2,15 @@ import { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
-import { formatRef } from './lib/refs'
+import { formatRef, verseRanges } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
-import { go, readPath, Route, useApp } from './state'
+import { awaitVerse, go, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, useApp, versesPicked } from './state'
+import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { BookmarkIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
 
@@ -153,6 +154,26 @@ export function Reader({ route }: { route: Route }) {
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
 
   useEffect(() => setSelected([]), [book, chapter, version])
+  // Verses you select are offered if you go to pray soon after.
+  useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
+  // After a prayer, "Add a verse": the next verse you tap is tied to it.
+  const [picking, setPicking] = useState(prayerAwaitingVerse)
+  const [tied, setTied] = useState('')
+  useEffect(() => {
+    const on = () => setPicking(prayerAwaitingVerse())
+    addEventListener(PICK_EVENT, on)
+    return () => removeEventListener(PICK_EVENT, on)
+  }, [])
+  useEffect(() => { if (tied) { const t = setTimeout(() => setTied(''), 3000); return () => clearTimeout(t) } }, [tied])
+  const tieVerse = (id: string, v: number) => {
+    const verse = { book, chapter, verses: [v] }
+    awaitVerse(undefined); tap()
+    // Prayers load only once you've prayed, so reading never waits on them.
+    import('./lib/prayers').then(m => m.prayers.setVerse(id, verse)).then(() => {
+      setTied(`Your prayer is tied to ${verseLabel(verse)}.`)
+      import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {})
+    }, () => setTied('That prayer is no longer on this device.'))
+  }
 
   const nav = (b: string, c: number, v?: number) => go(readPath(version, b, c, v, parallel))
   const primary = bibles[version]
@@ -214,6 +235,7 @@ export function Reader({ route }: { route: Route }) {
     return () => document.removeEventListener('pointerdown', down, true)
   }, [])
   const tapVerse = (e: MouseEvent, v: number) => {
+    if (picking) { tieVerse(picking, v); return }
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     // Selecting words isn't a tap, and neither is a tap on the selected
     // words (that's for the copy menu). A tap elsewhere while words are still
@@ -473,7 +495,14 @@ export function Reader({ route }: { route: Route }) {
 
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
-        onNote={vs => { setSelected([]); openNote(vs) }} />}
+        onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
+      {picking && (
+        <div class="pick-verse" role="status">
+          <span><span aria-hidden="true">{'🙏' + settings.prayTone} </span>Tap a verse for your prayer</span>
+          <button class="small" onClick={() => awaitVerse(undefined)}>Cancel</button>
+        </div>
+      )}
+      {tied && <div class="pick-verse done" role="status">{tied}</div>}
       {noteFor && <NotesSheet book={book} chapter={chapter} {...noteFor} dir={t?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
         text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
       {chapterSheet && (
@@ -508,22 +537,13 @@ function toVerse(v: number) {
   document.fonts?.ready.then(() => { if (Math.abs(scrollY - y) < 2) place() })
 }
 
-/** "16–18, 20" for a sorted list of verse numbers. */
-export function verseRanges(vs: number[]) {
-  const out: string[] = []
-  for (let i = 0; i < vs.length; i++) {
-    let j = i
-    while (j + 1 < vs.length && vs[j + 1] === vs[j] + 1) j++
-    out.push(i === j ? `${vs[i]}` : `${vs[i]}–${vs[j]}`)
-    i = j
-  }
-  return out.join(', ')
-}
+export { verseRanges }
 
 // Shown while verses are selected: tap more verses to add them, then
 // highlight, bookmark, copy, share or compare them together.
-function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote }: {
+function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote, onPray }: {
   book: string; chapter: number; verses: number[]; versions: string[]; bibles: Record<string, Bible>; onClose: () => void; onNote: (vs: number[]) => void
+  onPray: (vs: number[]) => void
 }) {
   const { settings, byId, data, marks, setMarks } = useApp()
   const [compare, setCompare] = useState<Bible[]>()
@@ -594,6 +614,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>Share</span></button>
             : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>Link</span></button>}
           <button onClick={showCompare}><CompareIcon size={22} /><span>Compare</span></button>
+          <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>Pray</span></button>
         </div>
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
