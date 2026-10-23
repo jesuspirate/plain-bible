@@ -3,8 +3,17 @@
 // The audio is stored as raw bytes with its type: older iPhones can't keep a
 // Blob in IndexedDB.
 
-export interface Prayer { id: string; at: number; ms: number; type: string; audio: ArrayBuffer }
-export type PrayerInfo = Omit<Prayer, 'audio'>
+/** One stretch of recording. */
+export interface Part { ms: number; type: string; audio: ArrayBuffer }
+/** A prayer: its first part, plus any parts added after it was interrupted
+ *  (the phone locked) and picked up again. `ms` is the length of them all. */
+export interface Prayer extends Part { id: string; at: number; more?: Part[] }
+export type PrayerInfo = Omit<Prayer, 'audio' | 'more'>
+
+/** The prayer with `part` added on the end. */
+export const withPart = (p: Prayer, part: Part): Prayer => ({ ...p, ms: p.ms + part.ms, more: [...(p.more ?? []), part] })
+/** Every part, in order. */
+export const partsOf = (p: Prayer): Part[] => [{ ms: p.more ? p.ms - p.more.reduce((n, x) => n + x.ms, 0) : p.ms, type: p.type, audio: p.audio }, ...(p.more ?? [])]
 
 const DB = 'plain-bible-prayers', STORE = 'prayers'
 let db: Promise<IDBDatabase> | undefined
@@ -25,10 +34,16 @@ export const prayers = {
   /** Newest first, without the audio. */
   list: async (): Promise<PrayerInfo[]> => {
     const all = await tx<Prayer[]>('readonly', s => s.getAll())
-    return all.map(({ audio: _, ...p }) => p).sort((a, b) => b.at - a.at)
+    return all.map(({ audio: _, more: __, ...p }) => p).sort((a, b) => b.at - a.at)
   },
   get: (id: string) => tx<Prayer | undefined>('readonly', s => s.get(id)),
   put: (p: Prayer) => tx('readwrite', s => s.put(p)).then(() => {}),
+  /** Add a part to a prayer that was interrupted. */
+  append: async (id: string, part: Part) => {
+    const p = await prayers.get(id)
+    if (!p) throw new Error('gone')
+    await prayers.put(withPart(p, part))
+  },
   delete: (id: string) => tx('readwrite', s => s.delete(id)).then(() => {}),
 }
 
