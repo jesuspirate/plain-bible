@@ -72,7 +72,7 @@ const unreachable = () => new SyncError(offline()
   ? "You're offline. Connect to the internet to sign in or sync."
   : "Couldn't reach the sync server. Your highlights and settings are safe on this device. Try again in a minute.")
 
-async function api<T>(path: string, init: { method?: string; token?: string; body?: unknown } = {}): Promise<T> {
+export async function api<T>(path: string, init: { method?: string; token?: string; body?: unknown } = {}): Promise<T> {
   const headers: Record<string, string> = {}
   if (init.token) headers.Authorization = `Bearer ${init.token}`
   if (init.body !== undefined) headers['Content-Type'] = 'application/json'
