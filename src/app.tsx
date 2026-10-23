@@ -9,7 +9,7 @@ import { Saved } from './saved'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { HistoryIcon, RefreshIcon } from './icons'
-import { isNative } from './lib/native'
+import { copyText, isNative } from './lib/native'
 import { applyUpdate, checkForUpdate, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
 import { formatRef } from './lib/refs'
@@ -332,18 +332,25 @@ function UpdateButton() {
   )
 }
 
-// The version, in one quiet line at the very bottom of Settings. Tapping it
-// is the whole update: it looks for a new version and switches to it if
-// there is one, or says you're up to date.
+// The version, quietly at the very bottom of Settings. Tap it to copy it
+// (handy for reporting a problem). The line under it is the whole update:
+// it looks for a new version and switches to it if there is one, or says
+// you're up to date.
 function VersionLine() {
   const state = useUpdate()
-  if (isNative) return <p class="version-line muted">Version {__BUILD__}</p>
+  const [copied, setCopied] = useState(false)
+  const version = `Plain Bible ${__BUILD__}`
+  const copy = async () => {
+    try { await copyText(version); setCopied(true); setTimeout(() => setCopied(false), 1500) } catch { /* nothing to do */ }
+  }
   const note = { idle: 'Tap to check for updates', checking: 'Checking…', ready: 'New version: tap to update', current: 'Up to date', offline: 'Offline, try later' }[state]
   return (
-    <button class={'version-line' + (state === 'ready' ? ' ready' : '')} disabled={state === 'checking'} onClick={() => checkForUpdate()}>
-      <span>Version {__BUILD__}</span>
-      <span class="version-note"><RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}</span>
-    </button>
+    <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
+      <button class="version-copy" onClick={copy} aria-label={`Version ${__BUILD__}. Tap to copy`}>{copied ? 'Copied ✓' : `Version ${__BUILD__}`}</button>
+      {!isNative && <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
+        <RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}
+      </button>}
+    </div>
   )
 }
 
