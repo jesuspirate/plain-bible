@@ -62,15 +62,30 @@ export class SyncError extends Error {
   constructor(message: string, public status = 0, public body?: any) { super(message) }
 }
 
+const TIMEOUT_MS = 15000
+const offline = () => navigator.onLine === false
+const unreachable = () => new SyncError(offline()
+  ? "You're offline. Connect to the internet to sign in or sync."
+  : "Couldn't reach the sync server. Your highlights and settings are safe on this device. Try again in a minute.")
+
 async function api<T>(path: string, init: { method?: string; token?: string; body?: unknown } = {}): Promise<T> {
   const headers: Record<string, string> = {}
   if (init.token) headers.Authorization = `Bearer ${init.token}`
   if (init.body !== undefined) headers['Content-Type'] = 'application/json'
+  const req = () => fetch(SYNC_URL + path, {
+    method: init.method ?? 'GET', headers, body: init.body !== undefined ? JSON.stringify(init.body) : undefined,
+    // A stalled request would otherwise leave "Waiting for passkey…" up for minutes.
+    signal: AbortSignal.timeout?.(TIMEOUT_MS),
+  })
   let res: Response
   try {
-    res = await fetch(SYNC_URL + path, { method: init.method ?? 'GET', headers, body: init.body !== undefined ? JSON.stringify(init.body) : undefined })
+    res = await req()
   } catch {
-    throw new SyncError('Could not reach the sync service. Check your connection.')
+    // Mobile connections often drop the first request after waking up; one
+    // quick retry hides that. Not for /verify: its challenge is single use.
+    if (offline() || path.endsWith('/verify')) throw unreachable()
+    await new Promise(r => setTimeout(r, 800))
+    try { res = await req() } catch { throw unreachable() }
   }
   const body = await res.json().catch(() => ({}))
   if (!res.ok) throw new SyncError(body.error || `Sync service error (${res.status})`, res.status, body)
@@ -107,8 +122,23 @@ export async function register(token?: string): Promise<string | undefined> {
   return r.token
 }
 
+// Sign-in options are fetched ahead of the tap. Safari only shows the passkey
+// sheet if it opens soon after the tap, and a slow network in between makes it
+// fail quietly, leaving the button stuck on "Waiting for passkey…".
+type Options = { challengeId: string; options: any }
+let prepared: { at: number; p: Promise<Options> } | null = null
+const loginOptions = () => api<Options>('/auth/login/options', { method: 'POST', body: {} })
+export function prepareSignIn() {
+  if (prepared && Date.now() - prepared.at < 4 * 60_000) return
+  const p = loginOptions()
+  prepared = { at: Date.now(), p }
+  p.catch(() => { if (prepared?.p === p) prepared = null })
+}
+
 export async function signIn(): Promise<string> {
-  const { challengeId, options } = await api<{ challengeId: string; options: any }>('/auth/login/options', { method: 'POST', body: {} })
+  const ready = prepared && Date.now() - prepared.at < 4 * 60_000 ? prepared.p.catch(loginOptions) : loginOptions()
+  prepared = null
+  const { challengeId, options } = await ready
   let response
   try { response = await usePasskey(options) } catch (e) {
     if (cancelled(e)) throw new SyncError('Cancelled')

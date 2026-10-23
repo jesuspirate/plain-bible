@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
   Account, accountInfo, deleteAccount, docKey, loadAccount, mergeDocs, register, saveAccount,
-  signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
+  prepareSignIn, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
 } from './lib/sync'
 import { isNative } from './lib/native'
 import { Settings, useApp } from './state'
@@ -113,16 +113,24 @@ export function AccountSection() {
   const [info, setInfo] = useState<{ passkeys: number; created: number }>()
   const acct = sync.account
   useEffect(() => { if (acct) accountInfo(acct.token).then(setInfo).catch(() => {}) }, [acct?.token, msg])
+  useEffect(() => { if (!acct && SYNC_URL && navigator.onLine !== false) prepareSignIn() }, [acct?.token])
   if (!sync.enabled) return null
   const passkeys = isNative || typeof PublicKeyCredential !== 'undefined'
 
   const act = (label: string, fn: () => Promise<void>) => async () => {
     setWorking(label); setMsg('')
-    try { await fn() } catch (e) { if ((e as Error).message !== 'Cancelled') setMsg((e as Error).message) }
+    try { await fn() } catch (e) {
+      const m = (e as Error).message
+      // Safari also reports a passkey sheet that never opened as cancelled.
+      if (m !== 'Cancelled') setMsg(m)
+      else if (label === 'login' || label === 'create') setMsg('The passkey request was cancelled or timed out. Tap the button to try again.')
+    }
     finally { setWorking('') }
   }
   const create = act('create', async () => { const t = await register(); if (t) sync.signedIn(t) })
-  const login = act('login', async () => sync.signedIn(await signIn()))
+  const login = act('login', async () => {
+    try { sync.signedIn(await signIn()) } catch (e) { prepareSignIn(); throw e }
+  })
   const addKey = act('add', async () => { await register(acct!.token); setMsg('Passkey added. You can now sign in with it on that device too.') })
   const logout = act('logout', async () => { await signOut(acct!.token); sync.signedOut() })
   const remove = act('delete', async () => {
