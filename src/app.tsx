@@ -19,14 +19,23 @@ import { loadPlace, savePlace, withoutVerse } from './lib/place'
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
 const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
-/** At most one reload every few seconds, so a broken setup can't loop. */
-function reloadOk() {
+/** Reload, at most once every few seconds so a broken setup can't loop. A
+ * reload asked for sooner (say, tapping through the themes) waits its turn
+ * rather than being dropped, so the status bar always catches up. */
+let reloadTimer = 0
+function reloadSoon() {
+  let wait = 0
   try {
-    const last = Number(sessionStorage.getItem('plain-bible:tint-reload') || 0)
-    if (Date.now() - last < 5000) return false
-    sessionStorage.setItem('plain-bible:tint-reload', String(Date.now()))
-    return true
-  } catch { return false }
+    wait = Math.max(0, Number(sessionStorage.getItem('plain-bible:tint-reload') || 0) + 2500 - Date.now())
+  } catch { return }
+  clearTimeout(reloadTimer)
+  reloadTimer = window.setTimeout(() => {
+    try { sessionStorage.setItem('plain-bible:tint-reload', String(Date.now())) } catch { return }
+    // The reader saves the verse on top as the page goes; drop any
+    // jump-to verse so it comes back on that one.
+    history.replaceState(history.state, '', withoutVerse(location.hash))
+    location.reload()
+  }, wait)
 }
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
@@ -63,12 +72,8 @@ export function App() {
     // there a theme change reloads the page (it comes back on the same verse).
     const tint = () => {
       const bg = getComputedStyle(root).getPropertyValue('--bg').trim()
-      if (IOS_HOME_SCREEN && bg !== LOAD_TINT && reloadOk()) {
-        // The reader saves the verse on top as the page goes; drop any
-        // jump-to verse so it comes back on that one.
-        history.replaceState(history.state, '', withoutVerse(location.hash))
-        return location.reload()
-      }
+      clearTimeout(reloadTimer)
+      if (IOS_HOME_SCREEN && bg !== LOAD_TINT) reloadSoon()
       document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
     }
     tint()
