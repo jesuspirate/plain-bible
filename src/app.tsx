@@ -18,17 +18,11 @@ import { hasContent, loadMarks, Marks, saveMarks } from './lib/marks'
 import { AccountSection, touchSettings, useSync } from './account'
 import { loadPlace, savePlace } from './lib/place'
 
-/** Match the phone's status bar (and the browser bar) to the theme. A fresh
- *  meta tag rather than an edited one: iPhone home-screen apps reliably
- *  repaint the status bar when the tag is replaced. */
+/** Match the browser bar (and Android's status bar) to the theme. The
+ *  iPhone home-screen app shows the page itself behind a see-through
+ *  status bar instead (index.html), so it follows the theme at once. */
 function setTint(bg: string) {
-  const old = document.querySelector('meta[name="theme-color"]')
-  if (!bg || old?.getAttribute('content') === bg) return
-  const meta = document.createElement('meta')
-  meta.name = 'theme-color'
-  meta.content = bg
-  if (old) old.replaceWith(meta)
-  else document.head.append(meta)
+  document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
 }
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
