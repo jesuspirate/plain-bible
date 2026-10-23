@@ -235,6 +235,9 @@ function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange
 }
 
 // Sync with your other devices: off until you turn it on, here.
+// Removing a home-screen web app on iPhone deletes its storage, prayers included.
+const LOCAL_ONLY = 'Until then, your prayers live only in this copy of the app. Removing it from your Home Screen, or clearing website data, deletes them.'
+
 function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () => void }) {
   const [on, setOn] = useState(prayerSyncOn)
   const [busy, setBusy] = useState(false)
@@ -275,6 +278,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
         {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers (say, an Android phone next to an iPhone). Keep it private: it opens your prayers.</p>}
       </> : !signedIn ? <>
         <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
+        <p class="muted small">{LOCAL_ONLY}</p>
         <button class="small" onClick={() => { onClose(); go('settings') }}>Go to Settings → Account</button>
       </> : needCode ? <>
         <p class="muted">This passkey can’t unlock your prayers here. On a device where they already sync, open Your prayers → Show prayer key, and type it below.</p>
@@ -287,6 +291,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
       </> : <>
         <p class="muted">Keep your prayers on all your devices. Each one is encrypted on this device before it leaves it, so no one else, not even the server, can hear it.</p>
         <button class="small primary" disabled={busy} onClick={start}>{busy ? 'Waiting for passkey…' : 'Sync my prayers'}</button>
+        <p class="muted small">{LOCAL_ONLY}</p>
       </>}
       {msg && <p class="note small">{msg}</p>}
     </div>

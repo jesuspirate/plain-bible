@@ -190,7 +190,7 @@ function SettingsBody() {
       <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
       <div class="field"><span>Prayer</span>
         <div class="col">
-          <button class="link pray-open" onClick={openPrayer}>Pray out loud; kept on this device only ›</button>
+          <button class="link pray-open" onClick={openPrayer}>Pray out loud ›</button>
           <div class="seg tones" role="radiogroup" aria-label="Prayer button">
             {['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'].map(t => (
               <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>{'🙏' + t}</button>
