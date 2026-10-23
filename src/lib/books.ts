@@ -157,6 +157,13 @@ for (const b of BOOKS) {
   }
 }
 
+/** A book by its exact name, abbreviation or alias only (no guessing from
+ *  a prefix), for spotting references inside ordinary writing. */
+export function exactBook(input: string): string | undefined {
+  const k = normName(input)
+  return k ? NAME_MAP.get(k) ?? NAME_MAP.get(k.replace(/ /g, '')) : undefined
+}
+
 /** Resolve a book name or abbreviation ("1 cor", "Jn", "song of songs") to a book id. */
 export function findBook(input: string): string | undefined {
   const k = normName(input)

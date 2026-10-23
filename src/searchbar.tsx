@@ -11,7 +11,6 @@ import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, openPrayer, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
-import { BookmarkIcon } from './icons'
 import { SettingsSheet } from './settings'
 
 const RECENT = 'plain-bible:recent'
@@ -153,10 +152,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // A tap only counts in the panel if the finger went down on that same
   // button and stayed put. The tap that opens search lands on the bar, but on
   // a phone its click can arrive after the panel has appeared and the
-  // keyboard has moved things. And a swipe down that starts just above the
-  // bar starts on Settings, which sits at the bottom of the panel; where
-  // nothing scrolls, Safari can still treat that swipe as a tap. Taps in the
-  // first moment after opening are ignored too.
+  // keyboard has moved things. And where nothing scrolls, Safari can treat
+  // a swipe as a tap on whatever button it started on. Taps in the first
+  // moment after opening are ignored too.
   const press = useRef<{ x: number; y: number; target: Element | null; moved: boolean }>()
   const openedAt = useRef(0)
   useEffect(() => { if (open) { press.current = undefined; openedAt.current = Date.now() } }, [open])
@@ -217,7 +215,18 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
-            <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
+            {/* Settings at the top, in sight the moment search opens. With the
+                small round button, the theme toggle sits here too. */}
+            <div class="sb-head">
+              <span class="sb-head-side">{mini && <ThemeToggle class="sb-head-btn sb-head-icon" />}</span>
+              <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
+              <span class="sb-head-side end">
+                <button type="button" class="sb-head-btn" onClick={() => { input.current?.blur(); setSettingsOpen(true) }}>
+                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
+                  <span>Settings</span>
+                </button>
+              </span>
+            </div>
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
                 <span class="sb-kicker">Go to · {version}</span>
@@ -286,16 +295,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                   {['John 3:16', '"born again"', 'love NEAR/5 neighbour', 'H430', 'grace in:pauline'].map(x => (
                     <button class="sb-chip" onClick={() => setQ(x)}>{x}</button>
                   ))}
-                </div>
-                {/* Everything else, out of the way until you need it. */}
-                <div class="sb-tools">
-                  <button class="sb-chip sb-tool" onClick={() => { input.current?.blur(); setSettingsOpen(true) }}>
-                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
-                    <span>Settings</span>
-                  </button>
-                  <button class="sb-chip sb-tool" onClick={() => finish('saved')}><BookmarkIcon size={20} /><span>Saved</span></button>
-                  {/* The small button has no room for the theme toggle, so it lives here. */}
-                  {mini && <ThemeToggle label />}
                 </div>
               </>
             )}

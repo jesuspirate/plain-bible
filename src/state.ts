@@ -30,6 +30,8 @@ export interface Settings {
   turn: 'stack' | 'slide' | 'off'
   /** skin tone of the 🙏 on the prayer button: a modifier character, or '' for the plain one */
   prayTone: string
+  /** a quiet line under the chapter title when you have notes on it */
+  noteReminders: boolean
   strongs: boolean
   strongsNumbers: boolean
   myVersions: string[]
@@ -47,7 +49,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'system', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', strongs: false, strongsNumbers: false,
+    theme: 'system', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
