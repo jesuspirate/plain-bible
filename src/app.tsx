@@ -8,7 +8,9 @@ import { SearchBar } from './searchbar'
 import { Saved } from './saved'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { HistoryIcon } from './icons'
+import { HistoryIcon, RefreshIcon } from './icons'
+import { isNative } from './lib/native'
+import { applyUpdate, checkForUpdate, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
 import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
@@ -141,6 +143,7 @@ export function App() {
         <nav>
           <HistoryButton route={route} />
           <VersionMenu route={route} />
+          <UpdateButton />
           {/* Settings live in the search panel; without the search bar they come back here. */}
           {!settings.searchBar && <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
             <svg class="gear" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
@@ -318,6 +321,35 @@ function HistoryButton({ route }: { route: Route }) {
   )
 }
 
+// Shows only when a new version of the app is in: one tap switches to it,
+// back on the same verse.
+function UpdateButton() {
+  const state = useUpdate()
+  const [busy, setBusy] = useState(false)
+  if (state !== 'ready') return null
+  return (
+    <button class={'update-btn' + (busy ? ' busy' : '')} aria-label="New version ready. Tap to update" title="New version ready: tap to update"
+      onClick={() => { setBusy(true); applyUpdate() }}>
+      <RefreshIcon size={24} />
+    </button>
+  )
+}
+
+// "Check for updates" in Settings, with what it found.
+function UpdateRow() {
+  const state = useUpdate()
+  if (isNative) return <p class="muted small">Version {__BUILD__}</p>
+  const label = { idle: 'Check for updates', checking: 'Checking…', ready: 'Update now', current: 'Up to date ✓', offline: 'Offline, try later' }[state]
+  return (
+    <div class="update-row">
+      <button class={'check-update' + (state === 'ready' ? ' ready' : '')} disabled={state === 'checking'} onClick={() => checkForUpdate()}>
+        <RefreshIcon size={20} class={state === 'checking' ? 'spin' : undefined} /> {label}
+      </button>
+      <span class="muted small">Version {__BUILD__}</span>
+    </div>
+  )
+}
+
 function SettingsView() {
   const { settings, update, catalog, marks, sync, byId } = useApp()
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
@@ -351,6 +383,7 @@ function SettingsView() {
           {pickFav && <VersionPicker title="Your Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
         </div>
       </div>
+      <UpdateRow />
       <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
       {more && <>
       <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>

@@ -4,9 +4,15 @@ import './fonts'
 import './styles.css'
 import { initNative, isNative } from './lib/native'
 import { warmSearch } from './searchClient'
+import { newVersionReady, registered } from './lib/update'
 
 // The reader puts you back on your verse itself; the browser's own scroll
 // restoration would fight it.
+// The code loaded, so the blank-page guard in index.html can stand down.
+const w = window as { plainBibleStarted?: boolean; plainBibleRepair?: () => void }
+w.plainBibleStarted = true
+document.getElementById('boot-stuck')?.remove()
+
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
 // Safari on iPhone only shows a button as pressed (:active) when the page
@@ -25,6 +31,8 @@ class Crash extends Component<{}, { error?: Error }> {
         <p class="error">Something went wrong: {String(error.message || error)}</p>
         <p>Your highlights and settings are safe on this device.</p>
         <p><button onClick={() => location.reload()}>Reload</button></p>
+        {/* Clears the saved app files (not your data) and loads a fresh copy. */}
+        {w.plainBibleRepair && <p><button onClick={w.plainBibleRepair}>Repair and reload</button></p>}
       </div>
     )
   }
@@ -36,20 +44,14 @@ initNative()
 // The iOS app ships its files inside the app, so it needs no service worker.
 if (import.meta.env.PROD && !isNative && 'serviceWorker' in navigator) {
   import('virtual:pwa-register').then(({ registerSW }) => {
-    // Check for a new version whenever the app comes back to the foreground,
-    // so an installed app picks up updates without being force-closed.
     registerSW({
       immediate: true,
-      // A new version took over. Reloading right away could pull the page
-      // out from under you mid-sentence (search open, a note half typed), so
-      // it waits until you switch away from the app; you come back to the
-      // same verse on the new version.
-      onNeedReload() {
-        const reload = () => { if (document.visibilityState === 'hidden') location.reload() }
-        document.addEventListener('visibilitychange', reload)
-        reload()
-      },
+      onNeedReload: newVersionReady,
       onRegisteredSW(_url, reg) {
+        registered(reg)
+        // Check for a new version whenever the app comes back to the
+        // foreground, so an installed app picks up updates without being
+        // force-closed.
         if (reg) document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}) })
       },
     })

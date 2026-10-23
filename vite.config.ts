@@ -2,7 +2,13 @@ import { defineConfig } from 'vite'
 import preact from '@preact/preset-vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
+// Shown in Settings, so you can tell which version you have: the day it was
+// built and its commit.
+const sha = (process.env.GITHUB_SHA || '').slice(0, 7)
+const BUILD = new Date().toISOString().slice(0, 10) + (sha ? ' · ' + sha : '')
+
 export default defineConfig({
+  define: { __BUILD__: JSON.stringify(BUILD) },
   // Relative base works on a custom domain and on a GitHub Pages project path.
   base: './',
   plugins: [
@@ -26,6 +32,10 @@ export default defineConfig({
         ],
       },
       workbox: {
+        // A new version waits until the app switches to it (src/lib/update.ts),
+        // so a page never runs half old and half new.
+        skipWaiting: false,
+        clientsClaim: false,
         globPatterns: ['**/*.{js,css,html,svg,png}'],
         runtimeCaching: [
           {
