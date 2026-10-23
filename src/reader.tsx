@@ -4,8 +4,9 @@ import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { lastColor, markKey, newNoteId, notesCovering, notesOf, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
+import { FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
+import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
@@ -30,6 +31,17 @@ export function Reader({ route }: { route: Route }) {
   const [selected, setSelected] = useState<number[]>([])
   // The verses whose notes are open.
   const [noteFor, setNoteFor] = useState<NotesTarget>()
+  const [chapterSheet, setChapterSheet] = useState(false)
+  // Which of your notes mention which passages, and their #tags. Read once
+  // the page is on screen, so opening the app is never slower for it.
+  const [links, setLinks] = useState<NoteLinks>()
+  useEffect(() => {
+    if (!settings.noteReminders) return setLinks(undefined)
+    const idle = window.requestIdleCallback ?? ((f: () => void) => setTimeout(f, 300))
+    const cancel = window.cancelIdleCallback ?? clearTimeout
+    const id = idle(() => setLinks(linkNotes(marks)))
+    return () => cancel(id)
+  }, [marks, settings.noteReminders])
 
   // A version that isn't on the device can't open offline; it tries again
   // by itself once the connection is back.
@@ -367,6 +379,19 @@ export function Reader({ route }: { route: Route }) {
   const showStrongs = settings.strongs
   const t = byId.get(version)
 
+  // Your notes on this chapter: a quiet line under the title, there only
+  // when you have some. Tap it for the list.
+  const inChapter = loaded && settings.noteReminders ? chapterNotes(marks, book, chapter, rows) : []
+  const elsewhere = links && loaded ? related(links, book, chapter, inChapter) : []
+  const reminder = (inChapter.length > 0 || elsewhere.length > 0) && (
+    <button class="chapter-notes" onClick={() => setChapterSheet(true)}>
+      <NoteIcon size={18} />
+      <span>{[inChapter.length && `${inChapter.length} ${inChapter.length === 1 ? 'note' : 'notes'} here`,
+        elsewhere.length && `${elsewhere.length} elsewhere`].filter(Boolean).join(' · ')}</span>
+    </button>
+  )
+  const goNote = (x: LinkedNote) => go(readPath(version, x.book, x.chapter, x.verse, parallel))
+
   // A chapter's verses. The live page is the one you read; the other is the
   // chapter beside it while you turn, which can't be tapped and has no ids.
   const page = (b: string, c: number, live: boolean) => {
@@ -387,6 +412,7 @@ export function Reader({ route }: { route: Route }) {
     const lex = live ? setLex : undefined
     return <>
       <h1 class="chapter-title"><span class="ct-book">{bookById(b).name}</span> <span class="ct-num">{c}</span></h1>
+      {live && reminder}
       {versions.length > 1 && (
         <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
       )}
@@ -448,8 +474,20 @@ export function Reader({ route }: { route: Route }) {
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} />}
-      {noteFor && <NotesSheet book={book} chapter={chapter} {...noteFor} dir={t?.rtl ? 'rtl' : undefined}
+      {noteFor && <NotesSheet book={book} chapter={chapter} {...noteFor} dir={t?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
         text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
+      {chapterSheet && (
+        <Sheet title={`Your notes · ${bookById(book).name} ${chapter}`} onClose={() => setChapterSheet(false)}>
+          {inChapter.length > 0 && <>
+            <h3 class="notes-head">In this chapter</h3>
+            <NoteCards notes={inChapter} book={book} chapter={chapter} onPick={x => { setChapterSheet(false); toVerse(x.verse); setNoteFor({ verses: x.verses, start: { key: x.key, id: x.id } }) }} />
+          </>}
+          {elsewhere.length > 0 && <>
+            <h3 class="notes-head">From your other notes</h3>
+            <NoteCards notes={elsewhere} onPick={x => { setChapterSheet(false); goNote(x as LinkedNote) }} />
+          </>}
+        </Sheet>
+      )}
     </div>
   )
 }
@@ -586,8 +624,8 @@ export interface NotesTarget {
  *  editor for one note. The verses are shown above as a reminder. Notes are
  *  saved as you type. A sheet opened straight to one note closes when you're
  *  done with it; opened on the list, it goes back to the list. */
-export function NotesSheet({ book, chapter, verses, start, text, dir, onClose }: NotesTarget & {
-  book: string; chapter: number; text: (v: number) => string; dir?: 'rtl'; onClose: () => void
+export function NotesSheet({ book, chapter, verses, start, text, dir, links, onGo, onClose }: NotesTarget & {
+  book: string; chapter: number; text: (v: number) => string; dir?: 'rtl'; links?: NoteLinks; onGo?: (x: LinkedNote) => void; onClose: () => void
 }) {
   const { marks } = useApp()
   const list = verses.length === 1
@@ -620,8 +658,36 @@ export function NotesSheet({ book, chapter, verses, start, text, dir, onClose }:
       <div class="row">
         <button class="primary" onClick={() => setEditing(fresh())}>+ Add note</button>
       </div>
+      {links && onGo && (() => {
+        const more = related(links, book, chapter, list, verses)
+        return more.length > 0 && <>
+          <h3 class="notes-head">Also in your notes</h3>
+          <NoteCards notes={more} onPick={x => onGo(x as LinkedNote)} />
+        </>
+      })()}
       </>}
     </Sheet>
+  )
+}
+
+/** Notes as cards: where each one is (when not obvious) and its text. */
+function NoteCards({ notes, book, chapter, onPick }: {
+  notes: (FoundNote & { book?: string; chapter?: number; why?: string })[]; book?: string; chapter?: number; onPick: (x: FoundNote) => void
+}) {
+  return (
+    <ul class="note-list">
+      {notes.map(x => (
+        <li><button class="note-card" onClick={() => onPick(x)}>
+          <span class="nc-meta muted small">
+            <strong>{x.book && (x.book !== book || x.chapter !== chapter)
+              ? `${bookById(x.book).name} ${x.chapter}:${verseRanges(x.verses)}`
+              : `${x.verses.length > 1 ? 'Verses' : 'Verse'} ${verseRanges(x.verses)}`}</strong>
+            {x.why && ` · ${x.why}`}
+          </span>
+          <span class="nc-text">{x.n}</span>
+        </button></li>
+      ))}
+    </ul>
   )
 }
 

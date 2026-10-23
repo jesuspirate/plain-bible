@@ -163,7 +163,7 @@ export function App() {
           : <ReaderRoute route={route} />}
       </main>
       {/* With the full bar hidden, a small round search button takes its place,
-          and opens the same panel (with Settings, Saved and the theme). */}
+          and opens the same panel (with Settings and the theme). */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
       {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
