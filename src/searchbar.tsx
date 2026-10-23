@@ -9,7 +9,7 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, readPath, useApp } from './state'
+import { go, openPrayer, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
 import { BookmarkIcon } from './icons'
 
@@ -20,15 +20,6 @@ export function rememberSearch(q: string) {
   try { localStorage.setItem(RECENT, JSON.stringify(list)) } catch { /* ignore */ }
 }
 
-type Recognition = { lang: string; interimResults: boolean; start(): void; stop(): void; onresult: (e: any) => void; onend: () => void; onerror: (e: any) => void }
-// iPhone and iPad expose speech recognition but refuse it inside home-screen
-// apps; their keyboard has its own dictation key, so we leave voice to that.
-const IOS = typeof navigator !== 'undefined' && (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
-const MIC_OFF = 'plain-bible:mic-off'
-const micBroken = () => { try { return localStorage.getItem(MIC_OFF) === '1' } catch { return false } }
-const SpeechRecognition: (new () => Recognition) | undefined =
-  typeof window !== 'undefined' && !IOS ? (window as any).SpeechRecognition || (window as any).webkitSpeechRecognition : undefined
-
 // With `mini`, the closed bar shrinks to a small round button in the corner;
 // tapping it opens the same panel.
 export function SearchBar({ here, mini }: { here?: { version: string; book: string; chapter: number }; mini?: boolean }) {
@@ -38,14 +29,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [browse, setBrowse] = useState<string>()
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
-  const [listening, setListening] = useState(false)
-  const [micOk, setMicOk] = useState(() => !!SpeechRecognition && !micBroken())
-  const [micNote, setMicNote] = useState('')
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
-  const recognizer = useRef<Recognition>()
   const version = here?.version ?? settings.version
   const t = byId.get(version)
 
@@ -218,27 +205,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     else searchAll()
   }
 
-  const toggleMic = () => {
-    if (!SpeechRecognition) return
-    if (listening) { recognizer.current?.stop(); return }
-    const r = new SpeechRecognition()
-    r.lang = navigator.language || 'en-US'
-    r.interimResults = true
-    r.onresult = (e: any) => setQ(Array.from(e.results).map((x: any) => x[0].transcript).join(''))
-    r.onend = () => setListening(false)
-    r.onerror = (e: any) => {
-      setListening(false)
-      if (e?.error === 'not-allowed' || e?.error === 'service-not-allowed') {
-        setMicNote('Voice input is blocked here. Allow the microphone for this site, or use your keyboard’s dictation key.')
-        if (e.error === 'service-not-allowed') { try { localStorage.setItem(MIC_OFF, '1') } catch { /* ignore */ } setMicOk(false) }
-      } else if (e?.error === 'no-speech') setMicNote('Didn’t catch that. Tap the mic and try again.')
-      else if (e?.error !== 'aborted') setMicNote('Voice input isn’t working in this browser right now.')
-    }
-    recognizer.current = r
-    setMicNote(''); setListening(true); setOpen(true)
-    try { r.start() } catch { setListening(false); setMicNote('Voice input isn’t available in this browser.') }
-  }
-
   return (
     <>
       {open && <div class="sb-scrim" onClick={close} />}
@@ -249,7 +215,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
             <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
-            {micNote && <p class="sb-note">{micNote}</p>}
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
                 <span class="sb-kicker">Go to · {version}</span>
@@ -337,18 +302,21 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? 'Search' : `Search ${version} or go to a passage`}
-            placeholder={listening ? 'Listening…' : here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
+            placeholder={here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {/* Light, sepia, dark: always one tap away, right in the bar. */}
           {!open && !mini && <ThemeToggle class="sb-theme" />}
-          {micOk && (open || !mini) && (
-            <button type="button" class={'sb-mic' + (listening ? ' on' : '')} aria-label={listening ? 'Stop dictation' : 'Search by voice'} onClick={toggleMic}>
-              <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" /></svg>
+          {/* Prayer, always one tap away: opens the glowing microphone over the page. */}
+          {!open && !mini && (
+            <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}>
+              <span class="sb-pray-emoji" aria-hidden="true">🙏{settings.prayTone}</span>
             </button>
           )}
         </form>
+        {/* With the bar hidden, prayer gets its own round button above search. */}
+        {mini && !open && <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}><span class="sb-pray-emoji" aria-hidden="true">🙏{settings.prayTone}</span></button>}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
       </div>

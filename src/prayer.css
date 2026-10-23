@@ -1,0 +1,63 @@
+/* Loaded with the prayer overlay, not at startup. */
+html.praying { overflow: hidden; }
+.pray {
+  position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center;
+  padding: max(16px, env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
+  /* just enough to know the words are still there; no blur, so it stays smooth */
+  background: rgba(12, 10, 6, .38); animation: sb-fade .35s ease-out;
+  color: #fff; -webkit-tap-highlight-color: transparent;
+}
+:root[data-theme='dark'] .pray { background: rgba(0, 0, 0, .5); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray { background: rgba(0, 0, 0, .5); } }
+.pray-close {
+  all: unset; cursor: pointer; position: absolute; top: max(12px, env(safe-area-inset-top)); right: max(12px, env(safe-area-inset-right));
+  display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; font-size: 18px;
+  background: rgba(0, 0, 0, .35); color: #fff;
+}
+.pray-center { display: flex; flex-direction: column; align-items: center; gap: 34px; margin-top: auto; }
+.pray-mic {
+  all: unset; cursor: pointer; position: relative; display: grid; place-items: center; width: 132px; height: 132px; border-radius: 50%;
+  color: #5a3a12; background: radial-gradient(circle at 50% 35%, #fffaf0 0%, #ffe3a3 45%, #f0b95a 100%);
+  box-shadow: 0 0 0 1px rgba(255, 240, 210, .6), 0 10px 40px rgba(240, 180, 80, .55);
+  transition: transform .2s cubic-bezier(.2, .8, .2, 1);
+}
+.pray-mic svg { position: relative; z-index: 1; }
+/* The light around it: a soft halo that breathes. Only opacity and scale
+   change, which phones draw without effort. */
+.pray-mic::before, .pray-mic::after {
+  content: ''; position: absolute; inset: -70px; border-radius: 50%; pointer-events: none;
+  background: radial-gradient(circle, rgba(255, 222, 150, .65) 0%, rgba(255, 210, 120, .25) 38%, transparent 68%);
+  animation: pray-breathe 4.5s ease-in-out infinite; will-change: transform, opacity;
+}
+.pray-mic::after { inset: -6px; background: none; border: 2px solid rgba(255, 228, 170, .8); opacity: 0; animation: none; }
+.pray-mic:active { transform: scale(.96); }
+.pray-mic.on { color: #fff; background: radial-gradient(circle at 50% 35%, #ffd98a 0%, #f2a541 55%, #d9822b 100%); }
+.pray-mic.on::before { animation-duration: 2.2s; }
+.pray-mic.on::after { animation: pray-ripple 2.2s ease-out infinite; }
+@keyframes pray-breathe { 0%, 100% { opacity: .6; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.06); } }
+@keyframes pray-ripple { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
+/* A soft dark card keeps the words readable over the text behind. */
+.pray-words { max-width: 340px; text-align: center; padding: 12px 18px 8px; border-radius: 18px; background: rgba(20, 16, 10, .86); }
+.pray-words p { margin: 0 0 6px; font-size: 17px; line-height: 1.45; }
+.pray-time { font: 600 28px var(--sans); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
+.pray-amen { font: 600 22px var(--serif); }
+.pray-verse { all: unset; cursor: pointer; display: block; padding-bottom: 6px; font: italic 17px/1.5 var(--reading); color: #fff7e6; }
+.pray-ref { display: block; margin-top: 4px; font: 600 13px var(--sans); font-style: normal; color: #ffe3a3; }
+.pray-foot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.pray-pill { border: none; border-radius: 99px; padding: 10px 18px; font: 600 15px var(--sans); background: rgba(255, 255, 255, .92); color: #2a2218; }
+.pray-private { margin: 0; padding: 4px 12px; border-radius: 99px; font-size: 13px; color: rgba(255, 255, 255, .85); background: rgba(28, 22, 14, .7); }
+.pray-list {
+  margin-top: auto; width: min(480px, 100%); max-height: 64vh; overflow: auto; overscroll-behavior: contain;
+  padding: 12px 8px 8px; border-radius: 20px; background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+  animation: sb-rise .22s cubic-bezier(.2, .8, .2, 1);
+}
+.pray-list h2 { margin: 2px 10px 8px; font-size: 18px; }
+.pray-list > p { margin: 8px 10px 12px; }
+.pray-list ol { list-style: none; margin: 0; padding: 0; }
+.pray-list li { display: flex; align-items: center; gap: 12px; padding: 8px 6px 8px 8px; border-radius: 14px; }
+.pray-list li.on { background: var(--chip); }
+.pray-play { display: grid; place-items: center; flex: none; width: 42px; height: 42px; padding: 0; border-radius: 50%; border: none; background: var(--accent); color: var(--accent-ink); }
+.pray-when { flex: 1; min-width: 0; font-size: 15px; font-variant-numeric: tabular-nums; }
+.pray-confirm { display: flex; gap: 6px; }
+button.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
+@media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after { animation: none; } }
