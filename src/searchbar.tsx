@@ -12,6 +12,7 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
 import { BookmarkIcon } from './icons'
+import { reopenSettings, SettingsSheet } from './settings'
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -37,7 +38,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [lens, setLens] = useState<Record<string, number>>({})
   const [browse, setBrowse] = useState<string>()
   const [q, setQ] = useState('')
-  const [open, setOpen] = useState(false)
+  // Settings rise as a sheet out of the open panel; pulling them down goes back to it.
+  const [settingsOpen, setSettingsOpen] = useState(reopenSettings)
+  const [open, setOpen] = useState(settingsOpen)
   const [listening, setListening] = useState(false)
   const [micOk, setMicOk] = useState(() => !!SpeechRecognition && !micBroken())
   const [micNote, setMicNote] = useState('')
@@ -158,7 +161,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     return () => { stale = true; clearTimeout(timer) }
   }, [trimmed, version])
 
-  const close = () => { setOpen(false); input.current?.blur() }
+  const close = () => { setOpen(false); setSettingsOpen(false); input.current?.blur() }
 
   // A tap only counts in the panel if the finger went down on that same
   // button and stayed put. The tap that opens search lands on the bar, but on
@@ -321,7 +324,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 </div>
                 {/* Everything else, out of the way until you need it. */}
                 <div class="sb-tools">
-                  <button class="sb-chip sb-tool" onClick={() => finish('settings')}>
+                  <button class="sb-chip sb-tool" onClick={() => { input.current?.blur(); setSettingsOpen(true) }}>
                     <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
                     <span>Settings</span>
                   </button>
@@ -352,6 +355,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
       </div>
+      {open && settingsOpen && <SettingsSheet onBack={() => setSettingsOpen(false)} onDone={() => { close(); setQ('') }} />}
     </>
   )
 }
