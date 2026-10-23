@@ -282,6 +282,19 @@ main.with-bar { padding-bottom: 120px; }
 @media (hover: hover) { .sb-row:hover { background: var(--chip); } }
 .sb-row .sb-glass { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .sb, .sb-panel, .sb-scrim { transition: none; animation: none; } }
+/* Search bar turned off: a small, quiet round button in the corner instead.
+   The real field sits invisibly on top of it, so one tap brings up the
+   keyboard on iPhone too. */
+main.with-mini { padding-bottom: 84px; }
+.sb.sb-mini { left: auto; right: calc(16px + env(safe-area-inset-right)); width: 48px; transform: none; }
+.sb-mini .sb-field {
+  position: relative; width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%;
+  background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none;
+  border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+.sb-mini .sb-field input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.sb-mini .sb-clear { display: none; }
+.sb-mini .sb-field:active { transform: scale(.94); }
 
 .sb-chapters { padding-bottom: 6px; }
 .sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; scroll-behavior: smooth; }
