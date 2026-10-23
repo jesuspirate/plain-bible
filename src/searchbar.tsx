@@ -9,9 +9,9 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, readPath, resumePath, useApp } from './state'
-import { loadTrail, stepTo, Trail } from './lib/history'
-import { VerseText } from './ui'
+import { go, readPath, useApp } from './state'
+import { ThemeToggle, VerseText } from './ui'
+import { BookmarkIcon } from './icons'
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -40,8 +40,6 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   const [micOk, setMicOk] = useState(() => !!SpeechRecognition && !micBroken())
   const [micNote, setMicNote] = useState('')
   const [recent, setRecent] = useState<string[]>(loadRecent)
-  const [trail, setTrail] = useState<Trail>()
-  const [showRead, setShowRead] = useState(false)
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
@@ -98,7 +96,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   useEffect(() => {
     if (open) data.bible(version).then(b => setLens(Object.fromEntries(Object.entries(b.books).map(([k, v]) => [k, v.length]))))
   }, [open, version])
-  useEffect(() => { if (!open) { setBrowse(undefined); setShowRead(false) } else setTrail(loadTrail()) }, [open])
+  useEffect(() => { if (!open) setBrowse(undefined) }, [open])
   const browseBook = browse ?? here?.book ?? 'Gen'
   const chapters = lens[browseBook] ?? 0
 
@@ -159,7 +157,6 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   }, [trimmed, version])
 
   const close = () => { setOpen(false); input.current?.blur() }
-  const parallelOf = () => new URLSearchParams(location.hash.split('?')[1] || '').get('p')?.split(',') ?? []
 
   // Pull the panel down from its top to close it, like an iOS sheet.
   const pull = useRef<{ y: number; dy: number }>()
@@ -262,19 +259,6 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             )}
             {!trimmed && (
               <>
-                {trail && trail.items.length > 1 && (
-                  // Folded to one quiet line; tap to see the places.
-                  <div class="sb-books sb-read">
-                    <button class="sb-fold" aria-expanded={showRead} onClick={() => setShowRead(x => !x)}>
-                      Recently read <span aria-hidden="true">{showRead ? '▴' : '▾'}</span>
-                    </button>
-                    {showRead && trail.items.map((_, i) => i).reverse().filter(i => !(here && trail.items[i].book === here.book && trail.items[i].chapter === here.chapter)).slice(0, 8).map(i => {
-                      const p = trail.items[i]
-                      return <button class="sb-chip" onClick={() => { stepTo(i); finish(resumePath(version, p.book, p.chapter, p.verse, here ? parallelOf() : [])) }}>
-                        {formatRef({ book: p.book, chapter: p.chapter, verse: p.verse > 1 ? p.verse : undefined }, true)}</button>
-                    })}
-                  </div>
-                )}
                 {recent.length > 0 && (
                   <div class="sb-recent">
                     <div class="sb-kicker">Recent searches <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button></div>
@@ -303,6 +287,14 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
                     <button class="sb-chip" onClick={() => setQ(x)}>{x}</button>
                   ))}
                 </div>
+                {/* Everything else, out of the way until you need it. */}
+                <div class="sb-tools">
+                  <button class="sb-chip sb-tool" onClick={() => finish('settings')}>
+                    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
+                    <span>Settings</span>
+                  </button>
+                  <button class="sb-chip sb-tool" onClick={() => finish('saved')}><BookmarkIcon size={20} /><span>Saved</span></button>
+                </div>
               </>
             )}
           </div>
@@ -315,6 +307,8 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
+          {/* Light, sepia, dark: always one tap away, right in the bar. */}
+          {!open && <ThemeToggle class="sb-theme" />}
           {micOk && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} aria-label={listening ? 'Stop dictation' : 'Search by voice'} onClick={toggleMic}>
               <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><rect x="9" y="3" width="6" height="11" rx="3" fill="currentColor" /><path d="M5.5 11a6.5 6.5 0 0 0 13 0M12 17.5V21" stroke="currentColor" stroke-width="1.8" fill="none" stroke-linecap="round" /></svg>
