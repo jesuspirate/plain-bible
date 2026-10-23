@@ -434,6 +434,10 @@ article.chapter.turning { position: relative; z-index: 6; background: var(--bg);
 .chapter.turning::after { content: ''; position: absolute; top: -200px; bottom: 0; right: -40px; width: 24px; pointer-events: none;
   background: linear-gradient(to right, rgba(0,0,0,.16), rgba(0,0,0,0)); }
 
+/* While a page turns the top bar is solid, so the pages and shade moving
+   under it never show through: everything stops at its bottom line. */
+html.page-turning header.top { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+
 /* Double-tap never zooms the page (a quick second tap on a verse highlights
    it instead); pinching to zoom still works everywhere. */
 html, body { touch-action: manipulation; }
