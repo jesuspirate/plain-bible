@@ -6,7 +6,7 @@
 // It is built only while a turn happens, from a copy of the page, so it
 // costs nothing at startup or while reading.
 
-const MS = 340, STAGGER = 55, SHEETS = 3, EASE = 'cubic-bezier(.45, .05, .25, 1)'
+const MS = 340, STAGGER = 55, SHEETS = 3, BLUR = 5, EASE = 'cubic-bezier(.45, .05, .25, 1)'
 
 export interface Fold {
   /** Follow the finger: 0 is flat, 1 is folded all the way over. */
@@ -66,6 +66,14 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
   document.body.append(root)
   article.style.visibility = 'hidden'
 
+  // The words on a page go soft as it stands up and sharpen as it lies down.
+  const blur = (f: HTMLElement, back: boolean, t: KeyframeAnimationOptions) => {
+    const words = f.firstElementChild as HTMLElement | null
+    if (!words || words.classList.contains('fold-shade')) return []
+    const steps = [{ filter: 'blur(0px)' }, { filter: `blur(${BLUR}px)`, offset: .5 }, { filter: `blur(${BLUR}px)` }]
+    return [words.animate(back ? steps.reverse() : steps, t)]
+  }
+
   // Each leaf turns over the spine; once it passes upright it is no longer
   // under the pages still to turn but on top of the ones already over.
   const play = (l: typeof leaves[number], i: number, delay: number) => {
@@ -79,6 +87,7 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
       ], t),
       l.front.s.animate([{ opacity: 0 }, { opacity: 1, offset: .5 }, { opacity: 1 }], t),
       l.back.s.animate([{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0 }], t),
+      ...blur(l.front.f, false, t),
     ]
   }
   const first = play(leaves[0], 0, 0)
@@ -102,7 +111,11 @@ export function startFold(article: HTMLElement, dir: 1 | -1): Fold {
       let tries = 0
       const look = () => {
         const n = next()
-        if (n && n !== article && n.isConnected) leaves[SHEETS].back.f.prepend(slice(n, stayX))
+        if (n && n !== article && n.isConnected) {
+          const last = leaves[SHEETS].back.f
+          last.prepend(slice(n, stayX))
+          blur(last, true, { duration: MS, delay: SHEETS * STAGGER, easing: EASE, fill: 'both' }).forEach(a => { a.startTime = rest[0].startTime })
+        }
         else if (!done && ++tries < 20) requestAnimationFrame(look)
       }
       setTimeout(look, SHEETS * STAGGER + MS * .4)
