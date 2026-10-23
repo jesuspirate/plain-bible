@@ -314,12 +314,12 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           {/* Prayer, always one tap away: opens the glowing microphone over the page. */}
           {!open && !mini && (
             <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}>
-              <span class="sb-pray-emoji" aria-hidden="true">🙏{settings.prayTone}</span>
+              <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
             </button>
           )}
         </form>
         {/* With the bar hidden, prayer gets its own round button above search. */}
-        {mini && !open && <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}><span class="sb-pray-emoji" aria-hidden="true">🙏{settings.prayTone}</span></button>}
+        {mini && !open && <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}><span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span></button>}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
       </div>
