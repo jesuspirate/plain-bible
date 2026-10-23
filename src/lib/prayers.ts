@@ -3,11 +3,15 @@
 // The audio is stored as raw bytes with its type: older iPhones can't keep a
 // Blob in IndexedDB.
 
+import type { PrayerVerse } from './prayerVerses'
+
 /** One stretch of recording. */
 export interface Part { ms: number; type: string; audio: ArrayBuffer }
 /** A prayer: its first part, plus any parts added after it was interrupted
- *  (the phone locked) and picked up again. `ms` is the length of them all. */
-export interface Prayer extends Part { id: string; at: number; more?: Part[] }
+ *  (the phone locked) and picked up again. `ms` is the length of them all.
+ *  `verse`: the verses it was prayed over, if any. Once set it stays, so
+ *  every device ends up with the same one. */
+export interface Prayer extends Part { id: string; at: number; more?: Part[]; verse?: PrayerVerse }
 /** A prayer without its audio; `parts` counts its parts. */
 export type PrayerInfo = Omit<Prayer, 'audio' | 'more'> & { parts: number }
 
@@ -48,6 +52,12 @@ export const prayers = {
     const p = await prayers.get(id)
     if (!p) throw new Error('gone')
     await prayers.put(withPart(p, part))
+  },
+  /** Tie a prayer to a verse, unless it already has one. */
+  setVerse: async (id: string, verse: PrayerVerse) => {
+    const p = await prayers.get(id)
+    if (!p) throw new Error('gone')
+    if (!p.verse) await prayers.put({ ...p, verse })
   },
   delete: (id: string) => tx('readwrite', s => s.delete(id)).then(() => {}),
 }

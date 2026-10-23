@@ -67,3 +67,16 @@ button.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .pray-sync .row { margin-bottom: 8px; }
 .pray-key code { display: block; padding: 10px 12px; border-radius: 10px; background: var(--chip); font: 600 15px/1.4 ui-monospace, Menlo, monospace; letter-spacing: .03em; user-select: all; -webkit-user-select: all; }
 .pray-code { width: 100%; box-sizing: border-box; margin-bottom: 8px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); font: 15px ui-monospace, Menlo, monospace; text-transform: uppercase; }
+/* The verses a prayer is prayed over: at the top, out of the way of the light. */
+.pray-over {
+  position: absolute; top: max(14px, env(safe-area-inset-top)); left: 64px; right: 64px; margin: 0 auto; width: fit-content; max-width: calc(100% - 128px);
+  display: flex; align-items: center; gap: 6px; box-sizing: border-box; min-height: 44px; padding: 6px 6px 6px 16px; border-radius: 99px;
+  font: 16px/1.3 var(--sans); color: #fff7e6; background: rgba(20, 16, 10, .86);
+}
+.pray-over strong { color: #ffe3a3; font-weight: 600; }
+button.pray-over.offer { border: 1px dashed rgba(255, 227, 163, .7); padding-right: 16px; cursor: pointer; }
+.pray-over-x { all: unset; cursor: pointer; display: grid; place-items: center; flex: none; width: 32px; height: 32px; border-radius: 50%; font-size: 14px; background: rgba(255, 255, 255, .14); }
+.pray-tied { all: unset; cursor: pointer; display: block; margin: 4px auto 8px; padding: 6px 4px; font: 15px var(--sans); color: #fff7e6; }
+.pray-tied strong { color: #ffe3a3; font-weight: 600; }
+.pray-add { margin: 6px 0 8px; }
+button.pray-list-verse { display: block; margin: 0; padding: 2px 0 0; font-size: 14px; text-align: left; }

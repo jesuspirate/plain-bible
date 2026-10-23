@@ -4,6 +4,7 @@ import { useContext, useEffect, useState } from 'preact/hooks'
 import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
 import type { Marks } from './lib/marks'
+import type { PrayerVerse } from './lib/prayerVerses'
 
 export type FontId = 'literata' | 'source-serif' | 'garamond' | 'inter' | 'atkinson' | 'system'
 
@@ -88,6 +89,28 @@ export const useApp = () => useContext(AppContext)
 /** Open the prayer overlay over whatever is on screen. */
 export const PRAY_EVENT = 'plain-bible:pray'
 export const openPrayer = () => window.dispatchEvent(new Event(PRAY_EVENT))
+
+// A prayer can be tied to a verse. Verses you just selected are offered when
+// you open prayer soon after; Pray on the selection bar ties them at once.
+let picked: { verse: PrayerVerse; at: number; sure: boolean } | undefined
+/** The reader calls this as verses are selected. */
+export const versesPicked = (verse: PrayerVerse) => { picked = { verse, at: Date.now(), sure: false } }
+/** Pray over these verses. */
+export const prayOver = (verse: PrayerVerse) => { picked = { verse, at: Date.now(), sure: true }; openPrayer() }
+/** What to offer as the prayer opens: verses selected in the last two
+ *  minutes, and whether they were chosen for this prayer. Asked once. */
+export function verseToPrayOver() {
+  const p = picked
+  picked = undefined
+  return p && Date.now() - p.at < 120_000 ? { verse: p.verse, sure: p.sure } : undefined
+}
+
+// After a prayer, "Add a verse" lets you tap one on the page.
+export const PICK_EVENT = 'plain-bible:pick-verse'
+let awaiting: string | undefined
+/** The prayer waiting for a verse to be tapped, if any. */
+export const prayerAwaitingVerse = () => awaiting
+export const awaitVerse = (id: string | undefined) => { awaiting = id; window.dispatchEvent(new Event(PICK_EVENT)) }
 
 // ---- hash routing ------------------------------------------------------------
 
