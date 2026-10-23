@@ -199,8 +199,8 @@ function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange
     el.src = urls[0]
     el.play().catch(release)
   }
-  // A copy you keep yourself: the share sheet on phones (Files, Voice
-  // Memos…), a download elsewhere. Each part is its own file.
+  // Send it to someone, or keep your own copy: the share sheet on phones
+  // (Messages, Files, Voice Memos…), a download elsewhere. Each part is its own file.
   const ready = useRef<{ id: string; files: File[] }>()
   const [again, setAgain] = useState<string>()
   const save = async (p: PrayerInfo) => {
@@ -250,8 +250,8 @@ function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange
               <span class="pray-when">{when(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span></span>
               {confirm === p.id
                 ? <span class="pray-confirm"><button class="small" onClick={() => setConfirm(undefined)}>Keep</button><button class="small danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? 'Delete everywhere' : 'Delete'}</button></span>
-                : <><button class="icon small pray-save" aria-label="Save a copy of this prayer" title="Save a copy" onClick={() => save(p)}>
-                    {again === p.id ? 'Save' : <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>}
+                : <><button class="icon small pray-save" aria-label="Share or save this prayer" title="Share or save" onClick={() => save(p)}>
+                    {again === p.id ? 'Share' : <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>}
                   </button>
                   <button class="icon small" aria-label="Delete this prayer" onClick={() => setConfirm(p.id)}>✕</button></>}
             </li>
