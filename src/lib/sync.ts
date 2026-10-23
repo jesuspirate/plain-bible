@@ -107,8 +107,10 @@ async function usePasskey(options: any) {
   return CapacitorPasskey.getCredential({ origin: RP_ORIGIN, publicKey: options }) as Promise<any>
 }
 
-// Native errors carry the WebAuthn error name in `code`.
-const cancelled = (e: unknown) => e instanceof Error && ['NotAllowedError', 'AbortError'].includes((e as { code?: string }).code ?? e.name)
+// Native errors carry the WebAuthn error name in `code`; SimpleWebAuthn's
+// errors keep it in `name` and use `code` for their own labels.
+const cancelled = (e: unknown) => e instanceof Error &&
+  [(e as { code?: string }).code, e.name].some(n => n === 'NotAllowedError' || n === 'AbortError')
 
 /** Create an account, or with a token add a passkey to that account. */
 export async function register(token?: string): Promise<string | undefined> {

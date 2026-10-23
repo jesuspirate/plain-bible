@@ -1,4 +1,4 @@
-import { render } from 'preact'
+import { Component, render } from 'preact'
 import { App } from './app'
 import './fonts'
 import './styles.css'
@@ -8,7 +8,24 @@ import { initNative, isNative } from './lib/native'
 // restoration would fight it.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
-render(<App />, document.getElementById('app')!)
+// Without this, an error while drawing the page leaves it blank. Show what
+// went wrong instead, so it can be reported, and a way back.
+class Crash extends Component<{}, { error?: Error }> {
+  componentDidCatch(error: Error) { this.setState({ error }) }
+  render() {
+    const { error } = this.state
+    if (!error) return this.props.children
+    return (
+      <div class="center">
+        <p class="error">Something went wrong: {String(error.message || error)}</p>
+        <p>Your highlights and settings are safe on this device.</p>
+        <p><button onClick={() => location.reload()}>Reload</button></p>
+      </div>
+    )
+  }
+}
+
+render(<Crash><App /></Crash>, document.getElementById('app')!)
 initNative()
 
 // The iOS app ships its files inside the app, so it needs no service worker.
