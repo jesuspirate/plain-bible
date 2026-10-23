@@ -18,6 +18,10 @@ const DAY = 86_400_000
 const SESSION_DAYS = 365
 const CHALLENGE_MS = 5 * 60_000
 const MAX_BODY = 2_000_000
+// Prayers: encrypted audio, sent in chunks that each fit in a row.
+const CHUNK_MAX = 1_100_000
+const MAX_CHUNKS = 64
+const PRAYER_QUOTA = 300_000_000
 
 class HttpError extends Error {
   constructor(public status: number, message: string, public extra?: object) { super(message) }
@@ -102,10 +106,96 @@ async function saveChallenge(env: Env, challenge: string, userId: string | null)
 // ---------------------------------------------------------------------------
 // Routes
 
+// Prayer sync. The app encrypts each recording with a key only the user's
+// devices hold, so all of this is opaque bytes plus ids and sizes.
+const PRAYER_ID = /^[a-z0-9]{4,40}$/
+const bytes = (v: unknown) => v instanceof ArrayBuffer ? v : new Uint8Array(v as number[]).buffer
+
+async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const userId = await session(req, env)
+  const db = env.DB
+  const [a, b, c] = parts
+  // Everything there is, so a device can see what it is missing.
+  if (req.method === 'GET' && !a) {
+    const [key, list, gone] = await Promise.all([
+      db.prepare('SELECT key_id FROM prayer_keys WHERE user_id = ?').bind(userId).first<{ key_id: string }>(),
+      db.prepare('SELECT prayer, part, chunks, size FROM prayer_parts WHERE user_id = ? ORDER BY prayer, part').bind(userId).all(),
+      db.prepare('SELECT prayer FROM prayer_gone WHERE user_id = ?').bind(userId).all<{ prayer: string }>(),
+    ])
+    return json({ keyId: key?.key_id ?? null, parts: list.results, gone: gone.results.map(r => r.prayer) })
+  }
+  // The key's fingerprint is set once, by the first device to turn sync on.
+  if (a === 'key' && !b && req.method === 'PUT') {
+    const { keyId } = await readJson<{ keyId: string }>(req)
+    if (typeof keyId !== 'string' || !/^[\w-]{8,64}$/.test(keyId)) throw new HttpError(400, 'Bad key id')
+    await db.prepare('INSERT INTO prayer_keys (user_id, key_id, created) VALUES (?, ?, ?) ON CONFLICT(user_id) DO NOTHING').bind(userId, keyId, Date.now()).run()
+    const cur = await db.prepare('SELECT key_id FROM prayer_keys WHERE user_id = ?').bind(userId).first<{ key_id: string }>()
+    if (cur?.key_id !== keyId) throw new HttpError(409, 'This account already has a prayer key', { keyId: cur?.key_id })
+    return json({ ok: true })
+  }
+  // The key wrapped for one passkey.
+  if (a === 'wrap' && b && !c) {
+    if (req.method === 'GET') {
+      const row = await db.prepare('SELECT wrapped FROM prayer_wraps WHERE cred_id = ? AND user_id = ?').bind(b, userId).first<{ wrapped: string }>()
+      if (!row) throw new HttpError(404, 'No key for this passkey')
+      return json({ wrapped: row.wrapped })
+    }
+    if (req.method === 'PUT') {
+      const { wrapped } = await readJson<{ wrapped: string }>(req)
+      if (typeof wrapped !== 'string' || wrapped.length > 500) throw new HttpError(400, 'Bad request')
+      const cred = await db.prepare('SELECT 1 FROM credentials WHERE id = ? AND user_id = ?').bind(b, userId).first()
+      if (!cred) throw new HttpError(404, 'Not your passkey')
+      await db.prepare('INSERT INTO prayer_wraps (cred_id, user_id, wrapped, created) VALUES (?, ?, ?, ?) ON CONFLICT(cred_id) DO UPDATE SET wrapped = excluded.wrapped')
+        .bind(b, userId, wrapped, Date.now()).run()
+      return json({ ok: true })
+    }
+  }
+  if (!a || !PRAYER_ID.test(a)) throw new HttpError(404, 'Not found')
+  // Deleting a prayer deletes it on every device.
+  if (req.method === 'DELETE' && !b) {
+    await db.batch([
+      db.prepare('DELETE FROM prayer_chunks WHERE user_id = ? AND prayer = ?').bind(userId, a),
+      db.prepare('DELETE FROM prayer_parts WHERE user_id = ? AND prayer = ?').bind(userId, a),
+      db.prepare('INSERT INTO prayer_gone (user_id, prayer, at) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').bind(userId, a, Date.now()),
+    ])
+    return json({ ok: true })
+  }
+  const part = Number(b), n = Number(c)
+  if (!Number.isInteger(part) || part < 0 || part > 999 || !Number.isInteger(n) || n < 0 || n >= MAX_CHUNKS) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET') {
+    const row = await db.prepare('SELECT data FROM prayer_chunks WHERE user_id = ? AND prayer = ? AND part = ? AND n = ?').bind(userId, a, part, n).first<{ data: unknown }>()
+    if (!row) throw new HttpError(404, 'Not found')
+    return new Response(bytes(row.data), { headers: { 'Content-Type': 'application/octet-stream', 'Cache-Control': 'no-store' } })
+  }
+  if (req.method === 'PUT') {
+    const of = Number(new URL(req.url).searchParams.get('of'))
+    if (!Number.isInteger(of) || of < 1 || of > MAX_CHUNKS || n >= of) throw new HttpError(400, 'Bad chunk')
+    const data = await req.arrayBuffer()
+    if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
+    if (await db.prepare('SELECT 1 FROM prayer_gone WHERE user_id = ? AND prayer = ?').bind(userId, a).first()) throw new HttpError(410, 'Deleted')
+    const used = await db.prepare('SELECT COALESCE(SUM(size), 0) AS n FROM prayer_parts WHERE user_id = ?').bind(userId).first<{ n: number }>()
+    if ((used?.n ?? 0) + data.byteLength > PRAYER_QUOTA) throw new HttpError(413, 'Your synced prayers have reached the storage limit')
+    await db.prepare('INSERT INTO prayer_chunks (user_id, prayer, part, n, of, data) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data')
+      .bind(userId, a, part, n, of, data).run()
+    // The part is listed once all its chunks are in.
+    const have = await db.prepare('SELECT COUNT(*) AS c, SUM(LENGTH(data)) AS size FROM prayer_chunks WHERE user_id = ? AND prayer = ? AND part = ? AND of = ?')
+      .bind(userId, a, part, of).first<{ c: number; size: number }>()
+    if (have?.c === of) {
+      await db.prepare('INSERT INTO prayer_parts (user_id, prayer, part, chunks, size, created) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET chunks = excluded.chunks, size = excluded.size')
+        .bind(userId, a, part, of, have.size, Date.now()).run()
+    }
+    return json({ ok: true, complete: have?.c === of })
+  }
+  throw new HttpError(404, 'Not found')
+}
+
 async function route(req: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
   const rpID = env.RP_ID
+  if (pathname === '/prayers' || pathname.startsWith('/prayers/')) {
+    return prayerRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
+  }
 
   switch (key) {
     case 'GET /': return json({ service: 'plain-bible-sync', ok: true })
@@ -192,7 +282,7 @@ async function route(req: Request, env: Env): Promise<Response> {
 
     case 'DELETE /account': {
       const userId = await session(req, env)
-      await env.DB.batch(['data', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

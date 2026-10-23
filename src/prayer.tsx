@@ -6,6 +6,8 @@ import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from
 import { plain } from './lib/text'
 import { tap } from './lib/native'
 import { go, readPath, useApp } from './state'
+import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSync, turnOnPrayerSync } from './lib/prayerSync'
+import { loadAccount, SYNC_URL } from './lib/sync'
 import './prayer.css'
 
 // paused: the phone locked mid-prayer. What was said is kept, and the next
@@ -30,8 +32,10 @@ export function Prayer({ onClose }: { onClose: () => void }) {
   const alive = useRef(true)
 
   const refresh = () => prayers.list().then(l => { if (alive.current) setList(l) }, () => setList([]))
+  // With sync on, bring in what was prayed on other devices, and send what's new here.
+  const sync = () => syncPrayers().then(changed => { if (changed) refresh() }, () => {})
   useEffect(() => {
-    refresh()
+    refresh(); sync()
     data.bible(version).then(b => {
       const raw = b.books[HEARD.book]?.[HEARD.chapter - 1]?.[HEARD.verse - 1]
       if (raw && alive.current) setHeard(plain(raw))
@@ -68,7 +72,8 @@ export function Prayer({ onClose }: { onClose: () => void }) {
     if (!alive.current) { stream.getTracks().forEach(t => t.stop()); return }
     const type = recordingType()
     let recorder: MediaRecorder
-    try { recorder = new MediaRecorder(stream, type ? { mimeType: type } : undefined) } catch {
+    // A voice needs far less than music: smaller files to keep, and to sync.
+    try { recorder = new MediaRecorder(stream, { ...(type ? { mimeType: type } : {}), audioBitsPerSecond: 64_000 }) } catch {
       stream.getTracks().forEach(t => t.stop())
       setPhase('idle'); setNote('This browser can’t record audio.')
       return
@@ -91,6 +96,7 @@ export function Prayer({ onClose }: { onClose: () => void }) {
         navigator.storage?.persist?.().catch(() => {})
         resume.current = interrupted ? { id, ms: (before?.ms ?? 0) + ms } : undefined
         if (alive.current) { setPhase(interrupted ? 'paused' : 'heard'); refresh() }
+        sync()
       } catch {
         if (alive.current) { setPhase('idle'); setNote('Your prayer couldn’t be kept: this device may be out of space.') }
       }
@@ -149,18 +155,18 @@ export function Prayer({ onClose }: { onClose: () => void }) {
               : <p>Tap and speak to God. Only you will hear this again.</p>}
           </div>
         </div>
-      ) : <PrayerList list={list} onChange={refresh} />}
+      ) : <PrayerList list={list} onChange={refresh} onClose={onClose} />}
       <div class="pray-foot">
         {view === 'list'
           ? <button class="pray-pill" onClick={() => setView('pray')}>Pray</button>
-          : count > 0 && phase !== 'recording' && phase !== 'paused' && <button class="pray-pill" onClick={() => setView('list')}>Your prayers · {count}</button>}
-        <p class="pray-private">Kept on this device only.</p>
+          : phase !== 'recording' && phase !== 'paused' && <button class="pray-pill" onClick={() => setView('list')}>Your prayers{count ? ` · ${count}` : ''}</button>}
+        <p class="pray-private">{prayerSyncOn() ? 'Encrypted on this device, then synced.' : 'Kept on this device only.'}</p>
       </div>
     </div>
   )
 }
 
-function PrayerList({ list, onChange }: { list?: PrayerInfo[]; onChange: () => void }) {
+function PrayerList({ list, onChange, onClose }: { list?: PrayerInfo[]; onChange: () => void; onClose: () => void }) {
   const [playing, setPlaying] = useState<string>()
   const [pos, setPos] = useState(0)
   const [confirm, setConfirm] = useState<string>()
@@ -197,7 +203,9 @@ function PrayerList({ list, onChange }: { list?: PrayerInfo[]; onChange: () => v
     if (playing === id) release()
     setConfirm(undefined)
     await prayers.delete(id).catch(() => {})
+    await deletedHere(id).catch(() => {})
     onChange()
+    syncPrayers().catch(() => {})
   }
 
   const when = (at: number) => new Date(at).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
@@ -215,12 +223,72 @@ function PrayerList({ list, onChange }: { list?: PrayerInfo[]; onChange: () => v
               </button>
               <span class="pray-when">{when(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span></span>
               {confirm === p.id
-                ? <span class="pray-confirm"><button class="small" onClick={() => setConfirm(undefined)}>Keep</button><button class="small danger" onClick={() => remove(p.id)}>Delete</button></span>
+                ? <span class="pray-confirm"><button class="small" onClick={() => setConfirm(undefined)}>Keep</button><button class="small danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? 'Delete everywhere' : 'Delete'}</button></span>
                 : <button class="icon small" aria-label="Delete this prayer" onClick={() => setConfirm(p.id)}>✕</button>}
             </li>
           ))}
         </ol>
       )}
+      <PrayerSync onChange={onChange} onClose={onClose} />
+    </div>
+  )
+}
+
+// Sync with your other devices: off until you turn it on, here.
+function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () => void }) {
+  const [on, setOn] = useState(prayerSyncOn)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [needCode, setNeedCode] = useState(false)
+  const [code, setCode] = useState('')
+  const [shown, setShown] = useState('')
+  if (!SYNC_URL) return null
+  const signedIn = !!loadAccount()
+
+  const act = (fn: () => Promise<void>) => async () => {
+    setBusy(true); setMsg('')
+    try { await fn() } catch (e) {
+      const m = (e as Error).message
+      setMsg(m === 'Cancelled' ? 'The passkey request was cancelled. Tap to try again.' : m)
+    } finally { setBusy(false); setOn(prayerSyncOn()); onChange() }
+  }
+  const start = act(async () => {
+    const r = await turnOnPrayerSync(needCode ? code : undefined)
+    setNeedCode(r === 'needCode')
+    if (r === 'on') { setCode(''); setMsg('Your prayers now sync with your other devices.') }
+  })
+  const stop = act(async () => { await turnOffPrayerSync(); setShown(''); setMsg('Prayers stay on this device and stop syncing here.') })
+  const now = act(async () => { await syncPrayers() })
+
+  return (
+    <div class="pray-sync">
+      {on ? <>
+        <p><strong>Syncing with your devices.</strong> <span class="muted">Each prayer is encrypted on this device before it leaves it. Only your devices can hear it.</span></p>
+        {shown && <p class="pray-key"><code>{shown.replace(/-/g, '-\u200B')}</code></p>}
+        <div class="row wrap">
+          <button class="small" disabled={busy} onClick={now}>{busy ? 'Syncing…' : 'Sync now'}</button>
+          {shown
+            ? <button class="small" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy key</button>
+            : <button class="small" onClick={() => prayerKeyCode().then(setShown)}>Show prayer key</button>}
+          <button class="small" disabled={busy} onClick={stop}>Stop syncing here</button>
+        </div>
+        {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers (say, an Android phone next to an iPhone). Keep it private: it opens your prayers.</p>}
+      </> : !signedIn ? <>
+        <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
+        <button class="small" onClick={() => { onClose(); go('settings') }}>Go to Settings → Account</button>
+      </> : needCode ? <>
+        <p class="muted">This passkey can’t unlock your prayers here. On a device where they already sync, open Your prayers → Show prayer key, and type it below.</p>
+        <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"
+          autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
+        <div class="row wrap">
+          <button class="small primary" disabled={busy || !code.trim()} onClick={start}>{busy ? 'Unlocking…' : 'Unlock'}</button>
+          <button class="small" onClick={() => { setNeedCode(false); setMsg('') }}>Cancel</button>
+        </div>
+      </> : <>
+        <p class="muted">Keep your prayers on all your devices. Each one is encrypted on this device before it leaves it, so no one else, not even the server, can hear it.</p>
+        <button class="small primary" disabled={busy} onClick={start}>{busy ? 'Waiting for passkey…' : 'Sync my prayers'}</button>
+      </>}
+      {msg && <p class="note small">{msg}</p>}
     </div>
   )
 }

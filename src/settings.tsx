@@ -193,7 +193,7 @@ function SettingsBody() {
           <button class="link pray-open" onClick={openPrayer}>Pray out loud; kept on this device only ›</button>
           <div class="seg tones" role="radiogroup" aria-label="Prayer button">
             {['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'].map(t => (
-              <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>🙏{t}</button>
+              <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>{'🙏' + t}</button>
             ))}
           </div>
         </div>

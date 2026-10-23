@@ -62,3 +62,8 @@ html.praying { overflow: hidden; }
 button.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 @media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after { animation: none; } }
 .pray-amen-btn { margin: 4px 0 6px; }
+.pray-sync { margin: 10px 4px 2px; padding: 12px 8px 4px; border-top: 1px solid var(--line); }
+.pray-sync p { margin: 0 0 10px; font-size: 14px; line-height: 1.45; }
+.pray-sync .row { margin-bottom: 8px; }
+.pray-key code { display: block; padding: 10px 12px; border-radius: 10px; background: var(--chip); font: 600 15px/1.4 ui-monospace, Menlo, monospace; letter-spacing: .03em; user-select: all; -webkit-user-select: all; }
+.pray-code { width: 100%; box-sizing: border-box; margin-bottom: 8px; padding: 10px 12px; border-radius: 10px; border: 1px solid var(--line); background: var(--bg); font: 15px ui-monospace, Menlo, monospace; text-transform: uppercase; }

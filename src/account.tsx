@@ -76,6 +76,8 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       }
       saveSettingsT({ ...doc.settingsT as Record<string, number>, ...Object.fromEntries(changedHere.map(k => [k, nowT[k]])) })
       setAccount(next); setError('')
+      // Prayers sync too where turned on; that code loads only then.
+      try { if (localStorage.getItem('plain-bible:prayer-sync')) import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {}) } catch { /* ignore */ }
     } catch (e) {
       if (e instanceof SyncError && e.status === 401) { setAccount(null); setError('You were signed out. Sign in again to keep syncing.') }
       else setError((e as Error).message)
