@@ -236,12 +236,16 @@ main.with-bar { padding-bottom: 120px; }
 .sb-clear { all: unset; cursor: pointer; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; background: color-mix(in srgb, var(--muted) 45%, transparent); color: var(--surface); }
 .sb-theme { all: unset; cursor: pointer; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--text); flex: none; -webkit-tap-highlight-color: transparent; }
 .sb-theme:active { background: var(--chip); }
-/* The prayer button: a small warm light, always there. Drawn once, not animated, so it costs nothing while you read. */
+/* The prayer button: 🙏 in a small warm light, always there. Drawn once, not animated, so it costs nothing while you read. */
 .sb-pray {
-  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
-  color: #5a3a12; background: radial-gradient(circle at 50% 35%, #fffaf0 0%, #ffe3a3 45%, #f0b95a 100%);
-  box-shadow: 0 0 0 1px rgba(240, 185, 90, .55), 0 0 14px 2px rgba(245, 190, 95, .55); -webkit-tap-highlight-color: transparent;
+  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+  background: radial-gradient(circle at 50% 40%, #fffdf6 0%, #fff1cc 55%, #ffd98a 100%);
+  box-shadow: 0 0 0 1px rgba(240, 185, 90, .6), 0 0 14px 3px rgba(245, 190, 95, .55); -webkit-tap-highlight-color: transparent;
 }
+.sb-pray-emoji { font: 23px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
+.sb-mini .sb-pray-emoji { font-size: 26px; }
+.tones button { font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; padding: 8px 10px; }
+.tones button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
 .sb-pray:active { transform: scale(.94); }
 .sb-bar { display: flex; align-items: center; gap: 8px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
@@ -300,6 +304,7 @@ main.with-mini { padding-bottom: 144px; }
 .sb-mini .sb-clear { display: none; }
 .sb-mini .sb-field:active { transform: scale(.94); }
 .sb-mini .sb-bar { flex-direction: column-reverse; gap: 12px; }
+.sb-mini .sb-bar .sb-field { flex: none; }
 .sb-mini .sb-pray { width: 48px; height: 48px; }
 
 .sb-chapters { padding-bottom: 6px; }

@@ -48,14 +48,3 @@ export const RefreshIcon = ({ size, class: c }: P) => (
     <path d="M19.8 3.8v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
-/** Two hands pressed together: prayer. */
-export const PrayIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}>
-    <mask id="pray-thumbs"><rect width="24" height="24" fill="#fff" /><path d="M11.4 13.4 9.6 10.6M12.6 13.4l1.8-2.8" stroke="#000" stroke-width="1" stroke-linecap="round" /></mask>
-    <g fill="currentColor" mask="url(#pray-thumbs)">
-      <path d="M11.4 2c-.9 0-1.6.7-1.8 1.6L8.1 9.8 4.2 14.5l4.1 3.9 3.1-2.6z" />
-      <path d="M12.6 2c.9 0 1.6.7 1.8 1.6l1.5 6.2 3.9 4.7-4.1 3.9-3.1-2.6z" />
-    </g>
-    <path d="M2.9 16.6 6.4 19.9M21.1 16.6l-3.5 3.3" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" />
-  </svg>
-)
