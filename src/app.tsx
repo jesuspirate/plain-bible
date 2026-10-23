@@ -2,20 +2,19 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, openPrayer, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
-import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { HistoryIcon, RefreshIcon } from './icons'
-import { copyText, isNative } from './lib/native'
-import { applyUpdate, checkForUpdate, useUpdate } from './lib/update'
+import { applyUpdate, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
 import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
-import { hasContent, loadMarks, Marks, saveMarks } from './lib/marks'
-import { AccountSection, touchSettings, useSync } from './account'
+import { loadMarks, Marks, saveMarks } from './lib/marks'
+import { touchSettings, useSync } from './account'
+import { closeSettingsPage, noteSettingsFrom, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
@@ -121,6 +120,10 @@ export function App() {
   }, [])
 
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
+  // Remember whether Settings was opened over the reader, so closing it can
+  // step back in history instead of piling up another reader page.
+  const lastPage = useRef(page)
+  if (lastPage.current !== page) { if (page === 'settings') noteSettingsFrom(lastPage.current); lastPage.current = page }
   const sync = useSync(marks, setMarksState, settings, setSettings, id => byId.has(id))
 
   if (error) return (
@@ -148,10 +151,8 @@ export function App() {
           <HistoryButton route={route} />
           <VersionMenu route={route} />
           <UpdateButton />
-          {/* Settings live in the search panel; without the search bar they come back here. */}
-          {!settings.searchBar && <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
-            <svg class="gear" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
-          </a>}
+          {/* Settings live in the search panel; this is only for #/settings opened as a page. */}
+          {view === 'settings' && <button class="done-btn" onClick={closeSettingsPage}>Done</button>}
         </nav>
       </header>
       <main class={view === 'search' ? '' : settings.searchBar ? 'with-bar' : 'with-mini'}>
@@ -339,134 +340,5 @@ function UpdateButton() {
       onClick={() => { setBusy(true); applyUpdate() }}>
       <RefreshIcon size={24} />
     </button>
-  )
-}
-
-// The version, quietly at the very bottom of Settings. Tap it to copy it
-// (handy for reporting a problem). The line under it is the whole update:
-// it looks for a new version and switches to it if there is one, or says
-// you're up to date.
-function VersionLine() {
-  const state = useUpdate()
-  const [copied, setCopied] = useState(false)
-  const version = `Plain Bible ${__BUILD__}`
-  const copy = async () => {
-    try { await copyText(version); setCopied(true); setTimeout(() => setCopied(false), 1500) } catch { /* nothing to do */ }
-  }
-  const note = { idle: 'Tap to check for updates', checking: 'Checking…', ready: 'New version: tap to update', current: 'Up to date', offline: 'Offline, try later' }[state]
-  return (
-    <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
-      <button class="version-copy" onClick={copy} aria-label={`Version ${__BUILD__}. Tap to copy`}>{copied ? 'Copied ✓' : `Version ${__BUILD__}`}</button>
-      {!isNative && <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
-        <RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}
-      </button>}
-    </div>
-  )
-}
-
-function SettingsView() {
-  const { settings, update, catalog, marks, sync, byId } = useApp()
-  useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
-  const saved = Object.values(marks).filter(hasContent).length
-  const [pickFav, setPickFav] = useState(false)
-  // Three things most people want; the rest waits behind "More settings".
-  const [more, setMore] = useState(false)
-  const fav = settings.favorite || settings.version
-  const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
-    <div class="seg" role="radiogroup">
-      {opts.map(([v, label]) => (
-        <button role="radio" aria-checked={settings[k] === v} class={settings[k] === v ? 'on' : ''} onClick={() => update({ [k]: v } as Partial<Settings>)}>{label}</button>
-      ))}
-    </div>
-  )
-  return (
-    <div class="settings">
-      <h1>Settings</h1>
-      <div class="essentials">
-        <div class="ess"><span class="ess-label">Text size</span>
-          <div class="size-row">
-            <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
-            <span class="size-sample" aria-label={`${settings.fontSize} pixels`}>In the beginning</span>
-            <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
-          </div>
-        </div>
-        <div class="ess"><span class="ess-label">Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
-        <div class="ess"><span class="ess-label">Bible</span>
-          <button class="pick big-pick" onClick={() => setPickFav(true)}><strong>{fav}</strong> <span class="muted">{byId.get(fav)?.name}</span> <span aria-hidden="true">▾</span></button>
-          <span class="muted small">Opens every time, and works offline.</span>
-          {pickFav && <VersionPicker title="Your Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
-        </div>
-      </div>
-      <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
-      {more && <>
-      <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
-      <div class="field"><span>Prayer</span>
-        <div class="col">
-          <button class="link" onClick={openPrayer}>Pray out loud; kept on this device only ›</button>
-          <div class="seg tones" role="radiogroup" aria-label="Prayer button">
-            {['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'].map(t => (
-              <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>🙏{t}</button>
-            ))}
-          </div>
-        </div>
-      </div>
-      <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
-      {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
-      <div class="field"><span>Font</span>
-        <div class="fonts" role="radiogroup" aria-label="Reading font">
-          {FONTS.map(f => (
-            <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
-              style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
-              <span class="font-sample">In the beginning was the Word</span>
-              <span class="font-name">{f.label}<span class="muted"> · {f.note}</span></span>
-            </button>
-          ))}
-        </div>
-      </div>
-      <div class="field"><span>Search bar</span>
-        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.</label>
-      </div>
-      <div class="field"><span>Highlights</span>
-        <div class="col">
-          <span class="muted small">Tap a verse twice quickly to highlight it in the last color you used.</span>
-          {sel('highlight', [['marker', 'Marker'], ['text', 'Colored text'], ['block', 'Block']])}
-          <p class="hl-preview" aria-hidden="true">
-            <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">In the beginning was the Word, and the Word was with God,</span></span>{' '}
-            <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">and the Word was God.</span></span>
-          </p>
-        </div>
-      </div>
-      <div class="field"><span>Verse numbers</span>{sel('verseNumbers', [['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']])}</div>
-      <div class="field"><span>Chapter turn</span>
-        <div class="col">
-          {sel('turn', [['stack', 'Stack'], ['slide', 'Side by side'], ['off', 'None']])}
-          <span class="muted small">{settings.turn === 'slide' ? 'Both chapters slide across together.' : settings.turn === 'off' ? 'The chapter changes with no movement.' : 'Your page slides away over the next chapter, like a stack of pages.'}</span>
-        </div>
-      </div>
-      <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
-      <div class="field"><span>Strong's numbers</span>
-        <div class="col">
-          <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)</label>
-          <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> Show the numbers inline</label>
-        </div>
-      </div>
-      <h2>Your data</h2>
-      <DataTools />
-      <h2>About</h2>
-      <p>Plain Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
-      <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
-        the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
-        Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
-        Each version's license is listed on the Versions page.</p>
-      <p><button onClick={() => {
-        // Only the settings: highlights, notes, history and the account stay.
-        if (confirm('Reset font, theme, layout and version choices to their defaults?\n\nYour highlights, bookmarks and notes are kept, and you stay signed in.'
-          + (sync.account ? ' Your other synced devices will get the default settings too.' : ''))) {
-          update({ ...defaultSettings(catalog), favorite: undefined })
-        }
-      }}>Reset settings</button></p>
-      </>}
-      <VersionLine />
-    </div>
   )
 }

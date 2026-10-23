@@ -61,3 +61,4 @@ html.praying { overflow: hidden; }
 .pray-confirm { display: flex; gap: 6px; }
 button.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 @media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after { animation: none; } }
+.pray-amen-btn { margin: 4px 0 6px; }
