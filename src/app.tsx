@@ -373,7 +373,13 @@ function SettingsView() {
         the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
         Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
         Each version's license is listed on the Versions page.</p>
-      <p><button onClick={() => { if (confirm('Reset all settings?')) { localStorage.clear(); location.reload() } }}>Reset settings</button></p>
+      <p><button onClick={() => {
+        // Only the settings: highlights, notes, history and the account stay.
+        if (confirm('Reset font, theme, layout and version choices to their defaults?\n\nYour highlights, bookmarks and notes are kept, and you stay signed in.'
+          + (sync.account ? ' Your other synced devices will get the default settings too.' : ''))) {
+          update({ ...defaultSettings(catalog), favorite: undefined })
+        }
+      }}>Reset settings</button></p>
       </>}
     </div>
   )
