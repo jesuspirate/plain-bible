@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from 'preact/hooks'
 import { saved, Translation } from './lib/data'
+import { loadPlace } from './lib/place'
 import { go, readPath, useApp } from './state'
 
 const CACHE = 'bible-data'
@@ -30,6 +31,8 @@ export function Versions() {
     }
     return [...m.entries()]
   }, [f])
+  // A version opens where you are reading, if it has that book.
+  const here = loadPlace()?.book ?? 'Gen'
   const langs = new Set(catalog.translations.map(t => t.lang)).size
 
   const toggleMine = (id: string) => update({
@@ -66,7 +69,7 @@ export function Versions() {
                 <button class={'star' + (settings.myVersions.includes(t.id) ? ' on' : '')} aria-pressed={settings.myVersions.includes(t.id)}
                   aria-label={`Add ${t.id} to my versions`} onClick={() => toggleMine(t.id)}>★</button>
                 <div class="vinfo">
-                  <a href={'#/' + readPath(t.id, t.books.includes('John') ? 'John' : t.books[0], 1)}><strong>{t.id}</strong> {t.name}</a>
+                  <a href={'#/' + (t.books.includes(here) ? 'read/' + t.id : readPath(t.id, t.books.includes('John') ? 'John' : t.books[0], 1))}><strong>{t.id}</strong> {t.name}</a>
                   <div class="muted small">
                     {t.strongs && <span class="badge">Strong's</span>}
                     {t.books.length} books · <a href={t.source} target="_blank" rel="noopener">{t.license}</a>
@@ -82,7 +85,7 @@ export function Versions() {
           </ul>
         </section>
       ))}
-      <p><button class="link" onClick={() => go(readPath(settings.version, 'John', 1))}>← Back to reading</button></p>
+      <p><button class="link" onClick={() => go('read')}>← Back to reading</button></p>
     </div>
   )
 }

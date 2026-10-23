@@ -8,6 +8,10 @@ import { initNative, isNative } from './lib/native'
 // restoration would fight it.
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
+// Safari on iPhone only shows a button as pressed (:active) when the page
+// listens for touches; without this, taps there give no feedback at all.
+document.addEventListener('touchstart', () => {}, { passive: true })
+
 // Without this, an error while drawing the page leaves it blank. Show what
 // went wrong instead, so it can be reported, and a way back.
 class Crash extends Component<{}, { error?: Error }> {

@@ -44,6 +44,15 @@ export class DataSource {
     }
   }
 
+  /** The last list of versions that loaded, at once and without the
+   *  network, so the app opens instantly even on a slow connection. */
+  keptCatalog(): Catalog | undefined {
+    try {
+      const kept: Catalog = JSON.parse(localStorage.getItem(CATALOG_KEY) || 'null')
+      if (kept?.translations?.length) return kept
+    } catch { /* nothing kept */ }
+  }
+
   /** In the iOS app (served from capacitor://), only a few versions ship
    *  inside the app. The rest download from the website once and are kept
    *  on the device. */
@@ -71,7 +80,12 @@ export class DataSource {
   lexicon(num: string): Promise<LexEntry | undefined> {
     const which = num[0] === 'H' ? 'hebrew' : 'greek'
     let p = this.lex.get(which)
-    if (!p) { p = this.json(`strongs-${which}.json`); this.lex.set(which, p) }
+    if (!p) {
+      p = this.json(`strongs-${which}.json`)
+      // Offline the first time: try again next time, not never.
+      p.catch(() => this.lex.delete(which))
+      this.lex.set(which, p)
+    }
     return p.then(d => d[num])
   }
 }

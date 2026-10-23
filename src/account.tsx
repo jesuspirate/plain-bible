@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
-  Account, accountInfo, deleteAccount, docKey, loadAccount, mergeDocs, register, saveAccount,
+  Account, accountInfo, changedAt, deleteAccount, docKey, loadAccount, mergeDocs, register, saveAccount,
   prepareSignIn, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
 } from './lib/sync'
 import { isNative } from './lib/native'
@@ -60,8 +60,13 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       const { doc, account: next } = await syncNow(acct, local)
       // Merge again with the current state, in case something changed while syncing.
       setMarksState(cur => { const m = mergeDocs({ ...doc, marks: cur }, doc).marks; saveMarks(m); return m })
+      // A setting changed here while the sync was on its way (say, the theme
+      // tapped) is newer than what came back: keep it, and send it next time.
+      const nowT = loadSettingsT(), startT = local.settingsT
+      const changedHere = Object.keys(nowT).filter(k => changedAt(nowT, k) > changedAt(startT, k))
+      const remote = { ...doc.settings } as Partial<Settings> & Record<string, unknown>
+      for (const k of changedHere) delete remote[k]
       if (JSON.stringify(doc.settings) !== JSON.stringify(local.settings)) {
-        const remote = doc.settings as Partial<Settings>
         const ok = (id: unknown) => typeof id === 'string' && validVersion(id)
         setSettings(s => s && ({
           ...s, ...remote,
@@ -69,7 +74,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
           favorite: ok(remote.favorite) ? remote.favorite : s.favorite,
         }))
       }
-      saveSettingsT(doc.settingsT as Record<string, number>)
+      saveSettingsT({ ...doc.settingsT as Record<string, number>, ...Object.fromEntries(changedHere.map(k => [k, nowT[k]])) })
       setAccount(next); setError('')
     } catch (e) {
       if (e instanceof SyncError && e.status === 401) { setAccount(null); setError('You were signed out. Sign in again to keep syncing.') }

@@ -30,13 +30,24 @@ export function Reader({ route }: { route: Route }) {
   // The verses the open note is about; the note lives on the first.
   const [noteFor, setNoteFor] = useState<number[]>()
 
+  // A version that isn't on the device can't open offline; it tries again
+  // by itself once the connection is back.
+  const [retry, setRetry] = useState(0)
   useEffect(() => {
     if (version !== settings.version || parallel.join() !== settings.parallel.join()) update({ version, parallel })
     setError('')
     Promise.all(versions.map(v => data.bible(v)))
       .then(bs => setBibles(Object.fromEntries(bs.map(b => [b.id, b]))))
-      .catch(e => setError(String(e.message || e)))
-  }, [versions.join()])
+      .catch(e => setError(navigator.onLine === false || e instanceof TypeError
+        ? `${versions.filter(v => !bibles[v]).join(', ') || version} isn’t saved on this device yet. Connect to the internet once and it stays available offline.`
+        : String(e.message || e)))
+  }, [versions.join(), retry])
+  useEffect(() => {
+    if (!error) return
+    const again = () => setRetry(n => n + 1)
+    addEventListener('online', again)
+    return () => removeEventListener('online', again)
+  }, [error])
 
   const loaded = versions.every(v => bibles[v])
 
@@ -79,13 +90,23 @@ export function Reader({ route }: { route: Route }) {
       }
     }
     const onScroll = () => { frame ||= requestAnimationFrame(measure) }
+    // Turning the phone (or resizing the window) re-flows the text; stay on
+    // the verse you were reading rather than wherever that pixel lands.
+    let width = innerWidth
+    const onResize = () => {
+      if (innerWidth === width) return // the keyboard, or the browser bar
+      width = innerWidth
+      if (topVerse.current && !peekDir.current) toVerse(topVerse.current)
+    }
     const onHide = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save() }
     addEventListener('scroll', onScroll, { passive: true })
+    addEventListener('resize', onResize)
     document.addEventListener('visibilitychange', onHide)
     addEventListener('pagehide', onHide)
     return () => {
       save(); cancelAnimationFrame(frame)
       removeEventListener('scroll', onScroll)
+      removeEventListener('resize', onResize)
       document.removeEventListener('visibilitychange', onHide)
       removeEventListener('pagehide', onHide)
     }
@@ -269,10 +290,17 @@ export function Reader({ route }: { route: Route }) {
     if (!peekDir.current) { if (article.current) article.current.style.transform = ''; return }
     glide(0, close)
   }
-  const onTouchStart = (e: TouchEvent) => { const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 } }
+  // A second finger (a pinch) ends the swipe and puts the page back, rather
+  // than leaving it stuck half way.
+  const abandon = () => { const s = touch.current; touch.current = undefined; if (s?.axis === 'x') release(0) }
+  const onTouchStart = (e: TouchEvent) => {
+    if (e.touches.length > 1) return abandon()
+    const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 }
+  }
   const onTouchMove = (e: TouchEvent) => {
     const s = touch.current, p = e.touches[0]
-    if (!s || e.touches.length > 1) return
+    if (!s) return
+    if (e.touches.length > 1) return abandon()
     const dx = p.clientX - s.x, dy = p.clientY - s.y
     if (!s.axis && Math.hypot(dx, dy) > 10) s.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
     if (s.axis === 'x') { s.dx = dx; follow(dx) }
@@ -360,7 +388,7 @@ export function Reader({ route }: { route: Route }) {
 
   return (
     <div class="reader">
-      {error && <p class="error">{error}</p>}
+      {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>Try again</button></p></div>}
       {!loaded && !error && <p class="muted center">Loading…</p>}
       {loaded && rows === 0 && <p class="muted center">{t?.name} does not include {bookById(book).name} {chapter}.</p>}
 
@@ -536,6 +564,16 @@ export function NoteSheet({ book, chapter, verses, lines, dir, onClose }: {
   }
   useEffect(() => { if (!draft) area.current?.focus() }, [])
   useEffect(() => { const t = setTimeout(() => save(draft), 600); return () => clearTimeout(t) }, [draft])
+  // Switching away (or an app update reloading the page) mustn't lose the
+  // last words typed.
+  const latest = useRef(draft)
+  latest.current = draft
+  useEffect(() => {
+    const flush = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save(latest.current) }
+    document.addEventListener('visibilitychange', flush)
+    addEventListener('pagehide', flush)
+    return () => { document.removeEventListener('visibilitychange', flush); removeEventListener('pagehide', flush) }
+  }, [])
   const close = () => { save(draft); onClose() }
   const shown = lines?.filter(([, s]) => s) ?? []
   // A long passage is folded to its first lines; tap to see it all.

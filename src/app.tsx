@@ -49,13 +49,22 @@ export function App() {
   const setMarks = (fn: (m: Marks) => Marks) => setMarksState(m => { const n = fn(m); saveMarks(n); return n })
 
   useEffect(() => {
-    data.catalog().then(c => {
+    const start = (c: Catalog) => {
       const ids = new Set(c.translations.map(t => t.id))
       const s = { ...defaultSettings(c), ...loadSettings() }
       s.myVersions = s.myVersions.filter(id => ids.has(id))
       if (!ids.has(s.version)) s.version = c.translations[0].id
       setCatalog(c); setSettings(s)
-    }).catch(e => setError(String(e.message || e)))
+    }
+    // Open straight away with the list of versions kept from last time, and
+    // swap in the fresh one when it arrives. Waiting for the network first
+    // would hold the app on "Loading…" for seconds on a weak connection.
+    const kept = data.keptCatalog()
+    if (kept) start(kept)
+    data.catalog().then(c => {
+      if (!kept) start(c)
+      else if (JSON.stringify(c) !== JSON.stringify(kept)) setCatalog(c)
+    }).catch(e => { if (!kept) setError(String(e.message || e)) })
   }, [])
 
   useEffect(() => {
@@ -263,7 +272,16 @@ function HistoryButton({ route }: { route: Route }) {
       const raw = b.books[p.book]?.[p.chapter - 1]?.[p.verse - 1]
       return raw ? plain(raw) : ''
     }))).catch(() => {})
-    const away = (e: Event) => { if (!box.current?.contains(e.target as Node)) setPeek(false) }
+    // A tap outside just closes the list; it doesn't also select the verse
+    // or press the button underneath.
+    const away = (e: Event) => {
+      if (box.current?.contains(e.target as Node)) return
+      setPeek(false)
+      if (e.type !== 'pointerdown') return
+      const stop = (c: Event) => { c.stopPropagation(); c.preventDefault() }
+      addEventListener('click', stop, { capture: true, once: true })
+      setTimeout(() => removeEventListener('click', stop, { capture: true }), 600)
+    }
     const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setPeek(false) }
     const t = setTimeout(() => setPeek(false), 8000)
     addEventListener('pointerdown', away); addEventListener('keydown', esc); addEventListener('scroll', away as never, { passive: true })

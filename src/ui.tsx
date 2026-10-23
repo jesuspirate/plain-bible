@@ -16,10 +16,25 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
     d.showModal()
     const close = () => latest.current()
     d.addEventListener('close', close)
-    return () => d.removeEventListener('close', close)
+    // On a phone the sheet sits at the bottom of the screen, where the
+    // keyboard would cover it (and the note you're typing): lift it above
+    // the keyboard and keep it within the space that's left.
+    const vv = window.visualViewport
+    const fit = () => {
+      if (!vv) return
+      const kb = Math.max(0, innerHeight - vv.height - vv.offsetTop)
+      d.style.marginBottom = kb > 40 ? kb + 'px' : ''
+      d.style.maxHeight = kb > 40 ? vv.height - 12 + 'px' : ''
+    }
+    vv?.addEventListener('resize', fit)
+    return () => { d.removeEventListener('close', close); vv?.removeEventListener('resize', fit) }
   }, [])
+  // Only a tap that starts and ends on the dimmed area closes the sheet, not
+  // a drag (say, selecting text in a note) that happens to end there.
+  const downOutside = useRef(false)
   return (
-    <dialog ref={ref} class={'sheet' + (wide ? ' wide' : '')} onClick={e => { if (e.target === ref.current) ref.current!.close() }}>
+    <dialog ref={ref} class={'sheet' + (wide ? ' wide' : '')} onPointerDown={e => { downOutside.current = e.target === ref.current }}
+      onClick={e => { if (e.target === ref.current && downOutside.current) ref.current!.close() }}>
       <div class="sheet-inner">
         <header class="sheet-head">
           <h2>{title}</h2>
