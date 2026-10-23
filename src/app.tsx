@@ -150,14 +150,16 @@ export function App() {
           </a>}
         </nav>
       </header>
-      <main class={settings.searchBar && view !== 'search' ? 'with-bar' : ''}>
+      <main class={view === 'search' ? '' : settings.searchBar ? 'with-bar' : 'with-mini'}>
         {view === 'search' ? <Search route={route} />
           : view === 'versions' ? <Versions />
           : view === 'saved' ? <Saved />
           : view === 'settings' ? <SettingsView />
           : <ReaderRoute route={route} />}
       </main>
-      {settings.searchBar && view !== 'search' && <SearchBar here={view === 'read' && route.path.length >= 4
+      {/* With the full bar hidden, a small round search button takes its place,
+          and opens the same panel (with Settings, Saved and the theme). */}
+      {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
     </AppContext.Provider>
   )
@@ -401,7 +403,7 @@ function SettingsView() {
         </div>
       </div>
       <div class="field"><span>Search bar</span>
-        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the floating search bar at the bottom of the screen</label>
+        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.</label>
       </div>
       <div class="field"><span>Highlights</span>
         <div class="col">
