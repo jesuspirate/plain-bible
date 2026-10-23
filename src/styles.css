@@ -459,8 +459,9 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
 }
 .sb.sb-open .sb-panel { padding-top: 0; transition: transform .2s, opacity .2s; touch-action: pan-y; }
 .sb.sb-open .sb-field { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent), 0 12px 32px rgba(0,0,0,.3); }
-/* Until the keyboard has settled the panel stays hidden, then rises in place. */
-.sb.sb-settling .sb-panel { opacity: 0; animation: none; }
+/* Opening is one quiet fade, panel and Cancel together with the backdrop,
+   while the keyboard rises below. Nothing slides or grows. */
+.sb.sb-open .sb-panel, .sb.sb-open .sb-cancel { animation: sb-fade .2s; }
 @media (min-width: 700px) { .sb.sb-open .sb-panel { max-height: min(70vh, 640px); } }
 /* Desktop: show a slim scrollbar on the chapter strip and a grab cursor. */
 @media (pointer: fine) {
