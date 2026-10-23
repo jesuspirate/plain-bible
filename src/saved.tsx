@@ -1,8 +1,8 @@
 // Your highlights, bookmarks and notes, in Bible order, shown in the version you read.
 import { useEffect, useMemo, useState } from 'preact/hooks'
 import { Bible } from './lib/data'
-import { compareKeys, hasContent, PALETTE, parseKey } from './lib/marks'
-import { NoteSheet, verseRanges } from './reader'
+import { compareKeys, hasContent, Mark, notesOf, PALETTE, parseKey } from './lib/marks'
+import { NotesSheet, NotesTarget, verseRanges } from './reader'
 import { BookmarkIcon } from './icons'
 import { bookById } from './lib/books'
 import { formatRef } from './lib/refs'
@@ -11,6 +11,22 @@ import { readPath, useApp } from './state'
 
 const PAGE = 60
 
+/** One entry in the list: a verse with its highlight, bookmark and notes,
+ *  or a passage with the notes written on it. */
+interface Row { key: string; verses: number[]; mark?: Mark; notes: ReturnType<typeof notesOf> }
+function rowsOf(key: string, m: Mark): Row[] {
+  const { verse } = parseKey(key)
+  const own: Row = { key, verses: [verse], mark: m, notes: [] }
+  const passages = new Map<string, Row>()
+  for (const x of notesOf(m)) {
+    if (!x.v) { own.notes.push(x); continue }
+    const id = x.v.join()
+    if (!passages.has(id)) passages.set(id, { key, verses: x.v, notes: [] })
+    passages.get(id)!.notes.push(x)
+  }
+  return [...(m.c || m.b || own.notes.length ? [own] : []), ...passages.values()]
+}
+
 export function Saved() {
   const { marks, setMarks, settings, data, byId } = useApp()
   const [filter, setFilter] = useState<string>('all')
@@ -18,7 +34,7 @@ export function Saved() {
   // The version isn't on the device and there's no connection to fetch it.
   const [missing, setMissing] = useState(false)
   const [limit, setLimit] = useState(PAGE)
-  const [editing, setEditing] = useState<string>()
+  const [editing, setEditing] = useState<NotesTarget & { key: string }>()
   const version = settings.version
   useEffect(() => { document.title = 'Saved · Plain Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
   useEffect(() => setLimit(PAGE), [filter])
@@ -30,14 +46,15 @@ export function Saved() {
     const known = PALETTE.filter(p => counts.has(p.color)).map(p => p.color)
     return [...known, ...[...counts.keys()].filter(c => !known.includes(c))].map(c => [c, counts.get(c)!] as const)
   }, [keys])
-  const shown = keys.filter(k => filter === 'all' || (filter === 'bookmarks' ? marks[k].b : filter === 'notes' ? marks[k].n : marks[k].c === filter))
+  const rows = useMemo(() => keys.flatMap(k => rowsOf(k, marks[k])), [keys])
+  const shown = rows.filter(r => filter === 'all' || (filter === 'bookmarks' ? r.mark?.b : filter === 'notes' ? r.notes.length : r.mark?.c === filter))
   const bookmarks = keys.filter(k => marks[k].b).length
-  const notes = keys.filter(k => marks[k].n).length
+  const notes = rows.reduce((n, r) => n + r.notes.length, 0)
 
   // Removing clears the highlight and bookmark; a note is only deleted on purpose.
   const remove = (k: string) => setMarks(m => {
     const t = Date.now(), cur = m[k]
-    return { ...m, [k]: cur.n ? { n: cur.n, nt: cur.nt, t } : { t, ...(cur.nt ? { nt: cur.nt } : {}) } }
+    return { ...m, [k]: cur.ns ? { ns: cur.ns, t } : { t } }
   })
 
   if (!keys.length) {
@@ -54,7 +71,7 @@ export function Saved() {
     <div class="saved">
       <h1>Saved</h1>
       <div class="chips" role="tablist">
-        <button class={'chip' + (filter === 'all' ? ' on' : '')} onClick={() => setFilter('all')}>All {keys.length}</button>
+        <button class={'chip' + (filter === 'all' ? ' on' : '')} onClick={() => setFilter('all')}>All {rows.length}</button>
         {bookmarks > 0 && <button class={'chip' + (filter === 'bookmarks' ? ' on' : '')} onClick={() => setFilter('bookmarks')} aria-label={`${bookmarks} bookmarks`}><BookmarkIcon class="bm-mark" /> {bookmarks}</button>}
         {notes > 0 && <button class={'chip' + (filter === 'notes' ? ' on' : '')} onClick={() => setFilter('notes')}>Notes {notes}</button>}
         {colors.map(([c, n]) => (
@@ -65,33 +82,31 @@ export function Saved() {
       </div>
       {missing && <p class="note">{version} isn’t saved on this device yet, so the verses can’t be shown. Connect to the internet once and they will be.</p>}
       <ol class="saved-list">
-        {shown.slice(0, limit).map(k => {
-          const r = parseKey(k), m = marks[k]
-          // A passage note shows every verse it is about.
-          const vs = m.n && m.nv ? m.nv : [r.verse]
+        {shown.slice(0, limit).map(row => {
+          const r = parseKey(row.key), m = row.mark, vs = row.verses
           const text = vs.map(v => { const raw = bible?.books[r.book]?.[r.chapter - 1]?.[v - 1]; return raw ? (vs.length > 1 ? `${v} ` : '') + plain(raw) : '' }).filter(Boolean).join(' ')
           return (
-            <li style={m.c ? { '--hl': m.c } : undefined} class={m.c ? 'hl' : ''}>
+            <li style={m?.c ? { '--hl': m.c } : undefined} class={m?.c ? 'hl' : ''}>
               <div class="saved-head">
                 <a class="ref" href={'#/' + readPath(version, r.book, r.chapter, r.verse)}>{vs.length > 1 ? `${bookById(r.book).name} ${r.chapter}:${verseRanges(vs)}` : formatRef(r)}</a>
-                {m.b && <span title="Bookmarked" class="bm-mark"><BookmarkIcon /></span>}
+                {m?.b && <span title="Bookmarked" class="bm-mark"><BookmarkIcon /></span>}
                 <span class="spacer" />
-                <button class="small" onClick={() => setEditing(k)}>{m.n ? 'Edit note' : 'Add note'}</button>
-                {(m.c || m.b) && <button class="icon small" aria-label={`Remove highlight and bookmark from ${formatRef(r)}`} onClick={() => remove(k)}>✕</button>}
+                <button class="small" onClick={() => setEditing({ key: row.key, verses: vs, start: 'new' })}>Add note</button>
+                {(m?.c || m?.b) && <button class="icon small" aria-label={`Remove highlight and bookmark from ${formatRef(r)}`} onClick={() => remove(row.key)}>✕</button>}
               </div>
               <p class="saved-text" dir={byId.get(version)?.rtl ? 'rtl' : undefined}>
                 {text || (bible && <span class="muted">Not in {version}</span>)}
               </p>
-              {m.n && <p class="saved-note" onClick={() => setEditing(k)}>{m.n}</p>}
+              {row.notes.map(x => <p class="saved-note" onClick={() => setEditing({ key: row.key, verses: vs, start: { key: row.key, id: x.id } })}>{x.n}</p>)}
             </li>
           )
         })}
       </ol>
       {shown.length > limit && <button class="more" onClick={() => setLimit(l => l + PAGE)}>Show more ({shown.length - limit} left)</button>}
       {editing && (() => {
-        const r = parseKey(editing), vs = marks[editing]?.nv ?? [r.verse]
-        const lines = vs.map(v => [v, plain(bible?.books[r.book]?.[r.chapter - 1]?.[v - 1] ?? '')] as [number, string])
-        return <NoteSheet book={r.book} chapter={r.chapter} verses={vs} lines={lines} dir={byId.get(version)?.rtl ? 'rtl' : undefined} onClose={() => setEditing(undefined)} />
+        const r = parseKey(editing.key)
+        return <NotesSheet book={r.book} chapter={r.chapter} verses={editing.verses} start={editing.start} dir={byId.get(version)?.rtl ? 'rtl' : undefined}
+          text={v => plain(bible?.books[r.book]?.[r.chapter - 1]?.[v - 1] ?? '')} onClose={() => setEditing(undefined)} />
       })()}
     </div>
   )

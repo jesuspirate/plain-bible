@@ -30,3 +30,20 @@ describe('mergeDocs', () => {
     expect(docKey(doc({ a: { t: 1 }, b: { t: 2, b: 1 } }))).toBe(docKey(doc({ b: { b: 1, t: 2 }, a: { t: 1 } })))
   })
 })
+
+describe('mergeDocs with several notes per verse', () => {
+  it('keeps notes added on different devices to the same verse', () => {
+    const a = doc({ 'Exod.2.1': { t: 1, ns: { s: { n: 'study', v: [1, 2, 3, 4], c: 10, t: 10 } } } })
+    const b = doc({ 'Exod.2.1': { c: '#dac6ff', t: 5, ns: { p: { n: 'prayer', v: [1, 2, 3, 4], c: 20, t: 20 } } } })
+    const m = mergeDocs(a, b).marks['Exod.2.1']
+    expect(Object.keys(m.ns!).sort()).toEqual(['p', 's'])
+    expect(m.c).toBe('#dac6ff')
+    expect(docKey(mergeDocs(a, b))).toBe(docKey(mergeDocs(b, a)))
+  })
+  it('sees an older single note and its moved copy as the same', () => {
+    const old = doc({ 'John.1.1': { n: 'x', nt: 5, t: 5 } })
+    const moved = doc({ 'John.1.1': { t: 5, ns: { '0': { n: 'x', c: 5, t: 5 } } } })
+    expect(docKey(old)).toBe(docKey(moved))
+    expect(docKey(mergeDocs(moved, old))).toBe(docKey(moved))
+  })
+})

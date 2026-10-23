@@ -2,6 +2,19 @@
 // translation, so a highlight shows in every version you read.
 import { BOOK_INDEX, findBook } from './books'
 
+/** One note. A verse can have several, each edited and synced on its own. */
+export interface Note {
+  /** the text; missing once the note is deleted (kept so the deletion syncs) */
+  n?: string
+  /** the verses it is about, when more than the one it lives on (sorted,
+   *  includes that verse) */
+  v?: number[]
+  /** when it was written, for ordering */
+  c: number
+  /** when it last changed */
+  t: number
+}
+
 export interface Mark {
   /** highlight color, e.g. "#fff193" */
   c?: string
@@ -9,16 +22,16 @@ export interface Mark {
   b?: 1
   /** version it was made in (informational) */
   v?: string
-  /** your note on this verse */
+  /** your notes, by id. A note on a passage lives on its first verse. */
+  ns?: Record<string, Note>
+  /** Older single note, its verses and when it changed. Read once and moved
+   *  into `ns` (as note "0"). */
   n?: string
-  /** the verses the note is about, when it covers more than this one
-   *  (sorted, includes this verse). The note lives on the first of them. */
   nv?: number[]
-  /** when the note last changed. Kept after a note is deleted, so the
-   *  deletion syncs; notes and highlights on one verse merge separately. */
   nt?: number
   /** last changed, ms since epoch. A mark with no color, bookmark or note
-   *  records a removal, so that it syncs to other devices. */
+   *  records a removal, so that it syncs to other devices. Notes keep their
+   *  own times, so notes and highlights on one verse merge separately. */
   t: number
 }
 /** key: "John.3.16" */
@@ -54,54 +67,93 @@ export function compareKeys(a: string, b: string) {
   return BOOK_INDEX[x.book] - BOOK_INDEX[y.book] || x.chapter - y.chapter || x.verse - y.verse
 }
 
-/** Whether a mark holds anything to show (not just a removal record). */
-export const hasContent = (m: Mark | undefined) => !!(m && (m.c || m.b || m.n))
-
-/** A mark with nothing left becomes a bare removal record. */
-export function tidy(m: Mark): Mark {
-  if (hasContent(m)) return m
-  return m.nt ? { t: m.t, nt: m.nt } : { t: m.t }
+/** Moves an older single note into the notes list. The id is fixed, so
+ *  every device moving the same note agrees and it isn't doubled. */
+export function upgrade(m: Mark): Mark {
+  if (m.n === undefined && m.nt === undefined && m.nv === undefined) return m
+  const { n, nv, nt, ...rest } = m
+  const t = nt ?? m.t
+  const old: Note = { c: t, t }
+  if (n) { old.n = n; if (nv && nv.length > 1) old.v = nv }
+  const cur = rest.ns?.['0']
+  return { ...rest, ns: { ...rest.ns, '0': cur && cur.t >= t ? cur : old } }
 }
 
-/** Merge two versions of one verse's mark: the newer one wins, except
- *  that the note keeps whichever note was edited last. */
+/** A verse's notes that still have text, oldest first, with their ids. */
+export function notesOf(m: Mark | undefined): (Note & { id: string; n: string })[] {
+  if (!m) return []
+  m = upgrade(m)
+  return Object.entries(m.ns ?? {}).filter(([, x]) => x.n).map(([id, x]) => ({ ...x, id, n: x.n! }))
+    .sort((a, b) => a.c - b.c || (a.id < b.id ? -1 : 1))
+}
+
+/** Whether a mark holds anything to show (not just a removal record). */
+export const hasContent = (m: Mark | undefined) => !!(m && (m.c || m.b || notesOf(m).length))
+
+/** A mark with nothing left becomes a bare removal record (keeping the
+ *  records of deleted notes). */
+export function tidy(m: Mark): Mark {
+  m = upgrade(m)
+  if (hasContent(m)) return m
+  return m.ns && Object.keys(m.ns).length ? { t: m.t, ns: m.ns } : { t: m.t }
+}
+
+/** Merge two versions of one verse's mark: the newer one wins for the
+ *  highlight and bookmark, and each note keeps its own newest version. */
 export function mergeMark(a: Mark | undefined, b: Mark | undefined): Mark | undefined {
-  if (!a || !b) return a ?? b
+  if (!a || !b) return a ? tidy(a) : b && tidy(b)
+  a = upgrade(a); b = upgrade(b)
   const out: Mark = { ...((b.t ?? 0) > (a.t ?? 0) ? b : a) }
-  // Copied: when both notes are the same age the note comes from `out`,
-  // which is cleared next.
-  const note = { ...((b.nt ?? 0) > (a.nt ?? 0) ? b : (a.nt ?? 0) > (b.nt ?? 0) ? a : out) }
-  delete out.n; delete out.nt; delete out.nv
-  if (note.n) out.n = note.n
-  if (note.n && note.nv) out.nv = note.nv
-  if (note.nt) out.nt = note.nt
+  const ns: Record<string, Note> = { ...a.ns }
+  for (const [id, x] of Object.entries(b.ns ?? {})) {
+    const y = ns[id]
+    // Same age: a deletion wins, so a note can't come back by a tie.
+    if (!y || x.t > y.t || (x.t === y.t && y.n !== undefined && (x.n === undefined || x.n > y.n))) ns[id] = x
+  }
+  delete out.ns
+  if (Object.keys(ns).length) out.ns = ns
   return tidy(out)
 }
 
-/** Set or clear (empty text) the note on one verse, or on a passage:
- *  `verses` are all the verses it is about; the note is kept on `key`. */
-export function setNote(marks: Marks, key: string, text: string, now = Date.now(), verses?: number[]): Marks {
-  const m: Mark = { ...marks[key], t: now, nt: now }
+/** A new note's id: when it was made, plus a little randomness so two
+ *  devices never pick the same one. */
+export const newNoteId = (now = Date.now()) => now.toString(36) + Math.random().toString(36).slice(2, 6)
+
+/** Write, edit or delete (empty text) one note on `key`. `verses` are all
+ *  the verses it is about. */
+export function setNote(marks: Marks, key: string, id: string, text: string, now = Date.now(), verses?: number[]): Marks {
+  const m = upgrade({ ...marks[key], t: marks[key]?.t ?? now })
+  const prev = m.ns?.[id]
   const n = text.trim()
-  delete m.nv
-  if (n) { m.n = n; if (verses && verses.length > 1) m.nv = verses } else delete m.n
-  return { ...marks, [key]: tidy(m) }
+  if (!n && !prev) return marks
+  const note: Note = { c: prev?.c ?? now, t: now }
+  if (n) { note.n = n; const vs = verses ?? prev?.v; if (vs && vs.length > 1) note.v = vs }
+  return { ...marks, [key]: tidy({ ...m, ns: { ...m.ns, [id]: note } }) }
 }
 
-/** The note in this chapter that covers verse `v`: its own, or a passage
- *  note that starts on an earlier verse. Returns the verse it lives on. */
-export function noteCovering(marks: Marks, book: string, chapter: number, v: number): number | undefined {
-  if (marks[markKey(book, chapter, v)]?.n) return v
-  for (let s = v - 1; s >= Math.max(1, v - 200); s--) {
-    const m = marks[markKey(book, chapter, s)]
-    if (m?.n && m.nv?.includes(v)) return s
+export interface FoundNote extends Note { id: string; n: string; key: string; verse: number; verses: number[] }
+
+/** Every note in this chapter that covers verse `v`: its own, and passage
+ *  notes that start on an earlier verse. Oldest first. */
+export function notesCovering(marks: Marks, book: string, chapter: number, v: number): FoundNote[] {
+  const out: FoundNote[] = []
+  for (let s = Math.max(1, v - 200); s <= v; s++) {
+    const key = markKey(book, chapter, s), m = marks[key]
+    if (!m) continue
+    for (const x of notesOf(m)) {
+      const verses = x.v ?? [s]
+      if (s === v || verses.includes(v)) out.push({ ...x, key, verse: s, verses })
+    }
   }
-  return undefined
+  return out.sort((a, b) => a.c - b.c)
 }
 
 const KEY = 'plain-bible:marks'
 export function loadMarks(): Marks {
-  try { return JSON.parse(localStorage.getItem(KEY) || '{}') } catch { return {} }
+  let m: Marks
+  try { m = JSON.parse(localStorage.getItem(KEY) || '{}') } catch { return {} }
+  for (const k in m) m[k] = upgrade(m[k])
+  return m
 }
 export function saveMarks(m: Marks) {
   try { localStorage.setItem(KEY, JSON.stringify(m)) } catch { /* storage full or blocked */ }
@@ -176,13 +228,15 @@ export function mergeImport(marks: Marks, items: ImportItem[], now = Date.now())
   let highlights = 0, bookmarks = 0, notes = 0
   for (const it of items) {
     const k = markKey(it.book, it.chapter, it.verse)
-    const m: Mark = { ...out[k], t: now }
+    const m: Mark = upgrade({ ...out[k], t: now })
     if (it.color) { m.c = it.color; highlights++; if (it.version) m.v = it.version }
     if (it.bookmark) { m.b = 1; bookmarks++ }
     if (it.note) {
-      // Don't overwrite a note you already have; add the imported one under it.
-      m.n = m.n && !m.n.includes(it.note) ? `${m.n}\n\n${it.note}` : it.note
-      m.nt = now; notes++
+      // A note of its own, next to any you already have (once).
+      if (!notesOf(m).some(x => x.n === it.note!.trim())) {
+        Object.assign(m, setNote({ [k]: m }, k, newNoteId(now), it.note, now)[k])
+      }
+      notes++
     }
     out[k] = m
   }

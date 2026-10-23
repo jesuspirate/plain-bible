@@ -1,7 +1,7 @@
 // Optional account sync. Sign-in is passkey only; the server keeps one JSON
 // document per account. Everything also works signed out.
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
-import { mergeMark, Marks } from './marks'
+import { mergeMark, Marks, upgrade } from './marks'
 import { isNative, WEB_URL } from './native'
 
 export const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
@@ -22,7 +22,7 @@ export function changedAt(t: SettingsT | undefined, key: string) {
 }
 
 /** Merge two documents: each verse keeps its newest mark (removals included)
- *  and its newest note, and each setting keeps its newest value. */
+ *  and each of its notes keeps its newest version, and each setting keeps its newest value. */
 export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
   if (!b) return a
   const marks: Marks = { ...a.marks }
@@ -41,7 +41,11 @@ export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
 
 /** Stable text for comparing documents without caring about key order. */
 export function docKey(d: SyncDoc) {
-  const marks = Object.keys(d.marks).sort().map(k => [k, d.marks[k].c ?? '', d.marks[k].b ?? 0, d.marks[k].t, d.marks[k].n ?? '', d.marks[k].nt ?? 0, ...(d.marks[k].nv ? [d.marks[k].nv!.join()] : [])])
+  const marks = Object.keys(d.marks).sort().map(k => {
+    const m = upgrade(d.marks[k])
+    const ns = Object.keys(m.ns ?? {}).sort().map(id => { const x = m.ns![id]; return [id, x.n ?? null, x.t, x.c, x.v?.join() ?? ''] })
+    return [k, m.c ?? '', m.b ?? 0, m.t, ns]
+  })
   const settings = Object.keys(d.settings ?? {}).sort().map(k => [k, d.settings[k], changedAt(d.settingsT, k)])
   return JSON.stringify([marks, settings])
 }

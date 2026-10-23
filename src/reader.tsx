@@ -1,9 +1,10 @@
+import { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { lastColor, markKey, noteCovering, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
+import { lastColor, markKey, newNoteId, notesCovering, notesOf, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink, tap } from './lib/native'
@@ -27,8 +28,8 @@ export function Reader({ route }: { route: Route }) {
   const [error, setError] = useState('')
   const [lex, setLex] = useState<string>()
   const [selected, setSelected] = useState<number[]>([])
-  // The verses the open note is about; the note lives on the first.
-  const [noteFor, setNoteFor] = useState<number[]>()
+  // The verses whose notes are open.
+  const [noteFor, setNoteFor] = useState<NotesTarget>()
 
   // A version that isn't on the device can't open offline; it tries again
   // by itself once the connection is back.
@@ -169,20 +170,26 @@ export function Reader({ route }: { route: Route }) {
   // After the verse number: a ribbon if it's bookmarked, and a note icon
   // (tap it to read or edit the note). The note icon stays put while the
   // note is open, even before anything is typed.
-  const editing = noteFor?.[0]
-  const marksAfter = (v: number) => <>
-    {mark(v)?.b && <BookmarkIcon class="bm-mark" />}
-    {(mark(v)?.n || editing === v) && (
-      <button class="note-mark" aria-label={`Note on verse ${v}`} title={mark(v)?.n} onClick={e => { e.stopPropagation(); openNote([v]) }}>
-        <NoteIcon />
-      </button>
-    )}
-  </>
-  // Write a note on one verse or on several. One verse that a passage note
-  // covers opens that note.
-  const openNote = (vs: number[]) => {
-    const on = vs.length === 1 && noteCovering(marks, book, chapter, vs[0])
-    setNoteFor(on ? mark(on)?.nv ?? [on] : vs)
+  const editing = noteFor?.verses[0]
+  const marksAfter = (v: number) => {
+    const ns = notesOf(mark(v))
+    return <>
+      {mark(v)?.b && <BookmarkIcon class="bm-mark" />}
+      {(ns.length > 0 || editing === v) && (
+        <button class="note-mark" aria-label={ns.length > 1 ? `${ns.length} notes on verse ${v}` : `Note on verse ${v}`} title={ns[0]?.n} onClick={e => { e.stopPropagation(); openNote([v], true) }}>
+          <NoteIcon />
+        </button>
+      )}
+    </>
+  }
+  // Notes on one verse or on several: the list of them, or a new note when
+  // there are none yet. From a verse's note icon, notes that all cover the
+  // same passage open as that passage, so "Add note" adds to it too.
+  const openNote = (vs: number[], fromIcon = false) => {
+    const all = notesCovering(marks, book, chapter, vs[0])
+    const mine = vs.length === 1 ? all : all.filter(x => x.verses.join() === vs.join())
+    const same = fromIcon && all.length > 0 && all.every(x => x.verses.join() === all[0].verses.join())
+    setNoteFor({ verses: same ? all[0].verses : vs, start: mine.length ? undefined : 'new' })
   }
   // One tap selects a verse; a quick second tap on it instead highlights it
   // in the colour you used last, or takes its highlight off.
@@ -370,10 +377,13 @@ export function Reader({ route }: { route: Route }) {
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }
     const hl = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
-    const after = (v: number) => live ? marksAfter(v) : <>
-      {mark(v)?.b && <BookmarkIcon class="bm-mark" />}
-      {mark(v)?.n && <span class="note-mark"><NoteIcon /></span>}
-    </>
+    const after = (v: number) => {
+      if (live) return marksAfter(v)
+      return <>
+        {mark(v)?.b && <BookmarkIcon class="bm-mark" />}
+        {notesOf(mark(v)).length > 0 && <span class="note-mark"><NoteIcon /></span>}
+      </>
+    }
     const lex = live ? setLex : undefined
     return <>
       <h1 class="chapter-title"><span class="ct-book">{bookById(b).name}</span> <span class="ct-num">{c}</span></h1>
@@ -438,8 +448,8 @@ export function Reader({ route }: { route: Route }) {
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} />}
-      {noteFor && <NoteSheet book={book} chapter={chapter} verses={noteFor} dir={t?.rtl ? 'rtl' : undefined}
-        lines={noteFor.map(v => [v, plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')])} onClose={() => setNoteFor(undefined)} />}
+      {noteFor && <NotesSheet book={book} chapter={chapter} {...noteFor} dir={t?.rtl ? 'rtl' : undefined}
+        text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
     </div>
   )
 }
@@ -486,7 +496,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const colors = new Set(keys.map(k => marks[k]?.c).filter(Boolean))
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
-  const hasNote = noteCovering(marks, book, chapter, verses[0]) !== undefined
+  const hasNote = notesCovering(marks, book, chapter, verses[0]).length > 0
 
   useEffect(() => {
     document.body.classList.add('selecting')
@@ -565,22 +575,87 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   )
 }
 
-/** Write, edit or delete the note on a verse or a passage. The verses it's
- *  about are shown above it as a reminder. Saved as you type. */
-export function NoteSheet({ book, chapter, verses, lines, dir, onClose }: {
-  book: string; chapter: number; verses: number[]; lines?: [number, string][]; dir?: 'rtl'; onClose: () => void
+export interface NotesTarget {
+  /** the verses the sheet is about; a new note covers these */
+  verses: number[]
+  /** open straight to a new note, or to one note by id (on `key`) */
+  start?: 'new' | { key: string; id: string }
+}
+
+/** Notes on a verse or a passage: a list of them with "Add note", and the
+ *  editor for one note. The verses are shown above as a reminder. Notes are
+ *  saved as you type. A sheet opened straight to one note closes when you're
+ *  done with it; opened on the list, it goes back to the list. */
+export function NotesSheet({ book, chapter, verses, start, text, dir, onClose }: NotesTarget & {
+  book: string; chapter: number; text: (v: number) => string; dir?: 'rtl'; onClose: () => void
+}) {
+  const { marks } = useApp()
+  const list = verses.length === 1
+    ? notesCovering(marks, book, chapter, verses[0])
+    : notesCovering(marks, book, chapter, verses[0]).filter(x => x.verses.join() === verses.join())
+  const fresh = () => ({ key: markKey(book, chapter, verses[0]), id: newNoteId(), verses })
+  const [editing, setEditing] = useState<{ key: string; id: string; verses: number[] } | undefined>(() => {
+    if (start === 'new' || !list.length) return fresh()
+    if (start) return { ...start, verses: list.find(x => x.id === start.id)?.verses ?? verses }
+  })
+  const fromList = useRef(!editing)
+  const ref = (vs: number[]) => `${bookById(book).name} ${chapter}:${verseRanges(vs)}`
+  const passage = (vs: number[]) => <Passage verses={vs} text={text} dir={dir} />
+  const done = () => fromList.current ? setEditing(undefined) : onClose()
+  return (
+    <Sheet title={editing ? `Note · ${ref(editing.verses)}` : `${list.length > 1 ? 'Notes' : 'Note'} · ${ref(verses)}`} onClose={onClose}>
+      {editing ? <NoteEditor key={editing.id} at={editing.key} id={editing.id} verses={editing.verses} passage={passage(editing.verses)} onDone={done} /> : <>
+      {passage(verses)}
+      <ul class="note-list">
+        {list.map(x => (
+          <li><button class="note-card" onClick={() => setEditing(x)}>
+            <span class="nc-meta muted small">
+              {x.verses.join() !== verses.join() && <strong>{ref(x.verses)} · </strong>}
+              {new Date(x.c).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: new Date(x.c).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' })}
+            </span>
+            <span class="nc-text">{x.n}</span>
+          </button></li>
+        ))}
+      </ul>
+      <div class="row">
+        <button class="primary" onClick={() => setEditing(fresh())}>+ Add note</button>
+      </div>
+      </>}
+    </Sheet>
+  )
+}
+
+/** The verses a note is about, as a quiet quote. A long passage is folded
+ *  to its first lines; tap to see it all. */
+function Passage({ verses, text, dir }: { verses: number[]; text: (v: number) => string; dir?: 'rtl' }) {
+  const [full, setFull] = useState(false)
+  const shown = verses.map(v => [v, text(v)] as const).filter(([, s]) => s)
+  if (!shown.length) return null
+  const long = shown.length > 3 || shown.reduce((n, [, s]) => n + s.length, 0) > 420
+  return (
+    <figure class={'note-passage' + (long && !full ? ' folded' : '')} dir={dir}>
+      <blockquote>
+        {shown.map(([v, s]) => <span class="np-verse">{verses.length > 1 && <sup>{v}</sup>}{s} </span>)}
+      </blockquote>
+      {long && <button class="link np-more" onClick={() => setFull(f => !f)} aria-expanded={full}>
+        {full ? 'Show less' : `Show all ${shown.length > 1 ? shown.length + ' verses' : 'of the verse'}`}</button>}
+    </figure>
+  )
+}
+
+/** Write, edit or delete one note (on the mark `at`). */
+function NoteEditor({ at: markK, id, verses, passage, onDone }: {
+  at: string; id: string; verses: number[]; passage: ComponentChildren; onDone: () => void
 }) {
   const { marks, setMarks } = useApp()
-  const key = markKey(book, chapter, verses[0])
-  const [draft, setDraft] = useState(marks[key]?.n ?? '')
-  const [full, setFull] = useState(false)
+  const initial = marks[markK]?.ns?.[id]?.n ?? ''
+  const [draft, setDraft] = useState(initial)
   const area = useRef<HTMLTextAreaElement>(null)
-  const saved = useRef(marks[key]?.n ?? '')
+  const saved = useRef(initial)
   const save = (s: string) => {
-    const sameVerses = (marks[key]?.nv ?? [verses[0]]).join() === verses.join()
-    if (s.trim() === saved.current.trim() && (sameVerses || !s.trim())) return
+    if (s.trim() === saved.current.trim()) return
     saved.current = s
-    setMarks(m => setNote(m, key, s, undefined, verses))
+    setMarks(m => setNote(m, markK, id, s, undefined, verses))
   }
   useEffect(() => { if (!draft) area.current?.focus() }, [])
   useEffect(() => { const t = setTimeout(() => save(draft), 600); return () => clearTimeout(t) }, [draft])
@@ -592,29 +667,21 @@ export function NoteSheet({ book, chapter, verses, lines, dir, onClose }: {
     const flush = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save(latest.current) }
     document.addEventListener('visibilitychange', flush)
     addEventListener('pagehide', flush)
-    return () => { document.removeEventListener('visibilitychange', flush); removeEventListener('pagehide', flush) }
+    return () => {
+      document.removeEventListener('visibilitychange', flush); removeEventListener('pagehide', flush)
+      // Closing the sheet, or going back to the list, keeps what was typed.
+      save(latest.current)
+    }
   }, [])
-  const close = () => { save(draft); onClose() }
-  const shown = lines?.filter(([, s]) => s) ?? []
-  // A long passage is folded to its first lines; tap to see it all.
-  const long = shown.length > 3 || shown.reduce((n, [, s]) => n + s.length, 0) > 420
   return (
-    <Sheet title={`Note · ${bookById(book).name} ${chapter}:${verseRanges(verses)}`} onClose={close}>
-      {shown.length > 0 && (
-        <figure class={'note-passage' + (long && !full ? ' folded' : '')} dir={dir}>
-          <blockquote>
-            {shown.map(([v, s]) => <span class="np-verse">{verses.length > 1 && <sup>{v}</sup>}{s} </span>)}
-          </blockquote>
-          {long && <button class="link np-more" onClick={() => setFull(f => !f)} aria-expanded={full}>
-            {full ? 'Show less' : `Show all ${shown.length > 1 ? shown.length + ' verses' : 'of the verse'}`}</button>}
-        </figure>
-      )}
+    <>
+      {passage}
       <textarea ref={area} class="note-text" rows={6} placeholder={verses.length > 1 ? 'Write a note on these verses…' : 'Write a note on this verse…'} value={draft}
         onInput={e => setDraft((e.target as HTMLTextAreaElement).value)} />
       <div class="row">
-        <button class="primary" onClick={close}>Done</button>
-        {saved.current && <button onClick={() => { setDraft(''); save(''); onClose() }}>Delete note</button>}
+        <button class="primary" onClick={onDone}>Done</button>
+        {saved.current && <button onClick={() => { latest.current = ''; save(''); onDone() }}>Delete note</button>}
       </div>
-    </Sheet>
+    </>
   )
 }
