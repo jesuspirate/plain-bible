@@ -42,8 +42,3 @@ export const CompareIcon = ({ size, class: c }: P) => (
     <rect x="13.5" y="4" width="7.5" height="16" rx="1.8" fill="none" stroke="currentColor" stroke-width="2.2" /></svg>
 )
 
-/** Two hands pressed together: prayer. */
-export const PrayIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}><path d="M11.2 3.5c-.6 0-1.1.4-1.3 1L7.5 12l-2.6 3.3a1.6 1.6 0 0 0 .2 2.2l2.6 2.3c.6.5 1.4.5 2 0l1.5-1.5V4.5c0-.6-.4-1-1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-    <path d="M12.8 3.5c.6 0 1.1.4 1.3 1L16.5 12l2.6 3.3a1.6 1.6 0 0 1-.2 2.2l-2.6 2.3c-.6.5-1.4.5-2 0l-1.5-1.5V4.5c0-.6.4-1 1-1z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
-)

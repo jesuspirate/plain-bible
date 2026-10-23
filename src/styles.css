@@ -236,9 +236,13 @@ main.with-bar { padding-bottom: 120px; }
 .sb-clear { all: unset; cursor: pointer; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; background: color-mix(in srgb, var(--muted) 45%, transparent); color: var(--surface); }
 .sb-theme { all: unset; cursor: pointer; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--text); flex: none; -webkit-tap-highlight-color: transparent; }
 .sb-theme:active { background: var(--chip); }
-.sb-mic { all: unset; cursor: pointer; display: grid; place-items: center; width: 38px; height: 38px; border-radius: 50%; color: var(--muted); }
-.sb-mic.on { color: #fff; background: #e5484d; animation: sb-pulse 1.2s ease-in-out infinite; }
-@keyframes sb-pulse { 50% { box-shadow: 0 0 0 8px rgba(229, 72, 77, .18); } }
+/* The prayer button: a small warm light, always there. Drawn once, not animated, so it costs nothing while you read. */
+.sb-pray {
+  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%;
+  color: #5a3a12; background: radial-gradient(circle at 50% 35%, #fffaf0 0%, #ffe3a3 45%, #f0b95a 100%);
+  box-shadow: 0 0 0 1px rgba(240, 185, 90, .55), 0 0 14px 2px rgba(245, 190, 95, .55); -webkit-tap-highlight-color: transparent;
+}
+.sb-pray:active { transform: scale(.94); }
 .sb-bar { display: flex; align-items: center; gap: 8px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
 .sb-cancel {
@@ -420,7 +424,6 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
 .sb.sb-open .sb-panel { padding-top: 0; transition: transform .2s, opacity .2s; touch-action: pan-y; }
 .sb.sb-open .sb-field { border-color: color-mix(in srgb, var(--accent) 55%, var(--line)); box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 16%, transparent), 0 12px 32px rgba(0,0,0,.3); }
 @media (min-width: 700px) { .sb.sb-open .sb-panel { max-height: min(70vh, 640px); } }
-.sb-note { margin: 4px 8px 8px; font-size: 14px; color: var(--muted); }
 /* Desktop: show a slim scrollbar on the chapter strip and a grab cursor. */
 @media (pointer: fine) {
   .sb-chapter-row { scrollbar-width: thin; cursor: grab; }
