@@ -12,7 +12,7 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
 import { BookmarkIcon } from './icons'
-import { reopenSettings, SettingsSheet } from './settings'
+import { SettingsSheet } from './settings'
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -39,7 +39,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [browse, setBrowse] = useState<string>()
   const [q, setQ] = useState('')
   // Settings rise as a sheet out of the open panel; pulling them down goes back to it.
-  const [settingsOpen, setSettingsOpen] = useState(reopenSettings)
+  const [settingsOpen, setSettingsOpen] = useState(false)
   const [open, setOpen] = useState(settingsOpen)
   const [listening, setListening] = useState(false)
   const [micOk, setMicOk] = useState(() => !!SpeechRecognition && !micBroken())

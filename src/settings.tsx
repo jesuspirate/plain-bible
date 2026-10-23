@@ -126,15 +126,6 @@ export function SettingsSheet({ onBack, onDone }: { onBack: () => void; onDone: 
   )
 }
 
-// A theme change in the iPhone home-screen app reloads the page; Settings
-// open over search should still be open when it comes back.
-const REOPEN = 'plain-bible:settings-open'
-export function keepSettingsOpen() { try { sessionStorage.setItem(REOPEN, '1') } catch { /* ignore */ } }
-export function reopenSettings() {
-  try { if (sessionStorage.getItem(REOPEN)) { sessionStorage.removeItem(REOPEN); return true } } catch { /* ignore */ }
-  return false
-}
-
 // #/settings as a page of its own: Done (or a pull down) goes back to the word.
 let overReader = false
 export function noteSettingsFrom(page: string) { overReader = page === 'read' }

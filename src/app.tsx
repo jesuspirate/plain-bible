@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
@@ -14,31 +14,20 @@ import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { touchSettings, useSync } from './account'
-import { closeSettingsPage, keepSettingsOpen, noteSettingsFrom, SettingsView } from './settings'
-import { loadPlace, savePlace, withoutVerse } from './lib/place'
+import { closeSettingsPage, noteSettingsFrom, SettingsView } from './settings'
+import { loadPlace, savePlace } from './lib/place'
 
-// The status bar colour the page loaded with (set in index.html before first paint).
-const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
-const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
-/** Reload, at most once every few seconds so a broken setup can't loop. A
- * reload asked for sooner (say, tapping through the themes) waits its turn
- * rather than being dropped, so the status bar always catches up. */
-let reloadTimer = 0
-function reloadSoon() {
-  let wait = 0
-  try {
-    wait = Math.max(0, Number(sessionStorage.getItem('plain-bible:tint-reload') || 0) + 2500 - Date.now())
-  } catch { return }
-  clearTimeout(reloadTimer)
-  reloadTimer = window.setTimeout(() => {
-    try { sessionStorage.setItem('plain-bible:tint-reload', String(Date.now())) } catch { return }
-    // Settings open over search come back open after the reload.
-    if (document.querySelector('.settings-sheet')) keepSettingsOpen()
-    // The reader saves the verse on top as the page goes; drop any
-    // jump-to verse so it comes back on that one.
-    history.replaceState(history.state, '', withoutVerse(location.hash))
-    location.reload()
-  }, wait)
+/** Match the phone's status bar (and the browser bar) to the theme. A fresh
+ *  meta tag rather than an edited one: iPhone home-screen apps reliably
+ *  repaint the status bar when the tag is replaced. */
+function setTint(bg: string) {
+  const old = document.querySelector('meta[name="theme-color"]')
+  if (!bg || old?.getAttribute('content') === bg) return
+  const meta = document.createElement('meta')
+  meta.name = 'theme-color'
+  meta.content = bg
+  if (old) old.replaceWith(meta)
+  else document.head.append(meta)
 }
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
@@ -70,24 +59,18 @@ export function App() {
     }).catch(e => { if (!kept) setError(String(e.message || e)) })
   }, [])
 
-  useEffect(() => {
+  useEffect(() => { if (settings) saveSettings(settings) }, [settings])
+
+  // Before the paint, so a theme tap shows in the very next frame.
+  useLayoutEffect(() => {
     if (!settings) return
-    saveSettings(settings)
     const root = document.documentElement
     root.dataset.theme = settings.theme
     root.dataset.hl = settings.highlight
     root.dataset.vn = settings.verseNumbers
     root.style.setProperty('--font-size', settings.fontSize + 'px')
     root.style.setProperty('--reading', FONTS.find(f => f.id === settings.font)!.family)
-    // Match the phone's status bar (and the browser bar) to the chosen theme.
-    // iPhone home-screen apps only read this colour when the page loads, so
-    // there a theme change reloads the page (it comes back on the same verse).
-    const tint = () => {
-      const bg = getComputedStyle(root).getPropertyValue('--bg').trim()
-      clearTimeout(reloadTimer)
-      if (IOS_HOME_SCREEN && bg !== LOAD_TINT) reloadSoon()
-      document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
-    }
+    const tint = () => setTint(getComputedStyle(root).getPropertyValue('--bg').trim())
     tint()
     const dark = matchMedia('(prefers-color-scheme: dark)')
     dark.addEventListener('change', tint)
