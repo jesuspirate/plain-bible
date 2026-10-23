@@ -286,6 +286,21 @@ main.with-bar { padding-bottom: 120px; }
 @media (hover: hover) { .sb-row:hover { background: var(--chip); } }
 .sb-row .sb-glass { color: var(--muted); }
 @media (prefers-reduced-motion: reduce) { .sb, .sb-panel, .sb-scrim { transition: none; animation: none; } }
+/* Search bar turned off: a small, quiet round button in the corner instead.
+   The real field sits invisibly on top of it, so one tap brings up the
+   keyboard on iPhone too. */
+main.with-mini { padding-bottom: 144px; }
+.sb.sb-mini { left: auto; right: calc(16px + env(safe-area-inset-right)); width: 48px; transform: none; }
+.sb-mini .sb-field {
+  position: relative; width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%;
+  background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none;
+  border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.12);
+}
+.sb-mini .sb-field input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.sb-mini .sb-clear { display: none; }
+.sb-mini .sb-field:active { transform: scale(.94); }
+.sb-mini .sb-bar { flex-direction: column-reverse; gap: 12px; }
+.sb-mini .sb-pray { width: 48px; height: 48px; }
 
 .sb-chapters { padding-bottom: 6px; }
 .sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; scroll-behavior: smooth; }
@@ -486,3 +501,17 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
   /* Not the verse numbers and Strong's words: they sit under your finger as you scroll. */
   :where(button, a, [role='button']):active:not(:disabled, .vn, .w) { opacity: .6; }
 }
+
+/* ---- new version ---- */
+/* A round button in the top bar, only while a new version is waiting. */
+.update-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: none; background: var(--accent); color: var(--accent-ink); -webkit-tap-highlight-color: transparent; animation: update-in .25s ease-out; }
+.update-btn:active { transform: scale(.94); }
+.update-btn.busy svg, .spin { animation: update-spin .8s linear infinite; }
+@keyframes update-in { from { transform: scale(.6); opacity: 0; } }
+@keyframes update-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .update-btn, .update-btn.busy svg, .spin { animation: none; } }
+/* The version: one quiet line at the foot of Settings, tap to update. */
+.version-line { display: flex; flex-direction: column; align-items: center; gap: 2px; width: 100%; min-height: 56px; margin: 28px 0 0; padding: 10px; border: none; background: none; color: var(--muted); font-size: 13px; text-align: center; -webkit-tap-highlight-color: transparent; }
+.version-note { display: inline-flex; align-items: center; gap: 5px; opacity: .8; }
+.version-line.ready { color: var(--accent); font-weight: 600; }
+.version-line.ready .version-note { opacity: 1; }

@@ -14,6 +14,60 @@
         document.documentElement.dataset.theme = t
         document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]
       } catch (e) {}
+
+      // If the app's code can't load (say a half-finished update left the
+      // saved copy pointing at files the site no longer has), the page would
+      // stay blank. Repair clears the saved app files (not your highlights,
+      // settings or downloaded Bibles) and loads a fresh copy.
+      window.plainBibleRepair = function () {
+        var done = function () { location.reload() }
+        try {
+          var jobs = []
+          if (navigator.serviceWorker) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
+            return Promise.all(rs.map(function (r) { return r.unregister() }))
+          }))
+          if (window.caches) jobs.push(caches.keys().then(function (ks) {
+            return Promise.all(ks.filter(function (k) { return k !== 'bible-data' && k !== 'fonts' }).map(function (k) { return caches.delete(k) }))
+          }))
+          Promise.all(jobs).then(done, done)
+          setTimeout(done, 4000)
+        } catch (e) { done() }
+      }
+      ;(function () {
+        var shown = false
+        function stuck(failed) {
+          if (window.plainBibleStarted || shown) return
+          // A broken copy fixes itself once per visit when online.
+          try {
+            if (failed && navigator.onLine && !sessionStorage.getItem('plain-bible:repaired')) {
+              sessionStorage.setItem('plain-bible:repaired', '1')
+              // Only if the site can be reached: a fresh copy has to come from it.
+              return fetch('./?fresh=' + Date.now(), { cache: 'no-store' }).then(function (r) {
+                if (r.ok) window.plainBibleRepair(); else stuck(true)
+              }, function () { stuck(true) })
+            }
+          } catch (e) {}
+          shown = true
+          var box = document.createElement('div')
+          box.id = 'boot-stuck'
+          box.style.cssText = 'position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;font:18px/1.5 system-ui,sans-serif;color:inherit'
+          box.innerHTML = '<p style="margin:0;max-width:22em">' + (failed ? 'Plain Bible didn’t start properly.' : 'Plain Bible is taking a while to start.')
+            + '<br>Your highlights, notes and settings are safe on this device.</p>'
+            + '<button type="button" style="font:inherit;font-weight:700;min-width:220px;min-height:52px;border-radius:26px;border:0;background:#7a4b1e;color:#fff">Repair and reload</button>'
+            + '<button type="button" style="font:inherit;min-width:220px;min-height:52px;border-radius:26px;border:1px solid currentColor;background:none;color:inherit">Just reload</button>'
+          var b = box.getElementsByTagName('button')
+          b[0].onclick = function () { b[0].textContent = 'Repairing…'; window.plainBibleRepair() }
+          b[1].onclick = function () { location.reload() }
+          ;(document.body || document.documentElement).appendChild(box)
+        }
+        // The app's own script failing to load or run.
+        addEventListener('error', function (e) {
+          var t = e.target
+          if (t && t.tagName === 'SCRIPT' || t && t.tagName === 'LINK' && t.rel === 'modulepreload') stuck(true)
+          else if (t === window && !window.plainBibleStarted) setTimeout(function () { stuck(true) }, 0)
+        }, true)
+        setTimeout(function () { stuck(false) }, 12000)
+      })()
     </script>
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon-192.png" />

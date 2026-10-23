@@ -83,7 +83,7 @@ export function upgrade(m: Mark): Mark {
 export function notesOf(m: Mark | undefined): (Note & { id: string; n: string })[] {
   if (!m) return []
   m = upgrade(m)
-  return Object.entries(m.ns ?? {}).filter(([, x]) => x.n).map(([id, x]) => ({ ...x, id, n: x.n! }))
+  return Object.entries(m.ns ?? {}).filter(([, x]) => x && x.n).map(([id, x]) => ({ ...x, id, n: x.n! }))
     .sort((a, b) => a.c - b.c || (a.id < b.id ? -1 : 1))
 }
 
@@ -152,8 +152,16 @@ const KEY = 'plain-bible:marks'
 export function loadMarks(): Marks {
   let m: Marks
   try { m = JSON.parse(localStorage.getItem(KEY) || '{}') } catch { return {} }
-  for (const k in m) m[k] = upgrade(m[k])
-  return m
+  if (!m || typeof m !== 'object' || Array.isArray(m)) return {}
+  // Startup must never fail over one odd entry: anything unreadable is
+  // left out.
+  const out: Marks = {}
+  for (const k in m) {
+    const x = m[k]
+    if (!x || typeof x !== 'object') continue
+    try { out[k] = upgrade(x) } catch { /* skip it */ }
+  }
+  return out
 }
 export function saveMarks(m: Marks) {
   try { localStorage.setItem(KEY, JSON.stringify(m)) } catch { /* storage full or blocked */ }

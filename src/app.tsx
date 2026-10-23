@@ -8,7 +8,9 @@ import { SearchBar } from './searchbar'
 import { Saved } from './saved'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { HistoryIcon } from './icons'
+import { HistoryIcon, RefreshIcon } from './icons'
+import { isNative } from './lib/native'
+import { applyUpdate, checkForUpdate, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
 import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
@@ -150,20 +152,23 @@ export function App() {
         <nav>
           <HistoryButton route={route} />
           <VersionMenu route={route} />
+          <UpdateButton />
           {/* Settings live in the search panel; without the search bar they come back here. */}
           {!settings.searchBar && <a class={view === 'settings' ? 'on' : ''} href="#/settings" aria-label="Settings" title="Settings">
             <svg class="gear" viewBox="0 0 24 24" width="19" height="19" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
           </a>}
         </nav>
       </header>
-      <main class={settings.searchBar && view !== 'search' ? 'with-bar' : ''}>
+      <main class={view === 'search' ? '' : settings.searchBar ? 'with-bar' : 'with-mini'}>
         {view === 'search' ? <Search route={route} />
           : view === 'versions' ? <Versions />
           : view === 'saved' ? <Saved />
           : view === 'settings' ? <SettingsView />
           : <ReaderRoute route={route} />}
       </main>
-      {settings.searchBar && view !== 'search' && <SearchBar here={view === 'read' && route.path.length >= 4
+      {/* With the full bar hidden, a small round search button takes its place,
+          and opens the same panel (with Settings, Saved and the theme). */}
+      {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
       {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
     </AppContext.Provider>
@@ -328,6 +333,35 @@ function HistoryButton({ route }: { route: Route }) {
   )
 }
 
+// Shows only when a new version of the app is in: one tap switches to it,
+// back on the same verse.
+function UpdateButton() {
+  const state = useUpdate()
+  const [busy, setBusy] = useState(false)
+  if (state !== 'ready') return null
+  return (
+    <button class={'update-btn' + (busy ? ' busy' : '')} aria-label="New version ready. Tap to update" title="New version ready: tap to update"
+      onClick={() => { setBusy(true); applyUpdate() }}>
+      <RefreshIcon size={24} />
+    </button>
+  )
+}
+
+// The version, in one quiet line at the very bottom of Settings. Tapping it
+// is the whole update: it looks for a new version and switches to it if
+// there is one, or says you're up to date.
+function VersionLine() {
+  const state = useUpdate()
+  if (isNative) return <p class="version-line muted">Version {__BUILD__}</p>
+  const note = { idle: 'Tap to check for updates', checking: 'Checking…', ready: 'New version: tap to update', current: 'Up to date', offline: 'Offline, try later' }[state]
+  return (
+    <button class={'version-line' + (state === 'ready' ? ' ready' : '')} disabled={state === 'checking'} onClick={() => checkForUpdate()}>
+      <span>Version {__BUILD__}</span>
+      <span class="version-note"><RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}</span>
+    </button>
+  )
+}
+
 function SettingsView() {
   const { settings, update, catalog, marks, sync, byId } = useApp()
   useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
@@ -379,7 +413,7 @@ function SettingsView() {
         </div>
       </div>
       <div class="field"><span>Search bar</span>
-        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the floating search bar at the bottom of the screen</label>
+        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.</label>
       </div>
       <div class="field"><span>Highlights</span>
         <div class="col">
@@ -421,6 +455,7 @@ function SettingsView() {
         }
       }}>Reset settings</button></p>
       </>}
+      <VersionLine />
     </div>
   )
 }

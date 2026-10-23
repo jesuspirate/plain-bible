@@ -20,7 +20,9 @@ export function rememberSearch(q: string) {
   try { localStorage.setItem(RECENT, JSON.stringify(list)) } catch { /* ignore */ }
 }
 
-export function SearchBar({ here }: { here?: { version: string; book: string; chapter: number } }) {
+// With `mini`, the closed bar shrinks to a small round button in the corner;
+// tapping it opens the same panel.
+export function SearchBar({ here, mini }: { here?: { version: string; book: string; chapter: number }; mini?: boolean }) {
   const { settings, data, byId } = useApp()
   // Chapter counts per book in the current version, for the book and chapter browser.
   const [lens, setLens] = useState<Record<string, number>>({})
@@ -206,7 +208,7 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
   return (
     <>
       {open && <div class="sb-scrim" onClick={close} />}
-      <div class={'sb' + (open ? ' sb-open' : '') + ''}>
+      <div class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
@@ -289,6 +291,8 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
                     <span>Settings</span>
                   </button>
                   <button class="sb-chip sb-tool" onClick={() => finish('saved')}><BookmarkIcon size={20} /><span>Saved</span></button>
+                  {/* The small button has no room for the theme toggle, so it lives here. */}
+                  {mini && <ThemeToggle label />}
                 </div>
               </>
             )}
@@ -297,20 +301,22 @@ export function SearchBar({ here }: { here?: { version: string; book: string; ch
         <div class="sb-bar">
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
-          <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={`Search ${version} or go to a passage`}
+          <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? 'Search' : `Search ${version} or go to a passage`}
             placeholder={here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
             onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {/* Light, sepia, dark: always one tap away, right in the bar. */}
-          {!open && <ThemeToggle class="sb-theme" />}
+          {!open && !mini && <ThemeToggle class="sb-theme" />}
           {/* Prayer, always one tap away: opens the glowing microphone over the page. */}
-          {!open && (
+          {!open && !mini && (
             <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}>
               <PrayIcon size={23} />
             </button>
           )}
         </form>
+        {/* With the bar hidden, prayer gets its own round button above search. */}
+        {mini && !open && <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}><PrayIcon size={26} /></button>}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
       </div>
