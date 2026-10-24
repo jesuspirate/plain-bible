@@ -226,7 +226,7 @@ html:has(dialog[open]) { overflow: hidden; }
 main.with-bar { padding-bottom: 120px; }
 .sb {
   position: fixed; z-index: 30; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom));
-  width: min(640px, calc(100vw - 24px)); transform: translateX(-50%);
+  width: min(600px, calc(100vw - 32px)); transform: translateX(-50%);
   transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s;
 }
 .sb-field {
@@ -248,7 +248,7 @@ main.with-bar { padding-bottom: 120px; }
 .sb-theme:active { background: var(--chip); }
 /* The prayer button: 🙏 in a small warm light, always there. Drawn once, not animated, so it costs nothing while you read. */
 .sb-pray {
-  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%;
+  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 58px; height: 58px; border-radius: 50%;
   background: radial-gradient(circle at 50% 40%, #fffdf6 0%, #fff1cc 55%, #ffd98a 100%);
   box-shadow: 0 0 0 1px rgba(240, 185, 90, .6), 0 0 14px 3px rgba(245, 190, 95, .55); -webkit-tap-highlight-color: transparent;
   /* Held for the skin tones: no text selection, no callout, no scrolling away. */
@@ -256,8 +256,7 @@ main.with-bar { padding-bottom: 120px; }
 }
 /* A little more to hold on to than the drawn circle. */
 .sb-pray::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; }
-.sb-pray-emoji { font: 23px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
-.sb-mini .sb-pray-emoji { font-size: 26px; }
+.sb-pray-emoji { font: 30px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
 .tones button { font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; padding: 8px 10px; }
 .tones button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
 .sb-pray:active { transform: scale(.94); }
@@ -281,7 +280,7 @@ main.with-bar { padding-bottom: 120px; }
 .hold-pick button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
 @keyframes hold-in { from { opacity: 0; transform: translateY(6px) scale(.96); } }
 @media (prefers-reduced-motion: reduce) { .hold-pick { animation: none; } }
-.sb-bar { display: flex; align-items: center; gap: 8px; }
+.sb-bar { display: flex; align-items: center; gap: 12px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
 .sb-cancel {
   all: unset; cursor: pointer; flex: none; box-sizing: border-box; height: 52px; padding: 0 18px; border-radius: 26px;
@@ -337,7 +336,7 @@ main.with-bar { padding-bottom: 120px; }
    The real field sits invisibly on top of it, so one tap brings up the
    keyboard on iPhone too. */
 main.with-mini { padding-bottom: 144px; }
-.sb.sb-mini { left: auto; right: calc(16px + env(safe-area-inset-right)); width: 48px; transform: none; }
+.sb.sb-mini { left: auto; right: calc(16px + env(safe-area-inset-right)); width: auto; transform: none; }
 .sb-mini .sb-field {
   position: relative; width: 48px; height: 48px; padding: 0; justify-content: center; border-radius: 50%;
   background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none;
@@ -346,9 +345,7 @@ main.with-mini { padding-bottom: 144px; }
 .sb-mini .sb-field input { position: absolute; inset: 0; width: 100%; opacity: 0; cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .sb-mini .sb-clear { display: none; }
 .sb-mini .sb-field:active { transform: scale(.94); }
-.sb-mini .sb-bar { flex-direction: column-reverse; gap: 12px; }
 .sb-mini .sb-bar .sb-field { flex: none; }
-.sb-mini .sb-pray { width: 48px; height: 48px; }
 
 .sb-chapters { padding-bottom: 6px; }
 .sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; scroll-behavior: smooth; }
@@ -438,14 +435,32 @@ main.with-mini { padding-bottom: 144px; }
 .shortcut strong { font-weight: 600; }
 .shortcut span { font-size: 14px; }
 
-/* ---- version menu ---- */
-.version-btn { height: 46px; padding: 0 16px; border-radius: 12px; border: 1px solid var(--line); background: var(--surface); font-weight: 700; font-size: 18px; white-space: nowrap; }
-.version-btn.on { background: var(--chip); }
-@media (hover: hover) { .version-btn:hover { background: var(--chip); } }
-.vm-extra { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 14px; overflow: hidden; margin-bottom: 16px; }
-.vm-extra > .vm-row { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 12px 14px; border: none; border-radius: 0; background: var(--surface); color: var(--text); text-decoration: none; text-align: left; font: inherit; font-size: 16px; cursor: pointer; margin: 0; width: 100%; box-sizing: border-box; }
-.vm-extra > .vm-row + .vm-row { border-top: 1px solid var(--line); }
-.vm-extra > .vm-row strong { font-weight: 600; }
+/* ---- the settings button, top right ---- */
+.profile-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: 1px solid var(--line); background: var(--chip); color: var(--text); position: relative; -webkit-tap-highlight-color: transparent; }
+@media (hover: hover) { .profile-btn:hover { filter: brightness(.96); } }
+.profile-btn:active { transform: scale(.94); }
+/* Signed in: a small green dot, like someone who's around. */
+.profile-btn.synced::after { content: ''; position: absolute; right: 1px; bottom: 1px; width: 11px; height: 11px; border-radius: 50%; background: #34a853; box-shadow: 0 0 0 2px var(--bg); }
+
+/* ---- settings lists: big rows, one tap each ---- */
+.set-group { margin: 0 0 22px; }
+.set-kicker { font: 600 13px var(--sans); text-transform: uppercase; letter-spacing: .05em; color: var(--muted); margin: 0 0 8px; }
+.set-group .essentials { margin: 4px 0 14px; }
+.set-list { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); }
+.set-row { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 16px; margin: 0; border: none; border-radius: 0; background: none; color: var(--text); text-decoration: none; text-align: left; font: 500 17px var(--sans); cursor: pointer; width: 100%; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+.set-row + .set-row { border-top: 1px solid var(--line); }
+@media (hover: hover) { .set-row:hover:not(:disabled) { background: var(--chip); } }
+.set-row:disabled { opacity: 1; cursor: default; }
+.set-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.set-value { color: var(--muted); font-weight: 400; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.set-chev { color: var(--muted); font-size: 22px; line-height: 1; }
+.set-icon { width: 28px; text-align: center; font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
+.set-vid { font-weight: 700; min-width: 48px; }
+.set-version .set-label { font-weight: 400; color: var(--muted); }
+.set-star { color: var(--accent); font-size: 20px; }
+.settings-back { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 46px; font: 600 24px var(--sans); color: var(--text); -webkit-tap-highlight-color: transparent; }
+.settings-back span { font-size: 34px; line-height: 1; color: var(--accent); margin-top: -3px; }
+.set-big { display: block; width: 100%; min-height: 56px; margin: 4px 0 10px; border-radius: 16px; font: 600 18px var(--sans); }
 
 /* ---- account ---- */
 .account p { margin: 0 0 10px; }

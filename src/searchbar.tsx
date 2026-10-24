@@ -12,7 +12,6 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, openPrayer, readPath, TONES, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
 import { useHoldPick } from './hold'
-import { SettingsSheet } from './settings'
 import { isIOS } from './lib/native'
 
 const TONE_NAMES = ['Yellow', 'Light skin tone', 'Medium-light skin tone', 'Medium skin tone', 'Medium-dark skin tone', 'Dark skin tone']
@@ -50,8 +49,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [lens, setLens] = useState<Record<string, number>>({})
   const [browse, setBrowse] = useState<string>()
   const [q, setQ] = useState('')
-  // Settings rise as a sheet out of the open panel; pulling them down goes back to it.
-  const [settingsOpen, setSettingsOpen] = useState(false)
   const [open, setOpen] = useState(false)
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
@@ -224,7 +221,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     setOpen(true)
   }
 
-  const close = () => { setOpen(false); setSettingsOpen(false); input.current?.blur() }
+  const close = () => { setOpen(false); input.current?.blur() }
 
   // A tap only counts in the panel if the finger went down on that same
   // button and stayed put. The tap that opens search lands on the bar, but on
@@ -292,17 +289,12 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
-            {/* Settings at the top, in sight the moment search opens. With the
-                small round button, the theme toggle sits here too. */}
+            {/* A grabber to pull it closed. With the small round button, the
+                theme toggle sits here too. (Settings are in the top right corner.) */}
             <div class="sb-head">
               <span class="sb-head-side">{mini && <ThemeToggle class="sb-head-btn sb-head-icon" />}</span>
               <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
-              <span class="sb-head-side end">
-                <button type="button" class="sb-head-btn" onClick={() => { input.current?.blur(); setSettingsOpen(true) }}>
-                  <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path fill="currentColor" d="M19.4 13a7.6 7.6 0 0 0 0-2l2.1-1.6-2-3.5-2.5 1a7.4 7.4 0 0 0-1.7-1L15 3h-4l-.4 2.7a7.4 7.4 0 0 0-1.7 1l-2.5-1-2 3.5L6.6 11a7.6 7.6 0 0 0 0 2l-2.1 1.6 2 3.5 2.5-1a7.4 7.4 0 0 0 1.7 1L11 21h4l.4-2.7a7.4 7.4 0 0 0 1.7-1l2.5 1 2-3.5zM13 15.5a3.5 3.5 0 1 1 0-7 3.5 3.5 0 0 1 0 7z" transform="translate(-1 0)" /></svg>
-                  <span>Settings</span>
-                </button>
-              </span>
+              <span class="sb-head-side end" />
             </div>
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
@@ -387,17 +379,13 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {/* Light, sepia, dark: always one tap away, right in the bar. */}
           {!open && !mini && <ThemeToggle class="sb-theme" />}
-          {/* Prayer, always one tap away: opens the glowing microphone over the page. */}
-          {!open && !mini && (
-            <PrayButton />
-          )}
         </form>
-        {/* With the bar hidden, prayer gets its own round button above search. */}
-        {mini && !open && <PrayButton />}
+        {/* Prayer, always one tap away, on its own just right of search: opens
+            the glowing microphone over the page. */}
+        {!open && <PrayButton />}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
       </div>
-      {open && settingsOpen && <SettingsSheet onBack={() => setSettingsOpen(false)} onDone={() => { close(); setQ('') }} />}
     </>
   )
 }

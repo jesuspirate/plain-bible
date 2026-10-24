@@ -93,6 +93,10 @@ export const useApp = () => useContext(AppContext)
 export const PRAY_EVENT = 'plain-bible:pray'
 export const openPrayer = () => window.dispatchEvent(new Event(PRAY_EVENT))
 
+/** Open Settings (the sheet behind the button in the top right corner). */
+export const SETTINGS_EVENT = 'plain-bible:settings'
+export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
+
 // A prayer can be tied to a verse. Verses you just selected are offered when
 // you open prayer soon after; Pray on the selection bar ties them at once.
 let picked: { verse: PrayerVerse; at: number; sure: boolean } | undefined

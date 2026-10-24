@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
-import { awaitVerse, go, inCircles, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
+import { awaitVerse, go, inCircles, openSettings, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { CircleIcon } from './icons'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
@@ -380,7 +380,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
       </> : !signedIn ? <>
         <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
         <p class="muted small">{LOCAL_ONLY}</p>
-        <button class="pray-btn" onClick={() => { onClose(); go('settings') }}>Go to Settings → Account</button>
+        <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>Go to Settings → Sync your devices</button>
       </> : needCode ? <>
         <p class="muted">This passkey can’t unlock your prayers here. On a device where they already sync, open Your prayers and tap <strong>Link another device</strong>, then open that link here. Or copy the prayer key from there and paste it below.</p>
         <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"
