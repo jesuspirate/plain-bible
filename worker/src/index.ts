@@ -189,12 +189,186 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
   throw new HttpError(404, 'Not found')
 }
 
+// Circles. Members share verses and prayers, each sealed with the circle's
+// key on the device; here they're opaque text and bytes, plus who and when.
+const CIRCLE_ID = /^[\w-]{8,40}$/
+const SEALED_MAX = 20_000
+const CIRCLE_QUOTA = 1_000_000_000
+const MAX_CIRCLES = 20
+const MAX_MEMBERS = 50
+const INVITE_DAYS = 7
+const sealedText = (v: unknown, max = SEALED_MAX) => typeof v === 'string' && v.length > 0 && v.length <= max && /^[\w-]+$/.test(v)
+
+/** The member's row in the circle, or 404 (not 403: a stranger can't tell
+ *  whether the circle exists). */
+async function membership(db: D1Database, circle: string, userId: string) {
+  const row = await db.prepare('SELECT mid FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(circle, userId).first<{ mid: string }>()
+  if (!row) throw new HttpError(404, 'Not found')
+  return row.mid
+}
+
+/** Take a member out, with what they shared. The last one out closes the circle. */
+function leaveCircle(db: D1Database, circle: string, userId: string) {
+  const mine = 'SELECT id FROM circle_items WHERE circle_id = ?1 AND user_id = ?2'
+  return [
+    db.prepare(`DELETE FROM circle_chunks WHERE circle_id = ?1 AND item IN (${mine})`).bind(circle, userId),
+    db.prepare(`DELETE FROM circle_amens WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
+    db.prepare('DELETE FROM circle_items WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
+    db.prepare('DELETE FROM circle_invites WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
+    db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
+    ...['circle_chunks', 'circle_amens', 'circle_items', 'circle_invites'].map(t =>
+      db.prepare(`DELETE FROM ${t} WHERE circle_id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)`).bind(circle)),
+    db.prepare('DELETE FROM circles WHERE id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)').bind(circle),
+  ]
+}
+
+async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const userId = await session(req, env)
+  const db = env.DB, now = Date.now()
+  const [a, b, c, d, e] = parts
+
+  // The circles you're in, with your locked copy of each key.
+  if (req.method === 'GET' && !a) {
+    const rows = await db.prepare(`SELECT c.id, c.name, m.mid, m.wrapped, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = c.id) AS members
+      FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE m.user_id = ? ORDER BY m.joined`).bind(userId).all()
+    return json({ circles: rows.results })
+  }
+  if (req.method === 'POST' && !a) {
+    const { id, name, wrapped, me } = await readJson<{ id: string; name: string; wrapped: string; me: string }>(req)
+    if (typeof id !== 'string' || !CIRCLE_ID.test(id) || !sealedText(name, 2000) || !sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
+    const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
+    if ((n?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
+    if (await db.prepare('SELECT 1 FROM circles WHERE id = ?').bind(id).first()) throw new HttpError(409, 'Try again')
+    await db.batch([
+      db.prepare('INSERT INTO circles (id, name, created) VALUES (?, ?, ?)').bind(id, name, now),
+      db.prepare('INSERT INTO circle_members (circle_id, user_id, mid, wrapped, name, joined) VALUES (?, ?, ?, ?, ?, ?)').bind(id, userId, random(9), wrapped, me, now),
+    ])
+    return json({ ok: true })
+  }
+
+  // Invites. Anyone signed in who has the link can look, and join once.
+  if (a === 'invite' && b && !c) {
+    if (!CIRCLE_ID.test(b)) throw new HttpError(404, 'Not found')
+    const inv = await db.prepare(`SELECT i.circle_id, i.wrapped, c.name, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = i.circle_id) AS members
+      FROM circle_invites i JOIN circles c ON c.id = i.circle_id WHERE i.id = ? AND i.expires > ?`).bind(b, now)
+      .first<{ circle_id: string; wrapped: string; name: string; members: number }>()
+    if (!inv) throw new HttpError(404, 'This invite has been used or has expired. Ask for a new one.')
+    const already = !!(await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(inv.circle_id, userId).first())
+    if (req.method === 'GET') return json({ circle: inv.circle_id, wrapped: inv.wrapped, name: inv.name, members: inv.members, already })
+    if (req.method === 'POST') {
+      if (already) return json({ ok: true, circle: inv.circle_id })
+      const { wrapped, me } = await readJson<{ wrapped: string; me: string }>(req)
+      if (!sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
+      if (inv.members >= MAX_MEMBERS) throw new HttpError(413, `A circle can have up to ${MAX_MEMBERS} people`)
+      const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
+      if ((n?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
+      // Used up in the same step as joining, so one link can't let in two people.
+      const taken = await db.prepare('DELETE FROM circle_invites WHERE id = ? AND expires > ? RETURNING circle_id').bind(b, now).first()
+      if (!taken) throw new HttpError(404, 'This invite has been used or has expired. Ask for a new one.')
+      await db.prepare('INSERT INTO circle_members (circle_id, user_id, mid, wrapped, name, joined) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING')
+        .bind(inv.circle_id, userId, random(9), wrapped, me, now).run()
+      return json({ ok: true, circle: inv.circle_id })
+    }
+  }
+
+  if (!a || !CIRCLE_ID.test(a)) throw new HttpError(404, 'Not found')
+  const circle = a
+  const mid = await membership(db, circle, userId)
+
+  // Who's in it and what's been shared, newest first.
+  if (req.method === 'GET' && !b) {
+    const [members, items, amens] = await Promise.all([
+      db.prepare('SELECT mid, name FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
+      db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
+        WHERE i.circle_id = ?1 AND (i.chunks = 0 OR i.chunks = (SELECT COUNT(*) FROM circle_chunks k WHERE k.circle_id = ?1 AND k.item = i.id))
+        ORDER BY i.at DESC LIMIT 300`).bind(circle).all(),
+      db.prepare(`SELECT a.item, m.mid FROM circle_amens a JOIN circle_members m ON m.circle_id = a.circle_id AND m.user_id = a.user_id
+        WHERE a.circle_id = ? ORDER BY a.at`).bind(circle).all<{ item: string; mid: string }>(),
+    ])
+    return json({ me: mid, members: members.results, items: items.results, amens: amens.results })
+  }
+  // Your name in this circle.
+  if (b === 'me' && !c) {
+    if (req.method === 'PUT') {
+      const { me } = await readJson<{ me: string }>(req)
+      if (!sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
+      await db.prepare('UPDATE circle_members SET name = ? WHERE circle_id = ? AND user_id = ?').bind(me, circle, userId).run()
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') { await db.batch(leaveCircle(db, circle, userId)); return json({ ok: true }) }
+  }
+  if (b === 'invites' && !c && req.method === 'POST') {
+    const { id, wrapped } = await readJson<{ id: string; wrapped: string }>(req)
+    if (typeof id !== 'string' || !CIRCLE_ID.test(id) || !sealedText(wrapped, 500)) throw new HttpError(400, 'Bad request')
+    const open = await db.prepare('SELECT COUNT(*) AS n FROM circle_invites WHERE circle_id = ? AND expires > ?').bind(circle, now).first<{ n: number }>()
+    if ((open?.n ?? 0) >= 20) throw new HttpError(413, 'Too many unused invites. Try again in a few days.')
+    await db.batch([
+      db.prepare('DELETE FROM circle_invites WHERE expires < ?').bind(now),
+      db.prepare('INSERT INTO circle_invites (id, circle_id, user_id, wrapped, expires) VALUES (?, ?, ?, ?, ?)').bind(id, circle, userId, wrapped, now + INVITE_DAYS * DAY),
+    ])
+    return json({ ok: true, expires: now + INVITE_DAYS * DAY })
+  }
+  if (b !== 'items' || !c || !CIRCLE_ID.test(c)) throw new HttpError(404, 'Not found')
+  const item = c
+  const own = () => db.prepare('SELECT chunks FROM circle_items WHERE circle_id = ? AND id = ? AND user_id = ?').bind(circle, item, userId).first<{ chunks: number }>()
+
+  if (!d) {
+    if (req.method === 'PUT') {
+      const { body, chunks, size } = await readJson<{ body: string; chunks: number; size: number }>(req)
+      if (!sealedText(body) || !Number.isInteger(chunks) || chunks < 0 || chunks > MAX_CHUNKS || !Number.isInteger(size) || size < 0 || size > MAX_CHUNKS * CHUNK_MAX) throw new HttpError(400, 'Bad request')
+      const used = await db.prepare('SELECT COALESCE(SUM(size), 0) AS n FROM circle_items WHERE circle_id = ?').bind(circle).first<{ n: number }>()
+      if ((used?.n ?? 0) + size > CIRCLE_QUOTA) throw new HttpError(413, 'This circle is full. Delete some older prayers to make room.')
+      const res = await db.prepare('INSERT INTO circle_items (circle_id, id, user_id, at, body, chunks, size) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING')
+        .bind(circle, item, userId, now, body, chunks, size).run()
+      if (!res.meta.changes && !(await own())) throw new HttpError(409, 'Try again')
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      if (!(await own())) throw new HttpError(404, 'Not found')
+      await db.batch(['circle_chunks', 'circle_amens'].map(t => db.prepare(`DELETE FROM ${t} WHERE circle_id = ? AND item = ?`).bind(circle, item)).concat(
+        db.prepare('DELETE FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item)))
+      return json({ ok: true })
+    }
+  }
+  if (d === 'amen' && !e) {
+    if (req.method === 'PUT') {
+      if (!(await db.prepare('SELECT 1 FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first())) throw new HttpError(404, 'Not found')
+      await db.prepare('INSERT INTO circle_amens (circle_id, item, user_id, at) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, userId, now).run()
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('DELETE FROM circle_amens WHERE circle_id = ? AND item = ? AND user_id = ?').bind(circle, item, userId).run()
+      return json({ ok: true })
+    }
+  }
+  // A prayer's sealed audio, one chunk at a time.
+  const n = Number(d)
+  if (!d || e || !Number.isInteger(n) || n < 0 || n >= MAX_CHUNKS) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET') {
+    const row = await db.prepare('SELECT data FROM circle_chunks WHERE circle_id = ? AND item = ? AND n = ?').bind(circle, item, n).first<{ data: unknown }>()
+    if (!row) throw new HttpError(404, 'Not found')
+    return new Response(bytes(row.data), { headers: { 'Content-Type': 'application/octet-stream', 'Cache-Control': 'no-store' } })
+  }
+  if (req.method === 'PUT') {
+    const it = await own()
+    if (!it || n >= it.chunks) throw new HttpError(404, 'Not found')
+    const data = await req.arrayBuffer()
+    if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
+    await db.prepare('INSERT INTO circle_chunks (circle_id, item, n, data) VALUES (?, ?, ?, ?) ON CONFLICT DO UPDATE SET data = excluded.data').bind(circle, item, n, data).run()
+    return json({ ok: true })
+  }
+  throw new HttpError(404, 'Not found')
+}
+
 async function route(req: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
   const rpID = env.RP_ID
   if (pathname === '/prayers' || pathname.startsWith('/prayers/')) {
     return prayerRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
+  }
+  if (pathname === '/circles' || pathname.startsWith('/circles/')) {
+    return circleRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
   }
 
   switch (key) {
@@ -282,7 +456,10 @@ async function route(req: Request, env: Env): Promise<Response> {
 
     case 'DELETE /account': {
       const userId = await session(req, env)
-      await env.DB.batch(['prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'sessions', 'credentials', 'challenges'].map(t =>
+      // Out of every circle first, taking what they shared with them.
+      const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
+      for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
+      await env.DB.batch(['circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

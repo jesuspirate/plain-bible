@@ -48,3 +48,11 @@ export const RefreshIcon = ({ size, class: c }: P) => (
     <path d="M19.8 3.8v4.6h-4.6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
+
+/** Three people around a circle: share with your circle. */
+export const CircleIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" />
+    <circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
+    <circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
+    <path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+)

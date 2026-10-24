@@ -9,10 +9,10 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { awaitVerse, go, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, useApp, versesPicked } from './state'
+import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, shareWithCircle, useApp, versesPicked } from './state'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
-import { BookmarkIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -614,6 +614,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>Link</span></button>}
           <button onClick={showCompare}><CompareIcon size={22} /><span>Compare</span></button>
           <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>Pray</span></button>
+          {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>Circle</span></button>}
         </div>
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>

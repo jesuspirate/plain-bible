@@ -4,7 +4,8 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
-import { awaitVerse, go, readPath, useApp, verseToPrayOver } from './state'
+import { awaitVerse, go, inCircles, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
+import { CircleIcon } from './icons'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
 import type { Bible } from './lib/data'
@@ -308,6 +309,9 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
                 <button class="pray-icon" aria-label="Share or save this prayer" title="Share or save" onClick={() => save(p)}>
                   {again === p.id ? 'Share' : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}
                 </button>
+                {inCircles() && <button class="pray-icon" aria-label="Share this prayer with your circle" title="Share with your circle" onClick={() => shareWithCircle({ prayer: p.id })}>
+                  <CircleIcon size={24} />
+                </button>}
                 {/* A bin, not a cross: a cross reads as close. */}
                 <button class="pray-icon pray-bin" aria-label="Delete this prayer" title="Delete" onClick={() => setConfirm(p.id)}>
                   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>

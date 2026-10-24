@@ -52,10 +52,11 @@ async function passkeySecret(): Promise<{ credId: string; secret: Uint8Array } |
 // the code needs typing only once: after that the passkey unlocks it.
 let pendingSecret: { credId: string; secret: Uint8Array } | null = null
 
-/** Turn prayer sync on for this device. Asks for the passkey; on the
- *  account's first device this makes the prayer key. Returns needCode when
- *  the key has to be typed in (a passkey that can't unlock it). */
-export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'> {
+/** The account's prayer key, from the passkey or a typed code; on the
+ *  account's first device this makes it. 'needCode' when the key has to be
+ *  typed in (a passkey that can't unlock it). Circles use the same key to
+ *  keep each circle's key, so it's one key to look after, not two. */
+export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'> {
   const acct = loadAccount()
   if (!SYNC_URL || !acct) throw new SyncError('Sign in first, under Settings → Account.')
   const remote = await api<Remote>('/prayers', { token: acct.token })
@@ -85,6 +86,16 @@ export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'
   if (secret) {
     await api(`/prayers/wrap/${encodeURIComponent(secret.credId)}`, { method: 'PUT', token: acct.token, body: { wrapped: await wrapKey(raw, secret.secret) } }).catch(() => {})
   }
+  return raw
+}
+
+/** Turn prayer sync on for this device. Asks for the passkey; on the
+ *  account's first device this makes the prayer key. Returns needCode when
+ *  the key has to be typed in (a passkey that can't unlock it). */
+export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'> {
+  const raw = await unlockKey(code)
+  if (raw === 'needCode') return raw
+  const pk = await prayerKey(raw)
   await meta.set('key', raw)
   setOn(pk.id)
   await syncPrayers()
