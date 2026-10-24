@@ -452,6 +452,7 @@ main.with-mini { padding-bottom: 144px; }
 @media (hover: hover) { .set-row:hover:not(:disabled) { background: var(--chip); } }
 .set-row:disabled { opacity: 1; cursor: default; }
 .set-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.set-sub { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 400; color: var(--muted); }
 .set-value { color: var(--muted); font-weight: 400; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .set-chev { color: var(--muted); font-size: 22px; line-height: 1; }
 .streak-row { gap: 0; cursor: pointer; }
