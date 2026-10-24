@@ -9,7 +9,8 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, openPrayer, readPath, TONES, useApp } from './state'
+import { go, inCircles, openPrayer, readPath, TONES, useApp } from './state'
+import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { VerseText } from './ui'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
@@ -24,10 +25,13 @@ function PrayButton() {
     value: settings.prayTone, onPick: t => update({ prayTone: t }), onTap: () => openPrayer(),
     label: 'Prayer button skin tone', cls: 'tone-pick', cell: 42,
   })
+  useCircleNews()
+  const news = inCircles() && circlesWithNews() > 0
   return (
     <>
-      <button {...button} type="button" class="sb-pray holdable" aria-label="Pray" title="Pray · hold for skin tones">
+      <button {...button} type="button" class="sb-pray holdable" aria-label={news ? 'Pray · something new in your circles' : 'Pray'} title="Pray · hold for skin tones">
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
+        {news && <span class="sb-pray-dot" aria-hidden="true" />}
       </button>
       {picker}
     </>

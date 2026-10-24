@@ -397,9 +397,15 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
   const looking = a === 'invite' && b && !c && req.method === 'GET'
   const userId = looking ? await session(req, env).catch(() => '') : await session(req, env)
 
-  // The circles you're in, with your locked copy of each key.
+  // The circles you're in, with your locked copy of each key, and when
+  // someone else last shared, replied, or prayed with something of yours
+  // (so the app can show a quiet dot; it says nothing of what).
   if (req.method === 'GET' && !a) {
-    const rows = await db.prepare(`SELECT c.id, c.name, m.mid, m.wrapped, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = c.id) AS members
+    const rows = await db.prepare(`SELECT c.id, c.name, m.mid, m.wrapped, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = c.id) AS members,
+      MAX(COALESCE((SELECT MAX(at) FROM circle_items i WHERE i.circle_id = c.id AND i.user_id != m.user_id), 0),
+        COALESCE((SELECT MAX(at) FROM circle_replies r WHERE r.circle_id = c.id AND r.user_id != m.user_id), 0),
+        COALESCE((SELECT MAX(a.at) FROM circle_amens a JOIN circle_items i ON i.circle_id = a.circle_id AND i.id = a.item
+          WHERE a.circle_id = c.id AND a.user_id != m.user_id AND i.user_id = m.user_id), 0)) AS latest
       FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE m.user_id = ? ORDER BY m.joined`).bind(userId).all()
     return json({ circles: rows.results })
   }
@@ -453,8 +459,8 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
       db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
         WHERE i.circle_id = ?1 AND (i.chunks = 0 OR i.chunks = (SELECT COUNT(*) FROM circle_chunks k WHERE k.circle_id = ?1 AND k.item = i.id))
         ORDER BY i.at DESC LIMIT 300`).bind(circle).all(),
-      db.prepare(`SELECT a.item, m.mid FROM circle_amens a JOIN circle_members m ON m.circle_id = a.circle_id AND m.user_id = a.user_id
-        WHERE a.circle_id = ? ORDER BY a.at`).bind(circle).all<{ item: string; mid: string }>(),
+      db.prepare(`SELECT a.item, m.mid, a.at FROM circle_amens a JOIN circle_members m ON m.circle_id = a.circle_id AND m.user_id = a.user_id
+        WHERE a.circle_id = ? ORDER BY a.at`).bind(circle).all<{ item: string; mid: string; at: number }>(),
       db.prepare(`SELECT r.item, r.id, m.mid, r.at, r.body FROM circle_replies r JOIN circle_members m ON m.circle_id = r.circle_id AND m.user_id = r.user_id
         WHERE r.circle_id = ? ORDER BY r.at`).bind(circle).all(),
     ])

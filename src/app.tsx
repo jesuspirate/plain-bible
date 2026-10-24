@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -17,6 +17,7 @@ import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveBanner, MoveWelcome } from './move'
 import { DAYS_EVENT } from './lib/streaks'
+import { checkCircleNews } from './lib/circleNews'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -169,6 +170,17 @@ export function App() {
     document.addEventListener('visibilitychange', back)
     return () => { clearTimeout(t); removeEventListener(DAYS_EVENT, push); removeEventListener('online', push); document.removeEventListener('visibilitychange', back) }
   }, [sharedWith, sync.account?.token])
+
+  // Something new in your circles? One small request when the app opens or
+  // comes back (at most once a minute), only for people in a circle.
+  useEffect(() => {
+    if (!sync.account || !inCircles()) return
+    const t = window.setTimeout(() => checkCircleNews(), 2500)
+    const back = () => { if (document.visibilityState === 'visible') checkCircleNews() }
+    document.addEventListener('visibilitychange', back)
+    addEventListener('online', back)
+    return () => { clearTimeout(t); document.removeEventListener('visibilitychange', back); removeEventListener('online', back) }
+  }, [sync.account?.token])
 
   if (error) return (
     <div class="center">
