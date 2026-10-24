@@ -13,7 +13,8 @@ async function cachedIds(): Promise<Set<string>> {
   } catch { return new Set() }
 }
 
-export function Versions() {
+/** With `inSheet`, it's a page of Settings: the sheet has the title and the way back. */
+export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
   const { catalog, settings, update, data } = useApp()
   const [filter, setFilter] = useState('')
   const [offline, setOffline] = useState<Set<string>>(new Set())
@@ -50,7 +51,7 @@ export function Versions() {
 
   return (
     <div class="versions">
-      <h1>Versions</h1>
+      {!inSheet && <h1>Versions</h1>}
       <p class="muted">{catalog.translations.length} versions in {langs} languages. All are public domain or openly licensed.
         Star a version to keep it at the top of every list. Save it for offline use and it works without a connection.</p>
       <input class="filter" type="search" placeholder="Filter by name or language" value={filter} onInput={e => setFilter((e.target as HTMLInputElement).value)} />
@@ -77,7 +78,7 @@ export function Versions() {
           </ul>
         </section>
       ))}
-      <p><button class="link" onClick={() => go('read')}>← Back to reading</button></p>
+      {!inSheet && <p><button class="link" onClick={() => go('read')}>← Back to reading</button></p>}
     </div>
   )
 }

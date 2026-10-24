@@ -601,9 +601,10 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .version-note { opacity: .8; }
 .version-line.ready .version-note { color: var(--accent); font-weight: 600; opacity: 1; }
 
-/* ---- Settings: a sheet that rises out of the search panel ---- */
+/* ---- Settings: a sheet over the word, which stays in view above it ---- */
+.settings-scrim { position: fixed; inset: 0; z-index: 34; background: rgba(10, 10, 12, .28); animation: sb-fade .25s; }
 .settings-sheet {
-  position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; top: calc(max(10px, env(safe-area-inset-top)) + 6px);
+  position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; top: calc(max(10px, env(safe-area-inset-top)) + 56px);
   overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; outline: none;
   background: var(--bg); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,.25);
   padding: 0 max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
@@ -620,7 +621,13 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .settings-grabber { all: unset; cursor: pointer; display: block; width: 100%; height: 22px; position: relative; -webkit-tap-highlight-color: transparent; }
 .settings-grabber::before { content: ''; position: absolute; left: 50%; top: 9px; width: 40px; height: 5px; margin-left: -20px; border-radius: 3px; background: color-mix(in srgb, var(--muted) 45%, transparent); }
 .settings-grabber:focus-visible::before { background: var(--accent); }
-@media (prefers-reduced-motion: reduce) { .settings-sheet { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .settings-sheet, .settings-scrim { animation: none; } }
+/* Wide screens: a panel at the right, full height, the text in view beside it. */
+@media (min-width: 900px) {
+  .settings-sheet { left: auto; top: 0; width: 460px; border-radius: 20px 0 0 20px; box-shadow: -10px 0 40px rgba(0,0,0,.2); animation-name: settings-side; }
+  .settings-sheet .settings-grabber { visibility: hidden; }
+}
+@keyframes settings-side { from { transform: translate3d(100%, 0, 0); } }
 @media (max-width: 360px) { .selbar .actions button { font-size: 11.5px; } }
 /* With Circle there are seven actions: a touch smaller, so "Bookmark" keeps its space. */
 .selbar .actions:has(> :nth-child(7)) { gap: 0; }
@@ -662,3 +669,5 @@ body:has(.pick-verse) .sb { display: none; }
 .account-more summary { cursor: pointer; color: var(--accent); font-size: 15px; padding: 6px 0; }
 .account-more[open] summary { margin-bottom: 8px; }
 .account .move-card { margin-top: 4px; }
+/* "Sign-in and account" opens its own page in Settings. */
+.account-open { display: block; margin: 8px 0 4px; padding: 8px 0; font-weight: 600; font-size: 16px; }

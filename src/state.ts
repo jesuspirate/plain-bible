@@ -93,15 +93,16 @@ export interface AppState {
 export const AppContext = createContext<AppState>(null!)
 export const useApp = () => useContext(AppContext)
 
-/** Open the prayer overlay over whatever is on screen. */
+/** Open the prayer overlay over whatever is on screen: to pray, or on
+ *  Circles (and one circle), which live there beside Your prayers. */
 export const PRAY_EVENT = 'plain-bible:pray'
-export const openPrayer = () => window.dispatchEvent(new Event(PRAY_EVENT))
+export type PrayAt = { circles: true; circle?: { id: string; name: string } }
+export const openPrayer = (at?: PrayAt) => window.dispatchEvent(new CustomEvent(PRAY_EVENT, { detail: at }))
+export const openCircles = (circle?: { id: string; name: string }) => openPrayer({ circles: true, circle })
 
 /** Open Settings (the sheet behind the button in the top right corner). */
 export const SETTINGS_EVENT = 'plain-bible:settings'
-/** Where Settings opens: the first page, or straight into Circles (and one circle). */
-export type SettingsAt = { page: 'circles'; circle?: { id: string; name: string } }
-export const openSettings = (at?: SettingsAt) => window.dispatchEvent(new CustomEvent(SETTINGS_EVENT, { detail: at }))
+export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
 
 // A prayer can be tied to a verse. Verses you just selected are offered when
 // you open prayer soon after; Pray on the selection bar ties them at once.

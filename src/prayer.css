@@ -47,6 +47,7 @@ html.praying { overflow: hidden; }
 .pray-verse { all: unset; cursor: pointer; display: block; padding-bottom: 6px; font: italic 17px/1.5 var(--reading); color: #fff7e6; }
 .pray-ref { display: block; margin-top: 4px; font: 600 13px var(--sans); font-style: normal; color: #ffe3a3; }
 .pray-foot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
+.pray-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .pray-pill { min-height: 50px; border: none; border-radius: 99px; padding: 10px 26px; font: 600 18px var(--sans); background: rgba(255, 255, 255, .92); color: #2a2218; }
 .pray-private { margin: 0; padding: 4px 12px; border-radius: 99px; font-size: 13px; color: rgba(255, 255, 255, .85); background: rgba(28, 22, 14, .7); }
 .pray-list {
@@ -58,6 +59,7 @@ html.praying { overflow: hidden; }
 .pray-head { position: sticky; top: 0; z-index: 1; margin: 0 -8px 4px; padding: 0 14px 10px; background: var(--surface); border-bottom: 1px solid var(--line); }
 .pray-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
 .pray-list h2 { margin: 0; font-size: 22px; }
+.pray-circles .circles { padding: 4px 8px 8px; }
 .pray-list > p { margin: 8px 10px 12px; }
 .pray-list ol { list-style: none; margin: 0; padding: 0; }
 .pray-list li { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 10px; padding: 8px 4px 8px 8px; border-radius: 14px; }

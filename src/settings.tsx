@@ -1,10 +1,10 @@
 // Settings. Everything lives here, behind the one button in the top right
-// corner: circles, sync, the Bible you read, reading, your data. (Prayer lives
-// on the 🙏 button alone.) They rise as
+// corner: sync, the Bible you read, reading, your data. (Prayer and Circles
+// live behind the 🙏 button.) They rise as
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, readPath, Settings, SettingsAt, useApp, useRoute } from './state'
+import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
@@ -13,6 +13,9 @@ import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
 import { MoveInSection } from './move'
+import { Saved } from './saved'
+import { Search } from './search'
+import { Versions } from './versions'
 import { StreakRow } from './streaks'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
@@ -109,59 +112,74 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 }
 
 // The parts of Settings. The first page has what most people reach for; each
-// row below opens a page of its own, with a way back.
-type Page = 'home' | 'reading' | 'circles' | 'data' | 'about'
-const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', circles: 'Circles', data: 'Your data', about: 'About' }
+// row below opens a page of its own, inside the sheet, with a way back.
+// Nothing opened from Settings is a page on its own: only opening a verse
+// leaves it.
+type Page = 'home' | 'reading' | 'saved' | 'search' | 'versions' | 'account' | 'data' | 'about'
+const PAGE_TITLE: Record<Page, string> = {
+  home: 'Settings', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
+  versions: 'Versions', account: 'Sign-in and account', data: 'Your data', about: 'About',
+}
 
-/** Where you are in Settings. Circles go one step deeper (one circle), so
- *  the back button steps out of the circle first, then out of Circles. */
-function useSettingsNav(at?: SettingsAt) {
-  const [page, setPageState] = useState<Page>(at?.page ?? 'home')
-  const [circle, setCircle] = useState<{ id: string; name: string } | undefined>(at?.circle)
-  const setPage = (p: Page) => { setCircle(undefined); setPageState(p) }
-  const back = () => { if (circle) setCircle(undefined); else setPage('home') }
-  const title = circle ? circle.name : PAGE_TITLE[page]
-  return { page, setPage, circle, setCircle, back, title, depth: page === 'home' ? 0 : circle ? 2 : 1 }
+/** Where you are in Settings: the first page, or one page in. */
+function useSettingsNav() {
+  const [page, setPage] = useState<Page>('home')
+  const back = () => setPage('home')
+  return { page, setPage, back, title: PAGE_TITLE[page], depth: page === 'home' ? 0 : 1 }
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
 
-/** Settings as a sheet that rises over the page, from the button in the top
- *  right corner. Pull it down, or Done, and you're back to the word. */
-export function SettingsSheet({ at, onClose }: { at?: SettingsAt; onClose: () => void }) {
+// On a wide screen Settings is a panel at the right, with the text still in view.
+const wide = () => matchMedia('(min-width: 900px)').matches
+/** Put Settings away: down on a phone, off to the right on a wide screen. */
+function putAway(box: HTMLElement | null, done: () => void) {
+  if (!box || !wide() || still()) { slideAway(box, done); return }
+  box.style.transition = 'transform .2s ease-in'
+  box.style.transform = 'translate3d(100%, 0, 0)'
+  setTimeout(done, 190)
+}
+
+/** Settings as a sheet that rises over the page (a panel from the right on a
+ *  wide screen), from the button in the top right corner. The word stays in
+ *  view behind it: a tap there, a pull down, or Done puts it away. Inside
+ *  pages have only ‹ back. */
+export function SettingsSheet({ onClose }: { onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
-  const nav = useSettingsNav(at)
+  const nav = useSettingsNav()
   const navRef = useRef(nav)
   navRef.current = nav
   usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
-  const done = () => slideAway(box.current, onClose)
-  useEffect(() => { box.current?.scrollTo(0, 0) }, [nav.page, nav.circle?.id])
+  const done = () => putAway(box.current, onClose)
+  useEffect(() => { box.current?.scrollTo(0, 0) }, [nav.page])
   useEffect(() => {
     // Escape steps back a page, then closes.
     const esc = (e: KeyboardEvent) => {
       if (e.key !== 'Escape' || document.querySelector('dialog[open]')) return
       e.stopPropagation()
       if (navRef.current.depth) navRef.current.back()
-      else slideAway(box.current, onClose)
+      else putAway(box.current, onClose)
     }
     addEventListener('keydown', esc, true)
     box.current?.focus({ preventScroll: true })
     return () => removeEventListener('keydown', esc, true)
   }, [])
   return (
+    <>
+    <div class="settings-scrim" onClick={done} aria-hidden="true" />
     <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
-      // A link inside (Saved, Advanced search) leaves Settings behind.
+      // A link inside (a verse, mostly) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
         <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
         <div class="settings-title">
           {nav.page === 'home'
-            ? <h1>Settings</h1>
+            ? <><h1>Settings</h1><button class="done-btn" onClick={done}>Done</button></>
             : <button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button>}
-          <button class="done-btn" onClick={done}>Done</button>
         </div>
       </div>
-      <div class="settings"><SettingsBody nav={nav} onAway={onClose} /></div>
+      <div class="settings"><SettingsBody nav={nav} /></div>
     </div>
+    </>
   )
 }
 
@@ -178,14 +196,14 @@ export function SettingsView() {
   const box = useRef<HTMLDivElement>(null)
   const nav = useSettingsNav()
   usePullDown(box, () => window.scrollY, closeSettingsPage)
-  useEffect(() => { window.scrollTo(0, 0) }, [nav.page, nav.circle?.id])
+  useEffect(() => { window.scrollTo(0, 0) }, [nav.page])
   return (
     <div class="settings" ref={box}>
       <button type="button" class="settings-grabber" aria-label="Close settings" onClick={closeSettingsPage} />
       {nav.page === 'home'
         ? <h1>Settings</h1>
         : <h1><button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button></h1>}
-      <SettingsBody nav={nav} onAway={() => {}} />
+      <SettingsBody nav={nav} />
     </div>
   )
 }
@@ -203,7 +221,7 @@ function Row({ label, value, onClick, href, icon }: { label: string; value?: str
 
 // The Bible you're reading, the ones beside it, and the one that opens every
 // time. (This used to be the version button in the top bar.)
-function BibleGroup() {
+function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
   const { settings, update, byId } = useApp()
   const route = useRoute()
   const [open, setOpen] = useState<'' | 'version' | 'compare'>('')
@@ -230,7 +248,7 @@ function BibleGroup() {
           <span class="set-label">{fav ? `${version} opens every time` : `Open ${version} every time`}</span>
           <span class="set-star" aria-hidden="true">{fav ? '★' : '☆'}</span>
         </button>
-        <Row label="Download and manage versions" href="#/versions" />
+        <Row label="Download and manage versions" onClick={() => setPage('versions')} />
       </div>
       {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)} />}
       {open === 'compare' && (
@@ -241,12 +259,11 @@ function BibleGroup() {
   )
 }
 
-function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void }) {
+function SettingsBody({ nav }: { nav: SettingsNav }) {
   const { page, setPage } = nav
   const { settings, update, catalog, marks, sync } = useApp()
-  // Circles load only when opened.
-  const [circles, setCircles] = useState<typeof import('./circles')>()
-  useEffect(() => { if (page === 'circles' && !circles) import('./circles').then(setCircles).catch(() => {}) }, [page])
+  // Advanced search keeps its query here while you're in Settings.
+  const [searchQuery, setSearchQuery] = useState('')
   const saved = Object.values(marks).filter(hasContent).length
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
@@ -304,9 +321,10 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
     </div>
   </>
 
-  if (page === 'circles') return circles
-    ? <circles.CirclesPanel circle={nav.circle?.id} onOpen={nav.setCircle} onAway={onAway} />
-    : <p class="muted">Opening…</p>
+  if (page === 'saved') return <Saved onImport={() => setPage('data')} />
+  if (page === 'search') return <Search route={{ path: ['search'], params: new URLSearchParams(searchQuery) }} onGo={p => setSearchQuery(p.split('?')[1] ?? '')} />
+  if (page === 'versions') return <Versions inSheet />
+  if (page === 'account') return <AccountSection part="account" />
 
   if (page === 'data') return <>
     <MoveInSection />
@@ -331,19 +349,17 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
 
   return (
     <>
-      {/* First: what the app is for besides reading. Praying, your circles,
-          what you've saved. Then sync, which brings it all to your other devices. */}
+      {/* First: what you've kept while reading. Then sync, which brings it all to your other devices. */}
       <section class="set-group">
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
           {settings.streaks && <StreakRow />}
-          {sync.enabled && <Row icon="👥" label="Circles" onClick={() => setPage('circles')} />}
-          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
-          <Row icon="🔎" label="Advanced search" href="#/search" />
+          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
+          <Row icon="🔎" label="Advanced search" onClick={() => setPage('search')} />
         </div>
       </section>
-      {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection /></section>}
-      <BibleGroup />
+      {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection onAccount={() => setPage('account')} /></section>}
+      <BibleGroup setPage={setPage} />
       <section class="set-group">
         <div class="essentials">
           <div class="ess"><span class="ess-label">Text size</span>

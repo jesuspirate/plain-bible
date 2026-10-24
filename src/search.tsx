@@ -14,7 +14,9 @@ const PAGE = 40
 
 const SCOPE_KEYS = ['ot', 'nt', 'law', 'history', 'wisdom', 'prophets', 'gospels', 'acts', 'pauline', 'general', 'deutero', 'ethiopic']
 
-export function Search({ route }: { route: Route }) {
+/** With `onGo`, search runs inside Settings: the query lives there instead
+ *  of in the address, and only opening a verse leaves. */
+export function Search({ route, onGo }: { route: Route; onGo?: (path: string, replace?: boolean) => void }) {
   const { settings, update, byId, data } = useApp()
   const q = route.params.get('q') ?? ''
   const versions = (route.params.get('v')?.split(',') ?? settings.searchVersions).filter(id => byId.has(id))
@@ -50,7 +52,8 @@ export function Search({ route }: { route: Route }) {
     const p = new URLSearchParams({ q, v: versions.join(','), s: scope, b: bookFilter })
     for (const [k, v] of Object.entries(patch)) v ? p.set(k, v) : p.delete(k)
     for (const k of [...p.keys()]) if (!p.get(k)) p.delete(k)
-    go('search?' + p.toString(), replace)
+    const to = onGo ?? go
+    to('search?' + p.toString(), replace)
   }
 
   // Run the search when the query, versions, scope, or options change.
@@ -132,7 +135,7 @@ export function Search({ route }: { route: Route }) {
         <button class="link" onClick={() => setHelp(h => !h)}>{help ? 'Hide tips' : 'Search tips'}</button>
       </div>
 
-      {help && <SearchHelp />}
+      {help && <SearchHelp onPick={onGo && (x => setParams({ q: x, b: undefined }))} />}
 
       {ref && (
         <button class="goto" onClick={() => go(readPath(versions[0] ?? settings.version, ref.book, ref.chapter, ref.verse))}>
@@ -188,7 +191,7 @@ export function Search({ route }: { route: Route }) {
         </>
       )}
 
-      {!q && !help && <SearchHelp />}
+      {!q && !help && <SearchHelp onPick={onGo && (x => setParams({ q: x, b: undefined }))} />}
 
       {picker && <VersionPicker title="Search in" multi selected={versions} onClose={() => setPicker(false)}
         onChange={ids => ids.length && setParams({ v: ids.join(',') })} />}
@@ -212,9 +215,11 @@ function RangePicker({ value, onChange }: { value: string; onChange: (v: string)
   )
 }
 
-function SearchHelp() {
+function SearchHelp({ onPick }: { onPick?: (q: string) => void }) {
   const ex = (q: string, what: string) => (
-    <tr><td><a href={`#/search?q=${encodeURIComponent(q)}`}><code>{q}</code></a></td><td>{what}</td></tr>
+    <tr><td>{onPick
+      ? <button class="link" onClick={() => onPick(q)}><code>{q}</code></button>
+      : <a href={`#/search?q=${encodeURIComponent(q)}`}><code>{q}</code></a>}</td><td>{what}</td></tr>
   )
   return (
     <div class="help">
