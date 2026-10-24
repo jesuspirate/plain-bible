@@ -439,7 +439,7 @@ export function Reader({ route }: { route: Route }) {
         <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
       )}
       {versions.length === 1 && settings.layout === 'paragraph' ? (
-        <p class="para" dir={t?.rtl ? 'rtl' : undefined}>
+        <p class="para" dir={t?.rtl ? 'rtl' : undefined} lang={t?.lang}>
           {primary.books[b][c - 1].map((raw, i) => raw && (
             <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
               <sup class="vn">{i + 1}</sup>{after(i + 1)}
