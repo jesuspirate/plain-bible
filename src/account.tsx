@@ -168,7 +168,9 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
   )
 }
 
-export function AccountSection() {
+/** With `onAccount`, "Sign-in and account" is a row that opens its own page
+ *  (Settings shows it as one, with a back arrow); `part="account"` is that page. */
+export function AccountSection({ onAccount, part }: { onAccount?: () => void; part?: 'account' } = {}) {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState('')
@@ -246,6 +248,28 @@ export function AccountSection() {
     )
   }
 
+  const account = <>
+    {info && <p class="muted small">
+      {info.email && <>Email {info.email} · </>}
+      {info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}
+    </p>}
+    <div class="row wrap">
+      {email && info?.email && !addEmail && <button onClick={() => setAddEmail(true)} disabled={!!working}>Change email</button>}
+      {email && info?.email && !!info.passkeys && <button onClick={dropEmail} disabled={!!working}>Remove email</button>}
+      <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : 'Add a passkey'}</button>
+      <button onClick={logout} disabled={!!working}>Sign out</button>
+      <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
+    </div>
+    <p class="muted small">Passkeys saved to iCloud Keychain, Google Password Manager or a password manager like Bitwarden already work on your other devices.</p>
+  </>
+  if (part === 'account') return (
+    <div class="account">
+      {account}
+      {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
+      {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
+    </div>
+  )
+
   const when = acct.lastSync ? new Date(acct.lastSync).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
   return (
     <div class="account">
@@ -259,21 +283,9 @@ export function AccountSection() {
         <p class="muted small">Worried about losing your passkey? <button class="link" onClick={() => setAddEmail(true)}>Add your email</button> as another way to sign in.</p>
       )}
       {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
-      <details class="account-more">
-        <summary>Sign-in and account</summary>
-        {info && <p class="muted small">
-          {info.email && <>Email {info.email} · </>}
-          {info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}
-        </p>}
-        <div class="row wrap">
-          {email && info?.email && !addEmail && <button onClick={() => setAddEmail(true)} disabled={!!working}>Change email</button>}
-          {email && info?.email && !!info.passkeys && <button onClick={dropEmail} disabled={!!working}>Remove email</button>}
-          <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : 'Add a passkey'}</button>
-          <button onClick={logout} disabled={!!working}>Sign out</button>
-          <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
-        </div>
-        <p class="muted small">Passkeys saved to iCloud Keychain, Google Password Manager or a password manager like Bitwarden already work on your other devices.</p>
-      </details>
+      {onAccount
+        ? <button class="link account-open" onClick={onAccount}>Sign-in and account ›</button>
+        : <details class="account-more"><summary>Sign-in and account</summary>{account}</details>}
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>
   )

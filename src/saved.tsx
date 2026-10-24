@@ -27,7 +27,9 @@ function rowsOf(key: string, m: Mark): Row[] {
   return [...(m.c || m.b || own.notes.length ? [own] : []), ...passages.values()]
 }
 
-export function Saved() {
+/** With `onImport`, it's a page of Settings: no title of its own, and the
+ *  import link opens Your data there. */
+export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const { marks, setMarks, settings, data, byId } = useApp()
   const [filter, setFilter] = useState<string>('all')
   const [bible, setBible] = useState<Bible>()
@@ -60,16 +62,16 @@ export function Saved() {
   if (!keys.length) {
     return (
       <div class="saved">
-        <h1>Saved</h1>
+        {!onImport && <h1>Saved</h1>}
         <p class="muted">Nothing saved yet. Tap any verse while reading to highlight, bookmark or add a note to it.
-          Coming from another app? <a href="#/settings">Import your highlights</a> in Settings.</p>
+          Coming from another app? {onImport ? <><button class="link" onClick={onImport}>Import your highlights</button> under Your data.</> : <><a href="#/settings">Import your highlights</a> in Settings.</>}</p>
       </div>
     )
   }
 
   return (
     <div class="saved">
-      <h1>Saved</h1>
+      {!onImport && <h1>Saved</h1>}
       <div class="chips" role="tablist">
         <button class={'chip' + (filter === 'all' ? ' on' : '')} onClick={() => setFilter('all')}>All {rows.length}</button>
         {bookmarks > 0 && <button class={'chip' + (filter === 'bookmarks' ? ' on' : '')} onClick={() => setFilter('bookmarks')} aria-label={`${bookmarks} bookmarks`}><BookmarkIcon class="bm-mark" /> {bookmarks}</button>}

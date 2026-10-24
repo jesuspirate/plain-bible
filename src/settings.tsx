@@ -13,6 +13,9 @@ import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
 import { MoveInSection } from './move'
+import { Saved } from './saved'
+import { Search } from './search'
+import { Versions } from './versions'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
 // (handy for reporting a problem). The line under it is the whole update:
@@ -108,9 +111,14 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 }
 
 // The parts of Settings. The first page has what most people reach for; each
-// row below opens a page of its own, with a way back.
-type Page = 'home' | 'reading' | 'circles' | 'data' | 'about'
-const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', circles: 'Circles', data: 'Your data', about: 'About' }
+// row below opens a page of its own, inside the sheet, with a way back.
+// Nothing opened from Settings is a page on its own: only opening a verse
+// leaves it.
+type Page = 'home' | 'reading' | 'circles' | 'saved' | 'search' | 'versions' | 'account' | 'data' | 'about'
+const PAGE_TITLE: Record<Page, string> = {
+  home: 'Settings', reading: 'Reading', circles: 'Circles', saved: 'Saved', search: 'Advanced search',
+  versions: 'Versions', account: 'Sign-in and account', data: 'Your data', about: 'About',
+}
 
 /** Where you are in Settings. Circles go one step deeper (one circle), so
  *  the back button steps out of the circle first, then out of Circles. */
@@ -148,7 +156,7 @@ export function SettingsSheet({ at, onClose }: { at?: SettingsAt; onClose: () =>
   }, [])
   return (
     <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
-      // A link inside (Saved, Advanced search) leaves Settings behind.
+      // A link inside (a verse, mostly) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
         <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
@@ -202,7 +210,7 @@ function Row({ label, value, onClick, href, icon }: { label: string; value?: str
 
 // The Bible you're reading, the ones beside it, and the one that opens every
 // time. (This used to be the version button in the top bar.)
-function BibleGroup() {
+function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
   const { settings, update, byId } = useApp()
   const route = useRoute()
   const [open, setOpen] = useState<'' | 'version' | 'compare'>('')
@@ -229,7 +237,7 @@ function BibleGroup() {
           <span class="set-label">{fav ? `${version} opens every time` : `Open ${version} every time`}</span>
           <span class="set-star" aria-hidden="true">{fav ? '★' : '☆'}</span>
         </button>
-        <Row label="Download and manage versions" href="#/versions" />
+        <Row label="Download and manage versions" onClick={() => setPage('versions')} />
       </div>
       {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)} />}
       {open === 'compare' && (
@@ -246,6 +254,8 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
   // Circles load only when opened.
   const [circles, setCircles] = useState<typeof import('./circles')>()
   useEffect(() => { if (page === 'circles' && !circles) import('./circles').then(setCircles).catch(() => {}) }, [page])
+  // Advanced search keeps its query here while you're in Settings.
+  const [searchQuery, setSearchQuery] = useState('')
   const saved = Object.values(marks).filter(hasContent).length
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
@@ -304,6 +314,11 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
     ? <circles.CirclesPanel circle={nav.circle?.id} onOpen={nav.setCircle} onAway={onAway} />
     : <p class="muted">Opening…</p>
 
+  if (page === 'saved') return <Saved onImport={() => setPage('data')} />
+  if (page === 'search') return <Search route={{ path: ['search'], params: new URLSearchParams(searchQuery) }} onGo={p => setSearchQuery(p.split('?')[1] ?? '')} />
+  if (page === 'versions') return <Versions inSheet />
+  if (page === 'account') return <AccountSection part="account" />
+
   if (page === 'data') return <>
     <MoveInSection />
     <DataTools />
@@ -333,12 +348,12 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
           {sync.enabled && <Row icon="👥" label="Circles" onClick={() => setPage('circles')} />}
-          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
-          <Row icon="🔎" label="Advanced search" href="#/search" />
+          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
+          <Row icon="🔎" label="Advanced search" onClick={() => setPage('search')} />
         </div>
       </section>
-      {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection /></section>}
-      <BibleGroup />
+      {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection onAccount={() => setPage('account')} /></section>}
+      <BibleGroup setPage={setPage} />
       <section class="set-group">
         <div class="essentials">
           <div class="ess"><span class="ess-label">Text size</span>
