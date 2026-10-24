@@ -13,6 +13,7 @@ import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSyn
 import { loadAccount, SYNC_URL } from './lib/sync'
 import { slideAway, usePullDown } from './settings'
 import { DeviceLink } from './move'
+import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { addDays, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
 import './prayer.css'
 
@@ -32,6 +33,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [phase, setPhase] = useState<Phase>('idle')
   // Praying, Your prayers, or Circles: the people you pray with live here too.
   const [view, setView] = useState<'pray' | 'list' | 'circles'>(at ? 'circles' : 'pray')
+  useCircleNews()
+  const circleNews = inCircles() ? circlesWithNews() : 0
   useEffect(() => { if (at) setView('circles') }, [at])
   const [note, setNote] = useState('')
   const [elapsed, setElapsed] = useState(0)
@@ -218,7 +221,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
           ? <button class="pray-pill" onClick={() => setView('pray')}>Pray</button>
           : phase !== 'recording' && phase !== 'paused' && <div class="pray-pills">
               <button class="pray-pill" onClick={() => setView('list')}>Your prayers{count ? ` · ${count}` : ''}</button>
-              {SYNC_URL && <button class="pray-pill" onClick={() => setView('circles')}>Circles</button>}
+              {SYNC_URL && <button class="pray-pill" onClick={() => setView('circles')}>Circles{circleNews > 0 && <span class="news-dot" aria-label=", something new" />}</button>}
             </div>}
         {view !== 'circles' && <p class="pray-private">{prayerSyncOn() ? 'Encrypted on this device, then synced.' : 'Kept on this device only.'}</p>}
       </div>

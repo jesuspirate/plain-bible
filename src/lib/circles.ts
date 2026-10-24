@@ -16,6 +16,7 @@ import { cleanVerse, PrayerVerse } from './prayerVerses'
 import { shareLink } from './native'
 import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
+import { noteLatest } from './circleNews'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const CHUNK = 1_000_000
@@ -35,7 +36,8 @@ export interface CircleInfo { id: string; name: string; members: number }
 /** `streak`: the days they read and prayed, if they show their streaks here. */
 export interface Member { mid: string; name: string; streak?: Days }
 export interface Reply { id: string; by: string; at: number; text: string }
-export interface FeedItem { id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; replies: Reply[] }
+/** `amenAt`: when each 🙏 was given, by member (missing in feeds kept by older versions). */
+export interface FeedItem { id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; amenAt?: Record<string, number>; replies: Reply[] }
 export interface Feed { me: string; members: Member[]; items: FeedItem[] }
 
 function token() {
@@ -86,7 +88,8 @@ export const keptCircles = async () => (await meta.get<CircleInfo[]>('circles'))
 export async function listCircles(unlock = false, code?: string): Promise<{ circles: CircleInfo[]; locked: number } | 'needCode'> {
   // The passkey goes first, in the same tap (see unlockKey).
   const locking = unlock ? lockKey(code).then(k => ({ k }), (e: Error) => ({ e })) : undefined
-  const { circles } = await api<{ circles: { id: string; name: string; wrapped: string; members: number }[] }>('/circles', { token: token() })
+  const { circles } = await api<{ circles: { id: string; name: string; wrapped: string; members: number; latest?: number | null }[] }>('/circles', { token: token() })
+  noteLatest(circles)
   const raws = await rawKeys()
   let lock: CryptoKey | undefined
   const out: CircleInfo[] = []
@@ -219,14 +222,17 @@ export async function loadFeed(circle: string): Promise<Feed> {
   const key = await keyOf(circle)
   const r = await api<{
     me: string; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
-    amens: { item: string; mid: string }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
+    amens: { item: string; mid: string; at?: number }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
   }>(`/circles/${circle}`, { token: token() })
   const members: Member[] = await Promise.all(r.members.map(async m => ({
     mid: m.mid, name: text(await openJson(key, m.name, `${circle}/me`).catch(() => ''), 60) || 'Someone',
     ...(m.streak ? { streak: fromShared(await openJson(key, m.streak, `${circle}/streak/${m.mid}`).catch(() => undefined)) } : {}),
   })))
-  const amens = new Map<string, string[]>()
-  for (const a of r.amens) amens.set(a.item, [...(amens.get(a.item) ?? []), a.mid])
+  const amens = new Map<string, string[]>(), amenAt = new Map<string, Record<string, number>>()
+  for (const a of r.amens) {
+    amens.set(a.item, [...(amens.get(a.item) ?? []), a.mid])
+    if (a.at) amenAt.set(a.item, { ...amenAt.get(a.item), [a.mid]: a.at })
+  }
   const replies = new Map<string, Reply[]>()
   for (const x of r.replies ?? []) {
     const said = text(await openJson(key, x.body, `${circle}/${x.item}/${x.id}`).catch(() => ''), 2000)
@@ -235,11 +241,29 @@ export async function loadFeed(circle: string): Promise<Feed> {
   const items: FeedItem[] = []
   for (const i of r.items) {
     const body = cleanShared(await openJson(key, i.body, `${circle}/${i.id}`).catch(() => undefined))
-    if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], replies: replies.get(i.id) ?? [] })
+    if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], amenAt: amenAt.get(i.id) ?? {}, replies: replies.get(i.id) ?? [] })
   }
   const feed = { me: r.me, members, items }
   await meta.set(`circle:${circle}`, feed)
   return feed
+}
+
+/** What's new for you in a feed since `since`: things others shared, their
+ *  replies, and their 🙏 on what you shared. The same rule the server uses
+ *  for the dot, so looking at the circle clears it. */
+export function newsIn(feed: Feed, since: number) {
+  const items = new Map<string, { item: boolean; replies: Set<string>; amens: Set<string> }>()
+  let latest = 0
+  for (const i of feed.items) {
+    const item = i.by !== feed.me && i.at > since
+    const replies = new Set(i.replies.filter(r => r.by !== feed.me && r.at > since).map(r => r.id))
+    const amens = new Set(i.by === feed.me ? Object.entries(i.amenAt ?? {}).filter(([m, at]) => m !== feed.me && at > since).map(([m]) => m) : [])
+    if (i.by !== feed.me) latest = Math.max(latest, i.at)
+    for (const r of i.replies) if (r.by !== feed.me) latest = Math.max(latest, r.at)
+    if (i.by === feed.me) for (const [m, at] of Object.entries(i.amenAt ?? {})) if (m !== feed.me) latest = Math.max(latest, at)
+    if (item || replies.size || amens.size) items.set(i.id, { item, replies, amens })
+  }
+  return { items, latest }
 }
 
 async function send(circle: string, body: Shared, audio?: Uint8Array) {

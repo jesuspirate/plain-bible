@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, loadFeed, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -15,6 +15,7 @@ import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } fro
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
+import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { BookmarkIcon } from './icons'
 import { Sheet } from './ui'
 import './circles.css'
@@ -126,6 +127,7 @@ function CodeEntry({ busy, onCode, onCancel }: { busy: boolean; onCode: (code: s
 
 function CircleList() {
   const nav = useNav()
+  useCircleNews()
   const [list, setList] = useState<CircleInfo[]>()
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
@@ -176,7 +178,10 @@ function CircleList() {
           {list?.length ? (
             <ul class="c-list">
               {list.map(c => (
-                <li><button class="c-open" onClick={() => nav.open(c)}><strong>{c.name}</strong><span class="muted">{c.members === 1 ? 'Just you so far' : `${c.members} people`} ›</span></button></li>
+                <li><button class="c-open" onClick={() => nav.open(c)}>
+                  <strong>{c.name}{hasNews(c.id) && <span class="news-dot" aria-label=", something new" />}</strong>
+                  <span class="muted">{hasNews(c.id) ? <span class="c-new-word">Something new</span> : c.members === 1 ? 'Just you so far' : `${c.members} people`} ›</span>
+                </button></li>
               ))}
             </ul>
           ) : list && !busy && !locked && <p>You’re not in a circle yet. Make one, then invite people with a link.</p>}
@@ -279,10 +284,13 @@ function CircleView({ id }: { id: string }) {
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [leaving, setLeaving] = useState(false)
-  const load = () => loadFeed(id).then(f => { setFeed(f); setMsg('') }, e => setMsg(message(e)))
+  // What came in since you last looked shows first, marked, until you next
+  // come back. Looking at it clears the dot.
+  const [since] = useState(() => seenAt(id))
+  const load = () => loadFeed(id).then(f => { setFeed(f); setMsg(''); markSeen(id, newsIn(f, 0).latest, true) }, e => setMsg(message(e)))
   useEffect(() => {
     keptCircles().then(cs => setInfo(cs.find(c => c.id === id)))
-    keptFeed(id).then(f => f && setFeed(f))
+    keptFeed(id).then(f => { if (f) { setFeed(f); markSeen(id, newsIn(f, 0).latest) } })
     load()
     const back = () => { if (document.visibilityState === 'visible') load() }
     document.addEventListener('visibilitychange', back)
@@ -315,6 +323,8 @@ function CircleView({ id }: { id: string }) {
   }
   const nameOf = (mid: string) => mid === feed?.me ? 'You' : feed?.members.find(m => m.mid === mid)?.name ?? 'Someone who left'
   const fav = settings.favorite || settings.version
+  const news = feed ? newsIn(feed, since).items : undefined
+  const items = feed ? [...feed.items.filter(i => news!.has(i.id)), ...feed.items.filter(i => !news!.has(i.id))] : []
 
   return (
     <div class="circles">
@@ -330,7 +340,7 @@ function CircleView({ id }: { id: string }) {
       {msg && <p class="note small">{msg}</p>}
       {feed && !feed.items.length && <p class="muted c-empty">Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.</p>}
       <ol class="c-feed">
-        {feed?.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} />)}
+        {feed && items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
       </ol>
       <div class="c-foot">
         {leaving
@@ -388,8 +398,10 @@ function StreakBoard({ circle, name, feed, onChange }: { circle: string; name: s
   )
 }
 
-function Item({ circle, item, mine, me, nameOf, fav, onChange }: {
+function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   circle: string; item: FeedItem; mine: boolean; me: string; nameOf: (mid: string) => string; fav: string; onChange: () => void
+  /** what's new on it since you last looked */
+  news?: { item: boolean; replies: Set<string>; amens: Set<string> }
 }) {
   const { marks, setMarks } = useApp()
   const b = item.body
@@ -428,9 +440,13 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange }: {
     setKept('Added to your notes on this verse.')
   }
   const kind = b.k === 'bookmark' ? 'bookmarked' : b.k === 'note' ? 'wrote a note' : b.k === 'prayer' ? 'prayed' : 'shared'
+  // New itself, or something new on it: a reply, or someone praying with you.
+  const fresh = news && !news.item && (news.replies.size ? (news.replies.size === 1 ? 'New reply' : 'New replies')
+    : `${[...news.amens].map(nameOf).join(', ')} ${news.amens.size === 1 ? 'is' : 'are'} praying with you`)
   return (
-    <li class={'c-item c-kind-' + b.k}>
-      <div class="c-item-head"><span><strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at)}</span></div>
+    <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '')}>
+      {fresh && <p class="c-new-word small">{fresh}</p>}
+      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">New</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at)}</span></div>
       {b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {verse && <button class="link c-ref" onClick={() => open(verse)}>With {verseLabel(verse)}</button>}
@@ -448,7 +464,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange }: {
       {item.replies.length > 0 && (
         <ul class="c-replies">
           {item.replies.map(r => (
-            <li><strong>{nameOf(r.by)}</strong> {r.text}
+            <li class={news?.replies.has(r.id) ? 'c-new-reply' : ''}><strong>{nameOf(r.by)}</strong> {r.text}
               {r.by === me && <button class="link small" disabled={busy} aria-label="Remove your reply" onClick={act(() => removeReply(circle, item.id, r.id))}>Remove</button>}</li>
           ))}
         </ul>

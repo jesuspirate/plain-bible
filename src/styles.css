@@ -677,3 +677,6 @@ body:has(.pick-verse) .sb { display: none; }
 .account .move-card { margin-top: 4px; }
 /* "Sign-in and account" opens its own page in Settings. */
 .account-open { display: block; margin: 8px 0 4px; padding: 8px 0; font-weight: 600; font-size: 16px; }
+
+/* Something new in a circle: a small dot on 🙏, nothing more. */
+.sb-pray-dot { position: absolute; top: 3px; right: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--bg); pointer-events: none; }

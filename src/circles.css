@@ -59,3 +59,11 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-streak-list .streak-check { min-width: 0; margin-left: 3px; color: var(--accent); }
 .c-streak-toggle { display: flex; gap: 10px; align-items: flex-start; }
 .c-streak-toggle input { margin-top: 4px; flex: none; }
+
+/* Something new since you last looked: a warm edge and a word, no counts. */
+.c-item.c-new { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.c-new-word { color: var(--accent); font-weight: 600; }
+.c-new-tag { color: var(--accent); font-weight: 600; margin-right: 6px; }
+p.c-new-word { display: block; margin: 0 0 4px; }
+.c-replies li.c-new-reply { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.news-dot { display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: var(--accent); vertical-align: middle; }
