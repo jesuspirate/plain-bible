@@ -41,6 +41,35 @@ export function registered(r: ServiceWorkerRegistration | undefined) {
     const w = r.installing
     w?.addEventListener('statechange', () => { if (w.state === 'installed' && controlled()) newVersionReady() })
   })
+  watch(r)
+}
+
+// How often an app left open on screen asks for a new version. The browser
+// only asks by itself when a page loads, so without this a phone sitting on
+// one chapter would never hear about an update.
+const EVERY = 20 * 60 * 1000
+// Never ask more than once a minute, however often you switch back and forth.
+const GAP = 60 * 1000
+let asked = 0
+
+/** Quietly ask for a new version: when the app comes back on screen, when
+ *  the connection comes back, and every so often while it stays open. Each
+ *  ask is one small request for sw.js; nothing is downloaded unless a new
+ *  version is really there. */
+function watch(r: ServiceWorkerRegistration) {
+  const ask = () => {
+    if (document.visibilityState !== 'visible' || !navigator.onLine) return
+    if (state === 'ready' || state === 'checking' || Date.now() - asked < GAP) return
+    asked = Date.now()
+    r.update().catch(() => {})
+  }
+  asked = Date.now() // registering just asked
+  document.addEventListener('visibilitychange', ask)
+  // Safari can bring a tab back from its page cache without a visibility change.
+  addEventListener('pageshow', e => { if ((e as PageTransitionEvent).persisted) ask() })
+  addEventListener('online', ask)
+  // Timers stop while the phone sleeps; the visibility check covers waking up.
+  setInterval(ask, EVERY)
 }
 
 /** A new version is in. Switching right away could pull the page out from
@@ -78,6 +107,7 @@ export async function checkForUpdate() {
   if (!navigator.onLine) return set('offline')
   if (!reg) return set('current')
   set('checking')
+  asked = Date.now()
   try {
     await reg.update()
     const incoming = reg.installing || reg.waiting

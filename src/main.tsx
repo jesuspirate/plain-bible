@@ -46,10 +46,6 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator) {
       onNeedReload: newVersionReady,
       onRegisteredSW(_url, reg) {
         registered(reg)
-        // Check for a new version whenever the app comes back to the
-        // foreground, so an installed app picks up updates without being
-        // force-closed.
-        if (reg) document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') reg.update().catch(() => {}) })
       },
     })
   }).catch(() => {})
