@@ -452,6 +452,7 @@ main.with-mini { padding-bottom: 144px; }
 @media (hover: hover) { .set-row:hover:not(:disabled) { background: var(--chip); } }
 .set-row:disabled { opacity: 1; cursor: default; }
 .set-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.set-icon svg { color: var(--accent); }
 .set-sub { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 400; color: var(--muted); }
 .set-value { color: var(--muted); font-weight: 400; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .set-chev { color: var(--muted); font-size: 22px; line-height: 1; }
@@ -461,7 +462,7 @@ main.with-mini { padding-bottom: 144px; }
 .streak-n { font-weight: 600; }
 .streak-check { color: var(--accent); font-weight: 700; }
 .streak-why { display: block; cursor: default; font: 400 15px/1.45 var(--sans); color: var(--muted); padding: 10px 16px 12px; }
-.set-icon { width: 28px; text-align: center; font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
+.set-icon { display: grid; place-items: center; width: 28px; text-align: center; font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
 .set-vid { font-weight: 700; min-width: 48px; }
 .set-version .set-label { font-weight: 400; color: var(--muted); }
 .set-star { color: var(--accent); font-size: 20px; }

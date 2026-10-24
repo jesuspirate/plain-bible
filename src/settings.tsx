@@ -7,7 +7,8 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { RefreshIcon } from './icons'
+import { BookmarkIcon, RefreshIcon } from './icons'
+import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
@@ -209,7 +210,7 @@ export function SettingsView() {
 }
 
 /** One row of a settings list: a name, what it's set to, and › to go on. */
-function Row({ label, sub, value, onClick, href, icon }: { label: string; sub?: string; value?: string; onClick?: () => void; href?: string; icon?: string }) {
+function Row({ label, sub, value, onClick, href, icon }: { label: string; sub?: string; value?: string; onClick?: () => void; href?: string; icon?: ComponentChildren }) {
   const inner = <>
     {icon && <span class="set-icon" aria-hidden="true">{icon}</span>}
     {sub
@@ -356,7 +357,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
           {settings.streaks && <StreakRow />}
-          <Row icon="🔖" label="Saved" sub="Bookmarks, notes, highlights" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
+          <Row icon={<BookmarkIcon size={24} />} label="Saved" sub="Bookmarks, notes, highlights" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
           <Row icon="🔎" label="Advanced search" onClick={() => setPage('search')} />
         </div>
       </section>
