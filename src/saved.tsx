@@ -36,7 +36,7 @@ export function Saved() {
   const [limit, setLimit] = useState(PAGE)
   const [editing, setEditing] = useState<NotesTarget & { key: string }>()
   const version = settings.version
-  useEffect(() => { document.title = 'Saved · Plain Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
+  useEffect(() => { document.title = 'Saved · Quiet Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
   useEffect(() => setLimit(PAGE), [filter])
 
   const keys = useMemo(() => Object.keys(marks).filter(k => hasContent(marks[k])).sort(compareKeys), [marks])

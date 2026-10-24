@@ -57,7 +57,7 @@ export function Search({ route }: { route: Route }) {
   useEffect(() => {
     setResult(undefined); setShown([]); setLimit(PAGE); setError('')
     if (!q.trim() || !versions.length) return
-    document.title = `${q} · Search · Plain Bible`
+    document.title = `${q} · Search · Quiet Bible`
     if (versions.join() !== settings.searchVersions.join()) update({ searchVersions: versions })
     rememberSearch(q.trim())
     let books = scopeBooks()

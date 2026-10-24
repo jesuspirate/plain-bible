@@ -1,4 +1,4 @@
-// Plain Bible sync: passkey-only accounts and one small JSON document per
+// Quiet Bible sync: passkey-only accounts and one small JSON document per
 // account (highlights, bookmarks, settings). No emails, no passwords, no
 // tracking. The app works fully without it.
 import {
@@ -22,6 +22,10 @@ const MAX_BODY = 2_000_000
 const CHUNK_MAX = 1_100_000
 const MAX_CHUNKS = 64
 const PRAYER_QUOTA = 300_000_000
+// Moves to a new address: a packed, encrypted copy of one device's data.
+const MOVE_ID = /^[A-Za-z0-9_-]{22}$/
+const MOVE_MAX_CHUNKS = 400
+const MOVE_DAYS = 7
 
 class HttpError extends Error {
   constructor(public status: number, message: string, public extra?: object) { super(message) }
@@ -61,6 +65,14 @@ function cors(req: Request, env: Env): Record<string, string> {
   }
 }
 const origins = (env: Env) => env.ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
+/** The calling address and its passkey domain. Passkeys belong to one
+ *  domain, so the old and new addresses each have their own; both sign in
+ *  to the same accounts. */
+function site(req: Request, env: Env) {
+  const origin = req.headers.get('Origin') ?? ''
+  if (!origins(env).includes(origin)) return { origin: origins(env), rpID: env.RP_ID }
+  return { origin, rpID: new URL(origin).hostname }
+}
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } })
 
@@ -189,10 +201,52 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
   throw new HttpError(404, 'Not found')
 }
 
+// A move to a new address. Anyone may leave one (the app works without an
+// account); it is encrypted on the device, kept a few days, and found only
+// by its random id, which travels in the move link with the key.
+async function moveRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const db = env.DB
+  const [id, n0] = parts
+  if (req.method === 'POST' && !id) {
+    await db.prepare('DELETE FROM moves WHERE expires < ?').bind(Date.now()).run()
+    return json({ id: random(16) })
+  }
+  if (!id || !MOVE_ID.test(id)) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET' && n0 === undefined) {
+    const row = await db.prepare('SELECT COUNT(*) AS c, MAX(of) AS of FROM moves WHERE id = ? AND expires > ?').bind(id, Date.now()).first<{ c: number; of: number | null }>()
+    if (!row?.c || row.c !== row.of) throw new HttpError(404, 'This move link has expired or was never finished. Make a new one on the old address.')
+    return json({ chunks: row.of })
+  }
+  if (req.method === 'DELETE' && n0 === undefined) {
+    await db.prepare('DELETE FROM moves WHERE id = ?').bind(id).run()
+    return json({ ok: true })
+  }
+  const n = Number(n0)
+  if (!Number.isInteger(n) || n < 0 || n >= MOVE_MAX_CHUNKS) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET') {
+    const row = await db.prepare('SELECT data FROM moves WHERE id = ? AND n = ? AND expires > ?').bind(id, n, Date.now()).first<{ data: unknown }>()
+    if (!row) throw new HttpError(404, 'Not found')
+    return new Response(bytes(row.data), { headers: { 'Content-Type': 'application/octet-stream', 'Cache-Control': 'no-store' } })
+  }
+  if (req.method === 'PUT') {
+    const of = Number(new URL(req.url).searchParams.get('of'))
+    if (!Number.isInteger(of) || of < 1 || of > MOVE_MAX_CHUNKS || n >= of) throw new HttpError(400, 'Bad chunk')
+    const data = await req.arrayBuffer()
+    if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
+    await db.prepare('INSERT INTO moves (id, n, of, data, expires) VALUES (?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data')
+      .bind(id, n, of, data, Date.now() + MOVE_DAYS * DAY).run()
+    return json({ ok: true })
+  }
+  throw new HttpError(404, 'Not found')
+}
+
 async function route(req: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
-  const rpID = env.RP_ID
+  const { origin, rpID } = site(req, env)
+  if (pathname === '/move' || pathname.startsWith('/move/')) {
+    return moveRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
+  }
   if (pathname === '/prayers' || pathname.startsWith('/prayers/')) {
     return prayerRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
   }
@@ -210,8 +264,8 @@ async function route(req: Request, env: Env): Promise<Response> {
       const options = await generateRegistrationOptions({
         rpName: env.RP_NAME, rpID,
         userID: b64url.decode(userId),
-        userName: 'Plain Bible',
-        userDisplayName: 'Plain Bible',
+        userName: env.RP_NAME,
+        userDisplayName: env.RP_NAME,
         attestationType: 'none',
         excludeCredentials: creds.map(c => ({ id: c.id, transports: c.transports ? JSON.parse(c.transports) : undefined })),
         authenticatorSelection: { residentKey: 'required', userVerification: 'preferred' },
@@ -226,7 +280,7 @@ async function route(req: Request, env: Env): Promise<Response> {
       if (!ch.user_id) throw new HttpError(400, 'Bad challenge')
       const v = await verifyRegistrationResponse({
         response: body.response, expectedChallenge: ch.challenge,
-        expectedOrigin: origins(env), expectedRPID: rpID, requireUserVerification: false,
+        expectedOrigin: origin, expectedRPID: rpID, requireUserVerification: false,
       }).catch(e => { throw new HttpError(400, String(e.message || e)) })
       if (!v.verified) throw new HttpError(400, 'Passkey could not be verified')
       const { credential } = v.registrationInfo
@@ -255,13 +309,20 @@ async function route(req: Request, env: Env): Promise<Response> {
       if (!cred) throw new HttpError(404, 'This passkey is not linked to an account. It may have been deleted.')
       const v = await verifyAuthenticationResponse({
         response: body.response, expectedChallenge: ch.challenge,
-        expectedOrigin: origins(env), expectedRPID: rpID, requireUserVerification: false,
+        expectedOrigin: origin, expectedRPID: rpID, requireUserVerification: false,
         credential: { id: cred.id, publicKey: b64url.decode(cred.public_key), counter: cred.counter, transports: cred.transports ? JSON.parse(cred.transports) : undefined },
       }).catch(e => { throw new HttpError(400, String(e.message || e)) })
       if (!v.verified) throw new HttpError(400, 'Passkey could not be verified')
       await env.DB.prepare('UPDATE credentials SET counter = ?, last_used = ? WHERE id = ?')
         .bind(v.authenticationInfo.newCounter, Date.now(), cred.id).run()
       return json({ token: await newSession(env, cred.user_id) })
+    }
+
+    // A second sign-in for the same account, carried to the app's new
+    // address inside a move, so signing out on one doesn't sign out both.
+    case 'POST /auth/handoff': {
+      const userId = await session(req, env)
+      return json({ token: await newSession(env, userId) })
     }
 
     case 'POST /auth/logout': {

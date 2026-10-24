@@ -104,7 +104,7 @@ export function DataTools() {
         </label>
         <button onClick={backup}>Back up my data</button>
       </div>
-      <p class="muted small">Import highlights, bookmarks and notes exported from another Bible app (a .zip, .html or .txt export), or a Plain Bible backup.
+      <p class="muted small">Import highlights, bookmarks and notes exported from another Bible app (a .zip, .html or .txt export), or a backup made with this app.
         They belong to the verse, so they appear in every version.</p>
       {preview && (
         <div class="import-preview">

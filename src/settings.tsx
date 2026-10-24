@@ -11,6 +11,7 @@ import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
+import { MoveInSection } from './move'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
 // (handy for reporting a problem). The line under it is the whole update:
@@ -19,7 +20,7 @@ import { AccountSection } from './account'
 function VersionLine() {
   const state = useUpdate()
   const [copied, setCopied] = useState(false)
-  const version = `Plain Bible ${__BUILD__}`
+  const version = `Quiet Bible ${__BUILD__}`
   const copy = async () => {
     try { await copyText(version); setCopied(true); setTimeout(() => setCopied(false), 1500) } catch { /* nothing to do */ }
   }
@@ -142,7 +143,7 @@ export function closeSettingsPage() {
 }
 
 export function SettingsView() {
-  useEffect(() => { document.title = 'Settings · Plain Bible' }, [])
+  useEffect(() => { document.title = 'Settings · Quiet Bible' }, [])
   const box = useRef<HTMLDivElement>(null)
   usePullDown(box, () => window.scrollY, closeSettingsPage)
   return (
@@ -242,9 +243,10 @@ function SettingsBody() {
         </div>
       </div>
       <h2>Your data</h2>
+      <MoveInSection />
       <DataTools />
       <h2>About</h2>
-      <p>Plain Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
+      <p>Quiet Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
       <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
         the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
         Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
