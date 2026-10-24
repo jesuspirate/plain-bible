@@ -8,7 +8,7 @@ no reading plans, devotionals, accounts, or feeds.
   French (Louis Segond 1910, Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
   the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more).
 - **The Ethiopian Orthodox Tewahedo canon**, the widest canon in use, in three languages:
-  `EthEn` in English (the King James with the Apocrypha, plus 1 Enoch, Jubilees and 4 Baruch in
+  `EthEn` in English (the King James with the Apocrypha, plus 1 Enoch and Jubilees in
   R. H. Charles' translations), `EthFr` in French (Crampon 1923, Giguet's Septante, and Hénoch),
   and `GEZ`, 25 books in Ge'ez itself from the Beta Masaheft transcriptions. 1 Enoch, Jubilees,
   the Meqabyan and 4 Baruch have their own section in the book picker and answer to

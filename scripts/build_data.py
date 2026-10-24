@@ -275,10 +275,11 @@ def build_beblia(fname):
 # ---------- Books of the Ethiopian canon in English ----------
 
 # github.com/scrollmapper/bible_databases_deuterocanonical, public domain:
-# 1 Enoch and Jubilees in R. H. Charles' translations, 4 Baruch (the Rest of
-# the Words of Baruch). These are the books the Ethiopian canon keeps that no
+# Jubilees in R. H. Charles' translation. With 1 Enoch below, these are the books the Ethiopian canon keeps that no
 # other canon has in print, so they finish an English Ethiopian Bible.
-ETH_EN = {"Jub": "book-of-jubilees", "4Bar": "4-baruch"}
+# 4 Baruch is left out: the scrollmapper copy reads as a modern translation
+# with no stated licence.
+ETH_EN = {"Jub": "book-of-jubilees"}
 
 
 def build_eth_en():
@@ -358,7 +359,7 @@ def build_geez(field="geez"):
 # its own translator, which is why they are listed in the version's name.
 COMPOSITES = {
     "EthEn": {
-        "name": "Ethiopian canon (King James with Apocrypha, and Charles' Enoch, Jubilees and 4 Baruch)",
+        "name": "Ethiopian canon (King James with Apocrypha, and Charles' Enoch and Jubilees)",
         "lang": "en", "base": "KJVA", "extra": "EthExtraEn",
         "license": "Public Domain (GPL for the King James text as published by scrollmapper)",
         "source": "https://github.com/scrollmapper/bible_databases_deuterocanonical",
@@ -455,7 +456,7 @@ def main():
             write_json(os.path.join(OUT, "bibles", "EthExtraEn.json"),
                        {"id": "EthExtraEn", "books": built["EthExtraEn"]})
             catalog.append({"id": "EthExtraEn", "lang": "en",
-                            "name": "Enoch, Jubilees and 4 Baruch (R. H. Charles)",
+                            "name": "Enoch and Jubilees (R. H. Charles)",
                             "license": "Public Domain", "strongs": False, "rtl": False,
                             "books": list(built["EthExtraEn"].keys()),
                             "source": "https://github.com/scrollmapper/bible_databases_deuterocanonical"})

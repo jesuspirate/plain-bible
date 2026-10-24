@@ -18,8 +18,7 @@ if [ ! -d strongs ]; then
 fi
 if [ ! -d deuterocanonical ]; then
   git clone --depth 1 --filter=blob:none --sparse https://github.com/scrollmapper/bible_databases_deuterocanonical.git deuterocanonical
-  (cd deuterocanonical && git sparse-checkout set --no-cone '/sources/en/1-enoch/*.json' '/sources/en/book-of-jubilees/*.json' \
-    '/sources/en/4-baruch/*.json')
+  (cd deuterocanonical && git sparse-checkout set --no-cone '/sources/en/book-of-jubilees/*.json')
 fi
 # Ge'ez (Ethiopic) scripture, from Beta Masaheft TEI transcriptions (CC BY-SA 4.0).
 [ -d ethiopian-bible ] || git clone --depth 1 https://github.com/LPettay/ethiopian-bible.git
