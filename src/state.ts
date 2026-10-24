@@ -33,6 +33,10 @@ export interface Settings {
   prayTone: string
   /** a quiet line under the chapter title when you have notes on it */
   noteReminders: boolean
+  /** show how many days in a row you've read and prayed */
+  streaks: boolean
+  /** the circles that see your streaks (ids); none unless you turn it on */
+  shareStreaks: string[]
   strongs: boolean
   strongsNumbers: boolean
   myVersions: string[]
@@ -53,7 +57,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, strongs: false, strongsNumbers: false,
+    theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },

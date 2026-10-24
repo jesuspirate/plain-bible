@@ -51,3 +51,11 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-list .c-open { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px;
   padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); -webkit-tap-highlight-color: transparent; }
 .settings .circles { padding: 0; }
+.c-streaks { padding: 10px 14px; }
+.c-streak-list { list-style: none; padding: 0; margin: 0 0 10px; display: grid; gap: 2px; }
+.c-streak-list li { display: grid; grid-template-columns: 1fr auto auto; gap: 14px; align-items: baseline; padding: 6px 0; }
+.c-streak-list li + li { border-top: 1px solid var(--line); }
+.c-streak-list li span { min-width: 3.6em; font-variant-numeric: tabular-nums; font-weight: 600; }
+.c-streak-list .streak-check { min-width: 0; margin-left: 3px; color: var(--accent); }
+.c-streak-toggle { display: flex; gap: 10px; align-items: flex-start; }
+.c-streak-toggle input { margin-top: 4px; flex: none; }

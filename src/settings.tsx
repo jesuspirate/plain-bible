@@ -16,6 +16,7 @@ import { MoveInSection } from './move'
 import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
+import { StreakRow } from './streaks'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
 // (handy for reporting a problem). The line under it is the whole update:
@@ -299,6 +300,9 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
     <div class="field"><span>Notes</span>
       <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.</label>
     </div>
+    <div class="field"><span>Streaks</span>
+      <label><input type="checkbox" checked={settings.streaks} onChange={e => update({ streaks: (e.target as HTMLInputElement).checked })} /> At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.</label>
+    </div>
     <div class="field"><span>Strong's numbers</span>
       <div class="col">
         <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)</label>
@@ -347,6 +351,7 @@ function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void })
       <section class="set-group">
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
+          {settings.streaks && <StreakRow />}
           {sync.enabled && <Row icon="👥" label="Circles" onClick={() => setPage('circles')} />}
           <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
           <Row icon="🔎" label="Advanced search" onClick={() => setPage('search')} />

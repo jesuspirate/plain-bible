@@ -26,6 +26,13 @@ describe('mergeDocs', () => {
     const a = doc({ 'John.1.1': { c: '#fff193', t: 1 } }, 3)
     expect(mergeDocs(a, null)).toBe(a)
   })
+  it('keeps every day read or prayed, from either side, and an older document without days', () => {
+    const a = { ...doc({}), days: { '2026-10-24': 1, '2026-10-23': 2 } }
+    const b = { ...doc({}), days: { '2026-10-24': 2 } }
+    expect(mergeDocs(a, b).days).toEqual({ '2026-10-24': 3, '2026-10-23': 2 })
+    expect(mergeDocs(a, doc({})).days).toEqual(a.days)
+    expect(docKey(mergeDocs(a, b))).not.toBe(docKey(a))
+  })
   it('compares documents regardless of key order', () => {
     expect(docKey(doc({ a: { t: 1 }, b: { t: 2, b: 1 } }))).toBe(docKey(doc({ b: { b: 1, t: 2 }, a: { t: 1 } })))
   })
