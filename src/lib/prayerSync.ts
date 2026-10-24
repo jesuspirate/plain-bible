@@ -7,7 +7,6 @@ import {
   b64url, keyCode, newKey, open, packPart, parseKeyCode, prayerKey, PRF_SALT, seal, unpackPart, unwrapKey, wrapKey,
 } from './prayerCrypto'
 import { api, loadAccount, SYNC_URL, SyncError } from './sync'
-import { isNative } from './native'
 import { cleanVerse } from './prayerVerses'
 
 /** Set on a device whose prayers sync: the fingerprint of the key it holds. */
@@ -29,7 +28,7 @@ interface Remote { keyId: string | null; parts: { prayer: string; part: number; 
  *  passkey is synced to. Null where the browser or passkey can't (then the
  *  key is typed in as a code instead). */
 async function passkeySecret(): Promise<{ credId: string; secret: Uint8Array } | null> {
-  if (isNative || typeof PublicKeyCredential === 'undefined') return null
+  if (typeof PublicKeyCredential === 'undefined') return null
   let cred: PublicKeyCredential | null
   try {
     cred = await navigator.credentials.get({

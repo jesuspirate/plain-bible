@@ -2,7 +2,6 @@ import { Component, render } from 'preact'
 import { App } from './app'
 import './fonts'
 import './styles.css'
-import { initNative, isNative } from './lib/native'
 import { warmSearch } from './searchClient'
 import { newVersionReady, registered } from './lib/update'
 
@@ -39,10 +38,8 @@ class Crash extends Component<{}, { error?: Error }> {
 }
 
 render(<Crash><App /></Crash>, document.getElementById('app')!)
-initNative()
 
-// The iOS app ships its files inside the app, so it needs no service worker.
-if (import.meta.env.PROD && !isNative && 'serviceWorker' in navigator) {
+if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   import('virtual:pwa-register').then(({ registerSW }) => {
     registerSW({
       immediate: true,

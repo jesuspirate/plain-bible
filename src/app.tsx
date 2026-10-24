@@ -94,9 +94,6 @@ export function App() {
   const strongs = !!settings?.strongs
   useEffect(() => {
     if (!offlineId) return
-    // The iOS app ships everything else inside the app, and keeps every version
-    // it has opened, so loading it is enough.
-    if (data.native) { data.bible(offlineId).catch(() => {}); return }
     if (!('caches' in window)) return
     navigator.storage?.persist?.().catch(() => {})
     const paths = [`bibles/${offlineId}.json`, ...(strongs ? ['strongs-hebrew.json', 'strongs-greek.json'] : [])]

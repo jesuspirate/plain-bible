@@ -38,11 +38,6 @@ no reading plans, devotionals, accounts, or feeds.
 - **Parallel reading** of up to six versions side by side.
 - **Works offline** as an installable web app (PWA): the app itself, your Default Bible and any version you open or save are kept on the device. It reopens on the exact verse you were reading. Settings, highlights and bookmarks stay on your device; only passkey sign-in and sync use the network.
 
-## iOS app
-
-The same app also builds for the App Store with Capacitor, on GitHub's Macs (no Mac needed).
-See [ios/README.md](ios/README.md).
-
 ## Search syntax
 
 | Query | Finds |

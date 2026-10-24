@@ -8,7 +8,7 @@ import { FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, PALET
 import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
-import { canShare, copyText, share, shareLink, tap } from './lib/native'
+import { canShare, copyText, share, shareLink } from './lib/native'
 import { awaitVerse, go, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, useApp, versesPicked } from './state'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -167,7 +167,7 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => { if (tied) { const t = setTimeout(() => setTied(''), 3000); return () => clearTimeout(t) } }, [tied])
   const tieVerse = (id: string, v: number) => {
     const verse = { book, chapter, verses: [v] }
-    awaitVerse(undefined); tap()
+    awaitVerse(undefined)
     // Prayers load only once you've prayed, so reading never waits on them.
     import('./lib/prayers').then(m => m.prayers.setVerse(id, verse)).then(() => {
       setTied(`Your prayer is tied to ${verseLabel(verse)}.`)
@@ -250,7 +250,6 @@ export function Reader({ route }: { route: Route }) {
       lastTap.current = undefined
       setSelected(prev.before)
       const key = markKey(book, chapter, v), had = marks[key]?.c
-      tap()
       setMarks(all => {
         const next = { ...all[key], t: now } as Record<string, unknown>
         if (had) delete next.c; else { next.c = lastColor(); next.v = version }
@@ -563,7 +562,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
     return () => { document.body.classList.remove('selecting'); removeEventListener('keydown', onKey) }
   }, [])
 
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => { tap(); setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>
