@@ -116,16 +116,17 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'reading' | 'saved' | 'search' | 'versions' | 'account' | 'data' | 'about'
+type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'account' | 'data' | 'about'
 const PAGE_TITLE: Record<Page, string> = {
-  home: 'Settings', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
+  home: 'Settings', sync: 'Sync your devices', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
   versions: 'Versions', account: 'Sign-in and account', data: 'Your data', about: 'About',
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
   const [page, setPage] = useState<Page>('home')
-  const back = () => setPage('home')
+  // Sign-in and account sits inside Sync; everything else, one step from home.
+  const back = () => setPage(page === 'account' ? 'sync' : 'home')
   return { page, setPage, back, title: PAGE_TITLE[page], depth: page === 'home' ? 0 : 1 }
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
@@ -209,6 +210,19 @@ export function SettingsView() {
   )
 }
 
+/** Under Sync your devices: when it last ran, or what went wrong. */
+function syncNote(sync: ReturnType<typeof useApp>['sync']) {
+  if (!sync.account) return 'Optional. Keep everything on all your devices'
+  if (sync.busy) return 'Syncing…'
+  if (sync.error) return 'Couldn’t sync. Tap to see why'
+  const at = sync.account.lastSync
+  if (!at) return undefined
+  const d = new Date(at)
+  return 'Last synced ' + (d.toDateString() === new Date().toDateString()
+    ? d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+    : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))
+}
+
 /** One row of a settings list: a name, what it's set to, and › to go on. */
 function Row({ label, sub, value, onClick, href, icon }: { label: string; sub?: string; value?: string; onClick?: () => void; href?: string; icon?: ComponentChildren }) {
   const inner = <>
@@ -251,7 +265,7 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
           <span class="set-label">{fav ? `${version} opens every time` : `Open ${version} every time`}</span>
           <span class="set-star" aria-hidden="true">{fav ? '★' : '☆'}</span>
         </button>
-        <Row label="Download and manage versions" onClick={() => setPage('versions')} />
+        <Row label="Manage versions" onClick={() => setPage('versions')} />
       </div>
       {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)} />}
       {open === 'compare' && (
@@ -328,6 +342,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'search') return <Search route={{ path: ['search'], params: new URLSearchParams(searchQuery) }} onGo={p => setSearchQuery(p.split('?')[1] ?? '')} />
   if (page === 'versions') return <Versions inSheet />
   if (page === 'account') return <AccountSection part="account" />
+  if (page === 'sync') return <AccountSection onAccount={() => setPage('account')} />
 
   if (page === 'data') return <>
     <MoveInSection />
@@ -361,26 +376,29 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
           <Row icon="🔎" label="Advanced search" onClick={() => setPage('search')} />
         </div>
       </section>
-      {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection onAccount={() => setPage('account')} /></section>}
+      {sync.enabled && <section class="set-group">
+        <h2 class="set-kicker">Sync</h2>
+        <div class="set-list">
+          <Row icon={<RefreshIcon size={22} />} label="Sync your devices" sub={syncNote(sync)}
+            value={sync.account ? 'On' : 'Off'} onClick={() => setPage('sync')} />
+        </div>
+      </section>}
       <BibleGroup setPage={setPage} />
       <section class="set-group">
-        <div class="essentials">
-          <div class="ess"><span class="ess-label">Text size</span>
-            <div class="size-row">
-              <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
-              <span class="size-sample" aria-label={`${settings.fontSize} pixels`}>In the beginning</span>
-              <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
-            </div>
-          </div>
-          <div class="ess"><span class="ess-label">Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
-        </div>
+        <h2 class="set-kicker">Reading</h2>
         <div class="set-list">
-          <Row label="Font, layout and more" value={fontName} onClick={() => setPage('reading')} />
+          <div class="set-row set-static">
+            <span class="set-label">Text size</span>
+            <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
+            <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
+          </div>
+          <div class="set-row set-static set-theme">{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
+          <Row label="Font and layout" value={fontName} onClick={() => setPage('reading')} />
         </div>
       </section>
       <section class="set-group">
         <div class="set-list">
-          <Row label="Your data" value="Import, export" onClick={() => setPage('data')} />
+          <Row label="Your data" onClick={() => setPage('data')} />
           <Row label="About" onClick={() => setPage('about')} />
         </div>
       </section>
