@@ -2,7 +2,7 @@
 // reference parsing. Book ids match the ids used in public/data.
 
 export interface BookInfo { id: string; name: string; abbr: string; aliases: string[]; group: Group }
-export type Group = 'law' | 'history' | 'wisdom' | 'major' | 'minor' | 'gospels' | 'acts' | 'pauline' | 'general' | 'apocalypse' | 'deutero'
+export type Group = 'law' | 'history' | 'wisdom' | 'major' | 'minor' | 'gospels' | 'acts' | 'pauline' | 'general' | 'apocalypse' | 'deutero' | 'ethiopic'
 
 const B = (id: string, name: string, abbr: string, group: Group, aliases: string[] = []): BookInfo =>
   ({ id, name, abbr, group, aliases })
@@ -96,8 +96,14 @@ export const BOOKS: BookInfo[] = [
   B('AddPs', 'Psalm 151', 'Ps 151', 'deutero', []),
   B('PssSol', 'Psalms of Solomon', 'Pss Sol', 'deutero', []),
   B('Odes', 'Odes', 'Odes', 'deutero', []),
-  B('1En', '1 Enoch', '1 En', 'deutero', ['enoch']),
+  B('1En', '1 Enoch', '1 En', 'ethiopic', ['enoch', 'henoch']),
   B('EpLao', 'Laodiceans', 'Laod', 'deutero', ['epistle to the laodiceans']),
+  // Books kept by the Ethiopian Orthodox Tewahedo canon.
+  B('Jub', 'Jubilees', 'Jub', 'ethiopic', ['book of jubilees', 'kufale', 'jubiles', 'livre des jubiles']),
+  B('1Meq', '1 Meqabyan', '1 Meq', 'ethiopic', ['i meqabyan', 'ethiopian maccabees', '1 meqabyan']),
+  B('2Meq', '2 Meqabyan', '2 Meq', 'ethiopic', ['ii meqabyan']),
+  B('3Meq', '3 Meqabyan', '3 Meq', 'ethiopic', ['iii meqabyan']),
+  B('4Bar', '4 Baruch', '4 Bar', 'ethiopic', ['iv baruch', 'rest of the words of baruch', 'paraleipomena jeremiou']),
 ]
 
 export const BOOK_INDEX: Record<string, number> = Object.fromEntries(BOOKS.map((b, i) => [b.id, i]))
@@ -123,11 +129,13 @@ export const SCOPES: Record<string, { label: string; books: string[] }> = (() =>
     pauline: { label: "Paul's letters", books: g('pauline') },
     general: { label: 'General letters (Hebrews–Jude)', books: g('general') },
     deutero: { label: 'Deuterocanon / Apocrypha', books: g('deutero') },
+    ethiopic: { label: 'Ethiopian canon', books: g('ethiopic', 'deutero').filter(id => ['Jub', '1Meq', '2Meq', '3Meq', '4Bar', '1En', 'Tob', 'Jdt', 'Wis', 'Sir', 'Bar', 'EpJer', '1Esd', '2Esd', 'PrMan', 'AddPs', '1Macc', '2Macc', '3Macc'].includes(id)) },
   }
 })()
 SCOPES.torah = SCOPES.law
 SCOPES.poetry = SCOPES.wisdom
 SCOPES.apocrypha = SCOPES.deutero
+SCOPES.ethiopian = SCOPES.ethiopic
 
 // French names, so "Jean 3:16" works as well as "John 3:16".
 const FRENCH: Record<string, string> = {
@@ -141,6 +149,12 @@ const FRENCH: Record<string, string> = {
   '2Thess': '2 thessaloniciens', '1Tim': '1 timothée', '2Tim': '2 timothée', Titus: 'tite', Phlm: 'philémon',
   Heb: 'hébreux', Jas: 'jacques', '1Pet': '1 pierre', '2Pet': '2 pierre', '1John': '1 jean', '2John': '2 jean',
   '3John': '3 jean', Rev: 'apocalypse',
+  // The books an Ethiopian or deuterocanonical edition adds, so French
+  // references find them too.
+  '1En': 'hénoch', Jub: 'jubilés', '4Bar': '4 baruch', Tob: 'tobie', Jdt: 'judith', Wis: 'sagesse',
+  Sir: 'siracide', Bar: 'baruch', EpJer: 'lettre de jérémie', '1Macc': '1 maccabées', '2Macc': '2 maccabées',
+  '3Macc': '3 maccabées', '4Macc': '4 maccabées', '1Esd': '1 esdras', '2Esd': '2 esdras',
+  PrMan: 'prière de manassé', AddPs: 'psaume 151', Sus: 'suzanne', PrAzar: 'prière d\'azarias',
 }
 for (const [id, name] of Object.entries(FRENCH)) BOOKS[BOOKS.findIndex(b => b.id === id)].aliases.push(name)
 BOOKS[BOOKS.findIndex(b => b.id === 'Ps')].aliases.push('psaume')

@@ -79,6 +79,11 @@ BOOKS = [
     ("PrMan", "Prayer of Manasseh", ["Prayer of Manasses"]), ("AddPs", "Psalm 151", ["Additional Psalm"]),
     ("PssSol", "Psalms of Solomon", ["Psalms of Solomon"]), ("Odes", "Odes", ["Odes"]),
     ("1En", "1 Enoch", ["I Enoch"]), ("EpLao", "Laodiceans", ["Laodiceans"]),
+    # Books of the Ethiopian Orthodox Tewahedo canon
+    ("Jub", "Jubilees", ["Jubilees", "Book of Jubilees"]),
+    ("1Meq", "1 Meqabyan", ["I Meqabyan"]), ("2Meq", "2 Meqabyan", ["II Meqabyan"]),
+    ("3Meq", "3 Meqabyan", ["III Meqabyan"]),
+    ("4Bar", "4 Baruch", ["IV Baruch", "Rest of the Words of Baruch"]),
 ]
 NAME_TO_CODE = {alias: code for code, _, aliases in BOOKS for alias in aliases}
 
@@ -89,7 +94,8 @@ LANGS = {
     "el": ("Greek (Modern)", "Ελληνικά"), "en": ("English", "English"),
     "enm": ("Middle English", "Middle English"), "eo": ("Esperanto", "Esperanto"),
     "es": ("Spanish", "Español"), "fi": ("Finnish", "Suomi"), "fr": ("French", "Français"),
-    "got": ("Gothic", "Gutiska"), "grc": ("Greek (Ancient)", "Ἑλληνική"), "gv": ("Manx", "Gaelg"),
+    "gez": ("Ge'ez (Ethiopic)", "ግዕዝ"), "got": ("Gothic", "Gutiska"),
+    "grc": ("Greek (Ancient)", "Ἑλληνική"), "gv": ("Manx", "Gaelg"),
     "hbo": ("Hebrew (Ancient)", "עברית"), "hr": ("Croatian", "Hrvatski"),
     "ht": ("Haitian Creole", "Kreyòl ayisyen"), "hu": ("Hungarian", "Magyar"),
     "hy": ("Armenian", "Հայերեն"), "ja": ("Japanese", "日本語"), "ko": ("Korean", "한국어"),
@@ -185,7 +191,12 @@ def load_books(path, tagged):
             verses = []
             for v in ch["verses"]:
                 n = v["verse"]
-                t = osis_to_tagged(v["text"]) if tagged else re.sub(r"\s+", " ", v["text"]).strip()
+                raw = v["text"] or ""
+                # A few source files carry the string "null" for a verse that
+                # was never transcribed; that is not text to read.
+                if raw.strip() == "null":
+                    raw = ""
+                t = osis_to_tagged(raw) if tagged else re.sub(r"\s+", " ", raw).strip()
                 while len(verses) < n - 1:
                     verses.append("")
                 if len(verses) >= n:
@@ -261,6 +272,113 @@ def build_beblia(fname):
     return books
 
 
+# ---------- Books of the Ethiopian canon in English ----------
+
+# github.com/scrollmapper/bible_databases_deuterocanonical, public domain:
+# 1 Enoch and Jubilees in R. H. Charles' translations, 4 Baruch (the Rest of
+# the Words of Baruch). These are the books the Ethiopian canon keeps that no
+# other canon has in print, so they finish an English Ethiopian Bible.
+ETH_EN = {"Jub": "book-of-jubilees", "4Bar": "4-baruch"}
+
+
+def build_eth_en():
+    # 1 Enoch comes from the chapter files of the Ge'ez source below, which
+    # carry Charles' English line by line against the Ge'ez: the scrollmapper
+    # copy of the same translation numbers its last twenty chapters
+    # differently, which would send "1 Enoch 106:1" to the wrong place.
+    books = {"1En": build_geez("translation")["1En"]}
+    for code, slug in ETH_EN.items():
+        path = os.path.join(SRC, "deuterocanonical", "sources", "en", slug, slug + ".json")
+        chapters = []
+        for ch in json.load(open(path, encoding="utf-8"))["books"][0]["chapters"]:
+            verses = []
+            for v in ch["verses"]:
+                n = v["verse"]
+                while len(verses) < n - 1:
+                    verses.append("")
+                text = re.sub(r"\s+", " ", v["text"] or "").strip()
+                if len(verses) >= n:
+                    verses[n - 1] = (verses[n - 1] + " " + text).strip()
+                else:
+                    verses.append(text)
+            while len(chapters) < ch["chapter"] - 1:
+                chapters.append([])
+            chapters.append(verses)
+        books[code] = chapters
+    return books
+
+
+# ---------- Ge'ez (Ethiopic) scripture ----------
+
+# Beta Masaheft (Universität Hamburg) TEI transcriptions, CC BY-SA 4.0, as
+# gathered per chapter by github.com/LPettay/ethiopian-bible. Books whose
+# chapters are not split into verses there (Kebra Nagast, Sinodos, …) and the
+# ones whose numbering does not line up with ours (Kings, Ezra) are left out.
+GEZ_BOOKS = {"Gen": "Gen", "Exod": "Exod", "Lev": "Lev", "Num": "Num", "Deut": "Deut",
+             "Josh": "Josh", "Judg": "Judg", "Ruth": "Ruth", "Job": "Job", "Prov": "Prov",
+             "Eccl": "Eccl", "Song": "Song", "Isa": "Isa", "Lam": "Lam", "Joel": "Joel",
+             "Jonah": "Jonah", "Tob": "Tob", "Jdt": "Jdt", "Wis": "Wis", "Sir": "Sir",
+             "2Esd": "ApEz", "1En": "1En", "Jub": "Jub", "1Meq": "1Meq", "3Meq": "3Meq"}
+
+
+def build_geez(field="geez"):
+    root = os.path.join(SRC, "ethiopian-bible", "public", "data", "chapters")
+    books = {}
+    for code, src in GEZ_BOOKS.items():
+        chapters = {}
+        for path in glob.glob(os.path.join(root, src, "*.json")):
+            data = json.load(open(path, encoding="utf-8"))
+            verses = []
+            for v in data["verses"]:
+                n = v.get("num") or len(verses) + 1
+                while len(verses) < n - 1:
+                    verses.append("")
+                text = re.sub(r"\s+", " ", v.get(field) or "").strip()
+                if len(verses) >= n:
+                    verses[n - 1] = (verses[n - 1] + " " + text).strip()
+                else:
+                    verses.append(text)
+            chapters[int(data["chapter"])] = verses
+        n_verses = sum(len(v) for v in chapters.values())
+        n_text = sum(1 for verses in chapters.values() for v in verses if v)
+        # A chapter kept whole, as one long "verse", is not readable here,
+        # and a book this source has no text for at all is not a book.
+        if not chapters or n_verses < 1.5 * len(chapters) or n_text < 0.5 * n_verses:
+            print("  skipping", code, "(no text divided into verses)", file=sys.stderr)
+            continue
+        books[code] = [chapters.get(i, []) for i in range(1, max(chapters) + 1)]
+    return books
+
+
+# ---------- Whole-canon editions assembled from several open texts ----------
+
+# The Ethiopian Orthodox Tewahedo canon in one version: a public-domain Bible
+# with the deuterocanon for the books it shares with other canons, and the
+# open translations above for the books only Ethiopia kept. Each part keeps
+# its own translator, which is why they are listed in the version's name.
+COMPOSITES = {
+    "EthEn": {
+        "name": "Ethiopian canon (King James with Apocrypha, and Charles' Enoch, Jubilees and 4 Baruch)",
+        "lang": "en", "base": "KJVA", "extra": "EthExtraEn",
+        "license": "Public Domain (GPL for the King James text as published by scrollmapper)",
+        "source": "https://github.com/scrollmapper/bible_databases_deuterocanonical",
+    },
+    "EthFr": {
+        "name": "Canon éthiopien (Crampon 1923, Septante de Giguet, Hénoch)",
+        "lang": "fr", "base": "FreCrampon", "extra": "FreLXXGiguet",
+        "license": "Public Domain",
+        "source": "https://github.com/scrollmapper/bible_databases",
+    },
+}
+
+
+def build_composite(spec, built):
+    books = dict(built[spec["base"]])
+    for code, chapters in built[spec["extra"]].items():
+        books.setdefault(code, chapters)
+    return books
+
+
 def load_lexicon(name, var):
     text = open(os.path.join(SRC, "strongs", name), encoding="utf-8").read()
     body = text[text.index(var) + len(var):].strip().lstrip("=").strip()
@@ -280,10 +398,15 @@ def write_json(path, obj):
 
 def main():
     only = set(sys.argv[1:])
+    wanted_composites = [cid for cid in COMPOSITES if not only or cid in only]
+    # A composite is assembled from other versions, which have to be built
+    # even when they were not asked for by name.
+    parts = {COMPOSITES[cid][k] for cid in wanted_composites for k in ("base", "extra")}
+    built = {}
     catalog = []
     for readme in sorted(glob.glob(os.path.join(SM, "sources", "*", "*", "README.md"))):
         lang, tid = readme.split(os.sep)[-3:-1]
-        if tid in SKIP or (only and tid not in only):
+        if tid in SKIP or (only and tid not in only and tid not in parts):
             continue
         lic = read_license(readme)
         if not license_ok(lic):
@@ -295,6 +418,10 @@ def main():
         print("•", tid, file=sys.stderr)
         full, books = load_books(path, tagged)
         if not books:
+            continue
+        if tid in parts:
+            built[tid] = books
+        if only and tid not in only:
             continue
         write_json(os.path.join(OUT, "bibles", tid + ".json"), {"id": tid, "books": books})
         name = re.sub(r"\s+with Strong.*$", "", clean_name(full or read_title(readme), tid), flags=re.I)
@@ -321,10 +448,42 @@ def main():
                         "strongs": True, "rtl": True, "books": [b[0] for b in BOOKS[:39]],
                         "source": "https://github.com/openscriptures/morphhb"})
 
+    if not only or "EthExtraEn" in only or "EthEn" in only:
+        print("• EthExtraEn", file=sys.stderr)
+        built["EthExtraEn"] = build_eth_en()
+        if not only or "EthExtraEn" in only:
+            write_json(os.path.join(OUT, "bibles", "EthExtraEn.json"),
+                       {"id": "EthExtraEn", "books": built["EthExtraEn"]})
+            catalog.append({"id": "EthExtraEn", "lang": "en",
+                            "name": "Enoch, Jubilees and 4 Baruch (R. H. Charles)",
+                            "license": "Public Domain", "strongs": False, "rtl": False,
+                            "books": list(built["EthExtraEn"].keys()),
+                            "source": "https://github.com/scrollmapper/bible_databases_deuterocanonical"})
+
+    if not only or "GEZ" in only:
+        print("• GEZ", file=sys.stderr)
+        books = build_geez()
+        write_json(os.path.join(OUT, "bibles", "GEZ.json"), {"id": "GEZ", "books": books})
+        catalog.append({"id": "GEZ", "name": "መጽሐፍ ቅዱስ · Ge'ez (Beta Masaheft transcriptions, 25 books)",
+                        "lang": "gez", "license": "Creative Commons: BY-SA 4.0", "strongs": False,
+                        "rtl": False, "books": list(books.keys()),
+                        "source": "https://github.com/LPettay/ethiopian-bible"})
+
+    for cid in wanted_composites:
+        spec = COMPOSITES[cid]
+        if spec["base"] not in built or spec["extra"] not in built:
+            print("  skipping", cid, "(missing source text)", file=sys.stderr)
+            continue
+        print("•", cid, file=sys.stderr)
+        books = build_composite(spec, built)
+        write_json(os.path.join(OUT, "bibles", cid + ".json"), {"id": cid, "books": books})
+        catalog.append({"id": cid, "name": spec["name"], "lang": spec["lang"], "license": spec["license"],
+                        "strongs": False, "rtl": False, "books": list(books.keys()), "source": spec["source"]})
+
     for c in catalog:
         en, native = LANGS.get(c["lang"], (c["lang"], c["lang"]))
         c["langName"], c["langNative"] = en, native
-    featured = ["KJV", "BSB", "LSG"]
+    featured = ["KJV", "BSB", "EthEn", "LSG", "EthFr"]
     catalog.sort(key=lambda c: (c["lang"] != "en", c["langName"], c["id"] not in featured, c["id"]))
 
     write_json(os.path.join(OUT, "catalog.json"), {

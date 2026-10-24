@@ -3,10 +3,17 @@
 Just the Bible. Many versions and languages, thorough search, and nothing else:
 no reading plans, devotionals, accounts, or feeds.
 
-- **116 versions in 48 languages**, all public domain or openly licensed
+- **120 versions in 48 languages**, all public domain or openly licensed
   (KJV, Berean Standard Bible, ASV, YLT, Douay-Rheims, Reina-Valera 1909, Luther 1545,
   French (Louis Segond 1910, Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
   the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more).
+- **The Ethiopian Orthodox Tewahedo canon**, the widest canon in use, in three languages:
+  `EthEn` in English (the King James with the Apocrypha, plus 1 Enoch, Jubilees and 4 Baruch in
+  R. H. Charles' translations), `EthFr` in French (Crampon 1923, Giguet's Septante, and Hénoch),
+  and `GEZ`, 25 books in Ge'ez itself from the Beta Masaheft transcriptions. 1 Enoch, Jubilees,
+  the Meqabyan and 4 Baruch have their own section in the book picker and answer to
+  `in:ethiopian` in search. No openly licensed Amharic Bible was found; the published ones are
+  under Bible Society copyright.
 - **Strong's numbers** in KJV, BSB, the Hebrew OT (Open Scriptures Hebrew Bible) and the Greek NT
   (Statistical Restoration GNT). Tap a word to see the Hebrew or Greek and its dictionary entry.
 - **Search** across one or many versions at once, with a per-book breakdown of results.

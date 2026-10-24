@@ -125,7 +125,8 @@ export function BookPicker({ version, onPick, onClose }: { version?: Translation
   const available = new Set(version?.books ?? BOOKS.map(b => b.id))
   const groups: [string, typeof BOOKS][] = [
     ['Old Testament', BOOKS.slice(0, 39)], ['New Testament', BOOKS.slice(39, 66)],
-    ['Deuterocanon / Apocrypha', BOOKS.slice(66)],
+    ['Deuterocanon / Apocrypha', BOOKS.filter(b => b.group === 'deutero')],
+    ['Ethiopian canon', BOOKS.filter(b => b.group === 'ethiopic')],
   ]
   if (book) {
     return (

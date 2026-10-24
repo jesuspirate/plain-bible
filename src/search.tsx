@@ -12,7 +12,7 @@ import { rememberSearch } from './searchbar'
 
 const PAGE = 40
 
-const SCOPE_KEYS = ['ot', 'nt', 'law', 'history', 'wisdom', 'prophets', 'gospels', 'acts', 'pauline', 'general', 'deutero']
+const SCOPE_KEYS = ['ot', 'nt', 'law', 'history', 'wisdom', 'prophets', 'gospels', 'acts', 'pauline', 'general', 'deutero', 'ethiopic']
 
 export function Search({ route }: { route: Route }) {
   const { settings, update, byId, data } = useApp()
