@@ -16,6 +16,7 @@ import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
+import { MoveBanner, MoveWelcome } from './move'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -39,6 +40,9 @@ if (IOS_HOME_SCREEN) {
     location.reload()
   })
 }
+
+// Nothing saved yet: this is the app's very first start on this address.
+const FIRST_START = (() => { try { return !localStorage.getItem('plain-bible:settings') } catch { return false } })()
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -143,7 +147,7 @@ export function App() {
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
-        <a class="brand" href="#/read" title="Back to where you were reading">Plain Bible</a>
+        <a class="brand" href="#/read" title="Back to where you were reading">Quiet Bible</a>
         <nav>
           <HistoryButton route={route} />
           <VersionMenu route={route} />
@@ -152,6 +156,7 @@ export function App() {
           {view === 'settings' && <button class="done-btn" onClick={closeSettingsPage}>Done</button>}
         </nav>
       </header>
+      <MoveBanner />
       <main class={view === 'search' ? '' : settings.searchBar ? 'with-bar' : 'with-mini'}>
         {view === 'search' ? <Search route={route} />
           : view === 'versions' ? <Versions />
@@ -164,6 +169,7 @@ export function App() {
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
       {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
+      <MoveWelcome firstStart={FIRST_START} />
     </AppContext.Provider>
   )
 }

@@ -134,7 +134,7 @@ export function Reader({ route }: { route: Route }) {
 
   const shown = useRef<{ book: string; chapter: number; target: number; at: number }>()
   useEffect(() => {
-    document.title = `${formatRef({ book, chapter })} (${version}) · Plain Bible`
+    document.title = `${formatRef({ book, chapter })} (${version}) · Quiet Bible`
     if (!loaded) return
     const prev = shown.current
     shown.current = { book, chapter, target, at: resumeAt }

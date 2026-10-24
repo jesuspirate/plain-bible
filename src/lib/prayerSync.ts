@@ -91,6 +91,17 @@ export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'
   return 'on'
 }
 
+/** Let a passkey unlock the prayer key on other devices too (say one just
+ *  saved on a new address). Asks for the passkey; false if it can't. */
+export async function keepKeyWithPasskey(): Promise<boolean> {
+  const acct = loadAccount(), raw = await meta.get<Uint8Array>('key')
+  if (!SYNC_URL || !acct || !raw) return false
+  const secret = await passkeySecret()
+  if (!secret) return false
+  await api(`/prayers/wrap/${encodeURIComponent(secret.credId)}`, { method: 'PUT', token: acct.token, body: { wrapped: await wrapKey(raw, secret.secret) } })
+  return true
+}
+
 /** Stop syncing on this device. Its prayers stay here, and on the account. */
 export async function turnOffPrayerSync() {
   setOn(null)

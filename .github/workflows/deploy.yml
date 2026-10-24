@@ -52,6 +52,15 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
+      # The old address (bible.chama.community) is served from Cloudflare
+      # Pages while devices move to myquietbible.com. Never blocks the main site.
+      - name: Deploy old address
+        if: github.event_name != 'pull_request' && env.HAS_SYNC_SECRETS == 'true'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: bash scripts/deploy_old_address.sh
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v3
         with:

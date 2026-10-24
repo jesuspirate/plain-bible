@@ -609,3 +609,23 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .pick-verse button { flex: none; }
 body:has(.pick-verse) .sb { display: none; }
 @media (prefers-reduced-motion: reduce) { .pick-verse { animation: none; } }
+
+/* Moving to myquietbible.com */
+.move-banner { max-width: 1200px; margin: 0 auto; padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; border-bottom: 1px solid var(--line); background: var(--surface); }
+.move-banner > span { flex: 1 1 12em; }
+.move-banner.open { display: block; padding: 12px 16px; }
+.move-card p { margin: 0 0 10px; }
+.move-card .row { margin-bottom: 10px; }
+.move-card .button { display: inline-block; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); text-decoration: none; }
+.move-link { font: 12px/1.4 ui-monospace, Menlo, monospace; word-break: break-all; padding: 8px 10px; border-radius: 8px; background: var(--chip); -webkit-user-select: all; user-select: all; }
+.move-steps { margin: 0 0 10px; padding-left: 1.4em; }
+.move-steps li { margin: 2px 0; }
+.move-paste .row { margin-bottom: 8px; }
+.move-input { width: 100%; max-width: 28em; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 16px; }
+.move-welcome {
+  position: fixed; z-index: 45; left: 16px; right: 16px; max-width: 30em; margin: 0 auto; bottom: calc(16px + env(safe-area-inset-bottom));
+  padding: 14px 16px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,.18);
+}
+.move-welcome p { margin: 0 0 10px; }
+.move-welcome .row { margin-top: 4px; }
+.move-welcome .note { margin: 10px 0 0; }

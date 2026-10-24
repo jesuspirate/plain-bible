@@ -18,7 +18,7 @@ export function Versions() {
   const [filter, setFilter] = useState('')
   const [offline, setOffline] = useState<Set<string>>(new Set())
   const [busy, setBusy] = useState<Record<string, boolean>>({})
-  useEffect(() => { cachedIds().then(setOffline); document.title = 'Versions · Plain Bible' }, [])
+  useEffect(() => { cachedIds().then(setOffline); document.title = 'Versions · Quiet Bible' }, [])
 
   const f = filter.toLowerCase()
   const groups = useMemo(() => {
