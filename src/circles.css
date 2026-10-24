@@ -15,8 +15,6 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-label input { font-weight: 400; }
 .c-code { letter-spacing: .06em; margin-bottom: 4px; }
 .c-list { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
-.c-list a { display: flex; justify-content: space-between; align-items: center; gap: 12px; padding: 14px; border: 1px solid var(--line);
-  border-radius: 14px; background: var(--surface); color: var(--text); text-decoration: none; }
 .c-feed { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 10px; }
 .c-item { padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
 .c-item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
@@ -50,3 +48,6 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-paste input { flex: 1; min-width: 0; }
 .c-notes { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
 .c-notes label { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; white-space: pre-wrap; }
+.c-list .c-open { all: unset; box-sizing: border-box; width: 100%; cursor: pointer; display: flex; justify-content: space-between; align-items: center; gap: 12px;
+  padding: 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); -webkit-tap-highlight-color: transparent; }
+.settings .circles { padding: 0; }

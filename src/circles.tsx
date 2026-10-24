@@ -1,7 +1,8 @@
 // Circles: a few people sharing what they read and pray. #/circles lists
 // yours, #/circles/<id> shows one, and #/join?… is an invite link. Loaded
 // only when one of these opens, or when something is shared.
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { createContext } from 'preact'
+import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, loadFeed, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareVerse,
@@ -11,7 +12,7 @@ import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
-import { go, readPath, Route, ShareRequest, useApp } from './state'
+import { go, openSettings, readPath, Route, SettingsAt, ShareRequest, useApp } from './state'
 import { BookmarkIcon } from './icons'
 import { Sheet } from './ui'
 import './circles.css'
@@ -25,20 +26,57 @@ const message = (e: unknown) => {
 }
 const when = (at: number) => new Date(at).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 
-export function CirclesPage({ route }: { route: Route }) {
-  useEffect(() => { document.title = 'Circles · Quiet Bible' }, [])
-  if (!SYNC_URL) return <div class="circles"><h1>Circles</h1><p class="muted">Circles aren’t available in this copy of the app.</p></div>
-  // An invite opens even before you have an account: it says who it's
-  // from, then makes the account right there, without leaving the page.
-  if (route.path[0] === 'join') return <Join id={route.params.get('i') ?? ''} secret={route.params.get('k') ?? ''} />
-  if (!loadAccount()) return (
+/** How the circles move between their pages. Inside the Settings sheet the
+ *  sheet keeps track (its back button steps out), and anything that leads
+ *  to the Bible closes the sheet first; as #/circles pages, the URL does. */
+interface Nav { sheet: boolean; open: (c?: { id: string; name: string }) => void; away: () => void }
+const NavCtx = createContext<Nav>({ sheet: false, open: c => go(c ? `circles/${c.id}` : 'circles'), away: () => {} })
+const useNav = () => useContext(NavCtx)
+
+/** Circles inside the Settings sheet: the list, or one circle. */
+export function CirclesPanel({ circle, onOpen, onAway }: { circle?: string; onOpen: (c?: { id: string; name: string }) => void; onAway: () => void }) {
+  if (!SYNC_URL) return <p class="muted">Circles aren’t available in this copy of the app.</p>
+  return (
+    <NavCtx.Provider value={{ sheet: true, open: onOpen, away: onAway }}>
+      {!loadAccount() ? <SignedOut /> : circle ? <CircleView id={circle} /> : <CircleList />}
+    </NavCtx.Provider>
+  )
+}
+
+function SignedOut() {
+  const { sheet } = useNav()
+  return (
     <div class="circles">
-      <h1>Circles</h1>
+      {!sheet && <h1>Circles</h1>}
       <p>Share the verses you read and the prayers you pray with a few people you choose: family, a friend, a small group.</p>
       <p class="muted">Everything you share is encrypted on your device, so only the people in your circle can read or hear it.</p>
       <SignIn />
     </div>
   )
+}
+
+/** Back to the word, with Settings open on Circles (or one circle). The
+ *  sheet closes itself when the page changes, so it opens a moment after. */
+function toSheet(at: SettingsAt) {
+  go('read', true)
+  setTimeout(() => openSettings(at), 60)
+}
+
+export function CirclesPage({ route }: { route: Route }) {
+  useEffect(() => { document.title = 'Circles · Quiet Bible' }, [])
+  // Circles live in the Settings sheet; #/circles (an older link) opens them there.
+  const at = route.path[0] === 'circles' ? route.path[1] : undefined
+  useEffect(() => {
+    if (route.path[0] !== 'circles') return
+    if (!at) { toSheet({ page: 'circles' }); return }
+    keptCircles().then(cs => toSheet({ page: 'circles', circle: { id: at, name: cs.find(c => c.id === at)?.name ?? 'Circle' } }))
+  }, [route.path.join('/')])
+  if (route.path[0] === 'circles') return null
+  if (!SYNC_URL) return <div class="circles"><h1>Circles</h1><p class="muted">Circles aren’t available in this copy of the app.</p></div>
+  // An invite opens even before you have an account: it says who it's
+  // from, then makes the account right there, without leaving the page.
+  if (route.path[0] === 'join') return <Join id={route.params.get('i') ?? ''} secret={route.params.get('k') ?? ''} />
+  if (!loadAccount()) return <SignedOut />
   return route.path[1] ? <CircleView id={route.path[1]} /> : <CircleList />
 }
 
@@ -86,6 +124,7 @@ function CodeEntry({ busy, onCode, onCancel }: { busy: boolean; onCode: (code: s
 }
 
 function CircleList() {
+  const nav = useNav()
   const [list, setList] = useState<CircleInfo[]>()
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
@@ -116,13 +155,13 @@ function CircleList() {
       keepName(me.trim())
       const id = await createCircle(name.trim(), me.trim(), code)
       if (id === 'needCode') { setNeedCode('create'); return }
-      go(`circles/${id}`)
+      nav.open({ id, name: name.trim() })
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
 
   return (
     <div class="circles">
-      <h1>Circles</h1>
+      {!nav.sheet && <h1>Circles</h1>}
       <p class="muted">Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.</p>
       {needCode
         ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')} />
@@ -136,7 +175,7 @@ function CircleList() {
           {list?.length ? (
             <ul class="c-list">
               {list.map(c => (
-                <li><a href={`#/circles/${c.id}`}><strong>{c.name}</strong><span class="muted">{c.members === 1 ? 'Just you so far' : `${c.members} people`} ›</span></a></li>
+                <li><button class="c-open" onClick={() => nav.open(c)}><strong>{c.name}</strong><span class="muted">{c.members === 1 ? 'Just you so far' : `${c.members} people`} ›</span></button></li>
               ))}
             </ul>
           ) : list && !busy && !locked && <p>You’re not in a circle yet. Make one, then invite people with a link.</p>}
@@ -166,12 +205,13 @@ function CircleList() {
 /** An invite link opened somewhere else (say in Safari, while you read in
  *  the app on your Home Screen) can be pasted here instead. */
 function PasteInvite() {
+  const nav = useNav()
   const [open, setOpen] = useState(false)
   const [text, setText] = useState('')
   const [msg, setMsg] = useState('')
   const use = (s: string) => {
     const l = parseInviteLink(s)
-    if (l) go(`join?i=${l.i}&k=${l.k}`)
+    if (l) { nav.away(); go(`join?i=${l.i}&k=${l.k}`) }
     else setMsg('That isn’t a whole invite link. Copy it again from the message.')
   }
   const paste = async () => {
@@ -196,7 +236,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
   const [me, setMe] = useState(lastName)
   useEffect(() => {
     if (!id || !secret) { setMsg('This invite link is incomplete. Ask for it to be sent again.'); return }
-    readInvite(id, secret).then(i => { if (i.already) go(`circles/${i.circle}`, true); else setInvite(i) }, e => setMsg(message(e)))
+    readInvite(id, secret).then(i => { if (i.already) toSheet({ page: 'circles', circle: { id: i.circle, name: i.name } }); else setInvite(i) }, e => setMsg(message(e)))
   }, [id, secret])
   const join = async (code?: string) => {
     if (!invite || !me.trim()) return
@@ -205,7 +245,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
       keepName(me.trim())
       const r = await joinCircle(id, invite, me.trim(), code)
       if (r === 'needCode') { setNeedCode(true); return }
-      go(`circles/${invite.circle}`, true)
+      toSheet({ page: 'circles', circle: { id: invite.circle, name: invite.name } })
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   return (
@@ -229,6 +269,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
 }
 
 function CircleView({ id }: { id: string }) {
+  const nav = useNav()
   const { settings } = useApp()
   const [info, setInfo] = useState<CircleInfo>()
   const [feed, setFeed] = useState<Feed>()
@@ -265,14 +306,14 @@ function CircleView({ id }: { id: string }) {
   }
   const leave = async () => {
     setBusy(true)
-    try { await leaveCircle(id); go('circles', true) } catch (e) { setMsg(message(e)); setBusy(false) }
+    try { await leaveCircle(id); nav.open() } catch (e) { setMsg(message(e)); setBusy(false) }
   }
   const nameOf = (mid: string) => mid === feed?.me ? 'You' : feed?.members.find(m => m.mid === mid)?.name ?? 'Someone who left'
   const fav = settings.favorite || settings.version
 
   return (
     <div class="circles">
-      <h1><button class="settings-back" onClick={() => go('circles')}><span aria-hidden="true">‹</span> {info?.name ?? 'Circle'}</button></h1>
+      {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><span aria-hidden="true">‹</span> {info?.name ?? 'Circle'}</button></h1>}
       {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
       <div class="c-row">
         {invite && !sent
@@ -313,7 +354,8 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange }: {
   }
   const send = act(async () => { await reply(circle, item.id, said.trim()); setSaid(''); setWriting(false) })
   const verse = b.verse
-  const open = (v: PrayerVerse) => go(readPath(fav, v.book, v.chapter, v.verses[0]))
+  const nav = useNav()
+  const open = (v: PrayerVerse) => { nav.away(); go(readPath(fav, v.book, v.chapter, v.verses[0])) }
   const ref = (v: PrayerVerse) => <button class="link c-ref" onClick={() => open(v)}>{verseLabel(v)}{b.k !== 'prayer' && b.version && <span class="muted small"> ({b.version})</span>}</button>
   // Keep it as your own: a bookmark, or a copy of the note in your notes.
   const bookmarked = !!verse && verse.verses.every(n => marks[markKey(verse.book, verse.chapter, n)]?.b)

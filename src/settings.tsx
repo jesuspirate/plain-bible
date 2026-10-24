@@ -3,7 +3,7 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, openPrayer, readPath, Settings, TONES, useApp, useRoute } from './state'
+import { defaultSettings, FONTS, go, openPrayer, readPath, Settings, SettingsAt, TONES, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
@@ -108,25 +108,37 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 
 // The parts of Settings. The first page has what most people reach for; each
 // row below opens a page of its own, with a way back.
-type Page = 'home' | 'reading' | 'prayer' | 'data' | 'about'
-const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', prayer: 'Prayer', data: 'Your data', about: 'About' }
+type Page = 'home' | 'reading' | 'prayer' | 'circles' | 'data' | 'about'
+const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', prayer: 'Prayer', circles: 'Circles', data: 'Your data', about: 'About' }
+
+/** Where you are in Settings. Circles go one step deeper (one circle), so
+ *  the back button steps out of the circle first, then out of Circles. */
+function useSettingsNav(at?: SettingsAt) {
+  const [page, setPageState] = useState<Page>(at?.page ?? 'home')
+  const [circle, setCircle] = useState<{ id: string; name: string } | undefined>(at?.circle)
+  const setPage = (p: Page) => { setCircle(undefined); setPageState(p) }
+  const back = () => { if (circle) setCircle(undefined); else setPage('home') }
+  const title = circle ? circle.name : PAGE_TITLE[page]
+  return { page, setPage, circle, setCircle, back, title, depth: page === 'home' ? 0 : circle ? 2 : 1 }
+}
+type SettingsNav = ReturnType<typeof useSettingsNav>
 
 /** Settings as a sheet that rises over the page, from the button in the top
  *  right corner. Pull it down, or Done, and you're back to the word. */
-export function SettingsSheet({ onClose }: { onClose: () => void }) {
+export function SettingsSheet({ at, onClose }: { at?: SettingsAt; onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
-  const [page, setPage] = useState<Page>('home')
-  const pageRef = useRef(page)
-  pageRef.current = page
+  const nav = useSettingsNav(at)
+  const navRef = useRef(nav)
+  navRef.current = nav
   usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
   const done = () => slideAway(box.current, onClose)
-  useEffect(() => { box.current?.scrollTo(0, 0) }, [page])
+  useEffect(() => { box.current?.scrollTo(0, 0) }, [nav.page, nav.circle?.id])
   useEffect(() => {
     // Escape steps back a page, then closes.
     const esc = (e: KeyboardEvent) => {
       if (e.key !== 'Escape' || document.querySelector('dialog[open]')) return
       e.stopPropagation()
-      if (pageRef.current !== 'home') setPage('home')
+      if (navRef.current.depth) navRef.current.back()
       else slideAway(box.current, onClose)
     }
     addEventListener('keydown', esc, true)
@@ -135,18 +147,18 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
   }, [])
   return (
     <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
-      // A link inside (Saved, Circles, Advanced search, Prayer) leaves Settings behind.
+      // A link inside (Saved, Advanced search, Prayer) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
         <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
         <div class="settings-title">
-          {page === 'home'
+          {nav.page === 'home'
             ? <h1>Settings</h1>
-            : <button class="settings-back" onClick={() => setPage('home')}><span aria-hidden="true">‹</span> {PAGE_TITLE[page]}</button>}
+            : <button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button>}
           <button class="done-btn" onClick={done}>Done</button>
         </div>
       </div>
-      <div class="settings"><SettingsBody page={page} setPage={setPage} /></div>
+      <div class="settings"><SettingsBody nav={nav} onAway={onClose} /></div>
     </div>
   )
 }
@@ -162,16 +174,16 @@ export function closeSettingsPage() {
 export function SettingsView() {
   useEffect(() => { document.title = 'Settings · Quiet Bible' }, [])
   const box = useRef<HTMLDivElement>(null)
-  const [page, setPage] = useState<Page>('home')
+  const nav = useSettingsNav()
   usePullDown(box, () => window.scrollY, closeSettingsPage)
-  useEffect(() => { window.scrollTo(0, 0) }, [page])
+  useEffect(() => { window.scrollTo(0, 0) }, [nav.page, nav.circle?.id])
   return (
     <div class="settings" ref={box}>
       <button type="button" class="settings-grabber" aria-label="Close settings" onClick={closeSettingsPage} />
-      {page === 'home'
+      {nav.page === 'home'
         ? <h1>Settings</h1>
-        : <h1><button class="settings-back" onClick={() => setPage('home')}><span aria-hidden="true">‹</span> {PAGE_TITLE[page]}</button></h1>}
-      <SettingsBody page={page} setPage={setPage} />
+        : <h1><button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button></h1>}
+      <SettingsBody nav={nav} onAway={() => {}} />
     </div>
   )
 }
@@ -227,8 +239,12 @@ function BibleGroup() {
   )
 }
 
-function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => void }) {
+function SettingsBody({ nav, onAway }: { nav: SettingsNav; onAway: () => void }) {
+  const { page, setPage } = nav
   const { settings, update, catalog, marks, sync } = useApp()
+  // Circles load only when opened.
+  const [circles, setCircles] = useState<typeof import('./circles')>()
+  useEffect(() => { if (page === 'circles' && !circles) import('./circles').then(setCircles).catch(() => {}) }, [page])
   const saved = Object.values(marks).filter(hasContent).length
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
@@ -296,6 +312,10 @@ function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => voi
     </div>
   </>
 
+  if (page === 'circles') return circles
+    ? <circles.CirclesPanel circle={nav.circle?.id} onOpen={nav.setCircle} onAway={onAway} />
+    : <p class="muted">Opening…</p>
+
   if (page === 'data') return <>
     <MoveInSection />
     <DataTools />
@@ -325,7 +345,7 @@ function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => voi
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
           <Row icon={'🙏' + settings.prayTone} label="Prayer" onClick={() => setPage('prayer')} />
-          {sync.enabled && <Row icon="👥" label="Circles" href="#/circles" />}
+          {sync.enabled && <Row icon="👥" label="Circles" onClick={() => setPage('circles')} />}
           <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
           <Row icon="🔎" label="Advanced search" href="#/search" />
         </div>

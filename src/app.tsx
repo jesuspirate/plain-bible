@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, SettingsAt, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -121,8 +121,9 @@ export function App() {
 
   // Settings rise as a sheet from the button in the top right corner.
   const [settingsOpen, setSettingsOpen] = useState(false)
+  const [settingsAt, setSettingsAt] = useState<SettingsAt>()
   useEffect(() => {
-    const on = () => setSettingsOpen(true)
+    const on = (e: Event) => { setSettingsAt((e as CustomEvent<SettingsAt | undefined>).detail); setSettingsOpen(true) }
     addEventListener(SETTINGS_EVENT, on)
     return () => removeEventListener(SETTINGS_EVENT, on)
   }, [])
@@ -190,7 +191,7 @@ export function App() {
           and opens the same panel (with the theme). */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
-      {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
+      {settingsOpen && <SettingsSheet at={settingsAt} onClose={() => { setSettingsOpen(false); setSettingsAt(undefined) }} />}
       {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
