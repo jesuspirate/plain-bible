@@ -51,8 +51,17 @@ header.top {
   position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px;
   padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
   padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right));
-  background: color-mix(in srgb, var(--bg) 88%, transparent); border-bottom: 1px solid var(--line);
-  -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
+  /* Solid page colour unless the phone can both mix colours and blur. Older
+     iPhones (iOS before 16.2) can't mix: the bar went see-through and the
+     blur smeared the chapter number into a dirty band. When it does blur, the
+     bar is nearly solid, so what slides under it is only a soft hint. */
+  background: var(--bg); border-bottom: 1px solid var(--line);
+}
+@supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  header.top {
+    background: color-mix(in srgb, var(--bg) 95%, transparent);
+    -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
+  }
 }
 .brand { font: 600 19px var(--serif); letter-spacing: .01em; color: var(--text); text-decoration: none; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
 .history { position: relative; }

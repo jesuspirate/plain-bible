@@ -82,7 +82,7 @@ button.pray-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff
 .pray-sync p.small { font-size: 14px; }
 .pray-key code { display: block; padding: 10px 12px; border-radius: 10px; background: var(--chip); font: 600 15px/1.4 ui-monospace, Menlo, monospace; letter-spacing: .03em; user-select: all; -webkit-user-select: all; }
 .pray-code { width: 100%; box-sizing: border-box; margin-bottom: 10px; min-height: 50px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); font: 17px ui-monospace, Menlo, monospace; text-transform: uppercase; }
-/* The verses a prayer is prayed over: at the top, out of the way of the light. */
+/* The verses a prayer is prayed with: at the top, out of the way of the light. */
 .pray-over {
   position: absolute; top: max(14px, calc(var(--cut) + 16px), env(safe-area-inset-top)); left: 74px; right: 74px; margin: 0 auto; width: fit-content; max-width: calc(100% - 148px);
   display: flex; align-items: center; gap: 6px; box-sizing: border-box; min-height: 44px; padding: 6px 6px 6px 16px; border-radius: 99px;
