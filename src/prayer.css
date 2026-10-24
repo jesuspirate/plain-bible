@@ -43,6 +43,7 @@ html.praying { overflow: hidden; }
 .pray-words p { margin: 0 0 6px; font-size: 17px; line-height: 1.45; }
 .pray-time { font: 600 28px var(--sans); font-variant-numeric: tabular-nums; letter-spacing: .02em; }
 .pray-amen { font: 600 22px var(--serif); }
+.pray-streak { margin: -4px 0 4px; font-size: 15px; opacity: .8; }
 .pray-verse { all: unset; cursor: pointer; display: block; padding-bottom: 6px; font: italic 17px/1.5 var(--reading); color: #fff7e6; }
 .pray-ref { display: block; margin-top: 4px; font: 600 13px var(--sans); font-style: normal; color: #ffe3a3; }
 .pray-foot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }

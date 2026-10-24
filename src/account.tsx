@@ -7,6 +7,7 @@ import {
   removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, verifyEmailCode,
 } from './lib/sync'
 import { Settings, useApp } from './state'
+import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { DeviceLink, PasteMove } from './move'
 
 export interface SyncApi {
@@ -48,7 +49,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
   const running = useRef(false), again = useRef(false)
   const setAccount = (a: Account | null) => { saveAccount(a); setAccountState(a) }
   const localDoc = (): SyncDoc | null => latest.current.settings
-    ? { v: 1, marks: latest.current.marks, settings: latest.current.settings as unknown as Record<string, unknown>, settingsT: loadSettingsT() }
+    ? { v: 1, marks: latest.current.marks, settings: latest.current.settings as unknown as Record<string, unknown>, settingsT: loadSettingsT(), days: loadDays() }
     : null
 
   const run = async () => {
@@ -60,6 +61,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       const { doc, account: next } = await syncNow(acct, local)
       // Merge again with the current state, in case something changed while syncing.
       setMarksState(cur => { const m = mergeDocs({ ...doc, marks: cur }, doc).marks; saveMarks(m); return m })
+      addDays(doc.days)
       // A setting changed here while the sync was on its way (say, the theme
       // tapped) is newer than what came back: keep it, and send it next time.
       const nowT = loadSettingsT(), startT = local.settingsT
@@ -105,6 +107,16 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     const t = setTimeout(auto, 2000)
     return () => clearTimeout(t)
   }, [marks, settings, account?.token])
+  // And shortly after a day is read or prayed.
+  useEffect(() => {
+    let t = 0
+    const on = () => {
+      clearTimeout(t)
+      t = window.setTimeout(() => { const local = localDoc(); if (loadAccount() && local && docKey(local) !== loadAccount()?.synced) auto() }, 2000)
+    }
+    addEventListener(DAYS_EVENT, on)
+    return () => { clearTimeout(t); removeEventListener(DAYS_EVENT, on) }
+  }, [])
 
   return {
     enabled: !!SYNC_URL, account, busy, error, run: () => { run() },

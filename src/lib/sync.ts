@@ -3,6 +3,7 @@
 // signed out.
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { mergeMark, Marks, upgrade } from './marks'
+import { Days, mergeDays } from './streaks'
 
 export const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
 
@@ -13,6 +14,8 @@ export interface SyncDoc {
   /** when each setting last changed, ms since epoch. Older documents used
    *  one number for all settings. */
   settingsT: SettingsT
+  /** the days you read and prayed, for streaks (see streaks.ts) */
+  days?: Days
 }
 export type SettingsT = Record<string, number> | number
 
@@ -22,7 +25,8 @@ export function changedAt(t: SettingsT | undefined, key: string) {
 }
 
 /** Merge two documents: each verse keeps its newest mark (removals included)
- *  and each of its notes keeps its newest version, and each setting keeps its newest value. */
+ *  and each of its notes keeps its newest version, each setting keeps its
+ *  newest value, and a day read or prayed on either side stays done. */
 export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
   if (!b) return a
   const marks: Marks = { ...a.marks }
@@ -36,7 +40,7 @@ export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
     settings[k] = useB ? b.settings[k] : a.settings[k]
     settingsT[k] = useB ? tb : ta
   }
-  return { v: 1, marks, settings, settingsT }
+  return { v: 1, marks, settings, settingsT, days: mergeDays(a.days, b.days) }
 }
 
 /** Stable text for comparing documents without caring about key order. */
@@ -47,7 +51,8 @@ export function docKey(d: SyncDoc) {
     return [k, m.c ?? '', m.b ?? 0, m.t, ns]
   })
   const settings = Object.keys(d.settings ?? {}).sort().map(k => [k, d.settings[k], changedAt(d.settingsT, k)])
-  return JSON.stringify([marks, settings])
+  const days = Object.keys(d.days ?? {}).sort().map(k => [k, d.days![k]])
+  return JSON.stringify([marks, settings, days])
 }
 
 // ---------------------------------------------------------------------------

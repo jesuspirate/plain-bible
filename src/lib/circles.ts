@@ -15,6 +15,7 @@ import { unlockKey } from './prayerSync'
 import { cleanVerse, PrayerVerse } from './prayerVerses'
 import { shareLink } from './native'
 import { setInCircles } from '../state'
+import { Days, fromShared, loadDays, shareable } from './streaks'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const CHUNK = 1_000_000
@@ -31,7 +32,8 @@ export type Shared =
   | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; note?: string }
 
 export interface CircleInfo { id: string; name: string; members: number }
-export interface Member { mid: string; name: string }
+/** `streak`: the days they read and prayed, if they show their streaks here. */
+export interface Member { mid: string; name: string; streak?: Days }
 export interface Reply { id: string; by: string; at: number; text: string }
 export interface FeedItem { id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; replies: Reply[] }
 export interface Feed { me: string; members: Member[]; items: FeedItem[] }
@@ -216,10 +218,13 @@ export const keptFeed = (circle: string) => meta.get<Feed>(`circle:${circle}`)
 export async function loadFeed(circle: string): Promise<Feed> {
   const key = await keyOf(circle)
   const r = await api<{
-    me: string; members: { mid: string; name: string }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
+    me: string; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
     amens: { item: string; mid: string }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
   }>(`/circles/${circle}`, { token: token() })
-  const members = await Promise.all(r.members.map(async m => ({ mid: m.mid, name: text(await openJson(key, m.name, `${circle}/me`).catch(() => ''), 60) || 'Someone' })))
+  const members: Member[] = await Promise.all(r.members.map(async m => ({
+    mid: m.mid, name: text(await openJson(key, m.name, `${circle}/me`).catch(() => ''), 60) || 'Someone',
+    ...(m.streak ? { streak: fromShared(await openJson(key, m.streak, `${circle}/streak/${m.mid}`).catch(() => undefined)) } : {}),
+  })))
   const amens = new Map<string, string[]>()
   for (const a of r.amens) amens.set(a.item, [...(amens.get(a.item) ?? []), a.mid])
   const replies = new Map<string, Reply[]>()
@@ -293,6 +298,39 @@ export async function prayerAudio(circle: string, item: FeedItem): Promise<{ typ
   }
   let o = 0
   return item.body.parts.map(p => ({ type: p.type, audio: all!.slice(o, o += p.size) }))
+}
+
+// Streaks a circle sees: sealed like everything else. What was last sent
+// to each circle is remembered, so nothing is sent twice.
+const SENT = 'plain-bible:streak-sent'
+const sentStreaks = (): Record<string, string> => { try { return JSON.parse(localStorage.getItem(SENT) || '{}') } catch { return {} } }
+const keepSent = (s: Record<string, string>) => { try { localStorage.setItem(SENT, JSON.stringify(s)) } catch { /* ignore */ } }
+
+/** Show this circle your streaks (as of now), or stop showing them. `mid`
+ *  is your place in the circle, which ties what's sealed to you. */
+export async function shareStreak(circle: string, mid: string, on: boolean) {
+  const sent = sentStreaks()
+  if (!on) {
+    await api(`/circles/${circle}/streak`, { method: 'DELETE', token: token() })
+    delete sent[circle]
+  } else {
+    const now = JSON.stringify(shareable(loadDays()))
+    const streak = await sealJson(await keyOf(circle), JSON.parse(now), `${circle}/streak/${mid}`)
+    await api(`/circles/${circle}/streak`, { method: 'PUT', token: token(), body: { streak } })
+    sent[circle] = now
+  }
+  keepSent(sent)
+}
+
+/** Keep the circles that see your streaks up to date: after a day is read
+ *  or prayed, and once a day. Sends only what changed. */
+export async function pushStreaks(ids: string[]) {
+  const now = JSON.stringify(shareable(loadDays()))
+  for (const id of ids) {
+    if (sentStreaks()[id] === now) continue
+    const mid = (await keptFeed(id))?.me ?? (await loadFeed(id)).me
+    await shareStreak(id, mid, true)
+  }
 }
 
 export const amen = (circle: string, item: string, on: boolean) =>
