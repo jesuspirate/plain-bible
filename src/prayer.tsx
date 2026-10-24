@@ -368,15 +368,18 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
   return (
     <div class="pray-sync">
       {on ? <>
-        <p><strong>Syncing with your devices.</strong> <span class="muted">Each prayer is encrypted on this device before it leaves it. Only your devices can hear it.</span></p>
-        {shown && <p class="pray-key"><code>{shown.replace(/-/g, '-\u200B')}</code></p>}
-        {/* Prayers sync by themselves each time this opens, so there's no Sync now. */}
-        {shown
-          ? <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy prayer key</button>
-          : <button class="pray-btn" onClick={() => prayerKeyCode().then(setShown)}>Show prayer key</button>}
-        <button class="pray-btn quiet" disabled={busy} onClick={stop}>{busy ? 'Stopping…' : 'Stop syncing on this device'}</button>
+        <p><strong>✓ Synced with your devices.</strong> <span class="muted">Encrypted, so only you can hear them.</span></p>
         <DeviceLink class="pray-link" />
-        {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers (say, an Android phone next to an iPhone). Easier: Link another device. Keep the key private: it opens your prayers.</p>}
+        <details class="account-more">
+          <summary>More</summary>
+          {shown && <p class="pray-key"><code>{shown.replace(/-/g, '-\u200B')}</code></p>}
+          {/* Prayers sync by themselves each time this opens, so there's no Sync now. */}
+          {shown
+            ? <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy prayer key</button>
+            : <button class="pray-btn" onClick={() => prayerKeyCode().then(setShown)}>Show prayer key</button>}
+          {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers. Easier: Link another device. Keep the key private: it opens your prayers.</p>}
+          <button class="pray-btn quiet" disabled={busy} onClick={stop}>{busy ? 'Stopping…' : 'Stop syncing on this device'}</button>
+        </details>
       </> : !signedIn ? <>
         <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
         <p class="muted small">{LOCAL_ONLY}</p>
