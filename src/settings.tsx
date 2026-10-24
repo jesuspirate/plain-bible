@@ -3,7 +3,7 @@
 // search (pull again, or Done, and you're back to the word). #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, openPrayer, Settings, useApp } from './state'
+import { defaultSettings, FONTS, go, openPrayer, Settings, TONES, useApp } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
@@ -192,7 +192,7 @@ function SettingsBody() {
         <div class="col">
           <button class="link pray-open" onClick={openPrayer}>Pray out loud ›</button>
           <div class="seg tones" role="radiogroup" aria-label="Prayer button">
-            {['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}'].map(t => (
+            {TONES.map(t => (
               <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>{'🙏' + t}</button>
             ))}
           </div>

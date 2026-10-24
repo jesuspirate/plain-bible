@@ -44,13 +44,16 @@ export interface Settings {
   searchOptions: SearchOptions
 }
 
+/** The skin tones of 🙏, plain first. */
+export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}']
+
 const KEY = 'plain-bible:settings'
 
 export function defaultSettings(catalog?: Catalog): Settings {
   const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'system', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, strongs: false, strongsNumbers: false,
+    theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
