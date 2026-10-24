@@ -1,4 +1,4 @@
-// The verses a prayer is prayed with, and how they're named.
+// The verses a prayer is prayed using, and how they're named.
 import { BOOK_INDEX, bookById } from './books'
 import { verseRanges } from './refs'
 

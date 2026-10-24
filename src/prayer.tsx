@@ -36,7 +36,7 @@ export function Prayer({ onClose }: { onClose: () => void }) {
   const [bible, setBible] = useState<Bible>()
   // Said back once a prayer is kept: a verse picked at random, in the Bible you read.
   const [comfort, setComfort] = useState<Comfort>(pickComfort)
-  // The verses this prayer is prayed with. Verses you just selected are
+  // The verses this prayer is prayed using. Verses you just selected are
   // offered; Pray on the selection bar ties them straight away.
   const [offer] = useState(verseToPrayOver)
   const [verse, setVerseNow] = useState<PrayerVerse | undefined>(offer?.sure ? offer.verse : undefined)
@@ -168,11 +168,11 @@ export function Prayer({ onClose }: { onClose: () => void }) {
       {view === 'pray' && <button class="pray-close" aria-label="Close" onClick={onClose}>✕</button>}
       {view === 'pray' && phase !== 'heard' && (verse
         ? <div class="pray-over">
-            <span>Praying with <strong>{verseLabel(verse)}</strong></span>
+            <span>Praying using <strong>{verseLabel(verse)}</strong></span>
             <button class="pray-over-x" aria-label={`Don’t tie this prayer to ${verseLabel(verse)}`} onClick={() => setVerse(undefined)}>✕</button>
           </div>
         : offer && !busy && <button class="pray-over offer" onClick={() => setVerse(offer.verse)}>
-            <span>+ Pray with <strong>{verseLabel(offer.verse)}</strong></span>
+            <span>+ Pray using <strong>{verseLabel(offer.verse)}</strong></span>
           </button>)}
       {view === 'pray' ? (
         <div class="pray-center">
@@ -196,7 +196,7 @@ export function Prayer({ onClose }: { onClose: () => void }) {
                     “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
                   </button>
                   {kept?.verse
-                    ? <button class="pray-tied" onClick={() => read(kept.verse!)}>Prayed with <strong>{verseLabel(kept.verse)}</strong> ›</button>
+                    ? <button class="pray-tied" onClick={() => read(kept.verse!)}>Prayed using <strong>{verseLabel(kept.verse)}</strong> ›</button>
                     : kept && <button class="pray-pill pray-add" onClick={addVerse}>+ Add a verse</button>}
                 </>
               : <p>Tap and speak to God. Only you will hear this again.</p>}
