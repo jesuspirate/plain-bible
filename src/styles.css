@@ -243,8 +243,10 @@ main.with-bar { padding-bottom: 120px; }
   background: radial-gradient(circle at 50% 40%, #fffdf6 0%, #fff1cc 55%, #ffd98a 100%);
   box-shadow: 0 0 0 1px rgba(240, 185, 90, .6), 0 0 14px 3px rgba(245, 190, 95, .55); -webkit-tap-highlight-color: transparent;
   /* Held for the skin tones: no text selection, no callout, no scrolling away. */
-  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none;
+  -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none; position: relative;
 }
+/* A little more to hold on to than the drawn circle. */
+.sb-pray::before { content: ''; position: absolute; inset: -6px; border-radius: 50%; }
 .sb-pray-emoji { font: 23px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
 .sb-mini .sb-pray-emoji { font-size: 26px; }
 .tones button { font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; padding: 8px 10px; }
