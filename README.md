@@ -63,7 +63,7 @@ Chinese and Japanese text is matched without needing word breaks.
 
 ## Optional account sync
 
-Signing in is optional and passkey-only (no email, no password). A small Cloudflare Worker in
+Signing in is optional, with a passkey or a 6-digit code sent by email (no password). A small Cloudflare Worker in
 [`worker/`](worker) keeps one JSON document per account in D1: highlights, bookmarks and settings.
 Each verse keeps its newest change, so edits on two devices merge cleanly.
 
@@ -71,6 +71,11 @@ To turn it on, add two repository secrets: `CLOUDFLARE_API_TOKEN` (an API token 
 "Edit Cloudflare Workers" template plus Account → D1 → Edit) and `CLOUDFLARE_ACCOUNT_ID`.
 The next push to `main` creates the database, deploys the Worker and builds the app pointing at it.
 Passkeys are tied to the `RP_ID` domain in `worker/wrangler.toml`.
+
+Email sign-in turns on once a third repository secret, `RESEND_API_KEY`, is set (a free
+[Resend](https://resend.com) account with `myquietbible.com` verified as a sending domain). The deploy
+also makes `EMAIL_SECRET` once, the key for the email fingerprints; never change it. Addresses are not
+stored, only that fingerprint and a hint. Codes come from `EMAIL_FROM` in `worker/wrangler.toml`.
 
 ### Moving addresses
 

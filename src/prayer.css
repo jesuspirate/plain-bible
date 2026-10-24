@@ -74,6 +74,7 @@ html.praying { overflow: hidden; }
 .pray-btn { display: block; width: 100%; min-height: 50px; margin: 0 0 10px; padding: 10px 16px; border-radius: 14px; font: 600 17px var(--sans); -webkit-tap-highlight-color: transparent; }
 .pray-btn:active { transform: scale(.98); }
 .pray-btn.quiet { background: none; color: var(--muted); }
+a.pray-btn { box-sizing: border-box; background: var(--surface); border: 1px solid var(--line); color: var(--text); text-align: center; text-decoration: none; line-height: 28px; }
 button.pray-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 @media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after { animation: none; } }
 .pray-amen-btn { margin: 4px 0 6px; }

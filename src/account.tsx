@@ -1,10 +1,10 @@
-// Settings → Account: optional passkey sign-in that keeps highlights,
-// bookmarks and settings the same on every device.
+// Settings → Account: optional sign-in, by email code or passkey, that keeps
+// highlights, bookmarks and settings the same on every device.
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
-  Account, accountInfo, changedAt, deleteAccount, docKey, loadAccount, mergeDocs, register, saveAccount,
-  prepareSignIn, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
+  Account, accountInfo, changedAt, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
+  removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, verifyEmailCode,
 } from './lib/sync'
 import { Settings, useApp } from './state'
 import { DeviceLink, PasteMove } from './move'
@@ -113,14 +113,72 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
   }
 }
 
+/** Sign in with a 6-digit code sent by email, or with `token`, add an email
+ *  to that account. A code rather than a link: on iPhone a link would open
+ *  Safari, not the Home Screen app, and the two keep separate storage. */
+function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: string) => void; onAdded?: (hint: string) => void }) {
+  const [email, setEmail] = useState('')
+  const [sent, setSent] = useState(false)
+  const [code, setCode] = useState('')
+  const [working, setWorking] = useState('')
+  const [msg, setMsg] = useState('')
+  const act = (label: string, fn: () => Promise<void>) => async () => {
+    if (working) return
+    setWorking(label); setMsg('')
+    try { await fn() } catch (e) { setMsg((e as Error).message) } finally { setWorking('') }
+  }
+  const send = act('send', async () => { await sendEmailCode(email.trim(), token); setSent(true); setCode('') })
+  const check = (c: string) => act('check', async () => {
+    const r = await verifyEmailCode(email.trim(), c, token)
+    if (r.token) onToken?.(r.token)
+    else if (r.added) onAdded?.(r.email ?? '')
+  })()
+  const submit = (fn: () => void) => (e: Event) => { e.preventDefault(); fn() }
+
+  if (!sent) return (
+    <div class="email-code">
+      <form class="row wrap" onSubmit={submit(send)}>
+        <input class="move-input" type="email" inputMode="email" autoComplete="email" placeholder="Your email" value={email}
+          onInput={e => setEmail((e.target as HTMLInputElement).value)} />
+        <button class="primary" disabled={!!working || !/\S@\S+\.\S/.test(email)}>{working ? 'Sending…' : 'Email me a code'}</button>
+      </form>
+      {msg && <p class="note">{msg}</p>}
+    </div>
+  )
+  const digits = code.replace(/\D/g, '')
+  return (
+    <div class="email-code">
+      <p class="muted small">We emailed a 6-digit code to <strong>{email.trim()}</strong>. It can take a minute; look in spam too.</p>
+      <form class="row wrap" onSubmit={submit(() => check(digits))}>
+        <input class="move-input code" inputMode="numeric" autoComplete="one-time-code" placeholder="6-digit code" maxLength={7} value={code}
+          onInput={e => {
+            const v = (e.target as HTMLInputElement).value
+            setCode(v)
+            // Filled in from the email (or typed): go straight on.
+            if (v.replace(/\D/g, '').length === 6) check(v.replace(/\D/g, ''))
+          }} />
+        <button class="primary" disabled={!!working || digits.length !== 6}>{working === 'check' ? 'Checking…' : token ? 'Add email' : 'Sign in'}</button>
+      </form>
+      <div class="row wrap">
+        <button class="link" disabled={!!working} onClick={send}>{working === 'send' ? 'Sending…' : 'Send a new code'}</button>
+        <button class="link" disabled={!!working} onClick={() => { setSent(false); setMsg('') }}>Use another email</button>
+      </div>
+      {msg && <p class="note">{msg}</p>}
+    </div>
+  )
+}
+
 export function AccountSection() {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState('')
-  const [info, setInfo] = useState<{ passkeys: number; created: number }>()
+  const [info, setInfo] = useState<{ passkeys: number; created: number; email: string | null }>()
+  const [email, setEmailOn] = useState(emailSignInOn)
+  const [addEmail, setAddEmail] = useState(false)
   const acct = sync.account
   useEffect(() => { if (acct) accountInfo(acct.token).then(setInfo).catch(() => {}) }, [acct?.token, msg])
   useEffect(() => { if (!acct && SYNC_URL && navigator.onLine !== false) prepareSignIn() }, [acct?.token])
+  useEffect(() => { if (SYNC_URL && navigator.onLine !== false) checkEmailSignIn().then(setEmailOn).catch(() => {}) }, [])
   if (!sync.enabled) return null
   const passkeys = typeof PublicKeyCredential !== 'undefined'
 
@@ -140,12 +198,35 @@ export function AccountSection() {
   })
   const addKey = act('add', async () => { await register(acct!.token); setMsg('Passkey added. You can now sign in with it on that device too.') })
   const logout = act('logout', async () => { await signOut(acct!.token); sync.signedOut() })
+  const dropEmail = act('email', async () => {
+    if (!confirm('Stop signing in with this email? You’ll sign in with your passkey only.')) return
+    await removeEmail(acct!.token); setMsg('Email removed.')
+  })
   const remove = act('delete', async () => {
     if (!confirm('Delete your account and its synced copy? Highlights stay on this device.')) return
     await deleteAccount(acct!.token); sync.signedOut(); setMsg('Account deleted.')
   })
 
   if (!acct) {
+    if (email) return (
+      <div class="account">
+        <p class="muted">Optional. Keep your highlights, notes, settings and prayers the same on all your devices.
+          No password: we email you a code. New here? The same code makes your account.</p>
+        <EmailCode onToken={sync.signedIn} />
+        {passkeys && <>
+          <p class="muted small">Or use a passkey: Face ID, a fingerprint or your screen lock.</p>
+          <div class="row wrap">
+            <button disabled={!!working} onClick={login}>{working === 'login' ? 'Waiting for passkey…' : 'Sign in with a passkey'}</button>
+            <button disabled={!!working} onClick={create}>{working === 'create' ? 'Waiting for passkey…' : 'New account with a passkey'}</button>
+          </div>
+        </>}
+        <details class="account-more">
+          <summary>Got a link from your other device?</summary>
+          <PasteMove />
+        </details>
+        {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
+      </div>
+    )
     return (
       <div class="account">
         <p class="muted">Optional. Keep your highlights, notes, settings and prayers the same on all your devices.
@@ -173,10 +254,20 @@ export function AccountSection() {
         <button onClick={sync.run} disabled={sync.busy}>Sync now</button>
       </div>
       <DeviceLink />
+      {/* Someone who signed in by passkey alone can add an email, so losing the passkey never locks them out. */}
+      {email && info && !info.email && !addEmail && (
+        <p class="muted small">Worried about losing your passkey? <button class="link" onClick={() => setAddEmail(true)}>Add your email</button> as another way to sign in.</p>
+      )}
+      {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
       <details class="account-more">
-        <summary>Passkeys and account</summary>
-        {info && <p class="muted small">{info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}</p>}
+        <summary>Sign-in and account</summary>
+        {info && <p class="muted small">
+          {info.email && <>Email {info.email} · </>}
+          {info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}
+        </p>}
         <div class="row wrap">
+          {email && info?.email && !addEmail && <button onClick={() => setAddEmail(true)} disabled={!!working}>Change email</button>}
+          {email && info?.email && !!info.passkeys && <button onClick={dropEmail} disabled={!!working}>Remove email</button>}
           <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : 'Add a passkey'}</button>
           <button onClick={logout} disabled={!!working}>Sign out</button>
           <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>

@@ -468,6 +468,10 @@ main.with-mini { padding-bottom: 144px; }
 button.danger { color: #b3261e; }
 :root[data-theme='dark'] button.danger { color: #ff8a80; }
 .account-box { margin: 0 0 20px; } .account-box h2 { margin-top: 0; }
+.email-code form .move-input { flex: 1 1 14em; width: auto; }
+.email-code .move-input.code { flex: 0 1 9em; font-variant-numeric: tabular-nums; }
+.email-code .move-input.code:not(:placeholder-shown) { letter-spacing: 3px; }
+.email-code .row:last-of-type { margin-top: 0; }
 
 /* ---- verse selection bar ---- */
 .selbar {
