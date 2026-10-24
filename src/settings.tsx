@@ -4,7 +4,6 @@
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, openPrayer, readPath, Settings, TONES, useApp, useRoute } from './state'
-import type { SettingsAt } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
@@ -13,6 +12,7 @@ import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
 import { MoveInSection } from './move'
+import type { SettingsAt } from './state'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
 // (handy for reporting a problem). The line under it is the whole update:
