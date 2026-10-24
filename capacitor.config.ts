@@ -9,14 +9,14 @@ const config: CapacitorConfig = {
   ios: {
     // The app draws its own safe areas (viewport-fit=cover), like the PWA.
     contentInset: 'never',
-    backgroundColor: '#faf8f3',
+    backgroundColor: '#f4ecd8',
     scheme: 'Plain Bible',
     limitsNavigationsToAppBoundDomains: false,
   },
   plugins: {
     SplashScreen: {
       launchAutoHide: false,
-      backgroundColor: '#faf8f3',
+      backgroundColor: '#f4ecd8',
       showSpinner: false,
     },
     CapacitorPasskey: {

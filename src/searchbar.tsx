@@ -9,9 +9,78 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, openPrayer, readPath, useApp } from './state'
+import { go, openPrayer, readPath, TONES, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
+import { createPortal } from 'preact/compat'
+import { holdTap } from './lib/native'
 import { SettingsSheet } from './settings'
+
+/** 🙏: tap to pray. Press and hold for the skin tones, as on the iPhone
+ *  emoji keyboard: slide onto one and let go, or let go and tap one. */
+function PrayButton() {
+  const { settings, update } = useApp()
+  const [at, setAt] = useState<DOMRect | null>(null)
+  const [hover, setHover] = useState<string | null>(null)
+  const timer = useRef(0)
+  const start = useRef<{ x: number; y: number } | null>(null)
+  const held = useRef(false)
+  const caught = useRef(false)
+  const choose = (t: string) => { update({ prayTone: t }); setAt(null); setHover(null) }
+  const toneAt = (x: number, y: number) => (document.elementFromPoint(x, y)?.closest('[data-tone]') as HTMLElement | null)?.dataset.tone ?? null
+  const down = (e: PointerEvent) => {
+    if (e.button) return
+    held.current = false
+    start.current = { x: e.clientX, y: e.clientY }
+    const el = e.currentTarget as HTMLElement
+    clearTimeout(timer.current)
+    timer.current = window.setTimeout(() => { held.current = true; holdTap(); setAt(el.getBoundingClientRect()) }, 450)
+  }
+  const move = (e: PointerEvent) => {
+    if (!start.current) return
+    if (held.current) { setHover(toneAt(e.clientX, e.clientY)); return }
+    if (Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) > 10) { clearTimeout(timer.current); start.current = null }
+  }
+  const up = (e: PointerEvent) => {
+    clearTimeout(timer.current)
+    if (held.current && start.current) {
+      const t = toneAt(e.clientX, e.clientY)
+      if (t !== null) choose(t)
+      else setHover(null)
+    }
+    start.current = null
+  }
+  useEffect(() => () => clearTimeout(timer.current), [])
+  useEffect(() => {
+    if (!at) return
+    const key = (e: KeyboardEvent) => { if (e.key === 'Escape') setAt(null) }
+    addEventListener('keydown', key)
+    return () => removeEventListener('keydown', key)
+  }, [at])
+  // Above the button, kept on screen.
+  const w = TONES.length * 44 + 12
+  const left = at ? Math.max(8, Math.min(innerWidth - w - 8, at.left + at.width / 2 - w / 2)) : 0
+  return (
+    <>
+      <button type="button" class="sb-pray" aria-label="Pray" title="Pray · hold for skin tones"
+        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={() => { clearTimeout(timer.current); start.current = null }}
+        onContextMenu={e => e.preventDefault()}
+        onClick={() => { if (held.current) { held.current = false; return } openPrayer() }}>
+        <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
+      </button>
+      {/* On the page itself: the bar's blur and slide would carry it along. */}
+      {at && createPortal(<>
+        {/* Only a tap that starts here closes it, not letting go of the hold. */}
+        <div class="tone-catch" onPointerDown={() => { caught.current = true }} onClick={() => { if (caught.current) setAt(null); caught.current = false }} />
+        <div class="tone-pick" role="radiogroup" aria-label="Prayer button skin tone" style={{ left, bottom: innerHeight - at.top + 10 }}>
+          {TONES.map(t => (
+            <button type="button" role="radio" data-tone={t} aria-checked={settings.prayTone === t}
+              class={(hover ?? settings.prayTone) === t ? 'on' : ''} onClick={() => choose(t)}>{'🙏' + t}</button>
+          ))}
+        </div>
+      </>, document.body)}
+    </>
+  )
+}
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -336,13 +405,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           {!open && !mini && <ThemeToggle class="sb-theme" />}
           {/* Prayer, always one tap away: opens the glowing microphone over the page. */}
           {!open && !mini && (
-            <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}>
-              <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
-            </button>
+            <PrayButton />
           )}
         </form>
         {/* With the bar hidden, prayer gets its own round button above search. */}
-        {mini && !open && <button type="button" class="sb-pray" aria-label="Pray" title="Pray" onClick={openPrayer}><span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span></button>}
+        {mini && !open && <PrayButton />}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
       </div>

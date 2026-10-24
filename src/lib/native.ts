@@ -42,6 +42,29 @@ export function tap() {
   import('@capacitor/haptics').then(({ Haptics, ImpactStyle }) => Haptics.impact({ style: ImpactStyle.Light })).catch(() => {})
 }
 
+/** The buzz of a press-and-hold, like holding a key on the iPhone keyboard.
+ *  The web has no haptics API on iPhone, but tapping a hidden switch
+ *  (iOS 18 and later) gives the same small tick; Android can vibrate. */
+let tick: HTMLLabelElement | undefined
+export function holdTap() {
+  if (isNative) {
+    import('@capacitor/haptics').then(({ Haptics, ImpactStyle }) => Haptics.impact({ style: ImpactStyle.Medium })).catch(() => {})
+  } else if (navigator.vibrate) {
+    navigator.vibrate(12)
+  } else {
+    if (!tick) {
+      tick = document.createElement('label')
+      tick.setAttribute('aria-hidden', 'true')
+      tick.style.cssText = 'position:fixed;left:-99px;top:0;width:1px;height:1px;overflow:hidden;opacity:0;pointer-events:none'
+      const box = document.createElement('input')
+      box.type = 'checkbox'; box.setAttribute('switch', ''); box.tabIndex = -1
+      tick.append(box)
+      document.body.append(tick)
+    }
+    tick.click()
+  }
+}
+
 /** Set up the native shell: status bar text that suits the theme, and hide
  *  the launch screen once the first chapter is on screen. */
 export async function initNative() {

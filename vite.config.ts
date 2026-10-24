@@ -22,7 +22,7 @@ export default defineConfig({
         short_name: 'Bible',
         description: 'Just the Bible, in many versions and languages, with thorough search.',
         theme_color: '#2b2a28',
-        background_color: '#faf8f3',
+        background_color: '#f4ecd8',
         display: 'standalone',
         start_url: './',
         icons: [
