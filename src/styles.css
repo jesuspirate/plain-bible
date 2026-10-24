@@ -474,6 +474,7 @@ main.with-mini { padding-bottom: 144px; }
 button.danger { color: #b3261e; }
 :root[data-theme='dark'] button.danger { color: #ff8a80; }
 .account-box { margin: 0 0 20px; } .account-box h2 { margin-top: 0; }
+.email-code { margin-top: 12px; }
 .email-code form .move-input { flex: 1 1 14em; width: auto; }
 .email-code .move-input.code { flex: 0 1 9em; font-variant-numeric: tabular-nums; }
 .email-code .move-input.code:not(:placeholder-shown) { letter-spacing: 3px; }
@@ -606,7 +607,10 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .settings-sheet {
   position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; top: calc(max(10px, env(safe-area-inset-top)) + 56px);
   overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; outline: none;
-  background: var(--bg); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,.25);
+  background: var(--bg); border-radius: 20px 20px 0 0;
+  /* The second shadow is the sheet again, just below it: when the iPhone
+     keyboard pans the page up, that strip shows instead of the reading page. */
+  box-shadow: 0 60vh 0 0 var(--bg), 0 -10px 40px rgba(0,0,0,.25);
   padding: 0 max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
   animation: settings-rise .32s cubic-bezier(.2, .8, .2, 1);
 }
