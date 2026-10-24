@@ -102,7 +102,7 @@ export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT)
 let picked: { verse: PrayerVerse; at: number; sure: boolean } | undefined
 /** The reader calls this as verses are selected. */
 export const versesPicked = (verse: PrayerVerse) => { picked = { verse, at: Date.now(), sure: false } }
-/** Pray with these verses in mind. */
+/** Pray using these verses. */
 export const prayOver = (verse: PrayerVerse) => { picked = { verse, at: Date.now(), sure: true }; openPrayer() }
 /** What to offer as the prayer opens: verses selected in the last two
  *  minutes, and whether they were chosen for this prayer. Asked once. */

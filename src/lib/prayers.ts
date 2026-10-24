@@ -9,7 +9,7 @@ import type { PrayerVerse } from './prayerVerses'
 export interface Part { ms: number; type: string; audio: ArrayBuffer }
 /** A prayer: its first part, plus any parts added after it was interrupted
  *  (the phone locked) and picked up again. `ms` is the length of them all.
- *  `verse`: the verses it was prayed with, if any. Once set it stays, so
+ *  `verse`: the verses it was prayed using, if any. Once set it stays, so
  *  every device ends up with the same one. */
 export interface Prayer extends Part { id: string; at: number; more?: Part[]; verse?: PrayerVerse }
 /** A prayer without its audio; `parts` counts its parts. */
