@@ -34,7 +34,7 @@ function PrayButton() {
     start.current = { x: e.clientX, y: e.clientY }
     const el = e.currentTarget as HTMLElement
     clearTimeout(timer.current)
-    timer.current = window.setTimeout(() => { held.current = true; holdTap(); setAt(el.getBoundingClientRect()) }, 450)
+    timer.current = window.setTimeout(() => { held.current = true; getSelection()?.removeAllRanges(); holdTap(); setAt(el.getBoundingClientRect()) }, 450)
   }
   const move = (e: PointerEvent) => {
     if (!start.current) return
@@ -47,9 +47,23 @@ function PrayButton() {
       const t = toneAt(e.clientX, e.clientY)
       if (t !== null) choose(t)
       else setHover(null)
+    } else if (start.current && e.button === 0) {
+      // A plain tap. Touches never send a click (see below), so it opens here.
+      openPrayer()
     }
     start.current = null
   }
+  // On iPhone a held finger otherwise selects the nearest verse and brings
+  // up Copy / Look Up / Translate. Stopping the touch itself stops all of
+  // that; the pointer events above still come through.
+  const btn = useRef<HTMLButtonElement>(null)
+  useEffect(() => {
+    const el = btn.current
+    if (!el) return
+    const stop = (e: TouchEvent) => { if (e.cancelable) e.preventDefault() }
+    el.addEventListener('touchstart', stop, { passive: false })
+    return () => el.removeEventListener('touchstart', stop)
+  }, [])
   useEffect(() => () => clearTimeout(timer.current), [])
   useEffect(() => {
     if (!at) return
@@ -62,10 +76,10 @@ function PrayButton() {
   const left = at ? Math.max(8, Math.min(innerWidth - w - 8, at.left + at.width / 2 - w / 2)) : 0
   return (
     <>
-      <button type="button" class="sb-pray" aria-label="Pray" title="Pray · hold for skin tones"
+      <button ref={btn} type="button" class="sb-pray" aria-label="Pray" title="Pray · hold for skin tones"
         onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={() => { clearTimeout(timer.current); start.current = null }}
         onContextMenu={e => e.preventDefault()}
-        onClick={() => { if (held.current) { held.current = false; return } openPrayer() }}>
+        onClick={e => { if (e.detail === 0) openPrayer() /* keyboard; taps open on pointerup */ }}>
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
       </button>
       {/* On the page itself: the bar's blur and slide would carry it along. */}
