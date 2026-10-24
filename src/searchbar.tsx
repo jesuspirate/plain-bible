@@ -27,10 +27,21 @@ function PrayButton() {
   const held = useRef(false)
   const caught = useRef(false)
   const choose = (t: string) => { update({ prayTone: t }); setAt(null); setHover(null) }
-  const toneAt = (x: number, y: number) => (document.elementFromPoint(x, y)?.closest('[data-tone]') as HTMLElement | null)?.dataset.tone ?? null
+  // Like the iPhone keyboard: while you slide, the tone is the one in line
+  // with your finger, wherever it is up or down, so a finger that covers the
+  // row or drifts a little still lands on the one you mean.
+  const pick = useRef<HTMLDivElement>(null)
+  const slid = useRef(false)
+  const toneAt = (x: number) => {
+    const cells = [...(pick.current?.children ?? [])] as HTMLElement[]
+    if (!cells.length) return null
+    const i = cells.findIndex(c => x < c.getBoundingClientRect().right)
+    return cells[i < 0 ? cells.length - 1 : i].dataset.tone ?? null
+  }
   const down = (e: PointerEvent) => {
     if (e.button) return
     held.current = false
+    slid.current = false
     start.current = { x: e.clientX, y: e.clientY }
     const el = e.currentTarget as HTMLElement
     clearTimeout(timer.current)
@@ -38,15 +49,21 @@ function PrayButton() {
   }
   const move = (e: PointerEvent) => {
     if (!start.current) return
-    if (held.current) { setHover(toneAt(e.clientX, e.clientY)); return }
+    if (held.current) {
+      // Settle first: the jitter of a held finger doesn't count as a slide.
+      if (!slid.current && Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) < 12) return
+      slid.current = true
+      setHover(toneAt(e.clientX))
+      return
+    }
     if (Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) > 10) { clearTimeout(timer.current); start.current = null }
   }
   const up = (e: PointerEvent) => {
     clearTimeout(timer.current)
     if (held.current && start.current) {
-      const t = toneAt(e.clientX, e.clientY)
+      // Slid onto a tone: that's the one. Just let go: stay open for a tap.
+      const t = slid.current ? toneAt(e.clientX) : null
       if (t !== null) choose(t)
-      else setHover(null)
     } else if (start.current && e.button === 0) {
       // A plain tap. Touches never send a click (see below), so it opens here.
       openPrayer()
@@ -86,7 +103,7 @@ function PrayButton() {
       {at && createPortal(<>
         {/* Only a tap that starts here closes it, not letting go of the hold. */}
         <div class="tone-catch" onPointerDown={() => { caught.current = true }} onClick={() => { if (caught.current) setAt(null); caught.current = false }} />
-        <div class="tone-pick" role="radiogroup" aria-label="Prayer button skin tone" style={{ left, bottom: innerHeight - at.top + 10 }}>
+        <div ref={pick} class="tone-pick" role="radiogroup" aria-label="Prayer button skin tone" style={{ left, bottom: innerHeight - at.top + 10 }}>
           {TONES.map(t => (
             <button type="button" role="radio" data-tone={t} aria-checked={settings.prayTone === t}
               class={(hover ?? settings.prayTone) === t ? 'on' : ''} onClick={() => choose(t)}>{'🙏' + t}</button>
