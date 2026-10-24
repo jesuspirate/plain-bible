@@ -1,5 +1,6 @@
-// Optional account sync. Sign-in is passkey only; the server keeps one JSON
-// document per account. Everything also works signed out.
+// Optional account sync. Sign-in is by passkey or by a code sent by email;
+// the server keeps one JSON document per account. Everything also works
+// signed out.
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { mergeMark, Marks, upgrade } from './marks'
 
@@ -136,7 +137,26 @@ export async function signIn(): Promise<string> {
 
 export const signOut = (token: string) => api('/auth/logout', { method: 'POST', token }).catch(() => {})
 export const deleteAccount = (token: string) => api('/account', { method: 'DELETE', token })
-export const accountInfo = (token: string) => api<{ created: number; passkeys: number; updated: number | null }>('/account', { token })
+export const accountInfo = (token: string) => api<{ created: number; passkeys: number; updated: number | null; email: string | null }>('/account', { token })
+
+// Email sign-in, where the server has it turned on. Remembered, so the form
+// is there at once next time, offline included.
+const EMAIL_KEY = 'plain-bible:email-signin'
+export function emailSignInOn() {
+  try { return localStorage.getItem(EMAIL_KEY) === '1' } catch { return false }
+}
+export async function checkEmailSignIn(): Promise<boolean> {
+  const on = !!(await api<{ email?: boolean }>('/')).email
+  try { on ? localStorage.setItem(EMAIL_KEY, '1') : localStorage.removeItem(EMAIL_KEY) } catch { /* ignore */ }
+  return on
+}
+/** Email a 6-digit code. With a token, it adds the address to that account. */
+export const sendEmailCode = (email: string, token?: string) =>
+  api('/auth/email/start', { method: 'POST', token, body: { email } })
+/** A token to sign in with, or with a token, the address added. */
+export const verifyEmailCode = (email: string, code: string, token?: string) =>
+  api<{ token?: string; added?: boolean; email?: string }>('/auth/email/verify', { method: 'POST', token, body: { email, code } })
+export const removeEmail = (token: string) => api('/auth/email', { method: 'DELETE', token })
 
 interface Remote { rev: number; updated: number | null; body: SyncDoc | null }
 

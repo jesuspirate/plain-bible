@@ -1,6 +1,7 @@
-// Quiet Bible sync: passkey-only accounts and one small JSON document per
-// account (highlights, bookmarks, settings). No emails, no passwords, no
-// tracking. The app works fully without it.
+// Quiet Bible sync: accounts you sign in to with a passkey or a code sent by
+// email, and one small JSON document per account (highlights, bookmarks,
+// settings). No passwords, no tracking, and email addresses are never
+// stored, only a fingerprint of them. The app works fully without it.
 import {
   generateAuthenticationOptions, generateRegistrationOptions,
   verifyAuthenticationResponse, verifyRegistrationResponse,
@@ -12,6 +13,10 @@ export interface Env {
   RP_ID: string
   RP_NAME: string
   ORIGINS: string
+  /** Email sign-in is on when both are set (see EMAIL_FROM). */
+  RESEND_API_KEY?: string
+  EMAIL_SECRET?: string
+  EMAIL_FROM: string
 }
 
 const DAY = 86_400_000
@@ -118,6 +123,108 @@ async function saveChallenge(env: Env, challenge: string, userId: string | null)
 }
 
 // ---------------------------------------------------------------------------
+// Email sign-in: a 6-digit code to type into the app. A code rather than a
+// link, because on iPhone a link opens Safari, not the Home Screen app, and
+// the two keep separate storage.
+
+const EMAIL = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/
+const CODE_MINUTES = 15
+const CODE_TRIES = 5
+const SENDS_PER_HOUR = 5
+// Resend's free plan sends up to 100 a day.
+const SENDS_PER_DAY = 90
+
+const emailOn = (env: Env) => !!(env.RESEND_API_KEY && env.EMAIL_SECRET)
+function cleanEmail(v: unknown) {
+  const e = typeof v === 'string' ? v.trim().toLowerCase() : ''
+  if (e.length > 254 || !EMAIL.test(e)) throw new HttpError(400, 'That doesn’t look like an email address.')
+  return e
+}
+/** A keyed fingerprint, so a copy of the database doesn't reveal addresses. */
+async function emailHash(env: Env, email: string) {
+  const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.EMAIL_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
+  return b64url.encode(new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(email))))
+}
+const emailHint = (email: string) => { const [name, domain] = email.split('@'); return `${name[0]}•••@${domain}` }
+
+async function sendCode(env: Env, to: string, code: string) {
+  const text = `Your Quiet Bible code is ${code}\n\nType it into the app to sign in. It works for ${CODE_MINUTES} minutes.\n\nIf you didn't ask for it, you can ignore this email.`
+  const html = `<div style="font-family:Georgia,serif;font-size:17px;line-height:1.5;color:#3b2f22">
+<p>Your Quiet Bible code is</p><p style="font-size:32px;letter-spacing:6px;margin:8px 0 16px"><strong>${code}</strong></p>
+<p>Type it into the app to sign in. It works for ${CODE_MINUTES} minutes.</p>
+<p style="color:#8a7a66;font-size:14px">If you didn't ask for it, you can ignore this email.</p></div>`
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject: `${code} is your Quiet Bible code`, text, html }),
+  }).catch(() => null)
+  if (!res?.ok) {
+    console.error('email not sent', res?.status, await res?.text().catch(() => ''))
+    throw new HttpError(502, 'The email couldn’t be sent. Try again in a few minutes.')
+  }
+}
+
+async function emailStart(req: Request, env: Env) {
+  if (!emailOn(env)) throw new HttpError(404, 'Email sign-in isn’t set up yet.')
+  const adding = req.headers.has('Authorization') ? await session(req, env) : null
+  const email = cleanEmail((await readJson<{ email: string }>(req)).email)
+  const hash = await emailHash(env, email), now = Date.now(), db = env.DB
+  const [mine, all] = await Promise.all([
+    db.prepare('SELECT COUNT(*) AS n FROM email_sends WHERE hash = ? AND at > ?').bind(hash, now - 3_600_000).first<{ n: number }>(),
+    db.prepare('SELECT COUNT(*) AS n FROM email_sends WHERE at > ?').bind(now - DAY).first<{ n: number }>(),
+  ])
+  if ((mine?.n ?? 0) >= SENDS_PER_HOUR) throw new HttpError(429, 'Several codes were already sent to this address. Use the newest one, or try again in an hour.')
+  if ((all?.n ?? 0) >= SENDS_PER_DAY) throw new HttpError(429, 'Too many sign-in emails today. Please try again tomorrow, or use a passkey.')
+  const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, '0')
+  await db.batch([
+    db.prepare('DELETE FROM email_sends WHERE at < ?').bind(now - DAY),
+    db.prepare('DELETE FROM email_codes WHERE expires < ?').bind(now),
+    db.prepare('INSERT INTO email_sends (hash, at) VALUES (?, ?)').bind(hash, now),
+    db.prepare(`INSERT INTO email_codes (hash, code_hash, user_id, tries, expires) VALUES (?, ?, ?, 0, ?)
+      ON CONFLICT(hash) DO UPDATE SET code_hash = excluded.code_hash, user_id = excluded.user_id, tries = 0, expires = excluded.expires`)
+      .bind(hash, await sha256(`${hash}:${code}`), adding, now + CODE_MINUTES * 60_000),
+  ])
+  await sendCode(env, email, code)
+  return json({ ok: true })
+}
+
+async function emailVerify(req: Request, env: Env) {
+  if (!emailOn(env)) throw new HttpError(404, 'Email sign-in isn’t set up yet.')
+  const body = await readJson<{ email: string; code: string }>(req)
+  const email = cleanEmail(body.email), digits = String(body.code ?? '').replace(/\D/g, '')
+  const hash = await emailHash(env, email), db = env.DB
+  // Each try counts, so the code can't be guessed.
+  const row = await db.prepare('UPDATE email_codes SET tries = tries + 1 WHERE hash = ? AND expires > ? RETURNING code_hash, user_id, tries')
+    .bind(hash, Date.now()).first<{ code_hash: string; user_id: string | null; tries: number }>()
+  const expired = 'That code has expired. Send yourself a new one.'
+  if (!row || row.tries > CODE_TRIES) throw new HttpError(400, expired)
+  if (digits.length !== 6 || await sha256(`${hash}:${digits}`) !== row.code_hash) {
+    throw new HttpError(400, row.tries >= CODE_TRIES ? expired : 'That code isn’t right. Check the newest email and try again.')
+  }
+  await db.prepare('DELETE FROM email_codes WHERE hash = ?').bind(hash).run()
+  const owner = await db.prepare('SELECT user_id FROM emails WHERE hash = ?').bind(hash).first<{ user_id: string }>()
+  const hint = emailHint(email), now = Date.now()
+  // Adding (or changing) the address of the signed-in account.
+  if (row.user_id) {
+    if (await session(req, env) !== row.user_id) throw new HttpError(400, expired)
+    if (owner && owner.user_id !== row.user_id) throw new HttpError(409, 'This email already signs in to another Quiet Bible account.')
+    await db.batch([
+      db.prepare('DELETE FROM emails WHERE user_id = ?').bind(row.user_id),
+      db.prepare('INSERT INTO emails (hash, user_id, hint, created) VALUES (?, ?, ?, ?)').bind(hash, row.user_id, hint, now),
+    ])
+    return json({ added: true, email: hint })
+  }
+  if (owner) return json({ token: await newSession(env, owner.user_id) })
+  // An address not seen before makes a new account.
+  const userId = random(16)
+  await db.batch([
+    db.prepare('INSERT INTO users (id, created) VALUES (?, ?)').bind(userId, now),
+    db.prepare('INSERT INTO emails (hash, user_id, hint, created) VALUES (?, ?, ?, ?)').bind(hash, userId, hint, now),
+  ])
+  return json({ token: await newSession(env, userId), created: true })
+}
+
+// ---------------------------------------------------------------------------
 // Routes
 
 // Prayer sync. The app encrypts each recording with a key only the user's
@@ -136,7 +243,9 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
       db.prepare('SELECT prayer, part, chunks, size FROM prayer_parts WHERE user_id = ? ORDER BY prayer, part').bind(userId).all(),
       db.prepare('SELECT prayer FROM prayer_gone WHERE user_id = ?').bind(userId).all<{ prayer: string }>(),
     ])
-    return json({ keyId: key?.key_id ?? null, parts: list.results, gone: gone.results.map(r => r.prayer) })
+    // Passkeys: an account signed in only by email has none to unlock the key with.
+    const passkeys = await db.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(userId).first<{ n: number }>()
+    return json({ keyId: key?.key_id ?? null, passkeys: passkeys?.n ?? 0, parts: list.results, gone: gone.results.map(r => r.prayer) })
   }
   // The key's fingerprint is set once, by the first device to turn sync on.
   if (a === 'key' && !b && req.method === 'PUT') {
@@ -452,7 +561,19 @@ async function route(req: Request, env: Env): Promise<Response> {
   }
 
   switch (key) {
-    case 'GET /': return json({ service: 'plain-bible-sync', ok: true })
+    case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env) })
+
+    // Sign in (or sign up) with a code sent by email, or add an email to
+    // the signed-in account.
+    case 'POST /auth/email/start': return emailStart(req, env)
+    case 'POST /auth/email/verify': return emailVerify(req, env)
+    case 'DELETE /auth/email': {
+      const userId = await session(req, env)
+      const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(userId).first<{ n: number }>()
+      if (!n?.n) throw new HttpError(400, 'Add a passkey first. Without your email or a passkey, you couldn’t sign in again.')
+      await env.DB.prepare('DELETE FROM emails WHERE user_id = ?').bind(userId).run()
+      return json({ ok: true })
+    }
 
     // Create an account, or add another passkey to the signed-in account.
     case 'POST /auth/register/options': {
@@ -533,12 +654,13 @@ async function route(req: Request, env: Env): Promise<Response> {
 
     case 'GET /account': {
       const userId = await session(req, env)
-      const [user, passkeys, data] = await Promise.all([
+      const [user, passkeys, data, email] = await Promise.all([
         env.DB.prepare('SELECT created FROM users WHERE id = ?').bind(userId).first<{ created: number }>(),
         env.DB.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(userId).first<{ n: number }>(),
         env.DB.prepare('SELECT updated FROM data WHERE user_id = ?').bind(userId).first<{ updated: number }>(),
+        env.DB.prepare('SELECT hint FROM emails WHERE user_id = ?').bind(userId).first<{ hint: string }>(),
       ])
-      return json({ created: user?.created, passkeys: passkeys?.n ?? 0, updated: data?.updated ?? null })
+      return json({ created: user?.created, passkeys: passkeys?.n ?? 0, updated: data?.updated ?? null, email: email?.hint ?? null })
     }
 
     case 'DELETE /account': {
@@ -546,7 +668,7 @@ async function route(req: Request, env: Env): Promise<Response> {
       // Out of every circle first, taking what they shared with them.
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

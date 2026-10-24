@@ -20,7 +20,7 @@ const CHUNK = 1_000_000
 const VERSE_PART = 999
 const enc = new TextEncoder(), dec = new TextDecoder()
 
-interface Remote { keyId: string | null; parts: { prayer: string; part: number; chunks: number; size: number }[]; gone: string[] }
+interface Remote { keyId: string | null; passkeys?: number; parts: { prayer: string; part: number; chunks: number; size: number }[]; gone: string[] }
 
 // ---- turning it on -----------------------------------------------------------
 
@@ -66,7 +66,8 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
     raw = parseKeyCode(code)
     if (!raw) throw new SyncError('That isn’t a whole prayer key. It has 32 letters and numbers.')
     if (remote.keyId && (await prayerKey(raw)).id !== remote.keyId) throw new SyncError('That key doesn’t match the prayers on this account.')
-  } else {
+  } else if (remote.passkeys !== 0) {
+    // An account signed in by email alone has no passkey to ask.
     secret = await passkeySecret()
     if (secret) {
       const w = await api<{ wrapped: string }>(`/prayers/wrap/${encodeURIComponent(secret.credId)}`, { token: acct.token }).catch(() => null)

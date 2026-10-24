@@ -372,17 +372,22 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
         {shown && <p class="pray-key"><code>{shown.replace(/-/g, '-\u200B')}</code></p>}
         {/* Prayers sync by themselves each time this opens, so there's no Sync now. */}
         {shown
-          ? <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy prayer key</button>
+          ? <>
+            <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy prayer key</button>
+            {/* From your own mail app, so the key never passes through the sync server. */}
+            <a class="pray-btn" href={`mailto:?subject=${encodeURIComponent('My Quiet Bible prayer key')}&body=${encodeURIComponent(
+              `My Quiet Bible prayer key:\n\n${shown}\n\nIt unlocks my synced prayers on a new device (Your prayers → Sync my prayers). Keep it private.`)}`}>Email it to myself</a>
+          </>
           : <button class="pray-btn" onClick={() => prayerKeyCode().then(setShown)}>Show prayer key</button>}
         <button class="pray-btn quiet" disabled={busy} onClick={stop}>{busy ? 'Stopping…' : 'Stop syncing on this device'}</button>
         <DeviceLink class="pray-link" />
-        {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers (say, an Android phone next to an iPhone). Easier: Link another device. Keep the key private: it opens your prayers.</p>}
+        {shown && <p class="muted small">Only needed on a device that can’t unlock your prayers by itself: one where you sign in by email, or whose passkey can’t (say, an Android phone next to an iPhone). Easier: Link another device. Keep the key private: it opens your prayers. Emailed to yourself, it’s there if you ever lose this phone.</p>}
       </> : !signedIn ? <>
         <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
         <p class="muted small">{LOCAL_ONLY}</p>
         <button class="pray-btn" onClick={() => { onClose(); go('settings') }}>Go to Settings → Account</button>
       </> : needCode ? <>
-        <p class="muted">This passkey can’t unlock your prayers here. On a device where they already sync, open Your prayers and tap <strong>Link another device</strong>, then open that link here. Or copy the prayer key from there and paste it below.</p>
+        <p class="muted">This device can’t unlock your prayers by itself. On a device where they already sync, open Your prayers and tap <strong>Link another device</strong>, then open that link here. Or copy the prayer key from there and paste it below.</p>
         <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"
           autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
         <button class="pray-btn primary" disabled={busy || !code.trim()} onClick={start}>{busy ? 'Unlocking…' : 'Unlock'}</button>
