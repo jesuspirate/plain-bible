@@ -1,9 +1,9 @@
-// Settings. They live inside the search panel: the Settings button there
-// raises them as a sheet over it, and pulling the sheet down goes back to
-// search (pull again, or Done, and you're back to the word). #/settings still
+// Settings. Everything lives here, behind the one button in the top right
+// corner: sync, the Bible you read, reading, prayer, your data. They rise as
+// a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, openPrayer, Settings, TONES, useApp } from './state'
+import { defaultSettings, FONTS, go, openPrayer, readPath, Settings, TONES, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
@@ -106,30 +106,47 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
   }, [])
 }
 
-/** Settings as a sheet that rises over the search panel. `onBack` returns
- *  to search; `onDone` closes search too, back to the word. */
-export function SettingsSheet({ onBack, onDone }: { onBack: () => void; onDone: () => void }) {
+// The parts of Settings. The first page has what most people reach for; each
+// row below opens a page of its own, with a way back.
+type Page = 'home' | 'reading' | 'prayer' | 'data' | 'about'
+const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', prayer: 'Prayer', data: 'Your data', about: 'About' }
+
+/** Settings as a sheet that rises over the page, from the button in the top
+ *  right corner. Pull it down, or Done, and you're back to the word. */
+export function SettingsSheet({ onClose }: { onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
-  usePullDown(box, () => box.current?.scrollTop ?? 0, onBack)
-  const done = () => slideAway(box.current, onDone)
+  const [page, setPage] = useState<Page>('home')
+  const pageRef = useRef(page)
+  pageRef.current = page
+  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
+  const done = () => slideAway(box.current, onClose)
+  useEffect(() => { box.current?.scrollTo(0, 0) }, [page])
   useEffect(() => {
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape' && !document.querySelector('dialog[open]')) { e.stopPropagation(); slideAway(box.current, onBack) } }
+    // Escape steps back a page, then closes.
+    const esc = (e: KeyboardEvent) => {
+      if (e.key !== 'Escape' || document.querySelector('dialog[open]')) return
+      e.stopPropagation()
+      if (pageRef.current !== 'home') setPage('home')
+      else slideAway(box.current, onClose)
+    }
     addEventListener('keydown', esc, true)
     box.current?.focus({ preventScroll: true })
     return () => removeEventListener('keydown', esc, true)
   }, [])
   return (
     <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
-      // A link inside (Saved, Advanced search, Prayer) leaves Settings and search behind.
-      onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onDone() }}>
+      // A link inside (Saved, Circles, Advanced search, Prayer) leaves Settings behind.
+      onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
-        <button type="button" class="settings-grabber" aria-label="Back to search" onClick={() => slideAway(box.current, onBack)} />
+        <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
         <div class="settings-title">
-          <h1>Settings</h1>
+          {page === 'home'
+            ? <h1>Settings</h1>
+            : <button class="settings-back" onClick={() => setPage('home')}><span aria-hidden="true">‹</span> {PAGE_TITLE[page]}</button>}
           <button class="done-btn" onClick={done}>Done</button>
         </div>
       </div>
-      <div class="settings"><SettingsBody /></div>
+      <div class="settings"><SettingsBody page={page} setPage={setPage} /></div>
     </div>
   )
 }
@@ -145,23 +162,74 @@ export function closeSettingsPage() {
 export function SettingsView() {
   useEffect(() => { document.title = 'Settings · Quiet Bible' }, [])
   const box = useRef<HTMLDivElement>(null)
+  const [page, setPage] = useState<Page>('home')
   usePullDown(box, () => window.scrollY, closeSettingsPage)
+  useEffect(() => { window.scrollTo(0, 0) }, [page])
   return (
     <div class="settings" ref={box}>
       <button type="button" class="settings-grabber" aria-label="Close settings" onClick={closeSettingsPage} />
-      <h1>Settings</h1>
-      <SettingsBody />
+      {page === 'home'
+        ? <h1>Settings</h1>
+        : <h1><button class="settings-back" onClick={() => setPage('home')}><span aria-hidden="true">‹</span> {PAGE_TITLE[page]}</button></h1>}
+      <SettingsBody page={page} setPage={setPage} />
     </div>
   )
 }
 
-function SettingsBody() {
-  const { settings, update, catalog, marks, sync, byId } = useApp()
+/** One row of a settings list: a name, what it's set to, and › to go on. */
+function Row({ label, value, onClick, href, icon }: { label: string; value?: string; onClick?: () => void; href?: string; icon?: string }) {
+  const inner = <>
+    {icon && <span class="set-icon" aria-hidden="true">{icon}</span>}
+    <span class="set-label">{label}</span>
+    {value && <span class="set-value">{value}</span>}
+    <span class="set-chev" aria-hidden="true">›</span>
+  </>
+  return href ? <a class="set-row" href={href}>{inner}</a> : <button class="set-row" onClick={onClick}>{inner}</button>
+}
+
+// The Bible you're reading, the ones beside it, and the one that opens every
+// time. (This used to be the version button in the top bar.)
+function BibleGroup() {
+  const { settings, update, byId } = useApp()
+  const route = useRoute()
+  const [open, setOpen] = useState<'' | 'version' | 'compare'>('')
+  const reading = route.path[0] === 'read' && route.path.length >= 4
+  const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.version
+  const parallel = ((reading && route.params.get('p')?.split(',')) || settings.parallel).filter(id => byId.has(id) && id !== version)
+  const goTo = (v: string, p: string[]) => {
+    const others = p.filter(id => id !== v)
+    if (reading) go(readPath(v, route.path[2], +route.path[3], +(route.params.get('v') || 0) || undefined, others))
+    else { update({ version: v, parallel: others }); go('read/' + v) }
+  }
+  const fav = settings.favorite === version
+  return (
+    <section class="set-group">
+      <h2 class="set-kicker">Bible</h2>
+      <div class="set-list">
+        <button class="set-row set-version" onClick={() => setOpen('version')}>
+          <span class="set-vid">{version}</span>
+          <span class="set-label">{byId.get(version)?.name ?? version}</span>
+          <span class="set-chev" aria-hidden="true">›</span>
+        </button>
+        <Row label="Compare side by side" value={parallel.length ? parallel.join(', ') : 'Off'} onClick={() => setOpen('compare')} />
+        <button class="set-row" onClick={() => update({ favorite: version })} disabled={fav}>
+          <span class="set-label">{fav ? `${version} opens every time` : `Open ${version} every time`}</span>
+          <span class="set-star" aria-hidden="true">{fav ? '★' : '☆'}</span>
+        </button>
+        <Row label="Download and manage versions" href="#/versions" />
+      </div>
+      {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)} />}
+      {open === 'compare' && (
+        <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setOpen('')}
+          onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
+      )}
+    </section>
+  )
+}
+
+function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => void }) {
+  const { settings, update, catalog, marks, sync } = useApp()
   const saved = Object.values(marks).filter(hasContent).length
-  const [pickFav, setPickFav] = useState(false)
-  // Three things most people want; the rest waits behind "More settings".
-  const [more, setMore] = useState(false)
-  const fav = settings.favorite || settings.version
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
       {opts.map(([v, label]) => (
@@ -169,98 +237,121 @@ function SettingsBody() {
       ))}
     </div>
   )
+  const fontName = FONTS.find(f => f.id === settings.font)?.label
+
+  if (page === 'reading') return <>
+    <div class="field"><span>Font</span>
+      <div class="fonts" role="radiogroup" aria-label="Reading font">
+        {FONTS.map(f => (
+          <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
+            style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
+            <span class="font-sample">In the beginning was the Word</span>
+            <span class="font-name">{f.label}<span class="muted"> · {f.note}</span></span>
+          </button>
+        ))}
+      </div>
+    </div>
+    <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
+    <div class="field"><span>Verse numbers</span>{sel('verseNumbers', [['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']])}</div>
+    <div class="field"><span>Highlights</span>
+      <div class="col">
+        <span class="muted small">Tap a verse twice quickly to highlight it in the last color you used.</span>
+        {sel('highlight', [['marker', 'Marker'], ['text', 'Colored text'], ['block', 'Block']])}
+        <p class="hl-preview" aria-hidden="true">
+          <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">In the beginning was the Word, and the Word was with God,</span></span>{' '}
+          <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">and the Word was God.</span></span>
+        </p>
+      </div>
+    </div>
+    <div class="field"><span>Chapter turn</span>
+      <div class="col">
+        {sel('turn', [['stack', 'Stack'], ['slide', 'Side by side'], ['off', 'None']])}
+        <span class="muted small">{settings.turn === 'slide' ? 'Both chapters slide across together.' : settings.turn === 'off' ? 'The chapter changes with no movement.' : 'Your page slides away over the next chapter, like a stack of pages.'}</span>
+      </div>
+    </div>
+    <div class="field"><span>Notes</span>
+      <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.</label>
+    </div>
+    <div class="field"><span>Strong's numbers</span>
+      <div class="col">
+        <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)</label>
+        <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> Show the numbers inline</label>
+      </div>
+    </div>
+    <div class="field"><span>Search bar</span>
+      <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.</label>
+    </div>
+  </>
+
+  if (page === 'prayer') return <>
+    <button class="pray-open set-big" onClick={openPrayer}>{'🙏' + settings.prayTone} Pray out loud</button>
+    <p class="muted small">Your prayers, and syncing them with your other devices, are in the prayer screen: tap <strong>Your prayers</strong> there.</p>
+    <div class="ess"><span class="ess-label">Prayer button</span>
+      <div class="seg tones" role="radiogroup" aria-label="Prayer button">
+        {TONES.map(t => (
+          <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>{'🙏' + t}</button>
+        ))}
+      </div>
+      <span class="muted small">You can also press and hold the 🙏 button to pick.</span>
+    </div>
+  </>
+
+  if (page === 'data') return <>
+    <MoveInSection />
+    <DataTools />
+    <h2>Settings</h2>
+    <p><button onClick={() => {
+      // Only the settings: highlights, notes, history and the account stay.
+      if (confirm('Reset font, theme, layout and version choices to their defaults?\n\nYour highlights, bookmarks and notes are kept, and you stay signed in.'
+        + (sync.account ? ' Your other synced devices will get the default settings too.' : ''))) {
+        update({ ...defaultSettings(catalog), favorite: undefined })
+      }
+    }}>Reset settings</button></p>
+  </>
+
+  if (page === 'about') return <>
+    <p>Quiet Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
+    <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
+      the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
+      Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
+      Each version's license is listed on the Versions page.</p>
+  </>
+
   return (
     <>
       {/* First thing in Settings: sync is how your other devices get everything. */}
       {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection /></section>}
-      <div class="essentials">
-        <div class="ess"><span class="ess-label">Text size</span>
-          <div class="size-row">
-            <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
-            <span class="size-sample" aria-label={`${settings.fontSize} pixels`}>In the beginning</span>
-            <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
+      <BibleGroup />
+      <section class="set-group">
+        <div class="essentials">
+          <div class="ess"><span class="ess-label">Text size</span>
+            <div class="size-row">
+              <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
+              <span class="size-sample" aria-label={`${settings.fontSize} pixels`}>In the beginning</span>
+              <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
+            </div>
           </div>
+          <div class="ess"><span class="ess-label">Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
         </div>
-        <div class="ess"><span class="ess-label">Theme</span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
-        <div class="ess"><span class="ess-label">Bible</span>
-          <button class="pick big-pick" onClick={() => setPickFav(true)}><strong>{fav}</strong> <span class="muted">{byId.get(fav)?.name}</span> <span aria-hidden="true">▾</span></button>
-          <span class="muted small">Opens every time, and works offline.</span>
-          {pickFav && <VersionPicker title="Your Bible" selected={[fav]} onClose={() => setPickFav(false)} onChange={([id]) => update({ favorite: id, version: id })} />}
+        <div class="set-list">
+          <Row label="Font, layout and more" value={fontName} onClick={() => setPage('reading')} />
         </div>
-      </div>
-      <button class="more-toggle" aria-expanded={more} onClick={() => setMore(m => !m)}>{more ? 'Fewer settings' : 'More settings'} <span aria-hidden="true">{more ? '▴' : '▾'}</span></button>
-      {more && <>
-      <div class="field"><span>Saved</span><a href="#/saved">{saved ? `${saved} highlights, bookmarks and notes` : 'Your highlights, bookmarks and notes'} ›</a></div>
-      <div class="field"><span>Prayer</span>
-        <div class="col">
-          <button class="link pray-open" onClick={openPrayer}>Pray out loud ›</button>
-          <div class="seg tones" role="radiogroup" aria-label="Prayer button">
-            {TONES.map(t => (
-              <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>{'🙏' + t}</button>
-            ))}
-          </div>
+      </section>
+      <section class="set-group">
+        <h2 class="set-kicker">Yours</h2>
+        <div class="set-list">
+          <Row icon={'🙏' + settings.prayTone} label="Prayer" onClick={() => setPage('prayer')} />
+          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
+          {sync.enabled && <Row icon="👥" label="Circles" href="#/circles" />}
+          <Row icon="🔎" label="Advanced search" href="#/search" />
         </div>
-      </div>
-      {sync.enabled && <div class="field"><span>Circles</span><a href="#/circles">Share verses and prayers with a few people ›</a></div>}
-      <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
-      <div class="field"><span>Font</span>
-        <div class="fonts" role="radiogroup" aria-label="Reading font">
-          {FONTS.map(f => (
-            <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
-              style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
-              <span class="font-sample">In the beginning was the Word</span>
-              <span class="font-name">{f.label}<span class="muted"> · {f.note}</span></span>
-            </button>
-          ))}
+      </section>
+      <section class="set-group">
+        <div class="set-list">
+          <Row label="Your data" value="Import, export" onClick={() => setPage('data')} />
+          <Row label="About" onClick={() => setPage('about')} />
         </div>
-      </div>
-      <div class="field"><span>Search bar</span>
-        <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.</label>
-      </div>
-      <div class="field"><span>Highlights</span>
-        <div class="col">
-          <span class="muted small">Tap a verse twice quickly to highlight it in the last color you used.</span>
-          {sel('highlight', [['marker', 'Marker'], ['text', 'Colored text'], ['block', 'Block']])}
-          <p class="hl-preview" aria-hidden="true">
-            <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">In the beginning was the Word, and the Word was with God,</span></span>{' '}
-            <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">and the Word was God.</span></span>
-          </p>
-        </div>
-      </div>
-      <div class="field"><span>Verse numbers</span>{sel('verseNumbers', [['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']])}</div>
-      <div class="field"><span>Chapter turn</span>
-        <div class="col">
-          {sel('turn', [['stack', 'Stack'], ['slide', 'Side by side'], ['off', 'None']])}
-          <span class="muted small">{settings.turn === 'slide' ? 'Both chapters slide across together.' : settings.turn === 'off' ? 'The chapter changes with no movement.' : 'Your page slides away over the next chapter, like a stack of pages.'}</span>
-        </div>
-      </div>
-      <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
-      <div class="field"><span>Notes</span>
-        <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.</label>
-      </div>
-      <div class="field"><span>Strong's numbers</span>
-        <div class="col">
-          <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)</label>
-          <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> Show the numbers inline</label>
-        </div>
-      </div>
-      <h2>Your data</h2>
-      <MoveInSection />
-      <DataTools />
-      <h2>About</h2>
-      <p>Quiet Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
-      <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
-        the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
-        Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
-        Each version's license is listed on the Versions page.</p>
-      <p><button onClick={() => {
-        // Only the settings: highlights, notes, history and the account stay.
-        if (confirm('Reset font, theme, layout and version choices to their defaults?\n\nYour highlights, bookmarks and notes are kept, and you stay signed in.'
-          + (sync.account ? ' Your other synced devices will get the default settings too.' : ''))) {
-          update({ ...defaultSettings(catalog), favorite: undefined })
-        }
-      }}>Reset settings</button></p>
-      </>}
+      </section>
       <VersionLine />
     </>
   )

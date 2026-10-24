@@ -2,11 +2,10 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
-import { VersionPicker } from './ui'
 import { HistoryIcon, RefreshIcon } from './icons'
 import { applyUpdate, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
@@ -14,7 +13,7 @@ import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { touchSettings, useSync } from './account'
-import { closeSettingsPage, noteSettingsFrom, SettingsView } from './settings'
+import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveBanner, MoveWelcome } from './move'
 
@@ -120,6 +119,15 @@ export function App() {
     return () => removeEventListener(PRAY_EVENT, on)
   }, [])
 
+  // Settings rise as a sheet from the button in the top right corner.
+  const [settingsOpen, setSettingsOpen] = useState(false)
+  useEffect(() => {
+    const on = () => setSettingsOpen(true)
+    addEventListener(SETTINGS_EVENT, on)
+    return () => removeEventListener(SETTINGS_EVENT, on)
+  }, [])
+  useEffect(() => { setSettingsOpen(false) }, [route.path.join('/')])
+
   // Circles load only when opened, or when something is shared with one.
   const [circles, setCircles] = useState<typeof import('./circles')>()
   const [sharing, setSharing] = useState<ShareRequest>()
@@ -161,10 +169,10 @@ export function App() {
         <a class="brand" href="#/read" title="Back to where you were reading">Quiet Bible</a>
         <nav>
           <HistoryButton route={route} />
-          <VersionMenu route={route} />
           <UpdateButton />
-          {/* Settings live in the search panel; this is only for #/settings opened as a page. */}
-          {view === 'settings' && <button class="done-btn" onClick={closeSettingsPage}>Done</button>}
+          {/* #/settings opened as a page has its own Done; everywhere else, the settings button. */}
+          {view === 'settings' ? <button class="done-btn" onClick={closeSettingsPage}>Done</button>
+            : <ProfileButton onOpen={() => setSettingsOpen(true)} />}
         </nav>
       </header>
       <MoveBanner />
@@ -177,9 +185,10 @@ export function App() {
           : <ReaderRoute route={route} />}
       </main>
       {/* With the full bar hidden, a small round search button takes its place,
-          and opens the same panel (with Settings and the theme). */}
+          and opens the same panel (with the theme). */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
+      {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
       {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
@@ -206,59 +215,18 @@ function ReaderRoute({ route }: { route: Route }) {
   return route.path.length >= 4 ? <Reader route={route} /> : null
 }
 
-// The version button in the top bar: switch version, compare side by side,
-// Strong's numbers, and a way to the full Versions page.
-function VersionMenu({ route }: { route: Route }) {
-  const { settings, update, byId } = useApp()
-  const [open, setOpen] = useState<'' | 'version' | 'compare'>('')
-  const reading = route.path[0] === 'read' && route.path.length >= 4
-  const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.version
-  const parallel = ((reading && route.params.get('p')?.split(',')) || settings.parallel).filter(id => byId.has(id) && id !== version)
-  const goTo = (v: string, p: string[]) => {
-    const others = p.filter(id => id !== v)
-    if (reading) go(readPath(v, route.path[2], +route.path[3], +(route.params.get('v') || 0) || undefined, others))
-    else { update({ version: v, parallel: others }); go('read/' + v) }
-  }
-  const tagged = [version, ...parallel].some(v => byId.get(v)?.strongs)
+// The one button in the top right corner: everything else lives behind it.
+function ProfileButton({ onOpen }: { onOpen: () => void }) {
+  const { sync } = useApp()
+  const on = !!sync.account
   return (
-    <>
-      <button class={'version-btn' + (route.path[0] === 'versions' ? ' on' : '')} onClick={() => setOpen('version')}
-        aria-label={`Version: ${byId.get(version)?.name ?? version}. Change version`}>
-        {version}{parallel.length > 0 && <span class="muted"> +{parallel.length}</span>} <span aria-hidden="true">▾</span>
-      </button>
-      {open === 'version' && (
-        <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)}
-          extra={<VersionOptions version={version} parallel={parallel} tagged={tagged} onCompare={() => setOpen('compare')} onClose={() => setOpen('')} />} />
-      )}
-      {open === 'compare' && (
-        <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setOpen('')}
-          onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
-      )}
-    </>
-  )
-}
-
-// Compare, Strong's, default and downloads: folded away under the list.
-function VersionOptions({ version, parallel, tagged, onCompare, onClose }: { version: string; parallel: string[]; tagged: boolean; onCompare: () => void; onClose: () => void }) {
-  const { settings, update } = useApp()
-  const [open, setOpen] = useState(parallel.length > 0)
-  if (!open) return <button class="more-toggle" onClick={() => setOpen(true)}>More options <span aria-hidden="true">▾</span></button>
-  return (
-    <div class="vm-extra">
-      <button class="vm-row" onClick={onCompare}>
-        <strong>Compare side by side</strong><span class="muted">{parallel.length ? parallel.join(', ') : 'Off'} ›</span>
-      </button>
-      {tagged && (
-        <label class="vm-row">
-          <strong>Strong's numbers</strong>
-          <input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} />
-        </label>
-      )}
-      <button class="vm-row" onClick={() => update({ favorite: version })} disabled={settings.favorite === version}>
-        <strong>{settings.favorite === version ? `★ ${version} opens every time` : `☆ Open ${version} every time`}</strong>
-      </button>
-      <a class="vm-row" href="#/versions" onClick={onClose}><strong>Download and manage versions</strong><span class="muted">›</span></a>
-    </div>
+    <button class={'profile-btn' + (on ? ' synced' : '')} onClick={onOpen}
+      aria-label={on ? 'Settings and account. Sync is on' : 'Settings and account'} title="Settings">
+      <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+        <circle cx="12" cy="8.6" r="3.9" fill="currentColor" />
+        <path d="M4.6 19.4c1.2-3.6 4-5.4 7.4-5.4s6.2 1.8 7.4 5.4" fill="currentColor" />
+      </svg>
+    </button>
   )
 }
 
