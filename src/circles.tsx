@@ -14,7 +14,7 @@ import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
-import { go, openSettings, readPath, Route, SettingsAt, ShareRequest, useApp } from './state'
+import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
 import { BookmarkIcon } from './icons'
 import { Sheet } from './ui'
 import './circles.css'
@@ -28,14 +28,14 @@ const message = (e: unknown) => {
 }
 const when = (at: number) => new Date(at).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 
-/** How the circles move between their pages. Inside the Settings sheet the
- *  sheet keeps track (its back button steps out), and anything that leads
- *  to the Bible closes the sheet first; as #/circles pages, the URL does. */
+/** How the circles move between their pages. Inside the prayer screen it
+ *  keeps track (its back button steps out), and anything that leads to the
+ *  Bible closes it first; as #/circles pages, the URL does. */
 interface Nav { sheet: boolean; open: (c?: { id: string; name: string }) => void; away: () => void }
 const NavCtx = createContext<Nav>({ sheet: false, open: c => go(c ? `circles/${c.id}` : 'circles'), away: () => {} })
 const useNav = () => useContext(NavCtx)
 
-/** Circles inside the Settings sheet: the list, or one circle. */
+/** Circles inside the prayer screen: the list, or one circle. */
 export function CirclesPanel({ circle, onOpen, onAway }: { circle?: string; onOpen: (c?: { id: string; name: string }) => void; onAway: () => void }) {
   if (!SYNC_URL) return <p class="muted">Circles aren’t available in this copy of the app.</p>
   return (
@@ -57,21 +57,20 @@ function SignedOut() {
   )
 }
 
-/** Back to the word, with Settings open on Circles (or one circle). The
- *  sheet closes itself when the page changes, so it opens a moment after. */
-function toSheet(at: SettingsAt) {
+/** Back to the word, with the prayer screen open on Circles (or one circle). */
+function toSheet(circle?: { id: string; name: string }) {
   go('read', true)
-  setTimeout(() => openSettings(at), 60)
+  setTimeout(() => openCircles(circle), 60)
 }
 
 export function CirclesPage({ route }: { route: Route }) {
   useEffect(() => { document.title = 'Circles · Quiet Bible' }, [])
-  // Circles live in the Settings sheet; #/circles (an older link) opens them there.
+  // Circles live in the prayer screen; #/circles (an older link) opens them there.
   const at = route.path[0] === 'circles' ? route.path[1] : undefined
   useEffect(() => {
     if (route.path[0] !== 'circles') return
-    if (!at) { toSheet({ page: 'circles' }); return }
-    keptCircles().then(cs => toSheet({ page: 'circles', circle: { id: at, name: cs.find(c => c.id === at)?.name ?? 'Circle' } }))
+    if (!at) { toSheet(); return }
+    keptCircles().then(cs => toSheet({ id: at, name: cs.find(c => c.id === at)?.name ?? 'Circle' }))
   }, [route.path.join('/')])
   if (route.path[0] === 'circles') return null
   if (!SYNC_URL) return <div class="circles"><h1>Circles</h1><p class="muted">Circles aren’t available in this copy of the app.</p></div>
@@ -114,7 +113,7 @@ function CodeEntry({ busy, onCode, onCancel }: { busy: boolean; onCode: (code: s
   const [code, setCode] = useState('')
   return (
     <div class="c-card">
-      <p class="muted">This device can’t unlock your circles by itself. Easiest: on a device where they open, tap Settings → Link another device and open that link here. Or there, go to Circles → Show my key, and type it below.</p>
+      <p class="muted">This device can’t unlock your circles by itself. Easiest: on a device where they open, tap Settings → Link another device and open that link here. Or there, go to 🙏 → Circles → Show my key, and type it below.</p>
       <input class="c-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Your key"
         autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
       <div class="c-row">
@@ -238,7 +237,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
   const [me, setMe] = useState(lastName)
   useEffect(() => {
     if (!id || !secret) { setMsg('This invite link is incomplete. Ask for it to be sent again.'); return }
-    readInvite(id, secret).then(i => { if (i.already) toSheet({ page: 'circles', circle: { id: i.circle, name: i.name } }); else setInvite(i) }, e => setMsg(message(e)))
+    readInvite(id, secret).then(i => { if (i.already) toSheet({ id: i.circle, name: i.name }); else setInvite(i) }, e => setMsg(message(e)))
   }, [id, secret])
   const join = async (code?: string) => {
     if (!invite || !me.trim()) return
@@ -247,7 +246,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
       keepName(me.trim())
       const r = await joinCircle(id, invite, me.trim(), code)
       if (r === 'needCode') { setNeedCode(true); return }
-      toSheet({ page: 'circles', circle: { id: invite.circle, name: invite.name } })
+      toSheet({ id: invite.circle, name: invite.name })
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   return (
@@ -591,7 +590,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         {'prayer' in request && <p class="muted small">Everyone in {circle?.name ?? 'the circle'} will be able to hear this prayer.</p>}
         <button class="c-btn primary" disabled={busy || done || !pick || (kind === 'note' && !theNote)} onClick={send}>{done ? 'Shared ✓' : busy ? 'Sharing…' : `Share with ${circle?.name ?? 'circle'}`}</button>
         {msg && <p class="note small">{msg}</p>}
-        {list && !list.length && <p class="muted">You’re not in a circle on this device yet. Open Settings → Circles.</p>}
+        {list && !list.length && <p class="muted">You’re not in a circle on this device yet. Open 🙏 → Circles.</p>}
       </div>
     </Sheet>
   )

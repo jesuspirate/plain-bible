@@ -4,7 +4,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
-import { awaitVerse, go, inCircles, openSettings, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
+import { awaitVerse, go, inCircles, openSettings, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { CircleIcon } from './icons'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
@@ -26,11 +26,13 @@ function wordsOf(b: Bible | undefined, v: PrayerVerse) {
   return raw.every(Boolean) ? raw.map(r => plain(r!)).join(' ') : undefined
 }
 
-export function Prayer({ onClose }: { onClose: () => void }) {
+export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const { data, settings } = useApp()
   const version = settings.favorite || settings.version
   const [phase, setPhase] = useState<Phase>('idle')
-  const [view, setView] = useState<'pray' | 'list'>('pray')
+  // Praying, Your prayers, or Circles: the people you pray with live here too.
+  const [view, setView] = useState<'pray' | 'list' | 'circles'>(at ? 'circles' : 'pray')
+  useEffect(() => { if (at) setView('circles') }, [at])
   const [note, setNote] = useState('')
   const [elapsed, setElapsed] = useState(0)
   const [list, setList] = useState<PrayerInfo[]>()
@@ -209,13 +211,44 @@ export function Prayer({ onClose }: { onClose: () => void }) {
               : <p>Tap and speak to God. Only you will hear this again.</p>}
           </div>
         </div>
-      ) : <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} />}
+      ) : view === 'list' ? <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} />
+        : <CirclesCard at={at} onClose={onClose} />}
       <div class="pray-foot">
-        {view === 'list'
+        {view !== 'pray'
           ? <button class="pray-pill" onClick={() => setView('pray')}>Pray</button>
-          : phase !== 'recording' && phase !== 'paused' && <button class="pray-pill" onClick={() => setView('list')}>Your prayers{count ? ` · ${count}` : ''}</button>}
-        <p class="pray-private">{prayerSyncOn() ? 'Encrypted on this device, then synced.' : 'Kept on this device only.'}</p>
+          : phase !== 'recording' && phase !== 'paused' && <div class="pray-pills">
+              <button class="pray-pill" onClick={() => setView('list')}>Your prayers{count ? ` · ${count}` : ''}</button>
+              {SYNC_URL && <button class="pray-pill" onClick={() => setView('circles')}>Circles</button>}
+            </div>}
+        {view !== 'circles' && <p class="pray-private">{prayerSyncOn() ? 'Encrypted on this device, then synced.' : 'Kept on this device only.'}</p>}
       </div>
+    </div>
+  )
+}
+
+/** Circles, beside Your prayers: the same card. Inside one circle the top
+ *  has only ‹ back; on the list, Done (or a pull down) closes. */
+function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
+  const [mod, setMod] = useState<typeof import('./circles')>()
+  useEffect(() => { import('./circles').then(m => setMod(() => m)).catch(() => {}) }, [])
+  const [circle, setCircle] = useState(at?.circle)
+  useEffect(() => setCircle(at?.circle), [at])
+  const box = useRef<HTMLDivElement>(null)
+  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
+  useEffect(() => { box.current?.scrollTo(0, 0) }, [circle?.id])
+  const done = () => slideAway(box.current, onClose)
+  return (
+    // A link inside (a verse, mostly) goes to the word, so prayer steps aside.
+    <div class="pray-list pray-circles" ref={box} onClick={e => { if ((e.target as Element).closest?.('a[href^="#"]')) onClose() }}>
+      <div class="pray-head">
+        <button type="button" class="settings-grabber" aria-label="Close" onClick={done} />
+        <div class="pray-title">
+          {circle
+            ? <button class="settings-back" onClick={() => setCircle(undefined)}><span aria-hidden="true">‹</span> {circle.name}</button>
+            : <><h2>Circles</h2><button class="done-btn" onClick={done}>Done</button></>}
+        </div>
+      </div>
+      {mod ? <mod.CirclesPanel circle={circle?.id} onOpen={setCircle} onAway={onClose} /> : <p class="muted">Opening…</p>}
     </div>
   )
 }

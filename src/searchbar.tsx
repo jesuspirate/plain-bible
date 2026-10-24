@@ -21,7 +21,7 @@ function PrayButton() {
   const { settings, update } = useApp()
   const { button, picker } = useHoldPick({
     options: TONES.map((t, i) => ({ value: t, label: TONE_NAMES[i], body: '🙏' + t })),
-    value: settings.prayTone, onPick: t => update({ prayTone: t }), onTap: openPrayer,
+    value: settings.prayTone, onPick: t => update({ prayTone: t }), onTap: () => openPrayer(),
     label: 'Prayer button skin tone', cls: 'tone-pick', cell: 42,
   })
   return (

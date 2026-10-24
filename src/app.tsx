@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, SettingsAt, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -114,17 +114,17 @@ export function App() {
   // The prayer overlay loads only when first opened, so it costs nothing at startup.
   const [Prayer, setPrayer] = useState<typeof import('./prayer').Prayer>()
   const [praying, setPraying] = useState(false)
+  const [prayAt, setPrayAt] = useState<PrayAt>()
   useEffect(() => {
-    const on = () => { setPraying(true); import('./prayer').then(m => setPrayer(() => m.Prayer)).catch(() => setPraying(false)) }
+    const on = (e: Event) => { setPrayAt((e as CustomEvent<PrayAt | undefined>).detail); setPraying(true); import('./prayer').then(m => setPrayer(() => m.Prayer)).catch(() => setPraying(false)) }
     addEventListener(PRAY_EVENT, on)
     return () => removeEventListener(PRAY_EVENT, on)
   }, [])
 
   // Settings rise as a sheet from the button in the top right corner.
   const [settingsOpen, setSettingsOpen] = useState(false)
-  const [settingsAt, setSettingsAt] = useState<SettingsAt>()
   useEffect(() => {
-    const on = (e: Event) => { setSettingsAt((e as CustomEvent<SettingsAt | undefined>).detail); setSettingsOpen(true) }
+    const on = () => setSettingsOpen(true)
     addEventListener(SETTINGS_EVENT, on)
     return () => removeEventListener(SETTINGS_EVENT, on)
   }, [])
@@ -214,8 +214,8 @@ export function App() {
           and opens the same panel. */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
-      {settingsOpen && <SettingsSheet at={settingsAt} onClose={() => { setSettingsOpen(false); setSettingsAt(undefined) }} />}
-      {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
+      {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
+      {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
     </AppContext.Provider>
