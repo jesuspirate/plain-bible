@@ -10,7 +10,7 @@ import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, openPrayer, readPath, TONES, useApp } from './state'
-import { ThemeToggle, VerseText } from './ui'
+import { VerseText } from './ui'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
 
@@ -289,10 +289,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
-            {/* A grabber to pull it closed. With the small round button, the
-                theme toggle sits here too. (Settings are in the top right corner.) */}
+            {/* A grabber to pull it closed. (Theme and the rest of Settings are
+                in the top right corner.) */}
             <div class="sb-head">
-              <span class="sb-head-side">{mini && <ThemeToggle class="sb-head-btn sb-head-icon" />}</span>
+              <span class="sb-head-side" />
               <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
               <span class="sb-head-side end" />
             </div>
@@ -377,8 +377,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
-          {/* Light, sepia, dark: always one tap away, right in the bar. */}
-          {!open && !mini && <ThemeToggle class="sb-theme" />}
         </form>
         {/* Prayer, always one tap away, on its own just right of search: opens
             the glowing microphone over the page. */}
