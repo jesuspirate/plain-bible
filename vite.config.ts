@@ -18,8 +18,8 @@ export default defineConfig({
       injectRegister: false,
       includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png'],
       manifest: {
-        name: 'Plain Bible',
-        short_name: 'Bible',
+        name: 'Quiet Bible',
+        short_name: 'Quiet Bible',
         description: 'Just the Bible, in many versions and languages, with thorough search.',
         theme_color: '#2b2a28',
         background_color: '#f4ecd8',

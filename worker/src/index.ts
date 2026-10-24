@@ -1,4 +1,4 @@
-// Plain Bible sync: passkey-only accounts and one small JSON document per
+// Quiet Bible sync: passkey-only accounts and one small JSON document per
 // account (highlights, bookmarks, settings). No emails, no passwords, no
 // tracking. The app works fully without it.
 import {
@@ -22,6 +22,12 @@ const MAX_BODY = 2_000_000
 const CHUNK_MAX = 1_100_000
 const MAX_CHUNKS = 64
 const PRAYER_QUOTA = 300_000_000
+// Moves to a new address: a packed, encrypted copy of one device's data.
+const MOVE_ID = /^[A-Za-z0-9_-]{22}$/
+const MOVE_MAX_CHUNKS = 400
+const MOVE_DAYS = 7
+// A link that signs another device in lives an hour.
+const LINK_HOURS = 1
 
 class HttpError extends Error {
   constructor(public status: number, message: string, public extra?: object) { super(message) }
@@ -61,6 +67,14 @@ function cors(req: Request, env: Env): Record<string, string> {
   }
 }
 const origins = (env: Env) => env.ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
+/** The calling address and its passkey domain. Passkeys belong to one
+ *  domain, so the old and new addresses each have their own; both sign in
+ *  to the same accounts. */
+function site(req: Request, env: Env) {
+  const origin = req.headers.get('Origin') ?? ''
+  if (!origins(env).includes(origin)) return { origin: origins(env), rpID: env.RP_ID }
+  return { origin, rpID: new URL(origin).hostname }
+}
 const json = (body: unknown, status = 200) =>
   new Response(JSON.stringify(body), { status, headers: { 'Content-Type': 'application/json', 'Cache-Control': 'no-store' } })
 
@@ -189,6 +203,46 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
   throw new HttpError(404, 'Not found')
 }
 
+// A move to a new address. Anyone may leave one (the app works without an
+// account); it is encrypted on the device, kept a few days, and found only
+// by its random id, which travels in the move link with the key.
+async function moveRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const db = env.DB
+  const [id, n0] = parts
+  if (req.method === 'POST' && !id) {
+    await db.prepare('DELETE FROM moves WHERE expires < ?').bind(Date.now()).run()
+    return json({ id: random(16) })
+  }
+  if (!id || !MOVE_ID.test(id)) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET' && n0 === undefined) {
+    const row = await db.prepare('SELECT COUNT(*) AS c, MAX(of) AS of FROM moves WHERE id = ? AND expires > ?').bind(id, Date.now()).first<{ c: number; of: number | null }>()
+    if (!row?.c || row.c !== row.of) throw new HttpError(404, 'This move link has expired or was never finished. Make a new one on the old address.')
+    return json({ chunks: row.of })
+  }
+  if (req.method === 'DELETE' && n0 === undefined) {
+    await db.prepare('DELETE FROM moves WHERE id = ?').bind(id).run()
+    return json({ ok: true })
+  }
+  const n = Number(n0)
+  if (!Number.isInteger(n) || n < 0 || n >= MOVE_MAX_CHUNKS) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET') {
+    const row = await db.prepare('SELECT data FROM moves WHERE id = ? AND n = ? AND expires > ?').bind(id, n, Date.now()).first<{ data: unknown }>()
+    if (!row) throw new HttpError(404, 'Not found')
+    return new Response(bytes(row.data), { headers: { 'Content-Type': 'application/octet-stream', 'Cache-Control': 'no-store' } })
+  }
+  if (req.method === 'PUT') {
+    const of = Number(new URL(req.url).searchParams.get('of'))
+    if (!Number.isInteger(of) || of < 1 || of > MOVE_MAX_CHUNKS || n >= of) throw new HttpError(400, 'Bad chunk')
+    const data = await req.arrayBuffer()
+    if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
+    const life = new URL(req.url).searchParams.get('life') === 'link' ? LINK_HOURS * 3_600_000 : MOVE_DAYS * DAY
+    await db.prepare('INSERT INTO moves (id, n, of, data, expires) VALUES (?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data')
+      .bind(id, n, of, data, Date.now() + life).run()
+    return json({ ok: true })
+  }
+  throw new HttpError(404, 'Not found')
+}
+
 // Circles. Members share verses and prayers, each sealed with the circle's
 // key on the device; here they're opaque text and bytes, plus who and when.
 const CIRCLE_ID = /^[\w-]{8,40}$/
@@ -213,19 +267,23 @@ function leaveCircle(db: D1Database, circle: string, userId: string) {
   return [
     db.prepare(`DELETE FROM circle_chunks WHERE circle_id = ?1 AND item IN (${mine})`).bind(circle, userId),
     db.prepare(`DELETE FROM circle_amens WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
+    db.prepare(`DELETE FROM circle_replies WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
     db.prepare('DELETE FROM circle_items WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_invites WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
-    ...['circle_chunks', 'circle_amens', 'circle_items', 'circle_invites'].map(t =>
+    ...['circle_chunks', 'circle_amens', 'circle_replies', 'circle_items', 'circle_invites'].map(t =>
       db.prepare(`DELETE FROM ${t} WHERE circle_id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)`).bind(circle)),
     db.prepare('DELETE FROM circles WHERE id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)').bind(circle),
   ]
 }
 
 async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
-  const userId = await session(req, env)
   const db = env.DB, now = Date.now()
   const [a, b, c, d, e] = parts
+  // Looking at an invite needs no account yet, so the link can say who it's
+  // from before asking you to make one. It's sealed: the link's secret opens it.
+  const looking = a === 'invite' && b && !c && req.method === 'GET'
+  const userId = looking ? await session(req, env).catch(() => '') : await session(req, env)
 
   // The circles you're in, with your locked copy of each key.
   if (req.method === 'GET' && !a) {
@@ -249,13 +307,14 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
   // Invites. Anyone signed in who has the link can look, and join once.
   if (a === 'invite' && b && !c) {
     if (!CIRCLE_ID.test(b)) throw new HttpError(404, 'Not found')
-    const inv = await db.prepare(`SELECT i.circle_id, i.wrapped, c.name, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = i.circle_id) AS members
-      FROM circle_invites i JOIN circles c ON c.id = i.circle_id WHERE i.id = ? AND i.expires > ?`).bind(b, now)
-      .first<{ circle_id: string; wrapped: string; name: string; members: number }>()
+    const inv = await db.prepare(`SELECT i.circle_id, i.wrapped, c.name, m.name AS by_name, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = i.circle_id) AS members
+      FROM circle_invites i JOIN circles c ON c.id = i.circle_id LEFT JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
+      WHERE i.id = ? AND i.expires > ?`).bind(b, now)
+      .first<{ circle_id: string; wrapped: string; name: string; by_name: string | null; members: number }>()
     if (!inv) throw new HttpError(404, 'This invite has been used or has expired. Ask for a new one.')
-    const already = !!(await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(inv.circle_id, userId).first())
-    if (req.method === 'GET') return json({ circle: inv.circle_id, wrapped: inv.wrapped, name: inv.name, members: inv.members, already })
-    if (req.method === 'POST') {
+    const already = !!userId && !!(await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(inv.circle_id, userId).first())
+    if (req.method === 'GET') return json({ circle: inv.circle_id, wrapped: inv.wrapped, name: inv.name, by: inv.by_name, members: inv.members, already })
+    if (req.method === 'POST' && userId) {
       if (already) return json({ ok: true, circle: inv.circle_id })
       const { wrapped, me } = await readJson<{ wrapped: string; me: string }>(req)
       if (!sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
@@ -277,15 +336,17 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
 
   // Who's in it and what's been shared, newest first.
   if (req.method === 'GET' && !b) {
-    const [members, items, amens] = await Promise.all([
+    const [members, items, amens, replies] = await Promise.all([
       db.prepare('SELECT mid, name FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
       db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
         WHERE i.circle_id = ?1 AND (i.chunks = 0 OR i.chunks = (SELECT COUNT(*) FROM circle_chunks k WHERE k.circle_id = ?1 AND k.item = i.id))
         ORDER BY i.at DESC LIMIT 300`).bind(circle).all(),
       db.prepare(`SELECT a.item, m.mid FROM circle_amens a JOIN circle_members m ON m.circle_id = a.circle_id AND m.user_id = a.user_id
         WHERE a.circle_id = ? ORDER BY a.at`).bind(circle).all<{ item: string; mid: string }>(),
+      db.prepare(`SELECT r.item, r.id, m.mid, r.at, r.body FROM circle_replies r JOIN circle_members m ON m.circle_id = r.circle_id AND m.user_id = r.user_id
+        WHERE r.circle_id = ? ORDER BY r.at`).bind(circle).all(),
     ])
-    return json({ me: mid, members: members.results, items: items.results, amens: amens.results })
+    return json({ me: mid, members: members.results, items: items.results, amens: amens.results, replies: replies.results })
   }
   // Your name in this circle.
   if (b === 'me' && !c) {
@@ -325,8 +386,24 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
     }
     if (req.method === 'DELETE') {
       if (!(await own())) throw new HttpError(404, 'Not found')
-      await db.batch(['circle_chunks', 'circle_amens'].map(t => db.prepare(`DELETE FROM ${t} WHERE circle_id = ? AND item = ?`).bind(circle, item)).concat(
+      await db.batch(['circle_chunks', 'circle_amens', 'circle_replies'].map(t => db.prepare(`DELETE FROM ${t} WHERE circle_id = ? AND item = ?`).bind(circle, item)).concat(
         db.prepare('DELETE FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item)))
+      return json({ ok: true })
+    }
+  }
+  // Replies: anyone in the circle may write one; only its writer removes it.
+  if (d === 'replies' && e && CIRCLE_ID.test(e)) {
+    if (req.method === 'PUT') {
+      const { body } = await readJson<{ body: string }>(req)
+      if (!sealedText(body, 6000)) throw new HttpError(400, 'Bad request')
+      if (!(await db.prepare('SELECT 1 FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first())) throw new HttpError(404, 'Not found')
+      const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_replies WHERE circle_id = ? AND item = ?').bind(circle, item).first<{ n: number }>()
+      if ((n?.n ?? 0) >= 200) throw new HttpError(413, 'This has as many replies as it can hold')
+      await db.prepare('INSERT INTO circle_replies (circle_id, item, id, user_id, at, body) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, e, userId, now, body).run()
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('DELETE FROM circle_replies WHERE circle_id = ? AND item = ? AND id = ? AND user_id = ?').bind(circle, item, e, userId).run()
       return json({ ok: true })
     }
   }
@@ -363,7 +440,10 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
 async function route(req: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
-  const rpID = env.RP_ID
+  const { origin, rpID } = site(req, env)
+  if (pathname === '/move' || pathname.startsWith('/move/')) {
+    return moveRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
+  }
   if (pathname === '/prayers' || pathname.startsWith('/prayers/')) {
     return prayerRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
   }
@@ -384,8 +464,8 @@ async function route(req: Request, env: Env): Promise<Response> {
       const options = await generateRegistrationOptions({
         rpName: env.RP_NAME, rpID,
         userID: b64url.decode(userId),
-        userName: 'Plain Bible',
-        userDisplayName: 'Plain Bible',
+        userName: env.RP_NAME,
+        userDisplayName: env.RP_NAME,
         attestationType: 'none',
         excludeCredentials: creds.map(c => ({ id: c.id, transports: c.transports ? JSON.parse(c.transports) : undefined })),
         authenticatorSelection: { residentKey: 'required', userVerification: 'preferred' },
@@ -400,7 +480,7 @@ async function route(req: Request, env: Env): Promise<Response> {
       if (!ch.user_id) throw new HttpError(400, 'Bad challenge')
       const v = await verifyRegistrationResponse({
         response: body.response, expectedChallenge: ch.challenge,
-        expectedOrigin: origins(env), expectedRPID: rpID, requireUserVerification: false,
+        expectedOrigin: origin, expectedRPID: rpID, requireUserVerification: false,
       }).catch(e => { throw new HttpError(400, String(e.message || e)) })
       if (!v.verified) throw new HttpError(400, 'Passkey could not be verified')
       const { credential } = v.registrationInfo
@@ -429,13 +509,20 @@ async function route(req: Request, env: Env): Promise<Response> {
       if (!cred) throw new HttpError(404, 'This passkey is not linked to an account. It may have been deleted.')
       const v = await verifyAuthenticationResponse({
         response: body.response, expectedChallenge: ch.challenge,
-        expectedOrigin: origins(env), expectedRPID: rpID, requireUserVerification: false,
+        expectedOrigin: origin, expectedRPID: rpID, requireUserVerification: false,
         credential: { id: cred.id, publicKey: b64url.decode(cred.public_key), counter: cred.counter, transports: cred.transports ? JSON.parse(cred.transports) : undefined },
       }).catch(e => { throw new HttpError(400, String(e.message || e)) })
       if (!v.verified) throw new HttpError(400, 'Passkey could not be verified')
       await env.DB.prepare('UPDATE credentials SET counter = ?, last_used = ? WHERE id = ?')
         .bind(v.authenticationInfo.newCounter, Date.now(), cred.id).run()
       return json({ token: await newSession(env, cred.user_id) })
+    }
+
+    // A second sign-in for the same account, carried to the app's new
+    // address inside a move, so signing out on one doesn't sign out both.
+    case 'POST /auth/handoff': {
+      const userId = await session(req, env)
+      return json({ token: await newSession(env, userId) })
     }
 
     case 'POST /auth/logout': {
@@ -459,7 +546,7 @@ async function route(req: Request, env: Env): Promise<Response> {
       // Out of every circle first, taking what they shared with them.
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
-      await env.DB.batch(['circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

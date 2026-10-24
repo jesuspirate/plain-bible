@@ -38,3 +38,16 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-share { display: grid; gap: 10px; }
 .c-share p { margin: 0; }
 .c-pick { display: flex; }
+.c-ref { padding-left: 0; }
+.c-bm { color: var(--ribbon); float: right; margin: 2px 0 0 8px; }
+.c-note-main { margin: 4px 0 8px; font-size: 17px; }
+.c-replies { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
+.c-replies li { padding: 6px 10px; border-radius: 10px; background: var(--bg); white-space: pre-wrap; }
+.c-reply { margin-top: 10px; }
+.c-reply textarea { box-sizing: border-box; width: 100%; font: 16px/1.4 var(--sans); padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
+.c-reply .c-row { margin: 6px 0 0; }
+.c-who { margin: 6px 0 0; }
+.c-paste { margin: 14px 0; }
+.c-paste input { flex: 1; min-width: 0; }
+.c-notes { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
+.c-notes label { display: flex; gap: 8px; align-items: flex-start; padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; white-space: pre-wrap; }

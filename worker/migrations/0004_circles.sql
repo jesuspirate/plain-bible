@@ -57,3 +57,13 @@ CREATE TABLE circle_amens (
   at INTEGER NOT NULL,
   PRIMARY KEY (circle_id, item, user_id)
 );
+-- A few words back on something shared ("praying for you, Mom"), sealed too.
+CREATE TABLE circle_replies (
+  circle_id TEXT NOT NULL,
+  item TEXT NOT NULL,
+  id TEXT NOT NULL,
+  user_id TEXT NOT NULL,
+  at INTEGER NOT NULL,
+  body TEXT NOT NULL,
+  PRIMARY KEY (circle_id, item, id)
+);

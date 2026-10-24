@@ -4,6 +4,8 @@ import './fonts'
 import './styles.css'
 import { warmSearch } from './searchClient'
 import { newVersionReady, registered } from './lib/update'
+import { Arriving } from './move'
+import { parseMoveLink } from './lib/move'
 
 // The reader puts you back on your verse itself; the browser's own scroll
 // restoration would fight it.
@@ -37,7 +39,10 @@ class Crash extends Component<{}, { error?: Error }> {
   }
 }
 
-render(<Crash><App /></Crash>, document.getElementById('app')!)
+// A move link from the old address: bring everything over first, then start.
+const moving = location.hash.startsWith('#/move/') ? parseMoveLink(location.hash) : undefined
+if (location.hash.startsWith('#/move/') && !moving) history.replaceState(null, '', location.pathname + '#/read')
+render(<Crash>{moving ? <Arriving link={moving} /> : <App />}</Crash>, document.getElementById('app')!)
 
 if (import.meta.env.PROD && 'serviceWorker' in navigator) {
   import('virtual:pwa-register').then(({ registerSW }) => {

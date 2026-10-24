@@ -1,4 +1,6 @@
-# Plain Bible
+# Quiet Bible
+
+Live at https://myquietbible.com (formerly Plain Bible, at bible.chama.community).
 
 Just the Bible. Many versions and languages, thorough search, and nothing else:
 no reading plans, devotionals, accounts, or feeds.
@@ -69,6 +71,25 @@ To turn it on, add two repository secrets: `CLOUDFLARE_API_TOKEN` (an API token 
 "Edit Cloudflare Workers" template plus Account → D1 → Edit) and `CLOUDFLARE_ACCOUNT_ID`.
 The next push to `main` creates the database, deploys the Worker and builds the app pointing at it.
 Passkeys are tied to the `RP_ID` domain in `worker/wrangler.toml`.
+
+### Moving addresses
+
+The app moved from bible.chama.community to myquietbible.com. Browsers keep each address's
+storage and passkeys apart, so the old address shows a "Move" button (`src/move.tsx`,
+`src/lib/move.ts`): it packs everything on the device (highlights, notes, settings, history,
+prayers and the prayer sync key, plus a fresh sign-in for the same account), encrypts it with a
+key that only travels in the move link's `#fragment`, and leaves it with the sync Worker
+(`/move`) for 7 days. The new address takes it in from the link, or from "Paste move link"
+(iPhone Home Screen apps keep their own storage). A passkey is then saved for the new domain;
+the Worker picks the passkey domain from each request's `Origin` (both are in `ORIGINS`).
+
+The same mechanism adds a device: Settings → Account (or Your prayers) → "Link another device" makes
+a link, valid for an hour, that carries only a fresh sign-in and the prayer key, so the other device is
+signed in and its synced prayers unlocked with nothing to type.
+
+GitHub Pages serves myquietbible.com; the same build is deployed to Cloudflare Pages
+(`scripts/deploy_old_address.sh`, needs the token to have Cloudflare Pages → Edit) for
+bible.chama.community until every device has moved.
 
 Local development: `cd worker && npm install && npx wrangler d1 migrations apply plain-bible-sync --local &&
 npx wrangler dev --var RP_ID:localhost --var ORIGINS:http://localhost:5173`, then run the app with

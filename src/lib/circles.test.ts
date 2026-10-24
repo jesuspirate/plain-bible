@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { cleanShared } from './circles'
+import { cleanShared, parseInviteLink } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -19,5 +19,28 @@ describe('cleanShared', () => {
   it('caps long text', () => {
     const v = cleanShared({ k: 'verse', verse: { book: 'John', chapter: 3, verses: [16] }, version: 'KJV', text: 'x', note: 'y'.repeat(5000) })
     expect(v?.note?.length).toBe(2000)
+  })
+})
+
+describe('notes and bookmarks', () => {
+  const verse = { book: 'John', chapter: 3, verses: [16, 17] }
+  it('keeps a shared note, and drops an empty one', () => {
+    expect(cleanShared({ k: 'note', verse, version: 'KJV', text: 'For God so loved', note: 'Love first' }))
+      .toEqual({ k: 'note', verse, version: 'KJV', text: 'For God so loved', note: 'Love first' })
+    expect(cleanShared({ k: 'note', verse, version: 'KJV', text: 'x', note: '' })).toBeUndefined()
+  })
+  it('keeps a shared bookmark', () => {
+    expect(cleanShared({ k: 'bookmark', verse, version: 'KJV', text: 'x' })?.k).toBe('bookmark')
+  })
+})
+
+describe('parseInviteLink', () => {
+  it('finds the invite in a pasted link or message', () => {
+    expect(parseInviteLink('Come pray with us https://myquietbible.com/#/join?i=zKpMGqvt-JhAYZhj&k=Ab_cdEFghIJklMNopQRstu thanks'))
+      .toEqual({ i: 'zKpMGqvt-JhAYZhj', k: 'Ab_cdEFghIJklMNopQRstu' })
+  })
+  it('says no to anything else', () => {
+    expect(parseInviteLink('https://myquietbible.com/#/read/KJV/John/3')).toBeUndefined()
+    expect(parseInviteLink('#/join?i=short&k=x')).toBeUndefined()
   })
 })

@@ -25,12 +25,15 @@ const newId = () => b64url.encode(crypto.getRandomValues(new Uint8Array(12)))
  *  together ("read John 3 today") can come later as a kind of its own,
  *  sent only by people who turn it on for themselves. */
 export type Shared =
-  | { k: 'verse'; verse: PrayerVerse; version: string; text: string; note?: string }
+  | { k: 'verse' | 'bookmark'; verse: PrayerVerse; version: string; text: string; note?: string }
+  /** a note of yours: `note` is the note itself, `text` the verses it's on */
+  | { k: 'note'; verse: PrayerVerse; version: string; text: string; note: string }
   | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; note?: string }
 
 export interface CircleInfo { id: string; name: string; members: number }
 export interface Member { mid: string; name: string }
-export interface FeedItem { id: string; by: string; at: number; body: Shared; chunks: number; amens: string[] }
+export interface Reply { id: string; by: string; at: number; text: string }
+export interface FeedItem { id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; replies: Reply[] }
 export interface Feed { me: string; members: Member[]; items: FeedItem[] }
 
 function token() {
@@ -131,14 +134,22 @@ export async function inviteLink(circle: string) {
   return shareLink(`#/join?i=${id}&k=${b64url.encode(secret)}`)
 }
 
-export interface Invite { circle: string; name: string; members: number; already: boolean; raw: Uint8Array }
+/** The invite in a link someone sent, pasted in: its id and secret. */
+export function parseInviteLink(s: string): { i: string; k: string } | undefined {
+  const m = /[?&]i=([\w-]{8,40})&k=([\w-]{16,40})/.exec(s.trim())
+  return m ? { i: m[1], k: m[2] } : undefined
+}
+
+export interface Invite { circle: string; name: string; by: string; members: number; already: boolean; raw: Uint8Array }
 /** What an invite link opens, before you join. */
 export async function readInvite(id: string, secret: string): Promise<Invite> {
-  const r = await api<{ circle: string; wrapped: string; name: string; members: number; already: boolean }>(`/circles/invite/${encodeURIComponent(id)}`, { token: token() })
+  const r = await api<{ circle: string; wrapped: string; name: string; by: string | null; members: number; already: boolean }>(`/circles/invite/${encodeURIComponent(id)}`, { token: loadAccount()?.token })
   const raw = await open(await aesKey(b64url.decode(secret), 'circle invite v1'), b64url.decode(r.wrapped), `invite/${id}`)
     .catch(() => { throw new SyncError('This invite link is incomplete. Ask for it to be sent again.') })
-  const name = await openJson(await circleKey(r.circle, raw), r.name, `${r.circle}/name`).catch(() => 'Circle')
-  return { circle: r.circle, name: text(name, 80) || 'Circle', members: r.members, already: r.already, raw }
+  const key = await circleKey(r.circle, raw)
+  const name = await openJson(key, r.name, `${r.circle}/name`).catch(() => 'Circle')
+  const by = r.by ? await openJson(key, r.by, `${r.circle}/me`).catch(() => '') : ''
+  return { circle: r.circle, name: text(name, 80) || 'Circle', by: text(by, 60), members: r.members, already: r.already, raw }
 }
 
 export async function joinCircle(id: string, invite: Invite, me: string, code?: string): Promise<'joined' | 'needCode'> {
@@ -174,9 +185,12 @@ export function cleanShared(v: unknown): Shared | undefined {
   const x = v as Record<string, unknown> | null
   if (!x || typeof x !== 'object') return
   const note = text(x.note, 2000) || undefined
-  if (x.k === 'verse') {
+  if (x.k === 'verse' || x.k === 'bookmark' || x.k === 'note') {
     const verse = cleanVerse(x.verse)
-    return verse && { k: 'verse', verse, version: text(x.version, 20), text: text(x.text, 8000), note }
+    if (!verse) return
+    const base = { verse, version: text(x.version, 20), text: text(x.text, 8000) }
+    if (x.k === 'note') return note ? { k: 'note', ...base, note } : undefined
+    return { k: x.k, ...base, note }
   }
   if (x.k === 'prayer' && Array.isArray(x.parts)) {
     const parts = x.parts.filter(p => p && Number.isInteger(p.size) && p.size > 0 && typeof p.type === 'string')
@@ -191,14 +205,22 @@ export const keptFeed = (circle: string) => meta.get<Feed>(`circle:${circle}`)
 
 export async function loadFeed(circle: string): Promise<Feed> {
   const key = await keyOf(circle)
-  const r = await api<{ me: string; members: { mid: string; name: string }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]; amens: { item: string; mid: string }[] }>(`/circles/${circle}`, { token: token() })
+  const r = await api<{
+    me: string; members: { mid: string; name: string }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
+    amens: { item: string; mid: string }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
+  }>(`/circles/${circle}`, { token: token() })
   const members = await Promise.all(r.members.map(async m => ({ mid: m.mid, name: text(await openJson(key, m.name, `${circle}/me`).catch(() => ''), 60) || 'Someone' })))
   const amens = new Map<string, string[]>()
   for (const a of r.amens) amens.set(a.item, [...(amens.get(a.item) ?? []), a.mid])
+  const replies = new Map<string, Reply[]>()
+  for (const x of r.replies ?? []) {
+    const said = text(await openJson(key, x.body, `${circle}/${x.item}/${x.id}`).catch(() => ''), 2000)
+    if (said) replies.set(x.item, [...(replies.get(x.item) ?? []), { id: x.id, by: x.mid, at: x.at, text: said }])
+  }
   const items: FeedItem[] = []
   for (const i of r.items) {
     const body = cleanShared(await openJson(key, i.body, `${circle}/${i.id}`).catch(() => undefined))
-    if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [] })
+    if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], replies: replies.get(i.id) ?? [] })
   }
   const feed = { me: r.me, members, items }
   await meta.set(`circle:${circle}`, feed)
@@ -222,8 +244,12 @@ async function send(circle: string, body: Shared, audio?: Uint8Array) {
   return id
 }
 
-export const shareVerse = (circle: string, verse: PrayerVerse, version: string, quote: string, note?: string) =>
-  send(circle, { k: 'verse', verse, version, text: quote, note: note || undefined })
+/** Verses as they are, as a bookmark (others can bookmark them too with a
+ *  tap), or with one of your notes on them. */
+export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', verse: PrayerVerse, version: string, quote: string, note?: string) {
+  if (k === 'note' && !note) throw new SyncError('That note is empty.')
+  return send(circle, k === 'note' ? { k, verse, version, text: quote, note: note! } : { k, verse, version, text: quote, note: note || undefined })
+}
 
 export async function sharePrayer(circle: string, prayerId: string, note?: string) {
   const p = await prayers.get(prayerId)
@@ -261,6 +287,14 @@ export async function prayerAudio(circle: string, item: FeedItem): Promise<{ typ
 
 export const amen = (circle: string, item: string, on: boolean) =>
   api(`/circles/${circle}/items/${item}/amen`, { method: on ? 'PUT' : 'DELETE', token: token() })
+
+/** A few words back on something shared. */
+export async function reply(circle: string, item: string, said: string) {
+  const id = newId()
+  await api(`/circles/${circle}/items/${item}/replies/${id}`, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), said, `${circle}/${item}/${id}`) } })
+}
+export const removeReply = (circle: string, item: string, id: string) =>
+  api(`/circles/${circle}/items/${item}/replies/${id}`, { method: 'DELETE', token: token() })
 
 export async function removeShared(circle: string, item: string) {
   await api(`/circles/${circle}/items/${item}`, { method: 'DELETE', token: token() })

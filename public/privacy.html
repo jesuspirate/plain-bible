@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Privacy · Plain Bible</title>
+<title>Privacy · Quiet Bible</title>
 <style>
   body { font: 17px/1.6 Georgia, serif; max-width: 40em; margin: 0 auto; padding: 24px 16px 48px; background: #faf8f3; color: #22211f; }
   h1 { font-size: 1.6em; } h2 { font-size: 1.15em; margin-top: 1.6em; }
@@ -13,7 +13,7 @@
 </head>
 <body>
 <h1>Privacy</h1>
-<p>Plain Bible has no ads, no analytics and no tracking.</p>
+<p>Quiet Bible has no ads, no analytics and no tracking.</p>
 
 <h2>On your device</h2>
 <p>Your settings, highlights, bookmarks and recent searches are stored on your device only.
@@ -23,7 +23,19 @@ Searching happens on your device too.</p>
 <p>If you choose to sign in, the app stores one document for your account on our sync service
 (hosted by Cloudflare): your highlights, bookmarks and settings, so they match on all your devices.
 Sign-in uses a passkey: we keep its public key, never a password, email address or name.
-You can delete your account and everything stored with it at any time from Settings → Account and sync.</p>
+Spoken prayers sync only if you turn that on, and are encrypted on your device first with a key
+we never see. You can delete your account and everything stored with it at any time from Settings → Account and sync.</p>
+
+<h2>Circles</h2>
+<p>If you join a circle, what you choose to share there (verses, bookmarks, notes, prayers and replies) is encrypted on your
+device with the circle's key, which only its members' devices hold. The sync service stores it without being able to read it.
+It does know which accounts are in a circle, when something is shared, and how large it is. Leaving a circle, or deleting
+your account, removes what you shared there.</p>
+
+<h2>Moving to a new address</h2>
+<p>When you move a device from the old address (bible.chama.community) to myquietbible.com, the app packs
+what's on that device, encrypts it there, and leaves it on the sync service for up to 7 days for the new address to pick up.
+The key is only in your move link, so the service can't read it.</p>
 
 <h2>Downloads</h2>
 <p>Bible versions download from this website. Like any website, the hosting service
