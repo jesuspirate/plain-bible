@@ -199,6 +199,7 @@ function SettingsBody() {
           </div>
         </div>
       </div>
+      {sync.enabled && <div class="field"><span>Circles</span><a href="#/circles">Share verses and prayers with a few people ›</a></div>}
       <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
       {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
       <div class="field"><span>Font</span>

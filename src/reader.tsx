@@ -9,10 +9,10 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { awaitVerse, go, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, useApp, versesPicked } from './state'
+import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, shareWithCircle, useApp, versesPicked } from './state'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
-import { BookmarkIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -614,6 +614,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>Link</span></button>}
           <button onClick={showCompare}><CompareIcon size={22} /><span>Compare</span></button>
           <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>Pray</span></button>
+          {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>Circle</span></button>}
         </div>
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
@@ -647,7 +648,11 @@ export interface NotesTarget {
 export function NotesSheet({ book, chapter, verses, start, text, dir, links, onGo, onClose }: NotesTarget & {
   book: string; chapter: number; text: (v: number) => string; dir?: 'rtl'; links?: NoteLinks; onGo?: (x: LinkedNote) => void; onClose: () => void
 }) {
-  const { marks } = useApp()
+  const { marks, settings } = useApp()
+  // A note can go to your circle as it is, with the verses it's on.
+  const share = inCircles() ? (note: string, vs: number[]) => {
+    shareWithCircle({ verse: { book, chapter, verses: vs }, version: settings.version, text: vs.map(v => text(v)).filter(Boolean).join(' '), note })
+  } : undefined
   const list = verses.length === 1
     ? notesCovering(marks, book, chapter, verses[0])
     : notesCovering(marks, book, chapter, verses[0]).filter(x => x.verses.join() === verses.join())
@@ -662,7 +667,7 @@ export function NotesSheet({ book, chapter, verses, start, text, dir, links, onG
   const done = () => fromList.current ? setEditing(undefined) : onClose()
   return (
     <Sheet title={editing ? `Note · ${ref(editing.verses)}` : `${list.length > 1 ? 'Notes' : 'Note'} · ${ref(verses)}`} onClose={onClose}>
-      {editing ? <NoteEditor key={editing.id} at={editing.key} id={editing.id} verses={editing.verses} passage={passage(editing.verses)} onDone={done} /> : <>
+      {editing ? <NoteEditor key={editing.id} at={editing.key} id={editing.id} verses={editing.verses} passage={passage(editing.verses)} onDone={done} onShare={share} /> : <>
       {passage(verses)}
       <ul class="note-list">
         {list.map(x => (
@@ -730,8 +735,8 @@ function Passage({ verses, text, dir }: { verses: number[]; text: (v: number) =>
 }
 
 /** Write, edit or delete one note (on the mark `at`). */
-function NoteEditor({ at: markK, id, verses, passage, onDone }: {
-  at: string; id: string; verses: number[]; passage: ComponentChildren; onDone: () => void
+function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
+  at: string; id: string; verses: number[]; passage: ComponentChildren; onDone: () => void; onShare?: (note: string, verses: number[]) => void
 }) {
   const { marks, setMarks } = useApp()
   const initial = marks[markK]?.ns?.[id]?.n ?? ''
@@ -766,6 +771,7 @@ function NoteEditor({ at: markK, id, verses, passage, onDone }: {
         onInput={e => setDraft((e.target as HTMLTextAreaElement).value)} />
       <div class="row">
         <button class="primary" onClick={onDone}>Done</button>
+        {onShare && draft.trim() && <button onClick={() => { save(draft); onShare(draft.trim(), verses) }}><CircleIcon size={18} /> Share with circle</button>}
         {saved.current && <button onClick={() => { latest.current = ''; save(''); onDone() }}>Delete note</button>}
       </div>
     </>

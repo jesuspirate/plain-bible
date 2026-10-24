@@ -58,7 +58,7 @@ async function hkdf(secret: Uint8Array, info: string, bits: number) {
   const base = await subtle().importKey('raw', secret as BufferSource, 'HKDF', false, ['deriveBits'])
   return new Uint8Array(await subtle().deriveBits({ name: 'HKDF', hash: 'SHA-256', salt: enc.encode('plain-bible'), info: enc.encode(info) }, base, bits))
 }
-const aesKey = async (secret: Uint8Array, info: string) =>
+export const aesKey = async (secret: Uint8Array, info: string) =>
   subtle().importKey('raw', await hkdf(secret, info, 256) as BufferSource, 'AES-GCM', false, ['encrypt', 'decrypt'])
 
 export interface PrayerKey { key: CryptoKey; id: string }

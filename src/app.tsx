@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SHARE_EVENT, ShareRequest, useApp, useRoute } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -120,6 +120,17 @@ export function App() {
     return () => removeEventListener(PRAY_EVENT, on)
   }, [])
 
+  // Circles load only when opened, or when something is shared with one.
+  const [circles, setCircles] = useState<typeof import('./circles')>()
+  const [sharing, setSharing] = useState<ShareRequest>()
+  const loadCircles = () => import('./circles').then(m => setCircles(() => m)).catch(() => {})
+  useEffect(() => {
+    const on = (e: Event) => { setSharing((e as CustomEvent<ShareRequest>).detail); loadCircles() }
+    addEventListener(SHARE_EVENT, on)
+    return () => removeEventListener(SHARE_EVENT, on)
+  }, [])
+  useEffect(() => { if (page === 'circles' || page === 'join') loadCircles() }, [page])
+
   const byId = useMemo(() => new Map(catalog?.translations.map(t => [t.id, t]) ?? []), [catalog])
   // Remember whether Settings was opened over the reader, so closing it can
   // step back in history instead of piling up another reader page.
@@ -162,6 +173,7 @@ export function App() {
           : view === 'versions' ? <Versions />
           : view === 'saved' ? <Saved />
           : view === 'settings' ? <SettingsView />
+          : view === 'circles' || view === 'join' ? circles ? <circles.CirclesPage route={route} /> : null
           : <ReaderRoute route={route} />}
       </main>
       {/* With the full bar hidden, a small round search button takes its place,
@@ -169,6 +181,7 @@ export function App() {
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
       {praying && Prayer && <Prayer onClose={() => setPraying(false)} />}
+      {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
     </AppContext.Provider>
   )
