@@ -272,8 +272,7 @@ function CircleView({ id }: { id: string }) {
 
   return (
     <div class="circles">
-      <a class="c-back" href="#/circles">‹ Circles</a>
-      <h1>{info?.name ?? 'Circle'}</h1>
+      <h1><button class="settings-back" onClick={() => go('circles')}><span aria-hidden="true">‹</span> {info?.name ?? 'Circle'}</button></h1>
       {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
       <div class="c-row">
         {invite && !sent

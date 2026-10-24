@@ -1,7 +1,6 @@
 /* Circles: loaded with the circles page or the share sheet. */
 .circles { max-width: 40rem; margin: 0 auto; padding: 8px 16px 24px; }
 .circles h1 { margin: 6px 0 4px; }
-.c-back { display: inline-block; padding: 6px 0; text-decoration: none; }
 .c-btn { min-height: 46px; padding: 10px 18px; border-radius: 12px; font: 600 16px var(--sans); }
 .c-btn.small { min-height: 34px; padding: 4px 12px; font-size: 14px; }
 .c-btn.primary { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }

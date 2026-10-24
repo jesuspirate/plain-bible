@@ -170,8 +170,10 @@ export function App() {
         <nav>
           <HistoryButton route={route} />
           <UpdateButton />
-          {/* #/settings opened as a page has its own Done; everywhere else, the settings button. */}
+          {/* #/settings opened as a page has its own Done, and so do the pages
+              Settings opens (Circles, Saved): Done takes you back to the word. */}
           {view === 'settings' ? <button class="done-btn" onClick={closeSettingsPage}>Done</button>
+            : view === 'circles' || view === 'join' || view === 'saved' ? <button class="done-btn" onClick={() => go('read')}>Done</button>
             : <ProfileButton onOpen={() => setSettingsOpen(true)} />}
         </nav>
       </header>
