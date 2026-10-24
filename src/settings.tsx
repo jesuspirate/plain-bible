@@ -1,9 +1,10 @@
 // Settings. Everything lives here, behind the one button in the top right
-// corner: sync, the Bible you read, reading, prayer, your data. They rise as
+// corner: your circles and saved things, sync, the Bible you read, reading,
+// your data. (Prayer lives on the 🙏 button alone.) They rise as
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, openPrayer, readPath, Settings, TONES, useApp, useRoute } from './state'
+import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
@@ -108,8 +109,8 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 
 // The parts of Settings. The first page has what most people reach for; each
 // row below opens a page of its own, with a way back.
-type Page = 'home' | 'reading' | 'prayer' | 'data' | 'about'
-const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', prayer: 'Prayer', data: 'Your data', about: 'About' }
+type Page = 'home' | 'reading' | 'data' | 'about'
+const PAGE_TITLE: Record<Page, string> = { home: 'Settings', reading: 'Reading', data: 'Your data', about: 'About' }
 
 /** Settings as a sheet that rises over the page, from the button in the top
  *  right corner. Pull it down, or Done, and you're back to the word. */
@@ -135,7 +136,7 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
   }, [])
   return (
     <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
-      // A link inside (Saved, Circles, Advanced search, Prayer) leaves Settings behind.
+      // A link inside (Saved, Circles, Advanced search) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
         <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
@@ -283,19 +284,6 @@ function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => voi
     </div>
   </>
 
-  if (page === 'prayer') return <>
-    <button class="pray-open set-big" onClick={openPrayer}>{'🙏' + settings.prayTone} Pray out loud</button>
-    <p class="muted small">Your prayers, and syncing them with your other devices, are in the prayer screen: tap <strong>Your prayers</strong> there.</p>
-    <div class="ess"><span class="ess-label">Prayer button</span>
-      <div class="seg tones" role="radiogroup" aria-label="Prayer button">
-        {TONES.map(t => (
-          <button role="radio" aria-checked={settings.prayTone === t} class={settings.prayTone === t ? 'on' : ''} onClick={() => update({ prayTone: t })}>{'🙏' + t}</button>
-        ))}
-      </div>
-      <span class="muted small">You can also press and hold the 🙏 button to pick.</span>
-    </div>
-  </>
-
   if (page === 'data') return <>
     <MoveInSection />
     <DataTools />
@@ -324,7 +312,6 @@ function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => voi
       <section class="set-group">
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
-          <Row icon={'🙏' + settings.prayTone} label="Prayer" onClick={() => setPage('prayer')} />
           {sync.enabled && <Row icon="👥" label="Circles" href="#/circles" />}
           <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
           <Row icon="🔎" label="Advanced search" href="#/search" />
