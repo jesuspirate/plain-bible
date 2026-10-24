@@ -7,6 +7,7 @@ import {
   prepareSignIn, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
 } from './lib/sync'
 import { Settings, useApp } from './state'
+import { DeviceLink } from './move'
 
 export interface SyncApi {
   enabled: boolean
@@ -171,8 +172,9 @@ export function AccountSection() {
         <button onClick={logout} disabled={!!working}>Sign out</button>
         <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
       </div>
-      <p class="muted small">Passkeys saved to iCloud Keychain or Google Password Manager already work on your other devices.
-        Use “Add a passkey” to sign in from a device outside that ecosystem.</p>
+      <p class="muted small">Passkeys saved to iCloud Keychain, Google Password Manager or a password manager like Bitwarden already work on your other devices.
+        Or link another device directly: it’s signed in and its prayers unlocked, with nothing to type.</p>
+      <DeviceLink />
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>
   )

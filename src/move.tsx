@@ -1,7 +1,7 @@
 // Moving from the old address (bible.chama.community) to myquietbible.com,
 // where the app is called Quiet Bible. See lib/move.ts for how it works.
 import { useEffect, useState } from 'preact/hooks'
-import { applyMove, fetchMove, makeMoveLink, MOVED, MOVED_IN, movedIn, NEW_HOST, NEW_ORIGIN, onNewAddress, onOldAddress, parseMoveLink } from './lib/move'
+import { applyMove, fetchMove, makeDeviceLink, makeMoveLink, MOVED, MOVED_IN, movedIn, NEW_HOST, NEW_ORIGIN, onNewAddress, onOldAddress, parseMoveLink } from './lib/move'
 import { loadAccount, register } from './lib/sync'
 import { copyText, isIOS } from './lib/native'
 
@@ -107,13 +107,13 @@ export function Arriving({ link }: { link: { id: string; key: string } }) {
   )
 }
 
-/** Paste a move link made on the old address. */
+/** Paste a move link made on the old address, or a link from another device. */
 export function PasteMove({ onDone }: { onDone?: () => void }) {
   const [text, setText] = useState('')
   const [error, setError] = useState('')
   const go = (s: string) => {
     const link = parseMoveLink(s)
-    if (!link) { setError('That isn’t a move link. On the old address, tap Move, then Copy move link.'); return }
+    if (!link) { setError('That isn’t a Quiet Bible link. Copy it again on the other device.'); return }
     location.hash = `#/move/${link.id}.${link.key}`
     location.reload()
   }
@@ -123,7 +123,7 @@ export function PasteMove({ onDone }: { onDone?: () => void }) {
   return (
     <div class="move-paste">
       <div class="row wrap">
-        {'clipboard' in navigator && 'readText' in navigator.clipboard && <button class="primary" onClick={paste}>Paste move link</button>}
+        {'clipboard' in navigator && 'readText' in navigator.clipboard && <button class="primary" onClick={paste}>Paste link</button>}
         {onDone && <button onClick={onDone}>Not now</button>}
       </div>
       <input type="url" class="move-input" placeholder="or paste it here" value={text} autocomplete="off"
@@ -137,9 +137,9 @@ export function PasteMove({ onDone }: { onDone?: () => void }) {
 export function MoveInSection() {
   if (!onNewAddress()) return null
   return (
-    <div class="field"><span>Moving in</span>
+    <div class="field"><span>Link from another device</span>
       <div class="col">
-        <span class="muted small">Used Plain Bible at bible.chama.community? Tap Move there, copy the move link, and paste it here.</span>
+        <span class="muted small">Paste a link from Settings → Account → Link another device, or a move link from Plain Bible at bible.chama.community.</span>
         <PasteMove />
       </div>
     </div>
@@ -158,7 +158,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
   const [prayerKey, setPrayerKey] = useState(false)
   if (askPaste) return (
     <div class="move-welcome" role="dialog" aria-label="Moving in">
-      <p><strong>Welcome to Quiet Bible.</strong> Coming from Plain Bible? Paste the move link you copied there to bring everything over.</p>
+      <p><strong>Welcome to Quiet Bible.</strong> Have a link from another device, or a move link from Plain Bible? Paste it to bring everything over.</p>
       <PasteMove onDone={() => setAskPaste(false)} />
     </div>
   )
@@ -192,6 +192,13 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
       setPrayerKey(false)
     } catch (e) { fail(e) } finally { setWorking(false) }
   }
+  if (info.kind === 'link') return (
+    <div class="move-welcome" role="dialog" aria-label="Linked">
+      <p><strong>This device is linked.</strong> You’re signed in{info.prayerKey ? ' and your prayers are unlocked' : ''}. Your highlights, notes and settings arrive in a moment{info.prayerKey ? ', and your prayers right after' : ''}.</p>
+      {isIOS && !standalone() && <p class="small">To keep it on your Home Screen: tap Share, then <strong>Add to Home Screen</strong>. If it opens signed out there, paste the same link once more (it works for an hour).</p>}
+      <div class="row wrap"><button class="primary" onClick={close}>Done</button></div>
+    </div>
+  )
   const what = [plural(info.marks, 'highlighted or noted verse'), plural(info.prayers, 'prayer')]
   return (
     <div class="move-welcome" role="dialog" aria-label="Moved">
@@ -204,6 +211,41 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
         <button onClick={close}>{info.account && !saved ? 'Later' : 'Done'}</button>
       </div>
       {msg && <p class="note">{msg}</p>}
+    </div>
+  )
+}
+
+/** Settings → Account, and Your prayers: a link that signs another device
+ *  in and unlocks prayers there. */
+export function DeviceLink({ class: cls = '' }: { class?: string }) {
+  const [state, setState] = useState<'idle' | 'working' | 'ready'>('idle')
+  const [made, setMade] = useState<{ link: string; prayers: boolean }>()
+  const [error, setError] = useState('')
+  const [copied, setCopied] = useState(false)
+  const make = async () => {
+    setState('working'); setError('')
+    try { setMade(await makeDeviceLink()); setState('ready') } catch (e) { setError((e as Error).message); setState('idle') }
+  }
+  const copy = async () => {
+    try { await copyText(made!.link); setCopied(true) } catch { setError('Couldn’t copy. Press and hold the link to copy it.') }
+  }
+  const share = () => navigator.share?.({ title: 'Quiet Bible', url: made!.link }).catch(() => {})
+  if (state === 'ready' && made) return (
+    <div class={'move-card ' + cls}>
+      <p class="small">Open this on your other device within an hour. It signs that device in{made.prayers ? ' and unlocks your prayers there' : ''}. Keep it private: whoever opens it gets into your account.</p>
+      <p class="move-link" onClick={copy}>{made.link}</p>
+      <div class="row wrap">
+        <button class="primary" onClick={copy}>{copied ? 'Copied ✓' : 'Copy link'}</button>
+        {'share' in navigator && <button onClick={share}>Send…</button>}
+      </div>
+      <p class="muted small">Send it to yourself privately: AirDrop, a note to yourself, or your password manager. On iPhone, add Quiet Bible to the Home Screen first, open it, and tap <strong>Paste link</strong>.</p>
+      {error && <p class="note">{error}</p>}
+    </div>
+  )
+  return (
+    <div class={cls}>
+      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={make}>{state === 'working' ? 'Making a link…' : 'Link another device'}</button>
+      {error && <p class="note small">{error}</p>}
     </div>
   )
 }

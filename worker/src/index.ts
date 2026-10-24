@@ -26,6 +26,8 @@ const PRAYER_QUOTA = 300_000_000
 const MOVE_ID = /^[A-Za-z0-9_-]{22}$/
 const MOVE_MAX_CHUNKS = 400
 const MOVE_DAYS = 7
+// A link that signs another device in lives an hour.
+const LINK_HOURS = 1
 
 class HttpError extends Error {
   constructor(public status: number, message: string, public extra?: object) { super(message) }
@@ -233,8 +235,9 @@ async function moveRoute(req: Request, env: Env, parts: string[]): Promise<Respo
     if (!Number.isInteger(of) || of < 1 || of > MOVE_MAX_CHUNKS || n >= of) throw new HttpError(400, 'Bad chunk')
     const data = await req.arrayBuffer()
     if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
+    const life = new URL(req.url).searchParams.get('life') === 'link' ? LINK_HOURS * 3_600_000 : MOVE_DAYS * DAY
     await db.prepare('INSERT INTO moves (id, n, of, data, expires) VALUES (?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data')
-      .bind(id, n, of, data, Date.now() + MOVE_DAYS * DAY).run()
+      .bind(id, n, of, data, Date.now() + life).run()
     return json({ ok: true })
   }
   throw new HttpError(404, 'Not found')

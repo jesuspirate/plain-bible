@@ -83,6 +83,10 @@ key that only travels in the move link's `#fragment`, and leaves it with the syn
 (iPhone Home Screen apps keep their own storage). A passkey is then saved for the new domain;
 the Worker picks the passkey domain from each request's `Origin` (both are in `ORIGINS`).
 
+The same mechanism adds a device: Settings → Account (or Your prayers) → "Link another device" makes
+a link, valid for an hour, that carries only a fresh sign-in and the prayer key, so the other device is
+signed in and its synced prayers unlocked with nothing to type.
+
 GitHub Pages serves myquietbible.com; the same build is deployed to Cloudflare Pages
 (`scripts/deploy_old_address.sh`, needs the token to have Cloudflare Pages → Edit) for
 bible.chama.community until every device has moved.
