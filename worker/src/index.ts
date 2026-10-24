@@ -214,14 +214,17 @@ async function emailVerify(req: Request, env: Env) {
     ])
     return json({ added: true, email: hint })
   }
-  if (owner) return json({ token: await newSession(env, owner.user_id) })
+  if (owner) {
+    const n = await db.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(owner.user_id).first<{ n: number }>()
+    return json({ token: await newSession(env, owner.user_id), passkeys: n?.n ?? 0 })
+  }
   // An address not seen before makes a new account.
   const userId = random(16)
   await db.batch([
     db.prepare('INSERT INTO users (id, created) VALUES (?, ?)').bind(userId, now),
     db.prepare('INSERT INTO emails (hash, user_id, hint, created) VALUES (?, ?, ?, ?)').bind(hash, userId, hint, now),
   ])
-  return json({ token: await newSession(env, userId), created: true })
+  return json({ token: await newSession(env, userId), created: true, passkeys: 0 })
 }
 
 // ---------------------------------------------------------------------------

@@ -42,6 +42,9 @@ export interface Bundle {
   at: number
   local: Record<string, string>
   prayerKey?: string
+  /** The same account key, where prayers don't sync here but circles are
+   *  open: it unlocks the circles on the other device. */
+  accountKey?: string
   prayerDeleted?: string[]
   prayers: PackedPrayer[]
 }
@@ -157,7 +160,11 @@ export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean
   const syncId = localStorage.getItem(PRAYER_SYNC)
   const key = syncId ? await meta.get<Uint8Array>('key') : undefined
   if (syncId && key) local[PRAYER_SYNC] = syncId
-  const b: Omit<Bundle, 'prayers'> = { v: 1, kind: 'link', from: location.origin, at: Date.now(), local, prayerKey: key ? b64url.encode(key) : undefined }
+  const acctKey = key ? undefined : await meta.get<Uint8Array>('acct')
+  const b: Omit<Bundle, 'prayers'> = {
+    v: 1, kind: 'link', from: location.origin, at: Date.now(), local,
+    prayerKey: key ? b64url.encode(key) : undefined, accountKey: acctKey ? b64url.encode(acctKey) : undefined,
+  }
   // Prayers on the account that this device can't open: the link can't
   // carry their key, so say so rather than let the other device find none.
   const locked = !key && !!(await api<{ keyId: string | null }>('/prayers', { token: acct.token }).catch(() => null))?.keyId
@@ -227,6 +234,7 @@ export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn
   }
   for (const p of list) if (!(await prayers.get(p.id))) await prayers.put(p)
   if (bundle.prayerKey) await meta.set('key', b64url.decode(bundle.prayerKey))
+  if (bundle.accountKey) await meta.set('acct', b64url.decode(bundle.accountKey))
   if (bundle.prayerDeleted?.length) {
     const here = (await meta.get<string[]>('deleted')) ?? []
     await meta.set('deleted', [...new Set([...here, ...bundle.prayerDeleted])])

@@ -107,6 +107,7 @@ export async function register(token?: string): Promise<string | undefined> {
     throw new SyncError((e as Error).message)
   }
   const r = await api<{ token?: string }>('/auth/register/verify', { method: 'POST', token, body: { challengeId, response } })
+  setNoPasskey(false)
   return r.token
 }
 
@@ -132,7 +133,9 @@ export async function signIn(): Promise<string> {
     if (cancelled(e)) throw new SyncError('Cancelled')
     throw new SyncError((e as Error).message)
   }
-  return (await api<{ token: string }>('/auth/login/verify', { method: 'POST', body: { challengeId, response } })).token
+  const { token } = await api<{ token: string }>('/auth/login/verify', { method: 'POST', body: { challengeId, response } })
+  setNoPasskey(false)
+  return token
 }
 
 export const signOut = (token: string) => api('/auth/logout', { method: 'POST', token }).catch(() => {})
@@ -154,8 +157,17 @@ export async function checkEmailSignIn(): Promise<boolean> {
 export const sendEmailCode = (email: string, token?: string) =>
   api('/auth/email/start', { method: 'POST', token, body: { email } })
 /** A token to sign in with, or with a token, the address added. */
-export const verifyEmailCode = (email: string, code: string, token?: string) =>
-  api<{ token?: string; added?: boolean; email?: string }>('/auth/email/verify', { method: 'POST', token, body: { email, code } })
+export async function verifyEmailCode(email: string, code: string, token?: string) {
+  const r = await api<{ token?: string; added?: boolean; email?: string; passkeys?: number }>('/auth/email/verify', { method: 'POST', token, body: { email, code } })
+  if (r.token) setNoPasskey(!r.passkeys)
+  return r
+}
+
+// Whether the account has no passkey (one signed in by email), so unlocking
+// prayers and circles doesn't ask for a passkey that isn't there.
+const NO_PASSKEY = 'plain-bible:no-passkey'
+export const noPasskey = () => { try { return localStorage.getItem(NO_PASSKEY) === '1' } catch { return false } }
+export const setNoPasskey = (none: boolean) => { try { none ? localStorage.setItem(NO_PASSKEY, '1') : localStorage.removeItem(NO_PASSKEY) } catch { /* ignore */ } }
 export const removeEmail = (token: string) => api('/auth/email', { method: 'DELETE', token })
 
 interface Remote { rev: number; updated: number | null; body: SyncDoc | null }

@@ -78,16 +78,26 @@ const text = (v: unknown, max: number) => typeof v === 'string' ? v.slice(0, max
 /** The circles kept from last time, for offline. */
 export const keptCircles = async () => (await meta.get<CircleInfo[]>('circles')) ?? []
 
-/** The circles you're in, unlocking any this device hasn't seen yet. */
-export async function listCircles(code?: string): Promise<CircleInfo[] | 'needCode'> {
+/** The circles you're in. With `unlock` (a tap, or a typed code) it also
+ *  unlocks any this device hasn't seen yet, which can ask for the passkey;
+ *  without, those are only counted, so just opening Circles never asks. */
+export async function listCircles(unlock = false, code?: string): Promise<{ circles: CircleInfo[]; locked: number } | 'needCode'> {
+  // The passkey goes first, in the same tap (see unlockKey).
+  const locking = unlock ? lockKey(code).then(k => ({ k }), (e: Error) => ({ e })) : undefined
   const { circles } = await api<{ circles: { id: string; name: string; wrapped: string; members: number }[] }>('/circles', { token: token() })
   const raws = await rawKeys()
   let lock: CryptoKey | undefined
   const out: CircleInfo[] = []
-  let unlocked = 0, failed = 0
+  let unlocked = 0, failed = 0, locked = 0
   for (const c of circles) {
     if (!raws[c.id]) {
-      if (!lock) { const k = await lockKey(code); if (k === 'needCode') return k; lock = k }
+      if (!locking && !(await meta.get('acct')) && !(await meta.get('key'))) { locked++; continue }
+      if (!lock) {
+        const r = await (locking ?? lockKey(code).then(k => ({ k }), (e: Error) => ({ e }))) as { k: CryptoKey | 'needCode' } | { e: Error }
+        if ('e' in r) throw r.e
+        if (r.k === 'needCode') return r.k
+        lock = r.k
+      }
       const raw = await open(lock, b64url.decode(c.wrapped), `circle/${c.id}`).catch(() => undefined)
       // One circle that won't open mustn't hide the others.
       if (!raw) { failed++; continue }
@@ -105,7 +115,7 @@ export async function listCircles(code?: string): Promise<CircleInfo[] | 'needCo
     await meta.set('acct', undefined)
     throw new SyncError('Some circles couldn’t be unlocked on this device. Open Circles again to unlock them with your passkey.')
   }
-  return out
+  return { circles: out, locked }
 }
 
 export async function createCircle(name: string, me: string, code?: string): Promise<string | 'needCode'> {

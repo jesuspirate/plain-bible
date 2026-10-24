@@ -8,7 +8,7 @@ import {
 } from './lib/circles'
 import { duration, prayers } from './lib/prayers'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
-import { loadAccount, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
+import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, readPath, Route, ShareRequest, useApp } from './state'
@@ -74,7 +74,7 @@ function CodeEntry({ busy, onCode, onCancel }: { busy: boolean; onCode: (code: s
   const [code, setCode] = useState('')
   return (
     <div class="c-card">
-      <p class="muted">This passkey can’t unlock your circles here. On a device where they open, go to Circles → Show my key, and type it below.</p>
+      <p class="muted">This device can’t unlock your circles by itself. Easiest: on a device where they open, tap Settings → Link another device and open that link here. Or there, go to Circles → Show my key, and type it below.</p>
       <input class="c-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Your key"
         autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
       <div class="c-row">
@@ -94,18 +94,20 @@ function CircleList() {
   const [name, setName] = useState('')
   const [me, setMe] = useState(lastName)
   const [key, setKey] = useState('')
+  const [locked, setLocked] = useState(0)
 
-  const load = async (code?: string) => {
+  const load = async (unlock = false, code?: string) => {
     setBusy(true); setMsg('')
     try {
-      const r = await listCircles(code)
+      const r = await listCircles(unlock, code)
       if (r === 'needCode') setNeedCode('list')
-      else { setList(r); setNeedCode('') }
+      else { setList(r.circles); setLocked(r.locked); setNeedCode('') }
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   // What's kept shows at once (and offline); the server fills in the rest.
   // Unlocking can ask for the passkey, so that waits for a tap.
   useEffect(() => { keptCircles().then(k => { setList(k); if (navigator.onLine !== false) load() }) }, [])
+  const unlock = () => load(true)
 
   const create = async (code?: string) => {
     if (!name.trim() || !me.trim()) return
@@ -123,15 +125,21 @@ function CircleList() {
       <h1>Circles</h1>
       <p class="muted">Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.</p>
       {needCode
-        ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(c)} onCancel={() => setNeedCode('')} />
+        ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')} />
         : <>
+          {locked > 0 && (
+            <div class="c-card">
+              <p class="small">{locked === 1 ? 'One circle isn’t' : `${locked} circles aren’t`} unlocked on this device yet.</p>
+              <button class="c-btn primary" disabled={busy} onClick={unlock}>{noPasskey() ? (busy ? 'Unlocking…' : 'Unlock') : busy ? 'Waiting for passkey…' : 'Unlock with my passkey'}</button>
+            </div>
+          )}
           {list?.length ? (
             <ul class="c-list">
               {list.map(c => (
                 <li><a href={`#/circles/${c.id}`}><strong>{c.name}</strong><span class="muted">{c.members === 1 ? 'Just you so far' : `${c.members} people`} ›</span></a></li>
               ))}
             </ul>
-          ) : list && !busy && <p>You’re not in a circle yet. Make one, then invite people with a link.</p>}
+          ) : list && !busy && !locked && <p>You’re not in a circle yet. Make one, then invite people with a link.</p>}
           {making ? (
             <div class="c-card">
               <label class="c-label">Name of the circle<input value={name} maxLength={60} placeholder="Family, Tuesday group…" onInput={e => setName((e.target as HTMLInputElement).value)} /></label>

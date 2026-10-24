@@ -6,7 +6,7 @@ import { meta, partsOf, prayers } from './prayers'
 import {
   b64url, keyCode, newKey, open, packPart, parseKeyCode, prayerKey, PRF_SALT, seal, unpackPart, unwrapKey, wrapKey,
 } from './prayerCrypto'
-import { api, loadAccount, SYNC_URL, SyncError } from './sync'
+import { api, loadAccount, noPasskey, setNoPasskey, SYNC_URL, SyncError } from './sync'
 import { cleanVerse } from './prayerVerses'
 
 /** Set on a device whose prayers sync: the fingerprint of the key it holds. */
@@ -59,16 +59,25 @@ let pendingSecret: { credId: string; secret: Uint8Array } | null = null
 export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'> {
   const acct = loadAccount()
   if (!SYNC_URL || !acct) throw new SyncError('Sign in first, under Settings → Account.')
+  // The passkey is asked for at once, in the same tap, while the server is
+  // asked alongside. Safari drops a passkey sheet that opens after a network
+  // wait and reports it as cancelled, so a second tap failed the same way.
+  // Not where the last look found no passkey (an account signed in by email).
+  const asking = code === undefined && !noPasskey()
+    ? passkeySecret().then(s => ({ s }), (e: Error) => ({ e }))
+    : undefined
   const remote = await api<Remote>('/prayers', { token: acct.token })
+  if (remote.passkeys !== undefined) setNoPasskey(remote.passkeys === 0)
   let raw: Uint8Array | undefined
   let secret = pendingSecret
   if (code !== undefined) {
     raw = parseKeyCode(code)
     if (!raw) throw new SyncError('That isn’t a whole prayer key. It has 32 letters and numbers.')
     if (remote.keyId && (await prayerKey(raw)).id !== remote.keyId) throw new SyncError('That key doesn’t match the prayers on this account.')
-  } else if (remote.passkeys !== 0) {
-    // An account signed in by email alone has no passkey to ask.
-    secret = await passkeySecret()
+  } else if (asking && remote.passkeys !== 0) {
+    const r = await asking
+    if ('e' in r) throw r.e
+    secret = r.s
     if (secret) {
       const w = await api<{ wrapped: string }>(`/prayers/wrap/${encodeURIComponent(secret.credId)}`, { token: acct.token }).catch(() => null)
       if (w) raw = await unwrapKey(w.wrapped, secret.secret).catch(() => undefined)
