@@ -155,6 +155,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState(false)
   const [saved, setSaved] = useState(false)
+  const [prayerKey, setPrayerKey] = useState(false)
   if (askPaste) return (
     <div class="move-welcome" role="dialog" aria-label="Moving in">
       <p><strong>Welcome to Quiet Bible.</strong> Coming from Plain Bible? Paste the move link you copied there to bring everything over.</p>
@@ -164,19 +165,32 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
   if (!info) return null
   const close = () => { set(MOVED_IN, null); setInfo(null) }
   const acct = loadAccount()
+  const fail = (e: unknown) => {
+    const m = (e as Error).message
+    setMsg(m === 'Cancelled' ? 'The passkey request was cancelled. Tap the button to try again.' : m)
+  }
+  // One passkey request per tap. Asking again straight after saving one
+  // left password managers (Bitwarden) stuck on their own screen.
   const passkey = async () => {
     setWorking(true); setMsg('')
     try {
       await register(acct!.token)
       setSaved(true)
-      // Lets the new passkey unlock synced prayers on a new device.
+      const { prayerSyncOn } = await import('./lib/prayerSync')
+      setPrayerKey(prayerSyncOn())
+      setMsg('Passkey saved.')
+    } catch (e) { fail(e) } finally { setWorking(false) }
+  }
+  // Optional: lets the new passkey unlock synced prayers on a new device.
+  const unlockPrayers = async () => {
+    setWorking(true); setMsg('')
+    try {
       const { keepKeyWithPasskey } = await import('./lib/prayerSync')
-      if (await keepKeyWithPasskey().catch(() => false)) setMsg('Passkey saved, and it now unlocks your synced prayers too.')
-      else setMsg('Passkey saved.')
-    } catch (e) {
-      const m = (e as Error).message
-      setMsg(m === 'Cancelled' ? 'The passkey request was cancelled. Tap the button to try again.' : m)
-    } finally { setWorking(false) }
+      setMsg(await keepKeyWithPasskey()
+        ? 'Done. This passkey now unlocks your synced prayers on new devices too.'
+        : 'This passkey can’t unlock prayers. On a new device, type in your prayer key instead (Your prayers → Show prayer key).')
+      setPrayerKey(false)
+    } catch (e) { fail(e) } finally { setWorking(false) }
   }
   const what = [plural(info.marks, 'highlighted or noted verse'), plural(info.prayers, 'prayer')]
   return (
@@ -186,6 +200,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
       {isIOS && !standalone() && <p class="small">To keep it on your Home Screen: tap Share, then <strong>Add to Home Screen</strong>. If it opens empty there, paste the same move link once more.</p>}
       <div class="row wrap">
         {info.account && !saved && <button class="primary" disabled={working} onClick={passkey}>{working ? 'Waiting for passkey…' : 'Save a passkey'}</button>}
+        {saved && prayerKey && <button class="primary" disabled={working} onClick={unlockPrayers}>{working ? 'Waiting for passkey…' : 'Use it for prayers too'}</button>}
         <button onClick={close}>{info.account && !saved ? 'Later' : 'Done'}</button>
       </div>
       {msg && <p class="note">{msg}</p>}
