@@ -4,7 +4,8 @@ import { BOOKS, bookById } from './lib/books'
 import { LexEntry, Translation } from './lib/data'
 import type { Range } from './lib/query'
 import { segments } from './lib/text'
-import { useApp } from './state'
+import { Settings, useApp } from './state'
+import { useHoldPick } from './hold'
 
 export function Sheet({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ComponentChildren; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null)
@@ -211,16 +212,28 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
   )
 }
 
-/** Light → Sepia → Dark, one tap each. */
+const THEMES = [
+  { value: 'light', label: 'Light', swatch: '#ffffff' },
+  { value: 'sepia', label: 'Sepia', swatch: '#efdfbb' },
+  { value: 'dark', label: 'Dark', swatch: '#16161a' },
+  { value: 'system', label: 'Auto', swatch: 'linear-gradient(135deg, #ffffff 50%, #16161a 50%)' },
+]
+
+/** Light → Sepia → Dark, one tap each. Press and hold to pick any of them, or Auto. */
 export function ThemeToggle({ label: showLabel, class: cls }: { label?: boolean; class?: string }) {
   const { settings, update } = useApp()
   const prefersDark = typeof matchMedia !== 'undefined' && matchMedia('(prefers-color-scheme: dark)').matches
   const current = settings.theme === 'system' ? (prefersDark ? 'dark' : 'light') : settings.theme
   const next = ({ light: 'sepia', sepia: 'dark', dark: 'light' } as const)[current]
   const label = { light: 'Light', sepia: 'Sepia', dark: 'Dark' }
+  const { button, picker } = useHoldPick({
+    options: THEMES.map(t => ({ value: t.value, label: t.label, body: <><span class="theme-swatch" style={{ background: t.swatch }} /><span>{t.label}</span></> })),
+    value: settings.theme, onPick: v => update({ theme: v as Settings['theme'] }), onTap: () => update({ theme: next }),
+    label: 'Theme', cls: 'theme-pick', cell: 58,
+  })
   return (
-    <button type="button" class={cls ?? (showLabel ? 'sb-chip sb-tool' : 'icon theme-toggle')} aria-label={`${label[current]} mode. Switch to ${label[next].toLowerCase()} mode`} title={`${label[current]} · tap for ${label[next].toLowerCase()}`}
-      onClick={() => update({ theme: next })}>
+    <>
+    <button {...button} type="button" class={(cls ?? (showLabel ? 'sb-chip sb-tool' : 'icon theme-toggle')) + ' holdable'} aria-label={`${label[current]} mode. Switch to ${label[next].toLowerCase()} mode`} title={`${label[current]} · tap for ${label[next].toLowerCase()}, hold for all`}>
       {current === 'sepia'
         ? <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M4 5.5C6.5 4.3 9.3 4.4 12 6c2.7-1.6 5.5-1.7 8-.5v13c-2.5-1.2-5.3-1.1-8 .5-2.7-1.6-5.5-1.7-8-.5z" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /><path d="M12 6v13" stroke="currentColor" stroke-width="1.8" /></svg>
         : current === 'dark'
@@ -228,5 +241,7 @@ export function ThemeToggle({ label: showLabel, class: cls }: { label?: boolean;
         : <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true"><path d="M20 14.5A8 8 0 0 1 9.5 4a8 8 0 1 0 10.5 10.5z" fill="currentColor" /></svg>}
       {showLabel && <span>{label[next]} mode</span>}
     </button>
+    {picker}
+    </>
   )
 }
