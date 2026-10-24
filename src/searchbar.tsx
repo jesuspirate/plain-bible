@@ -12,6 +12,7 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, openPrayer, readPath, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
 import { SettingsSheet } from './settings'
+import { isIOS } from './lib/native'
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -75,9 +76,13 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       if (phone && up && h !== last) { last = h; rememberKeyboard(key, full - h) }
       set(vv.offsetTop, h)
     }
+    // iOS can scroll the page under the panel while the keyboard comes up;
+    // closing puts you back where you were reading.
+    const y = scrollY, at = location.hash
     root.classList.add('sb-lock')
     vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
     return () => {
+      if (location.hash === at && Math.abs(scrollY - y) > 1) scrollTo(0, y)
       root.classList.remove('sb-lock')
       root.style.removeProperty('--vv-top'); root.style.removeProperty('--vv-h')
       vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit)
@@ -171,6 +176,33 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     return () => { stale = true; clearTimeout(timer) }
   }, [trimmed, version])
 
+  // On iPhone, a tap on the closed bar would focus the field down at the
+  // bottom of the screen, and iOS then slides the whole screen to keep it
+  // above the keyboard: the panel jumped down and slid back up with the
+  // keyboard. So the tap puts the bar in its open place first, where the
+  // keyboard won't cover it, and only then focuses it, without scrolling.
+  const sb = useRef<HTMLDivElement>(null)
+  const tap = useRef<{ x: number; y: number }>()
+  const onFieldTouchStart = (e: TouchEvent) => {
+    tap.current = !open && isIOS ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : undefined
+  }
+  const onFieldTouchEnd = (e: TouchEvent) => {
+    const start = tap.current, end = e.changedTouches[0], el = sb.current
+    tap.current = undefined
+    if (!start || !el || open || Math.hypot(end.clientX - start.x, end.clientY - start.y) > 10) return
+    e.preventDefault()
+    const kb = keyboardHeight(`${innerWidth}x${innerHeight}`)
+    if (kb) {
+      const root = document.documentElement
+      root.style.setProperty('--vv-top', '0px')
+      root.style.setProperty('--vv-h', innerHeight - kb + 'px')
+      el.classList.remove('sb-mini'); el.classList.add('sb-open')
+      void el.offsetHeight
+    }
+    input.current?.focus({ preventScroll: true })
+    setOpen(true)
+  }
+
   const close = () => { setOpen(false); setSettingsOpen(false); input.current?.blur() }
 
   // A tap only counts in the panel if the finger went down on that same
@@ -233,7 +265,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   return (
     <>
       {open && <div class="sb-scrim" onClick={close} />}
-      <div class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
+      <div ref={sb} class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
@@ -329,7 +361,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? 'Search' : `Search ${version} or go to a passage`}
             placeholder={here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
-            onFocus={() => setOpen(true)} onInput={e => setQ((e.target as HTMLInputElement).value)}
+            onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {/* Light, sepia, dark: always one tap away, right in the bar. */}
