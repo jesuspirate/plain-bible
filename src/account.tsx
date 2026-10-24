@@ -268,11 +268,14 @@ export function AccountSection({ onAccount, part }: { onAccount?: () => void; pa
     <div class="row wrap">
       {email && info?.email && !addEmail && <button onClick={() => setAddEmail(true)} disabled={!!working}>Change email</button>}
       {email && info?.email && !!info.passkeys && <button onClick={dropEmail} disabled={!!working}>Remove email</button>}
-      <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : 'Add a passkey'}</button>
+      <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : info?.passkeys ? 'Add another passkey' : 'Add a passkey'}</button>
       <button onClick={logout} disabled={!!working}>Sign out</button>
       <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
     </div>
-    <p class="muted small">Passkeys saved to iCloud Keychain, Google Password Manager or a password manager like Bitwarden already work on your other devices.</p>
+    {/* Signed in by email, it can look as if the passkeys went away; they didn't, and this button only ever makes a new one. */}
+    <p class="muted small">{info?.passkeys
+      ? `Your ${info.passkeys === 1 ? 'passkey still works' : `${info.passkeys} passkeys still work`}, however you signed in. Add another only for a device that can’t use ${info.passkeys === 1 ? 'it' : 'them'}: passkeys in iCloud Keychain, Google Password Manager or Bitwarden already reach your other devices.`
+      : 'A passkey lets you sign in with Face ID, a fingerprint or your screen lock. Saved to iCloud Keychain, Google Password Manager or Bitwarden, it works on your other devices too.'}</p>
   </>
   if (part === 'account') return (
     <div class="account">
