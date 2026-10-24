@@ -11,6 +11,7 @@ import type { Bible } from './lib/data'
 import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSync, turnOnPrayerSync } from './lib/prayerSync'
 import { loadAccount, SYNC_URL } from './lib/sync'
 import { slideAway, usePullDown } from './settings'
+import { DeviceLink } from './move'
 import './prayer.css'
 
 // paused: the phone locked mid-prayer. What was said is kept, and the next
@@ -370,13 +371,14 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
           ? <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy prayer key</button>
           : <button class="pray-btn" onClick={() => prayerKeyCode().then(setShown)}>Show prayer key</button>}
         <button class="pray-btn quiet" disabled={busy} onClick={stop}>{busy ? 'Stopping…' : 'Stop syncing on this device'}</button>
-        {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers (say, an Android phone next to an iPhone). Keep it private: it opens your prayers.</p>}
+        <DeviceLink class="pray-link" />
+        {shown && <p class="muted small">Only needed on a device whose passkey can’t unlock your prayers (say, an Android phone next to an iPhone). Easier: Link another device. Keep the key private: it opens your prayers.</p>}
       </> : !signedIn ? <>
         <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
         <p class="muted small">{LOCAL_ONLY}</p>
         <button class="pray-btn" onClick={() => { onClose(); go('settings') }}>Go to Settings → Account</button>
       </> : needCode ? <>
-        <p class="muted">This passkey can’t unlock your prayers here. On a device where they already sync, open Your prayers → Show prayer key, and type it below.</p>
+        <p class="muted">This passkey can’t unlock your prayers here. On a device where they already sync, open Your prayers and tap <strong>Link another device</strong>, then open that link here. Or copy the prayer key from there and paste it below.</p>
         <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"
           autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
         <button class="pray-btn primary" disabled={busy || !code.trim()} onClick={start}>{busy ? 'Unlocking…' : 'Unlock'}</button>

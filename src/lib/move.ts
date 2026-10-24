@@ -22,7 +22,7 @@ export const onNewAddress = () => !onOldAddress() && !!SYNC_URL
 const PREFIX = 'plain-bible:'
 // Not carried: the list of versions (fetched fresh) and move bookkeeping.
 const SKIP = new Set([PREFIX + 'catalog', PREFIX + 'moved', PREFIX + 'moved-in', PREFIX + 'move-later'])
-const ACCOUNT = PREFIX + 'account', MARKS = PREFIX + 'marks'
+const ACCOUNT = PREFIX + 'account', MARKS = PREFIX + 'marks', PRAYER_SYNC = PREFIX + 'prayer-sync'
 /** Set on the old address once a move link was made. */
 export const MOVED = PREFIX + 'moved'
 /** Set on the new address after a move came in: what came, for the welcome. */
@@ -36,6 +36,8 @@ interface PackedPart { ms: number; type: string; audio: Ref }
 type PackedPrayer = Omit<Prayer, 'audio' | 'more'> & { audio: Ref; more?: PackedPart[] }
 export interface Bundle {
   v: 1
+  /** 'link': only a sign-in and the prayer key, to add another device. */
+  kind?: 'move' | 'link'
   from: string
   at: number
   local: Record<string, string>
@@ -43,7 +45,7 @@ export interface Bundle {
   prayerDeleted?: string[]
   prayers: PackedPrayer[]
 }
-export interface MovedIn { at: number; from: string; marks: number; prayers: number; account: boolean }
+export interface MovedIn { at: number; from: string; marks: number; prayers: number; account: boolean; kind?: 'move' | 'link'; prayerKey?: boolean }
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const aad = (n: number, of: number) => `move ${n}/${of}`
@@ -115,13 +117,10 @@ async function gather(): Promise<{ b: Omit<Bundle, 'prayers'>; list: Prayer[] }>
   }
 }
 
-/** Pack, encrypt and send everything on this device. Returns the move link
- *  and what it carries. */
-export async function makeMoveLink(progress: (done: number, of: number) => void = () => {}): Promise<{ link: string; prayers: number; marks: number; account: boolean }> {
-  if (!SYNC_URL) throw new SyncError('Moving needs the sync service, which isn’t set up here.')
-  if (navigator.onLine === false) throw new SyncError('You’re offline. Connect to the internet to move.')
-  const { b, list } = await gather()
-  const bytes = pack(b, list)
+/** Encrypt and send packed bytes. Returns the link's id and key. */
+async function upload(bytes: Uint8Array, life: 'move' | 'link', progress: (done: number, of: number) => void) {
+  if (!SYNC_URL) throw new SyncError('This needs the sync service, which isn’t set up here.')
+  if (navigator.onLine === false) throw new SyncError('You’re offline. Connect to the internet and try again.')
   const raw = crypto.getRandomValues(new Uint8Array(32))
   const key = await aesKey(raw, 'encrypt')
   const { id } = await api<{ id: string }>('/move', { method: 'POST', body: {} })
@@ -129,13 +128,38 @@ export async function makeMoveLink(progress: (done: number, of: number) => void 
   progress(0, of)
   for (let n = 0; n < of; n++) {
     const sealed = await seal(key, bytes.subarray(n * CHUNK, (n + 1) * CHUNK), aad(n, of))
-    await send(`/move/${id}/${n}?of=${of}`, sealed)
+    await send(`/move/${id}/${n}?of=${of}${life === 'link' ? '&life=link' : ''}`, sealed)
     progress(n + 1, of)
   }
+  return `#/move/${id}.${b64url.encode(raw)}`
+}
+
+/** Pack, encrypt and send everything on this device. Returns the move link
+ *  and what it carries. */
+export async function makeMoveLink(progress: (done: number, of: number) => void = () => {}): Promise<{ link: string; prayers: number; marks: number; account: boolean }> {
+  const { b, list } = await gather()
+  const hash = await upload(pack(b, list), 'move', progress)
   try { localStorage.setItem(MOVED, String(Date.now())) } catch { /* ignore */ }
   let marks = 0
   try { marks = Object.keys(JSON.parse(b.local[MARKS] || '{}')).length } catch { /* ignore */ }
-  return { link: `${NEW_ORIGIN}/#/move/${id}.${b64url.encode(raw)}`, prayers: list.length, marks, account: !!b.local[ACCOUNT] }
+  return { link: `${NEW_ORIGIN}/${hash}`, prayers: list.length, marks, account: !!b.local[ACCOUNT] }
+}
+
+/** A link that signs another device in to this account and, where prayers
+ *  sync here, unlocks them there too: no passkey dance, no key to type.
+ *  Highlights, notes and settings then arrive by the usual sync. It works
+ *  for an hour. */
+export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean }> {
+  const acct = loadAccount()
+  if (!acct) throw new SyncError('Sign in first, under Settings → Account.')
+  const { token } = await api<{ token: string }>('/auth/handoff', { method: 'POST', token: acct.token })
+  const local: Record<string, string> = { [ACCOUNT]: JSON.stringify({ token, rev: 0 }) }
+  const syncId = localStorage.getItem(PRAYER_SYNC)
+  const key = syncId ? await meta.get<Uint8Array>('key') : undefined
+  if (syncId && key) local[PRAYER_SYNC] = syncId
+  const b: Omit<Bundle, 'prayers'> = { v: 1, kind: 'link', from: location.origin, at: Date.now(), local, prayerKey: key ? b64url.encode(key) : undefined }
+  const hash = await upload(pack(b, []), 'link', () => {})
+  return { link: `${onOldAddress() ? NEW_ORIGIN : location.origin}/${hash}`, prayers: !!key }
 }
 
 async function send(path: string, body: Uint8Array) {
@@ -206,7 +230,7 @@ export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn
   }
   let marks = 0
   try { marks = Object.keys(JSON.parse(bundle.local[MARKS] || '{}')).length } catch { /* ignore */ }
-  const info: MovedIn = { at: Date.now(), from: bundle.from, marks, prayers: list.length, account: !!bundle.local[ACCOUNT] }
+  const info: MovedIn = { at: Date.now(), from: bundle.from, marks, prayers: list.length, account: !!bundle.local[ACCOUNT], kind: bundle.kind ?? 'move', prayerKey: !!bundle.prayerKey }
   localStorage.setItem(MOVED_IN, JSON.stringify(info))
   return info
 }
