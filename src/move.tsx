@@ -219,7 +219,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
  *  in and unlocks prayers there. */
 export function DeviceLink({ class: cls = '' }: { class?: string }) {
   const [state, setState] = useState<'idle' | 'working' | 'ready'>('idle')
-  const [made, setMade] = useState<{ link: string; prayers: boolean }>()
+  const [made, setMade] = useState<{ link: string; prayers: boolean; locked: boolean }>()
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
   const make = async () => {
@@ -233,6 +233,7 @@ export function DeviceLink({ class: cls = '' }: { class?: string }) {
   if (state === 'ready' && made) return (
     <div class={'move-card ' + cls}>
       <p class="small">Open this on your other device within an hour. It signs that device in{made.prayers ? ' and unlocks your prayers there' : ''}. Keep it private: whoever opens it gets into your account.</p>
+      {made.locked && <p class="note small">Your prayers are locked on this device, so this link won’t bring them. Make the link on a device where Your prayers says <strong>Syncing with your devices</strong>, or unlock them here first under Your prayers.</p>}
       <p class="move-link" onClick={copy}>{made.link}</p>
       <div class="row wrap">
         <button class="primary" onClick={copy}>{copied ? 'Copied ✓' : 'Copy link'}</button>

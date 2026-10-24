@@ -149,7 +149,7 @@ export async function makeMoveLink(progress: (done: number, of: number) => void 
  *  sync here, unlocks them there too: no passkey dance, no key to type.
  *  Highlights, notes and settings then arrive by the usual sync. It works
  *  for an hour. */
-export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean }> {
+export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean; locked: boolean }> {
   const acct = loadAccount()
   if (!acct) throw new SyncError('Sign in first, under Settings → Account.')
   const { token } = await api<{ token: string }>('/auth/handoff', { method: 'POST', token: acct.token })
@@ -158,8 +158,11 @@ export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean
   const key = syncId ? await meta.get<Uint8Array>('key') : undefined
   if (syncId && key) local[PRAYER_SYNC] = syncId
   const b: Omit<Bundle, 'prayers'> = { v: 1, kind: 'link', from: location.origin, at: Date.now(), local, prayerKey: key ? b64url.encode(key) : undefined }
+  // Prayers on the account that this device can't open: the link can't
+  // carry their key, so say so rather than let the other device find none.
+  const locked = !key && !!(await api<{ keyId: string | null }>('/prayers', { token: acct.token }).catch(() => null))?.keyId
   const hash = await upload(pack(b, []), 'link', () => {})
-  return { link: `${onOldAddress() ? NEW_ORIGIN : location.origin}/${hash}`, prayers: !!key }
+  return { link: `${onOldAddress() ? NEW_ORIGIN : location.origin}/${hash}`, prayers: !!key, locked }
 }
 
 async function send(path: string, body: Uint8Array) {
