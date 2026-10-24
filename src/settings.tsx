@@ -49,7 +49,7 @@ export function slideAway(box: HTMLElement | null, done: () => void) {
 // sideways) and goes far enough, or is flicked, closes; anything else is a
 // normal scroll. The non-passive touchmove listener is added only for such a
 // pull, so scrolling never waits on it. Only transforms move, nothing blurs.
-function usePullDown(box: { current: HTMLElement | null }, scrollTop: () => number, onClose: () => void) {
+export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () => number, onClose: () => void) {
   const close = useRef(onClose)
   close.current = onClose
   useEffect(() => {
