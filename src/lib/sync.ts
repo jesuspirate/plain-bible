@@ -2,7 +2,6 @@
 // document per account. Everything also works signed out.
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { mergeMark, Marks, upgrade } from './marks'
-import { isNative, WEB_URL } from './native'
 
 export const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
 
@@ -96,31 +95,13 @@ export async function api<T>(path: string, init: { method?: string; token?: stri
   return body as T
 }
 
-// In the iOS app the page's origin is capacitor://localhost, which can't use
-// passkeys for bible.chama.community. The native passkey API can, because
-// the app and the site vouch for each other (associated domains).
-const RP_ORIGIN = new URL(WEB_URL).origin
-async function createPasskey(options: any) {
-  if (!isNative) return startRegistration({ optionsJSON: options })
-  const { CapacitorPasskey } = await import('@capgo/capacitor-passkey')
-  return CapacitorPasskey.createCredential({ origin: RP_ORIGIN, publicKey: options }) as Promise<any>
-}
-async function usePasskey(options: any) {
-  if (!isNative) return startAuthentication({ optionsJSON: options })
-  const { CapacitorPasskey } = await import('@capgo/capacitor-passkey')
-  return CapacitorPasskey.getCredential({ origin: RP_ORIGIN, publicKey: options }) as Promise<any>
-}
-
-// Native errors carry the WebAuthn error name in `code`; SimpleWebAuthn's
-// errors keep it in `name` and use `code` for their own labels.
-const cancelled = (e: unknown) => e instanceof Error &&
-  [(e as { code?: string }).code, e.name].some(n => n === 'NotAllowedError' || n === 'AbortError')
+const cancelled = (e: unknown) => e instanceof Error && (e.name === 'NotAllowedError' || e.name === 'AbortError')
 
 /** Create an account, or with a token add a passkey to that account. */
 export async function register(token?: string): Promise<string | undefined> {
   const { challengeId, options } = await api<{ challengeId: string; options: any }>('/auth/register/options', { method: 'POST', token, body: {} })
   let response
-  try { response = await createPasskey(options) } catch (e) {
+  try { response = await startRegistration({ optionsJSON: options }) } catch (e) {
     if (cancelled(e)) throw new SyncError('Cancelled')
     throw new SyncError((e as Error).message)
   }
@@ -146,7 +127,7 @@ export async function signIn(): Promise<string> {
   prepared = null
   const { challengeId, options } = await ready
   let response
-  try { response = await usePasskey(options) } catch (e) {
+  try { response = await startAuthentication({ optionsJSON: options }) } catch (e) {
     if (cancelled(e)) throw new SyncError('Cancelled')
     throw new SyncError((e as Error).message)
   }

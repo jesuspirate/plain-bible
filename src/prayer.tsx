@@ -4,7 +4,6 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
-import { tap } from './lib/native'
 import { awaitVerse, go, readPath, useApp, verseToPrayOver } from './state'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
@@ -132,7 +131,7 @@ export function Prayer({ onClose }: { onClose: () => void }) {
     // Keep the screen awake while praying, so the phone doesn't lock itself
     // and cut the microphone off.
     navigator.wakeLock?.request('screen').then(l => { if (rec.current === this_) this_.lock = l; else l.release() }).catch(() => {})
-    setElapsed(before?.ms ?? 0); setPhase('recording'); tap()
+    setElapsed(before?.ms ?? 0); setPhase('recording')
   }
 
   function stop(interrupted = false) {
@@ -144,7 +143,6 @@ export function Prayer({ onClose }: { onClose: () => void }) {
     r.lock?.release().catch(() => {})
     if (r.recorder.state !== 'inactive') r.recorder.stop()
     else r.stream.getTracks().forEach(t => t.stop())
-    if (!interrupted) tap()
   }
 
   // Amen: a new verse to take away, and the prayer's own verse, if it has one.

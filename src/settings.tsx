@@ -7,7 +7,7 @@ import { defaultSettings, FONTS, go, openPrayer, Settings, TONES, useApp } from 
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { RefreshIcon } from './icons'
-import { copyText, isNative } from './lib/native'
+import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
@@ -27,9 +27,9 @@ function VersionLine() {
   return (
     <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
       <button class="version-copy" onClick={copy} aria-label={`Version ${__BUILD__}. Tap to copy`}>{copied ? 'Copied ✓' : `Version ${__BUILD__}`}</button>
-      {!isNative && <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
+      <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
         <RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}
-      </button>}
+      </button>
     </div>
   )
 }

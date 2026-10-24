@@ -6,7 +6,6 @@ import {
   Account, accountInfo, changedAt, deleteAccount, docKey, loadAccount, mergeDocs, register, saveAccount,
   prepareSignIn, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
 } from './lib/sync'
-import { isNative } from './lib/native'
 import { Settings, useApp } from './state'
 
 export interface SyncApi {
@@ -122,7 +121,7 @@ export function AccountSection() {
   useEffect(() => { if (acct) accountInfo(acct.token).then(setInfo).catch(() => {}) }, [acct?.token, msg])
   useEffect(() => { if (!acct && SYNC_URL && navigator.onLine !== false) prepareSignIn() }, [acct?.token])
   if (!sync.enabled) return null
-  const passkeys = isNative || typeof PublicKeyCredential !== 'undefined'
+  const passkeys = typeof PublicKeyCredential !== 'undefined'
 
   const act = (label: string, fn: () => Promise<void>) => async () => {
     setWorking(label); setMsg('')
