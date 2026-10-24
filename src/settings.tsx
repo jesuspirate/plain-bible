@@ -319,7 +319,17 @@ function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => voi
 
   return (
     <>
-      {/* First thing in Settings: sync is how your other devices get everything. */}
+      {/* First: what the app is for besides reading. Praying, your circles,
+          what you've saved. Then sync, which brings it all to your other devices. */}
+      <section class="set-group">
+        <h2 class="set-kicker">Yours</h2>
+        <div class="set-list">
+          <Row icon={'🙏' + settings.prayTone} label="Prayer" onClick={() => setPage('prayer')} />
+          {sync.enabled && <Row icon="👥" label="Circles" href="#/circles" />}
+          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
+          <Row icon="🔎" label="Advanced search" href="#/search" />
+        </div>
+      </section>
       {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection /></section>}
       <BibleGroup />
       <section class="set-group">
@@ -335,15 +345,6 @@ function SettingsBody({ page, setPage }: { page: Page; setPage: (p: Page) => voi
         </div>
         <div class="set-list">
           <Row label="Font, layout and more" value={fontName} onClick={() => setPage('reading')} />
-        </div>
-      </section>
-      <section class="set-group">
-        <h2 class="set-kicker">Yours</h2>
-        <div class="set-list">
-          <Row icon={'🙏' + settings.prayTone} label="Prayer" onClick={() => setPage('prayer')} />
-          <Row icon="🔖" label="Saved" value={saved ? String(saved) : undefined} href="#/saved" />
-          {sync.enabled && <Row icon="👥" label="Circles" href="#/circles" />}
-          <Row icon="🔎" label="Advanced search" href="#/search" />
         </div>
       </section>
       <section class="set-group">
