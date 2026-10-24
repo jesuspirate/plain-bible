@@ -135,7 +135,7 @@ function CircleList() {
           {making ? (
             <div class="c-card">
               <label class="c-label">Name of the circle<input value={name} maxLength={60} placeholder="Family, Tuesday group…" onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
-              <label class="c-label">Your name in it<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+              <label class="c-label">Your name<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
               <div class="c-row">
                 <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? 'Making…' : 'Make circle'}</button>
                 <button class="c-btn" onClick={() => setMaking(false)}>Cancel</button>
@@ -209,7 +209,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
             <span class="muted"> · {invite.members === 1 ? '1 person' : `${invite.members} people`}</span></p>
           <p class="muted small">A private circle to read the word and pray together. You’ll see what they share, and they’ll see only what you choose to share, one tap at a time. Everything is encrypted: not even the server can read it.</p>
           {!loadAccount() ? <SignIn joining /> : <>
-            <label class="c-label">Your name in it<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+            <label class="c-label">Your name<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
             <button class="c-btn primary" disabled={busy || !me.trim()} onClick={() => join()}>{busy ? 'Joining…' : `Join ${invite.name}`}</button>
           </>}
         </div>
