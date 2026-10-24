@@ -7,7 +7,7 @@ import {
   prepareSignIn, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow,
 } from './lib/sync'
 import { Settings, useApp } from './state'
-import { DeviceLink } from './move'
+import { DeviceLink, PasteMove } from './move'
 
 export interface SyncApi {
   enabled: boolean
@@ -148,14 +148,18 @@ export function AccountSection() {
   if (!acct) {
     return (
       <div class="account">
-        <p class="muted">Optional. Sign in with a passkey to keep your highlights, bookmarks and settings the same on all your devices.
-          No email, no password: your phone or computer unlocks it with Face ID, a fingerprint or your screen lock.</p>
+        <p class="muted">Optional. Keep your highlights, notes, settings and prayers the same on all your devices.
+          No email, no password: Face ID, a fingerprint or your screen lock unlocks it.</p>
         {passkeys ? (
           <div class="row wrap">
-            <button class="primary" disabled={!!working} onClick={create}>{working === 'create' ? 'Waiting for passkey…' : 'Create account with a passkey'}</button>
+            <button class="primary" disabled={!!working} onClick={create}>{working === 'create' ? 'Waiting for passkey…' : 'Create account'}</button>
             <button disabled={!!working} onClick={login}>{working === 'login' ? 'Waiting for passkey…' : 'Sign in'}</button>
           </div>
         ) : <p class="note">This browser does not support passkeys.</p>}
+        <details class="account-more">
+          <summary>Got a link from your other device?</summary>
+          <PasteMove />
+        </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
       </div>
     )
@@ -165,16 +169,20 @@ export function AccountSection() {
   return (
     <div class="account">
       <p><strong>Sync is on.</strong> <span class="muted">{sync.busy ? 'Syncing…' : sync.error ? '' : when ? `Last synced ${when}.` : ''}</span></p>
-      {info && <p class="muted small">{info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}</p>}
       <div class="row wrap">
         <button onClick={sync.run} disabled={sync.busy}>Sync now</button>
-        <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : 'Add a passkey'}</button>
-        <button onClick={logout} disabled={!!working}>Sign out</button>
-        <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
       </div>
-      <p class="muted small">Passkeys saved to iCloud Keychain, Google Password Manager or a password manager like Bitwarden already work on your other devices.
-        Or link another device directly: it’s signed in and its prayers unlocked, with nothing to type.</p>
       <DeviceLink />
+      <details class="account-more">
+        <summary>Passkeys and account</summary>
+        {info && <p class="muted small">{info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}</p>}
+        <div class="row wrap">
+          <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : 'Add a passkey'}</button>
+          <button onClick={logout} disabled={!!working}>Sign out</button>
+          <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
+        </div>
+        <p class="muted small">Passkeys saved to iCloud Keychain, Google Password Manager or a password manager like Bitwarden already work on your other devices.</p>
+      </details>
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>
   )

@@ -171,6 +171,8 @@ function SettingsBody() {
   )
   return (
     <>
+      {/* First thing in Settings: sync is how your other devices get everything. */}
+      {sync.enabled && <section class="account-box"><h2>Sync your devices</h2><AccountSection /></section>}
       <div class="essentials">
         <div class="ess"><span class="ess-label">Text size</span>
           <div class="size-row">
@@ -200,7 +202,6 @@ function SettingsBody() {
         </div>
       </div>
       <div class="field"><span>Advanced search</span><a href="#/search">Search many versions at once, with filters ›</a></div>
-      {sync.enabled && <section class="account-box"><h2>Account and sync</h2><AccountSection /></section>}
       <div class="field"><span>Font</span>
         <div class="fonts" role="radiogroup" aria-label="Reading font">
           {FONTS.map(f => (

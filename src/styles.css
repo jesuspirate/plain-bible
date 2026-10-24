@@ -629,3 +629,7 @@ body:has(.pick-verse) .sb { display: none; }
 .move-welcome p { margin: 0 0 10px; }
 .move-welcome .row { margin-top: 4px; }
 .move-welcome .note { margin: 10px 0 0; }
+.account-more { margin: 4px 0 10px; }
+.account-more summary { cursor: pointer; color: var(--accent); font-size: 15px; padding: 6px 0; }
+.account-more[open] summary { margin-bottom: 8px; }
+.account .move-card { margin-top: 4px; }
