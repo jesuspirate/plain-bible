@@ -10,6 +10,7 @@ import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/n
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
 import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, shareWithCircle, useApp, versesPicked } from './state'
+import { TURN_EVENT, watchReading } from './lib/streaks'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { BookmarkIcon, CircleIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
@@ -43,6 +44,12 @@ export function Reader({ route }: { route: Route }) {
     const id = idle(() => setLinks(linkNotes(marks)))
     return () => cancel(id)
   }, [marks, settings.noteReminders])
+
+  // Reading counts toward your streak: about a minute with the page moving
+  // (scrolling, tapping, turning chapters). It stops listening once today counts.
+  useEffect(() => watchReading(), [])
+  const turned = useRef(false)
+  useEffect(() => { if (turned.current) dispatchEvent(new Event(TURN_EVENT)); turned.current = true }, [book, chapter])
 
   // A version that isn't on the device can't open offline; it tries again
   // by itself once the connection is back.

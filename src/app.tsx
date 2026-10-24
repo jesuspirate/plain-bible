@@ -16,6 +16,7 @@ import { touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveBanner, MoveWelcome } from './move'
+import { DAYS_EVENT } from './lib/streaks'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -146,6 +147,28 @@ export function App() {
   const lastPage = useRef(page)
   if (lastPage.current !== page) { if (page === 'settings') noteSettingsFrom(lastPage.current); lastPage.current = page }
   const sync = useSync(marks, setMarksState, settings, setSettings, id => byId.has(id))
+
+  // Circles you show your streaks to hear about each new day read or prayed
+  // (and once a day). Nothing loads unless you've turned that on.
+  const sharedWith = settings?.shareStreaks.join() ?? ''
+  useEffect(() => {
+    const ids = sharedWith ? sharedWith.split(',') : []
+    if (!ids.length || !sync.account) return
+    let t = 0
+    const push = () => {
+      clearTimeout(t)
+      t = window.setTimeout(() => {
+        if (navigator.onLine === false || document.visibilityState !== 'visible') return
+        import('./lib/circles').then(m => m.pushStreaks(ids)).catch(() => {})
+      }, 3000)
+    }
+    push()
+    const back = () => { if (document.visibilityState === 'visible') push() }
+    addEventListener(DAYS_EVENT, push)
+    addEventListener('online', push)
+    document.addEventListener('visibilitychange', back)
+    return () => { clearTimeout(t); removeEventListener(DAYS_EVENT, push); removeEventListener('online', push); document.removeEventListener('visibilitychange', back) }
+  }, [sharedWith, sync.account?.token])
 
   if (error) return (
     <div class="center">

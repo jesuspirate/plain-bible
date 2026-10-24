@@ -449,7 +449,7 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
   // Who's in it and what's been shared, newest first.
   if (req.method === 'GET' && !b) {
     const [members, items, amens, replies] = await Promise.all([
-      db.prepare('SELECT mid, name FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
+      db.prepare('SELECT mid, name, streak FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
       db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
         WHERE i.circle_id = ?1 AND (i.chunks = 0 OR i.chunks = (SELECT COUNT(*) FROM circle_chunks k WHERE k.circle_id = ?1 AND k.item = i.id))
         ORDER BY i.at DESC LIMIT 300`).bind(circle).all(),
@@ -469,6 +469,19 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
       return json({ ok: true })
     }
     if (req.method === 'DELETE') { await db.batch(leaveCircle(db, circle, userId)); return json({ ok: true }) }
+  }
+  // Your streaks, for this circle to see, if you turned that on.
+  if (b === 'streak' && !c) {
+    if (req.method === 'PUT') {
+      const { streak } = await readJson<{ streak: string }>(req)
+      if (!sealedText(streak, 12000)) throw new HttpError(400, 'Bad request')
+      await db.prepare('UPDATE circle_members SET streak = ?, streak_at = ? WHERE circle_id = ? AND user_id = ?').bind(streak, now, circle, userId).run()
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('UPDATE circle_members SET streak = NULL, streak_at = NULL WHERE circle_id = ? AND user_id = ?').bind(circle, userId).run()
+      return json({ ok: true })
+    }
   }
   if (b === 'invites' && !c && req.method === 'POST') {
     const { id, wrapped } = await readJson<{ id: string; wrapped: string }>(req)

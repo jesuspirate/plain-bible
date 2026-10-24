@@ -5,8 +5,10 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, loadFeed, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareVerse,
+  leaveCircle, listCircles, loadFeed, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
+import { streaks } from './lib/streaks'
+import { useDays } from './streaks'
 import { duration, prayers } from './lib/prayers'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
@@ -270,7 +272,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
 
 function CircleView({ id }: { id: string }) {
   const nav = useNav()
-  const { settings } = useApp()
+  const { settings, update } = useApp()
   const [info, setInfo] = useState<CircleInfo>()
   const [feed, setFeed] = useState<Feed>()
   const [msg, setMsg] = useState('')
@@ -306,7 +308,11 @@ function CircleView({ id }: { id: string }) {
   }
   const leave = async () => {
     setBusy(true)
-    try { await leaveCircle(id); nav.open() } catch (e) { setMsg(message(e)); setBusy(false) }
+    try {
+      await leaveCircle(id)
+      if (settings.shareStreaks.includes(id)) update({ shareStreaks: settings.shareStreaks.filter(x => x !== id) })
+      nav.open()
+    } catch (e) { setMsg(message(e)); setBusy(false) }
   }
   const nameOf = (mid: string) => mid === feed?.me ? 'You' : feed?.members.find(m => m.mid === mid)?.name ?? 'Someone who left'
   const fav = settings.favorite || settings.version
@@ -315,6 +321,7 @@ function CircleView({ id }: { id: string }) {
     <div class="circles">
       {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><span aria-hidden="true">‹</span> {info?.name ?? 'Circle'}</button></h1>}
       {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
+      {feed && <StreakBoard circle={id} name={info?.name ?? 'this circle'} feed={feed} onChange={load} />}
       <div class="c-row">
         {invite && !sent
           ? <button class="c-btn primary" onClick={() => sendInvite(invite)}>{canShare ? 'Send invite link' : 'Copy invite link'}</button>
@@ -331,6 +338,53 @@ function CircleView({ id }: { id: string }) {
           ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>Stay</button><button class="c-btn danger" disabled={busy} onClick={leave}>Leave and remove what I shared</button></div>
           : <button class="link small" onClick={() => setLeaving(true)}>Leave this circle</button>}
       </div>
+    </div>
+  )
+}
+
+/** Streaks, for those in the circle who chose to show them: days in a row
+ *  reading and praying, longest first. Yours shows live from this device. */
+function StreakBoard({ circle, name, feed, onChange }: { circle: string; name: string; feed: Feed; onChange: () => void }) {
+  const { settings, update } = useApp()
+  const days = useDays()
+  const on = settings.shareStreaks.includes(circle)
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const toggle = async () => {
+    setBusy(true); setErr('')
+    try {
+      await shareStreak(circle, feed.me, !on)
+      update({ shareStreaks: on ? settings.shareStreaks.filter(x => x !== circle) : [...settings.shareStreaks, circle] })
+      onChange()
+    } catch (e) { setErr(navigator.onLine === false ? 'You’re offline. Try again once you’re connected.' : message(e)) } finally { setBusy(false) }
+  }
+  const rows = feed.members
+    .map(m => m.mid === feed.me ? (on ? { name: 'You', me: true, ...streaks(days) } : undefined) : m.streak ? { name: m.name, me: false, ...streaks(m.streak) } : undefined)
+    .filter(r => !!r)
+    .sort((a, b) => b.read + b.pray - a.read - a.pray)
+  const others = rows.filter(r => !r.me).length
+  return (
+    <div class="c-card c-streaks">
+      {rows.length > 0 && (
+        <ul class="c-streak-list" aria-label="Streaks">
+          {rows.map(r => (
+            <li class={r.me ? 'me' : ''}>
+              <strong>{r.name}</strong>
+              <span title="Days in a row reading">📖 {r.read}{r.readToday && <span class="streak-check" aria-label=", today">✓</span>}</span>
+              <span title="Days in a row praying">🙏 {r.pray}{r.prayToday && <span class="streak-check" aria-label=", today">✓</span>}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <label class="c-streak-toggle">
+        <input type="checkbox" checked={on} disabled={busy} onChange={toggle} />
+        <span>Show my streaks to {name}
+          <span class="muted small"> · {on
+            ? others ? 'Days in a row reading and praying, and whether you have today. Nothing else.' : 'Others see theirs here once they turn this on too.'
+            : others ? 'See how each other is doing, and keep each other going.' : 'They’ll see how many days in a row you’ve read and prayed. Nothing else.'}</span>
+        </span>
+      </label>
+      {err && <p class="note small">{err}</p>}
     </div>
   )
 }

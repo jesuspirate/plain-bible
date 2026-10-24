@@ -13,6 +13,7 @@ import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSyn
 import { loadAccount, SYNC_URL } from './lib/sync'
 import { slideAway, usePullDown } from './settings'
 import { DeviceLink } from './move'
+import { addDays, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
 import './prayer.css'
 
 // paused: the phone locked mid-prayer. What was said is kept, and the next
@@ -53,7 +54,11 @@ export function Prayer({ onClose }: { onClose: () => void }) {
   // so dimming the bar too left a bright strip over a grey one.
   const [cut] = useState(() => Math.max(0, Math.round(document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0)))
 
-  const refresh = () => prayers.list().then(l => { if (alive.current) setList(l) }, () => setList([]))
+  // Every prayer kept (here, or synced from another device) is a day prayed.
+  const refresh = () => prayers.list().then(l => {
+    addDays(Object.fromEntries(l.map(p => [dayOf(p.at), PRAY])))
+    if (alive.current) setList(l)
+  }, () => setList([]))
   // With sync on, bring in what was prayed on other devices, and send what's new here.
   const sync = () => syncPrayers().then(changed => { if (changed) refresh() }, () => {})
   useEffect(() => {
@@ -114,6 +119,7 @@ export function Prayer({ onClose }: { onClose: () => void }) {
         if (id) await prayers.append(id, part).catch(() => { id = undefined })
         if (id && tie) await prayers.setVerse(id, tie).catch(() => {})
         if (!id) await prayers.put({ id: id = started.toString(36) + Math.random().toString(36).slice(2, 6), at: started, ...part, ...(tie ? { verse: tie } : {}) })
+        markDay(PRAY, dayOf(started))
         navigator.storage?.persist?.().catch(() => {})
         resume.current = interrupted ? { id, ms: (before?.ms ?? 0) + ms } : undefined
         if (alive.current) {
@@ -192,6 +198,7 @@ export function Prayer({ onClose }: { onClose: () => void }) {
                 </>
               : phase === 'heard' ? <>
                   <p class="pray-amen">Amen. He heard you.</p>
+                  {settings.streaks && <PrayStreak />}
                   <button class="pray-verse" onClick={() => read(comfort)}>
                     “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
                   </button>
@@ -403,4 +410,10 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
       {msg && <p class="note small">{msg}</p>}
     </div>
   )
+}
+
+/** A quiet word after Amen, from the second day in a row. */
+function PrayStreak() {
+  const n = streak(loadDays(), PRAY)
+  return n > 1 ? <p class="pray-streak">{n} days of prayer in a row</p> : null
 }
