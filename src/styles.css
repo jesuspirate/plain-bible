@@ -543,8 +543,9 @@ html, body { touch-action: manipulation; }
 html { -webkit-tap-highlight-color: transparent; }
 button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 @media (hover: none) {
-  /* Not the verse numbers and Strong's words: they sit under your finger as you scroll. */
-  :where(button, a, [role='button']):active:not(:disabled, .vn, .w) { opacity: .6; }
+  /* Not the verse numbers and Strong's words: they sit under your finger as you scroll.
+     Not 🙏 either: it's held while you pick a skin tone, and it shrinks instead. */
+  :where(button, a, [role='button']):active:not(:disabled, .vn, .w, .sb-pray) { opacity: .6; }
 }
 
 /* ---- new version ---- */
