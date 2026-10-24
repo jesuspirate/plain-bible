@@ -11,105 +11,26 @@ import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, openPrayer, readPath, TONES, useApp } from './state'
 import { ThemeToggle, VerseText } from './ui'
-import { createPortal } from 'preact/compat'
-import { holdTap } from './lib/native'
+import { useHoldPick } from './hold'
 import { SettingsSheet } from './settings'
 import { isIOS } from './lib/native'
 
-/** 🙏: tap to pray. Press and hold for the skin tones, as on the iPhone
- *  emoji keyboard: slide onto one and let go, or let go and tap one. */
+const TONE_NAMES = ['Yellow', 'Light skin tone', 'Medium-light skin tone', 'Medium skin tone', 'Medium-dark skin tone', 'Dark skin tone']
+
+/** 🙏: tap to pray. Press and hold for the skin tones. */
 function PrayButton() {
   const { settings, update } = useApp()
-  const [at, setAt] = useState<DOMRect | null>(null)
-  const [hover, setHover] = useState<string | null>(null)
-  const timer = useRef(0)
-  const start = useRef<{ x: number; y: number } | null>(null)
-  const held = useRef(false)
-  const caught = useRef(false)
-  const choose = (t: string) => { update({ prayTone: t }); setAt(null); setHover(null) }
-  // Like the iPhone keyboard: while you slide, the tone is the one in line
-  // with your finger, wherever it is up or down, so a finger that covers the
-  // row or drifts a little still lands on the one you mean.
-  const pick = useRef<HTMLDivElement>(null)
-  const slid = useRef(false)
-  const toneAt = (x: number) => {
-    const cells = [...(pick.current?.children ?? [])] as HTMLElement[]
-    if (!cells.length) return null
-    const i = cells.findIndex(c => x < c.getBoundingClientRect().right)
-    return cells[i < 0 ? cells.length - 1 : i].dataset.tone ?? null
-  }
-  const down = (e: PointerEvent) => {
-    if (e.button) return
-    held.current = false
-    slid.current = false
-    start.current = { x: e.clientX, y: e.clientY }
-    const el = e.currentTarget as HTMLElement
-    clearTimeout(timer.current)
-    timer.current = window.setTimeout(() => { held.current = true; getSelection()?.removeAllRanges(); holdTap(); setAt(el.getBoundingClientRect()) }, 450)
-  }
-  const move = (e: PointerEvent) => {
-    if (!start.current) return
-    if (held.current) {
-      // Settle first: the jitter of a held finger doesn't count as a slide.
-      if (!slid.current && Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) < 12) return
-      slid.current = true
-      setHover(toneAt(e.clientX))
-      return
-    }
-    if (Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) > 10) { clearTimeout(timer.current); start.current = null }
-  }
-  const up = (e: PointerEvent) => {
-    clearTimeout(timer.current)
-    if (held.current && start.current) {
-      // Slid onto a tone: that's the one. Just let go: stay open for a tap.
-      const t = slid.current ? toneAt(e.clientX) : null
-      if (t !== null) choose(t)
-    } else if (start.current && e.button === 0) {
-      // A plain tap. Touches never send a click (see below), so it opens here.
-      openPrayer()
-    }
-    start.current = null
-  }
-  // On iPhone a held finger otherwise selects the nearest verse and brings
-  // up Copy / Look Up / Translate. Stopping the touch itself stops all of
-  // that; the pointer events above still come through.
-  const btn = useRef<HTMLButtonElement>(null)
-  useEffect(() => {
-    const el = btn.current
-    if (!el) return
-    const stop = (e: TouchEvent) => { if (e.cancelable) e.preventDefault() }
-    el.addEventListener('touchstart', stop, { passive: false })
-    return () => el.removeEventListener('touchstart', stop)
-  }, [])
-  useEffect(() => () => clearTimeout(timer.current), [])
-  useEffect(() => {
-    if (!at) return
-    const key = (e: KeyboardEvent) => { if (e.key === 'Escape') setAt(null) }
-    addEventListener('keydown', key)
-    return () => removeEventListener('keydown', key)
-  }, [at])
-  // Above the button, kept on screen.
-  const w = TONES.length * 44 + 12
-  const left = at ? Math.max(8, Math.min(innerWidth - w - 8, at.left + at.width / 2 - w / 2)) : 0
+  const { button, picker } = useHoldPick({
+    options: TONES.map((t, i) => ({ value: t, label: TONE_NAMES[i], body: '🙏' + t })),
+    value: settings.prayTone, onPick: t => update({ prayTone: t }), onTap: openPrayer,
+    label: 'Prayer button skin tone', cls: 'tone-pick', cell: 42,
+  })
   return (
     <>
-      <button ref={btn} type="button" class="sb-pray" aria-label="Pray" title="Pray · hold for skin tones"
-        onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={() => { clearTimeout(timer.current); start.current = null }}
-        onContextMenu={e => e.preventDefault()}
-        onClick={e => { if (e.detail === 0) openPrayer() /* keyboard; taps open on pointerup */ }}>
+      <button {...button} type="button" class="sb-pray holdable" aria-label="Pray" title="Pray · hold for skin tones">
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
       </button>
-      {/* On the page itself: the bar's blur and slide would carry it along. */}
-      {at && createPortal(<>
-        {/* Only a tap that starts here closes it, not letting go of the hold. */}
-        <div class="tone-catch" onPointerDown={() => { caught.current = true }} onClick={() => { if (caught.current) setAt(null); caught.current = false }} />
-        <div ref={pick} class="tone-pick" role="radiogroup" aria-label="Prayer button skin tone" style={{ left, bottom: innerHeight - at.top + 10 }}>
-          {TONES.map(t => (
-            <button type="button" role="radio" data-tone={t} aria-checked={settings.prayTone === t}
-              class={(hover ?? settings.prayTone) === t ? 'on' : ''} onClick={() => choose(t)}>{'🙏' + t}</button>
-          ))}
-        </div>
-      </>, document.body)}
+      {picker}
     </>
   )
 }
