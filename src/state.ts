@@ -95,7 +95,9 @@ export const openPrayer = () => window.dispatchEvent(new Event(PRAY_EVENT))
 
 /** Open Settings (the sheet behind the button in the top right corner). */
 export const SETTINGS_EVENT = 'plain-bible:settings'
-export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
+/** Where Settings opens: the first page, or straight into Circles (and one circle). */
+export type SettingsAt = { page: 'circles'; circle?: { id: string; name: string } }
+export const openSettings = (at?: SettingsAt) => window.dispatchEvent(new CustomEvent(SETTINGS_EVENT, { detail: at }))
 
 // A prayer can be tied to a verse. Verses you just selected are offered when
 // you open prayer soon after; Pray on the selection bar ties them at once.
