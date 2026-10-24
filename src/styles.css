@@ -601,15 +601,17 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .version-note { opacity: .8; }
 .version-line.ready .version-note { color: var(--accent); font-weight: 600; opacity: 1; }
 
-/* ---- Settings: a sheet that rises out of the search panel ---- */
+/* ---- Settings: a full screen that slides in from the right ---- */
 .settings-sheet {
-  position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; top: calc(max(10px, env(safe-area-inset-top)) + 6px);
+  position: fixed; z-index: 35; inset: 0;
   overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; outline: none;
-  background: var(--bg); border-radius: 20px 20px 0 0; box-shadow: 0 -10px 40px rgba(0,0,0,.25);
+  background: var(--bg); box-shadow: -10px 0 40px rgba(0,0,0,.18);
   padding: 0 max(16px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(16px, env(safe-area-inset-left));
-  animation: settings-rise .32s cubic-bezier(.2, .8, .2, 1);
+  animation: settings-in .3s cubic-bezier(.2, .8, .2, 1);
 }
-@keyframes settings-rise { from { transform: translate3d(0, 100%, 0); } }
+@keyframes settings-in { from { transform: translate3d(100%, 0, 0); } }
+.settings-sheet .settings-head { padding-top: max(8px, env(safe-area-inset-top)); }
+.settings-sheet .settings-title { min-height: 56px; }
 .settings-head { position: sticky; top: 0; z-index: 2; background: var(--bg); margin: 0 -16px; padding: 0 16px 6px; border-bottom: 1px solid var(--line); }
 .settings-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; max-width: 46rem; margin: 0 auto; }
 .settings-title h1 { margin: 0; font-size: 28px; }

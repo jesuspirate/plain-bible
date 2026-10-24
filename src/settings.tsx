@@ -1,8 +1,8 @@
 // Settings. Everything lives here, behind the one button in the top right
-// corner: circles, sync, the Bible you read, reading, your data. (Prayer lives
-// on the 🙏 button alone.) They rise as
-// a sheet; pulling it down (or Done) goes back to the word. #/settings still
-// opens them as a page, for old links.
+// corner: circles, saved, sync, the Bible you read, reading, your data. It
+// slides in as a full screen; the ‹ arrow at the top left goes back a page,
+// and from the first page back to the word. #/settings still opens it as a
+// page, for old links. (Prayer lives on the 🙏 button alone.)
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, readPath, Settings, SettingsAt, useApp, useRoute } from './state'
 import { DataTools } from './import'
@@ -133,23 +133,32 @@ function useSettingsNav(at?: SettingsAt) {
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
 
-/** Settings as a sheet that rises over the page, from the button in the top
- *  right corner. Pull it down, or Done, and you're back to the word. */
+/** Slide Settings away to the right, then run `done`. */
+function slideOut(box: HTMLElement | null, done: () => void) {
+  if (!box || still()) { done(); return }
+  box.style.transition = 'transform .22s ease-in'
+  box.style.transform = 'translate3d(100%, 0, 0)'
+  setTimeout(done, 210)
+}
+
+/** Settings as a full screen that slides in from the right, from the button
+ *  in the top right corner, like the iPhone's Settings app. Pages go deep
+ *  (a circle inside Circles), so there is one way out, always in the same
+ *  place: the ‹ arrow at the top left goes back a page, and from the first
+ *  page back to the word. */
 export function SettingsSheet({ at, onClose }: { at?: SettingsAt; onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
   const nav = useSettingsNav(at)
   const navRef = useRef(nav)
   navRef.current = nav
-  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
-  const done = () => slideAway(box.current, onClose)
+  const back = () => { if (navRef.current.depth) navRef.current.back(); else slideOut(box.current, onClose) }
   useEffect(() => { box.current?.scrollTo(0, 0) }, [nav.page, nav.circle?.id])
   useEffect(() => {
     // Escape steps back a page, then closes.
     const esc = (e: KeyboardEvent) => {
       if (e.key !== 'Escape' || document.querySelector('dialog[open]')) return
       e.stopPropagation()
-      if (navRef.current.depth) navRef.current.back()
-      else slideAway(box.current, onClose)
+      back()
     }
     addEventListener('keydown', esc, true)
     box.current?.focus({ preventScroll: true })
@@ -160,12 +169,10 @@ export function SettingsSheet({ at, onClose }: { at?: SettingsAt; onClose: () =>
       // A link inside (a verse, mostly) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
-        <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
         <div class="settings-title">
-          {nav.page === 'home'
-            ? <h1>Settings</h1>
-            : <button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button>}
-          <button class="done-btn" onClick={done}>Done</button>
+          <button class="settings-back" onClick={back} aria-label={nav.depth ? `Back. ${nav.title}` : 'Close settings. Back to reading'}>
+            <span aria-hidden="true">‹</span> {nav.title}
+          </button>
         </div>
       </div>
       <div class="settings"><SettingsBody nav={nav} onAway={onClose} /></div>
