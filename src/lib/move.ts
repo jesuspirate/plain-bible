@@ -9,7 +9,8 @@
 import { mergeMark, Marks } from './marks'
 import { meta, Prayer, prayers } from './prayers'
 import { b64url, open, seal } from './prayerCrypto'
-import { api, loadAccount, SYNC_URL, SyncError } from './sync'
+import { api, changedAt, loadAccount, SettingsT, SYNC_URL, SyncError } from './sync'
+import { Days, mergeDays } from './streaks'
 
 export const NEW_ORIGIN = 'https://myquietbible.com'
 export const NEW_HOST = 'myquietbible.com'
@@ -48,7 +49,15 @@ export interface Bundle {
   prayerDeleted?: string[]
   prayers: PackedPrayer[]
 }
-export interface MovedIn { at: number; from: string; marks: number; prayers: number; account: boolean; kind?: 'move' | 'link'; prayerKey?: boolean }
+export interface MovedIn {
+  at: number; from: string; marks: number; prayers: number; kind?: 'move' | 'link'; prayerKey?: boolean
+  /** Signed in by the move. */
+  account: boolean
+  /** Already signed in here, and that sign-in stayed. */
+  kept?: boolean
+  /** The move came from a different account than the one signed in here. */
+  otherAccount?: boolean
+}
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const aad = (n: number, of: number) => `move ${n}/${of}`
@@ -139,13 +148,15 @@ async function upload(bytes: Uint8Array, life: 'move' | 'link', progress: (done:
 
 /** Pack, encrypt and send everything on this device. Returns the move link
  *  and what it carries. */
-export async function makeMoveLink(progress: (done: number, of: number) => void = () => {}): Promise<{ link: string; prayers: number; marks: number; account: boolean }> {
+export async function makeMoveLink(progress: (done: number, of: number) => void = () => {}): Promise<{ link: string; prayers: number; marks: number; account: boolean; email?: string }> {
   const { b, list } = await gather()
+  const acct = b.local[ACCOUNT] ? loadAccount() : null
+  const email = acct ? (await api<{ email: string | null }>('/account', { token: acct.token }).catch(() => null))?.email ?? undefined : undefined
   const hash = await upload(pack(b, list), 'move', progress)
   try { localStorage.setItem(MOVED, String(Date.now())) } catch { /* ignore */ }
   let marks = 0
   try { marks = Object.keys(JSON.parse(b.local[MARKS] || '{}')).length } catch { /* ignore */ }
-  return { link: `${NEW_ORIGIN}/${hash}`, prayers: list.length, marks, account: !!b.local[ACCOUNT] }
+  return { link: `${NEW_ORIGIN}/${hash}`, prayers: list.length, marks, account: !!b.local[ACCOUNT], email }
 }
 
 /** A link that signs another device in to this account and, where prayers
@@ -225,23 +236,88 @@ export function mergeMarkText(here: string | null, came: string): string {
   return JSON.stringify(out)
 }
 
-/** Put a move on this device. What came wins over what's here, except that
- *  highlights and notes join, and prayers already here stay. */
-export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn> {
-  for (const [k, v] of Object.entries(bundle.local)) {
-    if (!k.startsWith(PREFIX) || SKIP.has(k)) continue
-    localStorage.setItem(k, k === MARKS ? mergeMarkText(localStorage.getItem(MARKS), v) : v)
+const SETTINGS = PREFIX + 'settings', SETTINGS_T = PREFIX + 'settings-t', DAYS = PREFIX + 'days'
+/** Kept with the account they belong to: never taken from another account. */
+const ACCOUNT_BOUND = (k: string) => k === ACCOUNT || k === PRAYER_SYNC || k.startsWith(PREFIX + 'circle') || k.startsWith(PREFIX + 'share-circle')
+const parse = <T>(s: string | null | undefined, or: T): T => { try { return s ? JSON.parse(s) ?? or : or } catch { return or } }
+
+/** Settings from both sides: each one keeps its newest change. A setting
+ *  here with no change time is a first-start default, so what came wins. */
+export function mergeSettingsText(here: { s: string | null; t: string | null }, came: { s?: string; t?: string }) {
+  const hs = parse<Record<string, unknown>>(here.s, {}), cs = parse<Record<string, unknown>>(came.s, {})
+  const ht = parse<SettingsT>(here.t, {}), ct = parse<SettingsT>(came.t, {})
+  const s: Record<string, unknown> = { ...hs }, t: Record<string, number> = {}
+  for (const k of new Set([...Object.keys(hs), ...Object.keys(cs)])) {
+    const a = changedAt(ht, k), b = changedAt(ct, k)
+    const useCame = k in cs && (!(k in hs) || a === 0 || b > a)
+    if (useCame) s[k] = cs[k]
+    const at = useCame ? b : a
+    if (at) t[k] = at
   }
+  return { settings: JSON.stringify(s), settingsT: JSON.stringify(t) }
+}
+
+/** What a move writes here, given what's here already. Nothing here is
+ *  replaced by something older: highlights and notes join, settings keep
+ *  their newest change, reading days add up, and anything else already here
+ *  stays. `ownAccount`: this device is signed in already, so its sign-in
+ *  stays; `sameAccount`: the move comes from that same account (false or
+ *  unknown keeps out everything tied to the other account). */
+export function mergeLocal(here: (k: string) => string | null, came: Record<string, string>, ownAccount: boolean, sameAccount: boolean): Record<string, string> {
+  const out: Record<string, string> = {}
+  for (const [k, v] of Object.entries(came)) {
+    if (!k.startsWith(PREFIX) || SKIP.has(k) || k === SETTINGS || k === SETTINGS_T) continue
+    if (k === ACCOUNT && ownAccount) continue
+    if (ownAccount && !sameAccount && ACCOUNT_BOUND(k)) continue
+    const h = here(k)
+    if (k === MARKS) out[k] = mergeMarkText(h, v)
+    else if (k === DAYS) out[k] = JSON.stringify(mergeDays(parse<Days>(h, {}), parse<Days>(v, {})))
+    else if (h === null) out[k] = v
+  }
+  if (came[SETTINGS] !== undefined) {
+    const m = mergeSettingsText({ s: here(SETTINGS), t: here(SETTINGS_T) }, { s: came[SETTINGS], t: came[SETTINGS_T] })
+    out[SETTINGS] = m.settings
+    out[SETTINGS_T] = m.settingsT
+  }
+  return out
+}
+
+/** Which account a sign-in belongs to, or undefined if that can't be told. */
+async function whose(token: string) {
+  const a = await api<{ created: number; email: string | null }>('/account', { token }).catch(() => undefined)
+  return a && `${a.created}|${a.email ?? ''}`
+}
+
+/** Put a move on this device, joining what's here (see mergeLocal). A
+ *  sign-in here stays, and so do the prayer key and circles here. */
+export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn> {
+  const own = loadAccount()
+  const cameToken = parse<{ token?: string }>(bundle.local[ACCOUNT], {}).token
+  let same = !own
+  if (own && cameToken) {
+    const [a, b] = await Promise.all([whose(own.token), whose(cameToken)])
+    same = !!a && a === b
+    // This device keeps its own sign-in, so the one that came isn't needed.
+    api('/auth/logout', { method: 'POST', token: cameToken }).catch(() => {})
+  }
+  const get = (k: string) => localStorage.getItem(k)
+  for (const [k, v] of Object.entries(mergeLocal(get, bundle.local, !!own, same))) localStorage.setItem(k, v)
   for (const p of list) if (!(await prayers.get(p.id))) await prayers.put(p)
-  if (bundle.prayerKey) await meta.set('key', b64url.decode(bundle.prayerKey))
-  if (bundle.accountKey) await meta.set('acct', b64url.decode(bundle.accountKey))
+  // A prayer key here stays: replacing it would lock the prayers it opens.
+  const hadKey = !!(await meta.get('key'))
+  const takeKey = same && !!bundle.prayerKey && !hadKey
+  if (takeKey) await meta.set('key', b64url.decode(bundle.prayerKey!))
+  if (same && bundle.accountKey && !(await meta.get('acct'))) await meta.set('acct', b64url.decode(bundle.accountKey))
   if (bundle.prayerDeleted?.length) {
     const here = (await meta.get<string[]>('deleted')) ?? []
     await meta.set('deleted', [...new Set([...here, ...bundle.prayerDeleted])])
   }
   let marks = 0
   try { marks = Object.keys(JSON.parse(bundle.local[MARKS] || '{}')).length } catch { /* ignore */ }
-  const info: MovedIn = { at: Date.now(), from: bundle.from, marks, prayers: list.length, account: !!bundle.local[ACCOUNT], kind: bundle.kind ?? 'move', prayerKey: !!bundle.prayerKey }
+  const info: MovedIn = {
+    at: Date.now(), from: bundle.from, marks, prayers: list.length, kind: bundle.kind ?? 'move',
+    account: !own && !!bundle.local[ACCOUNT], kept: !!own, otherAccount: !!own && !!cameToken && !same, prayerKey: takeKey,
+  }
   localStorage.setItem(MOVED_IN, JSON.stringify(info))
   return info
 }
