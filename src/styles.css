@@ -231,10 +231,9 @@ main.with-bar { padding-bottom: 120px; }
 }
 .sb-field {
   display: flex; align-items: center; gap: 8px; height: 52px; padding: 0 8px 0 16px; border-radius: 26px;
-  background: color-mix(in srgb, var(--surface) 72%, transparent);
-  -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
-  border: .5px solid color-mix(in srgb, var(--text) 14%, transparent);
-  box-shadow: 0 10px 30px rgba(0,0,0,.14), 0 1px 0 rgba(255,255,255,.35) inset;
+  /* Solid here; frosted glass further down, on phones that can do it. */
+  background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 10px 30px rgba(0,0,0,.14);
 }
 .sb-glass { color: var(--muted); flex: none; }
 .sb-field input {
@@ -298,9 +297,7 @@ main.with-bar { padding-bottom: 120px; }
 @keyframes sb-fade { from { opacity: 0; } }
 .sb-panel {
   max-height: min(62vh, 560px); overflow: auto; margin-bottom: 10px; padding: 8px; border-radius: 22px;
-  background: color-mix(in srgb, var(--surface) 88%, transparent);
-  -webkit-backdrop-filter: blur(24px) saturate(180%); backdrop-filter: blur(24px) saturate(180%);
-  border: .5px solid color-mix(in srgb, var(--text) 12%, transparent);
+  background: var(--surface); border: 1px solid var(--line);
   box-shadow: 0 20px 50px rgba(0,0,0,.22); animation: sb-rise .22s cubic-bezier(.2, .8, .2, 1);
 }
 @keyframes sb-rise { from { opacity: 0; transform: translateY(12px) scale(.98); } }
@@ -541,6 +538,40 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
   .sb-chapter-row { scrollbar-width: thin; cursor: grab; }
   .sb-chapter-row::-webkit-scrollbar { display: block; height: 6px; }
   .sb-chapter-row::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 3px; }
+}
+
+/* ---- glass: the search bar, its picker, the round search button and 🙏 ----
+   Frosted like iPhone: the page shows through, softly blurred, with a bright
+   rim on top. Only where the phone can both mix colours and blur; older
+   iPhones (before iOS 16.2) keep the solid look above, as the top bar does,
+   instead of a see-through smear. Nothing here animates, so it costs nothing
+   while you read. */
+:root { --glass-rim: rgba(255,255,255,.7); --glass-edge: rgba(0,0,0,.08); }
+:root[data-theme='sepia'] { --glass-rim: rgba(255,250,235,.75); --glass-edge: rgba(80,55,20,.12); }
+:root[data-theme='dark'] { --glass-rim: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.1); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] { --glass-rim: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.1); } }
+@supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  :root { --glass-open: color-mix(in srgb, var(--surface) 86%, transparent); }
+  .sb-field, .sb-mini .sb-field, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
+    -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
+    border: .5px solid var(--glass-edge);
+  }
+  .sb-field { background: color-mix(in srgb, var(--surface) 58%, transparent); box-shadow: 0 10px 30px rgba(0,0,0,.12), inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 color-mix(in srgb, var(--glass-rim) 40%, transparent); }
+  .sb-mini .sb-field { background: color-mix(in srgb, var(--surface) 58%, transparent); box-shadow: 0 4px 14px rgba(0,0,0,.12), inset 0 1px 0 var(--glass-rim); }
+  /* Open, the picker and field sit over the dimmed page: more frost, so the
+     books and results read as clearly as before. */
+  .sb.sb-open .sb-panel { background: linear-gradient(transparent 38px, var(--glass-open) 38px) padding-box; box-shadow: 0 18px 48px rgba(0,0,0,.28), inset 0 1px 0 var(--glass-rim); }
+  .sb.sb-open .sb-field { background: color-mix(in srgb, var(--surface) 88%, transparent); }
+  /* The grabber row stays put while the books scroll under it. It carries
+     the frost for its strip of the picker, so there's no band when it's still,
+     and what scrolls under it only shows faintly. */
+  .sb.sb-open .sb-head { background: var(--glass-open); }
+  /* 🙏 keeps its warm light, now as tinted glass. */
+  .sb-pray {
+    background: radial-gradient(circle at 50% 40%, rgba(255,253,246,.72) 0%, rgba(255,241,204,.66) 55%, rgba(255,217,138,.78) 100%);
+    -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
+    box-shadow: 0 0 0 1px rgba(240, 185, 90, .55), 0 0 14px 3px rgba(245, 190, 95, .5), inset 0 1px 0 rgba(255,255,255,.8);
+  }
 }
 
 /* ---- chapter turns ---- */
