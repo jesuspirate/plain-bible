@@ -33,10 +33,11 @@ export function MoveOut() {
     try { await copyText(made!.link); setCopied(true) } catch { setError('Couldn’t copy. Press and hold the link to copy it.') }
   }
   if (state === 'ready' && made) {
-    const what = [plural(made.marks, 'highlighted or noted verse'), plural(made.prayers, 'prayer'), 'your settings and history']
+    const what = [plural(made.marks, 'highlighted or noted verse'), made.prayers ? plural(made.prayers, 'prayer') + ' recorded here' : '', 'your settings and history'].filter(Boolean)
     return (
       <div class="move-card">
-        <p><strong>Ready to move.</strong> This link carries {what.join(', ')}{made.account ? ', and keeps you signed in' : ''}. It works for 7 days, on this device only, so keep it to yourself.</p>
+        <p><strong>Ready to move.</strong> This link carries {what.join(', ')}{made.account ? <>, and signs you in{made.email ? <> as <strong>{made.email}</strong></> : ''}</> : ''}. It works for 7 days, on this device only, so keep it to yourself.</p>
+        <p class="small">It adds to what’s already at {NEW_HOST} and replaces nothing there: highlights and notes join, each setting keeps its newest change, and if you’re signed in there you stay signed in, with your prayers and circles as they are.{made.prayers ? '' : ' Prayers synced from your other devices aren’t in this link; they come from your account.'}</p>
         <p class="move-link" onClick={copy}>{made.link}</p>
         <div class="row wrap">
           <button class="primary" onClick={copy}>{copied ? 'Copied ✓' : 'Copy move link'}</button>
@@ -200,10 +201,11 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
       <div class="row wrap"><button class="primary" onClick={close}>Done</button></div>
     </div>
   )
-  const what = [plural(info.marks, 'highlighted or noted verse'), plural(info.prayers, 'prayer')]
+  const what = [plural(info.marks, 'highlighted or noted verse'), info.prayers ? plural(info.prayers, 'prayer') : ''].filter(Boolean)
   return (
     <div class="move-welcome" role="dialog" aria-label="Moved">
-      <p><strong>Welcome to Quiet Bible.</strong> Your Bible moved: {what.join(', ')}, your settings and history.</p>
+      <p><strong>Welcome to Quiet Bible.</strong> Your Bible moved: {what.join(', ')}, your settings and history.{info.kept ? ' They joined what was already here; nothing was replaced.' : ''}</p>
+      {info.otherAccount && <p class="small">That link came from a different account than the one you’re signed in to here. You stayed signed in here, and its highlights, notes and settings joined this account.</p>}
       {info.account && !saved && <p class="small">You’re still signed in. Save a passkey for {NEW_HOST} so you can sign in here later; the old one only works on the old address.</p>}
       {isIOS && !standalone() && <p class="small">To keep it on your Home Screen: tap Share, then <strong>Add to Home Screen</strong>. If it opens empty there, paste the same move link once more.</p>}
       <div class="row wrap">
