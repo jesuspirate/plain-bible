@@ -141,11 +141,14 @@ export interface LooseIndex {
   /** verse ordinal → caller's key for the verse */
   refs: Int32Array
   postings: Map<string, Int32Array>
+  /** every word in the edition → its stem key, to fix typos against */
+  vocab: Map<string, string>
 }
 
 export function buildIndex(verses: Iterable<[number, string]>, l: Lang): LooseIndex {
   const texts: string[] = [], refs: number[] = []
   const lists = new Map<string, number[]>()
+  const vocab = new Map<string, string>()
   for (const [ref, text] of verses) {
     const n = texts.length
     texts.push(text); refs.push(ref)
@@ -153,6 +156,7 @@ export function buildIndex(verses: Iterable<[number, string]>, l: Lang): LooseIn
     for (const w of text.split(' ')) {
       if (!w) continue
       const k = l.key(w)
+      vocab.set(w, k)
       if (k === last) continue
       const list = lists.get(k)
       if (!list) lists.set(k, [n])
@@ -162,13 +166,70 @@ export function buildIndex(verses: Iterable<[number, string]>, l: Lang): LooseIn
   }
   const postings = new Map<string, Int32Array>()
   for (const [k, v] of lists) postings.set(k, Int32Array.from(v))
-  return { lang: l, texts, refs: Int32Array.from(refs), postings }
+  return { lang: l, texts, refs: Int32Array.from(refs), postings, vocab }
+}
+
+/** The query with misspelt words swapped for the closest word this edition
+ *  has (shepard → shepherd, rightousness → righteousness). Only when most
+ *  of the query is in the edition's language, so French words aren't
+ *  "corrected" into English ones. */
+export function fixTypos(idx: LooseIndex, q: LooseQuery): LooseQuery {
+  const odd = q.words.filter(w => w.content && w.word.length >= 4 && !idx.vocab.has(w.word))
+  if (!odd.length) return q
+  const known = q.words.filter(w => idx.vocab.has(w.word) || idx.lang.stop.has(w.word)).length
+  if (known * 2 < q.words.length) return q
+  const swap = new Map<string, string>()
+  for (const w of odd) {
+    if (swap.has(w.key)) continue
+    // A word this Bible doesn't have whose stem it does have (strengthens,
+    // or blesed → "ble") is only swapped for a word one letter away.
+    const max = idx.postings.has(w.key) ? 1 : w.word.length >= 7 ? 2 : 1
+    // Closest first; then a word that starts the same, and one that
+    // is longer (a letter left out is the usual slip); then the commoner.
+    let best: string | undefined, bestS = Infinity, bestDf = 0
+    for (const [v, k] of idx.vocab) {
+      const dl = v.length - w.word.length
+      if (Math.abs(dl) > max) continue
+      const d = distance(w.word, v, max)
+      if (d > max) continue
+      let same = 0
+      while (same < 4 && v[same] === w.word[same]) same++
+      const score = d + (same ? -0.1 * same : 0.5) + (dl < 0 ? 0.2 : 0) + Math.abs(dl) * 0.05
+      const df = idx.postings.get(k)?.length ?? 0
+      if (score < bestS || (score === bestS && df > bestDf)) { best = k; bestS = score; bestDf = df }
+    }
+    if (best) swap.set(w.key, best)
+  }
+  if (!swap.size) return q
+  const words = q.words.map(w => swap.has(w.key) ? { ...w, key: swap.get(w.key)! } : w)
+  return { ...q, words, stems: [...new Set(q.stems.map(s => swap.get(s) ?? s))] }
+}
+
+/** Edit distance (with swapped neighbours as one edit), giving up past `max`. */
+function distance(a: string, b: string, max: number): number {
+  const m = a.length, n = b.length
+  let pp = new Array<number>(n + 1).fill(0), prev = Array.from({ length: n + 1 }, (_, j) => j), cur = new Array<number>(n + 1)
+  for (let i = 1; i <= m; i++) {
+    cur[0] = i
+    let low = i
+    for (let j = 1; j <= n; j++) {
+      const c = a[i - 1] === b[j - 1] ? 0 : 1
+      let v = Math.min(prev[j] + 1, cur[j - 1] + 1, prev[j - 1] + c)
+      if (i > 1 && j > 1 && a[i - 1] === b[j - 2] && a[i - 2] === b[j - 1]) v = Math.min(v, pp[j - 2] + 1)
+      cur[j] = v
+      if (v < low) low = v
+    }
+    if (low > max) return max + 1
+    ;[pp, prev, cur] = [prev, cur, pp]
+  }
+  return prev[n]
 }
 
 export interface LooseHit { ref: number; score: number }
 
 /** Verses that loosely match, with a score (higher is better). */
-export function looseSearch(idx: LooseIndex, q: LooseQuery, allow?: (ref: number) => boolean): LooseHit[] {
+export function looseSearch(idx: LooseIndex, query: LooseQuery, allow?: (ref: number) => boolean): LooseHit[] {
+  const q = fixTypos(idx, query)
   const N = idx.texts.length
   if (!q.stems.length || !N) return []
   const idf = new Map<string, number>()

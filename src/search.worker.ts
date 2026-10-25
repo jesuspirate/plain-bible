@@ -5,7 +5,7 @@ import { BOOKS, BOOK_INDEX } from './lib/books'
 import { Bible, DataSource } from './lib/data'
 import { compile, highlight, parseQuery, Range, SearchOptions, VerseCtx } from './lib/query'
 import { normalize, plain, segments } from './lib/text'
-import { buildIndex, lang, looseQuery, looseRanges, looseSearch, looseWords, LooseIndex } from './lib/loose'
+import { buildIndex, fixTypos, lang, looseQuery, looseRanges, looseSearch, looseWords, LooseIndex } from './lib/loose'
 
 export interface SearchRequest {
   type: 'search'; seq: number; base: string; query: string; versions: string[]; options: SearchOptions; books?: string[]
@@ -61,10 +61,10 @@ function contexts(bible: Bible, o: SearchOptions): VerseCtx[][][] {
   return c
 }
 
-/** Plain words are matched forgivingly unless an exactness option is on. */
-function forgiving(q: string, o: SearchOptions) {
-  return o.caseSensitive || o.accentSensitive || o.partialWords ? undefined : looseWords(q)
-}
+// Search always forgives case and accents (Eternel finds Éternel), and plain
+// words are matched forgivingly. The old exactness options are ignored.
+const FORGIVE: SearchOptions = { caseSensitive: false, accentSensitive: false, partialWords: false }
+const forgiving = (q: string) => looseWords(q)
 
 const looseCache = new Map<string, LooseIndex>()
 
@@ -88,7 +88,8 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
   const parsed = parseQuery(req.query)
   const empty: SearchResponse = { type: 'search', seq: req.seq, errors: parsed.errors, hits: [], perBook: {}, perVersion: req.versions.map(() => 0), ms: 0 }
   if (!parsed.node || parsed.errors.some(e => e.startsWith('Add at least') || e.startsWith('Invalid'))) return empty
-  const loose = forgiving(req.query, req.options)
+  req.options = FORGIVE
+  const loose = forgiving(req.query)
   const match = loose ? undefined : compile(parsed.node, req.options)
   let allowed: Set<string> | undefined = parsed.books
   if (req.books) {
@@ -143,7 +144,8 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
 
 async function page(req: PageRequest): Promise<PageResponse> {
   const parsed = parseQuery(req.query)
-  const loose = forgiving(req.query, req.options)
+  req.options = FORGIVE
+  const loose = forgiving(req.query)
   data ??= new DataSource(req.base)
   const bibles = await Promise.all(req.versions.map(v => data!.bible(v)))
   const verses: PageVerse[] = req.refs.map(([book, chapter, verse, mask]) => ({
@@ -154,12 +156,17 @@ async function page(req: PageRequest): Promise<PageResponse> {
       const text = plain(raw)
       const matched = !!(mask & (1 << vi))
       const ranges = !matched ? []
-        : loose ? looseRanges(text, looseQuery(loose, lang(req.langs?.[vi])), lang(req.langs?.[vi]))
+        : loose ? looseText(b, req.langs?.[vi], text, loose)
         : parsed.node ? highlight(parsed.node, raw, text, req.options) : []
       return [{ version: b.id, text: raw, matched, ranges }]
     }),
   }))
   return { type: 'page', seq: req.seq, verses }
+}
+
+function looseText(b: Bible, code: string | undefined, text: string, words: string[]) {
+  const idx = looseIndex(b, code)
+  return looseRanges(text, fixTypos(idx, looseQuery(words, idx.lang)), idx.lang)
 }
 
 function post(msg: SearchResponse | PageResponse | ProgressResponse | ErrorResponse) { (self as unknown as Worker).postMessage(msg) }

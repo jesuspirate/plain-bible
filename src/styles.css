@@ -260,6 +260,14 @@ main.with-bar { padding-bottom: 120px; }
 .sb-field input::-webkit-search-cancel-button { display: none; }
 .sb-field input::placeholder { color: var(--muted); }
 .sb-clear { all: unset; cursor: pointer; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; background: color-mix(in srgb, var(--muted) 45%, transparent); color: var(--surface); }
+.sb-mic { all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 40px; height: 40px; margin-right: -8px; border-radius: 50%; color: var(--text); -webkit-tap-highlight-color: transparent; }
+.sb-mic:active { background: var(--chip); }
+/* Listening: the microphone glows warm, like the prayer button. */
+.sb-mic.on { color: #8a4b12; background: radial-gradient(circle at 50% 40%, #fffdf6 0%, #fff1cc 55%, #ffd98a 100%); box-shadow: 0 0 0 1px rgba(240, 185, 90, .6), 0 0 12px 2px rgba(245, 190, 95, .55); animation: sb-listen 1.4s ease-in-out infinite; }
+@keyframes sb-listen { 50% { box-shadow: 0 0 0 1px rgba(240, 185, 90, .6), 0 0 20px 6px rgba(245, 190, 95, .7); } }
+.sb-voice-note { margin: 6px 4px 0; padding: 8px 12px; border-radius: 12px; background: var(--surface); color: var(--text); font: 500 15px var(--sans); text-align: center; }
+.sb-in { all: unset; cursor: pointer; text-transform: none; letter-spacing: 0; font: 600 15px var(--sans); color: var(--accent); padding: 8px 12px; margin: -6px -4px -6px 0; border-radius: 99px; background: var(--chip); }
+.sb-vtag { font: 600 11px var(--sans); color: var(--muted); margin-left: 8px; letter-spacing: .03em; }
 .sb-theme { all: unset; cursor: pointer; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; color: var(--text); flex: none; -webkit-tap-highlight-color: transparent; }
 .sb-theme:active { background: var(--chip); }
 /* The prayer button: 🙏 in a small warm light, always there. Drawn once, not animated, so it costs nothing while you read. */
@@ -353,11 +361,11 @@ main.with-bar { padding-bottom: 120px; }
 .sb-head-icon { padding: 0; width: 40px; justify-content: center; }
 .sb-tips .sb-kicker { width: 100%; padding: 4px 4px 0; }
 .sb-chip { border-radius: 99px; padding: 6px 12px; font-size: 14px; background: var(--chip); border: none; }
-.sb-more { all: unset; cursor: pointer; display: block; padding: 10px 12px; color: var(--accent); font-weight: 600; font-size: 14px; }
+.sb-more { all: unset; cursor: pointer; display: block; box-sizing: border-box; width: 100%; margin: 6px 0 4px; padding: 13px 12px; border-radius: 14px; background: var(--chip); text-align: center; color: var(--accent); font: 600 16px var(--sans); }
 .sb-row { all: unset; cursor: pointer; display: flex; gap: 10px; align-items: center; width: 100%; box-sizing: border-box; padding: 9px 12px; border-radius: 12px; }
 @media (hover: hover) { .sb-row:hover { background: var(--chip); } }
 .sb-row .sb-glass { color: var(--muted); }
-@media (prefers-reduced-motion: reduce) { .sb, .sb-panel, .sb-scrim { transition: none; animation: none; } }
+@media (prefers-reduced-motion: reduce) { .sb, .sb-panel, .sb-scrim, .sb-mic.on { transition: none; animation: none; } }
 /* Search bar turned off: a small, quiet round button in the corner instead.
    The real field sits invisibly on top of it, so one tap brings up the
    keyboard on iPhone too. */

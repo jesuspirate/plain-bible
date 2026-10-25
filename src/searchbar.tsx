@@ -1,8 +1,10 @@
 // Floating search bar at the bottom of the screen, in the style of the iOS
 // search field. Tapping it opens a panel with instant results: a reference
-// jump with the verse itself, matching books, live search hits, and recent
-// searches, and the chapters of the book you are reading. It stays pinned
-// while you read, showing where you are.
+// jump with the verse itself, matching books, the verses that best match the
+// words typed (or spoken), and recent searches, and the chapters of the book
+// you are reading. It is the whole search: no query language to learn, just
+// words as you remember them. It stays pinned while you read, showing where
+// you are.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { BOOKS, bookById } from './lib/books'
 import { parseRef, formatRef, Ref } from './lib/refs'
@@ -13,7 +15,7 @@ import { go, inCircles, openCircles, openPrayer, readPath, TONES, useApp } from 
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
 import { CircleIcon } from './icons'
-import { VerseText } from './ui'
+import { VerseText, VersionPicker } from './ui'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
 
@@ -72,11 +74,16 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
   const [recent, setRecent] = useState<string[]>(loadRecent)
-  const [live, setLive] = useState<{ q: string; total: number; verses: PageVerse[] }>()
+  const [live, setLive] = useState<{ q: string; key: string; total: number; hits: number[]; verses: PageVerse[] }>()
+  // Versions to search: the one you're reading, unless you picked others.
+  const [picked, setPicked] = useState<string[]>()
+  const [pickIn, setPickIn] = useState(false)
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
   const version = here?.version ?? settings.version
   const t = byId.get(version)
+  const inV = picked?.some(id => byId.has(id)) ? picked.filter(id => byId.has(id)) : [version]
+  const langs = inV.map(id => byId.get(id)?.lang ?? '')
 
   const chapterRow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLDivElement>(null)
@@ -201,7 +208,13 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     return () => { stale = true }
   }, [ref?.book, ref?.chapter, ref?.verse, ref?.verseEnd, version])
 
-  // Live results while typing.
+  // Results while typing (or speaking), best matches first.
+  const pageOf = (hits: number[], from: number, to: number): [string, number, number, number][] => {
+    const refs: [string, number, number, number][] = []
+    for (let i = from; i < Math.min(to, hits.length / 4); i++) refs.push([BOOKS[hits[i * 4]].id, hits[i * 4 + 1], hits[i * 4 + 2], hits[i * 4 + 3]])
+    return refs
+  }
+  const key = inV.join()
   useEffect(() => {
     if (trimmed.length < 2 || ref) { setLive(undefined); return }
     let stale = false
@@ -209,17 +222,55 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       const base = data.url('')
       const options = settings.searchOptions
       try {
-        const r = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: [version], langs: [byId.get(version)?.lang ?? ''], options })
+        const r = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: inV, langs, options })
         if (stale) return
-        const total = r.hits.length / 4
-        const refs: [string, number, number, number][] = []
-        for (let i = 0; i < Math.min(4, total); i++) refs.push([BOOKS[r.hits[i * 4]].id, r.hits[i * 4 + 1], r.hits[i * 4 + 2], r.hits[i * 4 + 3]])
-        const page = refs.length ? await call<PageResponse>({ type: 'page', base, query: trimmed, versions: [version], langs: [byId.get(version)?.lang ?? ''], options, refs }) : { verses: [] }
-        if (!stale) setLive({ q: trimmed, total, verses: page.verses })
+        const refs = pageOf(r.hits, 0, FIRST)
+        const page = refs.length ? await call<PageResponse>({ type: 'page', base, query: trimmed, versions: inV, langs, options, refs }) : { verses: [] }
+        if (!stale) setLive({ q: trimmed, key, total: r.hits.length / 4, hits: r.hits, verses: page.verses })
       } catch { if (!stale) setLive(undefined) }
     }, 220)
     return () => { stale = true; clearTimeout(timer) }
-  }, [trimmed, version])
+  }, [trimmed, key])
+  const [loadingMore, setLoadingMore] = useState(false)
+  const more = async () => {
+    if (!live || loadingMore) return
+    setLoadingMore(true)
+    const refs = pageOf(live.hits, live.verses.length, live.verses.length + MORE)
+    try {
+      const page = await call<PageResponse>({ type: 'page', base: data.url(''), query: live.q, versions: inV, langs, options: settings.searchOptions, refs })
+      setLive(l => l && l.q === live.q && l.key === live.key ? { ...l, verses: [...l.verses, ...page.verses] } : l)
+    } finally { setLoadingMore(false) }
+  }
+
+  // Voice: say the words you remember. Uses the phone's own speech
+  // recognition, so nothing is added to the app; the button only shows where
+  // the browser has it.
+  const [listening, setListening] = useState(false)
+  const [voiceNote, setVoiceNote] = useState('')
+  const rec = useRef<any>()
+  const listen = () => {
+    if (rec.current) { rec.current.stop(); return }
+    const SR = speechRecognition()
+    if (!SR) return
+    const r = new SR()
+    r.lang = speechLang(t?.lang)
+    r.interimResults = true
+    r.maxAlternatives = 1
+    r.onresult = (e: any) => {
+      let text = ''
+      for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript
+      setQ(text.trim())
+    }
+    r.onerror = (e: any) => setVoiceNote(e.error === 'not-allowed' || e.error === 'service-not-allowed'
+      ? 'Allow the microphone to search by voice.' : e.error === 'network' ? 'Voice search needs a connection on this phone.'
+      : e.error === 'no-speech' ? 'Didn’t catch that. Tap the microphone and speak.' : '')
+    r.onend = () => { rec.current = undefined; setListening(false) }
+    rec.current = r
+    setVoiceNote(''); setQ(''); setListening(true)
+    if (!open) setOpen(true)
+    try { r.start() } catch { rec.current = undefined; setListening(false) }
+  }
+  useEffect(() => { if (!open) rec.current?.abort?.() }, [open])
 
   // On iPhone, a tap on the closed bar would focus the field down at the
   // bottom of the screen, and iOS then slides the whole screen to keep it
@@ -297,15 +348,19 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     if (p.dy > 90) close()
   }
   const finish = (path: string) => { close(); setQ(''); go(path) }
-  const searchAll = (query = trimmed) => {
-    if (!query) return
-    rememberSearch(query); setRecent(loadRecent())
-    finish(`search?q=${encodeURIComponent(query)}&v=${version}`)
-  }
+  // Search (the keyboard's button) puts the keyboard away to show the results.
   const submit = (e: Event) => {
     e.preventDefault()
-    if (ref) finish(readPath(version, ref.book, ref.chapter, ref.verse))
-    else searchAll()
+    if (ref) return finish(readPath(version, ref.book, ref.chapter, ref.verse))
+    if (!trimmed) return
+    rememberSearch(trimmed); setRecent(loadRecent())
+    input.current?.blur()
+  }
+  const openHit = (v: PageVerse) => {
+    if (trimmed) rememberSearch(trimmed)
+    const shown = v.texts.find(x => x.matched) ?? v.texts[0]
+    const id = v.texts.some(x => x.matched && x.version === version) ? version : shown?.version ?? version
+    finish(readPath(id, v.book, v.chapter, v.verse))
   }
 
   return (
@@ -338,16 +393,29 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 {books.map(b => <button class="sb-chip" onClick={() => finish(readPath(version, b.id, 1))}>{b.name}</button>)}
               </div>
             )}
-            {live && live.q === trimmed && (
+            {trimmed.length >= 2 && !ref && (
               <div class="sb-live">
-                <div class="sb-kicker">{live.total ? `${live.total.toLocaleString()} ${live.total === 1 ? 'verse' : 'verses'} in ${version}` : `No verses in ${version}`}</div>
-                {live.verses.map(v => (
-                  <button class="sb-item" onClick={() => finish(readPath(version, v.book, v.chapter, v.verse))}>
-                    <span class="sb-title">{formatRef(v)}</span>
-                    <span class="sb-verse" dir={t?.rtl ? 'rtl' : undefined}><VerseText raw={v.texts[0]?.text ?? ''} ranges={v.texts[0]?.ranges} /></span>
+                <div class="sb-kicker">
+                  <span>{live && live.q === trimmed && live.key === key
+                    ? live.total ? `${live.total.toLocaleString()} ${live.total === 1 ? 'verse' : 'verses'}${live.total > 1 && trimmed.includes(' ') ? ', best first' : ''}` : 'No verses found'
+                    : listening ? 'Listening…' : 'Searching…'}</span>
+                  <button type="button" class="sb-in" onClick={() => setPickIn(true)} aria-label={`Search in ${inV.join(', ')}. Change`}>
+                    in {inV.length > 2 ? `${inV.length} versions` : inV.join(', ')} ▾
                   </button>
-                ))}
-                {live.total > live.verses.length && <button class="sb-more" onClick={() => searchAll()}>See all {live.total.toLocaleString()} results, by book →</button>}
+                </div>
+                {live && live.q === trimmed && live.key === key && live.verses.map(v => {
+                  const shown = v.texts.find(x => x.matched) ?? v.texts[0]
+                  const tv = byId.get(shown?.version ?? version)
+                  return (
+                    <button class="sb-item" onClick={() => openHit(v)}>
+                      <span class="sb-title">{formatRef(v)}{inV.length > 1 && shown && <span class="sb-vtag">{shown.version}</span>}</span>
+                      <span class="sb-verse" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}><VerseText raw={shown?.text ?? ''} ranges={shown?.ranges} /></span>
+                    </button>
+                  )
+                })}
+                {live && live.q === trimmed && live.key === key && live.total > live.verses.length && (
+                  <button class="sb-more" onClick={more}>{loadingMore ? 'Loading…' : `Show more (${(live.total - live.verses.length).toLocaleString()} more)`}</button>
+                )}
               </div>
             )}
             {!trimmed && chapters > 0 && (
@@ -368,7 +436,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 {recent.length > 0 && (
                   <div class="sb-recent">
                     <div class="sb-kicker">Recent searches <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button></div>
-                    {recent.map(r => <button class="sb-row" onClick={() => searchAll(r)}><Glass small />{r}</button>)}
+                    {recent.map(r => <button class="sb-row" onClick={() => setQ(r)}><Glass small />{r}</button>)}
                   </div>
                 )}
                 <div class="sb-allbooks">
@@ -389,7 +457,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 </div>
                 <div class="sb-tips">
                   <div class="sb-kicker">Try</div>
-                  {['John 3:16', '"born again"', 'love NEAR/5 neighbour', 'H430', 'grace in:pauline'].map(x => (
+                  {(t?.lang === 'fr' ? FR_TRY : EN_TRY).map(x => (
                     <button class="sb-chip" onClick={() => setQ(x)}>{x}</button>
                   ))}
                 </div>
@@ -404,7 +472,13 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
-          {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
+          {q && !listening && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
+          {(!q || listening) && open && speechRecognition() && (
+            <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}
+              aria-label={listening ? 'Stop listening' : 'Search by voice'} title={listening ? 'Stop listening' : 'Search by voice'}>
+              <MicIcon />
+            </button>
+          )}
         </form>
         {/* Circles, then prayer, always one tap away just right of search.
             🙏 opens the glowing microphone over the page. */}
@@ -412,7 +486,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         {!open && <PrayButton />}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
+        {open && voiceNote && <div class="sb-voice-note" role="status">{voiceNote}</div>}
       </div>
+      {pickIn && <VersionPicker title="Search in" multi selected={inV} onClose={() => setPickIn(false)}
+        onChange={ids => ids.length && setPicked(ids)} />}
     </>
   )
 }
@@ -464,6 +541,23 @@ function rememberKeyboard(key: string, kb: number) {
     all[key] = Math.round(kb)
     localStorage.setItem(KEYBOARD, JSON.stringify(all))
   } catch { /* ignore */ }
+}
+
+const FIRST = 12, MORE = 20
+const EN_TRY = ['John 3:16', 'the Lord is my shepherd', 'no weapon formed against me', 'love your enemies']
+const FR_TRY = ['Jean 3:16', 'l’Éternel est mon berger', 'aucune arme forgée contre toi', 'aimez vos ennemis']
+
+const speechRecognition = (): any => (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
+
+const speechLang = (code = '') => ({ en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', pt: 'pt-BR', it: 'it-IT', ru: 'ru-RU', he: 'he-IL', el: 'el-GR', zh: 'zh-CN', ar: 'ar-SA' } as Record<string, string>)[code] ?? (navigator.language || 'en-US')
+
+function MicIcon() {
+  return (
+    <svg viewBox="0 0 24 24" width="20" height="20" aria-hidden="true">
+      <rect x="8.5" y="3" width="7" height="12" rx="3.5" fill="currentColor" />
+      <path d="M5.5 11.5a6.5 6.5 0 0 0 13 0M12 18v3" stroke="currentColor" stroke-width="2.2" fill="none" stroke-linecap="round" />
+    </svg>
+  )
 }
 
 function Glass({ small }: { small?: boolean }) {

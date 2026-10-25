@@ -127,13 +127,6 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
           <option value="range">Book range…</option>
         </select>
         {scope.startsWith('range:') && <RangePicker value={scope.slice(6)} onChange={r => setParams({ s: 'range:' + r, b: undefined })} />}
-        <details class="opts">
-          <summary>Options</summary>
-          <label><input type="checkbox" checked={opts.caseSensitive} onChange={e => setOpt('caseSensitive', (e.target as HTMLInputElement).checked)} /> Match case</label>
-          <label><input type="checkbox" checked={opts.accentSensitive} onChange={e => setOpt('accentSensitive', (e.target as HTMLInputElement).checked)} /> Match accents and vowel points</label>
-          <label><input type="checkbox" checked={opts.partialWords} onChange={e => setOpt('partialWords', (e.target as HTMLInputElement).checked)} /> Match inside words</label>
-        </details>
-        <button class="link" onClick={() => setHelp(h => !h)}>{help ? 'Hide tips' : 'Search tips'}</button>
       </div>
 
       {help && <SearchHelp onPick={onGo && (x => setParams({ q: x, b: undefined }))} />}
@@ -228,21 +221,12 @@ function SearchHelp({ onPick }: { onPick?: (q: string) => void }) {
       <table>
         <tbody>
           {ex('faith', 'the whole word, any case or accent')}
-          {ex('no weapons formed against me', 'plain words find a verse as you remember it: any form of a word (weapon, weapons), small words and me/thee/you not required, best matches first')}
-          {ex('"in the beginning"', 'an exact phrase')}
-          {ex('faith AND works', 'verses with both exact words')}
-          {ex('mercy OR grace', 'either word')}
-          {ex('love -hate', 'love but not hate (also NOT hate)')}
-          {ex('(mercy OR grace) peace', 'group with parentheses')}
-          {ex('redeem*', 'wildcards: * any letters, ? one letter')}
-          {ex('light NEAR/3 darkness', 'words at most 3 words apart')}
-          {ex('H430', "a Strong's number (H = Hebrew, G = Greek) in KJV, BSB and the original-language texts")}
-          {ex('/^And it came to pass/', 'a regular expression')}
-          {ex('kingdom in:gospels', 'limit to books: in:nt, in:ot, in:john, in:gen-deut, in:romans,galatians')}
+          {ex('no weapons formed against me', 'type a verse as you remember it: any form of a word, any accents, small slips, best matches first')}
+          {ex('l’Éternel est mon berger', 'in any language you read')}
           {ex('John 3:16', 'a reference jumps straight to the passage')}
         </tbody>
       </table>
-      <p class="muted small">Pick several versions to search them all at once. Tap a bar in the results chart to narrow to one book.</p>
+      <p class="muted small">Pick several versions to search them all at once. Tap a bar in the results chart to narrow to one book. For an exact phrase, put it in "quotes".</p>
     </div>
   )
 }
