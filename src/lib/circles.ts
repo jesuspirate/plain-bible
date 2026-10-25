@@ -220,6 +220,61 @@ export async function openInvited(id: string, invite: Invite, me: string) {
   await listCircles().catch(() => {})
 }
 
+// ---- joining with a code ----------------------------------------------------------
+// A member makes a 6-digit code; the person joining types it, which leaves a
+// public key; the member taps Allow and their device seals the circle key to
+// it. Guessing a code gets nobody in: the member still has to allow, after
+// checking that both screens show the same four digits.
+
+/** The member's side: a code for one person, for 15 minutes. */
+export const makeCode = (circle: string) => api<{ code: string; expires: number }>(`/circles/${circle}/code`, { method: 'POST', token: token() })
+export const dropCode = (circle: string, code: string) => api(`/circles/${circle}/code/${code}`, { method: 'DELETE', token: token() }).catch(() => {})
+/** Who typed the code, once someone has, with the four digits their screen shows. */
+export async function codeAsk(circle: string, code: string): Promise<{ label: string; match: string; pub: string } | null> {
+  const r = await api<{ pub: string | null; label: string | null }>(`/circles/${circle}/code/${code}`, { token: token() })
+  if (!r.pub) return null
+  const { matchCode } = await import('./approve')
+  return { label: r.label || 'device', match: await matchCode(r.pub), pub: r.pub }
+}
+export async function allowCode(circle: string, code: string, pub: string) {
+  const raw = (await rawKeys())[circle]
+  if (!raw) throw new SyncError('This circle isn’t unlocked on this device yet.')
+  const { EC, shared } = await import('./approve')
+  const pair = await crypto.subtle.generateKey(EC, false, ['deriveBits']) as CryptoKeyPair
+  const epk = b64url.encode(new Uint8Array(await crypto.subtle.exportKey('raw', pair.publicKey)))
+  const sealed = b64url.encode(await seal(await shared(pair.privateKey, pub, `code ${code}`), raw, `code/${code}`))
+  await api(`/circles/${circle}/code/${code}`, { method: 'PUT', token: token(), body: { epk, sealed } })
+}
+
+export interface Typed { code: string; pub: string; priv: CryptoKey; match: string }
+/** The joining side: type the code. Returns the four digits to compare. */
+export async function typeCode(code: string): Promise<Typed> {
+  const { EC, deviceLabel, matchCode } = await import('./approve')
+  const pair = await crypto.subtle.generateKey(EC, false, ['deriveBits']) as CryptoKeyPair
+  const pub = b64url.encode(new Uint8Array(await crypto.subtle.exportKey('raw', pair.publicKey)))
+  await api('/circles/code', { method: 'POST', token: token(), body: { code, pub, label: deviceLabel() } })
+  return { code, pub, priv: pair.privateKey, match: await matchCode(pub) }
+}
+export const stopWaiting = (t: Typed) => api(`/circles/code/${t.code}`, { method: 'DELETE', token: token() }).catch(() => {})
+/** Once allowed: join, and the circle opens here. Null while still waiting. */
+export async function joinWithCode(t: Typed, me: string, code?: string): Promise<CircleInfo | 'needCode' | null> {
+  const r = await api<{ circle: string; epk: string | null; sealed: string | null }>(`/circles/code/${t.code}`, { token: token() })
+  if (!r.sealed || !r.epk) return null
+  const { shared } = await import('./approve')
+  const raw = await open(await shared(t.priv, r.epk, `code ${t.code}`), b64url.decode(r.sealed), `code/${t.code}`)
+  await meta.set('circle-keys', { ...(await rawKeys()), [r.circle]: raw })
+  const lock = await lockKey(code)
+  if (lock === 'needCode') return lock
+  const key = await circleKey(r.circle, raw)
+  await api(`/circles/code/${t.code}/join`, {
+    method: 'POST', token: token(), body: {
+      wrapped: b64url.encode(await seal(lock, raw, `circle/${r.circle}`)), me: await sealJson(key, me, `${r.circle}/me`),
+    },
+  })
+  const list = await listCircles().catch(() => null)
+  return (list && list !== 'needCode' ? list.circles.find(c => c.id === r.circle) : undefined) ?? { id: r.circle, name: 'Circle', members: 0 }
+}
+
 export async function leaveCircle(circle: string) {
   await api(`/circles/${circle}/me`, { method: 'DELETE', token: token() })
   const raws = await rawKeys()
