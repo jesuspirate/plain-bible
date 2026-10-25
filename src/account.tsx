@@ -180,9 +180,9 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
   )
 }
 
-/** With `onAccount`, "Sign-in and account" is a row that opens its own page
- *  (Settings shows it as one, with a back arrow); `part="account"` is that page. */
-export function AccountSection({ onAccount, part }: { onAccount?: () => void; part?: 'account' } = {}) {
+/** Settings → Account, all on one page: signed out, the ways in; signed in,
+ *  who you are, sync, and the account's own buttons, as cards. */
+export function AccountSection() {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState('')
@@ -260,47 +260,49 @@ export function AccountSection({ onAccount, part }: { onAccount?: () => void; pa
     )
   }
 
-  const account = <>
-    {info && <p class="muted small">
-      {info.email && <>Email {info.email} · </>}
-      {info.passkeys} {info.passkeys === 1 ? 'passkey' : 'passkeys'} · account created {new Date(info.created).toLocaleDateString()}
-    </p>}
-    <div class="row wrap">
-      {email && info?.email && !addEmail && <button onClick={() => setAddEmail(true)} disabled={!!working}>Change email</button>}
-      {email && info?.email && !!info.passkeys && <button onClick={dropEmail} disabled={!!working}>Remove email</button>}
-      <button onClick={addKey} disabled={!!working}>{working === 'add' ? 'Waiting for passkey…' : info?.passkeys ? 'Add another passkey' : 'Add a passkey'}</button>
-      <button onClick={logout} disabled={!!working}>Sign out</button>
-      <button class="danger" onClick={remove} disabled={!!working}>Delete account</button>
-    </div>
-    {/* Signed in by email, it can look as if the passkeys went away; they didn't, and this button only ever makes a new one. */}
-    <p class="muted small">{info?.passkeys
-      ? `Your ${info.passkeys === 1 ? 'passkey still works' : `${info.passkeys} passkeys still work`}, however you signed in. Add another only for a device that can’t use ${info.passkeys === 1 ? 'it' : 'them'}: passkeys in iCloud Keychain, Google Password Manager or Bitwarden already reach your other devices.`
-      : 'A passkey lets you sign in with Face ID, a fingerprint or your screen lock. Saved to iCloud Keychain, Google Password Manager or Bitwarden, it works on your other devices too.'}</p>
-  </>
-  if (part === 'account') return (
-    <div class="account">
-      {account}
-      {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
-      {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
-    </div>
-  )
-
-  const when = acct.lastSync ? new Date(acct.lastSync).toLocaleString(undefined, { dateStyle: 'medium', timeStyle: 'short' }) : ''
+  const when = acct.lastSync ? new Date(acct.lastSync) : undefined
+  const last = sync.busy ? 'Syncing…' : sync.error ? 'Couldn’t sync' : when
+    ? 'Last synced ' + (when.toDateString() === new Date().toDateString()
+      ? when.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
+      : when.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))
+    : 'Sync is on'
+  const keys = info?.passkeys ?? 0
   return (
-    <div class="account">
-      <p><strong>Sync is on.</strong> <span class="muted">{sync.busy ? 'Syncing…' : sync.error ? '' : when ? `Last synced ${when}.` : ''}</span></p>
-      <div class="row wrap">
-        <button onClick={sync.run} disabled={sync.busy}>Sync now</button>
+    <div class="account account-page">
+      <div class="set-list">
+        <div class="set-row set-static">
+          <span class="set-icon acct-ok" aria-hidden="true">✓</span>
+          <span class="set-label">Signed in{info?.email ? ` as ${info.email}` : ''}
+            {info && <span class="set-sub">{keys} {keys === 1 ? 'passkey' : 'passkeys'} · since {new Date(info.created).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+          </span>
+        </div>
       </div>
-      <DeviceLink />
-      {/* Someone who signed in by passkey alone can add an email, so losing the passkey never locks them out. */}
-      {email && info && !info.email && !addEmail && (
-        <p class="muted small">Worried about losing your passkey? <button class="link" onClick={() => setAddEmail(true)}>Add your email</button> as another way to sign in.</p>
-      )}
+
+      <h2 class="set-kicker">Sync</h2>
+      <div class="set-list">
+        <button class="set-row" onClick={sync.run} disabled={sync.busy}>
+          <span class="set-label">Sync now<span class="set-sub">{last}</span></span>
+        </button>
+        <DeviceLink row />
+      </div>
+
+      <h2 class="set-kicker">Sign-in</h2>
+      <div class="set-list">
+        {email && !addEmail && <button class="set-row" onClick={() => setAddEmail(true)} disabled={!!working}>
+          <span class="set-label">{info?.email ? 'Change email' : 'Add an email'}{!info?.email && <span class="set-sub">Another way in if you lose your passkey</span>}</span>
+        </button>}
+        <button class="set-row" onClick={addKey} disabled={!!working}>
+          <span class="set-label">{working === 'add' ? 'Waiting for passkey…' : keys ? 'Add another passkey' : 'Add a passkey'}
+            <span class="set-sub">{keys ? 'Only for a device your passkeys don’t reach' : 'Face ID, a fingerprint or your screen lock'}</span></span>
+        </button>
+        {email && info?.email && !!keys && <button class="set-row" onClick={dropEmail} disabled={!!working}><span class="set-label">Remove email</span></button>}
+      </div>
       {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
-      {onAccount
-        ? <button class="link account-open" onClick={onAccount}>Sign-in and account ›</button>
-        : <details class="account-more"><summary>Sign-in and account</summary>{account}</details>}
+
+      <div class="set-list">
+        <button class="set-row" onClick={logout} disabled={!!working}><span class="set-label">Sign out</span></button>
+        <button class="set-row danger" onClick={remove} disabled={!!working}><span class="set-label">Delete account</span></button>
+      </div>
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>
   )

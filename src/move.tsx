@@ -217,7 +217,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
 
 /** Settings → Account, and Your prayers: a link that signs another device
  *  in and unlocks prayers there. */
-export function DeviceLink({ class: cls = '' }: { class?: string }) {
+export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boolean }) {
   const [state, setState] = useState<'idle' | 'working' | 'ready'>('idle')
   const [made, setMade] = useState<{ link: string; prayers: boolean; locked: boolean }>()
   const [error, setError] = useState('')
@@ -243,6 +243,13 @@ export function DeviceLink({ class: cls = '' }: { class?: string }) {
       {error && <p class="note">{error}</p>}
     </div>
   )
+  // As a row in a Settings card.
+  if (row) return <>
+    <button class="set-row" disabled={state === 'working'} onClick={make}>
+      <span class="set-label">{state === 'working' ? 'Making a link…' : 'Link another device'}<span class="set-sub">Sign it in without typing anything</span></span>
+    </button>
+    {error && <p class="note small set-note">{error}</p>}
+  </>
   return (
     <div class={cls}>
       <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={make}>{state === 'working' ? 'Making a link…' : 'Link another device'}</button>
