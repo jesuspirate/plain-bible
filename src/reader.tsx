@@ -14,7 +14,8 @@ import { TURN_EVENT, watchReading } from './lib/streaks'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
+import { canListen, startListening } from './listen'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -725,6 +726,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? 'Saved' : 'Bookmark'}</span>
           </button>
           <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>Note</span></button>
+          {canListen && <button onClick={() => { startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }, bibles[version]); onClose() }}>
+            <SpeakerIcon size={22} /><span>Listen</span></button>}
           <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>Copy</span></button>
           {canShare
             ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>Share</span></button>
