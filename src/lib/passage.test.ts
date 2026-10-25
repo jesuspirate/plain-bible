@@ -52,7 +52,7 @@ describe('Bibles that number the Psalms the Greek way', () => {
 describe('readerVersions', () => {
   const lang: Record<string, string> = { KJV: 'en', BSB: 'en', LSG: 'fr', EthFr: 'fr' }
   it('starts with the Bible you read, then yours in the same language', () => {
-    expect(readerVersions({ version: 'LSG', favorite: 'LSG', myVersions: ['KJV', 'BSB', 'LSG', 'EthFr'] }, id => lang[id])).toEqual(['LSG', 'EthFr'])
-    expect(readerVersions({ version: 'BSB', favorite: 'KJV', myVersions: ['KJV', 'BSB', 'LSG'] }, id => lang[id])).toEqual(['BSB', 'KJV'])
+    expect(readerVersions({ version: 'LSG', myVersions: ['KJV', 'BSB', 'LSG', 'EthFr'] }, id => lang[id])).toEqual(['LSG', 'EthFr'])
+    expect(readerVersions({ version: 'BSB', myVersions: ['KJV', 'BSB', 'LSG'] }, id => lang[id])).toEqual(['BSB', 'KJV'])
   })
 })

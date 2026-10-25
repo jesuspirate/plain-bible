@@ -40,9 +40,9 @@ export interface Settings {
   strongs: boolean
   strongsNumbers: boolean
   myVersions: string[]
+  /** your Bible: the one you picked, and the one the app opens in. Reading
+   *  another version (a search result, a link) doesn't change it. */
   version: string
-  /** the version the app always opens in */
-  favorite?: string
   parallel: string[]
   searchVersions: string[]
   searchOptions: SearchOptions

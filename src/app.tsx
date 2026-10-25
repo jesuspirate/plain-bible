@@ -64,8 +64,15 @@ export function App() {
   useEffect(() => {
     const start = (c: Catalog) => {
       const ids = new Set(c.translations.map(t => t.id))
-      const s = { ...defaultSettings(c), ...loadSettings() }
+      const s = { ...defaultSettings(c), ...loadSettings() } as Settings & { favorite?: string }
       s.myVersions = s.myVersions.filter(id => ids.has(id))
+      // "Open … every time" was a second, hidden choice of Bible beside the
+      // one you read, and the app opened in it. It is now your Bible, sent
+      // to your other devices as your latest choice.
+      if (s.favorite !== undefined) {
+        if (ids.has(s.favorite) && s.favorite !== s.version) { s.version = s.favorite; touchSettings(['version']) }
+        delete s.favorite
+      }
       if (!ids.has(s.version)) s.version = c.translations[0].id
       setCatalog(c); setSettings(s)
     }
@@ -98,10 +105,9 @@ export function App() {
     return () => dark.removeEventListener('change', tint)
   }, [settings])
 
-  // Keep the Default Bible (or, before one is chosen, the current version)
-  // saved for offline use, and ask the browser not to clear saved Bibles.
+  // Keep your Bible saved for offline use, and ask the browser not to clear saved Bibles.
   // With Strong's numbers on, the Hebrew and Greek lexicons are kept too.
-  const offlineId = settings && (settings.favorite || settings.version)
+  const offlineId = settings?.version
   const strongs = !!settings?.strongs
   useEffect(() => {
     if (!offlineId) return
@@ -258,7 +264,7 @@ function ReaderRoute({ route }: { route: Route }) {
       })
     } else if (route.path.length < 4) {
       const last = loadPlace()
-      go(readPath(route.path[1] || settings.favorite || settings.version, last?.book ?? 'Gen', last?.chapter ?? 1), true)
+      go(readPath(route.path[1] || settings.version, last?.book ?? 'Gen', last?.chapter ?? 1), true)
     } else {
       // A new chapter starts at its top (or the verse you jumped to); the
       // reader keeps the verse up to date as you scroll.
@@ -311,7 +317,7 @@ function HistoryButton({ route }: { route: Route }) {
   const reading = route.path[0] === 'read' && route.path.length >= 4
   // Away from the reader (Settings, Saved) the first place is the one you're reading.
   const places = reading ? previous(trail) : trail.items.slice().reverse()
-  const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.favorite || settings.version
+  const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.version
   const parallel = (reading && route.params.get('p')?.split(',')) || []
   const goTo = (p: Visit) => { setPeek(false); go(resumePath(version, p.book, p.chapter, p.verse, parallel)) }
 

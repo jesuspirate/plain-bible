@@ -54,9 +54,12 @@ export function Reader({ route }: { route: Route }) {
 
   // A version that isn't on the device can't open offline; it tries again
   // by itself once the connection is back.
+  // Your Bible changes only when you pick one (Settings, Versions). A
+  // search result, a lexicon search or a link that opens another version
+  // is a visit: it never becomes yours, here or on your other devices.
   const [retry, setRetry] = useState(0)
   useEffect(() => {
-    if (version !== settings.version || parallel.join() !== settings.parallel.join()) update({ version, parallel })
+    if (parallel.join() !== settings.parallel.join()) update({ parallel })
     setError('')
     Promise.all(versions.map(v => data.bible(v)))
       .then(bs => setBibles(Object.fromEntries(bs.map(b => [b.id, b]))))
@@ -583,7 +586,7 @@ export function Reader({ route }: { route: Route }) {
         </div>
       )}
       {tied && <div class="pick-verse done" role="status">{tied}</div>}
-      {noteFor && <NotesSheet book={book} chapter={chapter} {...noteFor} dir={t?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
+      {noteFor && <NotesSheet book={book} chapter={chapter} version={version} {...noteFor} dir={t?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
         text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
       {chapterSheet && (
         <Sheet title={`Your notes · ${bookById(book).name} ${chapter}`} onClose={() => setChapterSheet(false)}>
@@ -728,13 +731,13 @@ export interface NotesTarget {
  *  editor for one note. The verses are shown above as a reminder. Notes are
  *  saved as you type. A sheet opened straight to one note closes when you're
  *  done with it; opened on the list, it goes back to the list. */
-export function NotesSheet({ book, chapter, verses, start, text, dir, links, onGo, onClose }: NotesTarget & {
-  book: string; chapter: number; text: (v: number) => string; dir?: 'rtl'; links?: NoteLinks; onGo?: (x: LinkedNote) => void; onClose: () => void
+export function NotesSheet({ book, chapter, version, verses, start, text, dir, links, onGo, onClose }: NotesTarget & {
+  book: string; chapter: number; version?: string; text: (v: number) => string; dir?: 'rtl'; links?: NoteLinks; onGo?: (x: LinkedNote) => void; onClose: () => void
 }) {
   const { marks, settings } = useApp()
   // A note can go to your circle as it is, with the verses it's on.
   const share = inCircles() ? (note: string, vs: number[]) => {
-    shareWithCircle({ verse: { book, chapter, verses: vs }, version: settings.version, text: vs.map(v => text(v)).filter(Boolean).join(' '), note })
+    shareWithCircle({ verse: { book, chapter, verses: vs }, version: version ?? settings.version, text: vs.map(v => text(v)).filter(Boolean).join(' '), note })
   } : undefined
   const list = verses.length === 1
     ? notesCovering(marks, book, chapter, verses[0])
