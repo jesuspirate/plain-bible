@@ -180,6 +180,12 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
         <button class="link" disabled={!!working} onClick={() => { setSent(false); setMsg('') }}>{t('Use another email')}</button>
       </div>
       {msg && <p class="note">{msg}</p>}
+      {/* A new sending domain is sometimes held back or binned by mail services. */}
+      <details class="account-more">
+        <summary>{t('Code didn’t come?')}</summary>
+        <p class="muted small">{t('Wait a minute, then look in Spam or Junk. If it’s there, mark it “Not spam” so the next one comes straight in.')}</p>
+        {!token && <p class="muted small">{t('Still nothing? Use a passkey instead, or on a device that’s already signed in, open Settings → Account → Link another device.')}</p>}
+      </details>
     </div>
   )
 }
@@ -226,18 +232,21 @@ export function AccountSection() {
   })
 
   if (!acct) {
+    // A passkey first: nothing to wait for and no mail to lose. Email codes
+    // are the way in for people without one, or on a browser without passkeys.
     if (email) return (
       <div class="account">
         <p class="muted">{t('Optional. Keep your highlights, notes, settings and prayers the same on all your devices.')}{' '}
-          {t('No password: we email you a code. New here? The same code makes your account.')}</p>
-        <EmailCode onToken={sync.signedIn} />
+          {passkeys ? t('Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.')
+            : t('No password: we email you a code. New here? The same code makes your account.')}</p>
         {passkeys && <>
-          <p class="muted small">{t('Or use a passkey: Face ID, a fingerprint or your screen lock.')}</p>
           <div class="row wrap">
-            <button disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in with a passkey')}</button>
+            <button class="primary" disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in with a passkey')}</button>
             <button disabled={!!working} onClick={create}>{working === 'create' ? t('Waiting for passkey…') : t('New account with a passkey')}</button>
           </div>
+          <p class="muted small">{t('No passkey? We can email you a code instead. New here? The same code makes your account.')}</p>
         </>}
+        <EmailCode onToken={sync.signedIn} />
         <details class="account-more">
           <summary>{t('Got a link from your other device?')}</summary>
           <PasteMove />
