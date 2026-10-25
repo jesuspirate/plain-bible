@@ -5,6 +5,7 @@ import { BOOKS, BOOK_INDEX } from './lib/books'
 import { Bible, DataSource } from './lib/data'
 import { compile, highlight, parseQuery, Range, SearchOptions, VerseCtx } from './lib/query'
 import { normalize, plain, segments } from './lib/text'
+import { FAMOUS } from './lib/famous'
 import { buildIndex, fixTypos, lang, looseQuery, looseRanges, looseSearch, looseWords, LooseIndex } from './lib/loose'
 
 export interface SearchRequest {
@@ -68,6 +69,14 @@ const forgiving = (q: string) => looseWords(q)
 
 const looseCache = new Map<string, LooseIndex>()
 
+// Well-loved verses get a lift, so the verse you half remember beats a
+// stray verse sharing more of its words.
+const famous = new Set([...FAMOUS].map(k => {
+  const [book, cv] = k.split(' '), [c, v] = cv.split(':')
+  return (BOOK_INDEX[book] << 20) | (+c << 10) | +v
+}))
+const lift = (ref: number) => famous.has(ref) ? 2.5 : 0
+
 function looseIndex(bible: Bible, code: string | undefined): LooseIndex {
   const key = `${bible.id}|${code ?? ''}`
   let idx = looseCache.get(key)
@@ -106,7 +115,7 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
     if (loose) {
       const idx = looseIndex(bible, req.langs?.[vi])
       const allow = allowed && ((ref: number) => allowed!.has(BOOKS[ref >> 20].id))
-      for (const h of looseSearch(idx, looseQuery(loose, idx.lang), allow)) {
+      for (const h of looseSearch(idx, looseQuery(loose, idx.lang), allow, lift)) {
         masks.set(h.ref, (masks.get(h.ref) ?? 0) | (1 << vi))
         scores.set(h.ref, Math.max(scores.get(h.ref) ?? -Infinity, h.score))
         perVersion[vi]++

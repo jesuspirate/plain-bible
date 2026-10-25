@@ -40,7 +40,8 @@ const EN_STOP = set('a an the and or but nor of to in on at by for with from int
   'i me my mine myself we us our ours ourselves thou thee thy thine thyself ye you your yours yourself yourselves he him his himself she her hers herself they them their theirs themselves')
 const FR_STOP = set('le la les l un une des du de d et ou mais ni a au aux en dans par pour sur sous avec sans que qu qui quoi dont ou ne n pas point plus se s ce c cet cette ces ' +
   'est sont etait etaient sera seront etre ete ai as avons avez ont avait eu y car si comme lorsque quand aussi tout tous toute toutes ' +
-  'je j me m moi mon ma mes tu te t toi ton ta tes il ils elle elles lui leur leurs son sa ses nous notre nos vous votre vos eux')
+  'je j me m moi mon ma mes tu te t toi ton ta tes il ils elle elles lui leur leurs son sa ses nous notre nos vous votre vos eux ' +
+  'aucun aucune nul nulle jamais peut peux peuvent pourra pourras pourront pourrait pouvait doit doivent va vont')
 
 // Old and new forms that mean the same, and pronouns that a person
 // remembering a verse swaps freely (me / thee / you).
@@ -128,7 +129,9 @@ export function looseQuery(words: string[], l: Lang): LooseQuery {
   if (!ws.some(w => w.content)) ws = ws.map(w => ({ ...w, content: true }))
   const stems = [...new Set(ws.filter(w => w.content).map(w => w.key))]
   const k = stems.length
-  return { words: ws, stems, need: k <= 2 ? k : Math.max(2, Math.ceil(k * 0.6)) }
+  // Half the words is enough: people remember a verse in their own words
+  // ("formée" for "forgée"), and the ranking puts the closest first.
+  return { words: ws, stems, need: k <= 2 ? k : Math.ceil(k / 2) }
 }
 
 // ---------------------------------------------------------------------------
@@ -228,7 +231,8 @@ function distance(a: string, b: string, max: number): number {
 export interface LooseHit { ref: number; score: number }
 
 /** Verses that loosely match, with a score (higher is better). */
-export function looseSearch(idx: LooseIndex, query: LooseQuery, allow?: (ref: number) => boolean): LooseHit[] {
+/** `bonus` lifts verses the caller knows are sought often (see famous.ts). */
+export function looseSearch(idx: LooseIndex, query: LooseQuery, allow?: (ref: number) => boolean, bonus?: (ref: number) => number): LooseHit[] {
   const q = fixTypos(idx, query)
   const N = idx.texts.length
   if (!q.stems.length || !N) return []
@@ -251,12 +255,18 @@ export function looseSearch(idx: LooseIndex, query: LooseQuery, allow?: (ref: nu
     const toks = idx.texts[n].split(' ').filter(Boolean)
     const keys = toks.map(idx.lang.key)
     const have = new Set(keys)
+    // A word as typed counts fully; another form of it (armée for arme) a
+    // little less.
     let cov = 0
-    for (const s of q.stems) if (have.has(s)) cov += idf.get(s)!
+    for (const s of q.stems) {
+      if (!have.has(s)) continue
+      const asTyped = q.words.some(w => w.key === s && toks.includes(w.word))
+      cov += idf.get(s)! * (asTyped ? 1 : 0.75)
+    }
     const order = lcs(seq, keys) / seq.length
     const exactShare = q.words.filter(w => toks.includes(w.word)).length / exact.size
     const tight = tightness(q.stems.filter(s => have.has(s)), keys)
-    out.push({ ref, score: 10 * cov / total + 4 * order + 2 * tight + 0.5 * Math.min(1, exactShare) - toks.length / 1000 })
+    out.push({ ref, score: 10 * cov / total + 4 * order + 2 * tight + 0.5 * Math.min(1, exactShare) + (bonus?.(ref) ?? 0) - toks.length / 1000 })
   }
   return out
 }

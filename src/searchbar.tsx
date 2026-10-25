@@ -159,7 +159,19 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     if (Math.abs(dx) > 4) { d.moved = true; row.scrollLeft = d.left - dx }
   }
   const endDrag = () => { setTimeout(() => { drag.current = undefined }, 0) }
-  useEffect(() => { if (browse) panel.current?.scrollTo({ top: 0, behavior: 'smooth' }) }, [browse])
+  // Picking a book brings its chapters into view at the top, every time:
+  // even the same book twice, and even while the list is still gliding from
+  // a flick (iOS lets momentum override a smooth scroll, so the glide is
+  // stopped first and the jump is instant).
+  const pickBook = (id: string) => {
+    setBrowse(id)
+    const el = panel.current
+    if (!el) return
+    el.style.overflowY = 'hidden'
+    el.scrollTop = 0
+    requestAnimationFrame(() => { el.scrollTop = 0; el.style.overflowY = '' })
+  }
+  const [showRecent, setShowRecent] = useState(false)
   useEffect(() => {
     const row = chapterRow.current, on = row?.querySelector<HTMLElement>('.on')
     if (row && on) row.scrollLeft = on.offsetLeft - row.clientWidth / 2 + on.clientWidth / 2
@@ -248,29 +260,54 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [listening, setListening] = useState(false)
   const [voiceNote, setVoiceNote] = useState('')
   const rec = useRef<any>()
+  const watchdog = useRef<ReturnType<typeof setTimeout>>()
+  // Stopping always frees the screen at once, whether or not the browser
+  // ever reports back.
+  const stopListening = (note = '') => {
+    clearTimeout(watchdog.current)
+    const r = rec.current
+    rec.current = undefined
+    setListening(false)
+    if (note) setVoiceNote(note)
+    if (r) { r.onresult = r.onerror = r.onend = r.onstart = r.onaudiostart = null; try { r.abort() } catch { /* already stopped */ } }
+  }
   const listen = () => {
-    if (rec.current) { rec.current.stop(); return }
+    if (rec.current) return stopListening()
     const SR = speechRecognition()
     if (!SR) return
     const r = new SR()
     r.lang = speechLang(t?.lang)
     r.interimResults = true
     r.maxAlternatives = 1
+    let started = false, heard = false
+    r.onstart = r.onaudiostart = () => { started = true }
     r.onresult = (e: any) => {
+      heard = true
       let text = ''
       for (let i = 0; i < e.results.length; i++) text += e.results[i][0].transcript
       setQ(text.trim())
+      // A pause after speaking ends it.
+      clearTimeout(watchdog.current)
+      watchdog.current = setTimeout(() => stopListening(), 2500)
     }
-    r.onerror = (e: any) => setVoiceNote(e.error === 'not-allowed' || e.error === 'service-not-allowed'
+    r.onerror = (e: any) => stopListening(e.error === 'not-allowed' || e.error === 'service-not-allowed'
       ? 'Allow the microphone to search by voice.' : e.error === 'network' ? 'Voice search needs a connection on this phone.'
-      : e.error === 'no-speech' ? 'Didn’t catch that. Tap the microphone and speak.' : '')
-    r.onend = () => { rec.current = undefined; setListening(false) }
+      : e.error === 'no-speech' ? 'Didn’t catch that. Tap the microphone and speak.' : e.error === 'aborted' ? '' : VOICE_BROKEN)
+    r.onend = () => stopListening(heard ? '' : 'Didn’t catch that. Tap the microphone and speak.')
     rec.current = r
     setVoiceNote(''); setQ(''); setListening(true)
     if (!open) setOpen(true)
-    try { r.start() } catch { rec.current = undefined; setListening(false) }
+    // Some phones (iPhone home-screen apps in particular) accept the
+    // request and then never listen. Give up after a few seconds, and
+    // after that only offer the keyboard's own dictation.
+    watchdog.current = setTimeout(() => {
+      if (started || heard) { watchdog.current = setTimeout(() => stopListening(heard ? '' : 'Didn’t catch that. Tap the microphone and speak.'), 8000); return }
+      try { localStorage.setItem(VOICE_OFF, '1') } catch { /* private mode */ }
+      stopListening(VOICE_BROKEN)
+    }, 6000)
+    try { r.start() } catch { stopListening(VOICE_BROKEN) }
   }
-  useEffect(() => { if (!open) rec.current?.abort?.() }, [open])
+  useEffect(() => { if (!open) { stopListening(); setVoiceNote('') } }, [open])
 
   // On iPhone, a tap on the closed bar would focus the field down at the
   // bottom of the screen, and iOS then slides the whole screen to keep it
@@ -433,12 +470,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             )}
             {!trimmed && (
               <>
-                {recent.length > 0 && (
-                  <div class="sb-recent">
-                    <div class="sb-kicker">Recent searches <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button></div>
-                    {recent.map(r => <button class="sb-row" onClick={() => setQ(r)}><Glass small />{r}</button>)}
-                  </div>
-                )}
                 <div class="sb-allbooks">
                   {([['Old Testament', (i: number) => i < 39], ['New Testament', (i: number) => i >= 39 && i < 66], ['Deuterocanon', (i: number) => i >= 66]] as const).map(([label, inGroup]) => {
                     const list = BOOKS.filter((b, i) => inGroup(i) && lens[b.id])
@@ -448,13 +479,25 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                         <div class="sb-bookgrid">
                           {list.map(b => (
                             <button class={'sb-book' + (b.id === browseBook ? ' on' : '')} title={b.name}
-                              onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : setBrowse(b.id)}>{b.abbr}</button>
+                              onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : pickBook(b.id)}>{b.abbr}</button>
                           ))}
                         </div>
                       </>
                     )
                   })}
                 </div>
+                {/* Recent searches stay folded away under the books. */}
+                {recent.length > 0 && (
+                  <div class="sb-recent">
+                    <div class="sb-kicker">
+                      <button type="button" class="sb-fold" aria-expanded={showRecent} onClick={() => setShowRecent(x => !x)}>
+                        Recent searches ({recent.length}) <span aria-hidden="true">{showRecent ? '▾' : '▸'}</span>
+                      </button>
+                      {showRecent && <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button>}
+                    </div>
+                    {showRecent && recent.map(r => <button class="sb-row" onClick={() => setQ(r)}><Glass small />{r}</button>)}
+                  </div>
+                )}
                 <div class="sb-tips">
                   <div class="sb-kicker">Try</div>
                   {(t?.lang === 'fr' ? FR_TRY : EN_TRY).map(x => (
@@ -547,7 +590,10 @@ const FIRST = 12, MORE = 20
 const EN_TRY = ['John 3:16', 'the Lord is my shepherd', 'no weapon formed against me', 'love your enemies']
 const FR_TRY = ['Jean 3:16', 'l’Éternel est mon berger', 'aucune arme forgée contre toi', 'aimez vos ennemis']
 
-const speechRecognition = (): any => (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
+const VOICE_OFF = 'plain-bible:voice-off'
+const VOICE_BROKEN = 'Voice search doesn’t work in the app on this phone. Use the 🎤 on your keyboard instead.'
+const voiceOff = () => { try { return localStorage.getItem(VOICE_OFF) === '1' } catch { return false } }
+const speechRecognition = (): any => voiceOff() ? undefined : (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
 
 const speechLang = (code = '') => ({ en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', pt: 'pt-BR', it: 'it-IT', ru: 'ru-RU', he: 'he-IL', el: 'el-GR', zh: 'zh-CN', ar: 'ar-SA' } as Record<string, string>)[code] ?? (navigator.language || 'en-US')
 
