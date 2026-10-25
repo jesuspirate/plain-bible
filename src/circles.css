@@ -93,3 +93,8 @@ p.c-new-word { display: block; margin: 0 0 4px; }
   box-sizing: border-box; width: 100%; margin: 4px 0 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px;
   background: var(--bg); color: var(--text); font: 700 34px var(--sans); letter-spacing: .3em; text-align: center; font-variant-numeric: tabular-nums;
 }
+
+/* Which circle to share with: pills that wrap, however many circles. */
+.c-circles-pick { display: flex; flex-wrap: wrap; gap: 8px; }
+.c-circles-pick button { min-height: 40px; padding: 6px 14px; border-radius: 999px; font: 600 15px var(--sans); }
+.c-circles-pick button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
