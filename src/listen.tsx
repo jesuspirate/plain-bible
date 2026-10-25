@@ -218,7 +218,7 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
   }
   return (
     <Sheet title="Voice" onClose={onClose}>
-      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free in Settings → Accessibility → Spoken Content → Voices. After a download, close Quiet Bible fully (swipe it away) and open it again. Voices chosen for Live Speech are a separate list, and your Personal Voice can't be used by web apps.</p>
+      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free: in the iPhone Settings app, search "Voices" (it lives under Accessibility → Read & Speak, called Spoken Content on older iPhones). After a download, close Quiet Bible fully (swipe it away) and open it again. Voices chosen for Live Speech are a separate list, and your Personal Voice can't be used by web apps.</p>
       <div class="voice-list">
         {list.length === 0 && <p class="muted">No voice for this language on this phone.</p>}
         {list.map(v => (
