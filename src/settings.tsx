@@ -381,7 +381,6 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <div class="set-list">
           {settings.streaks && <StreakRow />}
           <Row icon={<BookmarkIcon size={24} />} label="Saved" sub="Bookmarks, notes, highlights" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
-          <Row icon={<SearchIcon size={24} />} label="Advanced search" onClick={() => setPage('search')} />
         </div>
       </section>
       {sync.enabled && <section class="set-group">

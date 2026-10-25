@@ -37,6 +37,14 @@ describe('forgiving search', () => {
     expect(run('god loves the world so much he gave his son')[0]).toBe(5)
     expect(run('whoever believes in him will not perish')[0]).toBe(5)
   })
+  it('forgives typos', () => {
+    expect(run('the lord is my shepard')[0]).toBe(4)
+    expect(run('No wepon formed aginst me')[0]).toBe(0)
+    expect(run('for god so loved the wrold')[0]).toBe(5)
+  })
+  it('forgives accents', () => {
+    expect(run('toute arme forgee contre toi', FR, 'fr')[0]).toBe(0)
+  })
   it('matches word forms', () => {
     expect(run('weapons').sort()).toEqual([0, 1])
     expect(run('form').sort()).toEqual([0, 2])
