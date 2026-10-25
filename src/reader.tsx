@@ -9,10 +9,11 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, shareWithCircle, useApp, versesPicked } from './state'
+import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
+import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
 
 export function Reader({ route }: { route: Route }) {
@@ -595,7 +596,9 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
     ? plain(b?.books[book]?.[chapter - 1]?.[verses[0] - 1] ?? '')
     : verses.map(v => { const raw = b?.books[book]?.[chapter - 1]?.[v - 1]; return raw ? `${v} ${plain(raw)}` : '' }).filter(Boolean).join(' ')
   const quote = `${textOf(bibles[version])}\n${ref} (${version})`
-  const link = shareLink(`#/${readPath(version, book, chapter, verses[0])}`)
+  // For someone else: numbered as everyone numbers it, to open in their Bible.
+  const std = toStandard(bibles[version], { book, chapter, verses })
+  const link = shareLink(`#/${sharedPath(version, std.book, std.chapter, std.verses[0])}`)
   const copy = async (s: string) => {
     try { await copyText(s); setNote('Copied') } catch { setNote('Copy failed') }
   }

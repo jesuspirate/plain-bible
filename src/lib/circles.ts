@@ -26,10 +26,15 @@ const newId = () => b64url.encode(crypto.getRandomValues(new Uint8Array(12)))
  *  change on the server, and apps that don't know a kind skip it. Reading
  *  together ("read John 3 today") can come later as a kind of its own,
  *  sent only by people who turn it on for themselves. */
+/** A verse carries its reference; whoever reads it sees it in their own
+ *  Bible (see lib/passage). `text` and `version` are the sender's words,
+ *  shown only when the reader's Bibles lack the passage, and `size` is how
+ *  many verses the sender's Bible has in that chapter, to notice when the
+ *  reader's Bible numbers it differently. */
 export type Shared =
-  | { k: 'verse' | 'bookmark'; verse: PrayerVerse; version: string; text: string; note?: string }
+  | { k: 'verse' | 'bookmark'; verse: PrayerVerse; version: string; text: string; size?: number; note?: string }
   /** a note of yours: `note` is the note itself, `text` the verses it's on */
-  | { k: 'note'; verse: PrayerVerse; version: string; text: string; note: string }
+  | { k: 'note'; verse: PrayerVerse; version: string; text: string; size?: number; note: string }
   | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; note?: string }
 
 export interface CircleInfo { id: string; name: string; members: number }
@@ -203,7 +208,8 @@ export function cleanShared(v: unknown): Shared | undefined {
   if (x.k === 'verse' || x.k === 'bookmark' || x.k === 'note') {
     const verse = cleanVerse(x.verse)
     if (!verse) return
-    const base = { verse, version: text(x.version, 20), text: text(x.text, 8000) }
+    const size = Number.isInteger(x.size) && (x.size as number) > 0 ? x.size as number : undefined
+    const base = { verse, version: text(x.version, 20), text: text(x.text, 8000), ...(size ? { size } : {}) }
     if (x.k === 'note') return note ? { k: 'note', ...base, note } : undefined
     return { k: x.k, ...base, note }
   }
@@ -285,19 +291,21 @@ async function send(circle: string, body: Shared, audio?: Uint8Array) {
 
 /** Verses as they are, as a bookmark (others can bookmark them too with a
  *  tap), or with one of your notes on them. */
-export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', verse: PrayerVerse, version: string, quote: string, note?: string) {
+export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', verse: PrayerVerse, version: string, quote: string, note?: string, size?: number) {
   if (k === 'note' && !note) throw new SyncError('That note is empty.')
-  return send(circle, k === 'note' ? { k, verse, version, text: quote, note: note! } : { k, verse, version, text: quote, note: note || undefined })
+  const base = { verse, version, text: quote, ...(size ? { size } : {}) }
+  return send(circle, k === 'note' ? { k, ...base, note: note! } : { k, ...base, note: note || undefined })
 }
 
-export async function sharePrayer(circle: string, prayerId: string, note?: string) {
+/** `standard`: the prayer's verse as everyone numbers it (see versification). */
+export async function sharePrayer(circle: string, prayerId: string, note?: string, standard = (v: PrayerVerse) => v) {
   const p = await prayers.get(prayerId)
   if (!p) throw new SyncError('That prayer is no longer on this device.')
   const parts = partsOf(p)
   const audio = new Uint8Array(parts.reduce((n, x) => n + x.audio.byteLength, 0))
   parts.reduce((o, x) => { audio.set(new Uint8Array(x.audio), o); return o + x.audio.byteLength }, 0)
   return send(circle, {
-    k: 'prayer', ms: p.ms, verse: p.verse, note: note || undefined,
+    k: 'prayer', ms: p.ms, verse: p.verse && standard(p.verse), note: note || undefined,
     parts: parts.map(x => ({ ms: x.ms, type: x.type, size: x.audio.byteLength })),
   }, audio)
 }

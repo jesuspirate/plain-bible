@@ -172,6 +172,13 @@ export function readPath(version: string, book: string, chapter: number, verse?:
   const qs = q.toString()
   return `read/${version}/${book}/${chapter}${qs ? '?' + qs : ''}`
 }
+/** A link to verses for someone else. It names your version, but opens in
+ *  the version they read (see ReaderRoute), never in yours. */
+export function sharedPath(version: string, book: string, chapter: number, verse?: number) {
+  const p = readPath(version, book, chapter, verse)
+  return `${p}${p.includes('?') ? '&' : '?'}shared=1`
+}
+
 /** Like readPath, but opens with `verse` at the top of the screen (where you
  *  left off) instead of marking it as a verse you jumped to. */
 export function resumePath(version: string, book: string, chapter: number, verse: number, parallel: string[] = []) {
