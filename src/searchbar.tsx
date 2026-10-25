@@ -405,7 +405,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
 // While search is open, Chrome is asked to lay the keyboard over the page
 // instead (the VirtualKeyboard API; iPhone has none and is unaffected), so
 // what is behind it is the dimmed page. Elsewhere, fields such as notes still
-// get the usual resize; it is handed back once the keyboard is down.
+// get the usual resize; it is handed back only once the keyboard has
+// finished sliding down, so it doesn't flash on the way down either.
 type VK = EventTarget & { overlaysContent: boolean; boundingRect: DOMRect }
 const vkApi = !isIOS && typeof navigator !== 'undefined' && matchMedia('(pointer: coarse)').matches
   ? (navigator as Navigator & { virtualKeyboard?: VK }).virtualKeyboard : undefined
@@ -421,10 +422,12 @@ function overlayKeyboard(on: boolean): VK | undefined {
   settle()
   if (on) { vk.overlaysContent = true; return vk }
   const off = () => { settle(); vk.overlaysContent = false }
-  if (!vk.boundingRect.height) return void off()
-  vkDown = () => { if (!vk.boundingRect.height) off() }
+  // Chrome can report the keyboard gone as it starts to slide away.
+  const soon = () => { clearTimeout(vkRelease); vkRelease = window.setTimeout(off, 700) }
+  vkDown = () => { if (!vk.boundingRect.height) soon() }
   vk.addEventListener('geometrychange', vkDown)
-  vkRelease = window.setTimeout(off, 1500)
+  if (!vk.boundingRect.height) soon()
+  else vkRelease = window.setTimeout(off, 2000)
 }
 
 // The keyboard's height on this phone, per screen size and orientation.
