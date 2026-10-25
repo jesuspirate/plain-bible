@@ -53,8 +53,8 @@ jobs:
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
-      # The old address (bible.chama.community) is served from Cloudflare
-      # Pages while devices move to myquietbible.com. Never blocks the main site.
+      # The old address (bible.chama.community), served from Cloudflare Pages,
+      # now redirects to myquietbible.com. Never blocks the main site.
       - name: Deploy old address
         if: github.event_name != 'pull_request' && env.HAS_SYNC_SECRETS == 'true'
         continue-on-error: true
