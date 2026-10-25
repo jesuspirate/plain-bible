@@ -875,7 +875,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           {kind === 'bookmark' && <p class="muted small">{t('They can bookmark it too, with one tap.')}</p>}
         </>}
         {list && list.length > 1 && (
-          <div class="seg c-pick" role="radiogroup" aria-label={t('Circle')}>
+          <div class="c-circles-pick" role="radiogroup" aria-label={t('Circle')}>
             {list.map(c => <button role="radio" aria-checked={pick === c.id} class={pick === c.id ? 'on' : ''} onClick={() => setPick(c.id)}>{c.name}</button>)}
           </div>
         )}
