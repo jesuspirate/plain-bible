@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { Saved } from './saved'
@@ -65,6 +65,8 @@ export function App() {
     const start = (c: Catalog) => {
       const ids = new Set(c.translations.map(t => t.id))
       const s = { ...defaultSettings(c), ...loadSettings() } as Settings & { favorite?: string }
+      // The first start opens in the theme chosen on the welcome page, if one was.
+      if (FIRST_START) s.theme = welcomeTheme() ?? s.theme
       s.myVersions = s.myVersions.filter(id => ids.has(id))
       // "Open … every time" was a second, hidden choice of Bible beside the
       // one you read, and the app opened in it. It is now your Bible, sent

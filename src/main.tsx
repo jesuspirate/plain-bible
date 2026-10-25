@@ -10,7 +10,7 @@ import { parseMoveLink } from './lib/move'
 // The reader puts you back on your verse itself; the browser's own scroll
 // restoration would fight it.
 // The code loaded, so the blank-page guard in index.html can stand down.
-const w = window as { plainBibleStarted?: boolean; plainBibleRepair?: () => void }
+const w = window as { plainBibleStarted?: boolean; plainBibleRepair?: () => void; plainBibleWelcome?: boolean }
 w.plainBibleStarted = true
 document.getElementById('boot-stuck')?.remove()
 
@@ -42,9 +42,10 @@ class Crash extends Component<{}, { error?: Error }> {
 // A move link from the old address: bring everything over first, then start.
 const moving = location.hash.startsWith('#/move/') ? parseMoveLink(location.hash) : undefined
 if (location.hash.startsWith('#/move/') && !moving) history.replaceState(null, '', location.pathname + '#/read')
-render(<Crash>{moving ? <Arriving link={moving} /> : <App />}</Crash>, document.getElementById('app')!)
+// A first visit is on its way to the welcome page (index.html): nothing to start.
+if (!w.plainBibleWelcome) render(<Crash>{moving ? <Arriving link={moving} /> : <App />}</Crash>, document.getElementById('app')!)
 
-if (import.meta.env.PROD && 'serviceWorker' in navigator) {
+if (import.meta.env.PROD && 'serviceWorker' in navigator && !w.plainBibleWelcome) {
   import('virtual:pwa-register').then(({ registerSW }) => {
     registerSW({
       immediate: true,

@@ -5,7 +5,7 @@ Live at https://myquietbible.com (formerly Plain Bible, at bible.chama.community
 Just the Bible. Many versions and languages, thorough search, and nothing else:
 no reading plans, devotionals, accounts, or feeds.
 
-- **120 versions in 48 languages**, all public domain or openly licensed
+- **120 versions in 49 languages**, all public domain or openly licensed
   (KJV, Berean Standard Bible, ASV, YLT, Douay-Rheims, Reina-Valera 1909, Luther 1545,
   French (Louis Segond 1910, Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
   the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more).
@@ -39,6 +39,18 @@ no reading plans, devotionals, accounts, or feeds.
   Light, dark and sepia themes.
 - **Parallel reading** of up to six versions side by side.
 - **Works offline** as an installable web app (PWA): the app itself, your Default Bible and any version you open or save are kept on the device. It reopens on the exact verse you were reading. Settings, highlights and bookmarks stay on your device; only passkey sign-in and sync use the network.
+
+## Welcome page
+
+`welcome/` is the landing page: what Quiet Bible is, the lamp verse in a few languages, and the
+steps to put it on a Home Screen, in the app's own colours and fonts (Light, Sepia or Dark). A first
+visit to the bare address opens it (`index.html` sends you there when nothing has been saved on the
+device and the address carries no link); the Bible is one tap away, and after that the bare address
+opens the Bible. An app on a Home Screen never sees it, nor does any link into the Bible (a shared
+verse, a circle invite, a move link). Settings → About links to it. It is a second page of the same
+Vite build (`vite.config.ts`), so it shares the fonts and is saved offline with the app. The number
+of versions and languages in its text (and in the app's description) is read from the catalog at build
+time. Screenshots are in `docs/welcome/`.
 
 ## Search syntax
 
