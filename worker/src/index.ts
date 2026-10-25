@@ -147,16 +147,25 @@ async function emailHash(env: Env, email: string) {
 }
 const emailHint = (email: string) => { const [name, domain] = email.split('@'); return `${name[0]}•••@${domain}` }
 
-async function sendCode(env: Env, to: string, code: string) {
-  const text = `Your Quiet Bible code is ${code}\n\nType it into the app to sign in. It works for ${CODE_MINUTES} minutes.\n\nIf you didn't ask for it, you can ignore this email.`
+// The code email in the language the app is in (src/lib/sync.ts sends it).
+const CODE_MAIL = {
+  en: { subject: '{code} is your Quiet Bible code', is: 'Your Quiet Bible code is', type: 'Type it into the app to sign in. It works for {min} minutes.', ignore: 'If you didn’t ask for it, you can ignore this email.' },
+  fr: { subject: '{code} est votre code Quiet Bible', is: 'Votre code Quiet Bible est', type: 'Saisissez-le dans l’application pour vous connecter. Il reste valable {min}\u00a0minutes.', ignore: 'Si vous ne l’avez pas demandé, vous pouvez ignorer cet e-mail.' },
+  es: { subject: '{code} es tu código de Quiet Bible', is: 'Tu código de Quiet Bible es', type: 'Escríbelo en la app para iniciar sesión. Sirve durante {min} minutos.', ignore: 'Si no lo pediste, puedes ignorar este correo.' },
+}
+
+async function sendCode(env: Env, to: string, code: string, lang?: string) {
+  const w = CODE_MAIL[lang as keyof typeof CODE_MAIL] ?? CODE_MAIL.en
+  const type = w.type.replace('{min}', String(CODE_MINUTES))
+  const text = `${w.is} ${code}\n\n${type}\n\n${w.ignore}`
   const html = `<div style="font-family:Georgia,serif;font-size:17px;line-height:1.5;color:#3b2f22">
-<p>Your Quiet Bible code is</p><p style="font-size:32px;letter-spacing:6px;margin:8px 0 16px"><strong>${code}</strong></p>
-<p>Type it into the app to sign in. It works for ${CODE_MINUTES} minutes.</p>
-<p style="color:#8a7a66;font-size:14px">If you didn't ask for it, you can ignore this email.</p></div>`
+<p>${w.is}</p><p style="font-size:32px;letter-spacing:6px;margin:8px 0 16px"><strong>${code}</strong></p>
+<p>${type}</p>
+<p style="color:#8a7a66;font-size:14px">${w.ignore}</p></div>`
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject: `${code} is your Quiet Bible code`, text, html }),
+    body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject: w.subject.replace('{code}', code), text, html }),
   }).catch(() => null)
   if (!res?.ok) {
     console.error('email not sent', res?.status, await res?.text().catch(() => ''))
@@ -167,7 +176,8 @@ async function sendCode(env: Env, to: string, code: string) {
 async function emailStart(req: Request, env: Env) {
   if (!emailOn(env)) throw new HttpError(404, 'Email sign-in isn’t set up yet.')
   const adding = req.headers.has('Authorization') ? await session(req, env) : null
-  const email = cleanEmail((await readJson<{ email: string }>(req)).email)
+  const body = await readJson<{ email: string; lang?: string }>(req)
+  const email = cleanEmail(body.email)
   const hash = await emailHash(env, email), now = Date.now(), db = env.DB
   const [mine, all] = await Promise.all([
     db.prepare('SELECT COUNT(*) AS n FROM email_sends WHERE hash = ? AND at > ?').bind(hash, now - 3_600_000).first<{ n: number }>(),
@@ -184,7 +194,7 @@ async function emailStart(req: Request, env: Env) {
       ON CONFLICT(hash) DO UPDATE SET code_hash = excluded.code_hash, user_id = excluded.user_id, tries = 0, expires = excluded.expires`)
       .bind(hash, await sha256(`${hash}:${code}`), adding, now + CODE_MINUTES * 60_000),
   ])
-  await sendCode(env, email, code)
+  await sendCode(env, email, code, body.lang)
   return json({ ok: true })
 }
 

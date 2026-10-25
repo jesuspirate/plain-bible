@@ -54,6 +54,9 @@ section.hero { border-top: none; }
 .themes button { all: unset; cursor: pointer; display: inline-grid; place-items: center; min-height: 46px; padding: 0 15px; border-radius: 999px; font: 600 17px var(--sans); color: var(--soft); -webkit-tap-highlight-color: transparent; }
 .themes button:focus-visible { outline: 3px solid var(--accent); outline-offset: 2px; }
 .themes button[aria-pressed='true'] { background: var(--text); color: var(--bg); }
+/* Theme and language side by side; on a phone, language goes under theme. */
+.pickers { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
+.langs button { padding: 0 13px; }
 
 main { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 @supports (padding: max(0px)) {

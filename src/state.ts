@@ -5,19 +5,22 @@ import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
 import type { Marks } from './lib/marks'
 import type { PrayerVerse } from './lib/prayerVerses'
+import { N_, type Lang } from './i18n'
 
 export type FontId = 'literata' | 'source-serif' | 'garamond' | 'inter' | 'atkinson' | 'system'
 
 export const FONTS: { id: FontId; label: string; note: string; family: string }[] = [
-  { id: 'literata', label: 'Literata', note: 'Book serif made for long reading', family: "'Literata Variable', Georgia, serif" },
-  { id: 'source-serif', label: 'Source Serif', note: 'Crisp, modern serif', family: "'Source Serif 4 Variable', Georgia, serif" },
-  { id: 'garamond', label: 'Garamond', note: 'Classic printed-Bible feel', family: "'EB Garamond Variable', Garamond, Georgia, serif" },
-  { id: 'inter', label: 'Inter', note: 'Clean sans-serif', family: "'Inter Variable', system-ui, sans-serif" },
-  { id: 'atkinson', label: 'Atkinson Hyperlegible', note: 'Designed for low vision; very easy to read', family: "'Atkinson Hyperlegible', system-ui, sans-serif" },
-  { id: 'system', label: 'System', note: "Your device's own font", family: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" },
+  { id: 'literata', label: 'Literata', note: N_('Book serif made for long reading'), family: "'Literata Variable', Georgia, serif" },
+  { id: 'source-serif', label: 'Source Serif', note: N_('Crisp, modern serif'), family: "'Source Serif 4 Variable', Georgia, serif" },
+  { id: 'garamond', label: 'Garamond', note: N_('Classic printed-Bible feel'), family: "'EB Garamond Variable', Garamond, Georgia, serif" },
+  { id: 'inter', label: 'Inter', note: N_('Clean sans-serif'), family: "'Inter Variable', system-ui, sans-serif" },
+  { id: 'atkinson', label: 'Atkinson Hyperlegible', note: N_('Designed for low vision; very easy to read'), family: "'Atkinson Hyperlegible', system-ui, sans-serif" },
+  { id: 'system', label: N_('System'), note: N_("Your device's own font"), family: "system-ui, -apple-system, 'Segoe UI', Roboto, sans-serif" },
 ]
 
 export interface Settings {
+  /** the language of the app's own words; 'auto' follows the phone */
+  language: 'auto' | Lang
   theme: 'system' | 'light' | 'dark' | 'sepia'
   fontSize: number
   font: FontId
@@ -53,11 +56,19 @@ export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\
 
 const KEY = 'plain-bible:settings'
 
+// The Bible a newcomer starts in, for languages with more than one: the
+// usual one, not whichever sorts first (for French that was the Ethiopian
+// canon's EthFr, ahead of the Louis Segond).
+const USUAL: Record<string, string> = { fr: 'LSG', es: 'SpaRV' }
+
 export function defaultSettings(catalog?: Catalog): Settings {
-  const lang = (navigator.language || 'en').toLowerCase().split('-')[0]
-  const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en').slice(0, 3).map(t => t.id) ?? []
+  const picked = welcomeLang()
+  const lang = (picked ?? navigator.language ?? 'en').toLowerCase().split('-')[0]
+  const rank = (id: string) => id === USUAL[lang] ? 0 : id.startsWith('Eth') ? 2 : 1
+  const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
+    .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -69,6 +80,14 @@ export function welcomeTheme(): Settings['theme'] | undefined {
   try {
     const t = localStorage.getItem('plain-bible:welcome-theme')
     return t === 'light' || t === 'sepia' || t === 'dark' ? t : undefined
+  } catch { return undefined }
+}
+
+/** The language picked on the welcome page before the Bible was first opened, if any. */
+export function welcomeLang(): Lang | undefined {
+  try {
+    const l = localStorage.getItem('plain-bible:welcome-lang')
+    return l === 'en' || l === 'fr' || l === 'es' ? l : undefined
   } catch { return undefined }
 }
 

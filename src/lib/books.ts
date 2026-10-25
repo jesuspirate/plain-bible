@@ -1,3 +1,5 @@
+import { currentLang, N_ } from '../i18n'
+
 // Canonical book order and English names/abbreviations used for navigation and
 // reference parsing. Book ids match the ids used in public/data.
 
@@ -116,20 +118,20 @@ export const SCOPES: Record<string, { label: string; books: string[] }> = (() =>
   const by = (pred: (b: BookInfo, i: number) => boolean) => BOOKS.filter(pred).map(b => b.id)
   const g = (...groups: Group[]) => by(b => groups.includes(b.group))
   return {
-    ot: { label: 'Old Testament', books: by((_, i) => i < 39) },
-    nt: { label: 'New Testament', books: by((_, i) => i >= 39 && i < 66) },
-    law: { label: 'Law (Genesis–Deuteronomy)', books: g('law') },
-    history: { label: 'History (Joshua–Esther)', books: g('history') },
-    wisdom: { label: 'Wisdom & Poetry (Job–Song)', books: g('wisdom') },
-    prophets: { label: 'Prophets (Isaiah–Malachi)', books: g('major', 'minor') },
-    major: { label: 'Major Prophets', books: g('major') },
-    minor: { label: 'Minor Prophets', books: g('minor') },
-    gospels: { label: 'Gospels', books: g('gospels') },
-    epistles: { label: 'Epistles (Romans–Jude)', books: g('pauline', 'general') },
-    pauline: { label: "Paul's letters", books: g('pauline') },
-    general: { label: 'General letters (Hebrews–Jude)', books: g('general') },
-    deutero: { label: 'Deuterocanon / Apocrypha', books: g('deutero') },
-    ethiopic: { label: 'Ethiopian canon', books: g('ethiopic', 'deutero').filter(id => ['Jub', '1Meq', '2Meq', '3Meq', '4Bar', '1En', 'Tob', 'Jdt', 'Wis', 'Sir', 'Bar', 'EpJer', '1Esd', '2Esd', 'PrMan', 'AddPs', '1Macc', '2Macc', '3Macc'].includes(id)) },
+    ot: { label: N_('Old Testament'), books: by((_, i) => i < 39) },
+    nt: { label: N_('New Testament'), books: by((_, i) => i >= 39 && i < 66) },
+    law: { label: N_('Law (Genesis–Deuteronomy)'), books: g('law') },
+    history: { label: N_('History (Joshua–Esther)'), books: g('history') },
+    wisdom: { label: N_('Wisdom & Poetry (Job–Song)'), books: g('wisdom') },
+    prophets: { label: N_('Prophets (Isaiah–Malachi)'), books: g('major', 'minor') },
+    major: { label: N_('Major Prophets'), books: g('major') },
+    minor: { label: N_('Minor Prophets'), books: g('minor') },
+    gospels: { label: N_('Gospels'), books: g('gospels') },
+    epistles: { label: N_('Epistles (Romans–Jude)'), books: g('pauline', 'general') },
+    pauline: { label: N_("Paul's letters"), books: g('pauline') },
+    general: { label: N_('General letters (Hebrews–Jude)'), books: g('general') },
+    deutero: { label: N_('Deuterocanon / Apocrypha'), books: g('deutero') },
+    ethiopic: { label: N_('Ethiopian canon'), books: g('ethiopic', 'deutero').filter(id => ['Jub', '1Meq', '2Meq', '3Meq', '4Bar', '1En', 'Tob', 'Jdt', 'Wis', 'Sir', 'Bar', 'EpJer', '1Esd', '2Esd', 'PrMan', 'AddPs', '1Macc', '2Macc', '3Macc'].includes(id)) },
   }
 })()
 SCOPES.torah = SCOPES.law
@@ -137,30 +139,81 @@ SCOPES.poetry = SCOPES.wisdom
 SCOPES.apocrypha = SCOPES.deutero
 SCOPES.ethiopian = SCOPES.ethiopic
 
-// French names, so "Jean 3:16" works as well as "John 3:16".
-const FRENCH: Record<string, string> = {
-  Gen: 'genèse', Exod: 'exode', Lev: 'lévitique', Num: 'nombres', Deut: 'deutéronome', Josh: 'josué', Judg: 'juges',
-  '1Sam': '1 samuel', '2Sam': '2 samuel', '1Kgs': '1 rois', '2Kgs': '2 rois', '1Chr': '1 chroniques', '2Chr': '2 chroniques',
-  Ezra: 'esdras', Neh: 'néhémie', Ps: 'psaumes', Prov: 'proverbes', Eccl: 'ecclésiaste', Song: 'cantique des cantiques',
-  Isa: 'ésaïe', Jer: 'jérémie', Ezek: 'ézéchiel', Hos: 'osée', Obad: 'abdias', Jonah: 'jonas', Mic: 'michée',
-  Hab: 'habacuc', Zeph: 'sophonie', Hag: 'aggée', Zech: 'zacharie', Mal: 'malachie', Matt: 'matthieu', Mark: 'marc',
-  Luke: 'luc', John: 'jean', Acts: 'actes', Rom: 'romains', '1Cor': '1 corinthiens', '2Cor': '2 corinthiens',
-  Gal: 'galates', Eph: 'éphésiens', Phil: 'philippiens', Col: 'colossiens', '1Thess': '1 thessaloniciens',
-  '2Thess': '2 thessaloniciens', '1Tim': '1 timothée', '2Tim': '2 timothée', Titus: 'tite', Phlm: 'philémon',
-  Heb: 'hébreux', Jas: 'jacques', '1Pet': '1 pierre', '2Pet': '2 pierre', '1John': '1 jean', '2John': '2 jean',
-  '3John': '3 jean', Rev: 'apocalypse',
-  // The books an Ethiopian or deuterocanonical edition adds, so French
-  // references find them too.
-  '1En': 'hénoch', Jub: 'jubilés', '4Bar': '4 baruch', Tob: 'tobie', Jdt: 'judith', Wis: 'sagesse',
-  Sir: 'siracide', Bar: 'baruch', EpJer: 'lettre de jérémie', '1Macc': '1 maccabées', '2Macc': '2 maccabées',
-  '3Macc': '3 maccabées', '4Macc': '4 maccabées', '1Esd': '1 esdras', '2Esd': '2 esdras',
-  PrMan: 'prière de manassé', AddPs: 'psaume 151', Sus: 'suzanne', PrAzar: 'prière d\'azarias',
+// Names in French and Spanish: shown when the app is in that language, and
+// understood in references whatever the language ("Jean 3:16", "Juan 3:16").
+// A short form follows a name too long for a narrow button.
+const FR: Record<string, string> = {
+  Gen: 'Genèse', Exod: 'Exode', Lev: 'Lévitique', Num: 'Nombres', Deut: 'Deutéronome', Josh: 'Josué', Judg: 'Juges',
+  Ruth: 'Ruth', '1Sam': '1 Samuel', '2Sam': '2 Samuel', '1Kgs': '1 Rois', '2Kgs': '2 Rois', '1Chr': '1 Chroniques',
+  '2Chr': '2 Chroniques', Ezra: 'Esdras', Neh: 'Néhémie', Esth: 'Esther', Job: 'Job', Ps: 'Psaumes', Prov: 'Proverbes',
+  Eccl: 'Ecclésiaste', Song: 'Cantique des cantiques', Isa: 'Ésaïe', Jer: 'Jérémie', Lam: 'Lamentations',
+  Ezek: 'Ézéchiel', Dan: 'Daniel', Hos: 'Osée', Joel: 'Joël', Amos: 'Amos', Obad: 'Abdias', Jonah: 'Jonas', Mic: 'Michée',
+  Nah: 'Nahum', Hab: 'Habacuc', Zeph: 'Sophonie', Hag: 'Aggée', Zech: 'Zacharie', Mal: 'Malachie', Matt: 'Matthieu',
+  Mark: 'Marc', Luke: 'Luc', John: 'Jean', Acts: 'Actes', Rom: 'Romains', '1Cor': '1 Corinthiens',
+  '2Cor': '2 Corinthiens', Gal: 'Galates', Eph: 'Éphésiens', Phil: 'Philippiens', Col: 'Colossiens',
+  '1Thess': '1 Thessaloniciens', '2Thess': '2 Thessaloniciens', '1Tim': '1 Timothée', '2Tim': '2 Timothée',
+  Titus: 'Tite', Phlm: 'Philémon', Heb: 'Hébreux', Jas: 'Jacques', '1Pet': '1 Pierre', '2Pet': '2 Pierre', '1John': '1 Jean',
+  '2John': '2 Jean', '3John': '3 Jean', Jude: 'Jude', Rev: 'Apocalypse',
+  // The books an Ethiopian or deuterocanonical edition adds.
+  Tob: 'Tobie', Jdt: 'Judith', EsthGr: 'Esther (grec)', AddEsth: 'Additions à Esther', Wis: 'Sagesse',
+  Sir: 'Siracide', Bar: 'Baruch', EpJer: 'Lettre de Jérémie', PrAzar: 'Prière d’Azarias', Sus: 'Suzanne',
+  Bel: 'Bel et le dragon', AddDan: 'Additions à Daniel', '1Macc': '1 Maccabées', '2Macc': '2 Maccabées',
+  '3Macc': '3 Maccabées', '4Macc': '4 Maccabées', '1Esd': '1 Esdras', '2Esd': '2 Esdras',
+  PrMan: 'Prière de Manassé', AddPs: 'Psaume 151', PssSol: 'Psaumes de Salomon', Odes: 'Odes', '1En': 'Hénoch',
+  EpLao: 'Laodicéens', Jub: 'Jubilés', '1Meq': '1 Meqabyan', '2Meq': '2 Meqabyan', '3Meq': '3 Meqabyan',
+  '4Bar': '4 Baruch',
 }
-for (const [id, name] of Object.entries(FRENCH)) BOOKS[BOOKS.findIndex(b => b.id === id)].aliases.push(name)
-BOOKS[BOOKS.findIndex(b => b.id === 'Ps')].aliases.push('psaume')
+const ES: Record<string, string> = {
+  Gen: 'Génesis', Exod: 'Éxodo', Lev: 'Levítico', Num: 'Números', Deut: 'Deuteronomio', Josh: 'Josué', Judg: 'Jueces',
+  Ruth: 'Rut', '1Sam': '1 Samuel', '2Sam': '2 Samuel', '1Kgs': '1 Reyes', '2Kgs': '2 Reyes', '1Chr': '1 Crónicas',
+  '2Chr': '2 Crónicas', Ezra: 'Esdras', Neh: 'Nehemías', Esth: 'Ester', Job: 'Job', Ps: 'Salmos', Prov: 'Proverbios',
+  Eccl: 'Eclesiastés', Song: 'Cantares', Isa: 'Isaías', Jer: 'Jeremías', Lam: 'Lamentaciones', Ezek: 'Ezequiel',
+  Dan: 'Daniel', Hos: 'Oseas', Joel: 'Joel', Amos: 'Amós', Obad: 'Abdías', Jonah: 'Jonás', Mic: 'Miqueas', Nah: 'Nahúm',
+  Hab: 'Habacuc', Zeph: 'Sofonías', Hag: 'Hageo', Zech: 'Zacarías', Mal: 'Malaquías', Matt: 'Mateo', Mark: 'Marcos',
+  Luke: 'Lucas', John: 'Juan', Acts: 'Hechos', Rom: 'Romanos', '1Cor': '1 Corintios', '2Cor': '2 Corintios', Gal: 'Gálatas',
+  Eph: 'Efesios', Phil: 'Filipenses', Col: 'Colosenses', '1Thess': '1 Tesalonicenses', '2Thess': '2 Tesalonicenses',
+  '1Tim': '1 Timoteo', '2Tim': '2 Timoteo', Titus: 'Tito', Phlm: 'Filemón', Heb: 'Hebreos', Jas: 'Santiago', '1Pet': '1 Pedro',
+  '2Pet': '2 Pedro', '1John': '1 Juan', '2John': '2 Juan', '3John': '3 Juan', Jude: 'Judas', Rev: 'Apocalipsis',
+  Tob: 'Tobías', Jdt: 'Judit', EsthGr: 'Ester (griego)', AddEsth: 'Adiciones a Ester', Wis: 'Sabiduría',
+  Sir: 'Eclesiástico', Bar: 'Baruc', EpJer: 'Carta de Jeremías', PrAzar: 'Oración de Azarías',
+  Sus: 'Susana', Bel: 'Bel y el dragón', AddDan: 'Adiciones a Daniel', '1Macc': '1 Macabeos', '2Macc': '2 Macabeos',
+  '3Macc': '3 Macabeos', '4Macc': '4 Macabeos', '1Esd': '1 Esdras', '2Esd': '2 Esdras', PrMan: 'Oración de Manasés',
+  AddPs: 'Salmo 151', PssSol: 'Salmos de Salomón', Odes: 'Odas', '1En': '1 Enoc', EpLao: 'Laodicenses',
+  Jub: 'Jubileos', '1Meq': '1 Meqabyan', '2Meq': '2 Meqabyan', '3Meq': '3 Meqabyan', '4Bar': '4 Baruc',
+}
+
+// The short forms printed Bibles use in each language, for narrow places
+// (the book grid, a long name on a small phone). Other books shorten by cutting.
+const BOOK_IDS_66 = 'Gen Exod Lev Num Deut Josh Judg Ruth 1Sam 2Sam 1Kgs 2Kgs 1Chr 2Chr Ezra Neh Esth Job Ps Prov Eccl Song Isa Jer Lam Ezek Dan Hos Joel Amos Obad Jonah Mic Nah Hab Zeph Hag Zech Mal Matt Mark Luke John Acts Rom 1Cor 2Cor Gal Eph Phil Col 1Thess 2Thess 1Tim 2Tim Titus Phlm Heb Jas 1Pet 2Pet 1John 2John 3John Jude Rev'.split(' ')
+const ABBR: Record<string, Record<string, string | undefined>> = {
+  fr: Object.fromEntries(BOOK_IDS_66.map((id, i) => [id, 'Gen|Ex|Lév|Nomb|Deut|Jos|Jug|Ruth|1 Sam|2 Sam|1 Rois|2 Rois|1 Chr|2 Chr|Esd|Néh|Est|Job|Ps|Prov|Ecc|Cant|És|Jér|Lam|Éz|Dan|Os|Joël|Am|Abd|Jon|Mich|Nah|Hab|Soph|Agg|Zach|Mal|Matt|Marc|Luc|Jean|Act|Rom|1 Cor|2 Cor|Gal|Éph|Phil|Col|1 Thes|2 Thes|1 Tim|2 Tim|Tite|Phm|Héb|Jacq|1 Pi|2 Pi|1 Jn|2 Jn|3 Jn|Jude|Apoc'.split('|')[i]])),
+  es: Object.fromEntries(BOOK_IDS_66.map((id, i) => [id, 'Gén|Éx|Lev|Núm|Dt|Jos|Jue|Rut|1 Sam|2 Sam|1 Re|2 Re|1 Cr|2 Cr|Esd|Neh|Est|Job|Sal|Pr|Ec|Cant|Is|Jer|Lam|Ez|Dn|Os|Jl|Am|Abd|Jon|Miq|Nah|Hab|Sof|Hag|Zac|Mal|Mt|Mr|Lc|Jn|Hch|Ro|1 Co|2 Co|Gál|Ef|Fil|Col|1 Ts|2 Ts|1 Ti|2 Ti|Tit|Flm|Heb|Stg|1 P|2 P|1 Jn|2 Jn|3 Jn|Jud|Ap'.split('|')[i]])),
+}
+const NAMES = { fr: FR, es: ES } as Record<string, Record<string, string>>
+for (const table of [FR, ES]) {
+  for (const [id, name] of Object.entries(table)) {
+    const b = BOOKS[BOOK_INDEX[id]]
+    b.aliases.push(name.toLowerCase().replace('’', "'"))
+  }
+}
+BOOKS[BOOK_INDEX.Ps].aliases.push('psaume', 'salmo')
+BOOKS[BOOK_INDEX['1En']].aliases.push('hénoch', 'enoc')
 
 /** A book's name in French ("Ésaïe"), if it has one. */
-export const frenchName = (id: string) => FRENCH[id] && FRENCH[id][0].toUpperCase() + FRENCH[id].slice(1)
+export const frenchName = (id: string) => FR[id]
+
+/** A book's name in the app's language: "Isaiah", "Ésaïe" or "Isaías". */
+export const bookName = (id: string, lang: string = currentLang()) => NAMES[lang]?.[id] || bookById(id).name
+/** Its short form, for narrow places: "1 Thes", "Apoc". */
+export function bookAbbr(id: string, lang: string = currentLang()) {
+  const name = NAMES[lang]?.[id]
+  if (!name) return bookById(id).abbr
+  if (ABBR[lang][id]) return ABBR[lang][id]
+  const n = name.match(/^\d /)?.[0] ?? '', rest = name.slice(n.length)
+  return rest.length > 6 ? n + rest.slice(0, 4).trim() : name
+}
+/** The name for a narrow spot: the full one when it's short enough. */
+export const bookShort = (id: string) => { const n = bookName(id); return n.length > 10 ? bookAbbr(id) : n }
 
 const normName = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/\./g, '').replace(/^(first|1st)\s+/, '1 ')
   .replace(/^(second|2nd)\s+/, '2 ').replace(/^(third|3rd)\s+/, '3 ').replace(/\s+/g, ' ').trim()
@@ -190,6 +243,7 @@ export function findBook(input: string): string | undefined {
   // Unambiguous prefix of a full name ("revel", "phili" is ambiguous).
   const compact = k.replace(/ /g, '')
   if (compact.length < 2) return undefined
-  const hits = BOOKS.filter(b => b.name.toLowerCase().replace(/ /g, '').startsWith(compact))
+  const flat = (n: string) => normName(n).replace(/ /g, '')
+  const hits = BOOKS.filter(b => flat(b.name).startsWith(compact) || flat(bookName(b.id)).startsWith(compact))
   return hits.length === 1 ? hits[0].id : undefined
 }

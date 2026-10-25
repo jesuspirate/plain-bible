@@ -1,4 +1,4 @@
-import { findBook, bookById } from './books'
+import { findBook, bookAbbr, bookName } from './books'
 
 export interface Ref { book: string; chapter: number; verse?: number; verseEnd?: number }
 
@@ -70,8 +70,7 @@ function parseWritten(input: string): Ref | undefined {
 }
 
 export function formatRef(r: Ref, short = false): string {
-  const b = bookById(r.book)
-  const name = short ? b.abbr : b.name
+  const name = short ? bookAbbr(r.book) : bookName(r.book)
   let s = `${name} ${r.chapter}`
   if (r.verse) s += `:${r.verse}`
   if (r.verseEnd && r.verseEnd !== r.verse) s += `–${r.verseEnd}`

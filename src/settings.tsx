@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, DataIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
+import { BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
@@ -18,6 +18,7 @@ import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
 import { StreakRow } from './streaks'
+import { deviceLang, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
 // (handy for reporting a problem). The line under it is the whole update:
@@ -30,10 +31,10 @@ function VersionLine() {
   const copy = async () => {
     try { await copyText(version); setCopied(true); setTimeout(() => setCopied(false), 1500) } catch { /* nothing to do */ }
   }
-  const note = { idle: 'Tap to check for updates', checking: 'Checking…', ready: 'New version: tap to update', current: 'Up to date', offline: 'Offline, try later' }[state]
+  const note = t({ idle: N_('Tap to check for updates'), checking: N_('Checking…'), ready: N_('New version: tap to update'), current: N_('Up to date'), offline: N_('Offline, try later') }[state])
   return (
     <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
-      <button class="version-copy" onClick={copy} aria-label={`Version ${__BUILD__}. Tap to copy`}>{copied ? 'Copied ✓' : `Version ${__BUILD__}`}</button>
+      <button class="version-copy" onClick={copy} aria-label={t('Version {build}. Tap to copy', { build: __BUILD__ })}>{copied ? t('Copied ✓') : t('Version {build}', { build: __BUILD__ })}</button>
       <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
         <RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}
       </button>
@@ -116,17 +117,17 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about'
+type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language'
 const PAGE_TITLE: Record<Page, string> = {
-  home: 'Settings', sync: 'Account', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
-  versions: 'Versions', data: 'Your data', about: 'About',
+  home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), saved: N_('Saved'), search: N_('Advanced search'),
+  versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'),
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
   const [page, setPage] = useState<Page>('home')
   const back = () => setPage('home')
-  return { page, setPage, back, title: PAGE_TITLE[page], depth: page === 'home' ? 0 : 1 }
+  return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : 1 }
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
 
@@ -167,14 +168,14 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
   return (
     <>
     <div class="settings-scrim" onClick={done} aria-hidden="true" />
-    <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label="Settings" tabIndex={-1}
+    <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label={t('Settings')} tabIndex={-1}
       // A link inside (a verse, mostly) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
-        <button type="button" class="settings-grabber" aria-label="Close settings" onClick={done} />
+        <button type="button" class="settings-grabber" aria-label={t('Close settings')} onClick={done} />
         <div class="settings-title">
           {nav.page === 'home'
-            ? <><h1>Settings</h1><button class="done-btn" onClick={done}>Done</button></>
+            ? <><h1>{t('Settings')}</h1><button class="done-btn" onClick={done}>{t('Done')}</button></>
             : <button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> {nav.title}</button>}
         </div>
       </div>
@@ -193,16 +194,16 @@ export function closeSettingsPage() {
 }
 
 export function SettingsView() {
-  useEffect(() => { document.title = 'Settings · Quiet Bible' }, [])
+  useEffect(() => { document.title = t('Settings') + ' · Quiet Bible' }, [])
   const box = useRef<HTMLDivElement>(null)
   const nav = useSettingsNav()
   usePullDown(box, () => window.scrollY, closeSettingsPage)
   useEffect(() => { window.scrollTo(0, 0) }, [nav.page])
   return (
     <div class="settings" ref={box}>
-      <button type="button" class="settings-grabber" aria-label="Close settings" onClick={closeSettingsPage} />
+      <button type="button" class="settings-grabber" aria-label={t('Close settings')} onClick={closeSettingsPage} />
       {nav.page === 'home'
-        ? <h1>Settings</h1>
+        ? <h1>{t('Settings')}</h1>
         : <h1><button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> {nav.title}</button></h1>}
       <SettingsBody nav={nav} />
     </div>
@@ -215,15 +216,15 @@ const PersonIcon = () => (
 
 /** Under Account: what it's for, when sync last ran, or what went wrong. */
 function syncNote(sync: ReturnType<typeof useApp>['sync']) {
-  if (!sync.account) return 'Sync your highlights and prayers'
-  if (sync.busy) return 'Syncing…'
-  if (sync.error) return 'Couldn’t sync. Tap to see why'
+  if (!sync.account) return t('Sync your highlights and prayers')
+  if (sync.busy) return t('Syncing…')
+  if (sync.error) return t('Couldn’t sync. Tap to see why')
   const at = sync.account.lastSync
   if (!at) return undefined
   const d = new Date(at)
-  return 'Last synced ' + (d.toDateString() === new Date().toDateString()
-    ? d.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
-    : d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' }))
+  return t('Last synced {when}', { when: d.toDateString() === new Date().toDateString()
+    ? d.toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' })
+    : d.toLocaleDateString(locale(), { month: 'short', day: 'numeric' }) })
 }
 
 /** One row of a settings list: a name, what it's set to, and › to go on. */
@@ -261,7 +262,7 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
   }
   return (
     <section class="set-group">
-      <h2 class="set-kicker">Bible</h2>
+      <h2 class="set-kicker">{t('Bible')}</h2>
       <div class="set-list">
         <button class="set-row set-version" onClick={() => setOpen('version')}>
           <span class="set-icon" aria-hidden="true"><BookIcon size={24} /></span>
@@ -270,16 +271,38 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
           <span class="set-chev" aria-hidden="true">›</span>
         </button>
         {version !== settings.version && byId.has(settings.version) &&
-          <Row icon={<ReturnIcon size={24} />} label={`Back to ${settings.version}`} sub="Your Bible" onClick={() => goTo(settings.version, parallel)} />}
-        <Row icon={<CompareIcon size={24} />} label="Compare side by side" value={parallel.length ? parallel.join(', ') : 'Off'} onClick={() => setOpen('compare')} />
-        <Row icon={<BooksIcon size={24} />} label="Manage versions" onClick={() => setPage('versions')} />
+          <Row icon={<ReturnIcon size={24} />} label={t('Back to {version}', { version: settings.version })} sub={t('Your Bible')} onClick={() => goTo(settings.version, parallel)} />}
+        <Row icon={<CompareIcon size={24} />} label={t('Compare side by side')} value={parallel.length ? parallel.join(', ') : t('Off')} onClick={() => setOpen('compare')} />
+        <Row icon={<BooksIcon size={24} />} label={t('Manage versions')} onClick={() => setPage('versions')} />
       </div>
-      {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
+      {open === 'version' && <VersionPicker title={t('Version')} selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
       {open === 'compare' && (
-        <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setOpen('')}
+        <VersionPicker title={t('Compare with')} multi max={5} selected={parallel} onClose={() => setOpen('')}
           onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
       )}
     </section>
+  )
+}
+
+// The language of the app's own words (not the Bible's: that's the version).
+// Automatic follows the phone. Each language is named in itself, so you can
+// find yours whatever the app is in now.
+function LanguagePage() {
+  const { settings, update } = useApp()
+  const phone = LANGS.find(l => l.id === deviceLang())!.name
+  const opts: [Settings['language'], string, string?][] = [['auto', t('Automatic'), t('Same as this device: {lang}', { lang: phone })], ...LANGS.map(l => [l.id, l.name] as [Settings['language'], string])]
+  return (
+    <>
+    <div class="set-list" role="radiogroup" aria-label={t('Language')}>
+      {opts.map(([id, name, sub]) => (
+        <button role="radio" aria-checked={settings.language === id} class={'set-row lang-row' + (settings.language === id ? ' on' : '')} onClick={() => update({ language: id })}>
+          <span class="set-label">{name}{sub && <span class="set-sub">{sub}</span>}</span>
+          {settings.language === id && <span class="lang-check" aria-hidden="true">✓</span>}
+        </button>
+      ))}
+    </div>
+    <p class="muted small lang-note">{t('This changes the words of the app. The Bible you read is chosen under Bible, in Settings.')}</p>
+    </>
   )
 }
 
@@ -299,49 +322,49 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   const fontName = FONTS.find(f => f.id === settings.font)?.label
 
   if (page === 'reading') return <>
-    <div class="field"><span>Font</span>
-      <div class="fonts" role="radiogroup" aria-label="Reading font">
+    <div class="field"><span>{t('Font')}</span>
+      <div class="fonts" role="radiogroup" aria-label={t('Reading font')}>
         {FONTS.map(f => (
           <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
             style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
-            <span class="font-sample">In the beginning was the Word</span>
-            <span class="font-name">{f.label}<span class="muted"> · {f.note}</span></span>
+            <span class="font-sample">{t('In the beginning was the Word')}</span>
+            <span class="font-name">{t(f.label)}<span class="muted"> · {t(f.note)}</span></span>
           </button>
         ))}
       </div>
     </div>
-    <div class="field"><span>Layout</span>{sel('layout', [['verses', 'One verse per line'], ['paragraph', 'Paragraph']])}</div>
-    <div class="field"><span>Verse numbers</span>{sel('verseNumbers', [['small', 'Small'], ['medium', 'Medium'], ['large', 'Large']])}</div>
-    <div class="field"><span>Highlights</span>
+    <div class="field"><span>{t('Layout')}</span>{sel('layout', [['verses', t('One verse per line')], ['paragraph', t('Paragraph')]])}</div>
+    <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
+    <div class="field"><span>{t('Highlights')}</span>
       <div class="col">
-        <span class="muted small">Tap a verse twice quickly to highlight it in the last color you used.</span>
-        {sel('highlight', [['marker', 'Marker'], ['text', 'Colored text'], ['block', 'Block']])}
+        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')}</span>
+        {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
         <p class="hl-preview" aria-hidden="true">
-          <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">In the beginning was the Word, and the Word was with God,</span></span>{' '}
-          <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">and the Word was God.</span></span>
+          <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
+          <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
         </p>
       </div>
     </div>
-    <div class="field"><span>Chapter turn</span>
+    <div class="field"><span>{t('Chapter turn')}</span>
       <div class="col">
-        {sel('turn', [['stack', 'Stack'], ['slide', 'Side by side'], ['off', 'None']])}
-        <span class="muted small">{settings.turn === 'slide' ? 'Both chapters slide across together.' : settings.turn === 'off' ? 'The chapter changes with no movement.' : 'Your page slides away over the next chapter, like a stack of pages.'}</span>
+        {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
+        <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
       </div>
     </div>
-    <div class="field"><span>Notes</span>
-      <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.</label>
+    <div class="field"><span>{t('Notes')}</span>
+      <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> {t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.')}</label>
     </div>
-    <div class="field"><span>Streaks</span>
-      <label><input type="checkbox" checked={settings.streaks} onChange={e => update({ streaks: (e.target as HTMLInputElement).checked })} /> At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.</label>
+    <div class="field"><span>{t('Streaks')}</span>
+      <label><input type="checkbox" checked={settings.streaks} onChange={e => update({ streaks: (e.target as HTMLInputElement).checked })} /> {t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.')}</label>
     </div>
-    <div class="field"><span>Strong's numbers</span>
+    <div class="field"><span>{t("Strong's numbers")}</span>
       <div class="col">
-        <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)</label>
-        <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> Show the numbers inline</label>
+        <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> {t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)')}</label>
+        <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> {t('Show the numbers inline')}</label>
       </div>
     </div>
-    <div class="field"><span>Search bar</span>
-      <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.</label>
+    <div class="field"><span>{t('Search bar')}</span>
+      <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> {t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.')}</label>
     </div>
   </>
 
@@ -349,64 +372,71 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'search') return <Search route={{ path: ['search'], params: new URLSearchParams(searchQuery) }} onGo={p => setSearchQuery(p.split('?')[1] ?? '')} />
   if (page === 'versions') return <Versions inSheet />
   if (page === 'sync') return <AccountSection />
+  if (page === 'language') return <LanguagePage />
 
   if (page === 'data') return <>
     <MoveInSection />
     <DataTools />
-    <h2>Settings</h2>
+    <h2>{t('Settings')}</h2>
     <p><button onClick={() => {
       // Only the settings: highlights, notes, history and the account stay.
-      if (confirm('Reset font, theme, layout and version choices to their defaults?\n\nYour highlights, bookmarks and notes are kept, and you stay signed in.'
-        + (sync.account ? ' Your other synced devices will get the default settings too.' : ''))) {
-        update(defaultSettings(catalog))
+      if (confirm(t('Reset font, theme, layout and version choices to their defaults?') + '\n\n' + t('Your highlights, bookmarks and notes are kept, and you stay signed in.')
+        + (sync.account ? ' ' + t('Your other synced devices will get the default settings too.') : ''))) {
+        // The language stays: a reset shouldn't leave you in one you can't read.
+        update({ ...defaultSettings(catalog), language: settings.language })
       }
-    }}>Reset settings</button></p>
+    }}>{t('Reset settings')}</button></p>
   </>
 
   if (page === 'about') return <>
-    <p>Quiet Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
+    <p>{t('Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.', { n: catalog.translations.length })}{' '}
+      {sync.account ? t('Your highlights and settings are stored on your device and synced with your passkey account.') : t('Your highlights and settings are stored on your device.')}</p>
     {/* The welcome page is what a first visit to the bare address shows: what this is, and how to put it on a Home Screen. */}
-    <p>To pass Quiet Bible on, send <strong>myquietbible.com</strong>. It opens on a <a href="welcome/">welcome page</a> that says what this is and how to put it on a Home Screen.</p>
-    <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
-      the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
-      Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
-      Each version's license is listed on the Versions page.</p>
+    <p>{tj('To pass Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.', {
+      site: <strong>myquietbible.com</strong>, welcome: <a href="welcome/">{t('welcome page')}</a> })}</p>
+    <p class="muted small">{tj('Texts come from the {scrollmapper} and the {oshb} (CC BY 4.0).', {
+      scrollmapper: <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">{t('Scrollmapper Bible databases')}</a>,
+      oshb: <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> })}{' '}
+      {tj('Strong’s dictionary from {source} (CC BY-SA).', { source: <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> })}{' '}
+      {t('Each version’s license is listed on the Versions page.')}</p>
   </>
 
   return (
     <>
       {/* First: what you've kept while reading. Then sync, which brings it all to your other devices. */}
       <section class="set-group">
-        <h2 class="set-kicker">Yours</h2>
+        <h2 class="set-kicker">{t('Yours')}</h2>
         <div class="set-list">
           {settings.streaks && <StreakRow />}
-          <Row icon={<BookmarkIcon size={24} />} label="Saved" sub="Highlights, notes, bookmarks" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
+          <Row icon={<BookmarkIcon size={24} />} label={t('Saved')} sub={t('Highlights, notes, bookmarks')} value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
         </div>
       </section>
       {sync.enabled && <section class="set-group">
         <div class="set-list">
-          <Row icon={<PersonIcon />} label={sync.account ? 'Account' : 'Sign in or sign up'} sub={syncNote(sync)}
+          <Row icon={<PersonIcon />} label={sync.account ? t('Account') : t('Sign in or sign up')} sub={syncNote(sync)}
             onClick={() => setPage('sync')} />
         </div>
       </section>}
       <BibleGroup setPage={setPage} />
       <section class="set-group">
-        <h2 class="set-kicker">Reading</h2>
+        <h2 class="set-kicker">{t('Reading')}</h2>
         <div class="set-list">
           <div class="set-row set-static">
             <span class="set-icon" aria-hidden="true"><TextSizeIcon size={24} /></span>
-            <span class="set-label">Text size</span>
-            <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
-            <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
+            <span class="set-label">{t('Text size')}</span>
+            <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label={t('Smaller text')}>A−</button>
+            <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label={t('Larger text')}>A+</button>
           </div>
-          <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
-          <Row icon={<LayoutIcon size={24} />} label="Font and layout" value={fontName} onClick={() => setPage('reading')} />
+          <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', t('Light')], ['sepia', t('Sepia')], ['dark', t('Dark')], ['system', t('Auto')]])}</div>
+          <Row icon={<LayoutIcon size={24} />} label={t('Font and layout')} value={fontName && t(fontName)} onClick={() => setPage('reading')} />
         </div>
       </section>
       <section class="set-group">
         <div class="set-list">
-          <Row icon={<DataIcon size={24} />} label="Your data" onClick={() => setPage('data')} />
-          <Row icon={<InfoIcon size={24} />} label="About" onClick={() => setPage('about')} />
+          <Row icon={<GlobeIcon size={24} />} label={t('Language')} value={settings.language === 'auto' ? t('Automatic') : LANGS.find(l => l.id === settings.language)?.name}
+            onClick={() => setPage('language')} />
+          <Row icon={<DataIcon size={24} />} label={t('Your data')} onClick={() => setPage('data')} />
+          <Row icon={<InfoIcon size={24} />} label={t('About')} onClick={() => setPage('about')} />
         </div>
       </section>
       <VersionLine />

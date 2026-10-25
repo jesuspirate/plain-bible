@@ -8,6 +8,7 @@ import {
 } from './prayerCrypto'
 import { api, loadAccount, noPasskey, setNoPasskey, SYNC_URL, SyncError } from './sync'
 import { cleanVerse } from './prayerVerses'
+import { t } from '../i18n'
 
 /** Set on a device whose prayers sync: the fingerprint of the key it holds. */
 const ON = 'plain-bible:prayer-sync'
@@ -310,11 +311,11 @@ async function put(path: string, token: string, body: Uint8Array): Promise<'ok' 
     headers: { Authorization: `Bearer ${token}`, 'Content-Type': 'application/octet-stream' },
   })
   if (res.status === 410) return 'gone'
-  if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || `Sync service error (${res.status})`, res.status)
+  if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || t('Sync service error ({status})', { status: res.status }), res.status)
   return 'ok'
 }
 async function get(path: string, token: string): Promise<Uint8Array> {
   const res = await fetch(SYNC_URL + path, { headers: { Authorization: `Bearer ${token}` } })
-  if (!res.ok) throw new SyncError(`Sync service error (${res.status})`, res.status)
+  if (!res.ok) throw new SyncError(t('Sync service error ({status})', { status: res.status }), res.status)
   return new Uint8Array(await res.arrayBuffer())
 }

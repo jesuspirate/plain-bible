@@ -511,6 +511,10 @@ main.with-mini { padding-bottom: 144px; }
 .set-list { display: flex; flex-direction: column; border: 1px solid var(--line); border-radius: 16px; overflow: hidden; background: var(--surface); }
 .set-row { display: flex; align-items: center; gap: 12px; min-height: 56px; padding: 8px 16px; margin: 0; border: none; border-radius: 0; background: none; color: var(--text); text-decoration: none; text-align: left; font: 500 17px var(--sans); cursor: pointer; width: 100%; box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
 .set-row + .set-row { border-top: 1px solid var(--line); }
+/* Settings → Language: one big row per language, a tick on the one in use. */
+.lang-row .set-label { flex: 1; }
+.lang-check { font: 700 22px var(--sans); color: var(--accent); }
+.lang-note { margin: 12px 4px; }
 @media (hover: hover) { .set-row:hover:not(:disabled) { background: var(--chip); } }
 .set-row:disabled { opacity: 1; cursor: default; }
 .set-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }

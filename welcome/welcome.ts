@@ -1,6 +1,6 @@
 // The welcome page: what Quiet Bible is, in the app's own colours and fonts,
-// and the way in. Plain HTML; this script only does the theme buttons, the
-// verse in other languages, the Home Screen steps, and the way in.
+// and the way in. Plain HTML; this script only does the theme and language
+// buttons, the verse in other languages, the Home Screen steps, and the way in.
 import '@fontsource-variable/literata'
 import '@fontsource-variable/inter'
 import './welcome.css'
@@ -23,12 +23,12 @@ function applyTheme(t: Theme, remember: boolean) {
   let link = $<HTMLLinkElement>('link[rel="manifest"]')
   if (!link) { link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link) }
   link.href = `../manifest-${t}.webmanifest`
-  for (const b of $$<HTMLButtonElement>('.themes button')) b.setAttribute('aria-pressed', String(b.dataset.theme === t))
+  for (const b of $$<HTMLButtonElement>('.themes button[data-theme]')) b.setAttribute('aria-pressed', String(b.dataset.theme === t))
   // The Bible opens in this theme too, the first time (src/state.ts).
   if (remember) set(THEME_KEY, t)
 }
 applyTheme((document.documentElement.dataset.theme as Theme) || 'sepia', false)
-for (const b of $$<HTMLButtonElement>('.themes button')) b.addEventListener('click', () => applyTheme(b.dataset.theme as Theme, true))
+for (const b of $$<HTMLButtonElement>('.themes button[data-theme]')) b.addEventListener('click', () => applyTheme(b.dataset.theme as Theme, true))
 
 // ---- the way in ----
 // The old address still serves this page while devices move. Someone new
@@ -36,11 +36,17 @@ for (const b of $$<HTMLButtonElement>('.themes button')) b.addEventListener('cli
 // device stays, and its Move button brings everything over.
 const newcomerOnOldAddress = location.hostname === 'bible.chama.community' && !get('plain-bible:settings')
 const home = newcomerOnOldAddress ? 'https://myquietbible.com/#/read' : '../#/read'
-for (const a of $$<HTMLAnchorElement>('a[data-open]')) {
-  a.href = home
-  // Once you've gone in, the bare address opens the Bible, not this page (index.html).
-  a.addEventListener('click', () => set(WELCOMED_KEY, '1'))
+// Called again when the words change: the steps' links are new then.
+function wireLinks() {
+  for (const a of $$<HTMLAnchorElement>('a[data-open]')) {
+    if (a.dataset.wired) continue
+    a.dataset.wired = '1'
+    a.href = home
+    // Once you've gone in, the bare address opens the Bible, not this page (index.html).
+    a.addEventListener('click', () => set(WELCOMED_KEY, '1'))
+  }
 }
+wireLinks()
 
 // On phones, the way in floats at the bottom, as the search bar does in the
 // app: once the first button has scrolled away, and until the last one shows.
@@ -71,16 +77,79 @@ const VERSES: Record<string, { lang: string; text: string; version: string; psal
   he: { lang: 'he', text: 'נֵר־לְרַגְלִי דְבָרֶךָ וְאוֹר לִנְתִיבָתִי׃', version: 'Westminster Leningrad Codex' },
 }
 const verse = $<HTMLQuoteElement>('#verse')!, ref = $('#verse-ref')!
-for (const b of $$<HTMLButtonElement>('.chips button')) b.addEventListener('click', () => {
-  const v = VERSES[b.dataset.verse!]
+let chip = 'en'
+function showVerse(id: string) {
+  const v = VERSES[id]
+  chip = id
   verse.lang = v.lang
   verse.dir = v.lang === 'he' ? 'rtl' : 'ltr'
   verse.innerHTML = '<span class="vn" aria-hidden="true">105</span>'
   verse.appendChild(document.createTextNode(v.text))
   // The Vulgate and the Russian Bible count the Psalms one behind here.
-  ref.textContent = `Psalm 119:105 · ${v.version}` + (v.psalm118 ? ', where it is Psalm 118' : '')
-  for (const o of $$<HTMLButtonElement>('.chips button')) o.setAttribute('aria-pressed', String(o === b))
-})
+  ref.textContent = word('verseRef').replace('{version}', v.version) + (v.psalm118 ? word('psalm118') : '')
+  for (const o of $$<HTMLButtonElement>('.chips button')) o.setAttribute('aria-pressed', String(o.dataset.verse === id))
+}
+for (const b of $$<HTMLButtonElement>('.chips button')) b.addEventListener('click', () => showVerse(b.dataset.verse!))
+
+// ---- the page's words: English as written in index.html, French and
+// Spanish each a small file of their own, loaded only when read ----
+type Lang = 'en' | 'fr' | 'es'
+type Words = typeof import('./fr').default
+const LANG_KEY = 'plain-bible:welcome-lang'
+const LOAD: Record<Exclude<Lang, 'en'>, () => Promise<{ default: Words }>> = { fr: () => import('./fr'), es: () => import('./es') }
+const root = document.documentElement
+const description = $<HTMLMetaElement>('meta[name="description"]')!
+const mock = $$<HTMLParagraphElement>('.m-chapter p')
+const closing = $('#closing-verse')!
+const EN: Words = {
+  title: document.title,
+  description: description.content,
+  homeScreen: 'Put it on your Home Screen',
+  computerInstall: 'Install it on your computer',
+  verseRef: 'Psalm 119:105 · {version}',
+  psalm118: ', where it is Psalm 118',
+  mbar: 'Ps 119 · KJV',
+  mock: mock.map(p => p.textContent!.replace(/^\d+/, '')),
+  closing: closing.textContent!,
+} as Words
+const html = new Map($$('[data-t]').map(el => [el, el.innerHTML]))
+const labels = new Map($$('[data-t-label]').map(el => [el, el.getAttribute('aria-label')!]))
+let words: Partial<Words> = {}
+const word = <K extends keyof Words>(k: K): Words[K] => words[k] ?? EN[k]
+// {svg} puts back the English's drawn icons, in order; the counts are the build's.
+const fill = (s: string, svgs: string[] = []) => {
+  let i = 0
+  return s.replace(/\{svg\}/g, () => svgs[i++] ?? '')
+    .replace(/\{(versions|languages)\}/g, (_, k: 'versions' | 'languages') => root.dataset[k] ?? '')
+}
+
+async function applyLang(l: Lang, remember: boolean) {
+  try { words = l === 'en' ? {} : (await LOAD[l]()).default } catch { words = {}; l = 'en' }
+  root.lang = l
+  for (const [el, en] of html) {
+    const w = words[el.dataset.t as keyof Words]
+    el.innerHTML = typeof w === 'string' ? fill(w, en.match(/<svg[\s\S]*?<\/svg>/g) ?? []) : en
+  }
+  for (const [el, en] of labels) el.setAttribute('aria-label', (words[el.dataset.tLabel as keyof Words] as string) ?? en)
+  document.title = word('title')
+  description.content = fill(word('description'))
+  for (const el of $$('[data-device-label]')) el.textContent = word(computer ? 'computerInstall' : 'homeScreen')
+  // The reader in the picture shows the Bible this language opens in.
+  mock.forEach((p, i) => {
+    const n = String(103 + i), text = word('mock')[i]
+    p.innerHTML = `<sup>${n}</sup>`
+    if (n === '105') p.appendChild(document.createElement('mark')).textContent = text
+    else p.appendChild(document.createTextNode(text))
+  })
+  closing.textContent = word('closing')
+  showVerse(l === 'en' ? (chip === 'fr' || chip === 'es' ? 'en' : chip) : l)
+  for (const b of $$<HTMLButtonElement>('.langs button')) b.setAttribute('aria-pressed', String(b.dataset.lang === l))
+  wireLinks()
+  root.classList.remove('i18n-wait')
+  // The Bible starts in this language too, the first time (src/state.ts).
+  if (remember) set(LANG_KEY, l)
+}
+for (const b of $$<HTMLButtonElement>('.langs button')) b.addEventListener('click', () => applyLang(b.dataset.lang as Lang, true))
 
 // ---- Home Screen: the steps for the device in hand first ----
 const ua = navigator.userAgent
@@ -96,7 +165,8 @@ function showPanel(id: string) {
 for (const t of $$<HTMLButtonElement>('.seg button')) t.addEventListener('click', () => showPanel(t.id.slice(4)))
 showPanel(iOS ? 'iphone' : android ? 'android' : 'computer')
 // A computer has no Home Screen.
-if (!iOS && !android) for (const el of $$('[data-device-label]')) el.textContent = 'Install it on your computer'
+const computer = !iOS && !android
+applyLang((['en', 'fr', 'es'].includes(root.lang) ? root.lang : 'en') as Lang, false)
 
 // Where the browser offers to install (Chrome on Android and computers), one button does it.
 interface BeforeInstallPromptEvent extends Event { prompt(): Promise<void>; userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }> }

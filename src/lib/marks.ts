@@ -37,15 +37,18 @@ export interface Mark {
 /** key: "John.3.16" */
 export type Marks = Record<string, Mark>
 
+import { N_ } from '../i18n'
+
+/** The highlight colours; each name is translated where it's shown. */
 export const PALETTE: { color: string; name: string }[] = [
-  { color: '#fff193', name: 'Yellow' },
-  { color: '#b3e487', name: 'Green' },
-  { color: '#cae1fe', name: 'Blue' },
-  { color: '#80cbc4', name: 'Teal' },
-  { color: '#dac6ff', name: 'Purple' },
-  { color: '#ffc9e4', name: 'Pink' },
-  { color: '#ffc595', name: 'Orange' },
-  { color: '#ffadaf', name: 'Red' },
+  { color: '#fff193', name: N_('Yellow') },
+  { color: '#b3e487', name: N_('Green') },
+  { color: '#cae1fe', name: N_('Blue') },
+  { color: '#80cbc4', name: N_('Teal') },
+  { color: '#dac6ff', name: N_('Purple') },
+  { color: '#ffc9e4', name: N_('Pink') },
+  { color: '#ffc595', name: N_('Orange') },
+  { color: '#ffadaf', name: N_('Red') },
 ]
 
 /** The colour last picked, for double-tap highlighting. */

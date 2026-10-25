@@ -6,9 +6,10 @@ import { Bible } from './lib/data'
 import { compareKeys, hasContent, Mark, Marks, notesOf, PALETTE, parseKey, tidy } from './lib/marks'
 import { NotesSheet, NotesTarget, verseRanges } from './reader'
 import { BookmarkIcon, EditIcon, HighlightIcon, NoteIcon, TrashIcon } from './icons'
-import { bookById } from './lib/books'
+import { bookName } from './lib/books'
 import { plain } from './lib/text'
 import { readPath, useApp } from './state'
+import { N_, t } from './i18n'
 
 const PAGE = 60
 const TAB = 'plain-bible:saved-tab'
@@ -50,7 +51,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const [undo, setUndo] = useState<{ what: string; before: Marks }>()
   const version = settings.version
   const rtl = byId.get(version)?.rtl ? 'rtl' as const : undefined
-  useEffect(() => { document.title = 'Saved · Quiet Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
+  useEffect(() => { document.title = t('Saved') + ' · Quiet Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
 
   const keys = useMemo(() => Object.keys(marks).filter(k => hasContent(marks[k])).sort(compareKeys), [marks])
   const runs = useMemo(() => runsOf(keys, marks), [keys])
@@ -62,16 +63,16 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const counts: Record<Tab, number> = { highlights: runs.length, notes: notes.length, bookmarks: bookmarks.length }
 
   const [tab, setTabState] = useState<Tab>(() => {
-    let t: string | null = null
-    try { t = localStorage.getItem(TAB) } catch { /* private mode */ }
+    let last: string | null = null
+    try { last = localStorage.getItem(TAB) } catch { /* private mode */ }
     // Open on the tab you used last, if it still has something in it.
-    if ((t === 'highlights' || t === 'notes' || t === 'bookmarks') && counts[t]) return t
-    return (['highlights', 'notes', 'bookmarks'] as Tab[]).find(t => counts[t]) ?? 'highlights'
+    if ((last === 'highlights' || last === 'notes' || last === 'bookmarks') && counts[last]) return last
+    return (['highlights', 'notes', 'bookmarks'] as Tab[]).find(x => counts[x]) ?? 'highlights'
   })
   const shownTab = tab
-  const setTab = (t: Tab) => {
-    setTabState(t); setLimit(PAGE); setRecolor(undefined); setUndo(undefined)
-    try { localStorage.setItem(TAB, t) } catch { /* private mode */ }
+  const setTab = (to: Tab) => {
+    setTabState(to); setLimit(PAGE); setRecolor(undefined); setUndo(undefined)
+    try { localStorage.setItem(TAB, to) } catch { /* private mode */ }
   }
   useEffect(() => setLimit(PAGE), [color, find, newest])
 
@@ -79,12 +80,12 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     const raw = bible?.books[book]?.[chapter - 1]?.[v - 1]
     return raw ? (vs.length > 1 ? `${v} ` : '') + plain(raw) : ''
   }).filter(Boolean).join(' ')
-  const refOf = (book: string, chapter: number, vs: number[]) => `${bookById(book).name} ${chapter}:${verseRanges(vs)}`
+  const refOf = (book: string, chapter: number, vs: number[]) => `${bookName(book)} ${chapter}:${verseRanges(vs)}`
   const Ref = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) =>
     <a class="ref" href={'#/' + readPath(version, book, chapter, verses[0])}>{refOf(book, chapter, verses)}</a>
   const Text = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) => {
-    const t = verseText(book, chapter, verses)
-    return <p class="saved-text" dir={rtl}>{t || (bible && <span class="muted">Not in {version}</span>)}</p>
+    const words = verseText(book, chapter, verses)
+    return <p class="saved-text" dir={rtl}>{words || (bible && <span class="muted">{t('Not in {version}', { version })}</span>)}</p>
   }
 
   /** Change some verses' marks, keeping what they were so it can be undone. */
@@ -92,9 +93,9 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     const before: Marks = {}
     for (const k of ks) before[k] = marks[k]
     setMarks(m => {
-      const out = { ...m }, t = Date.now()
+      const out = { ...m }, now = Date.now()
       for (const k of ks) {
-        const next = { ...m[k], ...patch, t } as Record<string, unknown>
+        const next = { ...m[k], ...patch, t: now } as Record<string, unknown>
         for (const [f, v] of Object.entries(patch)) if (v === undefined) delete next[f]
         out[k] = tidy(next as unknown as Mark)
       }
@@ -104,11 +105,11 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   }
   const putBack = () => {
     if (!undo) return
-    const t = Date.now()
+    const now = Date.now()
     // Only the highlight and bookmark come back; notes were never touched.
     setMarks(m => {
       const out = { ...m }
-      for (const [k, was] of Object.entries(undo.before)) out[k] = tidy({ ...m[k], c: was.c, b: was.b, t } as Mark)
+      for (const [k, was] of Object.entries(undo.before)) out[k] = tidy({ ...m[k], c: was.c, b: was.b, t: now } as Mark)
       return out
     })
     setUndo(undefined)
@@ -117,24 +118,24 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   if (!keys.length) {
     return (
       <div class="saved">
-        {!onImport && <h1>Saved</h1>}
-        <p class="muted">Nothing saved yet. Tap any verse while reading to highlight, bookmark or add a note to it.
-          Coming from another app? {onImport ? <><button class="link" onClick={onImport}>Import your highlights</button> under Your data.</> : <><a href="#/settings">Import your highlights</a> in Settings.</>}</p>
+        {!onImport && <h1>{t('Saved')}</h1>}
+        <p class="muted">{t('Nothing saved yet. Tap any verse while reading to highlight, bookmark or add a note to it.')}{' '}
+          {t('Coming from another app?')} {onImport ? <><button class="link" onClick={onImport}>{t('Import your highlights')}</button> {t('under Your data.')}</> : <><a href="#/settings">{t('Import your highlights')}</a> {t('in Settings.')}</>}</p>
       </div>
     )
   }
 
   const tabs: [Tab, string, ComponentChildren][] = [
-    ['highlights', 'Highlights', <HighlightIcon size={24} />],
-    ['notes', 'Notes', <NoteIcon size={24} />],
-    ['bookmarks', 'Bookmarks', <BookmarkIcon size={24} filled={false} />],
+    ['highlights', t('Highlights'), <HighlightIcon size={24} />],
+    ['notes', t('Notes'), <NoteIcon size={24} />],
+    ['bookmarks', t('Bookmarks'), <BookmarkIcon size={24} filled={false} />],
   ]
-  const more = (n: number) => n > limit && <button class="more" onClick={() => setLimit(l => l + PAGE)}>Show more ({n - limit} left)</button>
-  const empty = {
-    highlights: 'No highlights yet. Tap a verse while reading and pick a colour, or tap a verse twice quickly.',
-    notes: 'No notes yet. Tap a verse while reading, then the note button, to write one.',
-    bookmarks: 'No bookmarks yet. Tap a verse while reading, then Bookmark.',
-  }[shownTab]
+  const more = (n: number) => n > limit && <button class="more" onClick={() => setLimit(l => l + PAGE)}>{t('Show more ({n} left)', { n: n - limit })}</button>
+  const empty = t({
+    highlights: N_('No highlights yet. Tap a verse while reading and pick a colour, or tap a verse twice quickly.'),
+    notes: N_('No notes yet. Tap a verse while reading, then the note button, to write one.'),
+    bookmarks: N_('No bookmarks yet. Tap a verse while reading, then Bookmark.'),
+  }[shownTab])
 
   let body
   if (shownTab === 'highlights') {
@@ -144,9 +145,9 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     body = <>
       {colors.length > 1 && (
         <div class="chips saved-colors">
-          <button class={'chip' + (color === 'all' ? ' on' : '')} onClick={() => setColor('all')}>All</button>
+          <button class={'chip' + (color === 'all' ? ' on' : '')} onClick={() => setColor('all')}>{t('All')}</button>
           {colors.map(c => (
-            <button class={'chip swatch-chip' + (color === c ? ' on' : '')} onClick={() => setColor(c)} aria-label={`${PALETTE.find(p => p.color === c)?.name ?? c} highlights`}>
+            <button class={'chip swatch-chip' + (color === c ? ' on' : '')} onClick={() => setColor(c)} aria-label={t('{color} highlights', { color: t(PALETTE.find(p => p.color === c)?.name ?? c) })}>
               <span class="dot" style={{ background: c }} />{runs.filter(r => r.color === c).length}
             </button>
           ))}
@@ -161,7 +162,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                 <Ref {...r} />
                 <span class="spacer" />
                 <button class={'saved-act' + (recolor === id ? ' on' : '')} aria-expanded={recolor === id} onClick={() => setRecolor(recolor === id ? undefined : id)}>
-                  <span class="dot big" style={{ background: r.color }} />Colour
+                  <span class="dot big" style={{ background: r.color }} />{t('Colour')}
                 </button>
               </div>
               <Text {...r} />
@@ -169,12 +170,12 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                 <div class="saved-palette">
                   <div class="swatches">
                     {PALETTE.map(p => (
-                      <button class={'swatch' + (p.color === r.color ? ' on' : '')} style={{ background: p.color }} aria-label={p.name}
+                      <button class={'swatch' + (p.color === r.color ? ' on' : '')} style={{ background: p.color }} aria-label={t(p.name)}
                         onClick={() => { change(r.keys, { c: p.color }); setRecolor(undefined) }} />
                     ))}
                   </div>
-                  <button class="saved-remove" onClick={() => { change(r.keys, { c: undefined }, `Highlight on ${ref} removed.`); setRecolor(undefined) }}>
-                    <TrashIcon size={20} /> Remove highlight
+                  <button class="saved-remove" onClick={() => { change(r.keys, { c: undefined }, t('Highlight on {ref} removed.', { ref })); setRecolor(undefined) }}>
+                    <TrashIcon size={20} /> {t('Remove highlight')}
                   </button>
                 </div>
               )}
@@ -191,14 +192,14 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     body = <>
       {notes.length > 3 && (
         <div class="saved-tools">
-          <input type="search" class="saved-find" placeholder="Find in your notes" value={find} onInput={e => setFind((e.target as HTMLInputElement).value)} />
-          <div class="seg" role="radiogroup" aria-label="Order">
-            <button role="radio" aria-checked={!newest} class={!newest ? 'on' : ''} onClick={() => setNewest(false)}>Bible order</button>
-            <button role="radio" aria-checked={newest} class={newest ? 'on' : ''} onClick={() => setNewest(true)}>Newest</button>
+          <input type="search" class="saved-find" placeholder={t('Find in your notes')} value={find} onInput={e => setFind((e.target as HTMLInputElement).value)} />
+          <div class="seg" role="radiogroup" aria-label={t('Order')}>
+            <button role="radio" aria-checked={!newest} class={!newest ? 'on' : ''} onClick={() => setNewest(false)}>{t('Bible order')}</button>
+            <button role="radio" aria-checked={newest} class={newest ? 'on' : ''} onClick={() => setNewest(true)}>{t('Newest')}</button>
           </div>
         </div>
       )}
-      {!list.length && <p class="muted">No note has “{find.trim()}” in it.</p>}
+      {!list.length && <p class="muted">{t('No note has “{words}” in it.', { words: find.trim() })}</p>}
       <ol class="saved-list">
         {list.slice(0, limit).map(x => {
           const open = () => setEditing({ key: x.key, verses: x.verses, start: { key: x.key, id: x.id } })
@@ -207,7 +208,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
               <div class="saved-head">
                 <Ref {...x} />
                 <span class="spacer" />
-                <button class="saved-act" onClick={open}><EditIcon size={20} />Edit</button>
+                <button class="saved-act" onClick={open}><EditIcon size={20} />{t('Edit')}</button>
               </div>
               <Text {...x} />
               <p class="saved-note" onClick={open}>{x.n}</p>
@@ -228,8 +229,8 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                 <span class="bm-mark" aria-hidden="true"><BookmarkIcon /></span>
                 <Ref book={r.book} chapter={r.chapter} verses={vs} />
                 <span class="spacer" />
-                <button class="saved-act" onClick={() => change([k], { b: undefined }, `Bookmark on ${refOf(r.book, r.chapter, vs)} removed.`)}>
-                  <TrashIcon size={20} />Remove
+                <button class="saved-act" onClick={() => change([k], { b: undefined }, t('Bookmark on {ref} removed.', { ref: refOf(r.book, r.chapter, vs) }))}>
+                  <TrashIcon size={20} />{t('Remove')}
                 </button>
               </div>
               <Text book={r.book} chapter={r.chapter} verses={vs} />
@@ -243,16 +244,16 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
 
   return (
     <div class="saved">
-      {!onImport && <h1>Saved</h1>}
+      {!onImport && <h1>{t('Saved')}</h1>}
       <div class="saved-tabs" role="tablist">
-        {tabs.map(([t, label, icon]) => (
-          <button role="tab" aria-selected={shownTab === t} class={shownTab === t ? 'on' : ''} onClick={() => setTab(t)}>
-            {icon}<span class="st-label">{label}</span><span class="st-count">{counts[t]}</span>
+        {tabs.map(([id, label, icon]) => (
+          <button role="tab" aria-selected={shownTab === id} class={shownTab === id ? 'on' : ''} onClick={() => setTab(id)}>
+            {icon}<span class="st-label">{label}</span><span class="st-count">{counts[id]}</span>
           </button>
         ))}
       </div>
-      {missing && <p class="note">{version} isn’t saved on this device yet, so the verses can’t be shown. Connect to the internet once and they will be.</p>}
-      {undo && <div class="saved-undo" role="status"><span>{undo.what}</span><button onClick={putBack}>Undo</button></div>}
+      {missing && <p class="note">{t('{version} isn’t saved on this device yet, so the verses can’t be shown. Connect to the internet once and they will be.', { version })}</p>}
+      {undo && <div class="saved-undo" role="status"><span>{undo.what}</span><button onClick={putBack}>{t('Undo')}</button></div>}
       {counts[shownTab] ? body : <p class="muted">{empty}</p>}
       {editing && (() => {
         const r = parseKey(editing.key)
