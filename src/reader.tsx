@@ -165,6 +165,37 @@ export function Reader({ route }: { route: Route }) {
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
 
   useEffect(() => setSelected([]), [book, chapter, version])
+
+  // The verse a search, link or reminder lands on glows for a moment, then
+  // lets go so you are just reading. It goes sooner on your first scroll or
+  // tap, and for good once you highlight or select it. Back (the clock)
+  // still takes you to where you were, so it needn't stay as a marker.
+  const [glow, setGlow] = useState(0)
+  const [leaving, setLeaving] = useState(false)
+  const landed = useRef('')
+  useEffect(() => {
+    // The clock starts once the verse is on screen, and only once per landing
+    // (a version that loads later doesn't light it up again).
+    const at = `${book}/${chapter}/${target}`
+    if (!target) { landed.current = ''; return setGlow(0) }
+    if (landed.current === at) return setGlow(0)
+    if (!loaded) return
+    landed.current = at
+    setGlow(target); setLeaving(false)
+    let gone = 0
+    const letGo = () => {
+      if (gone) return
+      setLeaving(true)
+      gone = window.setTimeout(() => setGlow(0), 600)
+    }
+    const events = ['pointerdown', 'wheel', 'touchmove', 'keydown'] as const
+    // A moment's grace, so the tap that opened the result doesn't end it.
+    const arm = setTimeout(() => events.forEach(e => addEventListener(e, letGo, { passive: true })), 400)
+    const done = setTimeout(() => setGlow(0), 3400)
+    return () => { clearTimeout(arm); clearTimeout(done); clearTimeout(gone); events.forEach(e => removeEventListener(e, letGo)) }
+  }, [book, chapter, target, loaded])
+  useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
+  useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
   // Verses you select are offered if you go to pray soon after.
   useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
   // After a prayer, "Add a verse": the next verse you tap is tied to it.
@@ -502,7 +533,7 @@ export function Reader({ route }: { route: Route }) {
   const page = (b: string, c: number, live: boolean) => {
     const mark = (v: number) => marks[markKey(b, c, v)]
     const rowsOf = Math.max(...versions.map(v => bibles[v].books[b]?.[c - 1]?.length ?? 0))
-    const cls = (base: string, v: number) => base + (live && target === v ? ' target' : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && selected.includes(v) ? ' picked' : '')
+    const cls = (base: string, v: number) => base + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && selected.includes(v) ? ' picked' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }

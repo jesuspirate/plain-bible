@@ -121,7 +121,18 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .verse .cell { padding: 1px 0; }
 .vn { all: unset; cursor: pointer; font: 600 var(--vn-size, .62em) var(--sans); color: var(--muted); vertical-align: super; margin-right: 4px; padding: 0 2px; }
 @media (hover: hover) { .vn:hover { color: var(--accent); } }
-.target { background: color-mix(in srgb, var(--mark) 55%, transparent); border-radius: 4px; }
+/* Where a search or link lands: a glow that fades by itself (see Reader) */
+.target { border-radius: 4px; animation: landed 3.2s ease-out forwards; }
+@keyframes landed {
+  0%, 55% { background: color-mix(in srgb, var(--mark) 55%, transparent); }
+  100% { background: color-mix(in srgb, var(--mark) 0%, transparent); }
+}
+.target.leaving { animation: let-go .5s ease-out forwards; }
+@keyframes let-go {
+  from { background: color-mix(in srgb, var(--mark) 40%, transparent); }
+  to { background: color-mix(in srgb, var(--mark) 0%, transparent); }
+}
+@media (prefers-reduced-motion: reduce) { .target.leaving { animation: none; } }
 .para { text-align: left; }
 .pv { scroll-margin-top: 80px; }
 .w { cursor: pointer; text-decoration: underline dotted color-mix(in srgb, var(--muted) 60%, transparent); text-underline-offset: 3px; }
