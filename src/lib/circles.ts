@@ -9,7 +9,7 @@
 // which browsers never send anywhere, and that secret unlocks the circle key
 // for one new member. Loaded only when circles are opened or used.
 import { meta, partsOf, prayers } from './prayers'
-import { aesKey, b64url, keyCode, open, seal } from './prayerCrypto'
+import { aesKey, b64url, keyCode, open, prayerKey, seal } from './prayerCrypto'
 import { api, loadAccount, SYNC_URL, SyncError } from './sync'
 import { keepStorage, unlockKey } from './prayerSync'
 import { cleanVerse, PrayerVerse } from './prayerVerses'
@@ -56,6 +56,10 @@ function token() {
 /** The key that locks this account's copies of circle keys. 'needCode' when
  *  the passkey can't unlock the account key and it has to be typed in. */
 async function lockKey(code?: string): Promise<CryptoKey | 'needCode'> {
+  const raw = await lockRaw(code)
+  return raw === 'needCode' ? raw : aesKey(raw, 'circle lock v1')
+}
+async function lockRaw(code?: string): Promise<Uint8Array | 'needCode'> {
   let raw = await meta.get<Uint8Array>('acct')
   if (!raw) {
     // Kept as the account key too, so turning prayer sync off later
@@ -66,7 +70,7 @@ async function lockKey(code?: string): Promise<CryptoKey | 'needCode'> {
     await meta.set('acct', raw)
     keepStorage()
   }
-  return aesKey(raw, 'circle lock v1')
+  return raw
 }
 
 const keys = new Map<string, CryptoKey>()
@@ -93,7 +97,9 @@ export const keptCircles = async () => (await meta.get<CircleInfo[]>('circles'))
 /** The circles you're in. With `unlock` (a tap, or a typed code) it also
  *  unlocks any this device hasn't seen yet, which can ask for the passkey;
  *  without, those are only counted, so just opening Circles never asks. */
-export async function listCircles(unlock = false, code?: string): Promise<{ circles: CircleInfo[]; locked: number } | 'needCode'> {
+/** `stale`: circles whose copy here was locked with a key no device holds
+ *  any more (see startOver); a new invite opens them again. */
+export async function listCircles(unlock = false, code?: string): Promise<{ circles: CircleInfo[]; locked: number; stale: number } | 'needCode'> {
   // The passkey goes first, in the same tap (see unlockKey).
   const locking = unlock ? lockKey(code).then(k => ({ k }), (e: Error) => ({ e })) : undefined
   const { circles } = await api<{ circles: { id: string; name: string; wrapped: string; members: number; latest?: number | null }[] }>('/circles', { token: token() })
@@ -123,12 +129,17 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
   await meta.set('circle-keys', raws)
   await meta.set('circles', out)
   setInCircles(out.length)
-  // None would open: this device holds some other account's key.
+  // None would open: either this device holds some other account's key, or
+  // the account started over with a new key and those need a new invite.
   if (failed && !unlocked) {
-    await meta.set('acct', undefined)
-    throw new SyncError('Some circles couldn’t be unlocked on this device. Open Circles again to unlock them with your passkey.')
+    const { keyId } = await api<{ keyId: string | null }>('/prayers', { token: token() })
+    const raw = await meta.get<Uint8Array>('acct')
+    if (!keyId || !raw || (await prayerKey(raw)).id !== keyId) {
+      await meta.set('acct', undefined)
+      throw new SyncError('Some circles couldn’t be unlocked on this device. Open Circles again to unlock them with your passkey.')
+    }
   }
-  return { circles: out, locked }
+  return { circles: out, locked, stale: failed }
 }
 
 export async function createCircle(name: string, me: string, code?: string): Promise<string | 'needCode'> {
@@ -187,6 +198,26 @@ export async function joinCircle(id: string, invite: Invite, me: string, code?: 
   await meta.set('circle-keys', { ...(await rawKeys()), [invite.circle]: invite.raw })
   await listCircles().catch(() => {})
   return 'joined'
+}
+
+/** An invite to a circle you're already in: it opens the circle on this
+ *  device, and where this device holds your key without asking, it also
+ *  replaces your copy on the server (one that no device of yours could open
+ *  any more, say after starting over). */
+export async function openInvited(id: string, invite: Invite, me: string) {
+  await meta.set('circle-keys', { ...(await rawKeys()), [invite.circle]: invite.raw })
+  if (await meta.get('acct') || await meta.get('key')) {
+    const lock = await lockKey()
+    const key = await circleKey(invite.circle, invite.raw)
+    if (lock !== 'needCode') {
+      await api(`/circles/invite/${encodeURIComponent(id)}`, {
+        method: 'POST', token: token(), body: {
+          wrapped: b64url.encode(await seal(lock, invite.raw, `circle/${invite.circle}`)), me: await sealJson(key, me, `${invite.circle}/me`),
+        },
+      }).catch(() => {})
+    }
+  }
+  await listCircles().catch(() => {})
 }
 
 export async function leaveCircle(circle: string) {

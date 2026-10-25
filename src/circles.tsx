@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, openInvited, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -15,6 +15,7 @@ import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { AskApproval } from './approve'
+import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
@@ -154,6 +155,31 @@ function CodeEntry({ busy, onCode, onCancel, onApproved }: { busy: boolean; onCo
         <button class="c-btn primary" disabled={busy || !code.trim()} onClick={() => onCode(code)}>{busy ? 'Unlocking…' : 'Unlock'}</button>
         <button class="c-btn" onClick={onCancel}>Cancel</button>
       </div>
+      <StartOver onDone={onApproved} />
+    </div>
+  )
+}
+
+/** The way out when no device can open your circles or prayers any more:
+ *  a new key here. Circles then need a new invite each. */
+function StartOver({ onDone }: { onDone: () => void }) {
+  const [open, setOpen] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  if (!open) return <p class="c-paste"><button class="link small" onClick={() => setOpen(true)}>None of my devices can open them</button></p>
+  const begin = async () => {
+    setBusy(true); setMsg('')
+    try { await startOver(); onDone() } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card">
+      <p class="small">First check the other places you use Quiet Bible. On iPhone, Safari and the Home Screen app keep separate keys. If one of them opens your circles, tap “Approve from my other phone” above and allow it there.</p>
+      <p class="small">If nothing opens them, start over with a new key. Prayers saved on this phone stay. Prayers kept only on the server can’t be opened by anyone and are removed. To get back into a circle, ask someone in it for a new invite link.</p>
+      <div class="c-row">
+        <button class="c-btn primary" disabled={busy} onClick={begin}>{busy ? 'Starting over…' : 'Start over with a new key'}</button>
+        <button class="c-btn" disabled={busy} onClick={() => setOpen(false)}>Cancel</button>
+      </div>
+      {msg && <p class="note small">{msg}</p>}
     </div>
   )
 }
@@ -170,13 +196,14 @@ function CircleList() {
   const [me, setMe] = useState(lastName)
   const [key, setKey] = useState('')
   const [locked, setLocked] = useState(0)
+  const [stale, setStale] = useState(0)
 
   const load = async (unlock = false, code?: string) => {
     setBusy(true); setMsg('')
     try {
       const r = await listCircles(unlock, code)
       if (r === 'needCode') setNeedCode('list')
-      else { setList(r.circles); setLocked(r.locked); setNeedCode('') }
+      else { setList(r.circles); setLocked(r.locked); setStale(r.stale); setNeedCode('') }
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   // What's kept shows at once (and offline); the server fills in the rest.
@@ -207,6 +234,11 @@ function CircleList() {
             <div class="c-card">
               <p class="small">{locked === 1 ? 'One circle isn’t' : `${locked} circles aren’t`} unlocked on this device yet.</p>
               <button class="c-btn primary" disabled={busy} onClick={unlock}>{noPasskey() ? (busy ? 'Unlocking…' : 'Unlock') : busy ? 'Waiting for passkey…' : 'Unlock with my passkey'}</button>
+            </div>
+          )}
+          {stale > 0 && (
+            <div class="c-card">
+              <p class="small">{stale === 1 ? 'One circle can’t' : `${stale} circles can’t`} be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.</p>
             </div>
           )}
           {list?.length ? (
@@ -276,7 +308,11 @@ function Join({ id, secret }: { id: string; secret: string }) {
   const [me, setMe] = useState(lastName)
   useEffect(() => {
     if (!id || !secret) { setMsg('This invite link is incomplete. Ask for it to be sent again.'); return }
-    readInvite(id, secret).then(i => { if (i.already) toSheet({ id: i.circle, name: i.name }); else setInvite(i) }, e => setMsg(message(e)))
+    readInvite(id, secret).then(async i => {
+      if (!i.already) { setInvite(i); return }
+      await openInvited(id, i, lastName() || 'Me')
+      toSheet({ id: i.circle, name: i.name })
+    }, e => setMsg(message(e)))
   }, [id, secret])
   const join = async (code?: string) => {
     if (!invite || !me.trim()) return

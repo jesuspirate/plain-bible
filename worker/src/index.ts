@@ -259,6 +259,22 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
     if (cur?.key_id !== keyId) throw new HttpError(409, 'This account already has a prayer key', { keyId: cur?.key_id })
     return json({ ok: true })
   }
+  // Starting over with a new key, when no device of theirs holds the old one.
+  // What the old key locked can't be opened by anyone any more, so it goes:
+  // the synced prayers and the passkeys' copies of the old key. Circles stay;
+  // each needs a new invite to open with the new key (see the invite join).
+  if (a === 'key' && b === 'new' && !c && req.method === 'POST') {
+    const { keyId } = await readJson<{ keyId: string }>(req)
+    if (typeof keyId !== 'string' || !/^[\w-]{8,64}$/.test(keyId)) throw new HttpError(400, 'Bad key id')
+    await db.batch([
+      db.prepare('INSERT INTO prayer_keys (user_id, key_id, created) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET key_id = excluded.key_id, created = excluded.created')
+        .bind(userId, keyId, Date.now()),
+      db.prepare('DELETE FROM prayer_wraps WHERE user_id = ?').bind(userId),
+      db.prepare('DELETE FROM prayer_chunks WHERE user_id = ?').bind(userId),
+      db.prepare('DELETE FROM prayer_parts WHERE user_id = ?').bind(userId),
+    ])
+    return json({ ok: true })
+  }
   // The key wrapped for one passkey.
   if (a === 'wrap' && b && !c) {
     if (req.method === 'GET') {
@@ -433,8 +449,16 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
     const already = !!userId && !!(await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(inv.circle_id, userId).first())
     if (req.method === 'GET') return json({ circle: inv.circle_id, wrapped: inv.wrapped, name: inv.name, by: inv.by_name, members: inv.members, already })
     if (req.method === 'POST' && userId) {
-      if (already) return json({ ok: true, circle: inv.circle_id })
       const { wrapped, me } = await readJson<{ wrapped: string; me: string }>(req)
+      // Already in: a new invite replaces your locked copy of the circle key,
+      // for someone whose old copy no device of theirs can open any more.
+      if (already) {
+        if (!sealedText(wrapped, 500)) return json({ ok: true, circle: inv.circle_id })
+        const taken = await db.prepare('DELETE FROM circle_invites WHERE id = ? AND expires > ? RETURNING circle_id').bind(b, now).first()
+        if (!taken) throw new HttpError(404, 'This invite has been used or has expired. Ask for a new one.')
+        await db.prepare('UPDATE circle_members SET wrapped = ? WHERE circle_id = ? AND user_id = ?').bind(wrapped, inv.circle_id, userId).run()
+        return json({ ok: true, circle: inv.circle_id })
+      }
       if (!sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
       if (inv.members >= MAX_MEMBERS) throw new HttpError(413, `A circle can have up to ${MAX_MEMBERS} people`)
       const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
