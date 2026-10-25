@@ -65,7 +65,7 @@ export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
                 <button class={'star' + (settings.myVersions.includes(t.id) ? ' on' : '')} aria-pressed={settings.myVersions.includes(t.id)}
                   aria-label={`Add ${t.id} to my versions`} onClick={() => toggleMine(t.id)}>★</button>
                 <div class="vinfo">
-                  <a href={'#/' + (t.books.includes(here) ? 'read/' + t.id : readPath(t.id, t.books.includes('John') ? 'John' : t.books[0], 1))}><strong>{t.id}</strong> {t.name}</a>
+                  <a onClick={() => update({ version: t.id })} href={'#/' + (t.books.includes(here) ? 'read/' + t.id : readPath(t.id, t.books.includes('John') ? 'John' : t.books[0], 1))}><strong>{t.id}</strong> {t.name}</a>
                   <div class="muted small">
                     {t.strongs && <span class="badge">Strong's</span>}
                     {t.books.length} books · <a href={t.source} target="_blank" rel="noopener">{t.license}</a>

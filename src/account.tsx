@@ -68,12 +68,13 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       const changedHere = Object.keys(nowT).filter(k => changedAt(nowT, k) > changedAt(startT, k))
       const remote = { ...doc.settings } as Partial<Settings> & Record<string, unknown>
       for (const k of changedHere) delete remote[k]
+      // Retired; a device not yet updated may still send it.
+      delete remote.favorite
       if (JSON.stringify(doc.settings) !== JSON.stringify(local.settings)) {
         const ok = (id: unknown) => typeof id === 'string' && validVersion(id)
         setSettings(s => s && ({
           ...s, ...remote,
           version: ok(remote.version) ? remote.version! : s.version,
-          favorite: ok(remote.favorite) ? remote.favorite : s.favorite,
         }))
       }
       saveSettingsT({ ...doc.settingsT as Record<string, number>, ...Object.fromEntries(changedHere.map(k => [k, nowT[k]])) })

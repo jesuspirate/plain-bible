@@ -352,7 +352,7 @@ function CircleView({ id }: { id: string }) {
     } catch (e) { setMsg(message(e)); setBusy(false) }
   }
   const nameOf = (mid: string) => mid === feed?.me ? 'You' : feed?.members.find(m => m.mid === mid)?.name ?? 'Someone who left'
-  const fav = settings.favorite || settings.version
+  const fav = settings.version
   const news = feed ? newsIn(feed, since).items : undefined
   const items = feed ? [...feed.items.filter(i => news!.has(i.id)), ...feed.items.filter(i => !news!.has(i.id))] : []
 
