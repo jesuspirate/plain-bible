@@ -543,7 +543,7 @@ export default {
   "Your highlights, bookmarks and notes are kept, and you stay signed in.": "Vos surlignages, signets et notes sont gardés, et vous restez connecté.",
   "Your other synced devices will get the default settings too.": "Vos autres appareils synchronisés recevront aussi les réglages par défaut.",
   "Reset settings": "Réinitialiser les réglages",
-  "Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.": "Quiet Bible, c’est la Bible, simplement : {n} versions, une recherche rapide, et rien d’autre. Ni plans, ni pistage, et un compte facultatif.",
+  "Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.": "Quiet Bible, c’est une Bible simple : {n} versions, une recherche rapide, et rien d’autre. Ni plans, ni pistage, et un compte facultatif.",
   "Your highlights and settings are stored on your device and synced with your passkey account.": "Vos surlignages et vos réglages sont gardés sur votre appareil et synchronisés avec votre compte à clé d’accès.",
   "Your highlights and settings are stored on your device.": "Vos surlignages et vos réglages sont gardés sur votre appareil.",
   "To pass Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.": "Pour faire connaître Quiet Bible, envoyez {site}. Le lien ouvre une {welcome} qui explique ce que c’est et comment l’ajouter à un écran d’accueil.",

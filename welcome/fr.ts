@@ -2,15 +2,15 @@
 // keeps each drawn icon of the English, in order; {versions} and {languages}
 // are the counts.
 export default {
-  title: 'Quiet Bible · Simplement la Bible',
-  description: 'Simplement la Bible : {versions} versions en {languages} langues, une recherche qui trouve, et rien d’autre. Ni plans, ni publicité, ni abonnement. Gratuite, et elle marche hors ligne.',
+  title: 'Quiet Bible · Une Bible simple',
+  description: 'Une Bible simple : {versions} versions en {languages} langues, une recherche qui trouve, et rien d’autre. Ni plans, ni publicité, ni abonnement. Gratuite, et elle marche hors ligne.',
   brand: 'Quiet Bible, haut de la page',
   theme: 'Thème',
   language: 'Langue',
   light: 'Clair',
   sepia: 'Sépia',
   dark: 'Sombre',
-  lead: 'Simplement la Bible.',
+  lead: 'Une Bible simple.',
   sub: 'Beaucoup de versions et de langues, une recherche qui trouve, et rien d’autre. Ni plans, ni fil d’actualité, ni publicité. Gratuite, et elle marche hors ligne.',
   open: 'Ouvrir la Bible',
   floatOpen: '{svg}Ouvrir la Bible',
