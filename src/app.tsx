@@ -18,6 +18,7 @@ import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveBanner, MoveWelcome } from './move'
 import { DAYS_EVENT } from './lib/streaks'
 import { checkCircleNews } from './lib/circleNews'
+import { ApproveCard } from './approve'
 import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 
@@ -244,6 +245,7 @@ export function App() {
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
+      <ApproveCard />
     </AppContext.Provider>
   )
 }

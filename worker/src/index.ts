@@ -568,6 +568,52 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
   throw new HttpError(404, 'Not found')
 }
 
+// A new device asking for the account key, and a device that holds it
+// passing it on, sealed to the new one's public key.
+const APPROVE_ID = /^[\w-]{16,40}$/
+async function approveRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const userId = await session(req, env)
+  const db = env.DB, now = Date.now()
+  const [id] = parts
+  if (!id) {
+    if (req.method === 'GET') {
+      const rows = await db.prepare('SELECT id, pub, label, created AS at FROM approvals WHERE user_id = ? AND sealed IS NULL AND expires > ? ORDER BY created')
+        .bind(userId, now).all()
+      return json({ requests: rows.results })
+    }
+    if (req.method === 'POST') {
+      const { pub, label } = await readJson<{ pub: string; label: string }>(req)
+      if (!sealedText(pub, 200) || typeof label !== 'string' || label.length > 60) throw new HttpError(400, 'Bad request')
+      const open = await db.prepare('SELECT COUNT(*) AS n FROM approvals WHERE user_id = ? AND expires > ?').bind(userId, now).first<{ n: number }>()
+      if ((open?.n ?? 0) >= 5) throw new HttpError(429, 'Too many devices waiting. Try again tomorrow.')
+      const rid = random(16)
+      await db.batch([
+        db.prepare('DELETE FROM approvals WHERE expires < ?').bind(now),
+        db.prepare('INSERT INTO approvals (id, user_id, pub, label, created, expires) VALUES (?, ?, ?, ?, ?, ?)').bind(rid, userId, pub, label, now, now + DAY),
+      ])
+      return json({ id: rid })
+    }
+  }
+  if (!id || !APPROVE_ID.test(id) || parts.length > 1) throw new HttpError(404, 'Not found')
+  if (req.method === 'GET') {
+    const row = await db.prepare('SELECT epk, sealed FROM approvals WHERE id = ? AND user_id = ? AND expires > ?').bind(id, userId, now).first<{ epk: string | null; sealed: string | null }>()
+    if (!row) throw new HttpError(404, 'This request has expired. Ask again.')
+    return json(row)
+  }
+  if (req.method === 'PUT') {
+    const { epk, sealed } = await readJson<{ epk: string; sealed: string }>(req)
+    if (!sealedText(epk, 200) || !sealedText(sealed, 500)) throw new HttpError(400, 'Bad request')
+    const res = await db.prepare('UPDATE approvals SET epk = ?, sealed = ? WHERE id = ? AND user_id = ? AND sealed IS NULL AND expires > ?').bind(epk, sealed, id, userId, now).run()
+    if (!res.meta.changes) throw new HttpError(404, 'That device stopped waiting. Ask it to try again.')
+    return json({ ok: true })
+  }
+  if (req.method === 'DELETE') {
+    await db.prepare('DELETE FROM approvals WHERE id = ? AND user_id = ?').bind(id, userId).run()
+    return json({ ok: true })
+  }
+  throw new HttpError(404, 'Not found')
+}
+
 async function route(req: Request, env: Env): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
@@ -577,6 +623,9 @@ async function route(req: Request, env: Env): Promise<Response> {
   }
   if (pathname === '/prayers' || pathname.startsWith('/prayers/')) {
     return prayerRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
+  }
+  if (pathname === '/approve' || pathname.startsWith('/approve/')) {
+    return approveRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
   }
   if (pathname === '/circles' || pathname.startsWith('/circles/')) {
     return circleRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
@@ -690,7 +739,7 @@ async function route(req: Request, env: Env): Promise<Response> {
       // Out of every circle first, taking what they shared with them.
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

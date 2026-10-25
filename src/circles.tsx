@@ -14,6 +14,7 @@ import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
+import { AskApproval } from './approve'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
@@ -140,11 +141,13 @@ function SignIn({ joining }: { joining?: boolean }) {
 }
 
 /** The account key typed in, for a device whose passkey can't unlock it. */
-function CodeEntry({ busy, onCode, onCancel }: { busy: boolean; onCode: (code: string) => void; onCancel: () => void }) {
+function CodeEntry({ busy, onCode, onCancel, onApproved }: { busy: boolean; onCode: (code: string) => void; onCancel: () => void; onApproved: () => void }) {
   const [code, setCode] = useState('')
   return (
     <div class="c-card">
-      <p class="muted">This device can’t unlock your circles by itself. Easiest: on a device where they open, tap Settings → Link another device and open that link here. Or there, go to 🙏 → Circles → Show my key, and type it below.</p>
+      <p class="muted">This device can’t unlock your circles by itself yet. Let one where they already open allow it:</p>
+      <AskApproval onDone={onApproved} />
+      <p class="muted small">Or type your key from there (🙏 → Circles → Show my key):</p>
       <input class="c-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Your key"
         autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
       <div class="c-row">
@@ -197,7 +200,8 @@ function CircleList() {
       {!nav.sheet && <h1>Circles</h1>}
       <p class="muted">Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.</p>
       {needCode
-        ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')} />
+        ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')}
+          onApproved={() => needCode === 'create' ? create() : load(true)} />
         : <>
           {locked > 0 && (
             <div class="c-card">
@@ -287,7 +291,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
   return (
     <div class="circles">
       <h1>Join a circle</h1>
-      {invite && (needCode ? <CodeEntry busy={busy} onCode={join} onCancel={() => setNeedCode(false)} /> : (
+      {invite && (needCode ? <CodeEntry busy={busy} onCode={join} onCancel={() => setNeedCode(false)} onApproved={() => join()} /> : (
         <div class="c-card">
           <p>{invite.by ? <><strong>{invite.by}</strong> invited you to </> : 'You’re invited to '}<strong>{invite.name}</strong>
             <span class="muted"> · {invite.members === 1 ? '1 person' : `${invite.members} people`}</span></p>

@@ -2,6 +2,7 @@
 // were reading, dimmed just enough that the words are still there. What you
 // say is recorded and kept on this device only; nothing is sent anywhere.
 import { useEffect, useRef, useState } from 'preact/hooks'
+import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { awaitVerse, go, inCircles, openSettings, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
@@ -428,7 +429,9 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
         <p class="muted small">{LOCAL_ONLY}</p>
         <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>Go to Settings → Account</button>
       </> : needCode ? <>
-        <p class="muted">This device can’t unlock your prayers by itself. On a device where they already sync, open Your prayers and tap <strong>Link another device</strong>, then open that link here. Or copy the prayer key from there and paste it below.</p>
+        <p class="muted">This device can’t unlock your prayers by itself yet. Let one where they already sync allow it:</p>
+        <AskApproval btn="pray-btn" onDone={() => { setNeedCode(false); act(async () => { if (await turnOnPrayerSync() === 'on') setMsg('Your prayers now sync with your other devices.') })() }} />
+        <p class="muted small">Or paste the prayer key from there (Your prayers → More → Show prayer key):</p>
         <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"
           autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
         <button class="pray-btn primary" disabled={busy || !code.trim()} onClick={start}>{busy ? 'Unlocking…' : 'Unlock'}</button>
