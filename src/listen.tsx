@@ -65,6 +65,8 @@ const bookTitle = (id: string, lang: string) => (lang.startsWith('fr') && french
 const heading = (s: Spot) => s.lang.startsWith('fr')
   ? `${bookTitle(s.book, s.lang)}, chapitre ${s.chapter}.` : `${bookTitle(s.book, s.lang)}, chapter ${s.chapter}.`
 
+const NO_SOUND = 'No sound? Turn off Silent mode, then tap play.'
+
 function say(text: string, lang: string, my: number, then: () => void) {
   if (!synth || my !== run) return
   const u = new SpeechSynthesisUtterance(text)
@@ -72,8 +74,12 @@ function say(text: string, lang: string, my: number, then: () => void) {
   if (v) try { u.voice = v } catch { /* not a voice this browser accepts */ }
   u.lang = v?.lang ?? (lang.startsWith('fr') ? 'fr-FR' : lang.startsWith('en') ? 'en-US' : lang)
   u.rate = rate()
-  u.onend = () => { if (my === run) then() }
+  // If the phone never starts talking, say so instead of looking busy.
+  const quiet = setTimeout(() => { if (my === run) pauseListening(NO_SOUND) }, 5000)
+  u.onstart = () => clearTimeout(quiet)
+  u.onend = () => { clearTimeout(quiet); if (my === run) then() }
   u.onerror = e => {
+    clearTimeout(quiet)
     if (my !== run || e.error === 'interrupted' || e.error === 'canceled') return
     // Stay where we were, paused, and say so, rather than vanish.
     pauseListening(e.error === 'not-allowed' ? 'Tap play to start.' : 'This voice couldn’t speak. Pick another voice.')
@@ -111,11 +117,16 @@ function next(my: number) {
 function begin() {
   if (!synth || !now) return
   const my = ++run
+  const busy = synth.speaking || synth.pending
   synth.cancel()
+  synth.resume?.()
   now = { ...now, playing: true, trouble: undefined }
   emit()
-  // Some browsers drop a request made right after cancel().
-  setTimeout(() => next(my), 60)
+  // iPhones only let speech start inside the tap itself, so speak right away.
+  // Only when something was already talking, wait a moment: some browsers
+  // drop a request made right after cancel().
+  if (busy) setTimeout(() => next(my), 60)
+  else next(my)
 }
 
 /** Starts reading aloud at a verse. */
