@@ -17,6 +17,7 @@ import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
+import { overlayOpen } from './lib/overlay'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -240,7 +241,7 @@ export function Reader({ route }: { route: Route }) {
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
-      if ((e.target as HTMLElement).closest('input, textarea, dialog')) return
+      if ((e.target as HTMLElement).closest('input, textarea, dialog') || overlayOpen()) return
       if (e.key === 'ArrowRight') turn(1)
       if (e.key === 'ArrowLeft') turn(-1)
     }
@@ -441,6 +442,7 @@ export function Reader({ route }: { route: Route }) {
   // the end, even once the chapter it was in has gone).
   const onTouchStart = (e: TouchEvent) => {
     if (e.touches.length > 1) return abandon()
+    if (overlayOpen()) return
     const el = e.target as HTMLElement
     if (el.closest?.('.sb, dialog, .selbar, .pager, header') || !(el.closest?.('.reader') || busy.current || peekDir.current)) return
     if (busy.current) hurry()
@@ -501,6 +503,9 @@ export function Reader({ route }: { route: Route }) {
         else w.low = Math.min(w.low, ax)
       }
       if (ax <= ay && !w.dx && !w.done) return
+      // With a sheet or Circles up, the swipe isn't for the page behind.
+      // A swipe already turning the page lets go of it.
+      if (overlayOpen()) { if (w.dx && !w.done) release(0); w.dx = 0; w.done = false; w.peak = 0; return }
       if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .sb-chapter-row')) return
       e.preventDefault()
       clearTimeout(w.timer)
