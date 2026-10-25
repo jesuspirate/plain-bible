@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, openInvited, makeCode, dropCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -15,6 +15,7 @@ import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { AskApproval } from './approve'
+import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
@@ -154,6 +155,31 @@ function CodeEntry({ busy, onCode, onCancel, onApproved }: { busy: boolean; onCo
         <button class="c-btn primary" disabled={busy || !code.trim()} onClick={() => onCode(code)}>{busy ? 'Unlocking…' : 'Unlock'}</button>
         <button class="c-btn" onClick={onCancel}>Cancel</button>
       </div>
+      <StartOver onDone={onApproved} />
+    </div>
+  )
+}
+
+/** The way out when no device can open your circles or prayers any more:
+ *  a new key here. Circles then need a new invite each. */
+function StartOver({ onDone }: { onDone: () => void }) {
+  const [open, setOpen] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  if (!open) return <p class="c-paste"><button class="link small" onClick={() => setOpen(true)}>None of my devices can open them</button></p>
+  const begin = async () => {
+    setBusy(true); setMsg('')
+    try { await startOver(); onDone() } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card">
+      <p class="small">First check the other places you use Quiet Bible. On iPhone, Safari and the Home Screen app keep separate keys. If one of them opens your circles, tap “Approve from my other phone” above and allow it there.</p>
+      <p class="small">If nothing opens them, start over with a new key. Prayers saved on this phone stay. Prayers kept only on the server can’t be opened by anyone and are removed. To get back into a circle, ask someone in it for a new invite link.</p>
+      <div class="c-row">
+        <button class="c-btn primary" disabled={busy} onClick={begin}>{busy ? 'Starting over…' : 'Start over with a new key'}</button>
+        <button class="c-btn" disabled={busy} onClick={() => setOpen(false)}>Cancel</button>
+      </div>
+      {msg && <p class="note small">{msg}</p>}
     </div>
   )
 }
@@ -170,13 +196,15 @@ function CircleList() {
   const [me, setMe] = useState(lastName)
   const [key, setKey] = useState('')
   const [locked, setLocked] = useState(0)
+  const [stale, setStale] = useState(0)
+  const [joining, setJoining] = useState(false)
 
   const load = async (unlock = false, code?: string) => {
     setBusy(true); setMsg('')
     try {
       const r = await listCircles(unlock, code)
       if (r === 'needCode') setNeedCode('list')
-      else { setList(r.circles); setLocked(r.locked); setNeedCode('') }
+      else { setList(r.circles); setLocked(r.locked); setStale(r.stale); setNeedCode('') }
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   // What's kept shows at once (and offline); the server fills in the rest.
@@ -209,6 +237,11 @@ function CircleList() {
               <button class="c-btn primary" disabled={busy} onClick={unlock}>{noPasskey() ? (busy ? 'Unlocking…' : 'Unlock') : busy ? 'Waiting for passkey…' : 'Unlock with my passkey'}</button>
             </div>
           )}
+          {stale > 0 && (
+            <div class="c-card">
+              <p class="small">{stale === 1 ? 'One circle can’t' : `${stale} circles can’t`} be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.</p>
+            </div>
+          )}
           {list?.length ? (
             <ul class="c-list">
               {list.map(c => (
@@ -218,7 +251,7 @@ function CircleList() {
                 </button></li>
               ))}
             </ul>
-          ) : list && !busy && !locked && <p>You’re not in a circle yet. Make one, then invite people with a link.</p>}
+          ) : list && !busy && !locked && <p>You’re not in a circle yet. Join one with a code, or make your own.</p>}
           {making ? (
             <div class="c-card">
               <label class="c-label">Name of the circle<input value={name} maxLength={60} placeholder="Family, Tuesday group…" onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
@@ -228,8 +261,13 @@ function CircleList() {
                 <button class="c-btn" onClick={() => setMaking(false)}>Cancel</button>
               </div>
             </div>
-          ) : <button class="c-btn primary" onClick={() => setMaking(true)}>New circle</button>}
-          <PasteInvite />
+          ) : joining ? <JoinCode onCancel={() => setJoining(false)} /> : (
+            <div class="c-row c-two">
+              <button class="c-btn primary" onClick={() => setJoining(true)}>Enter a code</button>
+              <button class="c-btn" onClick={() => setMaking(true)}>New circle</button>
+            </div>
+          )}
+          {!joining && !making && <PasteInvite />}
         </>}
       {msg && <p class="note small">{msg} {!needCode && <button class="link" onClick={() => load()}>Try again</button>}</p>}
       <div class="c-foot">
@@ -238,6 +276,113 @@ function CircleList() {
             <p class="muted small">Only needed on a device whose passkey can’t unlock your circles. Keep it private: it opens your circles and your synced prayers.</p></>
           : <button class="link small" onClick={() => accountKeyCode().then(k => setKey(k || 'Open a circle on this device first.'))}>Show my key</button>}
       </div>
+    </div>
+  )
+}
+
+/** Checks something every few seconds while shown. */
+function useEvery(ms: number, fn: () => Promise<boolean | void>, on: boolean) {
+  const f = useRef(fn)
+  f.current = fn
+  useEffect(() => {
+    if (!on) return
+    let stop = false, t = 0
+    const tick = async () => { if (stop) return; const done = await f.current().catch(() => false); if (!done && !stop) t = window.setTimeout(tick, ms) }
+    t = window.setTimeout(tick, ms)
+    return () => { stop = true; clearTimeout(t) }
+  }, [on, ms])
+}
+
+const spaced = (code: string) => `${code.slice(0, 3)} ${code.slice(3)}`
+
+/** A member's side of joining with a code: the code, then "Let them in?". */
+function ShowCode({ circle, onDone }: { circle: string; onDone: () => void }) {
+  const [code, setCode] = useState<{ code: string; expires: number }>()
+  const [ask, setAsk] = useState<{ label: string; match: string; pub: string }>()
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [done, setDone] = useState(false)
+  useEffect(() => { makeCode(circle).then(setCode, e => setMsg(message(e))) }, [circle])
+  useEvery(2500, async () => {
+    if (!code) return
+    if (Date.now() > code.expires) { setMsg('This code has expired.'); return true }
+    const a = await codeAsk(circle, code.code)
+    if (a) { setAsk(a); return true }
+  }, !!code && !ask && !done && !msg)
+  const close = () => { if (code && !done) dropCode(circle, code.code); onDone() }
+  const allow = async () => {
+    setBusy(true); setMsg('')
+    try { await allowCode(circle, code!.code, ask!.pub); setDone(true) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card c-codebox">
+      {done ? <>
+        <p class="c-card-title">They’re in</p>
+        <p class="muted small">They’ll show up here as soon as their phone finishes joining.</p>
+        <button class="c-btn primary" onClick={onDone}>Done</button>
+      </> : ask ? <>
+        <p class="c-card-title">Let their {ask.label} in?</p>
+        <p class="muted small">Only if their screen shows these same digits:</p>
+        <p class="c-bigcode" aria-label={ask.match.split('').join(' ')}>{ask.match}</p>
+        <div class="c-row c-two">
+          <button class="c-btn primary" disabled={busy} onClick={allow}>{busy ? 'Letting in…' : 'Allow'}</button>
+          <button class="c-btn" disabled={busy} onClick={close}>Not them</button>
+        </div>
+      </> : <>
+        <p class="c-card-title">Their code</p>
+        <p class="c-bigcode" aria-label={code?.code.split('').join(' ')}>{code ? spaced(code.code) : '··· ···'}</p>
+        <p class="muted small">On their phone: Circles → <strong>Enter a code</strong>. Works once, for 15 minutes. Keep this open.</p>
+        <button class="c-btn" onClick={close}>Cancel</button>
+      </>}
+      {msg && <p class="note small">{msg}</p>}
+    </div>
+  )
+}
+
+/** The joining side: type the code, compare four digits, wait for Allow. */
+function JoinCode({ onCancel }: { onCancel: () => void }) {
+  const nav = useNav()
+  const [code, setCode] = useState('')
+  const [me, setMe] = useState(lastName)
+  const [typed, setTyped] = useState<Typed>()
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [needKey, setNeedKey] = useState(false)
+  const digits = code.replace(/\D/g, '').slice(0, 6)
+  const send = async () => {
+    if (digits.length !== 6 || !me.trim()) return
+    setBusy(true); setMsg('')
+    try { keepName(me.trim()); setTyped(await typeCode(digits)) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  const finish = async (key?: string) => {
+    const r = await joinWithCode(typed!, me.trim(), key)
+    if (r === 'needCode') { setNeedKey(true); return true }
+    if (r) { setNeedKey(false); nav.open(r); return true }
+    return false
+  }
+  useEvery(2500, async () => { try { return await finish() } catch (e) { setMsg(message(e)); return true } }, !!typed && !needKey && !msg)
+  const cancel = () => { if (typed) stopWaiting(typed); onCancel() }
+  if (needKey) return <CodeEntry busy={busy} onCode={k => { setBusy(true); finish(k).catch(e => setMsg(message(e))).finally(() => setBusy(false)) }}
+    onCancel={cancel} onApproved={() => finish()} />
+  return (
+    <div class="c-card c-codebox">
+      {typed ? <>
+        <p class="c-card-title">Ask them to tap Allow</p>
+        <p class="muted small">Their screen shows these same digits:</p>
+        <p class="c-bigcode" aria-label={typed.match.split('').join(' ')}>{typed.match}</p>
+        <p class="muted small">Waiting for them…</p>
+        <button class="c-btn" onClick={cancel}>Cancel</button>
+      </> : <>
+        <p class="c-card-title">Enter the code</p>
+        <input class="c-code-input" value={digits} inputMode="numeric" autoComplete="one-time-code" maxLength={7} placeholder="000000"
+          aria-label="The 6-digit code" onInput={e => { setCode((e.target as HTMLInputElement).value); setMsg('') }} />
+        <label class="c-label">Your name<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+        <div class="c-row c-two">
+          <button class="c-btn primary" disabled={busy || digits.length !== 6 || !me.trim()} onClick={send}>{busy ? 'Checking…' : 'Join'}</button>
+          <button class="c-btn" onClick={cancel}>Cancel</button>
+        </div>
+      </>}
+      {msg && <p class="note small">{msg}</p>}
     </div>
   )
 }
@@ -268,6 +413,24 @@ function PasteInvite() {
   )
 }
 
+// A phone's browser, not the app on its Home Screen. Links always open
+// there (an iPhone never opens one in a Home Screen app), and the two keep
+// separate accounts, so joining here would leave the app outside the circle.
+const inBrowser = () => !((navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches)
+  && matchMedia('(pointer: coarse)').matches
+
+function OpenInApp() {
+  const [copied, setCopied] = useState(false)
+  return (
+    <div class="c-card">
+      <p><strong>Have Quiet Bible on your Home Screen?</strong> Open this invite there, so you join with the account you already use:</p>
+      <p class="small">Copy it, open the app, then Circles → <strong>Have an invite link? Paste it</strong>.</p>
+      <button class="c-btn primary" onClick={() => copyText(location.href).then(() => setCopied(true), () => {})}>{copied ? 'Copied: now open the app' : 'Copy invite'}</button>
+      <p class="muted small">No app yet? Join right here below.</p>
+    </div>
+  )
+}
+
 function Join({ id, secret }: { id: string; secret: string }) {
   const [invite, setInvite] = useState<Invite>()
   const [msg, setMsg] = useState('')
@@ -276,7 +439,11 @@ function Join({ id, secret }: { id: string; secret: string }) {
   const [me, setMe] = useState(lastName)
   useEffect(() => {
     if (!id || !secret) { setMsg('This invite link is incomplete. Ask for it to be sent again.'); return }
-    readInvite(id, secret).then(i => { if (i.already) toSheet({ id: i.circle, name: i.name }); else setInvite(i) }, e => setMsg(message(e)))
+    readInvite(id, secret).then(async i => {
+      if (!i.already) { setInvite(i); return }
+      await openInvited(id, i, lastName() || 'Me')
+      toSheet({ id: i.circle, name: i.name })
+    }, e => setMsg(message(e)))
   }, [id, secret])
   const join = async (code?: string) => {
     if (!invite || !me.trim()) return
@@ -291,6 +458,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
   return (
     <div class="circles">
       <h1>Join a circle</h1>
+      {inBrowser() && invite && !needCode && <OpenInApp />}
       {invite && (needCode ? <CodeEntry busy={busy} onCode={join} onCancel={() => setNeedCode(false)} onApproved={() => join()} /> : (
         <div class="c-card">
           <p>{invite.by ? <><strong>{invite.by}</strong> invited you to </> : 'You’re invited to '}<strong>{invite.name}</strong>
@@ -318,6 +486,7 @@ function CircleView({ id }: { id: string }) {
   const [sent, setSent] = useState(false)
   const [busy, setBusy] = useState(false)
   const [leaving, setLeaving] = useState(false)
+  const [showCode, setShowCode] = useState(false)
   // What came in since you last looked shows first, marked, until you next
   // come back. Looking at it clears the dot.
   const [since] = useState(() => seenAt(id))
@@ -336,7 +505,7 @@ function CircleView({ id }: { id: string }) {
   // tap was too long ago (Safari does, after a slow network), the button
   // turns into "Send invite link" and the next tap sends it at once.
   const sendInvite = async (link: string) => {
-    const text = `Come read the word and pray with ${info?.name ?? 'my circle'} in Quiet Bible. This private link is just for you: it works once, for 7 days.`
+    const text = `Come read the word and pray with ${info?.name ?? 'my circle'} in Quiet Bible. This private link is just for you: it works once, for 7 days. Already have the Quiet Bible app? Copy this link and paste it in Circles there.`
     if (canShare) {
       try { await navigator.share({ title: 'Quiet Bible', text, url: link }); setSent(true) } catch (e) {
         if ((e as Error).name !== 'AbortError') setInvite(link)
@@ -365,12 +534,18 @@ function CircleView({ id }: { id: string }) {
       {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? 'Circle'}</button></h1>}
       {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
       {feed && <StreakBoard circle={id} name={info?.name ?? 'this circle'} feed={feed} onChange={load} />}
-      <div class="c-row">
-        {invite && !sent
-          ? <button class="c-btn primary" onClick={() => sendInvite(invite)}>{canShare ? 'Send invite link' : 'Copy invite link'}</button>
-          : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? 'Making link…' : sent ? 'Invite someone else' : 'Invite someone'}</button>}
-      </div>
-      <p class="muted small">{sent ? 'Sent. ' : ''}Each invite link lets one person in and works for 7 days, so send it only to the person you mean.</p>
+      {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} /> : (
+        <div class="c-card">
+          <p class="c-card-title">Invite someone</p>
+          <div class="c-row c-two">
+            <button class="c-btn primary" onClick={() => { setMsg(''); setShowCode(true) }}>Show a code</button>
+            {invite && !sent
+              ? <button class="c-btn" onClick={() => sendInvite(invite)}>{canShare ? 'Send the link' : 'Copy the link'}</button>
+              : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? 'Making link…' : 'Send a link'}</button>}
+          </div>
+          <p class="muted small">{sent ? 'Link sent. ' : ''}A code is for someone beside you or on a call. A link works from far away, once, for 7 days.</p>
+        </div>
+      )}
       {msg && <p class="note small">{msg}</p>}
       {feed && !feed.items.length && <p class="muted c-empty">Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.</p>}
       <ol class="c-feed">
