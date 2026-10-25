@@ -5,6 +5,7 @@ import { useState } from 'preact/hooks'
 import { Backup, htmlToText, ImportItem, isBackup, mergeImport, mergeMark, Marks, notesOf, parseNotes, parseRefList } from './lib/marks'
 import { isIOS } from './lib/native'
 import { useApp } from './state'
+import { t, tj, tn } from './i18n'
 
 interface Preview { items: ImportItem[]; skipped: string[]; files: string[]; backup?: Backup }
 
@@ -70,9 +71,9 @@ export function DataTools() {
     setBusy(true); setMsg(''); setPreview(undefined)
     try {
       const p = await readImport(file)
-      if (!p.items.length && !p.backup) setMsg(`Nothing to import was found in ${file.name}.`)
+      if (!p.items.length && !p.backup) setMsg(t('Nothing to import was found in {file}.', { file: file.name }))
       else setPreview(p)
-    } catch (err) { setMsg(`Could not read ${file.name}: ${(err as Error).message}`) }
+    } catch (err) { setMsg(t('Could not read {file}: {error}', { file: file.name, error: (err as Error).message })) }
     finally { setBusy(false) }
   }
 
@@ -84,7 +85,7 @@ export function DataTools() {
     if (!preview) return
     setMarks(m => mergeImport(preview.backup ? mergeBackup(m, preview.backup.marks) : m, preview.items).marks)
     if (preview.backup?.settings && typeof preview.backup.settings === 'object') update(preview.backup.settings as Partial<typeof settings>)
-    setMsg(`Imported ${hlCount} highlights, ${bmCount} bookmarks and ${ntCount} notes.`)
+    setMsg(t('Imported {h} highlights, {b} bookmarks and {n} notes.', { h: hlCount, b: bmCount, n: ntCount }))
     setPreview(undefined)
   }
 
@@ -96,24 +97,24 @@ export function DataTools() {
 
   return (
     <div class="datatools">
-      <p class="muted">You have <strong>{hl}</strong> highlighted verses, <strong>{bm}</strong> bookmarks and <strong>{nt}</strong> notes on this device.</p>
+      <p class="muted">{tj('You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.', { h: <strong>{hl}</strong>, b: <strong>{bm}</strong>, n: <strong>{nt}</strong> })}</p>
       <div class="row wrap">
         <label class={'button primary' + (busy ? ' disabled' : '')}>
-          {busy ? 'Reading…' : 'Import highlights and notes…'}
+          {busy ? t('Reading…') : t('Import highlights and notes…')}
           <input type="file" accept=".zip,.html,.htm,.txt,.json,application/zip,text/html" onChange={pick} hidden />
         </label>
-        <button onClick={backup}>Back up my data</button>
+        <button onClick={backup}>{t('Back up my data')}</button>
       </div>
-      <p class="muted small">Import highlights, bookmarks and notes exported from another Bible app (a .zip, .html or .txt export), or a backup made with this app.
-        They belong to the verse, so they appear in every version.</p>
+      <p class="muted small">{t('Import highlights, bookmarks and notes exported from another Bible app (a .zip, .html or .txt export), or a backup made with this app.')}{' '}
+        {t('They belong to the verse, so they appear in every version.')}</p>
       {preview && (
         <div class="import-preview">
-          <p>Found <strong>{hlCount}</strong> highlights, <strong>{bmCount}</strong> bookmarks and <strong>{ntCount}</strong> notes in {preview.files.join(', ')}.
-            {preview.skipped.length > 0 && <> {preview.skipped.length} lines were not recognized.</>}</p>
-          {preview.skipped.length > 0 && <details class="small"><summary>Show unrecognized lines</summary><pre>{preview.skipped.slice(0, 50).join('\n')}</pre></details>}
+          <p>{tj('Found {h} highlights, {b} bookmarks and {n} notes in {files}.', { h: <strong>{hlCount}</strong>, b: <strong>{bmCount}</strong>, n: <strong>{ntCount}</strong>, files: preview.files.join(', ') })}
+            {preview.skipped.length > 0 && <> {tn(preview.skipped.length, '{n} line was not recognized.', '{n} lines were not recognized.')}</>}</p>
+          {preview.skipped.length > 0 && <details class="small"><summary>{t('Show unrecognized lines')}</summary><pre>{preview.skipped.slice(0, 50).join('\n')}</pre></details>}
           <div class="row">
-            <button class="primary" onClick={apply}>Import</button>
-            <button onClick={() => setPreview(undefined)}>Cancel</button>
+            <button class="primary" onClick={apply}>{t('Import')}</button>
+            <button onClick={() => setPreview(undefined)}>{t('Cancel')}</button>
           </div>
         </div>
       )}

@@ -74,12 +74,24 @@
           var box = document.createElement('div')
           box.id = 'boot-stuck'
           box.style.cssText = 'position:fixed;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;padding:24px;text-align:center;font:18px/1.5 system-ui,sans-serif;color:inherit'
-          box.innerHTML = '<p style="margin:0;max-width:22em">' + (failed ? 'Quiet Bible didn’t start properly.' : 'Quiet Bible is taking a while to start.')
-            + '<br>Your highlights, notes and settings are safe on this device.</p>'
-            + '<button type="button" style="font:inherit;font-weight:700;min-width:220px;min-height:52px;border-radius:26px;border:0;background:#7a4b1e;color:#fff">Repair and reload</button>'
-            + '<button type="button" style="font:inherit;min-width:220px;min-height:52px;border-radius:26px;border:1px solid currentColor;background:none;color:inherit">Just reload</button>'
+          // In the app's language (src/i18n.ts), which can't load if the app didn't.
+          var l = 'en'
+          try {
+            l = JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').language || localStorage.getItem('plain-bible:welcome-lang') || ''
+            if (!/^(en|fr|es)$/.test(l)) l = String(navigator.language).toLowerCase().split('-')[0]
+          } catch (e) {}
+          var W = {
+            en: ['Quiet Bible didn’t start properly.', 'Quiet Bible is taking a while to start.', 'Your highlights, notes and settings are safe on this device.', 'Repair and reload', 'Just reload', 'Repairing…'],
+            fr: ['Quiet Bible n’a pas démarré correctement.', 'Quiet Bible met du temps à démarrer.', 'Vos surlignages, notes et réglages sont en sécurité sur cet appareil.', 'Réparer et recharger', 'Simplement recharger', 'Réparation…'],
+            es: ['Quiet Bible no se inició bien.', 'Quiet Bible está tardando en iniciarse.', 'Tus resaltados, notas y ajustes están a salvo en este dispositivo.', 'Reparar y recargar', 'Solo recargar', 'Reparando…'],
+          }
+          var w = W[l] || W.en
+          box.innerHTML = '<p style="margin:0;max-width:22em">' + (failed ? w[0] : w[1])
+            + '<br>' + w[2] + '</p>'
+            + '<button type="button" style="font:inherit;font-weight:700;min-width:220px;min-height:52px;border-radius:26px;border:0;background:#7a4b1e;color:#fff">' + w[3] + '</button>'
+            + '<button type="button" style="font:inherit;min-width:220px;min-height:52px;border-radius:26px;border:1px solid currentColor;background:none;color:inherit">' + w[4] + '</button>'
           var b = box.getElementsByTagName('button')
-          b[0].onclick = function () { b[0].textContent = 'Repairing…'; window.plainBibleRepair() }
+          b[0].onclick = function () { b[0].textContent = w[5]; window.plainBibleRepair() }
           b[1].onclick = function () { location.reload() }
           ;(document.body || document.documentElement).appendChild(box)
         }

@@ -22,6 +22,7 @@ import { checkCircleNews } from './lib/circleNews'
 import { ApproveCard } from './approve'
 import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
+import { currentLang, pickLang, setLang, t } from './i18n'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -92,6 +93,14 @@ export function App() {
   }, [])
 
   useEffect(() => { if (settings) saveSettings(settings) }, [settings])
+
+  // A new language in Settings (or from another device): its words load,
+  // then everything is drawn again in it.
+  const [, setWords] = useState(0)
+  const language = settings && pickLang(settings.language)
+  useEffect(() => {
+    if (language && language !== currentLang()) setLang(language).then(() => setWords(n => n + 1)).catch(() => {})
+  }, [language])
 
   // Before the paint, so a theme tap shows in the very next frame.
   useLayoutEffect(() => {
@@ -171,10 +180,10 @@ export function App() {
   useEffect(() => {
     const ids = sharedWith ? sharedWith.split(',') : []
     if (!ids.length || !sync.account) return
-    let t = 0
+    let timer = 0
     const push = () => {
-      clearTimeout(t)
-      t = window.setTimeout(() => {
+      clearTimeout(timer)
+      timer = window.setTimeout(() => {
         if (navigator.onLine === false || document.visibilityState !== 'visible') return
         import('./lib/circles').then(m => m.pushStreaks(ids)).catch(() => {})
       }, 3000)
@@ -184,27 +193,27 @@ export function App() {
     addEventListener(DAYS_EVENT, push)
     addEventListener('online', push)
     document.addEventListener('visibilitychange', back)
-    return () => { clearTimeout(t); removeEventListener(DAYS_EVENT, push); removeEventListener('online', push); document.removeEventListener('visibilitychange', back) }
+    return () => { clearTimeout(timer); removeEventListener(DAYS_EVENT, push); removeEventListener('online', push); document.removeEventListener('visibilitychange', back) }
   }, [sharedWith, sync.account?.token])
 
   // Something new in your circles? One small request when the app opens or
   // comes back (at most once a minute), only for people in a circle.
   useEffect(() => {
     if (!sync.account || !inCircles()) return
-    const t = window.setTimeout(() => checkCircleNews(), 2500)
+    const timer = window.setTimeout(() => checkCircleNews(), 2500)
     const back = () => { if (document.visibilityState === 'visible') checkCircleNews() }
     document.addEventListener('visibilitychange', back)
     addEventListener('online', back)
-    return () => { clearTimeout(t); document.removeEventListener('visibilitychange', back); removeEventListener('online', back) }
+    return () => { clearTimeout(timer); document.removeEventListener('visibilitychange', back); removeEventListener('online', back) }
   }, [sync.account?.token])
 
   if (error) return (
     <div class="center">
-      <p class="error">Could not load the list of versions: {error}</p>
-      <p><button onClick={() => location.reload()}>Try again</button></p>
+      <p class="error">{t('Could not load the list of versions: {error}', { error })}</p>
+      <p><button onClick={() => location.reload()}>{t('Try again')}</button></p>
     </div>
   )
-  if (!catalog || !settings) return <p class="muted center">Loading…</p>
+  if (!catalog || !settings) return <p class="muted center">{t('Loading…')}</p>
 
   const update = (patch: Partial<Settings>) => {
     setSettings(s => {
@@ -218,14 +227,14 @@ export function App() {
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
-        <a class="brand" href="#/read" title="Back to where you were reading">Quiet Bible</a>
+        <a class="brand" href="#/read" title={t('Back to where you were reading')}>Quiet Bible</a>
         <nav>
           <HistoryButton route={route} />
           <UpdateButton />
           {/* #/settings opened as a page has its own Done, and so do the pages
               Settings opens (Circles, Saved): Done takes you back to the word. */}
-          {view === 'settings' ? <button class="done-btn" onClick={closeSettingsPage}>Done</button>
-            : view === 'circles' || view === 'join' || view === 'saved' ? <button class="done-btn" onClick={() => go('read')}>Done</button>
+          {view === 'settings' ? <button class="done-btn" onClick={closeSettingsPage}>{t('Done')}</button>
+            : view === 'circles' || view === 'join' || view === 'saved' ? <button class="done-btn" onClick={() => go('read')}>{t('Done')}</button>
             : <ProfileButton onOpen={() => setSettingsOpen(true)} />}
         </nav>
       </header>
@@ -289,7 +298,7 @@ function ProfileButton({ onOpen }: { onOpen: () => void }) {
   const on = !!sync.account
   return (
     <button class={'profile-btn' + (on ? ' synced' : '')} onClick={onOpen}
-      aria-label={on ? 'Settings and account. Sync is on' : 'Settings and account'} title="Settings">
+      aria-label={on ? t('Settings and account. Sync is on') : t('Settings and account')} title={t('Settings')}>
       <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
         <circle cx="12" cy="8.6" r="3.9" fill="currentColor" />
         <path d="M4.6 19.4c1.2-3.6 4-5.4 7.4-5.4s6.2 1.8 7.4 5.4" fill="currentColor" />
@@ -346,26 +355,26 @@ function HistoryButton({ route }: { route: Route }) {
       setTimeout(() => removeEventListener('click', stop, { capture: true }), 600)
     }
     const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setPeek(false) }
-    const t = setTimeout(() => setPeek(false), 8000)
+    const timer = setTimeout(() => setPeek(false), 8000)
     addEventListener('pointerdown', away); addEventListener('keydown', esc); addEventListener('scroll', away as never, { passive: true })
-    return () => { clearTimeout(t); removeEventListener('pointerdown', away); removeEventListener('keydown', esc); removeEventListener('scroll', away as never) }
+    return () => { clearTimeout(timer); removeEventListener('pointerdown', away); removeEventListener('keydown', esc); removeEventListener('scroll', away as never) }
   }, [peek])
 
   const first = places[0]
   return (
     <div class="history" ref={box}>
       <button class={'history-btn' + (peek ? ' on' : '') + (first ? '' : ' idle')} aria-expanded={peek}
-        aria-label={first ? `Back to ${placeName(first)}. Hold for recent places` : 'Reading history'} title={first ? `Back to ${placeName(first)} · hold for more` : undefined}
+        aria-label={first ? t('Back to {place}. Hold for recent places', { place: placeName(first) }) : t('Reading history')} title={first ? t('Back to {place} · hold for more', { place: placeName(first) }) : undefined}
         onPointerDown={down} onPointerUp={up} onPointerLeave={up} onPointerCancel={up}
         onContextMenu={e => { e.preventDefault(); up(); setPeek(true) }}
         onClick={() => { if (hold.current?.fired) return; if (first) goTo(first); else setPeek(p => !p) }}>
         <HistoryIcon size={26} />
       </button>
       {peek && (
-        <div class="peek" role="dialog" aria-label="Go back">
-          {!first ? <p class="peek-empty">When you jump to another passage, the place you left shows here so you can come back with one tap.</p> : <>
+        <div class="peek" role="dialog" aria-label={t('Go back')}>
+          {!first ? <p class="peek-empty">{t('When you jump to another passage, the place you left shows here so you can come back with one tap.')}</p> : <>
             <button class="peek-main" onClick={() => goTo(first)}>
-              <span class="peek-kicker">Back to</span>
+              <span class="peek-kicker">{t('Back to')}</span>
               <strong>{placeName(first)}</strong>
               {lines[0] && <span class="peek-line">{lines[0]}</span>}
             </button>
@@ -388,7 +397,7 @@ function UpdateButton() {
   const [busy, setBusy] = useState(false)
   if (state !== 'ready') return null
   return (
-    <button class={'update-btn' + (busy ? ' busy' : '')} aria-label="New version ready. Tap to update" title="New version ready: tap to update"
+    <button class={'update-btn' + (busy ? ' busy' : '')} aria-label={t('New version ready. Tap to update')} title={t('New version ready: tap to update')}
       onClick={() => { setBusy(true); applyUpdate() }}>
       <RefreshIcon size={24} />
     </button>

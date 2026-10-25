@@ -3,6 +3,7 @@
 // Jean 3:16"), and to other notes only by a #tag you gave them both.
 import { exactBook } from './books'
 import { FoundNote, Marks, notesOf, parseKey } from './marks'
+import { t } from '../i18n'
 
 /** A passage a note mentions: a chapter, or verses `from`–`to` in it. */
 export interface Mention { book: string; chapter: number; from?: number; to?: number }
@@ -99,14 +100,14 @@ export function related(links: NoteLinks, book: string, chapter: number, mine: F
     const id = noteId(note)
     if (skip.has(id) || out.has(id)) continue
     if (verses && at.from && !verses.some(v => v >= at.from! && v <= at.to!)) continue
-    out.set(id, { ...note, why: 'mentions ' + (at.from ? `${chapter}:${at.from}${at.to !== at.from ? '–' + at.to : ''}` : `chapter ${chapter}`) })
+    out.set(id, { ...note, why: at.from ? t('mentions {ref}', { ref: `${chapter}:${at.from}${at.to !== at.from ? '–' + at.to : ''}` }) : t('mentions chapter {n}', { n: chapter }) })
   }
   for (const x of mine) {
-    for (const t of links.tagsOf.get(noteId(x)) ?? []) {
-      for (const note of links.tags.get(t) ?? []) {
+    for (const tag of links.tagsOf.get(noteId(x)) ?? []) {
+      for (const note of links.tags.get(tag) ?? []) {
         const id = noteId(note)
         if (skip.has(id) || out.has(id)) continue
-        out.set(id, { ...note, why: '#' + t })
+        out.set(id, { ...note, why: '#' + tag })
       }
     }
   }

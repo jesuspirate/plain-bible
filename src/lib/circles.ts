@@ -17,6 +17,7 @@ import { shareLink } from './native'
 import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
 import { noteLatest } from './circleNews'
+import { t } from '../i18n'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const CHUNK = 1_000_000
@@ -285,7 +286,7 @@ async function send(circle: string, body: Shared, audio?: Uint8Array) {
       method: 'PUT', body: sealed!.subarray(n * CHUNK, (n + 1) * CHUNK) as BodyInit,
       headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/octet-stream' },
     }).catch(() => { throw new SyncError('The connection dropped while sending. Try again.') })
-    if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || `Sync service error (${res.status})`, res.status)
+    if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || t('Sync service error ({status})', { status: res.status }), res.status)
   }
   // Your own prayer plays from here without downloading it again.
   if (audio) await meta.set(`circle-audio:${circle}/${id}`, audio.buffer)
@@ -323,7 +324,7 @@ export async function prayerAudio(circle: string, item: FeedItem): Promise<{ typ
     for (let n = 0; n < item.chunks; n++) {
       const res = await fetch(`${SYNC_URL}/circles/${circle}/items/${item.id}/${n}`, { headers: { Authorization: `Bearer ${tok}` } })
         .catch(() => { throw new SyncError('Connect to the internet to hear this prayer the first time.') })
-      if (!res.ok) throw new SyncError(`Sync service error (${res.status})`, res.status)
+      if (!res.ok) throw new SyncError(t('Sync service error ({status})', { status: res.status }), res.status)
       pieces.push(new Uint8Array(await res.arrayBuffer()))
     }
     const sealed = new Uint8Array(pieces.reduce((s, x) => s + x.length, 0))

@@ -11,6 +11,7 @@ import { meta, Prayer, prayers } from './prayers'
 import { b64url, open, seal } from './prayerCrypto'
 import { api, changedAt, loadAccount, SettingsT, SYNC_URL, SyncError } from './sync'
 import { Days, mergeDays } from './streaks'
+import { t } from '../i18n'
 
 export const NEW_ORIGIN = 'https://myquietbible.com'
 export const NEW_HOST = 'myquietbible.com'
@@ -86,7 +87,7 @@ export function pack(b: Omit<Bundle, 'prayers'>, list: Prayer[]): Uint8Array {
 export function unpack(bytes: Uint8Array): { bundle: Bundle; prayers: Prayer[] } {
   const n = new DataView(bytes.buffer, bytes.byteOffset, bytes.byteLength).getUint32(0)
   const bundle = JSON.parse(dec.decode(bytes.subarray(4, 4 + n))) as Bundle
-  if (bundle.v !== 1) throw new Error('This move link comes from a newer version. Update the app and try again.')
+  if (bundle.v !== 1) throw new Error(t('This move link comes from a newer version. Update the app and try again.'))
   const base = 4 + n
   const get = ([o, len]: Ref) => bytes.slice(base + o, base + o + len).buffer
   const list = bundle.prayers.map(({ audio, more, ...p }) => ({
@@ -189,7 +190,7 @@ async function send(path: string, body: Uint8Array) {
       const res = await fetch(SYNC_URL + path, { method: 'PUT', body: body as BodyInit, headers: { 'Content-Type': 'application/octet-stream' } })
       if (res.ok) return
       const msg = (await res.json().catch(() => ({}))).error
-      if (res.status < 500 || attempt >= 2) throw new SyncError(msg || `Sync service error (${res.status})`, res.status)
+      if (res.status < 500 || attempt >= 2) throw new SyncError(msg || t('Sync service error ({status})', { status: res.status }), res.status)
     } catch (e) {
       if (e instanceof SyncError || attempt >= 2) throw e instanceof SyncError ? e : new SyncError('The connection dropped while sending. Try again.')
     }

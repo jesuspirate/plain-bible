@@ -7,6 +7,7 @@
 import { meta } from './prayers'
 import { aesKey, b64url, keyCode, open, seal } from './prayerCrypto'
 import { api, loadAccount, SyncError } from './sync'
+import { N_ } from '../i18n'
 
 const EC = { name: 'ECDH', namedCurve: 'P-256' } as const
 const DAY = 86_400_000
@@ -36,10 +37,10 @@ function deviceLabel() {
   const ua = navigator.userAgent
   if (/iPhone/.test(ua)) return 'iPhone'
   if (/iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return 'iPad'
-  if (/Android/.test(ua)) return /Mobile/.test(ua) ? 'Android phone' : 'Android tablet'
+  if (/Android/.test(ua)) return /Mobile/.test(ua) ? N_('Android phone') : N_('Android tablet')
   if (/Macintosh/.test(ua)) return 'Mac'
-  if (/Windows/.test(ua)) return 'Windows computer'
-  return 'device'
+  if (/Windows/.test(ua)) return N_('Windows computer')
+  return N_('device')
 }
 
 async function shared(priv: CryptoKey, pub: string, id: string) {

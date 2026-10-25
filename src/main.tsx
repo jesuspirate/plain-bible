@@ -6,6 +6,7 @@ import { warmSearch } from './searchClient'
 import { newVersionReady, registered } from './lib/update'
 import { Arriving } from './move'
 import { parseMoveLink } from './lib/move'
+import { savedLang, setLang, t } from './i18n'
 
 // The reader puts you back on your verse itself; the browser's own scroll
 // restoration would fight it.
@@ -29,11 +30,11 @@ class Crash extends Component<{}, { error?: Error }> {
     if (!error) return this.props.children
     return (
       <div class="center">
-        <p class="error">Something went wrong: {String(error.message || error)}</p>
-        <p>Your highlights and settings are safe on this device.</p>
-        <p><button onClick={() => location.reload()}>Reload</button></p>
+        <p class="error">{t('Something went wrong: {error}', { error: String(error.message || error) })}</p>
+        <p>{t('Your highlights and settings are safe on this device.')}</p>
+        <p><button onClick={() => location.reload()}>{t('Reload')}</button></p>
         {/* Clears the saved app files (not your data) and loads a fresh copy. */}
-        {w.plainBibleRepair && <p><button onClick={w.plainBibleRepair}>Repair and reload</button></p>}
+        {w.plainBibleRepair && <p><button onClick={w.plainBibleRepair}>{t('Repair and reload')}</button></p>}
       </div>
     )
   }
@@ -43,7 +44,11 @@ class Crash extends Component<{}, { error?: Error }> {
 const moving = location.hash.startsWith('#/move/') ? parseMoveLink(location.hash) : undefined
 if (location.hash.startsWith('#/move/') && !moving) history.replaceState(null, '', location.pathname + '#/read')
 // A first visit is on its way to the welcome page (index.html): nothing to start.
-if (!w.plainBibleWelcome) render(<Crash>{moving ? <Arriving link={moving} /> : <App />}</Crash>, document.getElementById('app')!)
+// In French or Spanish, their words come in first (a small file, saved
+// offline with the app); English needs nothing.
+const start = () => render(<Crash>{moving ? <Arriving link={moving} /> : <App />}</Crash>, document.getElementById('app')!)
+const lang = savedLang()
+if (!w.plainBibleWelcome) { if (lang === 'en') start(); else setLang(lang).catch(() => {}).then(start) }
 
 if (import.meta.env.PROD && 'serviceWorker' in navigator && !w.plainBibleWelcome) {
   import('virtual:pwa-register').then(({ registerSW }) => {

@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en">
+<html lang="en" data-versions="{{versions}}" data-languages="{{languages}}">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
@@ -43,6 +43,31 @@
         document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]
       })()
     </script>
+    <script>
+      // The page's language, before the first paint: the one picked here last
+      // time, or the app's on this device, or the phone's. Not English: the
+      // page stays hidden the moment it takes to put its words in (welcome.ts).
+      (function () {
+        var ok = /^(en|fr|es)$/, l = null
+        try {
+          l = localStorage.getItem('plain-bible:welcome-lang') || JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').language
+        } catch (e) {}
+        if (!ok.test(l || '')) {
+          l = 'en'
+          var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']
+          for (var i = 0; i < list.length; i++) {
+            var c = String(list[i]).toLowerCase().split('-')[0]
+            if (ok.test(c)) { l = c; break }
+          }
+        }
+        document.documentElement.lang = l
+        if (l !== 'en') {
+          document.documentElement.classList.add('i18n-wait')
+          setTimeout(function () { document.documentElement.classList.remove('i18n-wait') }, 3000)
+        }
+      })()
+    </script>
+    <style>.i18n-wait body { visibility: hidden; }</style>
     <script type="module" src="./welcome.ts"></script>
   </head>
   <body>
@@ -55,14 +80,21 @@
     </svg>
 
     <header class="top">
-      <a class="brand" href="#top" aria-label="Quiet Bible, top of the page">
+      <a class="brand" href="#top" aria-label="Quiet Bible, top of the page" data-t-label="brand">
         <svg aria-hidden="true"><use href="#lamp" /></svg>
         <span>Quiet Bible</span>
       </a>
-      <div class="themes" role="group" aria-label="Theme">
-        <button type="button" data-theme="light" aria-pressed="false">Light</button>
-        <button type="button" data-theme="sepia" aria-pressed="false">Sepia</button>
-        <button type="button" data-theme="dark" aria-pressed="false">Dark</button>
+      <div class="pickers">
+        <div class="themes" role="group" aria-label="Theme" data-t-label="theme">
+          <button type="button" data-theme="light" aria-pressed="false" data-t="light">Light</button>
+          <button type="button" data-theme="sepia" aria-pressed="false" data-t="sepia">Sepia</button>
+          <button type="button" data-theme="dark" aria-pressed="false" data-t="dark">Dark</button>
+        </div>
+        <div class="themes langs" role="group" aria-label="Language" data-t-label="language">
+          <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+          <button type="button" data-lang="fr" lang="fr" aria-pressed="false" aria-label="Français">FR</button>
+          <button type="button" data-lang="es" lang="es" aria-pressed="false" aria-label="Español">ES</button>
+        </div>
       </div>
     </header>
 
@@ -71,14 +103,14 @@
         <div class="hero-text">
           <div class="lamp" aria-hidden="true"><svg><use href="#lamp" /></svg></div>
           <h1>Quiet Bible</h1>
-          <p class="lead">Just the Bible.</p>
-          <p class="sub">Many versions and languages, a search that finds things, and nothing else.
+          <p class="lead" data-t="lead">Just the Bible.</p>
+          <p class="sub" data-t="sub">Many versions and languages, a search that finds things, and nothing else.
             No plans, no feeds, no ads. Free, and it works offline.</p>
           <div class="cta">
-            <a class="btn primary" href="../#/read" data-open>Open the Bible</a>
+            <a class="btn primary" href="../#/read" data-open data-t="open">Open the Bible</a>
             <a class="btn" href="#install" data-device-label>Put it on your Home Screen</a>
           </div>
-          <p class="hint">No sign-up and no app store. It opens right here in your browser.</p>
+          <p class="hint" data-t="hint">No sign-up and no app store. It opens right here in your browser.</p>
         </div>
 
         <!-- The reader, drawn in the page's own colours, so it follows the theme. -->
@@ -90,7 +122,7 @@
               <span class="m-ic m-person"><svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="8.6" r="3.9" fill="currentColor" /><path d="M4.6 19.4c1.2-3.6 4-5.4 7.4-5.4s6.2 1.8 7.4 5.4" fill="currentColor" /></svg></span>
             </div>
             <div class="m-chapter">
-              <div class="m-title"><span class="m-book">Psalms</span><span class="m-num">119</span></div>
+              <div class="m-title"><span class="m-book" data-t="psalms">Psalms</span><span class="m-num">119</span></div>
               <p><sup>103</sup>How sweet are thy words unto my taste! yea, sweeter than honey to my mouth!</p>
               <p><sup>104</sup>Through thy precepts I get understanding: therefore I hate every false way.</p>
               <p><sup>105</sup><mark>Thy word is a lamp unto my feet, and a light unto my path.</mark></p>
@@ -105,7 +137,7 @@
             <div class="m-bar">
               <div class="m-field">
                 <svg viewBox="0 0 24 24" width="20" height="20"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4" /><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" /></svg>
-                <span>Ps 119 · KJV</span>
+                <span data-t="mbar">Ps 119 · KJV</span>
               </div>
               <div class="m-circles"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.6" /><circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.6" /><circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.6" /><path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" /></svg></div>
               <div class="m-pray"><span>🙏</span></div>
@@ -115,14 +147,14 @@
       </section>
 
       <section class="verse-section" aria-labelledby="verse-h">
-        <h2 id="verse-h">In your own language</h2>
-        <p class="section-sub">{{versions}} versions in {{languages}} languages, every one public domain or openly licensed.
+        <h2 id="verse-h" data-t="verseH">In your own language</h2>
+        <p class="section-sub" data-t="verseSub">{{versions}} versions in {{languages}} languages, every one public domain or openly licensed.
           The same verse, in a few of them:</p>
         <figure class="verse-card">
           <blockquote id="verse" lang="en"><span class="vn" aria-hidden="true">105</span>Thy word is a lamp unto my feet, and a light unto my path.</blockquote>
           <figcaption id="verse-ref">Psalm 119:105 · King James Version</figcaption>
         </figure>
-        <div class="chips" role="group" aria-label="Pick a language">
+        <div class="chips" role="group" aria-label="Pick a language" data-t-label="pickLang">
           <button type="button" data-verse="en" aria-pressed="true">English</button>
           <button type="button" data-verse="fr" lang="fr" aria-pressed="false">Français</button>
           <button type="button" data-verse="de" lang="de" aria-pressed="false">Deutsch</button>
@@ -135,88 +167,88 @@
       </section>
 
       <section id="whats-in" aria-labelledby="in-h">
-        <h2 id="in-h">What's in it</h2>
+        <h2 id="in-h" data-t="inH">What's in it</h2>
         <div class="cards">
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
-            <h3>Many Bibles</h3>
-            <p>{{versions}} versions in {{languages}} languages: the King James, Louis Segond 1910, Luther, Reina-Valera, the Hebrew Bible and the Greek New Testament, the Ethiopian canon in English, French and Ge'ez, and more. Compare up to six side by side.</p>
+            <h3 data-t="biblesH">Many Bibles</h3>
+            <p data-t="biblesP">{{versions}} versions in {{languages}} languages: the King James, Louis Segond 1910, Luther, Reina-Valera, the Hebrew Bible and the Greek New Testament, the Ethiopian canon in English, French and Ge'ez, and more. Compare up to six side by side.</p>
           </article>
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="10.5" cy="10.5" r="6.5" fill="none" stroke="currentColor" stroke-width="2.4" /><path d="M15.5 15.5 21 21" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" /></svg>
-            <h3>A search that finds things</h3>
-            <p>A word, a phrase, two words near each other, in one Bible or many, with the results counted by book. Type a reference and you're there. Strong's numbers, too.</p>
+            <h3 data-t="searchH">A search that finds things</h3>
+            <p data-t="searchP">A word, a phrase, two words near each other, in one Bible or many, with the results counted by book. Type a reference and you're there. Strong's numbers, too.</p>
           </article>
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M7.5 9.5 12 14l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
-            <h3>Works offline</h3>
-            <p>The Bibles you read stay on your phone. On a plane, in the hills, in a basement: it opens on the verse where you left off, with no connection at all.</p>
+            <h3 data-t="offlineH">Works offline</h3>
+            <p data-t="offlineP">The Bibles you read stay on your phone. On a plane, in the hills, in a basement: it opens on the verse where you left off, with no connection at all.</p>
           </article>
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 2.5h11a1.5 1.5 0 0 1 1.5 1.5v18l-7-4.6L5 22V4a1.5 1.5 0 0 1 1.5-1.5z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
-            <h3>Highlights, notes and bookmarks</h3>
-            <p>Eight colors, a note on a verse or on a whole passage, a ribbon for the places you come back to. Bring over what you kept in another Bible app.</p>
+            <h3 data-t="marksH">Highlights, notes and bookmarks</h3>
+            <p data-t="marksP">Eight colors, a note on a verse or on a whole passage, a ribbon for the places you come back to. Bring over what you kept in another Bible app.</p>
           </article>
           <article class="card">
             <span class="emoji" aria-hidden="true">🙏</span>
-            <h3>Prayer</h3>
-            <p>Record a prayer with the 🙏 button, or pray using a verse. Recordings stay on your device, or sync locked with a key that only you hold.</p>
+            <h3 data-t="prayerH">Prayer</h3>
+            <p data-t="prayerP">Record a prayer with the 🙏 button, or pray using a verse. Recordings stay on your device, or sync locked with a key that only you hold.</p>
           </article>
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
-            <h3>Circles</h3>
-            <p>A small private circle for family and friends. Share a verse, a note or a prayer, and reply with a word or a 🙏. What you share is locked with the circle's own key, and opens in each reader's own Bible.</p>
+            <h3 data-t="circlesH">Circles</h3>
+            <p data-t="circlesP">A small private circle for family and friends. Share a verse, a note or a prayer, and reply with a word or a 🙏. What you share is locked with the circle's own key, and opens in each reader's own Bible.</p>
           </article>
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
-            <h3>Your devices, together</h3>
-            <p>Only if you want it. Sign in with a passkey or a code sent by email, and your highlights, notes and settings follow you. A second device signs in from the first with one link; nothing to type.</p>
+            <h3 data-t="devicesH">Your devices, together</h3>
+            <p data-t="devicesP">Only if you want it. Sign in with a passkey or a code sent by email, and your highlights, notes and settings follow you. A second device signs in from the first with one link; nothing to type.</p>
           </article>
           <article class="card">
             <span class="aa" aria-hidden="true">Aa</span>
-            <h3>Made for reading</h3>
-            <p>Six fonts, one of them made for low vision. Text as large as you need, and buttons you can't miss. Swipe to turn the chapter. Light, Sepia or Dark, like this page.</p>
+            <h3 data-t="readingH">Made for reading</h3>
+            <p data-t="readingP">Six fonts, one of them made for low vision. Text as large as you need, and buttons you can't miss. Swipe to turn the chapter. Light, Sepia or Dark, like this page.</p>
           </article>
         </div>
       </section>
 
       <section id="whats-not" aria-labelledby="not-h">
-        <h2 id="not-h">And what isn't</h2>
-        <ul class="nots">
+        <h2 id="not-h" data-t="notH">And what isn't</h2>
+        <ul class="nots" data-t="nots">
           <li>No reading plans. No devotionals. No curated anything.</li>
           <li>No ads. No tracking. No analytics.</li>
           <li>No paywall. Nothing is locked.</li>
           <li>No account needed. Sign in only if you want sync.</li>
         </ul>
-        <p class="section-sub">Quiet Bible is free. One day there will be a way to give, if you'd like to help keep it going. Nothing will ever depend on it.</p>
+        <p class="section-sub" data-t="free">Quiet Bible is free. One day there will be a way to give, if you'd like to help keep it going. Nothing will ever depend on it.</p>
       </section>
 
       <section id="install" aria-labelledby="install-h">
         <h2 id="install-h" data-device-label>Put it on your Home Screen</h2>
-        <p class="section-sub">Then it opens full screen like any other app, keeps your place, and works with no connection.</p>
-        <div class="seg" role="group" aria-label="Your device">
+        <p class="section-sub" data-t="installSub">Then it opens full screen like any other app, keeps your place, and works with no connection.</p>
+        <div class="seg" role="group" aria-label="Your device" data-t-label="device">
           <button type="button" id="tab-iphone" aria-controls="panel-iphone" aria-pressed="false">iPhone</button>
           <button type="button" id="tab-android" aria-controls="panel-android" aria-pressed="false">Android</button>
-          <button type="button" id="tab-computer" aria-controls="panel-computer" aria-pressed="false">Computer</button>
+          <button type="button" id="tab-computer" aria-controls="panel-computer" aria-pressed="false" data-t="computer">Computer</button>
         </div>
 
         <div class="panel" id="panel-iphone" role="region" aria-labelledby="tab-iphone" hidden>
-          <ol class="steps">
+          <ol class="steps" data-t="iosSteps">
             <li><span><a href="../#/read" data-open>Open the Bible</a> in Safari.</span></li>
             <li><span>Tap the Share button <span class="nb"><svg class="inline" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /><path d="M8 11H6.5A1.5 1.5 0 0 0 5 12.5v7A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-7a1.5 1.5 0 0 0-1.5-1.5H16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>,</span> the square with an arrow pointing up. On newer iPhones it is behind the <strong>•••</strong> button at the bottom.</span></li>
             <li><span>Tap <strong>Add to Home</strong> <span class="nb"><strong>Screen</strong> <svg class="inline" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>.</span> You may have to scroll down to find it.</span></li>
             <li><span>Tap <strong>Add</strong>. If you see <strong>Open as Web App</strong>, leave it on. The lamp appears on your Home Screen.</span></li>
           </ol>
-          <p class="note">Do it from the Bible, not from this page, so the lamp opens straight into your reading. Use Safari: other browsers on iPhone and iPad can't always add an app.</p>
+          <p class="note" data-t="iosNote">Do it from the Bible, not from this page, so the lamp opens straight into your reading. Use Safari: other browsers on iPhone and iPad can't always add an app.</p>
         </div>
 
         <div class="panel" id="panel-android" role="region" aria-labelledby="tab-android" hidden>
           <div class="install-now" hidden>
-            <button type="button" class="btn primary" data-install>Install Quiet Bible</button>
-            <p class="note">One tap. Nothing goes through an app store.</p>
+            <button type="button" class="btn primary" data-install data-t="install">Install Quiet Bible</button>
+            <p class="note" data-t="androidNote">One tap. Nothing goes through an app store.</p>
           </div>
-          <p class="installed" hidden>Installed. Open the lamp with your other apps.</p>
-          <ol class="steps">
+          <p class="installed" hidden data-t="androidInstalled">Installed. Open the lamp with your other apps.</p>
+          <ol class="steps" data-t="androidSteps">
             <li><span><a href="../#/read" data-open>Open the Bible</a> in Chrome, or the browser you use.</span></li>
             <li><span>Open the browser's menu, usually three dots <svg class="inline" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2" fill="currentColor" /><circle cx="12" cy="12" r="2.2" fill="currentColor" /><circle cx="12" cy="19" r="2.2" fill="currentColor" /></svg> at the top right.</span></li>
             <li><span>Tap <strong>Install app</strong> or <strong>Add to Home screen</strong>, then <strong>Install</strong>.</span></li>
@@ -226,11 +258,11 @@
 
         <div class="panel" id="panel-computer" role="region" aria-labelledby="tab-computer" hidden>
           <div class="install-now" hidden>
-            <button type="button" class="btn primary" data-install>Install Quiet Bible</button>
-            <p class="note">It opens in its own window, like any other app.</p>
+            <button type="button" class="btn primary" data-install data-t="install">Install Quiet Bible</button>
+            <p class="note" data-t="computerNote">It opens in its own window, like any other app.</p>
           </div>
-          <p class="installed" hidden>Installed. Open Quiet Bible with your other apps.</p>
-          <ol class="steps">
+          <p class="installed" hidden data-t="computerInstalled">Installed. Open Quiet Bible with your other apps.</p>
+          <ol class="steps" data-t="computerSteps">
             <li><span><a href="../#/read" data-open>Open the Bible</a> in Chrome or Edge.</span></li>
             <li><span>Click the install icon at the right end of the address bar, a screen with an arrow <span class="nb"><svg class="inline" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 7.5v5M9.8 10.5l2.2 2.2 2.2-2.2M8 20h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>,</span> then <strong>Install</strong>.</span></li>
             <li><span>On a Mac with Safari: <strong>File</strong>, then <strong>Add to Dock</strong>.</span></li>
@@ -241,25 +273,25 @@
 
       <section class="closing">
         <div class="lamp small" aria-hidden="true"><svg><use href="#lamp" /></svg></div>
-        <p class="lead">Thy word is a lamp unto my feet, and a light unto my path.</p>
-        <p class="ref">Psalm 119:105</p>
-        <a class="btn primary" href="../#/read" data-open>Open the Bible</a>
+        <p class="lead" id="closing-verse">Thy word is a lamp unto my feet, and a light unto my path.</p>
+        <p class="ref" data-t="ref">Psalm 119:105</p>
+        <a class="btn primary" href="../#/read" data-open data-t="open">Open the Bible</a>
       </section>
     </main>
 
     <footer>
       <p class="foot-brand"><svg aria-hidden="true"><use href="#lamp" /></svg> Quiet Bible · myquietbible.com</p>
-      <nav aria-label="More">
-        <a href="../#/read" data-open>Open the Bible</a>
-        <a href="../privacy.html">Privacy</a>
-        <a href="https://github.com/jesuspirate/plain-bible" rel="noopener">Source code</a>
+      <nav aria-label="More" data-t-label="more">
+        <a href="../#/read" data-open data-t="open">Open the Bible</a>
+        <a href="../privacy.html" data-t="privacy">Privacy</a>
+        <a href="https://github.com/jesuspirate/plain-bible" rel="noopener" data-t="source">Source code</a>
       </nav>
-      <p class="foot-note">Every text is public domain or openly licensed. Each version's license is listed in the app.</p>
+      <p class="foot-note" data-t="footNote">Every text is public domain or openly licensed. Each version's license is listed in the app.</p>
     </footer>
 
     <!-- On phones, once the first button has scrolled away, the way in floats at the bottom, as the search bar does in the app. -->
     <div class="float" aria-hidden="true">
-      <a href="../#/read" data-open tabindex="-1"><svg><use href="#lamp" /></svg>Open the Bible</a>
+      <a href="../#/read" data-open tabindex="-1" data-t="floatOpen"><svg><use href="#lamp" /></svg>Open the Bible</a>
     </div>
   </body>
 </html>
