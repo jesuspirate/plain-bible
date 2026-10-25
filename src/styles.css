@@ -479,8 +479,13 @@ main.with-mini { padding-bottom: 144px; }
 /* ---- account ---- */
 .account p { margin: 0 0 10px; }
 .account .row { margin: 4px 0 10px; }
-button.danger { color: #b3261e; }
-:root[data-theme='dark'] button.danger { color: #ff8a80; }
+button.danger, .set-row.danger { color: #b3261e; }
+.account-page .set-list { margin: 0 0 18px; }
+.account-page .set-kicker { margin-top: 4px; }
+.acct-ok { color: var(--accent); font: 700 20px var(--sans); }
+.set-list .move-card { margin: 0; border: none; border-top: 1px solid var(--line); border-radius: 0; padding: 12px 16px; }
+.set-note { margin: 0; padding: 8px 16px; }
+:root[data-theme='dark'] button.danger, :root[data-theme='dark'] .set-row.danger { color: #ff8a80; }
 .account-box { margin: 0 0 20px; } .account-box h2 { margin-top: 0; }
 .email-code { margin-top: 12px; }
 .email-code form .move-input { flex: 1 1 14em; width: auto; }

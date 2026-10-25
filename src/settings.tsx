@@ -116,17 +116,16 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'account' | 'data' | 'about'
+type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about'
 const PAGE_TITLE: Record<Page, string> = {
   home: 'Settings', sync: 'Account', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
-  versions: 'Versions', account: 'Sign-in options', data: 'Your data', about: 'About',
+  versions: 'Versions', data: 'Your data', about: 'About',
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
   const [page, setPage] = useState<Page>('home')
-  // Sign-in options sit inside Account; everything else, one step from home.
-  const back = () => setPage(page === 'account' ? 'sync' : 'home')
+  const back = () => setPage('home')
   return { page, setPage, back, title: PAGE_TITLE[page], depth: page === 'home' ? 0 : 1 }
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
@@ -345,8 +344,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'saved') return <Saved onImport={() => setPage('data')} />
   if (page === 'search') return <Search route={{ path: ['search'], params: new URLSearchParams(searchQuery) }} onGo={p => setSearchQuery(p.split('?')[1] ?? '')} />
   if (page === 'versions') return <Versions inSheet />
-  if (page === 'account') return <AccountSection part="account" />
-  if (page === 'sync') return <AccountSection onAccount={() => setPage('account')} />
+  if (page === 'sync') return <AccountSection />
 
   if (page === 'data') return <>
     <MoveInSection />
