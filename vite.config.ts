@@ -1,4 +1,4 @@
-import { defineConfig } from 'vite'
+import { defineConfig, type Plugin } from 'vite'
 import preact from '@preact/preset-vite'
 import { VitePWA } from 'vite-plugin-pwa'
 
@@ -7,30 +7,48 @@ import { VitePWA } from 'vite-plugin-pwa'
 const sha = (process.env.GITHUB_SHA || '').slice(0, 7)
 const BUILD = new Date().toISOString().slice(0, 10) + (sha ? ' · ' + sha : '')
 
+const manifest = {
+  name: 'Quiet Bible',
+  short_name: 'Quiet Bible',
+  description: 'Just the Bible, in many versions and languages, with thorough search.',
+  theme_color: '#2b2a28',
+  background_color: '#f4ecd8',
+  display: 'standalone' as const,
+  start_url: './',
+  icons: [
+    { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
+    { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
+    { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
+  ],
+}
+
+// One copy of the manifest per theme. Android paints the installed app's
+// window in its background colour, and that shows for a moment behind the
+// keyboard as it slides up or down; a cream window flashed white in Dark.
+// The app points at the copy for the theme in use (src/app.tsx), so the
+// home-screen app takes the colour of the theme it was installed in.
+const THEMES = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }
+const themedManifests: Plugin = {
+  name: 'themed-manifests',
+  generateBundle() {
+    for (const [id, bg] of Object.entries(THEMES)) {
+      this.emitFile({ type: 'asset', fileName: `manifest-${id}.webmanifest`, source: JSON.stringify({ ...manifest, background_color: bg }) })
+    }
+  },
+}
+
 export default defineConfig({
   define: { __BUILD__: JSON.stringify(BUILD) },
   // Relative base works on a custom domain and on a GitHub Pages project path.
   base: './',
   plugins: [
     preact(),
+    themedManifests,
     VitePWA({
       registerType: 'autoUpdate',
       injectRegister: false,
       includeAssets: ['icon.svg', 'icon-192.png', 'icon-512.png'],
-      manifest: {
-        name: 'Quiet Bible',
-        short_name: 'Quiet Bible',
-        description: 'Just the Bible, in many versions and languages, with thorough search.',
-        theme_color: '#2b2a28',
-        background_color: '#f4ecd8',
-        display: 'standalone',
-        start_url: './',
-        icons: [
-          { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
-          { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },
-          { src: 'icon-512.png', sizes: '512x512', type: 'image/png', purpose: 'maskable' },
-        ],
-      },
+      manifest,
       workbox: {
         // A new version waits until the app switches to it (src/lib/update.ts),
         // so a page never runs half old and half new.

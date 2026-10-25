@@ -30,6 +30,10 @@ const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === t
  *  background (it comes back on the same verse, with the bar matching). */
 function setTint(bg: string) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
+  // Installing on Android takes the window colour from this theme's manifest
+  // (vite.config.ts), so the keyboard doesn't slide in over a light window.
+  const theme = ({ '#faf8f3': 'light', '#f4ecd8': 'sepia', '#16161a': 'dark' } as Record<string, string>)[bg]
+  if (theme) document.querySelector('link[rel="manifest"]')?.setAttribute('href', `./manifest-${theme}.webmanifest`)
 }
 if (IOS_HOME_SCREEN) {
   document.addEventListener('visibilitychange', () => {
