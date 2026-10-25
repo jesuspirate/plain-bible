@@ -541,36 +541,53 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
 }
 
 /* ---- glass: the search bar, its picker, the round search button and 🙏 ----
-   Frosted like iPhone: the page shows through, softly blurred, with a bright
-   rim on top. Only where the phone can both mix colours and blur; older
-   iPhones (before iOS 16.2) keep the solid look above, as the top bar does,
-   instead of a see-through smear. Nothing here animates, so it costs nothing
-   while you read. */
-:root { --glass-rim: rgba(255,255,255,.7); --glass-edge: rgba(0,0,0,.08); }
-:root[data-theme='sepia'] { --glass-rim: rgba(255,250,235,.75); --glass-edge: rgba(80,55,20,.12); }
-:root[data-theme='dark'] { --glass-rim: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.1); }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] { --glass-rim: rgba(255,255,255,.14); --glass-edge: rgba(255,255,255,.1); } }
+   Frosted like iPhone: the page shows through, softly blurred. The rim is
+   what makes it glass, as on Apple's: a thin bright line along the top and
+   bottom, fading to a thin dark line down the sides. Only where the phone can
+   both mix colours and blur; older iPhones (before iOS 16.2) keep the solid
+   look above, as the top bar does, instead of a see-through smear. Nothing
+   here animates, so it costs nothing while you read. */
+:root { --rim-light: #fff; --rim-dark: rgba(0,0,0,.32); }
+/* What tints the glass: the page colour in Light and Sepia; in Dark a faint white, as on iPhone, so it reads lighter than the page. */
+:root { --glass-tint: color-mix(in srgb, var(--surface) 42%, transparent); }
+:root[data-theme='sepia'] { --rim-light: #fffcf2; --rim-dark: rgba(70,45,15,.38); }
+:root[data-theme='dark'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(255,255,255,.13); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(255,255,255,.13); } }
 @supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   :root { --glass-open: color-mix(in srgb, var(--surface) 86%, transparent); }
   .sb-field, .sb-mini .sb-field, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
-    -webkit-backdrop-filter: blur(20px) saturate(180%); backdrop-filter: blur(20px) saturate(180%);
-    border: .5px solid var(--glass-edge);
+    -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%);
   }
-  .sb-field { background: color-mix(in srgb, var(--surface) 58%, transparent); box-shadow: 0 10px 30px rgba(0,0,0,.12), inset 0 1px 0 var(--glass-rim), inset 0 -1px 0 color-mix(in srgb, var(--glass-rim) 40%, transparent); }
-  .sb-mini .sb-field { background: color-mix(in srgb, var(--surface) 58%, transparent); box-shadow: 0 4px 14px rgba(0,0,0,.12), inset 0 1px 0 var(--glass-rim); }
+  .sb-field { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
+  .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+  /* The rim: a 1px ring drawn with a gradient, light top and bottom, dark at the sides. */
+  .sb-field::after, .sb-pray::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
+    background: linear-gradient(to bottom, var(--rim-light), var(--rim-dark) 34%, var(--rim-dark) 66%, var(--rim-light));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+  /* Open, the field shows its focus ring instead. */
+  .sb.sb-open .sb-field::after { display: none; }
   /* Open, the picker and field sit over the dimmed page: more frost, so the
-     books and results read as clearly as before. */
-  .sb.sb-open .sb-panel { background: linear-gradient(transparent 38px, var(--glass-open) 38px) padding-box; box-shadow: 0 18px 48px rgba(0,0,0,.28), inset 0 1px 0 var(--glass-rim); }
+     books and results read as clearly as before. The picker is tall, so its
+     rim is light along the top and bottom edges and dark down the sides. */
+  .sb.sb-open .sb-panel {
+    background: linear-gradient(transparent 38px, var(--glass-open) 38px) padding-box;
+    border: 1.5px solid; border-color: var(--rim-light) var(--rim-dark) color-mix(in srgb, var(--rim-light) 70%, transparent) var(--rim-dark);
+    box-shadow: 0 18px 48px rgba(0,0,0,.28);
+  }
   .sb.sb-open .sb-field { background: color-mix(in srgb, var(--surface) 88%, transparent); }
   /* The grabber row stays put while the books scroll under it. It carries
      the frost for its strip of the picker, so there's no band when it's still,
      and what scrolls under it only shows faintly. */
   .sb.sb-open .sb-head { background: var(--glass-open); }
-  /* 🙏 keeps its warm light, now as tinted glass. */
+  /* 🙏 keeps its warm light, now as tinted glass with a golden rim. */
   .sb-pray {
-    background: radial-gradient(circle at 50% 40%, rgba(255,253,246,.72) 0%, rgba(255,241,204,.66) 55%, rgba(255,217,138,.78) 100%);
+    --rim-light: rgba(255,255,255,.95); --rim-dark: rgba(200,130,40,.55);
+    background: radial-gradient(circle at 50% 40%, rgba(255,253,246,.84) 0%, rgba(255,241,204,.8) 55%, rgba(255,217,138,.88) 100%);
     -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
-    box-shadow: 0 0 0 1px rgba(240, 185, 90, .55), 0 0 14px 3px rgba(245, 190, 95, .5), inset 0 1px 0 rgba(255,255,255,.8);
+    box-shadow: 0 0 14px 3px rgba(245, 190, 95, .5);
   }
 }
 
