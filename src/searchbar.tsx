@@ -81,16 +81,20 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       root.style.setProperty('--vv-top', top + 'px')
       root.style.setProperty('--vv-h', h + 'px')
     }
+    const vk = overlayKeyboard(true)
     // The screen's full height, keyboard down; the keyboard counts as up once
     // it takes a good part of it.
     const full = innerHeight, kb = phone ? keyboardHeight(key) : 0
-    if (vv && vv.height < full - 100) set(vv.offsetTop, vv.height) // keyboard already up
+    if (vk && vk.boundingRect.height > 100) set(0, full - vk.boundingRect.height) // keyboard already up
+    else if (vv && vv.height < full - 100) set(vv.offsetTop, vv.height)
     else if (kb) set(0, full - kb)
     else if (vv) set(vv.offsetTop, vv.height)
     let seen = false, last = 0
     const fit = () => {
       if (!vv) return
-      const h = vv.height, up = h < full - 100
+      // Over the page, the keyboard leaves the screen its full size and says
+      // how tall it is instead.
+      const h = vk ? full - vk.boundingRect.height : vv.height, up = h < full - 100
       // On a phone, ignore the in-between sizes while the keyboard is still
       // on its way; after that, follow it (the ✓ button can put it away).
       if (phone && !up && !seen) return
@@ -103,7 +107,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     const y = scrollY, at = location.hash
     root.classList.add('sb-lock')
     vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
+    vk?.addEventListener('geometrychange', fit)
     return () => {
+      vk?.removeEventListener('geometrychange', fit); overlayKeyboard(false)
       if (location.hash === at && Math.abs(scrollY - y) > 1) scrollTo(0, y)
       root.classList.remove('sb-lock')
       root.style.removeProperty('--vv-top'); root.style.removeProperty('--vv-h')
@@ -206,6 +212,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const sb = useRef<HTMLDivElement>(null)
   const tap = useRef<{ x: number; y: number }>()
   const onFieldTouchStart = (e: TouchEvent) => {
+    if (!open) overlayKeyboard(true) // before the keyboard is asked for
     tap.current = !open && isIOS ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : undefined
   }
   const onFieldTouchEnd = (e: TouchEvent) => {
@@ -390,6 +397,37 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       </div>
     </>
   )
+}
+
+// On Android the keyboard shrinks the app's window as it rises, and for a
+// moment the gap shows the window behind the page, a light cream (the
+// manifest's background), which flashed white under the keyboard in Dark.
+// While search is open, Chrome is asked to lay the keyboard over the page
+// instead (the VirtualKeyboard API; iPhone has none and is unaffected), so
+// what is behind it is the dimmed page. Elsewhere, fields such as notes still
+// get the usual resize; it is handed back only once the keyboard has
+// finished sliding down, so it doesn't flash on the way down either.
+type VK = EventTarget & { overlaysContent: boolean; boundingRect: DOMRect }
+const vkApi = !isIOS && typeof navigator !== 'undefined' && matchMedia('(pointer: coarse)').matches
+  ? (navigator as Navigator & { virtualKeyboard?: VK }).virtualKeyboard : undefined
+let vkRelease = 0, vkDown: (() => void) | undefined
+function overlayKeyboard(on: boolean): VK | undefined {
+  const vk = vkApi
+  if (!vk) return
+  const settle = () => {
+    clearTimeout(vkRelease)
+    if (vkDown) vk.removeEventListener('geometrychange', vkDown)
+    vkDown = undefined
+  }
+  settle()
+  if (on) { vk.overlaysContent = true; return vk }
+  const off = () => { settle(); vk.overlaysContent = false }
+  // Chrome can report the keyboard gone as it starts to slide away.
+  const soon = () => { clearTimeout(vkRelease); vkRelease = window.setTimeout(off, 700) }
+  vkDown = () => { if (!vk.boundingRect.height) soon() }
+  vk.addEventListener('geometrychange', vkDown)
+  if (!vk.boundingRect.height) soon()
+  else vkRelease = window.setTimeout(off, 2000)
 }
 
 // The keyboard's height on this phone, per screen size and orientation.
