@@ -300,6 +300,24 @@ function PasteInvite() {
   )
 }
 
+// A phone's browser, not the app on its Home Screen. Links always open
+// there (an iPhone never opens one in a Home Screen app), and the two keep
+// separate accounts, so joining here would leave the app outside the circle.
+const inBrowser = () => !((navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches)
+  && matchMedia('(pointer: coarse)').matches
+
+function OpenInApp() {
+  const [copied, setCopied] = useState(false)
+  return (
+    <div class="c-card">
+      <p><strong>Have Quiet Bible on your Home Screen?</strong> Open this invite there, so you join with the account you already use:</p>
+      <p class="small">Copy it, open the app, then Circles → <strong>Have an invite link? Paste it</strong>.</p>
+      <button class="c-btn primary" onClick={() => copyText(location.href).then(() => setCopied(true), () => {})}>{copied ? 'Copied: now open the app' : 'Copy invite'}</button>
+      <p class="muted small">No app yet? Join right here below.</p>
+    </div>
+  )
+}
+
 function Join({ id, secret }: { id: string; secret: string }) {
   const [invite, setInvite] = useState<Invite>()
   const [msg, setMsg] = useState('')
@@ -327,6 +345,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
   return (
     <div class="circles">
       <h1>Join a circle</h1>
+      {inBrowser() && invite && !needCode && <OpenInApp />}
       {invite && (needCode ? <CodeEntry busy={busy} onCode={join} onCancel={() => setNeedCode(false)} onApproved={() => join()} /> : (
         <div class="c-card">
           <p>{invite.by ? <><strong>{invite.by}</strong> invited you to </> : 'You’re invited to '}<strong>{invite.name}</strong>
@@ -372,7 +391,7 @@ function CircleView({ id }: { id: string }) {
   // tap was too long ago (Safari does, after a slow network), the button
   // turns into "Send invite link" and the next tap sends it at once.
   const sendInvite = async (link: string) => {
-    const text = `Come read the word and pray with ${info?.name ?? 'my circle'} in Quiet Bible. This private link is just for you: it works once, for 7 days.`
+    const text = `Come read the word and pray with ${info?.name ?? 'my circle'} in Quiet Bible. This private link is just for you: it works once, for 7 days. Already have the Quiet Bible app? Copy this link and paste it in Circles there.`
     if (canShare) {
       try { await navigator.share({ title: 'Quiet Bible', text, url: link }); setSent(true) } catch (e) {
         if ((e as Error).name !== 'AbortError') setInvite(link)
