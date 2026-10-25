@@ -9,6 +9,7 @@ import {
 import { Settings, useApp } from './state'
 import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { DeviceLink, PasteMove } from './move'
+import { KeyBackup } from './approve'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
 
 export interface SyncApi {
@@ -288,6 +289,7 @@ export function AccountSection() {
         </button>
         <DeviceLink row />
       </div>
+      <KeyBackup />
 
       <h2 class="set-kicker">Sign-in</h2>
       <div class="set-list">

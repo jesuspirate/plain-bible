@@ -63,7 +63,10 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
   // asked alongside. Safari drops a passkey sheet that opens after a network
   // wait and reports it as cancelled, so a second tap failed the same way.
   // Not where the last look found no passkey (an account signed in by email).
-  const asking = code === undefined && !noPasskey()
+  // A key already here (from another device's approval, or from circles)
+  // needs nothing asked.
+  const kept = code === undefined ? (await meta.get<Uint8Array>('key')) ?? (await meta.get<Uint8Array>('acct')) : undefined
+  const asking = code === undefined && !kept && !noPasskey()
     ? passkeySecret().then(s => ({ s }), (e: Error) => ({ e }))
     : undefined
   const remote = await api<Remote>('/prayers', { token: acct.token })
@@ -74,6 +77,8 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
     raw = parseKeyCode(code)
     if (!raw) throw new SyncError('That isn’t a whole prayer key. It has 32 letters and numbers.')
     if (remote.keyId && (await prayerKey(raw)).id !== remote.keyId) throw new SyncError('That key doesn’t match the prayers on this account.')
+  } else if (kept && (!remote.keyId || (await prayerKey(kept)).id === remote.keyId)) {
+    raw = kept
   } else if (asking && remote.passkeys !== 0) {
     const r = await asking
     if ('e' in r) throw r.e

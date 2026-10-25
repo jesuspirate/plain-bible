@@ -783,3 +783,10 @@ body:has(.pick-verse) .sb { display: none; }
 .account-open { display: block; margin: 8px 0 4px; padding: 8px 0; font-weight: 600; font-size: 16px; }
 
 /* Something new in a circle: a small dot on 🙏, nothing more. */
+
+/* ---- approve a new device ---- */
+.approve-code { font: 700 28px var(--sans); letter-spacing: 2px; margin: 4px 0 8px; font-variant-numeric: tabular-nums; }
+.approve-code.inline { font-size: 18px; letter-spacing: 1px; }
+.approve-wait { margin: 8px 0; }
+.approve-wait p { margin: 0 0 6px; }
+.approve-card { z-index: 60; }
