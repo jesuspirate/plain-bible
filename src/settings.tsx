@@ -1,6 +1,6 @@
 // Settings. Everything lives here, behind the one button in the top right
 // corner: sync, the Bible you read, reading, your data. (Prayer and Circles
-// live behind the 🙏 button.) They rise as
+// have their own buttons beside search.) They rise as
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
