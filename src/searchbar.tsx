@@ -6,7 +6,7 @@
 // words as you remember them. It stays pinned while you read, showing where
 // you are.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { BOOKS, bookById } from './lib/books'
+import { BOOKS, bookAbbr, bookName, bookShort } from './lib/books'
 import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
@@ -18,20 +18,21 @@ import { CircleIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
+import { locale, N_, t, tn } from './i18n'
 
-const TONE_NAMES = ['Yellow', 'Light skin tone', 'Medium-light skin tone', 'Medium skin tone', 'Medium-dark skin tone', 'Dark skin tone']
+const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
 /** 🙏: tap to pray. Press and hold for the skin tones. */
 function PrayButton() {
   const { settings, update } = useApp()
   const { button, picker } = useHoldPick({
-    options: TONES.map((t, i) => ({ value: t, label: TONE_NAMES[i], body: '🙏' + t })),
-    value: settings.prayTone, onPick: t => update({ prayTone: t }), onTap: () => openPrayer(),
-    label: 'Prayer button skin tone', cls: 'tone-pick', cell: 42,
+    options: TONES.map((tone, i) => ({ value: tone, label: t(TONE_NAMES[i]), body: '🙏' + tone })),
+    value: settings.prayTone, onPick: tone => update({ prayTone: tone }), onTap: () => openPrayer(),
+    label: t('Prayer button skin tone'), cls: 'tone-pick', cell: 42,
   })
   return (
     <>
-      <button {...button} type="button" class="sb-pray holdable" aria-label="Pray" title="Pray · hold for skin tones">
+      <button {...button} type="button" class="sb-pray holdable" aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
       </button>
       {picker}
@@ -46,7 +47,7 @@ function CirclesButton() {
   const news = inCircles() && circlesWithNews() > 0
   return (
     <button type="button" class="sb-circles" onClick={() => openCircles()}
-      aria-label={news ? 'Circles · something new' : 'Circles'} title="Circles">
+      aria-label={news ? t('Circles · something new') : t('Circles')} title={t('Circles')}>
       <CircleIcon size={30} />
       {news && <span class="sb-news-dot" aria-hidden="true" />}
     </button>
@@ -55,7 +56,7 @@ function CirclesButton() {
 
 // On a phone the bar shares its row with Circles and 🙏, so long book names
 // are shortened (1 Thess, Deut) to keep the version in view.
-const shortName = (id: string) => { const b = bookById(id); return innerWidth < 430 && b.name.length > 10 ? b.abbr : b.name }
+const shortName = (id: string) => innerWidth < 430 ? bookShort(id) : bookName(id)
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -81,7 +82,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
   const version = here?.version ?? settings.version
-  const t = byId.get(version)
+  const info = byId.get(version)
   const inV = picked?.some(id => byId.has(id)) ? picked.filter(id => byId.has(id)) : [version]
   const langs = inV.map(id => byId.get(id)?.lang ?? '')
 
@@ -201,7 +202,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const books = useMemo(() => {
     if (!trimmed || ref) return []
     const k = trimmed.toLowerCase()
-    return BOOKS.filter(b => t?.books.includes(b.id) && (b.name.toLowerCase().startsWith(k) || b.abbr.toLowerCase() === k)).slice(0, 6)
+    return BOOKS.filter(b => info?.books.includes(b.id) && (b.name.toLowerCase().startsWith(k) || b.abbr.toLowerCase() === k
+      || bookName(b.id).toLowerCase().startsWith(k) || bookAbbr(b.id).toLowerCase() === k)).slice(0, 6)
   }, [trimmed, ref])
 
   // Reference preview: show the verse (or first verses of the chapter).
@@ -275,11 +277,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     if (rec.current) return stopListening()
     // The iPhone home-screen app can't use the browser's speech recognition,
     // but the keyboard's own microphone works there and is just as good.
-    if (IOS_APP) { setVoiceNote(KEYBOARD_MIC); input.current?.focus(); return }
+    if (IOS_APP) { setVoiceNote(t(KEYBOARD_MIC)); input.current?.focus(); return }
     const SR = speechRecognition()
     if (!SR) return
     const r = new SR()
-    r.lang = speechLang(t?.lang)
+    r.lang = speechLang(info?.lang)
     r.interimResults = true
     r.maxAlternatives = 1
     let started = false, heard = false
@@ -294,9 +296,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       watchdog.current = setTimeout(() => stopListening(), 2500)
     }
     r.onerror = (e: any) => stopListening(e.error === 'not-allowed' || e.error === 'service-not-allowed'
-      ? 'Allow the microphone to search by voice.' : e.error === 'network' ? 'Voice search needs a connection on this phone.'
-      : e.error === 'no-speech' ? 'Didn’t catch that. Tap the microphone and speak.' : e.error === 'aborted' ? '' : VOICE_BROKEN)
-    r.onend = () => stopListening(heard ? '' : 'Didn’t catch that. Tap the microphone and speak.')
+      ? t('Allow the microphone to search by voice.') : e.error === 'network' ? t('Voice search needs a connection on this phone.')
+      : e.error === 'no-speech' ? t('Didn’t catch that. Tap the microphone and speak.') : e.error === 'aborted' ? '' : t(VOICE_BROKEN))
+    r.onend = () => stopListening(heard ? '' : t('Didn’t catch that. Tap the microphone and speak.'))
     rec.current = r
     setVoiceNote(''); setQ(''); setListening(true)
     if (!open) setOpen(true)
@@ -304,11 +306,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     // request and then never listen. Give up after a few seconds, and
     // after that only offer the keyboard's own dictation.
     watchdog.current = setTimeout(() => {
-      if (started || heard) { watchdog.current = setTimeout(() => stopListening(heard ? '' : 'Didn’t catch that. Tap the microphone and speak.'), 8000); return }
+      if (started || heard) { watchdog.current = setTimeout(() => stopListening(heard ? '' : t('Didn’t catch that. Tap the microphone and speak.')), 8000); return }
       try { localStorage.setItem(VOICE_OFF, '1') } catch { /* private mode */ }
-      stopListening(VOICE_BROKEN)
+      stopListening(t(VOICE_BROKEN))
     }, 6000)
-    try { r.start() } catch { stopListening(VOICE_BROKEN) }
+    try { r.start() } catch { stopListening(t(VOICE_BROKEN)) }
   }
   useEffect(() => { if (!open) { stopListening(); setVoiceNote('') } }, [open])
 
@@ -408,7 +410,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       {open && <div class="sb-scrim" onClick={close} />}
       <div ref={sb} class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
         {open && (
-          <div class="sb-panel" ref={panel} role="listbox" aria-label="Suggestions"
+          <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
@@ -416,31 +418,31 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 in the top right corner.) */}
             <div class="sb-head">
               <span class="sb-head-side" />
-              <button type="button" class="sb-grabber" aria-label="Close search" onClick={close} />
+              <button type="button" class="sb-grabber" aria-label={t('Close search')} onClick={close} />
               <span class="sb-head-side end" />
             </div>
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
-                <span class="sb-kicker">Go to · {version}</span>
+                <span class="sb-kicker">{t('Go to')} · {version}</span>
                 <span class="sb-title">{formatRef(preview.ref)}</span>
-                <span class="sb-verse" dir={t?.rtl ? 'rtl' : undefined}>
+                <span class="sb-verse" dir={info?.rtl ? 'rtl' : undefined}>
                   {preview.lines.map(([n, s]) => <><sup>{n}</sup>{s} </>)}
                 </span>
               </button>
             )}
             {books.length > 0 && (
               <div class="sb-books">
-                {books.map(b => <button class="sb-chip" onClick={() => finish(readPath(version, b.id, 1))}>{b.name}</button>)}
+                {books.map(b => <button class="sb-chip" onClick={() => finish(readPath(version, b.id, 1))}>{bookName(b.id)}</button>)}
               </div>
             )}
             {trimmed.length >= 2 && !ref && (
               <div class="sb-live">
                 <div class="sb-kicker">
                   <span>{live && live.q === trimmed && live.key === key
-                    ? live.total ? `${live.total.toLocaleString()} ${live.total === 1 ? 'verse' : 'verses'}${live.total > 1 && trimmed.includes(' ') ? ', best first' : ''}` : 'No verses found'
-                    : listening ? 'Listening…' : 'Searching…'}</span>
-                  <button type="button" class="sb-in" onClick={() => setPickIn(true)} aria-label={`Search in ${inV.join(', ')}. Change`}>
-                    in {inV.length > 2 ? `${inV.length} versions` : inV.join(', ')} ▾
+                    ? live.total ? tn(live.total, '{n} verse', '{n} verses') + (live.total > 1 && trimmed.includes(' ') ? t(', best first') : '') : t('No verses found')
+                    : listening ? t('Listening…') : t('Searching…')}</span>
+                  <button type="button" class="sb-in" onClick={() => setPickIn(true)} aria-label={t('Search in {versions}. Change', { versions: inV.join(', ') })}>
+                    {t('in {versions}', { versions: inV.length > 2 ? tn(inV.length, '{n} version', '{n} versions') : inV.join(', ') })} ▾
                   </button>
                 </div>
                 {live && live.q === trimmed && live.key === key && live.verses.map(v => {
@@ -454,13 +456,13 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                   )
                 })}
                 {live && live.q === trimmed && live.key === key && live.total > live.verses.length && (
-                  <button class="sb-more" onClick={more}>{loadingMore ? 'Loading…' : `Show more (${(live.total - live.verses.length).toLocaleString()} more)`}</button>
+                  <button class="sb-more" onClick={more}>{loadingMore ? t('Loading…') : t('Show more ({n} more)', { n: live.total - live.verses.length })}</button>
                 )}
               </div>
             )}
             {!trimmed && chapters > 0 && (
               <div class="sb-chapters">
-                <div class="sb-kicker">{bookById(browseBook).name}</div>
+                <div class="sb-kicker">{bookName(browseBook)}</div>
                 <div class="sb-chapter-row" ref={chapterRow} onWheel={onWheel} onPointerDown={onPointerDown}
                   onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerLeave={endDrag}
                   onClickCapture={e => { if (drag.current?.moved) { e.stopPropagation(); e.preventDefault() } }}>
@@ -474,15 +476,15 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             {!trimmed && (
               <>
                 <div class="sb-allbooks">
-                  {([['Old Testament', (i: number) => i < 39], ['New Testament', (i: number) => i >= 39 && i < 66], ['Deuterocanon', (i: number) => i >= 66]] as const).map(([label, inGroup]) => {
+                  {([[t('Old Testament'), (i: number) => i < 39], [t('New Testament'), (i: number) => i >= 39 && i < 66], [t('Deuterocanon'), (i: number) => i >= 66]] as const).map(([label, inGroup]) => {
                     const list = BOOKS.filter((b, i) => inGroup(i) && lens[b.id])
                     return list.length > 0 && (
                       <>
                         <div class="sb-kicker">{label}</div>
                         <div class="sb-bookgrid">
                           {list.map(b => (
-                            <button class={'sb-book' + (b.id === browseBook ? ' on' : '')} title={b.name}
-                              onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : pickBook(b.id)}>{b.abbr}</button>
+                            <button class={'sb-book' + (b.id === browseBook ? ' on' : '')} title={bookName(b.id)}
+                              onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : pickBook(b.id)}>{bookAbbr(b.id)}</button>
                           ))}
                         </div>
                       </>
@@ -494,16 +496,16 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                   <div class="sb-recent">
                     <div class="sb-kicker">
                       <button type="button" class="sb-fold" aria-expanded={showRecent} onClick={() => setShowRecent(x => !x)}>
-                        Recent searches ({recent.length}) <span aria-hidden="true">{showRecent ? '▾' : '▸'}</span>
+                        {t('Recent searches ({n})', { n: recent.length })} <span aria-hidden="true">{showRecent ? '▾' : '▸'}</span>
                       </button>
-                      {showRecent && <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>Clear</button>}
+                      {showRecent && <button class="link small" onClick={() => { localStorage.removeItem(RECENT); setRecent([]) }}>{t('Clear')}</button>}
                     </div>
                     {showRecent && recent.map(r => <button class="sb-row" onClick={() => setQ(r)}><Glass small />{r}</button>)}
                   </div>
                 )}
                 <div class="sb-tips">
-                  <div class="sb-kicker">Try</div>
-                  {(t?.lang === 'fr' ? FR_TRY : EN_TRY).map(x => (
+                  <div class="sb-kicker">{t('Try')}</div>
+                  {(info?.lang === 'fr' ? FR_TRY : info?.lang === 'es' ? ES_TRY : EN_TRY).map(x => (
                     <button class="sb-chip" onClick={() => setQ(x)}>{x}</button>
                   ))}
                 </div>
@@ -514,14 +516,14 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         <div class="sb-bar">
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
-          <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? 'Search' : `Search ${version} or go to a passage`}
-            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
+          <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
+            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Search {version} or John 3:16', { version })}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
-          {q && !listening && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
+          {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}
-              aria-label={listening ? 'Stop listening' : 'Search by voice'} title={listening ? 'Stop listening' : 'Search by voice'}>
+              aria-label={listening ? t('Stop listening') : t('Search by voice')} title={listening ? t('Stop listening') : t('Search by voice')}>
               <MicIcon />
             </button>
           )}
@@ -530,11 +532,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             🙏 opens the glowing microphone over the page. */}
         {!open && SYNC_URL && <CirclesButton />}
         {!open && <PrayButton />}
-        {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
+        {open && <button type="button" class="sb-cancel" onClick={close}>{t('Cancel')}</button>}
         </div>
         {open && voiceNote && <div class="sb-voice-note" role="status">{voiceNote}</div>}
       </div>
-      {pickIn && <VersionPicker title="Search in" multi selected={inV} onClose={() => setPickIn(false)}
+      {pickIn && <VersionPicker title={t('Search in')} multi selected={inV} onClose={() => setPickIn(false)}
         onChange={ids => ids.length && setPicked(ids)} />}
     </>
   )
@@ -592,11 +594,12 @@ function rememberKeyboard(key: string, kb: number) {
 const FIRST = 12, MORE = 20
 const EN_TRY = ['John 3:16', 'the Lord is my shepherd', 'no weapon formed against me', 'love your enemies']
 const FR_TRY = ['Jean 3:16', 'l’Éternel est mon berger', 'aucune arme forgée contre toi', 'aimez vos ennemis']
+const ES_TRY = ['Juan 3:16', 'Jehová es mi pastor', 'en el principio era el Verbo', 'amad a vuestros enemigos']
 
 const IOS_APP = typeof navigator !== 'undefined' && (navigator as any).standalone === true
-const KEYBOARD_MIC = 'Tap the 🎤 on your keyboard, then speak.'
+const KEYBOARD_MIC = N_('Tap the 🎤 on your keyboard, then speak.')
 const VOICE_OFF = 'plain-bible:voice-off'
-const VOICE_BROKEN = 'Voice search doesn’t work in the app on this phone. Use the 🎤 on your keyboard instead.'
+const VOICE_BROKEN = N_('Voice search doesn’t work in the app on this phone. Use the 🎤 on your keyboard instead.')
 const voiceOff = () => { try { return localStorage.getItem(VOICE_OFF) === '1' } catch { return false } }
 const speechRecognition = (): any => voiceOff() ? undefined : (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
 

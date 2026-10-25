@@ -5,11 +5,12 @@
 /* eslint-env serviceworker */
 const NAMES = new URL('push/circles.json', self.registration.scope).href
 
-async function nameOf(id) {
+// { <circle id>: name, '': the notification's words in the app's language }
+async function kept() {
   try {
     const res = await (await caches.open('quiet-bible-push')).match(NAMES)
-    return res ? (await res.json())[id] : undefined
-  } catch { return undefined }
+    return res ? await res.json() : {}
+  } catch { return {} }
 }
 
 self.addEventListener('push', event => {
@@ -17,11 +18,14 @@ self.addEventListener('push', event => {
   try { data = event.data ? event.data.json() : {} } catch { /* not ours */ }
   const id = typeof data.c === 'string' ? data.c : ''
   event.waitUntil((async () => {
-    const name = id && await nameOf(id)
+    const all = await kept()
+    const name = id && typeof all[id] === 'string' ? all[id] : ''
+    const words = all[''] || {}
     // An open app updates its dot right away.
     for (const c of await self.clients.matchAll({ type: 'window' })) c.postMessage({ t: 'circle-news' })
     // A phone must show something for every message, or it stops sending them.
-    await self.registration.showNotification(name ? `Something new in ${name}` : 'Something new in your circle', {
+    const title = name ? (words.title || 'Something new in {circle}').replace('{circle}', name) : words.other || 'Something new in your circle'
+    await self.registration.showNotification(title, {
       tag: id ? `circle-${id}` : 'circle',
       icon: 'icon-192.png',
       silent: true,

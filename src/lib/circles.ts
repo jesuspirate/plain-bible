@@ -18,6 +18,7 @@ import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
 import { noteLatest } from './circleNews'
 import { forget, keepNames } from './push'
+import { t } from '../i18n'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const CHUNK = 1_000_000
@@ -257,24 +258,24 @@ export async function typeCode(code: string): Promise<Typed> {
   await api('/circles/code', { method: 'POST', token: token(), body: { code, pub, label: deviceLabel() } })
   return { code, pub, priv: pair.privateKey, match: await matchCode(pub) }
 }
-export const stopWaiting = (t: Typed) => api(`/circles/code/${t.code}`, { method: 'DELETE', token: token() }).catch(() => {})
+export const stopWaiting = (typed: Typed) => api(`/circles/code/${typed.code}`, { method: 'DELETE', token: token() }).catch(() => {})
 /** Once allowed: join, and the circle opens here. Null while still waiting. */
-export async function joinWithCode(t: Typed, me: string, code?: string): Promise<CircleInfo | 'needCode' | null> {
-  const r = await api<{ circle: string; epk: string | null; sealed: string | null }>(`/circles/code/${t.code}`, { token: token() })
+export async function joinWithCode(typed: Typed, me: string, code?: string): Promise<CircleInfo | 'needCode' | null> {
+  const r = await api<{ circle: string; epk: string | null; sealed: string | null }>(`/circles/code/${typed.code}`, { token: token() })
   if (!r.sealed || !r.epk) return null
   const { shared } = await import('./approve')
-  const raw = await open(await shared(t.priv, r.epk, `code ${t.code}`), b64url.decode(r.sealed), `code/${t.code}`)
+  const raw = await open(await shared(typed.priv, r.epk, `code ${typed.code}`), b64url.decode(r.sealed), `code/${typed.code}`)
   await meta.set('circle-keys', { ...(await rawKeys()), [r.circle]: raw })
   const lock = await lockKey(code)
   if (lock === 'needCode') return lock
   const key = await circleKey(r.circle, raw)
-  await api(`/circles/code/${t.code}/join`, {
+  await api(`/circles/code/${typed.code}/join`, {
     method: 'POST', token: token(), body: {
       wrapped: b64url.encode(await seal(lock, raw, `circle/${r.circle}`)), me: await sealJson(key, me, `${r.circle}/me`),
     },
   })
   const list = await listCircles().catch(() => null)
-  return (list && list !== 'needCode' ? list.circles.find(c => c.id === r.circle) : undefined) ?? { id: r.circle, name: 'Circle', members: 0 }
+  return (list && list !== 'needCode' ? list.circles.find(c => c.id === r.circle) : undefined) ?? { id: r.circle, name: t('Circle'), members: 0 }
 }
 
 export async function leaveCircle(circle: string) {
@@ -374,7 +375,7 @@ async function send(circle: string, body: Shared, audio?: Uint8Array) {
       method: 'PUT', body: sealed!.subarray(n * CHUNK, (n + 1) * CHUNK) as BodyInit,
       headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/octet-stream' },
     }).catch(() => { throw new SyncError('The connection dropped while sending. Try again.') })
-    if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || `Sync service error (${res.status})`, res.status)
+    if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || t('Sync service error ({status})', { status: res.status }), res.status)
   }
   // Your own prayer plays from here without downloading it again.
   if (audio) await meta.set(`circle-audio:${circle}/${id}`, audio.buffer)
@@ -412,7 +413,7 @@ export async function prayerAudio(circle: string, item: FeedItem): Promise<{ typ
     for (let n = 0; n < item.chunks; n++) {
       const res = await fetch(`${SYNC_URL}/circles/${circle}/items/${item.id}/${n}`, { headers: { Authorization: `Bearer ${tok}` } })
         .catch(() => { throw new SyncError('Connect to the internet to hear this prayer the first time.') })
-      if (!res.ok) throw new SyncError(`Sync service error (${res.status})`, res.status)
+      if (!res.ok) throw new SyncError(t('Sync service error ({status})', { status: res.status }), res.status)
       pieces.push(new Uint8Array(await res.arrayBuffer()))
     }
     const sealed = new Uint8Array(pieces.reduce((s, x) => s + x.length, 0))

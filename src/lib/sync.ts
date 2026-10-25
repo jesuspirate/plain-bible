@@ -5,6 +5,7 @@ import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { mergeMark, Marks, upgrade } from './marks'
 import { Days, mergeDays } from './streaks'
 import { PRF_SALT } from './prayerCrypto'
+import { currentLang, t } from '../i18n'
 
 export const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
 
@@ -68,15 +69,17 @@ export function saveAccount(a: Account | null) {
   try { a ? localStorage.setItem(KEY, JSON.stringify(a)) : localStorage.removeItem(KEY) } catch { /* ignore */ }
 }
 
+/** Something sync (or the sync service) couldn't do, in your language. The
+ *  service answers in English; those sentences are translated here too. */
 export class SyncError extends Error {
-  constructor(message: string, public status = 0, public body?: any) { super(message) }
+  constructor(message: string, public status = 0, public body?: any) { super(message === 'Cancelled' ? message : t(message)) }
 }
 
 const TIMEOUT_MS = 15000
 const offline = () => navigator.onLine === false
 const unreachable = () => new SyncError(offline()
-  ? "You're offline. Connect to the internet to sign in or sync."
-  : "Couldn't reach the sync server. Your highlights and settings are safe on this device. Try again in a minute.")
+  ? t("You're offline. Connect to the internet to sign in or sync.")
+  : t("Couldn't reach the sync server. Your highlights and settings are safe on this device. Try again in a minute."))
 
 export async function api<T>(path: string, init: { method?: string; token?: string; body?: unknown } = {}): Promise<T> {
   const headers: Record<string, string> = {}
@@ -98,7 +101,7 @@ export async function api<T>(path: string, init: { method?: string; token?: stri
     try { res = await req() } catch { throw unreachable() }
   }
   const body = await res.json().catch(() => ({}))
-  if (!res.ok) throw new SyncError(body.error || `Sync service error (${res.status})`, res.status, body)
+  if (!res.ok) throw new SyncError(body.error || t('Sync service error ({status})', { status: res.status }), res.status, body)
   return body as T
 }
 
@@ -194,7 +197,7 @@ export async function checkEmailSignIn(): Promise<boolean> {
 }
 /** Email a 6-digit code. With a token, it adds the address to that account. */
 export const sendEmailCode = (email: string, token?: string) =>
-  api('/auth/email/start', { method: 'POST', token, body: { email } })
+  api('/auth/email/start', { method: 'POST', token, body: { email, lang: currentLang() } })
 /** A token to sign in with, or with a token, the address added. */
 export async function verifyEmailCode(email: string, code: string, token?: string) {
   const r = await api<{ token?: string; added?: boolean; email?: string; passkeys?: number }>('/auth/email/verify', { method: 'POST', token, body: { email, code } })

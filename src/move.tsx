@@ -5,6 +5,7 @@ import { applyMove, fetchMove, makeDeviceLink, makeMoveLink, MOVED, MOVED_IN, mo
 import { loadAccount, register } from './lib/sync'
 import { copyText, isIOS } from './lib/native'
 import { PhoneIcon } from './icons'
+import { locale, t, tj, tn } from './i18n'
 
 const standalone = () => (navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches
 const plural = (n: number, one: string, many = one + 's') => `${n} ${n === 1 ? one : many}`
@@ -90,10 +91,10 @@ export function MoveBanner() {
 
 /** Shown instead of the app while a move link is being taken in. */
 export function Arriving({ link }: { link: { id: string; key: string } }) {
-  const [step, setStep] = useState('Bringing your Bible over…')
+  const [step, setStep] = useState(() => t('Bringing your Bible over…'))
   const [error, setError] = useState('')
   useEffect(() => {
-    fetchMove(link, (done, of) => setStep(of > 1 ? `Bringing your Bible over… ${Math.round(done / of * 100)}%` : 'Bringing your Bible over…'))
+    fetchMove(link, (done, of) => setStep(t('Bringing your Bible over…') + (of > 1 ? ' ' + (done / of).toLocaleString(locale(), { style: 'percent' }) : '')))
       .then(({ bundle, prayers }) => applyMove(bundle, prayers))
       .then(() => { history.replaceState(null, '', location.pathname + '#/read'); location.reload() })
       .catch(e => setError((e as Error).message || String(e)))
@@ -102,8 +103,8 @@ export function Arriving({ link }: { link: { id: string; key: string } }) {
     <div class="center">
       {error ? <>
         <p class="error">{error}</p>
-        <p><button onClick={() => location.reload()}>Try again</button></p>
-        <p><button onClick={() => { history.replaceState(null, '', location.pathname + '#/read'); location.reload() }}>Open the Bible</button></p>
+        <p><button onClick={() => location.reload()}>{t('Try again')}</button></p>
+        <p><button onClick={() => { history.replaceState(null, '', location.pathname + '#/read'); location.reload() }}>{t('Open the Bible')}</button></p>
       </> : <p class="muted">{step}</p>}
     </div>
   )
@@ -115,20 +116,20 @@ export function PasteMove({ onDone }: { onDone?: () => void }) {
   const [error, setError] = useState('')
   const go = (s: string) => {
     const link = parseMoveLink(s)
-    if (!link) { setError('That isn’t a Quiet Bible link. Copy it again on the other device.'); return }
+    if (!link) { setError(t('That isn’t a Quiet Bible link. Copy it again on the other device.')); return }
     location.hash = `#/move/${link.id}.${link.key}`
     location.reload()
   }
   const paste = async () => {
-    try { go(await navigator.clipboard.readText()) } catch { setError('Couldn’t read the clipboard. Paste the link into the box instead.') }
+    try { go(await navigator.clipboard.readText()) } catch { setError(t('Couldn’t read the clipboard. Paste the link into the box instead.')) }
   }
   return (
     <div class="move-paste">
       <div class="row wrap">
-        {'clipboard' in navigator && 'readText' in navigator.clipboard && <button class="primary" onClick={paste}>Paste link</button>}
-        {onDone && <button onClick={onDone}>Not now</button>}
+        {'clipboard' in navigator && 'readText' in navigator.clipboard && <button class="primary" onClick={paste}>{t('Paste link')}</button>}
+        {onDone && <button onClick={onDone}>{t('Not now')}</button>}
       </div>
-      <input type="url" class="move-input" placeholder="or paste it here" value={text} autocomplete="off"
+      <input type="url" class="move-input" placeholder={t('or paste it here')} value={text} autocomplete="off"
         onInput={e => { const v = (e.target as HTMLInputElement).value; setText(v); if (parseMoveLink(v)) go(v) }} />
       {error && <p class="note">{error}</p>}
     </div>
@@ -139,9 +140,9 @@ export function PasteMove({ onDone }: { onDone?: () => void }) {
 export function MoveInSection() {
   if (!onNewAddress()) return null
   return (
-    <div class="field"><span>Link from another device</span>
+    <div class="field"><span>{t('Link from another device')}</span>
       <div class="col">
-        <span class="muted small">Paste a link from Settings → Account → Link another device, or a move link from Plain Bible at bible.chama.community.</span>
+        <span class="muted small">{t('Paste a link from Settings → Account → Link another device, or a move link from Plain Bible at bible.chama.community.')}</span>
         <PasteMove />
       </div>
     </div>
@@ -159,8 +160,8 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
   const [saved, setSaved] = useState(false)
   const [prayerKey, setPrayerKey] = useState(false)
   if (askPaste) return (
-    <div class="move-welcome" role="dialog" aria-label="Moving in">
-      <p><strong>Welcome to Quiet Bible.</strong> Have a link from another device, or a move link from Plain Bible? Paste it to bring everything over.</p>
+    <div class="move-welcome" role="dialog" aria-label={t('Moving in')}>
+      <p><strong>{t('Welcome to Quiet Bible.')}</strong> {t('Have a link from another device, or a move link from Plain Bible? Paste it to bring everything over.')}</p>
       <PasteMove onDone={() => setAskPaste(false)} />
     </div>
   )
@@ -169,7 +170,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
   const acct = loadAccount()
   const fail = (e: unknown) => {
     const m = (e as Error).message
-    setMsg(m === 'Cancelled' ? 'The passkey request was cancelled. Tap the button to try again.' : m)
+    setMsg(m === 'Cancelled' ? t('The passkey request was cancelled. Tap the button to try again.') : m)
   }
   // One passkey request per tap. Asking again straight after saving one
   // left password managers (Bitwarden) stuck on their own screen.
@@ -180,7 +181,7 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
       setSaved(true)
       const { prayerSyncOn } = await import('./lib/prayerSync')
       setPrayerKey(prayerSyncOn())
-      setMsg('Passkey saved.')
+      setMsg(t('Passkey saved.'))
     } catch (e) { fail(e) } finally { setWorking(false) }
   }
   // Optional: lets the new passkey unlock synced prayers on a new device.
@@ -189,29 +190,31 @@ export function MoveWelcome({ firstStart }: { firstStart: boolean }) {
     try {
       const { keepKeyWithPasskey } = await import('./lib/prayerSync')
       setMsg(await keepKeyWithPasskey()
-        ? 'Done. This passkey now unlocks your synced prayers on new devices too.'
-        : 'This passkey can’t unlock prayers. On a new device, type in your prayer key instead (Your prayers → Show prayer key).')
+        ? t('Done. This passkey now unlocks your synced prayers on new devices too.')
+        : t('This passkey can’t unlock prayers. On a new device, type in your prayer key instead (Your prayers → Show prayer key).'))
       setPrayerKey(false)
     } catch (e) { fail(e) } finally { setWorking(false) }
   }
   if (info.kind === 'link') return (
-    <div class="move-welcome" role="dialog" aria-label="Linked">
-      <p><strong>This device is linked.</strong> You’re signed in{info.prayerKey ? ' and your prayers are unlocked' : ''}. Your highlights, notes and settings arrive in a moment{info.prayerKey ? ', and your prayers right after' : ''}.</p>
-      {isIOS && !standalone() && <p class="small">To keep it on your Home Screen: tap Share, then <strong>Add to Home Screen</strong>. If it opens signed out there, paste the same link once more (it works for an hour).</p>}
-      <div class="row wrap"><button class="primary" onClick={close}>Done</button></div>
+    <div class="move-welcome" role="dialog" aria-label={t('Linked')}>
+      <p><strong>{t('This device is linked.')}</strong> {info.prayerKey
+        ? t('You’re signed in and your prayers are unlocked. Your highlights, notes and settings arrive in a moment, and your prayers right after.')
+        : t('You’re signed in. Your highlights, notes and settings arrive in a moment.')}</p>
+      {isIOS && !standalone() && <p class="small">{tj('To keep it on your Home Screen: tap Share, then {add}. If it opens signed out there, paste the same link once more (it works for an hour).', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>}
+      <div class="row wrap"><button class="primary" onClick={close}>{t('Done')}</button></div>
     </div>
   )
-  const what = [plural(info.marks, 'highlighted or noted verse'), info.prayers ? plural(info.prayers, 'prayer') : ''].filter(Boolean)
+  const what = [tn(info.marks, '{n} highlighted or noted verse', '{n} highlighted or noted verses'), info.prayers ? tn(info.prayers, '{n} prayer', '{n} prayers') : ''].filter(Boolean)
   return (
-    <div class="move-welcome" role="dialog" aria-label="Moved">
-      <p><strong>Welcome to Quiet Bible.</strong> Your Bible moved: {what.join(', ')}, your settings and history.{info.kept ? ' They joined what was already here; nothing was replaced.' : ''}</p>
-      {info.otherAccount && <p class="small">That link came from a different account than the one you’re signed in to here. You stayed signed in here, and its highlights, notes and settings joined this account.</p>}
-      {info.account && !saved && <p class="small">You’re still signed in. Save a passkey for {NEW_HOST} so you can sign in here later; the old one only works on the old address.</p>}
-      {isIOS && !standalone() && <p class="small">To keep it on your Home Screen: tap Share, then <strong>Add to Home Screen</strong>. If it opens empty there, paste the same move link once more.</p>}
+    <div class="move-welcome" role="dialog" aria-label={t('Moved')}>
+      <p><strong>{t('Welcome to Quiet Bible.')}</strong> {t('Your Bible moved: {what}, your settings and history.', { what: what.join(', ') })}{info.kept ? ' ' + t('They joined what was already here; nothing was replaced.') : ''}</p>
+      {info.otherAccount && <p class="small">{t('That link came from a different account than the one you’re signed in to here. You stayed signed in here, and its highlights, notes and settings joined this account.')}</p>}
+      {info.account && !saved && <p class="small">{t('You’re still signed in. Save a passkey for {site} so you can sign in here later; the old one only works on the old address.', { site: NEW_HOST })}</p>}
+      {isIOS && !standalone() && <p class="small">{tj('To keep it on your Home Screen: tap Share, then {add}. If it opens empty there, paste the same move link once more.', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>}
       <div class="row wrap">
-        {info.account && !saved && <button class="primary" disabled={working} onClick={passkey}>{working ? 'Waiting for passkey…' : 'Save a passkey'}</button>}
-        {saved && prayerKey && <button class="primary" disabled={working} onClick={unlockPrayers}>{working ? 'Waiting for passkey…' : 'Use it for prayers too'}</button>}
-        <button onClick={close}>{info.account && !saved ? 'Later' : 'Done'}</button>
+        {info.account && !saved && <button class="primary" disabled={working} onClick={passkey}>{working ? t('Waiting for passkey…') : t('Save a passkey')}</button>}
+        {saved && prayerKey && <button class="primary" disabled={working} onClick={unlockPrayers}>{working ? t('Waiting for passkey…') : t('Use it for prayers too')}</button>}
+        <button onClick={close}>{info.account && !saved ? t('Later') : t('Done')}</button>
       </div>
       {msg && <p class="note">{msg}</p>}
     </div>
@@ -230,19 +233,20 @@ export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boo
     try { setMade(await makeDeviceLink()); setState('ready') } catch (e) { setError((e as Error).message); setState('idle') }
   }
   const copy = async () => {
-    try { await copyText(made!.link); setCopied(true) } catch { setError('Couldn’t copy. Press and hold the link to copy it.') }
+    try { await copyText(made!.link); setCopied(true) } catch { setError(t('Couldn’t copy. Press and hold the link to copy it.')) }
   }
   const share = () => navigator.share?.({ title: 'Quiet Bible', url: made!.link }).catch(() => {})
   if (state === 'ready' && made) return (
     <div class={'move-card ' + cls}>
-      <p class="small">Open this on your other device within an hour. It signs that device in{made.prayers ? ' and unlocks your prayers there' : ''}. Keep it private: whoever opens it gets into your account.</p>
-      {made.locked && <p class="note small">Your prayers are locked on this device, so this link won’t bring them. Make the link on a device where Your prayers says <strong>Syncing with your devices</strong>, or unlock them here first under Your prayers.</p>}
+      <p class="small">{made.prayers ? t('Open this on your other device within an hour. It signs that device in and unlocks your prayers there. Keep it private: whoever opens it gets into your account.')
+        : t('Open this on your other device within an hour. It signs that device in. Keep it private: whoever opens it gets into your account.')}</p>
+      {made.locked && <p class="note small">{tj('Your prayers are locked on this device, so this link won’t bring them. Make the link on a device where Your prayers says {syncing}, or unlock them here first under Your prayers.', { syncing: <strong>{t('Synced with your devices.')}</strong> })}</p>}
       <p class="move-link" onClick={copy}>{made.link}</p>
       <div class="row wrap">
-        <button class="primary" onClick={copy}>{copied ? 'Copied ✓' : 'Copy link'}</button>
-        {'share' in navigator && <button onClick={share}>Send…</button>}
+        <button class="primary" onClick={copy}>{copied ? t('Copied ✓') : t('Copy link')}</button>
+        {'share' in navigator && <button onClick={share}>{t('Send…')}</button>}
       </div>
-      <p class="muted small">Send it to yourself privately: AirDrop, a note to yourself, or your password manager. On iPhone, add Quiet Bible to the Home Screen first, open it, and tap <strong>Paste link</strong>.</p>
+      <p class="muted small">{tj('Send it to yourself privately: AirDrop, a note to yourself, or your password manager. On iPhone, add Quiet Bible to the Home Screen first, open it, and tap {paste}.', { paste: <strong>{t('Paste link')}</strong> })}</p>
       {error && <p class="note">{error}</p>}
     </div>
   )
@@ -250,13 +254,13 @@ export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boo
   if (row) return <>
     <button class="set-row" disabled={state === 'working'} onClick={make}>
       <span class="set-icon" aria-hidden="true"><PhoneIcon size={24} /></span>
-      <span class="set-label">{state === 'working' ? 'Making a link…' : 'Link another device'}<span class="set-sub">Sign it in without typing anything</span></span>
+      <span class="set-label">{state === 'working' ? t('Making a link…') : t('Link another device')}<span class="set-sub">{t('Sign it in without typing anything')}</span></span>
     </button>
     {error && <p class="note small set-note">{error}</p>}
   </>
   return (
     <div class={cls}>
-      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={make}>{state === 'working' ? 'Making a link…' : 'Link another device'}</button>
+      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={make}>{state === 'working' ? t('Making a link…') : t('Link another device')}</button>
       {error && <p class="note small">{error}</p>}
     </div>
   )

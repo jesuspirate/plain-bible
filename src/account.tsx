@@ -11,6 +11,7 @@ import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { DeviceLink, PasteMove } from './move'
 import { KeyBackup } from './approve'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
+import { locale, t, tj, tn } from './i18n'
 
 export interface SyncApi {
   enabled: boolean
@@ -84,7 +85,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       // Prayers sync too where turned on; that code loads only then.
       try { if (localStorage.getItem('plain-bible:prayer-sync')) import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {}) } catch { /* ignore */ }
     } catch (e) {
-      if (e instanceof SyncError && e.status === 401) { setAccount(null); setError('You were signed out. Sign in again to keep syncing.') }
+      if (e instanceof SyncError && e.status === 401) { setAccount(null); setError(t('You were signed out. Sign in again to keep syncing.')) }
       else setError((e as Error).message)
     } finally {
       running.current = false; setBusy(false)
@@ -107,18 +108,18 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
   useEffect(() => {
     const local = localDoc()
     if (!account || !local || docKey(local) === account.synced) return
-    const t = setTimeout(auto, 2000)
-    return () => clearTimeout(t)
+    const timer = setTimeout(auto, 2000)
+    return () => clearTimeout(timer)
   }, [marks, settings, account?.token])
   // And shortly after a day is read or prayed.
   useEffect(() => {
-    let t = 0
+    let timer = 0
     const on = () => {
-      clearTimeout(t)
-      t = window.setTimeout(() => { const local = localDoc(); if (loadAccount() && local && docKey(local) !== loadAccount()?.synced) auto() }, 2000)
+      clearTimeout(timer)
+      timer = window.setTimeout(() => { const local = localDoc(); if (loadAccount() && local && docKey(local) !== loadAccount()?.synced) auto() }, 2000)
     }
     addEventListener(DAYS_EVENT, on)
-    return () => { clearTimeout(t); removeEventListener(DAYS_EVENT, on) }
+    return () => { clearTimeout(timer); removeEventListener(DAYS_EVENT, on) }
   }, [])
 
   return {
@@ -153,9 +154,9 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
   if (!sent) return (
     <div class="email-code">
       <form class="row wrap" onSubmit={submit(send)}>
-        <input class="move-input" type="email" inputMode="email" autoComplete="email" placeholder="Your email" value={email}
+        <input class="move-input" type="email" inputMode="email" autoComplete="email" placeholder={t('Your email')} value={email}
           onInput={e => setEmail((e.target as HTMLInputElement).value)} />
-        <button class="primary" disabled={!!working || !/\S@\S+\.\S/.test(email)}>{working ? 'Sending…' : 'Email me a code'}</button>
+        <button class="primary" disabled={!!working || !/\S@\S+\.\S/.test(email)}>{working ? t('Sending…') : t('Email me a code')}</button>
       </form>
       {msg && <p class="note">{msg}</p>}
     </div>
@@ -163,20 +164,20 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
   const digits = code.replace(/\D/g, '')
   return (
     <div class="email-code">
-      <p class="muted small">We emailed a 6-digit code to <strong>{email.trim()}</strong>. It can take a minute; look in spam too.</p>
+      <p class="muted small">{tj('We emailed a 6-digit code to {email}. It can take a minute; look in spam too.', { email: <strong>{email.trim()}</strong> })}</p>
       <form class="row wrap" onSubmit={submit(() => check(digits))}>
-        <input class="move-input code" inputMode="numeric" autoComplete="one-time-code" placeholder="6-digit code" maxLength={7} value={code}
+        <input class="move-input code" inputMode="numeric" autoComplete="one-time-code" placeholder={t('6-digit code')} maxLength={7} value={code}
           onInput={e => {
             const v = (e.target as HTMLInputElement).value
             setCode(v)
             // Filled in from the email (or typed): go straight on.
             if (v.replace(/\D/g, '').length === 6) check(v.replace(/\D/g, ''))
           }} />
-        <button class="primary" disabled={!!working || digits.length !== 6}>{working === 'check' ? 'Checking…' : token ? 'Add email' : 'Sign in'}</button>
+        <button class="primary" disabled={!!working || digits.length !== 6}>{working === 'check' ? t('Checking…') : token ? t('Add email') : t('Sign in')}</button>
       </form>
       <div class="row wrap">
-        <button class="link" disabled={!!working} onClick={send}>{working === 'send' ? 'Sending…' : 'Send a new code'}</button>
-        <button class="link" disabled={!!working} onClick={() => { setSent(false); setMsg('') }}>Use another email</button>
+        <button class="link" disabled={!!working} onClick={send}>{working === 'send' ? t('Sending…') : t('Send a new code')}</button>
+        <button class="link" disabled={!!working} onClick={() => { setSent(false); setMsg('') }}>{t('Use another email')}</button>
       </div>
       {msg && <p class="note">{msg}</p>}
     </div>
@@ -205,7 +206,7 @@ export function AccountSection() {
       const m = (e as Error).message
       // Safari also reports a passkey sheet that never opened as cancelled.
       if (m !== 'Cancelled') setMsg(m)
-      else if (label === 'login' || label === 'create') setMsg('The passkey request was cancelled or timed out. Tap the button to try again.')
+      else if (label === 'login' || label === 'create') setMsg(t('The passkey request was cancelled or timed out. Tap the button to try again.'))
     }
     finally { setWorking('') }
   }
@@ -213,32 +214,32 @@ export function AccountSection() {
   const login = act('login', async () => {
     try { sync.signedIn(await signIn()) } catch (e) { prepareSignIn(); throw e }
   })
-  const addKey = act('add', async () => { await register(acct!.token); setMsg('Passkey added. You can now sign in with it on that device too.') })
+  const addKey = act('add', async () => { await register(acct!.token); setMsg(t('Passkey added. You can now sign in with it on that device too.')) })
   const logout = act('logout', async () => { await signOut(acct!.token); sync.signedOut() })
   const dropEmail = act('email', async () => {
-    if (!confirm('Stop signing in with this email? You’ll sign in with your passkey only.')) return
-    await removeEmail(acct!.token); setMsg('Email removed.')
+    if (!confirm(t('Stop signing in with this email? You’ll sign in with your passkey only.'))) return
+    await removeEmail(acct!.token); setMsg(t('Email removed.'))
   })
   const remove = act('delete', async () => {
-    if (!confirm('Delete your account and its synced copy? Highlights stay on this device.')) return
-    await deleteAccount(acct!.token); sync.signedOut(); setMsg('Account deleted.')
+    if (!confirm(t('Delete your account and its synced copy? Highlights stay on this device.'))) return
+    await deleteAccount(acct!.token); sync.signedOut(); setMsg(t('Account deleted.'))
   })
 
   if (!acct) {
     if (email) return (
       <div class="account">
-        <p class="muted">Optional. Keep your highlights, notes, settings and prayers the same on all your devices.
-          No password: we email you a code. New here? The same code makes your account.</p>
+        <p class="muted">{t('Optional. Keep your highlights, notes, settings and prayers the same on all your devices.')}{' '}
+          {t('No password: we email you a code. New here? The same code makes your account.')}</p>
         <EmailCode onToken={sync.signedIn} />
         {passkeys && <>
-          <p class="muted small">Or use a passkey: Face ID, a fingerprint or your screen lock.</p>
+          <p class="muted small">{t('Or use a passkey: Face ID, a fingerprint or your screen lock.')}</p>
           <div class="row wrap">
-            <button disabled={!!working} onClick={login}>{working === 'login' ? 'Waiting for passkey…' : 'Sign in with a passkey'}</button>
-            <button disabled={!!working} onClick={create}>{working === 'create' ? 'Waiting for passkey…' : 'New account with a passkey'}</button>
+            <button disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in with a passkey')}</button>
+            <button disabled={!!working} onClick={create}>{working === 'create' ? t('Waiting for passkey…') : t('New account with a passkey')}</button>
           </div>
         </>}
         <details class="account-more">
-          <summary>Got a link from your other device?</summary>
+          <summary>{t('Got a link from your other device?')}</summary>
           <PasteMove />
         </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
@@ -246,16 +247,16 @@ export function AccountSection() {
     )
     return (
       <div class="account">
-        <p class="muted">Optional. Keep your highlights, notes, settings and prayers the same on all your devices.
-          No email, no password: Face ID, a fingerprint or your screen lock unlocks it.</p>
+        <p class="muted">{t('Optional. Keep your highlights, notes, settings and prayers the same on all your devices.')}{' '}
+          {t('No email, no password: Face ID, a fingerprint or your screen lock unlocks it.')}</p>
         {passkeys ? (
           <div class="row wrap">
-            <button class="primary" disabled={!!working} onClick={create}>{working === 'create' ? 'Waiting for passkey…' : 'Create account'}</button>
-            <button disabled={!!working} onClick={login}>{working === 'login' ? 'Waiting for passkey…' : 'Sign in'}</button>
+            <button class="primary" disabled={!!working} onClick={create}>{working === 'create' ? t('Waiting for passkey…') : t('Create account')}</button>
+            <button disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in')}</button>
           </div>
-        ) : <p class="note">This browser does not support passkeys.</p>}
+        ) : <p class="note">{t('This browser does not support passkeys.')}</p>}
         <details class="account-more">
-          <summary>Got a link from your other device?</summary>
+          <summary>{t('Got a link from your other device?')}</summary>
           <PasteMove />
         </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
@@ -264,51 +265,51 @@ export function AccountSection() {
   }
 
   const when = acct.lastSync ? new Date(acct.lastSync) : undefined
-  const last = sync.busy ? 'Syncing…' : sync.error ? 'Couldn’t sync' : when
-    ? 'Last synced ' + (when.toDateString() === new Date().toDateString()
-      ? when.toLocaleTimeString(undefined, { hour: 'numeric', minute: '2-digit' })
-      : when.toLocaleString(undefined, { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }))
-    : 'Sync is on'
+  const last = sync.busy ? t('Syncing…') : sync.error ? t('Couldn’t sync') : when
+    ? t('Last synced {when}', { when: when.toDateString() === new Date().toDateString()
+      ? when.toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' })
+      : when.toLocaleString(locale(), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' }) })
+    : t('Sync is on')
   const keys = info?.passkeys ?? 0
   return (
     <div class="account account-page">
       <div class="set-list">
         <div class="set-row set-static">
           <span class="set-icon" aria-hidden="true"><CheckIcon size={24} /></span>
-          <span class="set-label">Signed in{info?.email ? ` as ${info.email}` : ''}
-            {info && <span class="set-sub">{keys} {keys === 1 ? 'passkey' : 'passkeys'} · since {new Date(info.created).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
+          <span class="set-label">{info?.email ? t('Signed in as {email}', { email: info.email }) : t('Signed in')}
+            {info && <span class="set-sub">{tn(keys, '{n} passkey', '{n} passkeys')} · {t('since {date}', { date: new Date(info.created).toLocaleDateString(locale(), { month: 'short', day: 'numeric', year: 'numeric' }) })}</span>}
           </span>
         </div>
       </div>
 
-      <h2 class="set-kicker">Sync</h2>
+      <h2 class="set-kicker">{t('Sync')}</h2>
       <div class="set-list">
         <button class="set-row" onClick={sync.run} disabled={sync.busy}>
           <span class="set-icon" aria-hidden="true"><RefreshIcon size={24} /></span>
-          <span class="set-label">Sync now<span class="set-sub">{last}</span></span>
+          <span class="set-label">{t('Sync now')}<span class="set-sub">{last}</span></span>
         </button>
         <DeviceLink row />
       </div>
       <KeyBackup />
 
-      <h2 class="set-kicker">Sign-in</h2>
+      <h2 class="set-kicker">{t('Sign-in')}</h2>
       <div class="set-list">
         {email && !addEmail && <button class="set-row" onClick={() => setAddEmail(true)} disabled={!!working}>
           <span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span>
-          <span class="set-label">{info?.email ? 'Change email' : 'Add an email'}{!info?.email && <span class="set-sub">Another way in if you lose your passkey</span>}</span>
+          <span class="set-label">{info?.email ? t('Change email') : t('Add an email')}{!info?.email && <span class="set-sub">{t('Another way in if you lose your passkey')}</span>}</span>
         </button>}
         <button class="set-row" onClick={addKey} disabled={!!working}>
           <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
-          <span class="set-label">{working === 'add' ? 'Waiting for passkey…' : keys ? 'Add another passkey' : 'Add a passkey'}
-            <span class="set-sub">{keys ? 'Only for a device your passkeys don’t reach' : 'Face ID, a fingerprint or your screen lock'}</span></span>
+          <span class="set-label">{working === 'add' ? t('Waiting for passkey…') : keys ? t('Add another passkey') : t('Add a passkey')}
+            <span class="set-sub">{keys ? t('Only for a device your passkeys don’t reach') : t('Face ID, a fingerprint or your screen lock')}</span></span>
         </button>
-        {email && info?.email && !!keys && <button class="set-row" onClick={dropEmail} disabled={!!working}><span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span><span class="set-label">Remove email</span></button>}
+        {email && info?.email && !!keys && <button class="set-row" onClick={dropEmail} disabled={!!working}><span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span><span class="set-label">{t('Remove email')}</span></button>}
       </div>
-      {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
+      {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(t('You can now also sign in with {email}.', { email: hint })) }} />}
 
       <div class="set-list">
-        <button class="set-row" onClick={logout} disabled={!!working}><span class="set-icon" aria-hidden="true"><SignOutIcon size={24} /></span><span class="set-label">Sign out</span></button>
-        <button class="set-row danger" onClick={remove} disabled={!!working}><span class="set-icon" aria-hidden="true"><TrashIcon size={24} /></span><span class="set-label">Delete account</span></button>
+        <button class="set-row" onClick={logout} disabled={!!working}><span class="set-icon" aria-hidden="true"><SignOutIcon size={24} /></span><span class="set-label">{t('Sign out')}</span></button>
+        <button class="set-row danger" onClick={remove} disabled={!!working}><span class="set-icon" aria-hidden="true"><TrashIcon size={24} /></span><span class="set-label">{t('Delete account')}</span></button>
       </div>
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>

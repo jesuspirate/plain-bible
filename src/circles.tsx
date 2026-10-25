@@ -24,13 +24,14 @@ import { BackIcon, BellIcon, BookmarkIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import './circles.css'
+import { locale, t, tj, tn } from './i18n'
 
 const NAME = 'plain-bible:circle-name'
 const lastName = () => { try { return localStorage.getItem(NAME) || '' } catch { return '' } }
 const keepName = (s: string) => { try { localStorage.setItem(NAME, s) } catch { /* ignore */ } }
 const message = (e: unknown) => {
   const m = (e as Error).message
-  return m === 'Cancelled' ? 'The passkey request was cancelled. Tap to try again.' : m
+  return m === 'Cancelled' ? t('The passkey request was cancelled. Tap to try again.') : m
 }
 /** A passage someone shared, in the reader's own Bible: undefined while it's
  *  looked up (so their words never flash first), null if there's nothing
@@ -56,11 +57,11 @@ function Passage({ shown, small, from }: { shown: Shown | null | undefined; smal
   if (shown === null) return null
   return <>
     <p class={'c-quote' + (small ? ' small' : '') + (shown ? '' : ' c-quote-wait')} aria-busy={!shown}>{shown?.text}</p>
-    {shown && !shown.yours && <p class="muted small">Your {settings.version} doesn’t have this here, so it’s shown as {from} shared it ({shown.version}).</p>}
+    {shown && !shown.yours && <p class="muted small">{t('Your {version} doesn’t have this here, so it’s shown as {name} shared it ({theirs}).', { version: settings.version, name: from, theirs: shown.version })}</p>}
   </>
 }
 
-const when = (at: number) => new Date(at).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+const when = (at: number) => new Date(at).toLocaleString(locale(), { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 
 /** How the circles move between their pages. Inside the prayer screen it
  *  keeps track (its back button steps out), and anything that leads to the
@@ -71,7 +72,7 @@ const useNav = () => useContext(NavCtx)
 
 /** Circles inside the prayer screen: the list, or one circle. */
 export function CirclesPanel({ circle, onOpen, onAway }: { circle?: string; onOpen: (c?: { id: string; name: string }) => void; onAway: () => void }) {
-  if (!SYNC_URL) return <p class="muted">Circles aren’t available in this copy of the app.</p>
+  if (!SYNC_URL) return <p class="muted">{t('Circles aren’t available in this copy of the app.')}</p>
   return (
     <NavCtx.Provider value={{ sheet: true, open: onOpen, away: onAway }}>
       {!loadAccount() ? <SignedOut /> : circle ? <CircleView id={circle} /> : <CircleList />}
@@ -83,9 +84,9 @@ function SignedOut() {
   const { sheet } = useNav()
   return (
     <div class="circles">
-      {!sheet && <h1>Circles</h1>}
-      <p>Share the verses you read and the prayers you pray with a few people you choose: family, a friend, a small group.</p>
-      <p class="muted">Everything you share is encrypted on your device, so only the people in your circle can read or hear it.</p>
+      {!sheet && <h1>{t('Circles')}</h1>}
+      <p>{t('Share the verses you read and the prayers you pray with a few people you choose: family, a friend, a small group.')}</p>
+      <p class="muted">{t('Everything you share is encrypted on your device, so only the people in your circle can read or hear it.')}</p>
       <SignIn />
     </div>
   )
@@ -98,16 +99,16 @@ function toSheet(circle?: { id: string; name: string }) {
 }
 
 export function CirclesPage({ route }: { route: Route }) {
-  useEffect(() => { document.title = 'Circles · Quiet Bible' }, [])
+  useEffect(() => { document.title = t('Circles') + ' · Quiet Bible' }, [])
   // Circles live in the prayer screen; #/circles (an older link) opens them there.
   const at = route.path[0] === 'circles' ? route.path[1] : undefined
   useEffect(() => {
     if (route.path[0] !== 'circles') return
     if (!at) { toSheet(); return }
-    keptCircles().then(cs => toSheet({ id: at, name: cs.find(c => c.id === at)?.name ?? 'Circle' }))
+    keptCircles().then(cs => toSheet({ id: at, name: cs.find(c => c.id === at)?.name ?? t('Circle') }))
   }, [route.path.join('/')])
   if (route.path[0] === 'circles') return null
-  if (!SYNC_URL) return <div class="circles"><h1>Circles</h1><p class="muted">Circles aren’t available in this copy of the app.</p></div>
+  if (!SYNC_URL) return <div class="circles"><h1>{t('Circles')}</h1><p class="muted">{t('Circles aren’t available in this copy of the app.')}</p></div>
   // An invite opens even before you have an account: it says who it's
   // from, then makes the account right there, without leaving the page.
   if (route.path[0] === 'join') return <Join id={route.params.get('i') ?? ''} secret={route.params.get('k') ?? ''} />
@@ -121,21 +122,22 @@ function SignIn({ joining }: { joining?: boolean }) {
   const [working, setWorking] = useState('')
   const [msg, setMsg] = useState('')
   useEffect(() => { if (navigator.onLine !== false) prepareSignIn() }, [])
-  if (typeof PublicKeyCredential === 'undefined') return <p class="note">This browser can’t use passkeys, which circles need. Try Safari or Chrome.</p>
+  if (typeof PublicKeyCredential === 'undefined') return <p class="note">{t('This browser can’t use passkeys, which circles need. Try Safari or Chrome.')}</p>
   const act = (label: string, fn: () => Promise<string | undefined>) => async () => {
     setWorking(label); setMsg('')
-    try { const t = await fn(); if (t) sync.signedIn(t) } catch (e) {
+    try { const token = await fn(); if (token) sync.signedIn(token) } catch (e) {
       const m = (e as Error).message
-      setMsg(m === 'Cancelled' ? 'The passkey request was cancelled. Tap to try again.' : m)
+      setMsg(m === 'Cancelled' ? t('The passkey request was cancelled. Tap to try again.') : m)
       if (label === 'login') prepareSignIn()
     } finally { setWorking('') }
   }
   return (
     <div class="c-card">
-      <p class="small">{joining ? 'To join, make a free account with a passkey' : 'Circles need a free account with a passkey'}: your phone unlocks it with Face ID, a fingerprint or your screen lock. No email, no password.</p>
+      <p class="small">{joining ? t('To join, make a free account with a passkey: your phone unlocks it with Face ID, a fingerprint or your screen lock. No email, no password.')
+        : t('Circles need a free account with a passkey: your phone unlocks it with Face ID, a fingerprint or your screen lock. No email, no password.')}</p>
       <div class="c-row">
-        <button class="c-btn primary" disabled={!!working} onClick={act('create', () => register())}>{working === 'create' ? 'Waiting for passkey…' : 'Create account'}</button>
-        <button class="c-btn" disabled={!!working} onClick={act('login', signIn)}>{working === 'login' ? 'Waiting for passkey…' : 'I have one: sign in'}</button>
+        <button class="c-btn primary" disabled={!!working} onClick={act('create', () => register())}>{working === 'create' ? t('Waiting for passkey…') : t('Create account')}</button>
+        <button class="c-btn" disabled={!!working} onClick={act('login', signIn)}>{working === 'login' ? t('Waiting for passkey…') : t('I have one: sign in')}</button>
       </div>
       {msg && <p class="note small">{msg}</p>}
     </div>
@@ -147,14 +149,14 @@ function CodeEntry({ busy, onCode, onCancel, onApproved }: { busy: boolean; onCo
   const [code, setCode] = useState('')
   return (
     <div class="c-card">
-      <p class="muted">This device can’t unlock your circles by itself yet. Let one where they already open allow it:</p>
+      <p class="muted">{t('This device can’t unlock your circles by itself yet. Let one where they already open allow it:')}</p>
       <AskApproval onDone={onApproved} />
-      <p class="muted small">Or type your key from there (🙏 → Circles → Show my key):</p>
-      <input class="c-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Your key"
+      <p class="muted small">{t('Or type your key from there (Circles → Show my key):')}</p>
+      <input class="c-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder={t('Your key')}
         autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
       <div class="c-row">
-        <button class="c-btn primary" disabled={busy || !code.trim()} onClick={() => onCode(code)}>{busy ? 'Unlocking…' : 'Unlock'}</button>
-        <button class="c-btn" onClick={onCancel}>Cancel</button>
+        <button class="c-btn primary" disabled={busy || !code.trim()} onClick={() => onCode(code)}>{busy ? t('Unlocking…') : t('Unlock')}</button>
+        <button class="c-btn" onClick={onCancel}>{t('Cancel')}</button>
       </div>
       <StartOver onDone={onApproved} />
     </div>
@@ -167,18 +169,18 @@ function StartOver({ onDone }: { onDone: () => void }) {
   const [open, setOpen] = useState(false)
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
-  if (!open) return <p class="c-paste"><button class="link small" onClick={() => setOpen(true)}>None of my devices can open them</button></p>
+  if (!open) return <p class="c-paste"><button class="link small" onClick={() => setOpen(true)}>{t('None of my devices can open them')}</button></p>
   const begin = async () => {
     setBusy(true); setMsg('')
     try { await startOver(); onDone() } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   return (
     <div class="c-card">
-      <p class="small">First check the other places you use Quiet Bible. On iPhone, Safari and the Home Screen app keep separate keys. If one of them opens your circles, tap “Approve from my other phone” above and allow it there.</p>
-      <p class="small">If nothing opens them, start over with a new key. Prayers saved on this phone stay. Prayers kept only on the server can’t be opened by anyone and are removed. To get back into a circle, ask someone in it for a new invite link.</p>
+      <p class="small">{t('First check the other places you use Quiet Bible. On iPhone, Safari and the Home Screen app keep separate keys. If one of them opens your circles, tap “Approve from my other phone” above and allow it there.')}</p>
+      <p class="small">{t('If nothing opens them, start over with a new key. Prayers saved on this phone stay. Prayers kept only on the server can’t be opened by anyone and are removed. To get back into a circle, ask someone in it for a new invite link.')}</p>
       <div class="c-row">
-        <button class="c-btn primary" disabled={busy} onClick={begin}>{busy ? 'Starting over…' : 'Start over with a new key'}</button>
-        <button class="c-btn" disabled={busy} onClick={() => setOpen(false)}>Cancel</button>
+        <button class="c-btn primary" disabled={busy} onClick={begin}>{busy ? t('Starting over…') : t('Start over with a new key')}</button>
+        <button class="c-btn" disabled={busy} onClick={() => setOpen(false)}>{t('Cancel')}</button>
       </div>
       {msg && <p class="note small">{msg}</p>}
     </div>
@@ -226,56 +228,56 @@ function CircleList() {
 
   return (
     <div class="circles">
-      {!nav.sheet && <h1>Circles</h1>}
-      <p class="muted">Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.</p>
+      {!nav.sheet && <h1>{t('Circles')}</h1>}
+      <p class="muted">{t('Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.')}</p>
       {needCode
         ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')}
           onApproved={() => needCode === 'create' ? create() : load(true)} />
         : <>
           {locked > 0 && (
             <div class="c-card">
-              <p class="small">{locked === 1 ? 'One circle isn’t' : `${locked} circles aren’t`} unlocked on this device yet.</p>
-              <button class="c-btn primary" disabled={busy} onClick={unlock}>{noPasskey() ? (busy ? 'Unlocking…' : 'Unlock') : busy ? 'Waiting for passkey…' : 'Unlock with my passkey'}</button>
+              <p class="small">{tn(locked, 'One circle isn’t unlocked on this device yet.', '{n} circles aren’t unlocked on this device yet.')}</p>
+              <button class="c-btn primary" disabled={busy} onClick={unlock}>{noPasskey() ? (busy ? t('Unlocking…') : t('Unlock')) : busy ? t('Waiting for passkey…') : t('Unlock with my passkey')}</button>
             </div>
           )}
           {stale > 0 && (
             <div class="c-card">
-              <p class="small">{stale === 1 ? 'One circle can’t' : `${stale} circles can’t`} be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.</p>
+              <p class="small">{tn(stale, 'One circle can’t be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.', '{n} circles can’t be opened with your new key yet. Ask someone in them to send you a new invite link, then open it here.')}</p>
             </div>
           )}
           {list?.length ? (
             <ul class="c-list">
               {list.map(c => (
                 <li><button class="c-open" onClick={() => nav.open(c)}>
-                  <strong>{c.name}{hasNews(c.id) && <span class="news-dot" aria-label=", something new" />}</strong>
-                  <span class="muted">{hasNews(c.id) ? <span class="c-new-word">Something new</span> : c.members === 1 ? 'Just you so far' : `${c.members} people`} ›</span>
+                  <strong>{c.name}{hasNews(c.id) && <span class="news-dot" aria-label={t(', something new')} />}</strong>
+                  <span class="muted">{hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
                 </button></li>
               ))}
             </ul>
-          ) : list && !busy && !locked && <p>You’re not in a circle yet. Join one with a code, or make your own.</p>}
+          ) : list && !busy && !locked && <p>{t('You’re not in a circle yet. Join one with a code, or make your own.')}</p>}
           {making ? (
             <div class="c-card">
-              <label class="c-label">Name of the circle<input value={name} maxLength={60} placeholder="Family, Tuesday group…" onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
-              <label class="c-label">Your name<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+              <label class="c-label">{t('Name of the circle')}<input value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
+              <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
               <div class="c-row">
-                <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? 'Making…' : 'Make circle'}</button>
-                <button class="c-btn" onClick={() => setMaking(false)}>Cancel</button>
+                <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? t('Making…') : t('Make circle')}</button>
+                <button class="c-btn" onClick={() => setMaking(false)}>{t('Cancel')}</button>
               </div>
             </div>
           ) : joining ? <JoinCode onCancel={() => setJoining(false)} /> : (
             <div class="c-row c-two">
-              <button class="c-btn primary" onClick={() => setJoining(true)}>Enter a code</button>
-              <button class="c-btn" onClick={() => setMaking(true)}>New circle</button>
+              <button class="c-btn primary" onClick={() => setJoining(true)}>{t('Enter a code')}</button>
+              <button class="c-btn" onClick={() => setMaking(true)}>{t('New circle')}</button>
             </div>
           )}
           {!joining && !making && <PasteInvite />}
         </>}
-      {msg && <p class="note small">{msg} {!needCode && <button class="link" onClick={() => load()}>Try again</button>}</p>}
+      {msg && <p class="note small">{msg} {!needCode && <button class="link" onClick={() => load()}>{t('Try again')}</button>}</p>}
       <div class="c-foot">
         {key
           ? <><p class="c-key"><code>{key.replace(/-/g, '-​')}</code></p>
-            <p class="muted small">Only needed on a device whose passkey can’t unlock your circles. Keep it private: it opens your circles and your synced prayers.</p></>
-          : <button class="link small" onClick={() => accountKeyCode().then(k => setKey(k || 'Open a circle on this device first.'))}>Show my key</button>}
+            <p class="muted small">{t('Only needed on a device whose passkey can’t unlock your circles. Keep it private: it opens your circles and your synced prayers.')}</p></>
+          : <button class="link small" onClick={() => accountKeyCode().then(k => setKey(k || t('Open a circle on this device first.')))}>{t('Show my key')}</button>}
       </div>
     </div>
   )
@@ -306,7 +308,7 @@ function ShowCode({ circle, onDone }: { circle: string; onDone: () => void }) {
   useEffect(() => { makeCode(circle).then(setCode, e => setMsg(message(e))) }, [circle])
   useEvery(2500, async () => {
     if (!code) return
-    if (Date.now() > code.expires) { setMsg('This code has expired.'); return true }
+    if (Date.now() > code.expires) { setMsg(t('This code has expired.')); return true }
     const a = await codeAsk(circle, code.code)
     if (a) { setAsk(a); return true }
   }, !!code && !ask && !done && !msg)
@@ -318,22 +320,22 @@ function ShowCode({ circle, onDone }: { circle: string; onDone: () => void }) {
   return (
     <div class="c-card c-codebox">
       {done ? <>
-        <p class="c-card-title">They’re in</p>
-        <p class="muted small">They’ll show up here as soon as their phone finishes joining.</p>
-        <button class="c-btn primary" onClick={onDone}>Done</button>
+        <p class="c-card-title">{t('They’re in')}</p>
+        <p class="muted small">{t('They’ll show up here as soon as their phone finishes joining.')}</p>
+        <button class="c-btn primary" onClick={onDone}>{t('Done')}</button>
       </> : ask ? <>
-        <p class="c-card-title">Let their {ask.label} in?</p>
-        <p class="muted small">Only if their screen shows these same digits:</p>
+        <p class="c-card-title">{t('Let their {device} in?', { device: t(ask.label) })}</p>
+        <p class="muted small">{t('Only if their screen shows these same digits:')}</p>
         <p class="c-bigcode" aria-label={ask.match.split('').join(' ')}>{ask.match}</p>
         <div class="c-row c-two">
-          <button class="c-btn primary" disabled={busy} onClick={allow}>{busy ? 'Letting in…' : 'Allow'}</button>
-          <button class="c-btn" disabled={busy} onClick={close}>Not them</button>
+          <button class="c-btn primary" disabled={busy} onClick={allow}>{busy ? t('Letting in…') : t('Allow')}</button>
+          <button class="c-btn" disabled={busy} onClick={close}>{t('Not them')}</button>
         </div>
       </> : <>
-        <p class="c-card-title">Their code</p>
+        <p class="c-card-title">{t('Their code')}</p>
         <p class="c-bigcode" aria-label={code?.code.split('').join(' ')}>{code ? spaced(code.code) : '··· ···'}</p>
-        <p class="muted small">On their phone: Circles → <strong>Enter a code</strong>. Works once, for 15 minutes. Keep this open.</p>
-        <button class="c-btn" onClick={close}>Cancel</button>
+        <p class="muted small">{tj('On their phone: Circles → {enter}. Works once, for 15 minutes. Keep this open.', { enter: <strong>{t('Enter a code')}</strong> })}</p>
+        <button class="c-btn" onClick={close}>{t('Cancel')}</button>
       </>}
       {msg && <p class="note small">{msg}</p>}
     </div>
@@ -368,19 +370,19 @@ function JoinCode({ onCancel }: { onCancel: () => void }) {
   return (
     <div class="c-card c-codebox">
       {typed ? <>
-        <p class="c-card-title">Ask them to tap Allow</p>
-        <p class="muted small">Their screen shows these same digits:</p>
+        <p class="c-card-title">{t('Ask them to tap Allow')}</p>
+        <p class="muted small">{t('Their screen shows these same digits:')}</p>
         <p class="c-bigcode" aria-label={typed.match.split('').join(' ')}>{typed.match}</p>
-        <p class="muted small">Waiting for them…</p>
-        <button class="c-btn" onClick={cancel}>Cancel</button>
+        <p class="muted small">{t('Waiting for them…')}</p>
+        <button class="c-btn" onClick={cancel}>{t('Cancel')}</button>
       </> : <>
-        <p class="c-card-title">Enter the code</p>
+        <p class="c-card-title">{t('Enter the code')}</p>
         <input class="c-code-input" value={digits} inputMode="numeric" autoComplete="one-time-code" maxLength={7} placeholder="000000"
-          aria-label="The 6-digit code" onInput={e => { setCode((e.target as HTMLInputElement).value); setMsg('') }} />
-        <label class="c-label">Your name<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+          aria-label={t('The 6-digit code')} onInput={e => { setCode((e.target as HTMLInputElement).value); setMsg('') }} />
+        <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
         <div class="c-row c-two">
-          <button class="c-btn primary" disabled={busy || digits.length !== 6 || !me.trim()} onClick={send}>{busy ? 'Checking…' : 'Join'}</button>
-          <button class="c-btn" onClick={cancel}>Cancel</button>
+          <button class="c-btn primary" disabled={busy || digits.length !== 6 || !me.trim()} onClick={send}>{busy ? t('Checking…') : t('Join')}</button>
+          <button class="c-btn" onClick={cancel}>{t('Cancel')}</button>
         </div>
       </>}
       {msg && <p class="note small">{msg}</p>}
@@ -398,17 +400,17 @@ function PasteInvite() {
   const use = (s: string) => {
     const l = parseInviteLink(s)
     if (l) { nav.away(); go(`join?i=${l.i}&k=${l.k}`) }
-    else setMsg('That isn’t a whole invite link. Copy it again from the message.')
+    else setMsg(t('That isn’t a whole invite link. Copy it again from the message.'))
   }
   const paste = async () => {
     try { const s = await navigator.clipboard.readText(); setText(s); use(s) } catch { setOpen(true) }
   }
-  if (!open) return <p class="c-paste"><button class="link small" onClick={() => { setOpen(true); paste() }}>Have an invite link? Paste it</button></p>
+  if (!open) return <p class="c-paste"><button class="link small" onClick={() => { setOpen(true); paste() }}>{t('Have an invite link? Paste it')}</button></p>
   return (
     <div class="c-row c-paste">
-      <input class="c-code" value={text} placeholder="Paste the invite link" onInput={e => { setText((e.target as HTMLInputElement).value); setMsg('') }}
+      <input class="c-code" value={text} placeholder={t('Paste the invite link')} onInput={e => { setText((e.target as HTMLInputElement).value); setMsg('') }}
         autoComplete="off" autoCorrect="off" autoCapitalize="none" spellcheck={false} />
-      <button class="c-btn" disabled={!text.trim()} onClick={() => use(text)}>Open</button>
+      <button class="c-btn" disabled={!text.trim()} onClick={() => use(text)}>{t('Open')}</button>
       {msg && <p class="note small">{msg}</p>}
     </div>
   )
@@ -424,10 +426,10 @@ function OpenInApp() {
   const [copied, setCopied] = useState(false)
   return (
     <div class="c-card">
-      <p><strong>Have Quiet Bible on your Home Screen?</strong> Open this invite there, so you join with the account you already use:</p>
-      <p class="small">Copy it, open the app, then Circles → <strong>Have an invite link? Paste it</strong>.</p>
-      <button class="c-btn primary" onClick={() => copyText(location.href).then(() => setCopied(true), () => {})}>{copied ? 'Copied: now open the app' : 'Copy invite'}</button>
-      <p class="muted small">No app yet? Join right here below.</p>
+      <p><strong>{t('Have Quiet Bible on your Home Screen?')}</strong> {t('Open this invite there, so you join with the account you already use:')}</p>
+      <p class="small">{tj('Copy it, open the app, then Circles → {paste}.', { paste: <strong>{t('Have an invite link? Paste it')}</strong> })}</p>
+      <button class="c-btn primary" onClick={() => copyText(location.href).then(() => setCopied(true), () => {})}>{copied ? t('Copied: now open the app') : t('Copy invite')}</button>
+      <p class="muted small">{t('No app yet? Join right here below.')}</p>
     </div>
   )
 }
@@ -439,10 +441,10 @@ function Join({ id, secret }: { id: string; secret: string }) {
   const [needCode, setNeedCode] = useState(false)
   const [me, setMe] = useState(lastName)
   useEffect(() => {
-    if (!id || !secret) { setMsg('This invite link is incomplete. Ask for it to be sent again.'); return }
+    if (!id || !secret) { setMsg(t('This invite link is incomplete. Ask for it to be sent again.')); return }
     readInvite(id, secret).then(async i => {
       if (!i.already) { setInvite(i); return }
-      await openInvited(id, i, lastName() || 'Me')
+      await openInvited(id, i, lastName() || t('Me'))
       toSheet({ id: i.circle, name: i.name })
     }, e => setMsg(message(e)))
   }, [id, secret])
@@ -458,20 +460,20 @@ function Join({ id, secret }: { id: string; secret: string }) {
   }
   return (
     <div class="circles">
-      <h1>Join a circle</h1>
+      <h1>{t('Join a circle')}</h1>
       {inBrowser() && invite && !needCode && <OpenInApp />}
       {invite && (needCode ? <CodeEntry busy={busy} onCode={join} onCancel={() => setNeedCode(false)} onApproved={() => join()} /> : (
         <div class="c-card">
-          <p>{invite.by ? <><strong>{invite.by}</strong> invited you to </> : 'You’re invited to '}<strong>{invite.name}</strong>
-            <span class="muted"> · {invite.members === 1 ? '1 person' : `${invite.members} people`}</span></p>
-          <p class="muted small">A private circle to read the word and pray together. You’ll see what they share, and they’ll see only what you choose to share, one tap at a time. Everything is encrypted: not even the server can read it.</p>
+          <p>{invite.by ? tj('{name} invited you to {circle}', { name: <strong>{invite.by}</strong>, circle: <strong>{invite.name}</strong> }) : tj('You’re invited to {circle}', { circle: <strong>{invite.name}</strong> })}
+            <span class="muted"> · {tn(invite.members, '{n} person', '{n} people')}</span></p>
+          <p class="muted small">{t('A private circle to read the word and pray together. You’ll see what they share, and they’ll see only what you choose to share, one tap at a time. Everything is encrypted: not even the server can read it.')}</p>
           {!loadAccount() ? <SignIn joining /> : <>
-            <label class="c-label">Your name<input value={me} maxLength={40} placeholder="How the others will see you" onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
-            <button class="c-btn primary" disabled={busy || !me.trim()} onClick={() => join()}>{busy ? 'Joining…' : `Join ${invite.name}`}</button>
+            <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+            <button class="c-btn primary" disabled={busy || !me.trim()} onClick={() => join()}>{busy ? t('Joining…') : t('Join {circle}', { circle: invite.name })}</button>
           </>}
         </div>
       ))}
-      {!invite && !msg && <p class="muted">Opening the invite…</p>}
+      {!invite && !msg && <p class="muted">{t('Opening the invite…')}</p>}
       {msg && <p class="note">{msg}</p>}
     </div>
   )
@@ -506,12 +508,14 @@ function CircleView({ id }: { id: string }) {
   // tap was too long ago (Safari does, after a slow network), the button
   // turns into "Send invite link" and the next tap sends it at once.
   const sendInvite = async (link: string) => {
-    const text = `Come read the word and pray with ${info?.name ?? 'my circle'} in Quiet Bible. This private link is just for you: it works once, for 7 days. Already have the Quiet Bible app? Copy this link and paste it in Circles there.`
+    const text = (info?.name ? t('Come read the word and pray with {circle} in Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
+      : t('Come read the word and pray with my circle in Quiet Bible. This private link is just for you: it works once, for 7 days.'))
+      + ' ' + t('Already have the Quiet Bible app? Copy this link and paste it in Circles there.')
     if (canShare) {
       try { await navigator.share({ title: 'Quiet Bible', text, url: link }); setSent(true) } catch (e) {
         if ((e as Error).name !== 'AbortError') setInvite(link)
       }
-    } else await copyText(link).then(() => { setSent(true); setMsg('Invite link copied. Paste it in a message to the person you’re inviting.') }, () => setInvite(link))
+    } else await copyText(link).then(() => { setSent(true); setMsg(t('Invite link copied. Paste it in a message to the person you’re inviting.')) }, () => setInvite(link))
   }
   const makeInvite = async () => {
     setBusy(true); setMsg(''); setSent(false)
@@ -525,38 +529,38 @@ function CircleView({ id }: { id: string }) {
       nav.open()
     } catch (e) { setMsg(message(e)); setBusy(false) }
   }
-  const nameOf = (mid: string) => mid === feed?.me ? 'You' : feed?.members.find(m => m.mid === mid)?.name ?? 'Someone who left'
+  const nameOf = (mid: string) => mid === feed?.me ? t('You') : feed?.members.find(m => m.mid === mid)?.name ?? t('Someone who left')
   const fav = settings.version
   const news = feed ? newsIn(feed, since).items : undefined
   const items = feed ? [...feed.items.filter(i => news!.has(i.id)), ...feed.items.filter(i => !news!.has(i.id))] : []
 
   return (
     <div class="circles">
-      {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? 'Circle'}</button></h1>}
-      {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
-      {feed && <Notify circle={id} name={info?.name ?? 'this circle'} />}
-      {feed && <StreakBoard circle={id} name={info?.name ?? 'this circle'} feed={feed} onChange={load} />}
+      {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? t('Circle')}</button></h1>}
+      {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? t('You') : m.name).join(', ')}</p>}
+      {feed && <Notify circle={id} name={info?.name} />}
+      {feed && <StreakBoard circle={id} name={info?.name} feed={feed} onChange={load} />}
       {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} /> : (
         <div class="c-card">
-          <p class="c-card-title">Invite someone</p>
+          <p class="c-card-title">{t('Invite someone')}</p>
           <div class="c-row c-two">
-            <button class="c-btn primary" onClick={() => { setMsg(''); setShowCode(true) }}>Show a code</button>
+            <button class="c-btn primary" onClick={() => { setMsg(''); setShowCode(true) }}>{t('Show a code')}</button>
             {invite && !sent
-              ? <button class="c-btn" onClick={() => sendInvite(invite)}>{canShare ? 'Send the link' : 'Copy the link'}</button>
-              : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? 'Making link…' : 'Send a link'}</button>}
+              ? <button class="c-btn" onClick={() => sendInvite(invite)}>{canShare ? t('Send the link') : t('Copy the link')}</button>
+              : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? t('Making link…') : t('Send a link')}</button>}
           </div>
-          <p class="muted small">{sent ? 'Link sent. ' : ''}A code is for someone beside you or on a call. A link works from far away, once, for 7 days.</p>
+          <p class="muted small">{sent ? t('Link sent.') + ' ' : ''}{t('A code is for someone beside you or on a call. A link works from far away, once, for 7 days.')}</p>
         </div>
       )}
       {msg && <p class="note small">{msg}</p>}
-      {feed && !feed.items.length && <p class="muted c-empty">Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.</p>}
+      {feed && !feed.items.length && <p class="muted c-empty">{t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
       <ol class="c-feed">
         {feed && items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
       </ol>
       <div class="c-foot">
         {leaving
-          ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>Stay</button><button class="c-btn danger" disabled={busy} onClick={leave}>Leave and remove what I shared</button></div>
-          : <button class="link small" onClick={() => setLeaving(true)}>Leave this circle</button>}
+          ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>{t('Stay')}</button><button class="c-btn danger" disabled={busy} onClick={leave}>{t('Leave and remove what I shared')}</button></div>
+          : <button class="link small" onClick={() => setLeaving(true)}>{t('Leave this circle')}</button>}
       </div>
     </div>
   )
@@ -564,7 +568,7 @@ function CircleView({ id }: { id: string }) {
 
 /** Notifications for this circle, on this phone: one big switch. They say
  *  only "Something new in Family", never what, and put no number on the icon. */
-function Notify({ circle, name }: { circle: string; name: string }) {
+function Notify({ circle, name = t('this circle') }: { circle: string; name?: string }) {
   const [support, setSupport] = useState(pushSupport)
   const [on, setOn] = useState(() => pushOn(circle))
   const [busy, setBusy] = useState(false)
@@ -579,28 +583,28 @@ function Notify({ circle, name }: { circle: string; name: string }) {
     setBusy(true); setErr('')
     try { await doing; setOn(!on) } catch (e) {
       setSupport(pushSupport())
-      setErr(navigator.onLine === false ? 'You’re offline. Try again once you’re connected.' : message(e))
+      setErr(navigator.onLine === false ? t('You’re offline. Try again once you’re connected.') : message(e))
     } finally { setBusy(false) }
   }
   return (
     <div class="c-card c-notify">
       {support === 'install' ? <>
-        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>Notifications</strong></p>
-        <p class="small">On iPhone, notifications only work once Quiet Bible is on your Home Screen. Tap Share, then <strong>Add to Home Screen</strong>, and open Quiet Bible from there. Then turn them on here.</p>
+        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>{t('Notifications')}</strong></p>
+        <p class="small">{tj('On iPhone, notifications only work once Quiet Bible is on your Home Screen. Tap Share, then {add}, and open Quiet Bible from there. Then turn them on here.', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>
       </> : support === 'old' ? <>
-        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>Notifications</strong></p>
-        <p class="small">Notifications need iOS 16.4 or newer. Update your iPhone in Settings → General → Software Update to turn them on.</p>
+        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>{t('Notifications')}</strong></p>
+        <p class="small">{t('Notifications need iOS 16.4 or newer. Update your iPhone in Settings → General → Software Update to turn them on.')}</p>
       </> : support === 'blocked' && !on ? <>
-        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>Notifications</strong></p>
-        <p class="small">{blockedHelp()} Then come back and turn them on here.</p>
+        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>{t('Notifications')}</strong></p>
+        <p class="small">{blockedHelp()} {t('Then come back and turn them on here.')}</p>
       </> : (
         <button class="c-switch-row" role="switch" aria-checked={on} disabled={busy} onClick={toggle}>
           <BellIcon class="c-notify-ico" />
           <span class="c-switch-text">
-            <strong>{busy ? (on ? 'Turning off…' : 'Turning on…') : 'Notify me'}</strong>
+            <strong>{busy ? (on ? t('Turning off…') : t('Turning on…')) : t('Notify me')}</strong>
             <span class="muted small">{on
-              ? `On for this phone: a quiet notice when there’s something new in ${name}. It never shows what was shared.`
-              : `A quiet notice on this phone when someone in ${name} shares, replies, or prays with you.`}</span>
+              ? t('On for this phone: a quiet notice when there’s something new in {circle}. It never shows what was shared.', { circle: name })
+              : t('A quiet notice on this phone when someone in {circle} shares, replies, or prays with you.', { circle: name })}</span>
           </span>
           <span class={'c-switch' + (on ? ' on' : '')} aria-hidden="true"><span /></span>
         </button>
@@ -612,7 +616,7 @@ function Notify({ circle, name }: { circle: string; name: string }) {
 
 /** Streaks, for those in the circle who chose to show them: days in a row
  *  reading and praying, longest first. Yours shows live from this device. */
-function StreakBoard({ circle, name, feed, onChange }: { circle: string; name: string; feed: Feed; onChange: () => void }) {
+function StreakBoard({ circle, name, feed, onChange }: { circle: string; name?: string; feed: Feed; onChange: () => void }) {
   const { settings, update } = useApp()
   const days = useDays()
   const on = settings.shareStreaks.includes(circle)
@@ -624,32 +628,32 @@ function StreakBoard({ circle, name, feed, onChange }: { circle: string; name: s
       await shareStreak(circle, feed.me, !on)
       update({ shareStreaks: on ? settings.shareStreaks.filter(x => x !== circle) : [...settings.shareStreaks, circle] })
       onChange()
-    } catch (e) { setErr(navigator.onLine === false ? 'You’re offline. Try again once you’re connected.' : message(e)) } finally { setBusy(false) }
+    } catch (e) { setErr(navigator.onLine === false ? t('You’re offline. Try again once you’re connected.') : message(e)) } finally { setBusy(false) }
   }
   const rows = feed.members
-    .map(m => m.mid === feed.me ? (on ? { name: 'You', me: true, ...streaks(days) } : undefined) : m.streak ? { name: m.name, me: false, ...streaks(m.streak) } : undefined)
+    .map(m => m.mid === feed.me ? (on ? { name: t('You'), me: true, ...streaks(days) } : undefined) : m.streak ? { name: m.name, me: false, ...streaks(m.streak) } : undefined)
     .filter(r => !!r)
     .sort((a, b) => b.read + b.pray - a.read - a.pray)
   const others = rows.filter(r => !r.me).length
   return (
     <div class="c-card c-streaks">
       {rows.length > 0 && (
-        <ul class="c-streak-list" aria-label="Streaks">
+        <ul class="c-streak-list" aria-label={t('Streaks')}>
           {rows.map(r => (
             <li class={r.me ? 'me' : ''}>
               <strong>{r.name}</strong>
-              <span title="Days in a row reading">📖 {r.read}{r.readToday && <span class="streak-check" aria-label=", today">✓</span>}</span>
-              <span title="Days in a row praying">🙏 {r.pray}{r.prayToday && <span class="streak-check" aria-label=", today">✓</span>}</span>
+              <span title={t('Days in a row reading')}>📖 {r.read}{r.readToday && <span class="streak-check" aria-label={t(', today')}>✓</span>}</span>
+              <span title={t('Days in a row praying')}>🙏 {r.pray}{r.prayToday && <span class="streak-check" aria-label={t(', today')}>✓</span>}</span>
             </li>
           ))}
         </ul>
       )}
       <label class="c-streak-toggle">
         <input type="checkbox" checked={on} disabled={busy} onChange={toggle} />
-        <span>Show my streaks to {name}
+        <span>{name ? t('Show my streaks to {circle}', { circle: name }) : t('Show my streaks to this circle')}
           <span class="muted small"> · {on
-            ? others ? 'Days in a row reading and praying, and whether you have today. Nothing else.' : 'Others see theirs here once they turn this on too.'
-            : others ? 'See how each other is doing, and keep each other going.' : 'They’ll see how many days in a row you’ve read and prayed. Nothing else.'}</span>
+            ? others ? t('Days in a row reading and praying, and whether you have today. Nothing else.') : t('Others see theirs here once they turn this on too.')
+            : others ? t('See how each other is doing, and keep each other going.') : t('They’ll see how many days in a row you’ve read and prayed. Nothing else.')}</span>
         </span>
       </label>
       {err && <p class="note small">{err}</p>}
@@ -688,30 +692,30 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   const bookmarked = !!verse && verse.verses.every(n => marks[markKey(verse.book, verse.chapter, n)]?.b)
   const bookmark = () => {
     if (!verse) return
-    const t = Date.now()
+    const now = Date.now()
     setMarks(all => {
       const out = { ...all }
-      for (const n of verse.verses) { const k = markKey(verse.book, verse.chapter, n); out[k] = tidy({ ...all[k], b: 1, t }) }
+      for (const n of verse.verses) { const k = markKey(verse.book, verse.chapter, n); out[k] = tidy({ ...all[k], b: 1, t: now }) }
       return out
     })
-    setKept('Bookmarked. It’s in your Saved.')
+    setKept(t('Bookmarked. It’s in your Saved.'))
   }
   const keepNote = () => {
     if (b.k !== 'note' || !verse) return
     setMarks(all => setNote(all, markKey(verse.book, verse.chapter, verse.verses[0]), newNoteId(), `${b.note}\n— ${nameOf(item.by)}`, Date.now(), verse.verses))
-    setKept('Added to your notes on this verse.')
+    setKept(t('Added to your notes on this verse.'))
   }
-  const kind = b.k === 'bookmark' ? 'bookmarked' : b.k === 'note' ? 'wrote a note' : b.k === 'prayer' ? 'prayed' : 'shared'
+  const kind = b.k === 'bookmark' ? t('bookmarked') : b.k === 'note' ? t('wrote a note') : b.k === 'prayer' ? t('prayed') : t('shared')
   // New itself, or something new on it: a reply, or someone praying with you.
-  const fresh = news && !news.item && (news.replies.size ? (news.replies.size === 1 ? 'New reply' : 'New replies')
-    : `${[...news.amens].map(nameOf).join(', ')} ${news.amens.size === 1 ? 'is' : 'are'} praying with you`)
+  const fresh = news && !news.item && (news.replies.size ? (news.replies.size === 1 ? t('New reply') : t('New replies'))
+    : tn(news.amens.size, '{names} is praying with you', '{names} are praying with you', { names: [...news.amens].map(nameOf).join(', ') }))
   return (
     <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '')}>
       {fresh && <p class="c-new-word small">{fresh}</p>}
-      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">New</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at)}</span></div>
+      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at)}</span></div>
       {b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
-        {verse && <button class="link c-ref" onClick={() => open(verse)}>With {verseLabel(verse)}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
+        {verse && <button class="link c-ref" onClick={() => open(verse)}>{t('With {verse}', { verse: verseLabel(verse) })}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
         {verse && <Passage shown={shown} small from={nameOf(item.by)} />}
         {b.note && <p class="c-note">{b.note}</p>}
       </> : b.k === 'note' ? <>
@@ -728,35 +732,35 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
         <ul class="c-replies">
           {item.replies.map(r => (
             <li class={news?.replies.has(r.id) ? 'c-new-reply' : ''}><strong>{nameOf(r.by)}</strong> {r.text}
-              {r.by === me && <button class="link small" disabled={busy} aria-label="Remove your reply" onClick={act(() => removeReply(circle, item.id, r.id))}>Remove</button>}</li>
+              {r.by === me && <button class="link small" disabled={busy} aria-label={t('Remove your reply')} onClick={act(() => removeReply(circle, item.id, r.id))}>{t('Remove')}</button>}</li>
           ))}
         </ul>
       )}
       {writing && (
         <div class="c-reply">
-          <textarea rows={2} maxLength={1000} value={said} placeholder={b.k === 'prayer' ? 'Pray with them in a few words…' : 'Write back…'}
+          <textarea rows={2} maxLength={1000} value={said} placeholder={b.k === 'prayer' ? t('Pray with them in a few words…') : t('Write back…')}
             autoFocus onInput={e => setSaid((e.target as HTMLTextAreaElement).value)} />
           <div class="c-row">
-            <button class="c-btn small primary" disabled={busy || !said.trim()} onClick={send}>{busy ? 'Sending…' : 'Send'}</button>
-            <button class="c-btn small" onClick={() => { setWriting(false); setSaid('') }}>Cancel</button>
+            <button class="c-btn small primary" disabled={busy || !said.trim()} onClick={send}>{busy ? t('Sending…') : t('Send')}</button>
+            <button class="c-btn small" onClick={() => { setWriting(false); setSaid('') }}>{t('Cancel')}</button>
           </div>
         </div>
       )}
       <div class="c-item-foot">
         <button class={'c-amen' + (prayed ? ' on' : '')} aria-pressed={prayed} disabled={busy} onClick={act(() => amen(circle, item.id, !prayed))}
-          title={names.length ? `Praying with you: ${names.join(', ')}` : 'Praying with you'}>
-          🙏 {prayed ? 'Praying' : 'Pray with'}{names.length ? ` · ${names.length}` : ''}
+          title={names.length ? t('Praying with you: {names}', { names: names.join(', ') }) : t('Praying with you')}>
+          🙏 {prayed ? t('Praying') : t('Pray with')}{names.length ? ` · ${names.length}` : ''}
         </button>
-        {!writing && <button class="c-amen" onClick={() => setWriting(true)}>Reply</button>}
+        {!writing && <button class="c-amen" onClick={() => setWriting(true)}>{t('Reply')}</button>}
         {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
-          ? <button class="link small" onClick={keepNote}>Keep note</button>
-          : !bookmarked && <button class="link small" onClick={bookmark}>Bookmark</button>)}
+          ? <button class="link small" onClick={keepNote}>{t('Keep note')}</button>
+          : !bookmarked && <button class="link small" onClick={bookmark}>{t('Bookmark')}</button>)}
         <span class="spacer" />
         {mine && (confirm
-          ? <><button class="c-btn small" onClick={() => setConfirm(false)}>Keep</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>Remove for everyone</button></>
-          : <button class="link small" onClick={() => setConfirm(true)}>Remove</button>)}
+          ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
+          : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
       </div>
-      {names.length > 0 && <p class="muted small c-who">Praying: {names.join(', ')}</p>}
+      {names.length > 0 && <p class="muted small c-who">{t('Praying: {names}', { names: names.join(', ') })}</p>}
       {kept && <p class="muted small">{kept}</p>}
       {err && <p class="note small">{err}</p>}
     </li>
@@ -796,12 +800,12 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
   const total = item.body.k === 'prayer' ? item.body.ms : 0
   return (
     <div class="c-prayer">
-      <button class="c-play" aria-label={state === 'idle' ? 'Play this prayer' : 'Stop'} onClick={play}>
+      <button class="c-play" aria-label={state === 'idle' ? t('Play this prayer') : t('Stop')} onClick={play}>
         {state === 'idle'
           ? <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
           : <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>}
       </button>
-      <span>A prayer <span class="muted">· {state === 'loading' ? 'Opening…' : state === 'playing' ? `${duration(pos)} / ${duration(total)}` : duration(total)}</span></span>
+      <span>{t('A prayer')} <span class="muted">· {state === 'loading' ? t('Opening…') : state === 'playing' ? `${duration(pos)} / ${duration(total)}` : duration(total)}</span></span>
     </div>
   )
 }
@@ -826,7 +830,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const theNote = 'verse' in request && request.note && !notes.some(x => x.id === noteId) ? request.note : notes.find(x => x.id === noteId)?.n
   useEffect(() => {
     keptCircles().then(cs => { setList(cs); setPick(cs[0]?.id ?? '') })
-    if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `Your prayer · ${duration(p.ms)}${p.verse ? ` · ${verseLabel(p.verse)}` : ''}` : ''))
+    if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${p.verse ? ` · ${verseLabel(p.verse)}` : ''}` : ''))
     else setWhat(verseLabel(request.verse))
   }, [])
   const circle = list?.find(c => c.id === pick)
@@ -848,18 +852,18 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
       }
       setDone(true)
       setTimeout(onClose, 900)
-    } catch (e) { setMsg(navigator.onLine === false ? 'You’re offline. Share again once you’re connected.' : message(e)) } finally { setBusy(false) }
+    } catch (e) { setMsg(navigator.onLine === false ? t('You’re offline. Share again once you’re connected.') : message(e)) } finally { setBusy(false) }
   }
   const canNote = notes.length > 0 || ('verse' in request && !!request.note)
   return (
-    <Sheet title="Share with your circle" onClose={onClose}>
+    <Sheet title={t('Share with your circle')} onClose={onClose}>
       <div class="c-share">
         <p><strong>{what}</strong></p>
         {'verse' in request && <>
-          <div class="seg c-pick" role="radiogroup" aria-label="Share as">
-            <button role="radio" aria-checked={kind === 'verse'} class={kind === 'verse' ? 'on' : ''} onClick={() => setKind('verse')}>Verse</button>
-            <button role="radio" aria-checked={kind === 'bookmark'} class={kind === 'bookmark' ? 'on' : ''} onClick={() => setKind('bookmark')}>Bookmark</button>
-            {canNote && <button role="radio" aria-checked={kind === 'note'} class={kind === 'note' ? 'on' : ''} onClick={() => setKind('note')}>My note</button>}
+          <div class="seg c-pick" role="radiogroup" aria-label={t('Share as')}>
+            <button role="radio" aria-checked={kind === 'verse'} class={kind === 'verse' ? 'on' : ''} onClick={() => setKind('verse')}>{t('Verse')}</button>
+            <button role="radio" aria-checked={kind === 'bookmark'} class={kind === 'bookmark' ? 'on' : ''} onClick={() => setKind('bookmark')}>{t('Bookmark')}</button>
+            {canNote && <button role="radio" aria-checked={kind === 'note'} class={kind === 'note' ? 'on' : ''} onClick={() => setKind('note')}>{t('My note')}</button>}
           </div>
           {kind === 'note' && notes.length > 1 && (
             <ul class="c-notes">{notes.map(x => (
@@ -868,18 +872,18 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           )}
           {kind === 'note' && notes.length <= 1 && theNote && <p class="c-note c-note-main">{theNote}</p>}
           <p class="c-quote small">{request.text}</p>
-          {kind === 'bookmark' && <p class="muted small">They can bookmark it too, with one tap.</p>}
+          {kind === 'bookmark' && <p class="muted small">{t('They can bookmark it too, with one tap.')}</p>}
         </>}
         {list && list.length > 1 && (
-          <div class="seg c-pick" role="radiogroup" aria-label="Circle">
+          <div class="seg c-pick" role="radiogroup" aria-label={t('Circle')}>
             {list.map(c => <button role="radio" aria-checked={pick === c.id} class={pick === c.id ? 'on' : ''} onClick={() => setPick(c.id)}>{c.name}</button>)}
           </div>
         )}
-        {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder="Add a few words (optional)" onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
-        {'prayer' in request && <p class="muted small">Everyone in {circle?.name ?? 'the circle'} will be able to hear this prayer.</p>}
-        <button class="c-btn primary" disabled={busy || done || !pick || (kind === 'note' && !theNote)} onClick={send}>{done ? 'Shared ✓' : busy ? 'Sharing…' : `Share with ${circle?.name ?? 'circle'}`}</button>
+        {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
+        {'prayer' in request && <p class="muted small">{circle ? t('Everyone in {circle} will be able to hear this prayer.', { circle: circle.name }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
+        <button class="c-btn primary" disabled={busy || done || !pick || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…') : circle ? t('Share with {circle}', { circle: circle.name }) : t('Share with circle')}</button>
         {msg && <p class="note small">{msg}</p>}
-        {list && !list.length && <p class="muted">You’re not in a circle on this device yet. Open 🙏 → Circles.</p>}
+        {list && !list.length && <p class="muted">{t('You’re not in a circle on this device yet. Open Circles, beside 🙏.')}</p>}
       </div>
     </Sheet>
   )

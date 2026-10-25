@@ -1,3 +1,4 @@
+import { N_, t } from './i18n'
 // Talks to the search worker. One worker is shared by the whole app.
 import SearchWorker from './search.worker?worker'
 
@@ -29,3 +30,15 @@ export function call<T>(msg: object, progress?: (m: string) => void): Promise<T>
   })
 }
 
+
+// The parser's own messages, in English there (the worker reads them).
+N_('Nothing to search for'); N_('Invalid regular expression'); N_('Add at least one word to look for, not only words to exclude')
+
+/** A message from the search worker (or the query parser), in your language. */
+export function searchText(m: string): string {
+  const quoted = m.match(/^(Ignored|Unknown book or section) "(.*)"$/)
+  if (quoted) return quoted[1] === 'Ignored' ? t('Ignored “{word}”', { word: quoted[2] }) : t('Unknown book or section “{word}”', { word: quoted[2] })
+  const searching = m.match(/^Searching (.+)…$/)
+  if (searching) return t('Searching {version}…', { version: searching[1] })
+  return t(m)
+}

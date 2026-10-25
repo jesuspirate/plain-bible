@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { BOOKS, SCOPES, bookById } from './lib/books'
+import { BOOKS, SCOPES, bookAbbr, bookName } from './lib/books'
 import { parseQuery, queryStrongs, SearchOptions } from './lib/query'
 import { formatRef, parseRef } from './lib/refs'
 import { plain } from './lib/text'
@@ -7,8 +7,9 @@ import { copyText } from './lib/native'
 import { go, readPath, Route, useApp } from './state'
 import { LexiconSheet, VerseText, VersionPicker } from './ui'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { call } from './searchClient'
+import { call, searchText } from './searchClient'
 import { rememberSearch } from './searchbar'
+import { locale, t, tn } from './i18n'
 
 const PAGE = 40
 
@@ -61,16 +62,16 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
   useEffect(() => {
     setResult(undefined); setShown([]); setLimit(PAGE); setError('')
     if (!q.trim() || !versions.length) return
-    document.title = `${q} · Search · Quiet Bible`
+    document.title = `${q} · ${t('Search')} · Quiet Bible`
     if (versions.join() !== settings.searchVersions.join()) update({ searchVersions: versions })
     rememberSearch(q.trim())
     let books = scopeBooks()
     if (bookFilter) books = [bookFilter]
-    setBusy('Searching…')
+    setBusy(t('Searching…'))
     let stale = false
-    call<SearchResponse>({ type: 'search', base: data.url(''), query: q, versions, langs, options: opts, books }, m => !stale && setBusy(m))
+    call<SearchResponse>({ type: 'search', base: data.url(''), query: q, versions, langs, options: opts, books }, m => !stale && setBusy(searchText(m)))
       .then(r => { if (!stale) { setResult(r); setBusy('') } })
-      .catch(e => { if (!stale) { setError(e.message); setBusy('') } })
+      .catch(e => { if (!stale) { setError(searchText(e.message)); setBusy('') } })
     return () => { stale = true }
   }, [q, versions.join(), scope, bookFilter, JSON.stringify(opts)])
 
@@ -103,28 +104,28 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
   const setOpt = (k: keyof SearchOptions, v: boolean) => update({ searchOptions: { ...opts, [k]: v } })
 
   const copyAll = async () => {
-    const lines = shown.map(v => `${formatRef(v)} ${v.texts.map(t => `(${t.version}) ${plain(t.text)}`).join(' ')}`)
+    const lines = shown.map(v => `${formatRef(v)} ${v.texts.map(x => `(${x.version}) ${plain(x.text)}`).join(' ')}`)
     try { await copyText(lines.join('\n')) } catch { /* ignore */ }
   }
 
   return (
     <div class="search">
       <form class="searchbar" onSubmit={submit}>
-        <input ref={inputRef} type="search" enterKeyHint="search" value={input} placeholder='Words, "a phrase", John 3:16, H430…'
-          aria-label="Search" onInput={e => setInput((e.target as HTMLInputElement).value)} />
-        <button class="primary" type="submit">Search</button>
+        <input ref={inputRef} type="search" enterKeyHint="search" value={input} placeholder={t('Words, “a phrase”, John 3:16, H430…')}
+          aria-label={t('Search')} onInput={e => setInput((e.target as HTMLInputElement).value)} />
+        <button class="primary" type="submit">{t('Search')}</button>
       </form>
 
       <div class="filters">
-        <button class="pick" onClick={() => setPicker(true)} title="Versions to search">In: {versions.join(', ') || 'choose versions'} ▾</button>
-        <select value={scope.startsWith('range:') ? 'range' : scope} aria-label="Books to search"
+        <button class="pick" onClick={() => setPicker(true)} title={t('Versions to search')}>{t('In: {versions}', { versions: versions.join(', ') || t('choose versions') })} ▾</button>
+        <select value={scope.startsWith('range:') ? 'range' : scope} aria-label={t('Books to search')}
           onChange={e => {
             const v = (e.target as HTMLSelectElement).value
             setParams({ s: v === 'range' ? 'range:Gen-Rev' : v, b: undefined })
           }}>
-          <option value="">Whole Bible</option>
-          {SCOPE_KEYS.map(k => <option value={k}>{k === 'acts' ? 'Acts' : SCOPES[k].label}</option>)}
-          <option value="range">Book range…</option>
+          <option value="">{t('Whole Bible')}</option>
+          {SCOPE_KEYS.map(k => <option value={k}>{k === 'acts' ? bookName('Acts') : t(SCOPES[k].label)}</option>)}
+          <option value="range">{t('Book range…')}</option>
         </select>
         {scope.startsWith('range:') && <RangePicker value={scope.slice(6)} onChange={r => setParams({ s: 'range:' + r, b: undefined })} />}
       </div>
@@ -133,30 +134,30 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
 
       {ref && (
         <button class="goto" onClick={() => go(readPath(versions[0] ?? settings.version, ref.book, ref.chapter, ref.verse))}>
-          Go to {formatRef(ref)} →
+          {t('Go to {ref}', { ref: formatRef(ref) })} →
         </button>
       )}
 
-      {parsed.errors.length > 0 && q && <p class="warn">{parsed.errors.join('. ')}</p>}
+      {parsed.errors.length > 0 && q && <p class="warn">{parsed.errors.map(searchText).join('. ')}</p>}
       {error && <p class="error">{error}</p>}
       {busy && <p class="muted">{busy}</p>}
 
       {result && !(ref && total === 0) && (
         <>
           <div class="summary">
-            <strong>{total.toLocaleString()}</strong> {total === 1 ? 'verse' : 'verses'}
-            {versions.length > 1 && <span class="muted"> ({versions.map((v, i) => `${v}: ${result.perVersion[i].toLocaleString()}`).join(' · ')})</span>}
+            <strong>{total.toLocaleString(locale())}</strong> {tn(total, 'verse', 'verses')}
+            {versions.length > 1 && <span class="muted"> ({versions.map((v, i) => `${v}: ${result.perVersion[i].toLocaleString(locale())}`).join(' · ')})</span>}
             <span class="muted small"> · {result.ms} ms</span>
-            {result.loose && total > 0 && <span class="muted small"> · {q.trim().split(/\s+/).length > 1 ? 'best matches first, close wording included' : 'all forms of the word'}</span>}
-            {bookFilter && <button class="chip" onClick={() => setParams({ b: undefined })}>{bookById(bookFilter).name} ✕</button>}
-            {total > 0 && <button class="link small" onClick={copyAll} title="Copy the results shown below">Copy shown</button>}
+            {result.loose && total > 0 && <span class="muted small"> · {q.trim().split(/\s+/).length > 1 ? t('best matches first, close wording included') : t('all forms of the word')}</span>}
+            {bookFilter && <button class="chip" onClick={() => setParams({ b: undefined })}>{bookName(bookFilter)} ✕</button>}
+            {total > 0 && <button class="link small" onClick={copyAll} title={t('Copy the results shown below')}>{t('Copy shown')}</button>}
           </div>
 
           {total > 0 && !bookFilter && Object.keys(result.perBook).length > 1 && (
-            <div class="dist" role="list" aria-label="Results by book">
+            <div class="dist" role="list" aria-label={t('Results by book')}>
               {BOOKS.filter(b => result.perBook[b.id]).map(b => (
-                <button role="listitem" class="bar" title={`${b.name}: ${result.perBook[b.id]}`} onClick={() => setParams({ b: b.id })}>
-                  <span class="bar-label">{b.abbr}</span>
+                <button role="listitem" class="bar" title={`${bookName(b.id)}: ${result.perBook[b.id]}`} onClick={() => setParams({ b: b.id })}>
+                  <span class="bar-label">{bookAbbr(b.id)}</span>
                   <span class="bar-fill" style={{ width: `${(result.perBook[b.id] / maxCount) * 100}%` }} />
                   <span class="bar-n">{result.perBook[b.id]}</span>
                 </button>
@@ -168,12 +169,12 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
             {shown.map(v => (
               <li>
                 <a class="ref" href={'#/' + readPath(versions[0], v.book, v.chapter, v.verse)}>{formatRef(v)}</a>
-                {v.texts.map(t => {
-                  const tv = byId.get(t.version)
+                {v.texts.map(x => {
+                  const tv = byId.get(x.version)
                   return (
-                    <p class={'hit' + (t.matched ? '' : ' nomatch')} dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
-                      {versions.length > 1 && <span class="vtag">{t.version}</span>}
-                      <VerseText raw={t.text} ranges={t.ranges} strongs={!!tv?.strongs && (settings.strongs || mark.length > 0)} mark={mark} onStrongs={setLex} />
+                    <p class={'hit' + (x.matched ? '' : ' nomatch')} dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
+                      {versions.length > 1 && <span class="vtag">{x.version}</span>}
+                      <VerseText raw={x.text} ranges={x.ranges} strongs={!!tv?.strongs && (settings.strongs || mark.length > 0)} mark={mark} onStrongs={setLex} />
                     </p>
                   )
                 })}
@@ -181,14 +182,14 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
             ))}
           </ol>
           {shown.length < total && shown.length >= limit - 0 && (
-            <button class="more" onClick={() => setLimit(l => l + PAGE)}>Show more ({(total - shown.length).toLocaleString()} left)</button>
+            <button class="more" onClick={() => setLimit(l => l + PAGE)}>{t('Show more ({n} left)', { n: total - shown.length })}</button>
           )}
         </>
       )}
 
       {!q && !help && <SearchHelp onPick={onGo && (x => setParams({ q: x, b: undefined }))} />}
 
-      {picker && <VersionPicker title="Search in" multi selected={versions} onClose={() => setPicker(false)}
+      {picker && <VersionPicker title={t('Search in')} multi selected={versions} onClose={() => setPicker(false)}
         onChange={ids => ids.length && setParams({ v: ids.join(',') })} />}
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); setParams({ q: n, b: undefined }) }} />}
     </div>
@@ -199,12 +200,12 @@ function RangePicker({ value, onChange }: { value: string; onChange: (v: string)
   const [a, b] = value.split('-')
   return (
     <span class="range">
-      <select value={a} aria-label="From book" onChange={e => onChange(`${(e.target as HTMLSelectElement).value}-${b}`)}>
-        {BOOKS.map(x => <option value={x.id}>{x.name}</option>)}
+      <select value={a} aria-label={t('From book')} onChange={e => onChange(`${(e.target as HTMLSelectElement).value}-${b}`)}>
+        {BOOKS.map(x => <option value={x.id}>{bookName(x.id)}</option>)}
       </select>
       –
-      <select value={b} aria-label="To book" onChange={e => onChange(`${a}-${(e.target as HTMLSelectElement).value}`)}>
-        {BOOKS.map(x => <option value={x.id}>{x.name}</option>)}
+      <select value={b} aria-label={t('To book')} onChange={e => onChange(`${a}-${(e.target as HTMLSelectElement).value}`)}>
+        {BOOKS.map(x => <option value={x.id}>{bookName(x.id)}</option>)}
       </select>
     </span>
   )
@@ -220,13 +221,13 @@ function SearchHelp({ onPick }: { onPick?: (q: string) => void }) {
     <div class="help">
       <table>
         <tbody>
-          {ex('faith', 'the whole word, any case or accent')}
-          {ex('no weapons formed against me', 'type a verse as you remember it: any form of a word, any accents, small slips, best matches first')}
-          {ex('l’Éternel est mon berger', 'in any language you read')}
-          {ex('John 3:16', 'a reference jumps straight to the passage')}
+          {ex(t('faith'), t('the whole word, any case or accent'))}
+          {ex(t('no weapons formed against me'), t('type a verse as you remember it: any form of a word, any accents, small slips, best matches first'))}
+          {ex(t('l’Éternel est mon berger'), t('in any language you read'))}
+          {ex(t('John 3:16'), t('a reference jumps straight to the passage'))}
         </tbody>
       </table>
-      <p class="muted small">Pick several versions to search them all at once. Tap a bar in the results chart to narrow to one book. For an exact phrase, put it in "quotes".</p>
+      <p class="muted small">{t('Pick several versions to search them all at once. Tap a bar in the results chart to narrow to one book. For an exact phrase, put it in “quotes”.')}</p>
     </div>
   )
 }

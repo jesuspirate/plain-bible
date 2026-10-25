@@ -1,6 +1,6 @@
 import { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { BOOKS, BOOK_INDEX, bookById } from './lib/books'
+import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
@@ -16,6 +16,7 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canListen, startListening } from './listen'
+import { locale, t, tn } from './i18n'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -65,7 +66,7 @@ export function Reader({ route }: { route: Route }) {
     Promise.all(versions.map(v => data.bible(v)))
       .then(bs => setBibles(Object.fromEntries(bs.map(b => [b.id, b]))))
       .catch(e => setError(navigator.onLine === false || e instanceof TypeError
-        ? `${versions.filter(v => !bibles[v]).join(', ') || version} isn’t saved on this device yet. Connect to the internet once and it stays available offline.`
+        ? t('{version} isn’t saved on this device yet. Connect to the internet once and it stays available offline.', { version: versions.filter(v => !bibles[v]).join(', ') || version })
         : String(e.message || e)))
   }, [versions.join(), retry])
   useEffect(() => {
@@ -207,15 +208,15 @@ export function Reader({ route }: { route: Route }) {
     addEventListener(PICK_EVENT, on)
     return () => removeEventListener(PICK_EVENT, on)
   }, [])
-  useEffect(() => { if (tied) { const t = setTimeout(() => setTied(''), 3000); return () => clearTimeout(t) } }, [tied])
+  useEffect(() => { if (tied) { const timer = setTimeout(() => setTied(''), 3000); return () => clearTimeout(timer) } }, [tied])
   const tieVerse = (id: string, v: number) => {
     const verse = { book, chapter, verses: [v] }
     awaitVerse(undefined)
     // Prayers load only once you've prayed, so reading never waits on them.
     import('./lib/prayers').then(m => m.prayers.setVerse(id, verse)).then(() => {
-      setTied(`Your prayer is tied to ${verseLabel(verse)}.`)
+      setTied(t('Your prayer is tied to {verse}.', { verse: verseLabel(verse) }))
       import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {})
-    }, () => setTied('That prayer is no longer on this device.'))
+    }, () => setTied(t('That prayer is no longer on this device.')))
   }
 
   const nav = (b: string, c: number, v?: number) => go(readPath(version, b, c, v, parallel))
@@ -252,7 +253,7 @@ export function Reader({ route }: { route: Route }) {
     return <>
       {mark(v)?.b && <BookmarkIcon class="bm-mark" />}
       {(ns.length > 0 || editing === v) && (
-        <button class="note-mark" aria-label={ns.length > 1 ? `${ns.length} notes on verse ${v}` : `Note on verse ${v}`} title={ns[0]?.n} onClick={e => { e.stopPropagation(); openNote([v], true) }}>
+        <button class="note-mark" aria-label={ns.length > 1 ? t('{n} notes on verse {v}', { n: ns.length, v }) : t('Note on verse {v}', { v })} title={ns[0]?.n} onClick={e => { e.stopPropagation(); openNote([v], true) }}>
           <NoteIcon />
         </button>
       )}
@@ -514,7 +515,7 @@ export function Reader({ route }: { route: Route }) {
 
   const rows = loaded ? Math.max(...versions.map(v => bibles[v].books[book]?.[chapter - 1]?.length ?? 0)) : 0
   const showStrongs = settings.strongs
-  const t = byId.get(version)
+  const info = byId.get(version)
 
   // Your notes on this chapter: a quiet line under the title, there only
   // when you have some. Tap it for the list.
@@ -523,8 +524,8 @@ export function Reader({ route }: { route: Route }) {
   const reminder = (inChapter.length > 0 || elsewhere.length > 0) && (
     <button class="chapter-notes" onClick={() => setChapterSheet(true)}>
       <NoteIcon size={18} />
-      <span>{[inChapter.length && `${inChapter.length} ${inChapter.length === 1 ? 'note' : 'notes'} here`,
-        elsewhere.length && `${elsewhere.length} elsewhere`].filter(Boolean).join(' · ')}</span>
+      <span>{[inChapter.length && tn(inChapter.length, '{n} note here', '{n} notes here'),
+        elsewhere.length && t('{n} elsewhere', { n: elsewhere.length })].filter(Boolean).join(' · ')}</span>
     </button>
   )
   const goNote = (x: LinkedNote) => go(readPath(version, x.book, x.chapter, x.verse, parallel))
@@ -548,13 +549,13 @@ export function Reader({ route }: { route: Route }) {
     }
     const lex = live ? setLex : undefined
     return <>
-      <h1 class="chapter-title"><span class="ct-book">{bookById(b).name}</span> <span class="ct-num">{c}</span></h1>
+      <h1 class="chapter-title"><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
       {live && reminder}
       {versions.length > 1 && (
         <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
       )}
       {versions.length === 1 && settings.layout === 'paragraph' ? (
-        <p class="para" dir={t?.rtl ? 'rtl' : undefined} lang={t?.lang}>
+        <p class="para" dir={info?.rtl ? 'rtl' : undefined} lang={info?.lang}>
           {primary.books[b][c - 1].map((raw, i) => raw && (
             <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
               <sup class="vn">{i + 1}</sup>{after(i + 1)}
@@ -569,7 +570,7 @@ export function Reader({ route }: { route: Route }) {
             const tv = byId.get(v)
             return (
               <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
-                <button class="vn" aria-label={`Verse ${i + 1} options`} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
+                <button class="vn" aria-label={t('Verse {v} options', { v: i + 1 })} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
                 {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span> : <span class="muted">—</span>}
               </div>
             )
@@ -581,9 +582,9 @@ export function Reader({ route }: { route: Route }) {
 
   return (
     <div class="reader">
-      {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>Try again</button></p></div>}
-      {!loaded && !error && <p class="muted center">Loading…</p>}
-      {loaded && rows === 0 && <p class="muted center">{t?.name} does not include {bookById(book).name} {chapter}.</p>}
+      {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>{t('Try again')}</button></p></div>}
+      {!loaded && !error && <p class="muted center">{t('Loading…')}</p>}
+      {loaded && rows === 0 && <p class="muted center">{t('{version} does not include {book} {chapter}.', { version: info?.name ?? version, book: bookName(book), chapter: String(chapter) })}</p>}
 
       {loaded && rows > 0 && (
         <article key={`${book}.${chapter}`} ref={article}
@@ -603,31 +604,31 @@ export function Reader({ route }: { route: Route }) {
       )}
 
       <nav class="pager">
-        <button onClick={() => turn(-1)}><span aria-hidden="true">‹</span> Previous</button>
-        <button onClick={() => turn(1)}>Next <span aria-hidden="true">›</span></button>
+        <button onClick={() => turn(-1)}><span aria-hidden="true">‹</span> {t('Previous')}</button>
+        <button onClick={() => turn(1)}>{t('Next')} <span aria-hidden="true">›</span></button>
       </nav>
-      {t && <p class="credit muted small">{t.name}. {t.license}.</p>}
+      {info && <p class="credit muted small">{info.name}. {info.license}.</p>}
 
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
       {picking && (
         <div class="pick-verse" role="status">
-          <span><span aria-hidden="true">{'🙏' + settings.prayTone} </span>Tap a verse for your prayer</span>
-          <button class="small" onClick={() => awaitVerse(undefined)}>Cancel</button>
+          <span><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap a verse for your prayer')}</span>
+          <button class="small" onClick={() => awaitVerse(undefined)}>{t('Cancel')}</button>
         </div>
       )}
       {tied && <div class="pick-verse done" role="status">{tied}</div>}
-      {noteFor && <NotesSheet book={book} chapter={chapter} version={version} {...noteFor} dir={t?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
+      {noteFor && <NotesSheet book={book} chapter={chapter} version={version} {...noteFor} dir={info?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
         text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
       {chapterSheet && (
-        <Sheet title={`Your notes · ${bookById(book).name} ${chapter}`} onClose={() => setChapterSheet(false)}>
+        <Sheet title={`${t('Your notes')} · ${bookName(book)} ${chapter}`} onClose={() => setChapterSheet(false)}>
           {inChapter.length > 0 && <>
-            <h3 class="notes-head">In this chapter</h3>
+            <h3 class="notes-head">{t('In this chapter')}</h3>
             <NoteCards notes={inChapter} book={book} chapter={chapter} onPick={x => { setChapterSheet(false); toVerse(x.verse); setNoteFor({ verses: x.verses, start: { key: x.key, id: x.id } }) }} />
           </>}
           {elsewhere.length > 0 && <>
-            <h3 class="notes-head">From your other notes</h3>
+            <h3 class="notes-head">{t('From your other notes')}</h3>
             <NoteCards notes={elsewhere} onPick={x => { setChapterSheet(false); goNote(x as LinkedNote) }} />
           </>}
         </Sheet>
@@ -665,7 +666,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const [note, setNote] = useState('')
   const version = versions[0]
   const keys = verses.map(v => markKey(book, chapter, v))
-  const ref = `${bookById(book).name} ${chapter}:${verseRanges(verses)}`
+  const ref = `${bookName(book)} ${chapter}:${verseRanges(verses)}`
   const colors = new Set(keys.map(k => marks[k]?.c).filter(Boolean))
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
@@ -696,7 +697,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const std = toStandard(bibles[version], { book, chapter, verses })
   const link = shareLink(`#/${sharedPath(version, std.book, std.chapter, std.verses[0])}`)
   const copy = async (s: string) => {
-    try { await copyText(s); setNote('Copied') } catch { setNote('Copy failed') }
+    try { await copyText(s); setNote(t('Copied')) } catch { setNote(t('Copy failed')) }
   }
   const showCompare = () => {
     const ids = settings.myVersions.filter(id => byId.get(id)?.books.includes(book))
@@ -705,36 +706,36 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
 
   return (
     <>
-      <div class="selbar" role="toolbar" aria-label={`${ref} selected`}>
+      <div class="selbar" role="toolbar" aria-label={t('{ref} selected', { ref })}>
         <div class="selbar-head">
           <strong>{ref}</strong>
-          <span class="muted small">{verses.length > 1 ? `${verses.length} verses` : 'Tap more verses to add them'}</span>
+          <span class="muted small">{verses.length > 1 ? tn(verses.length, '{n} verse', '{n} verses') : t('Tap more verses to add them')}</span>
           <span class="spacer" />
-          <button class="close-btn" aria-label="Clear selection" onClick={onClose}><CloseIcon size={22} /></button>
+          <button class="close-btn" aria-label={t('Clear selection')} onClick={onClose}><CloseIcon size={22} /></button>
         </div>
-        <div class="swatches" role="radiogroup" aria-label="Highlight color">
+        <div class="swatches" role="radiogroup" aria-label={t('Highlight color')}>
           {PALETTE.map(p => (
-            <button role="radio" aria-checked={current === p.color} aria-label={p.name} class={'swatch' + (current === p.color ? ' on' : '')}
+            <button role="radio" aria-checked={current === p.color} aria-label={t(p.name)} class={'swatch' + (current === p.color ? ' on' : '')}
               style={{ background: p.color }} onClick={() => { if (current !== p.color) rememberColor(p.color); apply({ c: current === p.color ? null : p.color }); onClose() }}>
               {current === p.color && <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>}
             </button>
           ))}
-          {colors.size > 0 && <button class="swatch none" aria-label="Remove highlight" onClick={() => { apply({ c: null }); onClose() }}>✕</button>}
+          {colors.size > 0 && <button class="swatch none" aria-label={t('Remove highlight')} onClick={() => { apply({ c: null }); onClose() }}>✕</button>}
         </div>
         <div class="actions">
           <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { apply({ b: allBookmarked ? null : 1 }); onClose() }}>
-            <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? 'Saved' : 'Bookmark'}</span>
+            <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
           </button>
-          <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>Note</span></button>
+          <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
           {canListen && <button onClick={() => { startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }, bibles[version]); onClose() }}>
-            <SpeakerIcon size={22} /><span>Listen</span></button>}
-          <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>Copy</span></button>
+            <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
+          <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
           {canShare
-            ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>Share</span></button>
-            : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>Link</span></button>}
-          <button onClick={showCompare}><CompareIcon size={22} /><span>Compare</span></button>
-          <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>Pray</span></button>
-          {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>Circle</span></button>}
+            ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>{t('Share')}</span></button>
+            : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>{t('Link')}</span></button>}
+          <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
+          <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
+          {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>{t('Circle')}</span></button>}
         </div>
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
@@ -782,11 +783,11 @@ export function NotesSheet({ book, chapter, version, verses, start, text, dir, l
     if (start) return { ...start, verses: list.find(x => x.id === start.id)?.verses ?? verses }
   })
   const fromList = useRef(!editing)
-  const ref = (vs: number[]) => `${bookById(book).name} ${chapter}:${verseRanges(vs)}`
+  const ref = (vs: number[]) => `${bookName(book)} ${chapter}:${verseRanges(vs)}`
   const passage = (vs: number[]) => <Passage verses={vs} text={text} dir={dir} />
   const done = () => fromList.current ? setEditing(undefined) : onClose()
   return (
-    <Sheet title={editing ? `Note · ${ref(editing.verses)}` : `${list.length > 1 ? 'Notes' : 'Note'} · ${ref(verses)}`} onClose={onClose}>
+    <Sheet title={editing ? `${t('Note')} · ${ref(editing.verses)}` : `${list.length > 1 ? t('Notes') : t('Note')} · ${ref(verses)}`} onClose={onClose}>
       {editing ? <NoteEditor key={editing.id} at={editing.key} id={editing.id} verses={editing.verses} passage={passage(editing.verses)} onDone={done} onShare={share} /> : <>
       {passage(verses)}
       <ul class="note-list">
@@ -794,19 +795,19 @@ export function NotesSheet({ book, chapter, version, verses, start, text, dir, l
           <li><button class="note-card" onClick={() => setEditing(x)}>
             <span class="nc-meta muted small">
               {x.verses.join() !== verses.join() && <strong>{ref(x.verses)} · </strong>}
-              {new Date(x.c).toLocaleDateString(undefined, { day: 'numeric', month: 'short', year: new Date(x.c).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' })}
+              {new Date(x.c).toLocaleDateString(locale(), { day: 'numeric', month: 'short', year: new Date(x.c).getFullYear() === new Date().getFullYear() ? undefined : 'numeric' })}
             </span>
             <span class="nc-text">{x.n}</span>
           </button></li>
         ))}
       </ul>
       <div class="row">
-        <button class="primary" onClick={() => setEditing(fresh())}>+ Add note</button>
+        <button class="primary" onClick={() => setEditing(fresh())}>+ {t('Add note')}</button>
       </div>
       {links && onGo && (() => {
         const more = related(links, book, chapter, list, verses)
         return more.length > 0 && <>
-          <h3 class="notes-head">Also in your notes</h3>
+          <h3 class="notes-head">{t('Also in your notes')}</h3>
           <NoteCards notes={more} onPick={x => onGo(x as LinkedNote)} />
         </>
       })()}
@@ -825,8 +826,8 @@ function NoteCards({ notes, book, chapter, onPick }: {
         <li><button class="note-card" onClick={() => onPick(x)}>
           <span class="nc-meta muted small">
             <strong>{x.book && (x.book !== book || x.chapter !== chapter)
-              ? `${bookById(x.book).name} ${x.chapter}:${verseRanges(x.verses)}`
-              : `${x.verses.length > 1 ? 'Verses' : 'Verse'} ${verseRanges(x.verses)}`}</strong>
+              ? `${bookName(x.book)} ${x.chapter}:${verseRanges(x.verses)}`
+              : `${x.verses.length > 1 ? t('Verses') : t('Verse')} ${verseRanges(x.verses)}`}</strong>
             {x.why && ` · ${x.why}`}
           </span>
           <span class="nc-text">{x.n}</span>
@@ -849,7 +850,7 @@ function Passage({ verses, text, dir }: { verses: number[]; text: (v: number) =>
         {shown.map(([v, s]) => <span class="np-verse">{verses.length > 1 && <sup>{v}</sup>}{s} </span>)}
       </blockquote>
       {long && <button class="link np-more" onClick={() => setFull(f => !f)} aria-expanded={full}>
-        {full ? 'Show less' : `Show all ${shown.length > 1 ? shown.length + ' verses' : 'of the verse'}`}</button>}
+        {full ? t('Show less') : shown.length > 1 ? t('Show all {n} verses', { n: shown.length }) : t('Show all of the verse')}</button>}
     </figure>
   )
 }
@@ -869,7 +870,7 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
     setMarks(m => setNote(m, markK, id, s, undefined, verses))
   }
   useEffect(() => { if (!draft) area.current?.focus() }, [])
-  useEffect(() => { const t = setTimeout(() => save(draft), 600); return () => clearTimeout(t) }, [draft])
+  useEffect(() => { const timer = setTimeout(() => save(draft), 600); return () => clearTimeout(timer) }, [draft])
   // Switching away (or an app update reloading the page) mustn't lose the
   // last words typed.
   const latest = useRef(draft)
@@ -887,12 +888,12 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
   return (
     <>
       {passage}
-      <textarea ref={area} class="note-text" rows={6} placeholder={verses.length > 1 ? 'Write a note on these verses…' : 'Write a note on this verse…'} value={draft}
+      <textarea ref={area} class="note-text" rows={6} placeholder={verses.length > 1 ? t('Write a note on these verses…') : t('Write a note on this verse…')} value={draft}
         onInput={e => setDraft((e.target as HTMLTextAreaElement).value)} />
       <div class="row">
-        <button class="primary" onClick={onDone}>Done</button>
-        {onShare && draft.trim() && <button onClick={() => { save(draft); onShare(draft.trim(), verses) }}><CircleIcon size={18} /> Share with circle</button>}
-        {saved.current && <button onClick={() => { latest.current = ''; save(''); onDone() }}>Delete note</button>}
+        <button class="primary" onClick={onDone}>{t('Done')}</button>
+        {onShare && draft.trim() && <button onClick={() => { save(draft); onShare(draft.trim(), verses) }}><CircleIcon size={18} /> {t('Share with circle')}</button>}
+        {saved.current && <button onClick={() => { latest.current = ''; save(''); onDone() }}>{t('Delete note')}</button>}
       </div>
     </>
   )

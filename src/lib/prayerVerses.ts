@@ -1,5 +1,6 @@
 // The verses a prayer is prayed using, and how they're named.
-import { BOOK_INDEX, bookById } from './books'
+import { BOOK_INDEX, bookName } from './books'
+import { t } from '../i18n'
 import { verseRanges } from './refs'
 
 /** Verses a prayer is tied to: one, or several from the same chapter. */
@@ -7,7 +8,7 @@ export interface PrayerVerse { book: string; chapter: number; verses: number[] }
 
 /** "Psalm 34:17", "Philippians 4:6–7" */
 export function verseLabel(v: PrayerVerse) {
-  const name = v.book === 'Ps' ? 'Psalm' : bookById(v.book).name
+  const name = v.book === 'Ps' ? t('Psalm') : bookName(v.book)
   return `${name} ${v.chapter}:${verseRanges(v.verses)}`
 }
 

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { addDays, dayOf, DAYS_EVENT, Days, loadDays, PRAY, streaks } from './lib/streaks'
 import type { ComponentChildren } from 'preact'
 import { BookIcon } from './icons'
+import { t, tn } from './i18n'
 
 /** The days you've read and prayed, as they change. */
 export function useDays() {
@@ -19,7 +20,7 @@ export function useDays() {
   return days
 }
 
-const daysText = (n: number) => n === 1 ? '1 day' : `${n} days`
+const daysText = (n: number) => tn(n, '{n} day', '{n} days')
 
 export function StreakRow() {
   const days = useDays()
@@ -33,14 +34,14 @@ export function StreakRow() {
   return (
     <>
       <button class="set-row streak-row" aria-expanded={why} onClick={() => setWhy(w => !w)}
-        aria-label={`Reading: ${daysText(s.read)} in a row${s.readToday ? ', done today' : ''}. Prayer: ${daysText(s.pray)} in a row${s.prayToday ? ', done today' : ''}. Tap to see how streaks count.`}>
+        aria-label={[t('Reading: {days} in a row', { days: daysText(s.read) }) + (s.readToday ? t(', done today') : ''),
+          t('Prayer: {days} in a row', { days: daysText(s.pray) }) + (s.prayToday ? t(', done today') : ''), t('Tap to see how streaks count.')].join('. ')}>
         <Streak icon={<BookIcon size={24} />} n={s.read} today={s.readToday} />
         <Streak icon="🙏" n={s.pray} today={s.prayToday} />
       </button>
       {why && (
         <p class="set-row streak-why">
-          A day counts when you read for about a minute (scrolling or turning chapters), or pray with 🙏. Today can still be done
-          until midnight, and one missed day a week is forgiven. Nothing reminds you. To share them with a circle, open the circle; to hide them, see Font, layout and more.
+          {t('A day counts when you read for about a minute (scrolling or turning chapters), or pray with 🙏. Today can still be done until midnight, and one missed day a week is forgiven. Nothing reminds you. To share them with a circle, open the circle; to hide them, see Font and layout.')}
         </p>
       )}
     </>

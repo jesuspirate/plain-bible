@@ -4,12 +4,13 @@
 // the verse being read is marked and kept in view, the reader follows into
 // the next chapter, and pausing or stopping is instant.
 import { useEffect, useState } from 'preact/hooks'
-import { BOOKS, BOOK_INDEX, bookById, frenchName } from './lib/books'
+import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import type { Bible } from './lib/data'
 import { plain } from './lib/text'
 import { go, parseHash, readPath } from './state'
 import { CloseIcon, PauseIcon, PlayIcon } from './icons'
 import { Sheet } from './ui'
+import { locale, N_, t } from './i18n'
 
 export interface Spot { version: string; lang: string; book: string; chapter: number; verse: number }
 interface Now extends Spot { playing: boolean; bible: Bible; trouble?: string }
@@ -33,7 +34,7 @@ const rate = () => { const r = Number(get(RATE_KEY)); return RATES.includes(r) ?
  * "Premium", sometimes only in the voice's id. */
 export function quality(v: SpeechSynthesisVoice): '' | 'Enhanced' | 'Premium' {
   const s = v.name + ' ' + v.voiceURI
-  return /premium/i.test(s) ? 'Premium' : /enhanced|natural|neural|wavenet/i.test(s) ? 'Enhanced' : ''
+  return /premium/i.test(s) ? 'Premium' : /enhanced|améliorée|mejorada|natural|neural|wavenet/i.test(s) ? 'Enhanced' : ''
 }
 
 /** The phone's voices for a language, the most natural first, each once. */
@@ -62,28 +63,31 @@ function voiceFor(lang: string): SpeechSynthesisVoice | undefined {
     ?? list.find(v => navigator.onLine || v.localService) ?? list[0]
 }
 
-const bookTitle = (id: string, lang: string) => (lang.startsWith('fr') && frenchName(id)) || bookById(id).name
-const heading = (s: Spot) => s.lang.startsWith('fr')
-  ? `${bookTitle(s.book, s.lang)}, chapitre ${s.chapter}.` : `${bookTitle(s.book, s.lang)}, chapter ${s.chapter}.`
+// Book names and the chapter heading in the language of the Bible being read
+// (they're spoken with its words), not the app's.
+const bookTitle = (id: string, lang: string) => bookName(id, lang.split('-')[0])
+const CHAPTER: Record<string, string> = { fr: 'chapitre', es: 'capítulo' }
+const heading = (s: Spot) => `${bookTitle(s.book, s.lang)}, ${CHAPTER[s.lang.split('-')[0]] ?? 'chapter'} ${s.chapter}.`
+const speechTag = (lang: string) => lang.startsWith('fr') ? 'fr-FR' : lang.startsWith('es') ? 'es-ES' : lang.startsWith('en') ? 'en-US' : lang
 
-const NO_SOUND = 'No sound? Flip the side switch off Silent, then tap play.'
+const NO_SOUND = N_('No sound? Flip the side switch off Silent, then tap play.')
 
 function say(text: string, lang: string, my: number, then: () => void) {
   if (!synth || my !== run) return
   const u = new SpeechSynthesisUtterance(text)
   const v = voiceFor(lang)
   if (v) try { u.voice = v } catch { /* not a voice this browser accepts */ }
-  u.lang = v?.lang ?? (lang.startsWith('fr') ? 'fr-FR' : lang.startsWith('en') ? 'en-US' : lang)
+  u.lang = v?.lang ?? speechTag(lang)
   u.rate = rate()
   // If the phone never starts talking, say so instead of looking busy.
-  const quiet = setTimeout(() => { if (my === run) pauseListening(NO_SOUND) }, 5000)
+  const quiet = setTimeout(() => { if (my === run) pauseListening(t(NO_SOUND)) }, 5000)
   u.onstart = () => clearTimeout(quiet)
   u.onend = () => { clearTimeout(quiet); if (my === run) then() }
   u.onerror = e => {
     clearTimeout(quiet)
     if (my !== run || e.error === 'interrupted' || e.error === 'canceled') return
     // Stay where we were, paused, and say so, rather than vanish.
-    pauseListening(e.error === 'not-allowed' ? 'Tap play to start.' : 'This voice couldn’t speak. Pick another voice.')
+    pauseListening(e.error === 'not-allowed' ? t('Tap play to start.') : t('This voice couldn’t speak. Pick another voice.'))
   }
   synth.speak(u)
 }
@@ -174,14 +178,14 @@ export function ListenPlayer() {
     if (!n) return
     const r = parseHash().path
     if (!(r[0] === 'read' && r[2] === n.book && +r[3] === n.chapter)) return
-    const t = setTimeout(() => {
+    const timer = setTimeout(() => {
       const el = document.getElementById('v' + n.verse)
       if (!el) return
       el.classList.add('speaking')
       const box = el.getBoundingClientRect()
       if (box.top < 90 || box.bottom > innerHeight - 170) scrollTo({ top: scrollY + box.top - innerHeight / 3, behavior: 'smooth' })
     }, 120)
-    return () => clearTimeout(t)
+    return () => clearTimeout(timer)
   }, [n?.book, n?.chapter, n?.verse, !!n])
   useEffect(() => () => { document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking')) }, [])
 
@@ -194,8 +198,8 @@ export function ListenPlayer() {
     if (seen >= 5) return
     put(TIP_KEY, String(seen + 1))
     setTip(true)
-    const t = setTimeout(() => setTip(false), 9000)
-    return () => clearTimeout(t)
+    const timer = setTimeout(() => setTip(false), 9000)
+    return () => clearTimeout(timer)
   }, [!!n])
 
   if (!n) return null
@@ -204,16 +208,16 @@ export function ListenPlayer() {
   const cycle = () => { put(RATE_KEY, String(RATES[(RATES.indexOf(r) + 1) % RATES.length])); redraw(x => x + 1); if (n.playing) begin() }
   return (
     <>
-      <div class="listen" role="region" aria-label="Reading aloud">
-        <button class="listen-play" onClick={() => n.playing ? pauseListening() : begin()} aria-label={n.playing ? 'Pause' : 'Play'}>
+      <div class="listen" role="region" aria-label={t('Reading aloud')}>
+        <button class="listen-play" onClick={() => n.playing ? pauseListening() : begin()} aria-label={n.playing ? t('Pause') : t('Play')}>
           {n.playing ? <PauseIcon size={26} /> : <PlayIcon size={26} />}
         </button>
-        <button class="listen-what" onClick={() => setVoices(true)} aria-label="Choose the voice">
+        <button class="listen-what" onClick={() => setVoices(true)} aria-label={t('Choose the voice')}>
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble || tip ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? 'Flip the side switch off Silent to hear' : voice && !phoneChoice(n.lang) ? voice.name : 'Phone’s own voice')} ▾</span>
+          <span class={n.trouble || tip ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : voice && !phoneChoice(n.lang) ? voice.name : t('Phone’s own voice'))} ▾</span>
         </button>
-        <button class="listen-rate" onClick={cycle} aria-label={`Speed ${r} times. Change`}>{r}×</button>
-        <button class="listen-stop" onClick={stopListening} aria-label="Stop reading aloud"><CloseIcon size={22} /></button>
+        <button class="listen-rate" onClick={cycle} aria-label={t('Speed {rate} times. Change', { rate: r })}>{r.toLocaleString(locale())}×</button>
+        <button class="listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={22} /></button>
       </div>
       {voices && <VoiceSheet lang={n.lang} onClose={() => setVoices(false)} onPick={() => { setVoices(false); redraw(x => x + 1); if (n.playing) begin() }} />}
     </>
@@ -223,6 +227,7 @@ export function ListenPlayer() {
 const SAMPLE: Record<string, string> = {
   en: 'The Lord is my shepherd; I shall not want.',
   fr: 'L’Éternel est mon berger: je ne manquerai de rien.',
+  es: 'Jehová es mi pastor; nada me faltará.',
 }
 
 function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => void; onPick: () => void }) {
@@ -234,8 +239,8 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
     const on = () => fresh(x => x + 1)
     synth?.getVoices()
     synth?.addEventListener?.('voiceschanged', on)
-    const t = setTimeout(on, 400)
-    return () => { clearTimeout(t); synth?.removeEventListener?.('voiceschanged', on) }
+    const timer = setTimeout(on, 400)
+    return () => { clearTimeout(timer); synth?.removeEventListener?.('voiceschanged', on) }
   }, [])
   const list = voicesFor(lang)
   const current = voiceFor(lang)
@@ -244,27 +249,27 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
     pauseListening()
     const u = new SpeechSynthesisUtterance(SAMPLE[code] ?? SAMPLE.en)
     if (v) u.voice = v
-    u.lang = v?.lang ?? (code === 'fr' ? 'fr-FR' : code === 'en' ? 'en-US' : lang); u.rate = rate()
+    u.lang = v?.lang ?? speechTag(lang); u.rate = rate()
     synth?.speak(u)
   }
   return (
-    <Sheet title="Voice" onClose={onClose}>
-      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free: in the iPhone Settings app, search "Voices" (it lives under Accessibility → Read & Speak, called Spoken Content on older iPhones). After a download, close Quiet Bible fully (swipe it away) and open it again. If your iPhone still doesn't list it here, pick it as the voice for the language in your iPhone settings and choose "Phone’s own voice" below. Voices chosen for Live Speech are a separate list, and your Personal Voice can't be used by web apps.</p>
+    <Sheet title={t('Voice')} onClose={onClose}>
+      <p class="muted small">{t('These are the voices on your phone. On iPhone, more natural ones (“Enhanced” or “Premium”) can be added free: in the iPhone Settings app, search “Voices” (it lives under Accessibility → Read & Speak, called Spoken Content on older iPhones). After a download, close Quiet Bible fully (swipe it away) and open it again. If your iPhone still doesn’t list it here, pick it as the voice for the language in your iPhone settings and choose “Phone’s own voice” below. Voices chosen for Live Speech are a separate list, and your Personal Voice can’t be used by web apps.')}</p>
       <div class="voice-list">
         <div class={'voice-row' + (mine ? ' on' : '')}>
           <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, PHONE); onPick() }}>
-            <strong>Phone’s own voice</strong>
-            <span class="muted small">The voice picked in your phone’s settings</span>
+            <strong>{t('Phone’s own voice')}</strong>
+            <span class="muted small">{t('The voice picked in your phone’s settings')}</span>
           </button>
-          <button class="voice-try" onClick={() => sample()} aria-label="Hear the phone’s own voice"><PlayIcon size={20} /></button>
+          <button class="voice-try" onClick={() => sample()} aria-label={t('Hear the phone’s own voice')}><PlayIcon size={20} /></button>
         </div>
         {list.map(v => (
           <div class={'voice-row' + (!mine && v.voiceURI === current?.voiceURI ? ' on' : '')}>
             <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, v.voiceURI); onPick() }}>
-              <strong>{v.name.replace(/\s*\((enhanced|premium)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
-              <span class="muted small">{v.lang}{v.localService ? '' : ' · needs a connection'}</span>
+              <strong>{v.name.replace(/\s*\((enhanced|premium|améliorée|mejorada)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
+              <span class="muted small">{v.lang}{v.localService ? '' : ' · ' + t('needs a connection')}</span>
             </button>
-            <button class="voice-try" onClick={() => sample(v)} aria-label={`Hear ${v.name}`}><PlayIcon size={20} /></button>
+            <button class="voice-try" onClick={() => sample(v)} aria-label={t('Hear {voice}', { voice: v.name })}><PlayIcon size={20} /></button>
           </div>
         ))}
       </div>

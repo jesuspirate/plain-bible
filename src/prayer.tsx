@@ -16,6 +16,7 @@ import { slideAway, usePullDown } from './settings'
 import { DeviceLink } from './move'
 import { addDays, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
 import './prayer.css'
+import { locale, N_, t, tj, tn } from './i18n'
 
 // paused: the phone locked mid-prayer. What was said is kept, and the next
 // tap carries on in the same prayer.
@@ -84,7 +85,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   }, [])
 
   const start = async () => {
-    if (!canRecord()) { setNote('This browser can’t record audio. Try Safari or Chrome.'); return }
+    if (!canRecord()) { setNote(t('This browser can’t record audio. Try Safari or Chrome.')); return }
     setNote(''); setPhase('asking')
     let stream: MediaStream
     try {
@@ -92,17 +93,17 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     } catch (e) {
       setPhase('idle')
       setNote((e as DOMException)?.name === 'NotAllowedError'
-        ? 'The microphone is blocked. Allow it for this app in your browser or phone settings, then tap again.'
-        : 'No microphone could be found.')
+        ? t('The microphone is blocked. Allow it for this app in your browser or phone settings, then tap again.')
+        : t('No microphone could be found.'))
       return
     }
-    if (!alive.current) { stream.getTracks().forEach(t => t.stop()); return }
+    if (!alive.current) { stream.getTracks().forEach(track => track.stop()); return }
     const type = recordingType()
     let recorder: MediaRecorder
     // A voice needs far less than music: smaller files to keep, and to sync.
     try { recorder = new MediaRecorder(stream, { ...(type ? { mimeType: type } : {}), audioBitsPerSecond: 64_000 }) } catch {
-      stream.getTracks().forEach(t => t.stop())
-      setPhase('idle'); setNote('This browser can’t record audio.')
+      stream.getTracks().forEach(track => track.stop())
+      setPhase('idle'); setNote(t('This browser can’t record audio.'))
       return
     }
     const chunks: Blob[] = []
@@ -110,7 +111,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     const before = resume.current
     recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data) }
     recorder.onstop = async () => {
-      stream.getTracks().forEach(t => t.stop())
+      stream.getTracks().forEach(track => track.stop())
       const ms = Date.now() - started
       const blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' })
       const interrupted = !!this_.interrupted
@@ -132,7 +133,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         }
         sync()
       } catch {
-        if (alive.current) { setPhase('idle'); setNote('Your prayer couldn’t be kept: this device may be out of space.') }
+        if (alive.current) { setPhase('idle'); setNote(t('Your prayer couldn’t be kept: this device may be out of space.')) }
       }
     }
     // Hand over the audio every second, so an interruption loses little.
@@ -153,7 +154,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     clearInterval(r.timer)
     r.lock?.release().catch(() => {})
     if (r.recorder.state !== 'inactive') r.recorder.stop()
-    else r.stream.getTracks().forEach(t => t.stop())
+    else r.stream.getTracks().forEach(track => track.stop())
   }
 
   // Amen: a new verse to take away, and the prayer's own verse, if it has one.
@@ -172,54 +173,54 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const count = list?.length ?? 0
 
   return (
-    <div class="pray" role="dialog" aria-modal="true" aria-label="Prayer" style={{ '--cut': `${cut}px` }}>
+    <div class="pray" role="dialog" aria-modal="true" aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
       {/* The list has its own Done, so only one close is ever on screen. */}
-      {view === 'pray' && <button class="pray-close" aria-label="Close" onClick={onClose}><CloseIcon size={26} /></button>}
+      {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
       {view === 'pray' && phase !== 'heard' && (verse
         ? <div class="pray-over">
-            <span>Praying using <strong>{verseLabel(verse)}</strong></span>
-            <button class="pray-over-x" aria-label={`Don’t tie this prayer to ${verseLabel(verse)}`} onClick={() => setVerse(undefined)}>✕</button>
+            <span>{tj('Praying using {verse}', { verse: <strong>{verseLabel(verse)}</strong> })}</span>
+            <button class="pray-over-x" aria-label={t('Don’t tie this prayer to {verse}', { verse: verseLabel(verse) })} onClick={() => setVerse(undefined)}>✕</button>
           </div>
         : offer && !busy && <button class="pray-over offer" onClick={() => setVerse(offer.verse)}>
-            <span>+ Pray using <strong>{verseLabel(offer.verse)}</strong></span>
+            <span>+ {tj('Pray using {verse}', { verse: <strong>{verseLabel(offer.verse)}</strong> })}</span>
           </button>)}
       {view === 'pray' ? (
         <div class="pray-center">
           <button class={'pray-mic' + (phase === 'recording' ? ' on' : '')} onClick={toggle}
-            aria-label={phase === 'recording' ? 'Amen: stop and keep this prayer' : phase === 'paused' ? 'Keep praying' : 'Start praying out loud'}>
+            aria-label={phase === 'recording' ? t('Amen: stop and keep this prayer') : phase === 'paused' ? t('Keep praying') : t('Start praying out loud')}>
             <svg viewBox="0 0 24 24" width="52" height="52" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="12.5" rx="3.5" fill="currentColor" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" /></svg>
           </button>
           <div class="pray-words" aria-live="polite">
             {note ? <p>{note}</p>
-              : phase === 'recording' ? <><p class="pray-time">{duration(elapsed)}</p><p>Tap when you’re done.</p></>
+              : phase === 'recording' ? <><p class="pray-time">{duration(elapsed)}</p><p>{t('Tap when you’re done.')}</p></>
               : phase === 'asking' ? <p>…</p>
               : phase === 'paused' ? <>
                   <p class="pray-time">{duration(elapsed)}</p>
-                  <p>The phone locked, so your prayer paused. Everything you said is kept.</p>
-                  <p>Tap the light to keep praying, or</p>
-                  <button class="pray-pill pray-amen-btn" onClick={amen}>Amen</button>
+                  <p>{t('The phone locked, so your prayer paused. Everything you said is kept.')}</p>
+                  <p>{t('Tap the light to keep praying, or')}</p>
+                  <button class="pray-pill pray-amen-btn" onClick={amen}>{t('Amen')}</button>
                 </>
               : phase === 'heard' ? <>
-                  <p class="pray-amen">Amen. He heard you.</p>
+                  <p class="pray-amen">{t('Amen. He heard you.')}</p>
                   {settings.streaks && <PrayStreak />}
                   <button class="pray-verse" onClick={() => read(comfort)}>
                     “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
                   </button>
                   {kept?.verse
-                    ? <button class="pray-tied" onClick={() => read(kept.verse!)}>Prayed using <strong>{verseLabel(kept.verse)}</strong> ›</button>
-                    : kept && <button class="pray-pill pray-add" onClick={addVerse}>+ Add a verse</button>}
+                    ? <button class="pray-tied" onClick={() => read(kept.verse!)}>{tj('Prayed using {verse}', { verse: <strong>{verseLabel(kept.verse)}</strong> })} ›</button>
+                    : kept && <button class="pray-pill pray-add" onClick={addVerse}>+ {t('Add a verse')}</button>}
                 </>
-              : <p>Tap and speak to God. Only you will hear this again.</p>}
+              : <p>{t('Tap and speak to God. Only you will hear this again.')}</p>}
           </div>
         </div>
       ) : view === 'list' ? <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} />
         : <CirclesCard at={at} onClose={onClose} />}
       <div class="pray-foot">
         {view === 'list'
-          ? <button class="pray-pill" onClick={() => setView('pray')}>Pray</button>
+          ? <button class="pray-pill" onClick={() => setView('pray')}>{t('Pray')}</button>
           : view === 'pray' && phase !== 'recording' && phase !== 'paused' &&
-            <button class="pray-pill" onClick={() => setView('list')}>Your prayers{count ? ` · ${count}` : ''}</button>}
-        {view !== 'circles' && <p class="pray-private">{prayerSyncOn() ? 'Encrypted on this device, then synced.' : 'Kept on this device only.'}</p>}
+            <button class="pray-pill" onClick={() => setView('list')}>{t('Your prayers')}{count ? ` · ${count}` : ''}</button>}
+        {view !== 'circles' && <p class="pray-private">{prayerSyncOn() ? t('Encrypted on this device, then synced.') : t('Kept on this device only.')}</p>}
       </div>
     </div>
   )
@@ -240,14 +241,14 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     // A link inside (a verse, mostly) goes to the word, so prayer steps aside.
     <div class="pray-list pray-circles" ref={box} onClick={e => { if ((e.target as Element).closest?.('a[href^="#"]')) onClose() }}>
       <div class="pray-head">
-        <button type="button" class="settings-grabber" aria-label="Close" onClick={done} />
+        <button type="button" class="settings-grabber" aria-label={t('Close')} onClick={done} />
         <div class="pray-title">
           {circle
             ? <button class="settings-back" onClick={() => setCircle(undefined)}><BackIcon class="back-ico" /> {circle.name}</button>
-            : <><h2>Circles</h2><button class="done-btn" onClick={done}>Done</button></>}
+            : <><h2>{t('Circles')}</h2><button class="done-btn" onClick={done}>{t('Done')}</button></>}
         </div>
       </div>
-      {mod ? <mod.CirclesPanel circle={circle?.id} onOpen={setCircle} onAway={onClose} /> : <p class="muted">Opening…</p>}
+      {mod ? <mod.CirclesPanel circle={circle?.id} onOpen={setCircle} onAway={onClose} /> : <p class="muted">{t('Opening…')}</p>}
     </div>
   )
 }
@@ -295,7 +296,7 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
       const full = await prayers.get(p.id)
       if (!full) return
       const parts = partsOf(full), name = fileName(full.at)
-      files = parts.map((x, i) => new File([x.audio], `${name}${parts.length > 1 ? ` (${i + 1} of ${parts.length})` : ''}.${extension(x.type)}`, { type: x.type }))
+      files = parts.map((x, i) => new File([x.audio], `${name}${parts.length > 1 ? ` (${t('{i} of {n}', { i: i + 1, n: parts.length })})` : ''}.${extension(x.type)}`, { type: x.type }))
     }
     if (navigator.canShare?.({ files })) {
       try { await navigator.share({ files }); ready.current = undefined; setAgain(undefined) } catch (e) {
@@ -324,21 +325,21 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
   const box = useRef<HTMLDivElement>(null)
   usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
   const done = () => slideAway(box.current, onClose)
-  const when = (at: number) => new Date(at).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+  const when = (at: number) => new Date(at).toLocaleString(locale(), { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
   return (
     <div class="pray-list" ref={box}>
       <div class="pray-head">
-        <button type="button" class="settings-grabber" aria-label="Close" onClick={done} />
+        <button type="button" class="settings-grabber" aria-label={t('Close')} onClick={done} />
         <div class="pray-title">
-          <h2>Your prayers</h2>
-          <button class="done-btn" onClick={done}>Done</button>
+          <h2>{t('Your prayers')}</h2>
+          <button class="done-btn" onClick={done}>{t('Done')}</button>
         </div>
       </div>
-      {!list?.length ? <p class="muted">No prayers yet.</p> : (
+      {!list?.length ? <p class="muted">{t('No prayers yet.')}</p> : (
         <ol>
           {list.map(p => (
             <li class={playing === p.id ? 'on' : ''}>
-              <button class="pray-play" aria-label={playing === p.id ? 'Stop' : `Play prayer from ${when(p.at)}`} onClick={() => play(p)}>
+              <button class="pray-play" aria-label={playing === p.id ? t('Stop') : t('Play prayer from {when}', { when: when(p.at) })} onClick={() => play(p)}>
                 {playing === p.id
                   ? <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>
                   : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
@@ -347,21 +348,21 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
                 {p.verse
                   ? <button class="link pray-list-verse" onClick={() => onRead(p.verse!)}>{verseLabel(p.verse)}</button>
                   // Thought of a verse later? The next verse you tap is tied to this prayer.
-                  : <button class="link pray-list-verse pray-list-add" onClick={() => { release(); awaitVerse(p.id); onClose() }}>+ Add a verse</button>}</span>
+                  : <button class="link pray-list-verse pray-list-add" onClick={() => { release(); awaitVerse(p.id); onClose() }}>+ {t('Add a verse')}</button>}</span>
               {confirm !== p.id && <>
-                <button class="pray-icon" aria-label="Share or save this prayer" title="Share or save" onClick={() => save(p)}>
-                  {again === p.id ? 'Share' : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}
+                <button class="pray-icon" aria-label={t('Share or save this prayer')} title={t('Share or save')} onClick={() => save(p)}>
+                  {again === p.id ? t('Share') : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}
                 </button>
-                {inCircles() && <button class="pray-icon" aria-label="Share this prayer with your circle" title="Share with your circle" onClick={() => shareWithCircle({ prayer: p.id })}>
+                {inCircles() && <button class="pray-icon" aria-label={t('Share this prayer with your circle')} title={t('Share with your circle')} onClick={() => shareWithCircle({ prayer: p.id })}>
                   <CircleIcon size={24} />
                 </button>}
                 {/* A bin, not a cross: a cross reads as close. */}
-                <button class="pray-icon pray-bin" aria-label="Delete this prayer" title="Delete" onClick={() => setConfirm(p.id)}>
+                <button class="pray-icon pray-bin" aria-label={t('Delete this prayer')} title={t('Delete')} onClick={() => setConfirm(p.id)}>
                   <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
                 </button></>}
               {confirm === p.id && <div class="pray-confirm">
-                <button class="pray-btn" onClick={() => setConfirm(undefined)}>Keep</button>
-                <button class="pray-btn danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? 'Delete everywhere' : 'Delete'}</button>
+                <button class="pray-btn" onClick={() => setConfirm(undefined)}>{t('Keep')}</button>
+                <button class="pray-btn danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
               </div>}
             </li>
           ))}
@@ -375,13 +376,13 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
 const pad = (n: number) => String(n).padStart(2, '0')
 function fileName(at: number) {
   const d = new Date(at)
-  return `Prayer ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}.${pad(d.getMinutes())}`
+  return `${t('Prayer')} ${d.getFullYear()}-${pad(d.getMonth() + 1)}-${pad(d.getDate())} ${pad(d.getHours())}.${pad(d.getMinutes())}`
 }
 const extension = (type: string) => type.includes('mp4') ? 'm4a' : type.includes('ogg') ? 'ogg' : 'webm'
 
 // Sync with your other devices: off until you turn it on, here.
 // Removing a home-screen web app on iPhone deletes its storage, prayers included.
-const LOCAL_ONLY = 'Until then, your prayers live only in this copy of the app. Removing it from your Home Screen, or clearing website data, deletes them.'
+const LOCAL_ONLY = N_('Until then, your prayers live only in this copy of the app. Removing it from your Home Screen, or clearing website data, deletes them.')
 
 function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () => void }) {
   const [on, setOn] = useState(prayerSyncOn)
@@ -397,52 +398,52 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
     setBusy(true); setMsg('')
     try { await fn() } catch (e) {
       const m = (e as Error).message
-      setMsg(m === 'Cancelled' ? 'The passkey request was cancelled. Tap to try again.' : m)
+      setMsg(m === 'Cancelled' ? t('The passkey request was cancelled. Tap to try again.') : m)
     } finally { setBusy(false); setOn(prayerSyncOn()); onChange() }
   }
   const start = act(async () => {
     const r = await turnOnPrayerSync(needCode ? code : undefined)
     setNeedCode(r === 'needCode')
-    if (r === 'on') { setCode(''); setMsg('Your prayers now sync with your other devices.') }
+    if (r === 'on') { setCode(''); setMsg(t('Your prayers now sync with your other devices.')) }
   })
-  const stop = act(async () => { await turnOffPrayerSync(); setShown(''); setMsg('Prayers stay on this device and stop syncing here.') })
+  const stop = act(async () => { await turnOffPrayerSync(); setShown(''); setMsg(t('Prayers stay on this device and stop syncing here.')) })
 
   return (
     <div class="pray-sync">
       {on ? <>
-        <p><strong>✓ Synced with your devices.</strong> <span class="muted">Encrypted, so only you can hear them.</span></p>
+        <p><strong>✓ {t('Synced with your devices.')}</strong> <span class="muted">{t('Encrypted, so only you can hear them.')}</span></p>
         <DeviceLink class="pray-link" />
         <details class="account-more">
-          <summary>More</summary>
+          <summary>{t('More')}</summary>
           {shown && <p class="pray-key"><code>{shown.replace(/-/g, '-\u200B')}</code></p>}
           {/* Prayers sync by themselves each time this opens, so there's no Sync now. */}
           {shown
             ? <>
-              <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg('Copied.'), () => {})}>Copy prayer key</button>
+              <button class="pray-btn" onClick={() => navigator.clipboard?.writeText(shown).then(() => setMsg(t('Copied.')), () => {})}>{t('Copy prayer key')}</button>
               {/* From your own mail app, so the key never passes through the sync server. */}
-              <a class="pray-btn" href={`mailto:?subject=${encodeURIComponent('My Quiet Bible prayer key')}&body=${encodeURIComponent(
-                `My Quiet Bible prayer key:\n\n${shown}\n\nIt unlocks my synced prayers on a new device (Your prayers → Sync my prayers). Keep it private.`)}`}>Email it to myself</a>
+              <a class="pray-btn" href={`mailto:?subject=${encodeURIComponent(t('My Quiet Bible prayer key'))}&body=${encodeURIComponent(
+                t('My Quiet Bible prayer key:') + `\n\n${shown}\n\n` + t('It unlocks my synced prayers on a new device (Your prayers → Sync my prayers). Keep it private.'))}`}>{t('Email it to myself')}</a>
             </>
-            : <button class="pray-btn" onClick={() => prayerKeyCode().then(setShown)}>Show prayer key</button>}
-          {shown && <p class="muted small">Only needed on a device that can’t unlock your prayers by itself: one where you sign in by email, or whose passkey can’t. Easier: Link another device. Keep the key private: it opens your prayers. Emailed to yourself, it’s there if you ever lose this phone.</p>}
-          <button class="pray-btn quiet" disabled={busy} onClick={stop}>{busy ? 'Stopping…' : 'Stop syncing on this device'}</button>
+            : <button class="pray-btn" onClick={() => prayerKeyCode().then(setShown)}>{t('Show prayer key')}</button>}
+          {shown && <p class="muted small">{t('Only needed on a device that can’t unlock your prayers by itself: one where you sign in by email, or whose passkey can’t. Easier: Link another device. Keep the key private: it opens your prayers. Emailed to yourself, it’s there if you ever lose this phone.')}</p>}
+          <button class="pray-btn quiet" disabled={busy} onClick={stop}>{busy ? t('Stopping…') : t('Stop syncing on this device')}</button>
         </details>
       </> : !signedIn ? <>
-        <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
-        <p class="muted small">{LOCAL_ONLY}</p>
-        <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>Go to Settings → Account</button>
+        <p class="muted">{t('To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.')}</p>
+        <p class="muted small">{t(LOCAL_ONLY)}</p>
+        <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>{t('Go to Settings → Account')}</button>
       </> : needCode ? <>
-        <p class="muted">This device can’t unlock your prayers by itself yet. Let one where they already sync allow it:</p>
-        <AskApproval btn="pray-btn" onDone={() => { setNeedCode(false); act(async () => { if (await turnOnPrayerSync() === 'on') setMsg('Your prayers now sync with your other devices.') })() }} />
-        <p class="muted small">Or paste the prayer key from there (Your prayers → More → Show prayer key):</p>
-        <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"
+        <p class="muted">{t('This device can’t unlock your prayers by itself yet. Let one where they already sync allow it:')}</p>
+        <AskApproval btn="pray-btn" onDone={() => { setNeedCode(false); act(async () => { if (await turnOnPrayerSync() === 'on') setMsg(t('Your prayers now sync with your other devices.')) })() }} />
+        <p class="muted small">{t('Or paste the prayer key from there (Your prayers → More → Show prayer key):')}</p>
+        <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder={t('Prayer key')}
           autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
-        <button class="pray-btn primary" disabled={busy || !code.trim()} onClick={start}>{busy ? 'Unlocking…' : 'Unlock'}</button>
-        <button class="pray-btn" onClick={() => { setNeedCode(false); setMsg('') }}>Cancel</button>
+        <button class="pray-btn primary" disabled={busy || !code.trim()} onClick={start}>{busy ? t('Unlocking…') : t('Unlock')}</button>
+        <button class="pray-btn" onClick={() => { setNeedCode(false); setMsg('') }}>{t('Cancel')}</button>
       </> : <>
-        <p class="muted">Keep your prayers on all your devices. Each one is encrypted on this device before it leaves it, so no one else, not even the server, can hear it.</p>
-        <button class="pray-btn primary" disabled={busy} onClick={start}>{busy ? 'Waiting for passkey…' : 'Sync my prayers'}</button>
-        <p class="muted small">{LOCAL_ONLY}</p>
+        <p class="muted">{t('Keep your prayers on all your devices. Each one is encrypted on this device before it leaves it, so no one else, not even the server, can hear it.')}</p>
+        <button class="pray-btn primary" disabled={busy} onClick={start}>{busy ? t('Waiting for passkey…') : t('Sync my prayers')}</button>
+        <p class="muted small">{t(LOCAL_ONLY)}</p>
       </>}
       {msg && <p class="note small">{msg}</p>}
     </div>
@@ -452,5 +453,5 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
 /** A quiet word after Amen, from the second day in a row. */
 function PrayStreak() {
   const n = streak(loadDays(), PRAY)
-  return n > 1 ? <p class="pray-streak">{n} days of prayer in a row</p> : null
+  return n > 1 ? <p class="pray-streak">{tn(n, '{n} day of prayer in a row', '{n} days of prayer in a row')}</p> : null
 }
