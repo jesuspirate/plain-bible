@@ -11,7 +11,7 @@
 import { meta, partsOf, prayers } from './prayers'
 import { aesKey, b64url, keyCode, open, seal } from './prayerCrypto'
 import { api, loadAccount, SYNC_URL, SyncError } from './sync'
-import { unlockKey } from './prayerSync'
+import { keepStorage, unlockKey } from './prayerSync'
 import { cleanVerse, PrayerVerse } from './prayerVerses'
 import { shareLink } from './native'
 import { setInCircles } from '../state'
@@ -56,12 +56,15 @@ function token() {
 /** The key that locks this account's copies of circle keys. 'needCode' when
  *  the passkey can't unlock the account key and it has to be typed in. */
 async function lockKey(code?: string): Promise<CryptoKey | 'needCode'> {
-  let raw = (await meta.get<Uint8Array>('acct')) ?? (await meta.get<Uint8Array>('key'))
+  let raw = await meta.get<Uint8Array>('acct')
   if (!raw) {
-    const r = await unlockKey(code)
+    // Kept as the account key too, so turning prayer sync off later
+    // doesn't lock the circles again.
+    const r = (await meta.get<Uint8Array>('key')) ?? await unlockKey(code)
     if (r === 'needCode') return r
     raw = r
     await meta.set('acct', raw)
+    keepStorage()
   }
   return aesKey(raw, 'circle lock v1')
 }

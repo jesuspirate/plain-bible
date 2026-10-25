@@ -49,8 +49,49 @@ async function passkeySecret(): Promise<{ credId: string; secret: Uint8Array } |
 }
 
 // The passkey secret from a first try that ended up asking for the code, so
-// the code needs typing only once: after that the passkey unlocks it.
+// the code needs typing only once: after that the passkey unlocks it. Also
+// the one a passkey sign-in just gave, so nothing asks for the passkey again.
 let pendingSecret: { credId: string; secret: Uint8Array } | null = null
+
+/** A key this device already holds for the prayers' key `keyId`. */
+async function heldKey(keyId: string | null) {
+  for (const name of ['key', 'acct']) {
+    const raw = await meta.get<Uint8Array>(name)
+    if (raw && (!keyId || (await prayerKey(raw)).id === keyId)) return raw
+  }
+}
+
+/** Right after a passkey sign-in (or sign-up) that also gave the passkey's
+ *  secret: keep the account key on this device, so circles and prayers open
+ *  without a second passkey sheet. Where the device already holds it, the
+ *  passkey is taught to unlock it too, for next time on a new device. */
+export async function passkeySignedIn(token: string, s: { credId: string; secret: Uint8Array } | null) {
+  pendingSecret = s
+  if (!s) return
+  const remote = await api<Remote>('/prayers', { token })
+  // A new account: its key is made when first needed, from this secret.
+  if (!remote.keyId) return
+  const wrapAt = `/prayers/wrap/${encodeURIComponent(s.credId)}`
+  let raw = await heldKey(remote.keyId)
+  if (raw) {
+    await api(wrapAt, { method: 'PUT', token, body: { wrapped: await wrapKey(raw, s.secret) } }).catch(() => {})
+  } else {
+    const w = await api<{ wrapped: string }>(wrapAt, { token }).catch(() => null)
+    raw = w ? await unwrapKey(w.wrapped, s.secret).catch(() => undefined) : undefined
+    if (!raw || (await prayerKey(raw)).id !== remote.keyId) return
+  }
+  await meta.set('acct', raw)
+  pendingSecret = null
+  keepStorage()
+}
+
+/** Ask the browser not to clear this device's keys when space runs low.
+ *  Safari and Chrome decide by themselves, without asking; Firefox would
+ *  ask, so not there. */
+export function keepStorage() {
+  if (/Firefox\//.test(navigator.userAgent)) return
+  navigator.storage?.persist?.().catch(() => {})
+}
 
 /** The account's prayer key, from the passkey or a typed code; on the
  *  account's first device this makes it. 'needCode' when the key has to be
@@ -64,25 +105,31 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
   // wait and reports it as cancelled, so a second tap failed the same way.
   // Not where the last look found no passkey (an account signed in by email).
   // A key already here (from another device's approval, or from circles)
-  // needs nothing asked.
+  // needs nothing asked. Nor does a secret the passkey already gave (at
+  // sign-in, or a try that ended up asking for the code): its answer won't
+  // change, and asking again would only show the same sheet for nothing.
   const kept = code === undefined ? (await meta.get<Uint8Array>('key')) ?? (await meta.get<Uint8Array>('acct')) : undefined
-  const asking = code === undefined && !kept && !noPasskey()
+  const given = code === undefined && !kept ? pendingSecret : null
+  const asking = code === undefined && !kept && !given && !noPasskey()
     ? passkeySecret().then(s => ({ s }), (e: Error) => ({ e }))
     : undefined
   const remote = await api<Remote>('/prayers', { token: acct.token })
   if (remote.passkeys !== undefined) setNoPasskey(remote.passkeys === 0)
   let raw: Uint8Array | undefined
   let secret = pendingSecret
+  const held = code === undefined && kept ? await heldKey(remote.keyId) : undefined
   if (code !== undefined) {
     raw = parseKeyCode(code)
     if (!raw) throw new SyncError('That isn’t a whole prayer key. It has 32 letters and numbers.')
     if (remote.keyId && (await prayerKey(raw)).id !== remote.keyId) throw new SyncError('That key doesn’t match the prayers on this account.')
-  } else if (kept && (!remote.keyId || (await prayerKey(kept)).id === remote.keyId)) {
-    raw = kept
-  } else if (asking && remote.passkeys !== 0) {
-    const r = await asking
-    if ('e' in r) throw r.e
-    secret = r.s
+  } else if (held) {
+    raw = held
+  } else if (given || (asking && remote.passkeys !== 0)) {
+    if (asking) {
+      const r = await asking
+      if ('e' in r) throw r.e
+      secret = r.s
+    }
     if (secret) {
       const w = await api<{ wrapped: string }>(`/prayers/wrap/${encodeURIComponent(secret.credId)}`, { token: acct.token }).catch(() => null)
       if (w) raw = await unwrapKey(w.wrapped, secret.secret).catch(() => undefined)
@@ -112,6 +159,7 @@ export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'
   if (raw === 'needCode') return raw
   const pk = await prayerKey(raw)
   await meta.set('key', raw)
+  keepStorage()
   setOn(pk.id)
   await syncPrayers()
   return 'on'
