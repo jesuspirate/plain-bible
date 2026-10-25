@@ -13,7 +13,7 @@ import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, r
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
-import { BookmarkIcon, CircleIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon } from './icons'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -611,7 +611,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           <strong>{ref}</strong>
           <span class="muted small">{verses.length > 1 ? `${verses.length} verses` : 'Tap more verses to add them'}</span>
           <span class="spacer" />
-          <button class="icon" aria-label="Clear selection" onClick={onClose}>✕</button>
+          <button class="close-btn" aria-label="Clear selection" onClick={onClose}><CloseIcon size={22} /></button>
         </div>
         <div class="swatches" role="radiogroup" aria-label="Highlight color">
           {PALETTE.map(p => (

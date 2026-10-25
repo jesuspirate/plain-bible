@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { BookmarkIcon, RefreshIcon } from './icons'
+import { BackIcon, BookmarkIcon, RefreshIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
@@ -175,7 +175,7 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
         <div class="settings-title">
           {nav.page === 'home'
             ? <><h1>Settings</h1><button class="done-btn" onClick={done}>Done</button></>
-            : <button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button>}
+            : <button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> {nav.title}</button>}
         </div>
       </div>
       <div class="settings"><SettingsBody nav={nav} /></div>
@@ -203,7 +203,7 @@ export function SettingsView() {
       <button type="button" class="settings-grabber" aria-label="Close settings" onClick={closeSettingsPage} />
       {nav.page === 'home'
         ? <h1>Settings</h1>
-        : <h1><button class="settings-back" onClick={nav.back}><span aria-hidden="true">‹</span> {nav.title}</button></h1>}
+        : <h1><button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> {nav.title}</button></h1>}
       <SettingsBody nav={nav} />
     </div>
   )

@@ -6,6 +6,7 @@ import type { Range } from './lib/query'
 import { segments } from './lib/text'
 import { Settings, useApp } from './state'
 import { useHoldPick } from './hold'
+import { BackIcon, CloseIcon } from './icons'
 
 export function Sheet({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ComponentChildren; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null)
@@ -39,7 +40,7 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
       <div class="sheet-inner">
         <header class="sheet-head">
           <h2>{title}</h2>
-          <button class="icon" aria-label="Close" onClick={() => ref.current!.close()}>✕</button>
+          <button class="close-btn" aria-label="Close" onClick={() => ref.current!.close()}><CloseIcon size={22} /></button>
         </header>
         <div class="sheet-body">{children}</div>
       </div>
@@ -132,7 +133,7 @@ export function BookPicker({ version, onPick, onClose }: { version?: Translation
   if (book) {
     return (
       <Sheet title={bookById(book).name} onClose={onClose}>
-        <button class="link" onClick={() => setBook(undefined)}>← All books</button>
+        <button class="back-link" onClick={() => setBook(undefined)}><BackIcon class="back-ico" /> All books</button>
         <div class="grid chapters">
           {Array.from({ length: chapters }, (_, i) => <button onClick={() => onPick(book, i + 1)}>{i + 1}</button>)}
         </div>

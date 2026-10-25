@@ -16,7 +16,7 @@ import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
-import { BookmarkIcon } from './icons'
+import { BackIcon, BookmarkIcon } from './icons'
 import { Sheet } from './ui'
 import './circles.css'
 
@@ -328,7 +328,7 @@ function CircleView({ id }: { id: string }) {
 
   return (
     <div class="circles">
-      {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><span aria-hidden="true">‹</span> {info?.name ?? 'Circle'}</button></h1>}
+      {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? 'Circle'}</button></h1>}
       {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
       {feed && <StreakBoard circle={id} name={info?.name ?? 'this circle'} feed={feed} onChange={load} />}
       <div class="c-row">
