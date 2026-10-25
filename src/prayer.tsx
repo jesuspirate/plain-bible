@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { awaitVerse, go, inCircles, openSettings, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
-import { CircleIcon } from './icons'
+import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
 import type { Bible } from './lib/data'
@@ -176,7 +176,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   return (
     <div class="pray" role="dialog" aria-modal="true" aria-label="Prayer" style={{ '--cut': `${cut}px` }}>
       {/* The list has its own Done, so only one close is ever on screen. */}
-      {view === 'pray' && <button class="pray-close" aria-label="Close" onClick={onClose}>✕</button>}
+      {view === 'pray' && <button class="pray-close" aria-label="Close" onClick={onClose}><CloseIcon size={26} /></button>}
       {view === 'pray' && phase !== 'heard' && (verse
         ? <div class="pray-over">
             <span>Praying using <strong>{verseLabel(verse)}</strong></span>
@@ -247,7 +247,7 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         <button type="button" class="settings-grabber" aria-label="Close" onClick={done} />
         <div class="pray-title">
           {circle
-            ? <button class="settings-back" onClick={() => setCircle(undefined)}><span aria-hidden="true">‹</span> {circle.name}</button>
+            ? <button class="settings-back" onClick={() => setCircle(undefined)}><BackIcon class="back-ico" /> {circle.name}</button>
             : <><h2>Circles</h2><button class="done-btn" onClick={done}>Done</button></>}
         </div>
       </div>

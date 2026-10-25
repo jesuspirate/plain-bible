@@ -2,6 +2,7 @@ import { useEffect, useMemo, useState } from 'preact/hooks'
 import { Translation } from './lib/data'
 import { loadPlace } from './lib/place'
 import { go, readPath, useApp } from './state'
+import { BackIcon } from './icons'
 
 const CACHE = 'bible-data'
 
@@ -78,7 +79,7 @@ export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
           </ul>
         </section>
       ))}
-      {!inSheet && <p><button class="link" onClick={() => go('read')}>← Back to reading</button></p>}
+      {!inSheet && <p><button class="back-link" onClick={() => go('read')}><BackIcon class="back-ico" /> Back to reading</button></p>}
     </div>
   )
 }

@@ -32,6 +32,12 @@ button.primary { background: var(--accent); color: var(--accent-ink); border-col
 button.link { background: none; border: none; color: var(--accent); padding: 4px 6px; }
 button.ghost { background: none; }
 button.icon { background: none; border: none; font-size: 18px; padding: 4px 8px; }
+/* Close: a bold × in a solid round button, the same in every sheet. */
+.close-btn { all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--text); color: var(--bg); -webkit-tap-highlight-color: transparent; }
+.close-btn:active { transform: scale(.92); }
+.close-btn:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
+.back-link { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 10px; min-height: 48px; font: 700 18px var(--sans); color: var(--text); }
+.back-link .back-ico { flex: none; box-sizing: border-box; width: 40px; height: 40px; padding: 9px 11px 9px 7px; border-radius: 50%; background: var(--text); color: var(--bg); }
 :focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .muted { color: var(--muted); }
 .small { font-size: 13px; }
@@ -140,7 +146,7 @@ dialog.sheet.wide { width: min(860px, calc(100vw - 24px)); }
 dialog.sheet::backdrop { background: rgba(0,0,0,.35); }
 .sheet-inner { display: flex; flex-direction: column; max-height: inherit; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line); }
-.sheet-head h2 { margin: 0; font-size: 18px; }
+.sheet-head h2 { margin: 0; font-size: 20px; }
 .sheet-body { padding: 12px 16px 20px; overflow: auto; overscroll-behavior: contain; }
 /* While a sheet is open the page behind it stays put: on an iPhone a drag on
    the dimmed part would otherwise scroll the chapter underneath. */
@@ -283,7 +289,7 @@ main.with-bar { padding-bottom: 120px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
 .sb-cancel {
   all: unset; cursor: pointer; flex: none; box-sizing: border-box; height: 52px; padding: 0 18px; border-radius: 26px;
-  display: grid; place-items: center; font: 600 16px var(--sans); letter-spacing: .01em;
+  display: grid; place-items: center; font: 700 17px var(--sans); letter-spacing: .01em;
   background: var(--accent); color: var(--accent-ink);
   box-shadow: 0 8px 24px rgba(0,0,0,.22); animation: sb-pop .2s cubic-bezier(.2, .8, .2, 1);
   -webkit-tap-highlight-color: transparent;
@@ -469,8 +475,11 @@ main.with-mini { padding-bottom: 144px; }
 .set-vid { font-weight: 700; min-width: 48px; }
 .set-version .set-label { font-weight: 400; color: var(--muted); }
 .set-star { color: var(--accent); font-size: 20px; }
-.settings-back { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 6px; min-height: 46px; font: 600 24px var(--sans); color: var(--text); -webkit-tap-highlight-color: transparent; }
-.settings-back span { font-size: 34px; line-height: 1; color: var(--accent); margin-top: -3px; }
+/* Back: the arrow sits in its own solid round button, so it can't be missed. */
+.settings-back { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; min-height: 52px; font: 700 24px var(--sans); color: var(--text); -webkit-tap-highlight-color: transparent; }
+.settings-back .back-ico { flex: none; box-sizing: border-box; width: 46px; height: 46px; padding: 11px 13px 11px 9px; border-radius: 50%; background: var(--text); color: var(--bg); }
+.settings-back:active .back-ico { transform: scale(.92); }
+.settings-back:focus-visible .back-ico { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
 .set-big { display: block; width: 100%; min-height: 56px; margin: 4px 0 10px; border-radius: 16px; font: 600 18px var(--sans); }
 
 /* ---- account ---- */
@@ -664,7 +673,7 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .settings-title h1 { margin: 0; font-size: 28px; }
 .settings-sheet .settings { padding-top: 14px; }
 /* Done: big and plain, easy to find and to hit. */
-.done-btn { min-height: 46px; padding: 8px 22px; border-radius: 23px; border: none; background: var(--accent); color: var(--accent-ink); font: 600 18px var(--sans); -webkit-tap-highlight-color: transparent; }
+.done-btn { min-height: 50px; padding: 8px 26px; border-radius: 25px; border: none; background: var(--accent); color: var(--accent-ink); font: 700 19px var(--sans); box-shadow: 0 2px 8px rgba(0,0,0,.18); -webkit-tap-highlight-color: transparent; }
 .done-btn:active { transform: scale(.96); }
 .settings-grabber { all: unset; cursor: pointer; display: block; width: 100%; height: 22px; position: relative; -webkit-tap-highlight-color: transparent; }
 .settings-grabber::before { content: ''; position: absolute; left: 50%; top: 9px; width: 40px; height: 5px; margin-left: -20px; border-radius: 3px; background: color-mix(in srgb, var(--muted) 45%, transparent); }

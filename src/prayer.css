@@ -13,9 +13,11 @@ html.praying { overflow: hidden; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray { --dim: rgba(0, 0, 0, .5); } }
 .pray-close {
   all: unset; cursor: pointer; position: absolute; top: max(12px, calc(var(--cut) + 12px), env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
-  display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%; font-size: 22px;
-  background: rgba(20, 16, 10, .86); color: #fff;
+  display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%;
+  /* the same white as the pills below, so it reads on the dimmed page */
+  background: rgba(255, 255, 255, .92); color: #2a2218; box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
 }
+.pray-close:active { transform: scale(.92); }
 .pray-center { display: flex; flex-direction: column; align-items: center; gap: 34px; margin-top: auto; }
 .pray-mic {
   all: unset; cursor: pointer; position: relative; display: grid; place-items: center; width: 132px; height: 132px; border-radius: 50%;
