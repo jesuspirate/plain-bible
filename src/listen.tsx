@@ -28,18 +28,34 @@ const get = (k: string) => { try { return localStorage.getItem(k) } catch { retu
 const put = (k: string, v: string) => { try { localStorage.setItem(k, v) } catch { /* private mode */ } }
 const rate = () => { const r = Number(get(RATE_KEY)); return RATES.includes(r) ? r : 1 }
 
-/** The phone's voices for a language, the most natural first. */
+/** How natural a voice is: iPhones name the better downloads "Enhanced" or
+ * "Premium", sometimes only in the voice's id. */
+export function quality(v: SpeechSynthesisVoice): '' | 'Enhanced' | 'Premium' {
+  const s = v.name + ' ' + v.voiceURI
+  return /premium/i.test(s) ? 'Premium' : /enhanced|natural|neural|wavenet/i.test(s) ? 'Enhanced' : ''
+}
+
+/** The phone's voices for a language, the most natural first, each once. */
 export function voicesFor(lang: string): SpeechSynthesisVoice[] {
   const code = lang.split('-')[0].toLowerCase()
   const region = ({ en: 'en-us', fr: 'fr-fr' } as Record<string, string>)[code]
   const score = (v: SpeechSynthesisVoice) =>
-    (/premium|enhanced|natural|neural|wavenet/i.test(v.name) ? 4 : 0) + (v.lang.toLowerCase().replace('_', '-') === region ? 2 : 0)
-    + (v.localService ? 1 : 0) + (v.default ? 0.5 : 0) - (/compact|eloquence|novelty|bad news|bells|bubbles|jester|organ|whisper|zarvox|trinoids|cellos|bahh|boing|wobble|superstar|grandma|grandpa|rocko|shelley|flo|reed|sandy/i.test(v.name) ? 5 : 0)
+    ({ Premium: 5, Enhanced: 4, '': 0 })[quality(v)] + (v.lang.toLowerCase().replace('_', '-') === region ? 2 : 0)
+    + (v.localService ? 1 : 0) + (v.default ? 0.5 : 0) - (/compact/i.test(v.voiceURI) ? 0.25 : 0)
+    - (/eloquence|novelty|bad news|bells|bubbles|jester|organ|whisper|zarvox|trinoids|cellos|bahh|boing|wobble|superstar|grandma|grandpa|rocko|shelley|flo|reed|sandy/i.test(v.name) ? 5 : 0)
+  // iPhones often list the same voice twice (two copies of one download):
+  // keep only the best copy of each name.
+  const seen = new Set<string>()
   return (synth?.getVoices() ?? []).filter(v => v.lang.toLowerCase().startsWith(code)).sort((a, b) => score(b) - score(a))
+    .filter(v => { const k = `${v.name.replace(/\s*\((enhanced|premium|compact)\)/i, '')}|${v.lang}|${quality(v)}`; return !seen.has(k) && !!seen.add(k) })
 }
+
+const PHONE = 'phone' // no voice named: the phone speaks with the one picked in its own settings
+const phoneChoice = (lang: string) => get(VOICE_KEY + lang.split('-')[0]) === PHONE
 
 function voiceFor(lang: string): SpeechSynthesisVoice | undefined {
   const list = voicesFor(lang), chosen = get(VOICE_KEY + lang.split('-')[0])
+  if (chosen === PHONE) return undefined
   // Offline, only a voice on the phone itself can speak.
   return list.find(v => v.voiceURI === chosen && (navigator.onLine || v.localService))
     ?? list.find(v => navigator.onLine || v.localService) ?? list[0]
@@ -54,7 +70,7 @@ function say(text: string, lang: string, my: number, then: () => void) {
   const u = new SpeechSynthesisUtterance(text)
   const v = voiceFor(lang)
   if (v) try { u.voice = v } catch { /* not a voice this browser accepts */ }
-  u.lang = v?.lang ?? lang
+  u.lang = v?.lang ?? (lang.startsWith('fr') ? 'fr-FR' : lang.startsWith('en') ? 'en-US' : lang)
   u.rate = rate()
   u.onend = () => { if (my === run) then() }
   u.onerror = e => {
@@ -169,7 +185,7 @@ export function ListenPlayer() {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label="Choose the voice">
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble ? 'listen-trouble' : 'muted'}>{n.trouble ?? (voice ? voice.name : 'Phone voice')} ▾</span>
+          <span class={n.trouble ? 'listen-trouble' : 'muted'}>{n.trouble ?? (voice && !phoneChoice(n.lang) ? voice.name : 'Phone’s own voice')} ▾</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={`Speed ${r} times. Change`}>{r}×</button>
         <button class="listen-stop" onClick={stopListening} aria-label="Stop reading aloud"><CloseIcon size={22} /></button>
@@ -186,23 +202,41 @@ const SAMPLE: Record<string, string> = {
 
 function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => void; onPick: () => void }) {
   const code = lang.split('-')[0]
+  // Ask the phone again each time the sheet opens: a voice downloaded a
+  // moment ago can take a while to show.
+  const [, fresh] = useState(0)
+  useEffect(() => {
+    const on = () => fresh(x => x + 1)
+    synth?.getVoices()
+    synth?.addEventListener?.('voiceschanged', on)
+    const t = setTimeout(on, 400)
+    return () => { clearTimeout(t); synth?.removeEventListener?.('voiceschanged', on) }
+  }, [])
   const list = voicesFor(lang)
   const current = voiceFor(lang)
-  const sample = (v: SpeechSynthesisVoice) => {
+  const mine = phoneChoice(lang)
+  const sample = (v?: SpeechSynthesisVoice) => {
     pauseListening()
     const u = new SpeechSynthesisUtterance(SAMPLE[code] ?? SAMPLE.en)
-    u.voice = v; u.lang = v.lang; u.rate = rate()
+    if (v) u.voice = v
+    u.lang = v?.lang ?? (code === 'fr' ? 'fr-FR' : code === 'en' ? 'en-US' : lang); u.rate = rate()
     synth?.speak(u)
   }
   return (
     <Sheet title="Voice" onClose={onClose}>
-      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free in Settings → Accessibility → Spoken Content → Voices.</p>
+      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free: in the iPhone Settings app, search "Voices" (it lives under Accessibility → Read & Speak, called Spoken Content on older iPhones). After a download, close Quiet Bible fully (swipe it away) and open it again. If your iPhone still doesn't list it here, pick it as the voice for the language in your iPhone settings and choose "Phone’s own voice" below. Voices chosen for Live Speech are a separate list, and your Personal Voice can't be used by web apps.</p>
       <div class="voice-list">
-        {list.length === 0 && <p class="muted">No voice for this language on this phone.</p>}
+        <div class={'voice-row' + (mine ? ' on' : '')}>
+          <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, PHONE); onPick() }}>
+            <strong>Phone’s own voice</strong>
+            <span class="muted small">The voice picked in your phone’s settings</span>
+          </button>
+          <button class="voice-try" onClick={() => sample()} aria-label="Hear the phone’s own voice"><PlayIcon size={20} /></button>
+        </div>
         {list.map(v => (
-          <div class={'voice-row' + (v.voiceURI === current?.voiceURI ? ' on' : '')}>
+          <div class={'voice-row' + (!mine && v.voiceURI === current?.voiceURI ? ' on' : '')}>
             <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, v.voiceURI); onPick() }}>
-              <strong>{v.name}</strong>
+              <strong>{v.name.replace(/\s*\((enhanced|premium)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
               <span class="muted small">{v.lang}{v.localService ? '' : ' · needs a connection'}</span>
             </button>
             <button class="voice-try" onClick={() => sample(v)} aria-label={`Hear ${v.name}`}><PlayIcon size={20} /></button>
