@@ -118,14 +118,14 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // leaves it.
 type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'account' | 'data' | 'about'
 const PAGE_TITLE: Record<Page, string> = {
-  home: 'Settings', sync: 'Sync your devices', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
-  versions: 'Versions', account: 'Sign-in and account', data: 'Your data', about: 'About',
+  home: 'Settings', sync: 'Account', reading: 'Reading', saved: 'Saved', search: 'Advanced search',
+  versions: 'Versions', account: 'Sign-in options', data: 'Your data', about: 'About',
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
   const [page, setPage] = useState<Page>('home')
-  // Sign-in and account sits inside Sync; everything else, one step from home.
+  // Sign-in options sit inside Account; everything else, one step from home.
   const back = () => setPage(page === 'account' ? 'sync' : 'home')
   return { page, setPage, back, title: PAGE_TITLE[page], depth: page === 'home' ? 0 : 1 }
 }
@@ -210,9 +210,13 @@ export function SettingsView() {
   )
 }
 
-/** Under Sync your devices: when it last ran, or what went wrong. */
+const PersonIcon = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24"><circle cx="12" cy="8.6" r="3.9" fill="currentColor" /><path d="M4.6 19.4c1.2-3.6 4-5.4 7.4-5.4s6.2 1.8 7.4 5.4" fill="currentColor" /></svg>
+)
+
+/** Under Account: what it's for, when sync last ran, or what went wrong. */
 function syncNote(sync: ReturnType<typeof useApp>['sync']) {
-  if (!sync.account) return 'Optional. Keep everything on all your devices'
+  if (!sync.account) return 'Sync your highlights and prayers'
   if (sync.busy) return 'Syncing…'
   if (sync.error) return 'Couldn’t sync. Tap to see why'
   const at = sync.account.lastSync
@@ -377,10 +381,9 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         </div>
       </section>
       {sync.enabled && <section class="set-group">
-        <h2 class="set-kicker">Sync</h2>
         <div class="set-list">
-          <Row icon={<RefreshIcon size={22} />} label="Sync your devices" sub={syncNote(sync)}
-            value={sync.account ? 'On' : 'Off'} onClick={() => setPage('sync')} />
+          <Row icon={<PersonIcon />} label={sync.account ? 'Account' : 'Sign in or sign up'} sub={syncNote(sync)}
+            onClick={() => setPage('sync')} />
         </div>
       </section>}
       <BibleGroup setPage={setPage} />

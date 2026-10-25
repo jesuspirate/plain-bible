@@ -431,7 +431,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
       </> : !signedIn ? <>
         <p class="muted">To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.</p>
         <p class="muted small">{LOCAL_ONLY}</p>
-        <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>Go to Settings → Sync your devices</button>
+        <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>Go to Settings → Account</button>
       </> : needCode ? <>
         <p class="muted">This device can’t unlock your prayers by itself. On a device where they already sync, open Your prayers and tap <strong>Link another device</strong>, then open that link here. Or copy the prayer key from there and paste it below.</p>
         <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder="Prayer key"

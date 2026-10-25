@@ -180,7 +180,7 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
   )
 }
 
-/** With `onAccount`, "Sign-in and account" is a row that opens its own page
+/** With `onAccount`, "Sign-in options" is a row that opens its own page
  *  (Settings shows it as one, with a back arrow); `part="account"` is that page. */
 export function AccountSection({ onAccount, part }: { onAccount?: () => void; part?: 'account' } = {}) {
   const { sync } = useApp()
@@ -299,8 +299,8 @@ export function AccountSection({ onAccount, part }: { onAccount?: () => void; pa
       )}
       {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
       {onAccount
-        ? <button class="link account-open" onClick={onAccount}>Sign-in and account ›</button>
-        : <details class="account-more"><summary>Sign-in and account</summary>{account}</details>}
+        ? <button class="link account-open" onClick={onAccount}>Sign-in options ›</button>
+        : <details class="account-more"><summary>Sign-in options</summary>{account}</details>}
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>
   )

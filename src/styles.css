@@ -681,7 +681,7 @@ body:has(.pick-verse) .sb { display: none; }
 .account-more summary { cursor: pointer; color: var(--accent); font-size: 15px; padding: 6px 0; }
 .account-more[open] summary { margin-bottom: 8px; }
 .account .move-card { margin-top: 4px; }
-/* "Sign-in and account" opens its own page in Settings. */
+/* "Sign-in options" opens its own page in Settings. */
 .account-open { display: block; margin: 8px 0 4px; padding: 8px 0; font-weight: 600; font-size: 16px; }
 
 /* Something new in a circle: a small dot on 🙏, nothing more. */
