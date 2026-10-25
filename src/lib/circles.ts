@@ -17,6 +17,7 @@ import { shareLink } from './native'
 import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
 import { noteLatest } from './circleNews'
+import { forget, keepNames } from './push'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const CHUNK = 1_000_000
@@ -123,6 +124,7 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
   await meta.set('circle-keys', raws)
   await meta.set('circles', out)
   setInCircles(out.length)
+  keepNames(out).catch(() => {})
   // None would open: this device holds some other account's key.
   if (failed && !unlocked) {
     await meta.set('acct', undefined)
@@ -197,6 +199,7 @@ export async function leaveCircle(circle: string) {
   await meta.set(`circle:${circle}`, undefined)
   const left = (await keptCircles()).filter(c => c.id !== circle)
   await meta.set('circles', left)
+  forget(circle)
   setInCircles(left.length)
 }
 

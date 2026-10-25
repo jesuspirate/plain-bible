@@ -19,7 +19,8 @@ import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
-import { BackIcon, BookmarkIcon } from './icons'
+import { BackIcon, BellIcon, BookmarkIcon } from './icons'
+import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import './circles.css'
 
@@ -321,7 +322,7 @@ function CircleView({ id }: { id: string }) {
   // What came in since you last looked shows first, marked, until you next
   // come back. Looking at it clears the dot.
   const [since] = useState(() => seenAt(id))
-  const load = () => loadFeed(id).then(f => { setFeed(f); setMsg(''); markSeen(id, newsIn(f, 0).latest, true) }, e => setMsg(message(e)))
+  const load = () => loadFeed(id).then(f => { setFeed(f); setMsg(''); markSeen(id, newsIn(f, 0).latest, true); clearNotifications(id).catch(() => {}) }, e => setMsg(message(e)))
   useEffect(() => {
     keptCircles().then(cs => setInfo(cs.find(c => c.id === id)))
     keptFeed(id).then(f => { if (f) { setFeed(f); markSeen(id, newsIn(f, 0).latest) } })
@@ -364,6 +365,7 @@ function CircleView({ id }: { id: string }) {
     <div class="circles">
       {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? 'Circle'}</button></h1>}
       {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? 'You' : m.name).join(', ')}</p>}
+      {feed && <Notify circle={id} name={info?.name ?? 'this circle'} />}
       {feed && <StreakBoard circle={id} name={info?.name ?? 'this circle'} feed={feed} onChange={load} />}
       <div class="c-row">
         {invite && !sent
@@ -381,6 +383,54 @@ function CircleView({ id }: { id: string }) {
           ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>Stay</button><button class="c-btn danger" disabled={busy} onClick={leave}>Leave and remove what I shared</button></div>
           : <button class="link small" onClick={() => setLeaving(true)}>Leave this circle</button>}
       </div>
+    </div>
+  )
+}
+
+/** Notifications for this circle, on this phone: one big switch. They say
+ *  only "Something new in Family", never what, and put no number on the icon. */
+function Notify({ circle, name }: { circle: string; name: string }) {
+  const [support, setSupport] = useState(pushSupport)
+  const [on, setOn] = useState(() => pushOn(circle))
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  // The server's key, fetched now, so the tap can go straight to the phone's question.
+  useEffect(() => { if (support === 'ok' && !on) prepareKey().catch(() => {}) }, [])
+  if (support === 'no') return null
+  const toggle = async () => {
+    // Started before anything else: an iPhone only asks "Allow
+    // notifications?" straight from a tap.
+    const doing = on ? turnOff(circle) : turnOn(circle)
+    setBusy(true); setErr('')
+    try { await doing; setOn(!on) } catch (e) {
+      setSupport(pushSupport())
+      setErr(navigator.onLine === false ? 'You’re offline. Try again once you’re connected.' : message(e))
+    } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card c-notify">
+      {support === 'install' ? <>
+        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>Notifications</strong></p>
+        <p class="small">On iPhone, notifications only work once Quiet Bible is on your Home Screen. Tap Share, then <strong>Add to Home Screen</strong>, and open Quiet Bible from there. Then turn them on here.</p>
+      </> : support === 'old' ? <>
+        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>Notifications</strong></p>
+        <p class="small">Notifications need iOS 16.4 or newer. Update your iPhone in Settings → General → Software Update to turn them on.</p>
+      </> : support === 'blocked' && !on ? <>
+        <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>Notifications</strong></p>
+        <p class="small">{blockedHelp()} Then come back and turn them on here.</p>
+      </> : (
+        <button class="c-switch-row" role="switch" aria-checked={on} disabled={busy} onClick={toggle}>
+          <BellIcon class="c-notify-ico" />
+          <span class="c-switch-text">
+            <strong>{busy ? (on ? 'Turning off…' : 'Turning on…') : 'Notify me'}</strong>
+            <span class="muted small">{on
+              ? `On for this phone: a quiet notice when there’s something new in ${name}. It never shows what was shared.`
+              : `A quiet notice on this phone when someone in ${name} shares, replies, or prays with you.`}</span>
+          </span>
+          <span class={'c-switch' + (on ? ' on' : '')} aria-hidden="true"><span /></span>
+        </button>
+      )}
+      {err && <p class="note small">{err}</p>}
     </div>
   )
 }

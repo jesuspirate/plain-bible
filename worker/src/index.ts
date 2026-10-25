@@ -7,6 +7,7 @@ import {
   verifyAuthenticationResponse, verifyRegistrationResponse,
 } from '@simplewebauthn/server'
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server'
+import { send, vapidPublic, type Subscription, type Vapid } from './push'
 
 export interface Env {
   DB: D1Database
@@ -17,6 +18,10 @@ export interface Env {
   RESEND_API_KEY?: string
   EMAIL_SECRET?: string
   EMAIL_FROM: string
+  /** Notifications are on when set: the service's P-256 key as JWK (made
+   *  once by the deploy script, then never changed, or every device would
+   *  have to turn notifications on again). */
+  VAPID_KEY?: string
 }
 
 const DAY = 86_400_000
@@ -383,13 +388,95 @@ function leaveCircle(db: D1Database, circle: string, userId: string) {
     db.prepare('DELETE FROM circle_items WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_invites WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
+    db.prepare('DELETE FROM push_circles WHERE circle_id = ?1 AND endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?2)').bind(circle, userId),
     ...['circle_chunks', 'circle_amens', 'circle_replies', 'circle_items', 'circle_invites'].map(t =>
       db.prepare(`DELETE FROM ${t} WHERE circle_id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)`).bind(circle)),
     db.prepare('DELETE FROM circles WHERE id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)').bind(circle),
   ]
 }
 
-async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+// ---------------------------------------------------------------------------
+// Notifications: "something new in <circle>", on the devices that asked.
+
+const PUSH_GAP = 2 * 60_000
+const vapid = (env: Env): Vapid | undefined => {
+  if (!env.VAPID_KEY) return undefined
+  try { return { jwk: JSON.parse(env.VAPID_KEY), subject: 'mailto:hello@myquietbible.com' } } catch { return undefined }
+}
+
+/** Tell the other members' devices (or only `to`, whose prayer was prayed
+ *  with) that something is new in this circle. At most once every two
+ *  minutes per device and circle; the notification on the phone stays one
+ *  per circle either way. */
+async function notifyCircle(env: Env, circle: string, from: string, to?: string) {
+  const v = vapid(env)
+  if (!v) return
+  const now = Date.now()
+  const rows = (await env.DB.prepare(`SELECT s.endpoint, s.p256dh, s.auth FROM push_circles p JOIN push_subs s ON s.endpoint = p.endpoint
+    JOIN circle_members m ON m.circle_id = p.circle_id AND m.user_id = s.user_id
+    WHERE p.circle_id = ?1 AND s.user_id != ?2 AND (?3 IS NULL OR s.user_id = ?3) AND (p.sent IS NULL OR p.sent < ?4)`)
+    .bind(circle, from, to ?? null, now - PUSH_GAP).all<Subscription>()).results
+  if (!rows.length) return
+  await env.DB.batch(rows.map(r => env.DB.prepare('UPDATE push_circles SET sent = ? WHERE endpoint = ? AND circle_id = ?').bind(now, r.endpoint, circle)))
+  const gone: string[] = []
+  await Promise.all(rows.map(r => send(r, { c: circle }, v, circle).then(ok => { if (!ok) gone.push(r.endpoint) }, e => console.error('push', e))))
+  if (gone.length) await env.DB.batch(gone.flatMap(e => [
+    env.DB.prepare('DELETE FROM push_circles WHERE endpoint = ?').bind(e),
+    env.DB.prepare('DELETE FROM push_subs WHERE endpoint = ?').bind(e),
+  ]))
+}
+
+const PUSH_HOSTS = /^https:\/\/[\w.-]+(:\d+)?\//
+const cleanSub = (v: unknown): Subscription => {
+  const s = v as { endpoint?: unknown; keys?: { p256dh?: unknown; auth?: unknown } } | null
+  const endpoint = s?.endpoint, p256dh = s?.keys?.p256dh, auth = s?.keys?.auth
+  if (typeof endpoint !== 'string' || endpoint.length > 1000 || !PUSH_HOSTS.test(endpoint) || !sealedText(p256dh, 200) || !sealedText(auth, 100)) throw new HttpError(400, 'Bad request')
+  return { endpoint, p256dh: p256dh as string, auth: auth as string }
+}
+
+async function pushRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const db = env.DB
+  const [a, b] = parts
+  // The key browsers subscribe with. null: notifications aren't set up.
+  if (a === 'key' && !b && req.method === 'GET') {
+    const v = vapid(env)
+    return json({ key: v ? vapidPublic(v.jwk) : null })
+  }
+  const userId = await session(req, env)
+  // This device stops hearing about anything (signing out).
+  if (!a && req.method === 'DELETE') {
+    const { endpoint } = await readJson<{ endpoint: string }>(req)
+    await db.batch([
+      db.prepare('DELETE FROM push_circles WHERE endpoint = ? AND EXISTS (SELECT 1 FROM push_subs s WHERE s.endpoint = ?1 AND s.user_id = ?2)').bind(endpoint, userId),
+      db.prepare('DELETE FROM push_subs WHERE endpoint = ? AND user_id = ?').bind(endpoint, userId),
+    ])
+    return json({ ok: true })
+  }
+  // One circle, on or off, for this device.
+  if (a === 'circles' && b && CIRCLE_ID.test(b)) {
+    const { sub } = await readJson<{ sub: unknown }>(req)
+    const s = cleanSub(sub)
+    if (req.method === 'PUT') {
+      await membership(db, b, userId)
+      if (!vapid(env)) throw new HttpError(503, 'Notifications aren’t set up yet. Try again later.')
+      const n = await db.prepare('SELECT COUNT(*) AS n FROM push_subs WHERE user_id = ?').bind(userId).first<{ n: number }>()
+      if ((n?.n ?? 0) >= 20 && !(await db.prepare('SELECT 1 FROM push_subs WHERE endpoint = ?').bind(s.endpoint).first())) throw new HttpError(413, 'Too many devices have notifications on')
+      await db.batch([
+        db.prepare(`INSERT INTO push_subs (endpoint, user_id, p256dh, auth, created) VALUES (?, ?, ?, ?, ?)
+          ON CONFLICT(endpoint) DO UPDATE SET user_id = excluded.user_id, p256dh = excluded.p256dh, auth = excluded.auth`).bind(s.endpoint, userId, s.p256dh, s.auth, Date.now()),
+        db.prepare('INSERT INTO push_circles (endpoint, circle_id) VALUES (?, ?) ON CONFLICT DO NOTHING').bind(s.endpoint, b),
+      ])
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('DELETE FROM push_circles WHERE endpoint = ?1 AND circle_id = ?2 AND EXISTS (SELECT 1 FROM push_subs s WHERE s.endpoint = ?1 AND s.user_id = ?3)').bind(s.endpoint, b, userId).run()
+      return json({ ok: true })
+    }
+  }
+  throw new HttpError(404, 'Not found')
+}
+
+async function circleRoute(req: Request, env: Env, parts: string[], ctx: ExecutionContext): Promise<Response> {
   const db = env.DB, now = Date.now()
   const [a, b, c, d, e] = parts
   // Looking at an invite needs no account yet, so the link can say who it's
@@ -513,6 +600,8 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
       const res = await db.prepare('INSERT INTO circle_items (circle_id, id, user_id, at, body, chunks, size) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING')
         .bind(circle, item, userId, now, body, chunks, size).run()
       if (!res.meta.changes && !(await own())) throw new HttpError(409, 'Try again')
+      // A prayer is news once its audio is all there (see the chunks below).
+      if (res.meta.changes && !chunks) ctx.waitUntil(notifyCircle(env, circle, userId))
       return json({ ok: true })
     }
     if (req.method === 'DELETE') {
@@ -530,7 +619,8 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
       if (!(await db.prepare('SELECT 1 FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first())) throw new HttpError(404, 'Not found')
       const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_replies WHERE circle_id = ? AND item = ?').bind(circle, item).first<{ n: number }>()
       if ((n?.n ?? 0) >= 200) throw new HttpError(413, 'This has as many replies as it can hold')
-      await db.prepare('INSERT INTO circle_replies (circle_id, item, id, user_id, at, body) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, e, userId, now, body).run()
+      const res = await db.prepare('INSERT INTO circle_replies (circle_id, item, id, user_id, at, body) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, e, userId, now, body).run()
+      if (res.meta.changes) ctx.waitUntil(notifyCircle(env, circle, userId))
       return json({ ok: true })
     }
     if (req.method === 'DELETE') {
@@ -540,8 +630,11 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
   }
   if (d === 'amen' && !e) {
     if (req.method === 'PUT') {
-      if (!(await db.prepare('SELECT 1 FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first())) throw new HttpError(404, 'Not found')
-      await db.prepare('INSERT INTO circle_amens (circle_id, item, user_id, at) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, userId, now).run()
+      const it = await db.prepare('SELECT user_id FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first<{ user_id: string }>()
+      if (!it) throw new HttpError(404, 'Not found')
+      const res = await db.prepare('INSERT INTO circle_amens (circle_id, item, user_id, at) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, userId, now).run()
+      // A 🙏 is news only to the one who shared it (as with the dot).
+      if (res.meta.changes) ctx.waitUntil(notifyCircle(env, circle, userId, it.user_id))
       return json({ ok: true })
     }
     if (req.method === 'DELETE') {
@@ -562,7 +655,12 @@ async function circleRoute(req: Request, env: Env, parts: string[]): Promise<Res
     if (!it || n >= it.chunks) throw new HttpError(404, 'Not found')
     const data = await req.arrayBuffer()
     if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
-    await db.prepare('INSERT INTO circle_chunks (circle_id, item, n, data) VALUES (?, ?, ?, ?) ON CONFLICT DO UPDATE SET data = excluded.data').bind(circle, item, n, data).run()
+    const res = await db.prepare('INSERT INTO circle_chunks (circle_id, item, n, data) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, n, data).run()
+    if (!res.meta.changes) await db.prepare('UPDATE circle_chunks SET data = ? WHERE circle_id = ? AND item = ? AND n = ?').bind(data, circle, item, n).run()
+    // The last piece of a prayer's audio: now the others can hear it.
+    else if ((await db.prepare('SELECT COUNT(*) AS n FROM circle_chunks WHERE circle_id = ? AND item = ?').bind(circle, item).first<{ n: number }>())?.n === it.chunks) {
+      ctx.waitUntil(notifyCircle(env, circle, userId))
+    }
     return json({ ok: true })
   }
   throw new HttpError(404, 'Not found')
@@ -614,7 +712,7 @@ async function approveRoute(req: Request, env: Env, parts: string[]): Promise<Re
   throw new HttpError(404, 'Not found')
 }
 
-async function route(req: Request, env: Env): Promise<Response> {
+async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
   const { origin, rpID } = site(req, env)
@@ -628,11 +726,14 @@ async function route(req: Request, env: Env): Promise<Response> {
     return approveRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
   }
   if (pathname === '/circles' || pathname.startsWith('/circles/')) {
-    return circleRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
+    return circleRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent), ctx)
+  }
+  if (pathname === '/push' || pathname.startsWith('/push/')) {
+    return pushRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
   }
 
   switch (key) {
-    case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env) })
+    case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env) })
 
     // Sign in (or sign up) with a code sent by email, or add an email to
     // the signed-in account.
@@ -739,7 +840,8 @@ async function route(req: Request, env: Env): Promise<Response> {
       // Out of every circle first, taking what they shared with them.
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.prepare('DELETE FROM push_circles WHERE endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?)').bind(userId).run()
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })
@@ -774,12 +876,12 @@ async function route(req: Request, env: Env): Promise<Response> {
 }
 
 export default {
-  async fetch(req: Request, env: Env): Promise<Response> {
+  async fetch(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
     const headers = cors(req, env)
     if (req.method === 'OPTIONS') return new Response(null, { status: 204, headers })
     let res: Response
     try {
-      res = await route(req, env)
+      res = await route(req, env, ctx)
     } catch (e) {
       if (e instanceof HttpError) res = json({ error: e.message, ...e.extra }, e.status)
       else { console.error(e); res = json({ error: 'Something went wrong' }, 500) }
