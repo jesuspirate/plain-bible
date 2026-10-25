@@ -3,6 +3,7 @@
 # database on first run, applies migrations, deploys the Worker, and prints
 # VITE_SYNC_URL=<url> for the app build. Needs CLOUDFLARE_API_TOKEN and
 # CLOUDFLARE_ACCOUNT_ID in the environment; RESEND_API_KEY turns on email sign-in.
+# Makes the notifications key (VAPID_KEY) on the first run that can.
 set -euo pipefail
 cd "$(dirname "$0")/../worker"
 export CI=1
@@ -24,12 +25,19 @@ echo "$out" >&2
 # Email sign-in: on once RESEND_API_KEY is a repository secret. EMAIL_SECRET
 # (the key for email fingerprints) is made once and then never changed, or
 # no one could sign in by email again.
+secrets=$(npx wrangler secret list 2>/dev/null || echo '[]')
 if [ -n "${RESEND_API_KEY:-}" ]; then
-  secrets=$(npx wrangler secret list 2>/dev/null || echo '[]')
   printf '%s' "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY >&2
   if ! echo "$secrets" | grep -q '"EMAIL_SECRET"'; then
     openssl rand -base64 32 | tr -d '\n' | npx wrangler secret put EMAIL_SECRET >&2
   fi
+fi
+# Notifications for circles: the service's own key (VAPID), made here once
+# and kept only as a Worker secret. Never changed after, or every phone
+# would have to turn its notifications on again.
+if [ "$secrets" != '[]' ] && ! echo "$secrets" | grep -q '"VAPID_KEY"'; then
+  node -e 'const k=require("crypto").generateKeyPairSync("ec",{namedCurve:"P-256"}).privateKey.export({format:"jwk"});process.stdout.write(JSON.stringify(k))' \
+    | npx wrangler secret put VAPID_KEY >&2
 fi
 url=$(echo "$out" | grep -oE 'https://[A-Za-z0-9.-]+\.workers\.dev' | head -1)
 if [ -z "$url" ]; then

@@ -170,7 +170,17 @@ export async function signIn(): Promise<string> {
   return token
 }
 
-export const signOut = (token: string) => api('/auth/logout', { method: 'POST', token }).catch(() => {})
+export async function signOut(token: string) {
+  // A device signing out stops hearing about its circles (see lib/push).
+  try {
+    if (localStorage.getItem('plain-bible:push-circles') && navigator.serviceWorker?.controller) {
+      const sub = await (await navigator.serviceWorker.ready).pushManager?.getSubscription()
+      if (sub) await api('/push', { method: 'DELETE', token, body: { endpoint: sub.endpoint } }).then(() => sub.unsubscribe())
+    }
+    localStorage.removeItem('plain-bible:push-circles')
+  } catch { /* ignore */ }
+  return api('/auth/logout', { method: 'POST', token }).catch(() => {})
+}
 export const deleteAccount = (token: string) => api('/account', { method: 'DELETE', token })
 export const accountInfo = (token: string) => api<{ created: number; passkeys: number; updated: number | null; email: string | null }>('/account', { token })
 

@@ -174,3 +174,9 @@ export const PlayIcon = ({ size, class: c }: P) => (
 export const PauseIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><rect x="5.5" y="4.5" width="4.5" height="15" rx="1.2" fill="currentColor" /><rect x="14" y="4.5" width="4.5" height="15" rx="1.2" fill="currentColor" /></svg>
 )
+
+/** A bell: notifications. */
+export const BellIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M6 16.5V11a6 6 0 0 1 12 0v5.5l1.8 2H4.2z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M9.8 20.6a2.4 2.4 0 0 0 4.4 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+)

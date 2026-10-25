@@ -81,6 +81,8 @@ export default defineConfig({
         // so a page never runs half old and half new.
         skipWaiting: false,
         clientsClaim: false,
+        // Notifications for circles (public/push-sw.js).
+        importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,png}'],
         // /welcome without the slash is the site's redirect to /welcome/, not a page the app should answer for.
         navigateFallbackDenylist: [/\/welcome$/],

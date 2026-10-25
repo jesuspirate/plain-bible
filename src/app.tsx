@@ -207,6 +207,28 @@ export function App() {
     return () => { clearTimeout(timer); document.removeEventListener('visibilitychange', back); removeEventListener('online', back) }
   }, [sync.account?.token])
 
+  // A circle's notification (public/push-sw.js): tapped, it opens that
+  // circle; arriving while the app is open, it lights the dot. And if this
+  // phone has notifications on, it keeps its push address current.
+  useEffect(() => {
+    const sw = navigator.serviceWorker
+    if (!sw) return
+    const on = (e: MessageEvent) => {
+      const m = e.data as { t?: string; c?: string } | null
+      if (m?.t === 'open-circle') go(m.c ? `circles/${m.c}` : 'circles')
+      else if (m?.t === 'circle-news') checkCircleNews(true)
+    }
+    sw.addEventListener('message', on)
+    return () => sw.removeEventListener('message', on)
+  }, [])
+  useEffect(() => {
+    let on = false
+    try { on = !!localStorage.getItem('plain-bible:push-circles') } catch { /* ignore */ }
+    if (!sync.account || !on) return
+    const t = window.setTimeout(() => import('./lib/push').then(m => m.refreshPush()).catch(() => {}), 5000)
+    return () => clearTimeout(t)
+  }, [sync.account?.token])
+
   if (error) return (
     <div class="center">
       <p class="error">{t('Could not load the list of versions: {error}', { error })}</p>

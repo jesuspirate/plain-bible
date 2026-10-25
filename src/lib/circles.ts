@@ -17,6 +17,7 @@ import { shareLink } from './native'
 import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
 import { noteLatest } from './circleNews'
+import { forget, keepNames } from './push'
 import { t } from '../i18n'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
@@ -130,6 +131,7 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
   await meta.set('circle-keys', raws)
   await meta.set('circles', out)
   setInCircles(out.length)
+  keepNames(out).catch(() => {})
   // None would open: either this device holds some other account's key, or
   // the account started over with a new key and those need a new invite.
   if (failed && !unlocked) {
@@ -284,6 +286,7 @@ export async function leaveCircle(circle: string) {
   await meta.set(`circle:${circle}`, undefined)
   const left = (await keptCircles()).filter(c => c.id !== circle)
   await meta.set('circles', left)
+  forget(circle)
   setInCircles(left.length)
 }
 
