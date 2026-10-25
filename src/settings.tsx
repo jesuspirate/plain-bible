@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { BackIcon, BookmarkIcon, RefreshIcon } from './icons'
+import { BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, DataIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
@@ -264,14 +264,15 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
       <h2 class="set-kicker">Bible</h2>
       <div class="set-list">
         <button class="set-row set-version" onClick={() => setOpen('version')}>
+          <span class="set-icon" aria-hidden="true"><BookIcon size={24} /></span>
           <span class="set-vid">{version}</span>
           <span class="set-label">{byId.get(version)?.name ?? version}</span>
           <span class="set-chev" aria-hidden="true">›</span>
         </button>
         {version !== settings.version && byId.has(settings.version) &&
-          <Row label={`Back to ${settings.version}`} sub="Your Bible" onClick={() => goTo(settings.version, parallel)} />}
-        <Row label="Compare side by side" value={parallel.length ? parallel.join(', ') : 'Off'} onClick={() => setOpen('compare')} />
-        <Row label="Manage versions" onClick={() => setPage('versions')} />
+          <Row icon={<ReturnIcon size={24} />} label={`Back to ${settings.version}`} sub="Your Bible" onClick={() => goTo(settings.version, parallel)} />}
+        <Row icon={<CompareIcon size={24} />} label="Compare side by side" value={parallel.length ? parallel.join(', ') : 'Off'} onClick={() => setOpen('compare')} />
+        <Row icon={<BooksIcon size={24} />} label="Manage versions" onClick={() => setPage('versions')} />
       </div>
       {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
       {open === 'compare' && (
@@ -378,7 +379,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <div class="set-list">
           {settings.streaks && <StreakRow />}
           <Row icon={<BookmarkIcon size={24} />} label="Saved" sub="Bookmarks, notes, highlights" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
-          <Row icon="🔎" label="Advanced search" onClick={() => setPage('search')} />
+          <Row icon={<SearchIcon size={24} />} label="Advanced search" onClick={() => setPage('search')} />
         </div>
       </section>
       {sync.enabled && <section class="set-group">
@@ -392,18 +393,19 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <h2 class="set-kicker">Reading</h2>
         <div class="set-list">
           <div class="set-row set-static">
+            <span class="set-icon" aria-hidden="true"><TextSizeIcon size={24} /></span>
             <span class="set-label">Text size</span>
             <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label="Smaller text">A−</button>
             <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label="Larger text">A+</button>
           </div>
-          <div class="set-row set-static set-theme">{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
-          <Row label="Font and layout" value={fontName} onClick={() => setPage('reading')} />
+          <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', 'Light'], ['sepia', 'Sepia'], ['dark', 'Dark'], ['system', 'Auto']])}</div>
+          <Row icon={<LayoutIcon size={24} />} label="Font and layout" value={fontName} onClick={() => setPage('reading')} />
         </div>
       </section>
       <section class="set-group">
         <div class="set-list">
-          <Row label="Your data" onClick={() => setPage('data')} />
-          <Row label="About" onClick={() => setPage('about')} />
+          <Row icon={<DataIcon size={24} />} label="Your data" onClick={() => setPage('data')} />
+          <Row icon={<InfoIcon size={24} />} label="About" onClick={() => setPage('about')} />
         </div>
       </section>
       <VersionLine />

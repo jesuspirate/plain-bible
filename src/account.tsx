@@ -9,6 +9,7 @@ import {
 import { Settings, useApp } from './state'
 import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { DeviceLink, PasteMove } from './move'
+import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
 
 export interface SyncApi {
   enabled: boolean
@@ -272,7 +273,7 @@ export function AccountSection() {
     <div class="account account-page">
       <div class="set-list">
         <div class="set-row set-static">
-          <span class="set-icon acct-ok" aria-hidden="true">✓</span>
+          <span class="set-icon" aria-hidden="true"><CheckIcon size={24} /></span>
           <span class="set-label">Signed in{info?.email ? ` as ${info.email}` : ''}
             {info && <span class="set-sub">{keys} {keys === 1 ? 'passkey' : 'passkeys'} · since {new Date(info.created).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' })}</span>}
           </span>
@@ -282,6 +283,7 @@ export function AccountSection() {
       <h2 class="set-kicker">Sync</h2>
       <div class="set-list">
         <button class="set-row" onClick={sync.run} disabled={sync.busy}>
+          <span class="set-icon" aria-hidden="true"><RefreshIcon size={24} /></span>
           <span class="set-label">Sync now<span class="set-sub">{last}</span></span>
         </button>
         <DeviceLink row />
@@ -290,19 +292,21 @@ export function AccountSection() {
       <h2 class="set-kicker">Sign-in</h2>
       <div class="set-list">
         {email && !addEmail && <button class="set-row" onClick={() => setAddEmail(true)} disabled={!!working}>
+          <span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span>
           <span class="set-label">{info?.email ? 'Change email' : 'Add an email'}{!info?.email && <span class="set-sub">Another way in if you lose your passkey</span>}</span>
         </button>}
         <button class="set-row" onClick={addKey} disabled={!!working}>
+          <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
           <span class="set-label">{working === 'add' ? 'Waiting for passkey…' : keys ? 'Add another passkey' : 'Add a passkey'}
             <span class="set-sub">{keys ? 'Only for a device your passkeys don’t reach' : 'Face ID, a fingerprint or your screen lock'}</span></span>
         </button>
-        {email && info?.email && !!keys && <button class="set-row" onClick={dropEmail} disabled={!!working}><span class="set-label">Remove email</span></button>}
+        {email && info?.email && !!keys && <button class="set-row" onClick={dropEmail} disabled={!!working}><span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span><span class="set-label">Remove email</span></button>}
       </div>
       {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(`You can now also sign in with ${hint}.`) }} />}
 
       <div class="set-list">
-        <button class="set-row" onClick={logout} disabled={!!working}><span class="set-label">Sign out</span></button>
-        <button class="set-row danger" onClick={remove} disabled={!!working}><span class="set-label">Delete account</span></button>
+        <button class="set-row" onClick={logout} disabled={!!working}><span class="set-icon" aria-hidden="true"><SignOutIcon size={24} /></span><span class="set-label">Sign out</span></button>
+        <button class="set-row danger" onClick={remove} disabled={!!working}><span class="set-icon" aria-hidden="true"><TrashIcon size={24} /></span><span class="set-label">Delete account</span></button>
       </div>
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>

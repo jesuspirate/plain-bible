@@ -66,3 +66,82 @@ export const CloseIcon = ({ size, class: c }: P) => (
 export const BackIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M15 4.5L7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
+
+// Settings rows. Each row has one of these at its left, in the accent colour,
+// so the names line up down the whole sheet.
+const line = { fill: 'none', stroke: 'currentColor', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const
+
+/** An open book: the Bible you read. */
+export const BookIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M12 6.6C10 5.1 7 4.6 3 5v13.6c4-.4 7 .1 9 1.6 2-1.5 5-2 9-1.6V5c-4-.4-7 .1-9 1.6zM12 6.6v13.6" {...line} /></svg>
+)
+
+/** Books standing on a shelf: all the versions. */
+export const BooksIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M3.5 4h4v16h-4zM10 6.5h4V20h-4zM15.8 7.8l3.6-1 2.7 12.4-3.6 1z" {...line} /></svg>
+)
+
+/** A magnifying glass: search. */
+export const SearchIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="10.5" cy="10.5" r="6.5" {...line} /><path d="M15.4 15.4l5.1 5.1" {...line} stroke-width="2.8" /></svg>
+)
+
+/** A small A and a big A: text size. */
+export const TextSizeIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M2.5 19.5l3.6-9 3.6 9M3.8 16.3h4.6M11 19.5l5.3-14 5.3 14M13 14.3h6.6" {...line} /></svg>
+)
+
+/** A circle half light, half dark: the theme. */
+export const ThemeIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="8.5" {...line} /><path d="M12 3.5a8.5 8.5 0 0 1 0 17z" fill="currentColor" /></svg>
+)
+
+/** Lines of text: font and layout. */
+export const LayoutIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M4 5.5h16M4 10h16M4 14.5h16M4 19h10" {...line} /></svg>
+)
+
+/** Into a tray: your data, to bring in or keep. */
+export const DataIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M12 3.5v10.5M7.5 9.5l4.5 4.5 4.5-4.5M4 14.5v4A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-4" {...line} /></svg>
+)
+
+/** An i in a circle: about. */
+export const InfoIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="9" {...line} /><path d="M12 11v6" {...line} stroke-width="2.6" /><circle cx="12" cy="7.4" r="1.5" fill="currentColor" /></svg>
+)
+
+/** An arrow turning back: back to your own Bible. */
+export const ReturnIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M8.5 4.5L4 9l4.5 4.5M4.5 9h10a5.5 5.5 0 0 1 0 11H10" {...line} /></svg>
+)
+
+/** A tick in a circle: signed in. */
+export const CheckIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="9" {...line} /><path d="M7.8 12.4l2.9 2.9 5.6-6" {...line} stroke-width="2.6" /></svg>
+)
+
+/** An envelope: email. */
+export const MailIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><rect x="3" y="5.5" width="18" height="13" rx="2" {...line} /><path d="M3.8 7l8.2 6 8.2-6" {...line} /></svg>
+)
+
+/** A key: a passkey. */
+export const KeyIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="7.5" cy="12" r="4" {...line} /><path d="M11.5 12h9.5M17.5 12v3.5M20.5 12v2.5" {...line} /></svg>
+)
+
+/** A phone: another device. */
+export const PhoneIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><rect x="6.5" y="2.5" width="11" height="19" rx="2.5" {...line} /><path d="M10.5 18h3" {...line} /></svg>
+)
+
+/** Out through a door: sign out. */
+export const SignOutIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M13.5 4.5h-7A1.5 1.5 0 0 0 5 6v12a1.5 1.5 0 0 0 1.5 1.5h7M10.5 12H21M17 8l4 4-4 4" {...line} /></svg>
+)
+
+/** A bin: delete. */
+export const TrashIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M4 6.5h16M9.5 6.5v-2h5v2M6.5 6.5l1 13a1.5 1.5 0 0 0 1.5 1.4h6a1.5 1.5 0 0 0 1.5-1.4l1-13M10 10.5v6M14 10.5v6" {...line} /></svg>
+)

@@ -4,6 +4,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { applyMove, fetchMove, makeDeviceLink, makeMoveLink, MOVED, MOVED_IN, movedIn, NEW_HOST, NEW_ORIGIN, onNewAddress, onOldAddress, parseMoveLink } from './lib/move'
 import { loadAccount, register } from './lib/sync'
 import { copyText, isIOS } from './lib/native'
+import { PhoneIcon } from './icons'
 
 const standalone = () => (navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches
 const plural = (n: number, one: string, many = one + 's') => `${n} ${n === 1 ? one : many}`
@@ -246,6 +247,7 @@ export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boo
   // As a row in a Settings card.
   if (row) return <>
     <button class="set-row" disabled={state === 'working'} onClick={make}>
+      <span class="set-icon" aria-hidden="true"><PhoneIcon size={24} /></span>
       <span class="set-label">{state === 'working' ? 'Making a link…' : 'Link another device'}<span class="set-sub">Sign it in without typing anything</span></span>
     </button>
     {error && <p class="note small set-note">{error}</p>}

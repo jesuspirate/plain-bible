@@ -469,13 +469,14 @@ main.with-mini { padding-bottom: 144px; }
 @media (hover: hover) { .set-row:hover:not(:disabled) { background: var(--chip); } }
 .set-row:disabled { opacity: 1; cursor: default; }
 .set-label { flex: 1; min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
-.set-icon svg { color: var(--accent); }
+.set-icon svg { display: block; color: var(--accent); }
+.set-row.danger .set-icon svg { color: inherit; }
 .set-sub { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 400; color: var(--muted); }
 .set-value { color: var(--muted); font-weight: 400; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .set-static { cursor: default; }
 @media (hover: hover) { .set-static:hover { background: none !important; } }
 .set-static .size-btn { width: 52px; height: 40px; border-radius: 12px; }
-.set-theme { padding: 10px 12px; }
+.set-theme { padding: 10px 12px 10px 16px; }
 .set-theme .seg { display: flex; flex: 1; border-radius: 12px; }
 .set-theme .seg button { flex: 1; padding: 10px 4px; font-size: 16px; }
 .set-chev { color: var(--muted); font-size: 22px; line-height: 1; }
@@ -501,7 +502,6 @@ main.with-mini { padding-bottom: 144px; }
 button.danger, .set-row.danger { color: #b3261e; }
 .account-page .set-list { margin: 0 0 18px; }
 .account-page .set-kicker { margin-top: 4px; }
-.acct-ok { color: var(--accent); font: 700 20px var(--sans); }
 .set-list .move-card { margin: 0; border: none; border-top: 1px solid var(--line); border-radius: 0; padding: 12px 16px; }
 .set-note { margin: 0; padding: 8px 16px; }
 :root[data-theme='dark'] button.danger, :root[data-theme='dark'] .set-row.danger { color: #ff8a80; }
