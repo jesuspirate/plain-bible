@@ -145,3 +145,13 @@ export const SignOutIcon = ({ size, class: c }: P) => (
 export const TrashIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M4 6.5h16M9.5 6.5v-2h5v2M6.5 6.5l1 13a1.5 1.5 0 0 0 1.5 1.4h6a1.5 1.5 0 0 0 1.5-1.4l1-13M10 10.5v6M14 10.5v6" {...line} /></svg>
 )
+
+/** A marker pen over a line: highlights. */
+export const HighlightIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M15 3.8l5.2 5.2-8.6 8.6H6.4v-5.2zM12.3 6.5l5.2 5.2M3.5 21h10" {...line} /></svg>
+)
+
+/** A pencil: edit. */
+export const EditIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M16.2 4.2l3.6 3.6L8.5 19.1 4 20l.9-4.5zM13.8 6.6l3.6 3.6" {...line} /></svg>
+)

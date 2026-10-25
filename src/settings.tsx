@@ -380,7 +380,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <h2 class="set-kicker">Yours</h2>
         <div class="set-list">
           {settings.streaks && <StreakRow />}
-          <Row icon={<BookmarkIcon size={24} />} label="Saved" sub="Bookmarks, notes, highlights" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
+          <Row icon={<BookmarkIcon size={24} />} label="Saved" sub="Highlights, notes, bookmarks" value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
         </div>
       </section>
       {sync.enabled && <section class="set-group">
