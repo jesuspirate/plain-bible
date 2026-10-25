@@ -558,17 +558,22 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
    here animates, so it costs nothing while you read. */
 :root { --rim-light: #fff; --rim-dark: rgba(0,0,0,.32); }
 /* What tints the glass: the page colour in Light and Sepia; in Dark a faint white, as on iPhone, so it reads lighter than the page. */
-:root { --glass-tint: color-mix(in srgb, var(--surface) 42%, transparent); }
+:root { --glass-tint: color-mix(in srgb, var(--surface) 55%, transparent); }
 :root[data-theme='sepia'] { --rim-light: #fffcf2; --rim-dark: rgba(70,45,15,.38); }
-:root[data-theme='dark'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(255,255,255,.13); }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(255,255,255,.13); } }
+:root[data-theme='dark'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(62,62,72,.66); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(62,62,72,.66); } }
 @supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   :root { --glass-open: color-mix(in srgb, var(--surface) 86%, transparent); }
   .sb-field, .sb-mini .sb-field, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
-    -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%);
+    -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
   }
   .sb-field { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+  /* Whatever shows through, the words on the glass stay readable: full text
+     colour, not the faded grey, with a soft halo of the glass behind them. */
+  .sb-field input::placeholder, .sb-field input { color: var(--text); text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface); }
+  .sb-field input::placeholder { color: color-mix(in srgb, var(--text) 82%, transparent); }
+  .sb-field .sb-glass { color: var(--text); filter: drop-shadow(0 0 3px var(--surface)); }
   /* The rim: a 1px ring drawn with a gradient, light top and bottom, dark at the sides. */
   .sb-field::after, .sb-pray::after {
     content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
