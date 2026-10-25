@@ -64,6 +64,14 @@ export function defaultSettings(catalog?: Catalog): Settings {
   }
 }
 
+/** The theme picked on the welcome page before the Bible was first opened, if any (welcome/welcome.ts). */
+export function welcomeTheme(): Settings['theme'] | undefined {
+  try {
+    const t = localStorage.getItem('plain-bible:welcome-theme')
+    return t === 'light' || t === 'sepia' || t === 'dark' ? t : undefined
+  } catch { return undefined }
+}
+
 export function loadSettings(): Partial<Settings> {
   try {
     const s = JSON.parse(localStorage.getItem(KEY) || '{}')

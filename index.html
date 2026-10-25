@@ -3,13 +3,36 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <meta name="description" content="Just the Bible: 116 versions in 48 languages, fast and thorough search, works offline. No plans, no accounts." />
+    <meta name="description" content="Just the Bible: {{versions}} versions in {{languages}} languages, a search that finds things, and nothing else. No plans, no ads, works offline." />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="Quiet Bible" />
+    <meta property="og:title" content="Quiet Bible" />
+    <meta property="og:description" content="Just the Bible. Many versions and languages, a search that finds things, and nothing else. Free, no ads, works offline." />
+    <meta property="og:url" content="https://myquietbible.com/" />
+    <meta property="og:image" content="https://myquietbible.com/icon-512.png" />
     <meta name="theme-color" content="#f4ecd8" />
     <script>
-      // Apply the saved theme before the first paint, so the status bar and
-      // page start in the right colour.
+      // A first visit to the bare address goes to the welcome page (what this
+      // is, and how to put it on a Home Screen); the Bible is one tap away
+      // there. Never for an app on a Home Screen, which keeps its own storage
+      // and so looks new; never for a link into the Bible (a verse someone
+      // shared, a circle invite, a move link); and never again once the
+      // Bible has been opened here.
       try {
-        var t = (JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').theme) || 'sepia'
+        if (!location.hash && !location.search && !localStorage.getItem('plain-bible:settings') && !localStorage.getItem('plain-bible:welcomed')
+          && matchMedia('(display-mode: browser)').matches && navigator.standalone !== true) {
+          // On its way: hide the page, and don't start the Bible behind it (src/main.tsx).
+          window.plainBibleWelcome = true
+          document.documentElement.style.visibility = 'hidden'
+          location.replace('welcome/')
+        }
+      } catch (e) {}
+
+      // Apply the saved theme before the first paint, so the status bar and
+      // page start in the right colour. On the first start, the theme picked
+      // on the welcome page, if any.
+      try {
+        var t = (JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').theme) || localStorage.getItem('plain-bible:welcome-theme') || 'sepia'
         if (t === 'system') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
         document.documentElement.dataset.theme = t
         document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]

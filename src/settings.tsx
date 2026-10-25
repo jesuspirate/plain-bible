@@ -364,6 +364,8 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
 
   if (page === 'about') return <>
     <p>Quiet Bible is just the Bible: {catalog.translations.length} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional. Your highlights and settings are stored on your device{sync.account ? ' and synced with your passkey account' : ''}.</p>
+    {/* The welcome page is what a first visit to the bare address shows: what this is, and how to put it on a Home Screen. */}
+    <p>To pass Quiet Bible on, send <strong>myquietbible.com</strong>. It opens on a <a href="welcome/">welcome page</a> that says what this is and how to put it on a Home Screen.</p>
     <p class="muted small">Texts come from the <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">Scrollmapper Bible databases</a> and
       the <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> (CC BY 4.0).
       Strong's dictionary from <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> (CC BY-SA).
