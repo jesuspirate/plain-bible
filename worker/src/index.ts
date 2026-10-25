@@ -162,15 +162,23 @@ const CODE_MAIL = {
 async function sendCode(env: Env, to: string, code: string, lang?: string) {
   const w = CODE_MAIL[lang as keyof typeof CODE_MAIL] ?? CODE_MAIL.en
   const type = w.type.replace('{min}', String(CODE_MINUTES))
-  const text = `${w.is} ${code}\n\n${type}\n\n${w.ignore}`
-  const html = `<div style="font-family:Georgia,serif;font-size:17px;line-height:1.5;color:#3b2f22">
+  // Plain and link-free on purpose: mail filters trust short transactional
+  // mail with a matching text part, and no tracking or links to judge.
+  const text = `${w.is} ${code}\n\n${type}\n\n${w.ignore}\n\n— Quiet Bible`
+  const html = `<!doctype html><html lang="${lang && lang in CODE_MAIL ? lang : 'en'}"><head><meta charset="utf-8"><title>Quiet Bible</title></head>
+<body><div style="font-family:Georgia,serif;font-size:17px;line-height:1.5;color:#3b2f22">
 <p>${w.is}</p><p style="font-size:32px;letter-spacing:6px;margin:8px 0 16px"><strong>${code}</strong></p>
 <p>${type}</p>
-<p style="color:#8a7a66;font-size:14px">${w.ignore}</p></div>`
+<p style="color:#8a7a66;font-size:14px">${w.ignore}</p>
+<p style="color:#8a7a66;font-size:14px">— Quiet Bible</p></div></body></html>`
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: env.EMAIL_FROM, to: [to], subject: w.subject.replace('{code}', code), text, html }),
+    body: JSON.stringify({
+      from: env.EMAIL_FROM, to: [to], subject: w.subject.replace('{code}', code), text, html,
+      // Each code its own message, so Gmail doesn't fold new codes under old ones.
+      headers: { 'X-Entity-Ref-ID': crypto.randomUUID() },
+    }),
   }).catch(() => null)
   if (!res?.ok) {
     console.error('email not sent', res?.status, await res?.text().catch(() => ''))
