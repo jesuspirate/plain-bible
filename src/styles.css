@@ -122,9 +122,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .vn { all: unset; cursor: pointer; font: 600 var(--vn-size, .62em) var(--sans); color: var(--muted); vertical-align: super; margin-right: 4px; padding: 0 2px; }
 @media (hover: hover) { .vn:hover { color: var(--accent); } }
 /* Where a search or link lands: a glow that fades by itself (see Reader) */
-.target { border-radius: 4px; animation: landed 3.2s ease-out forwards; }
+.target { border-radius: 4px; animation: landed 8s ease-in-out forwards; }
 @keyframes landed {
-  0%, 55% { background: color-mix(in srgb, var(--mark) 55%, transparent); }
+  0%, 75% { background: color-mix(in srgb, var(--mark) 55%, transparent); }
   100% { background: color-mix(in srgb, var(--mark) 0%, transparent); }
 }
 .target.leaving { animation: let-go .5s ease-out forwards; }

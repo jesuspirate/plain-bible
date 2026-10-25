@@ -168,10 +168,11 @@ export function Reader({ route }: { route: Route }) {
 
   useEffect(() => setSelected([]), [book, chapter, version])
 
-  // The verse a search, link or reminder lands on glows for a moment, then
-  // lets go so you are just reading. It goes sooner on your first scroll or
-  // tap, and for good once you highlight or select it. Back (the clock)
-  // still takes you to where you were, so it needn't stay as a marker.
+  // The verse a search, link or reminder lands on glows long enough to find
+  // and read it, then fades so you are just reading. A small scroll to read
+  // keeps it; scrolling it off the screen lets it go sooner, and highlighting
+  // or selecting it ends it for good. Back (the clock) still takes you to
+  // where you were, so it needn't stay as a marker.
   const [glow, setGlow] = useState(0)
   const [leaving, setLeaving] = useState(false)
   const landed = useRef('')
@@ -190,11 +191,15 @@ export function Reader({ route }: { route: Route }) {
       setLeaving(true)
       gone = window.setTimeout(() => setGlow(0), 600)
     }
-    const events = ['pointerdown', 'wheel', 'touchmove', 'keydown'] as const
-    // A moment's grace, so the tap that opened the result doesn't end it.
-    const arm = setTimeout(() => events.forEach(e => addEventListener(e, letGo, { passive: true })), 400)
-    const done = setTimeout(() => setGlow(0), 3400)
-    return () => { clearTimeout(arm); clearTimeout(done); clearTimeout(gone); events.forEach(e => removeEventListener(e, letGo)) }
+    let seen = false
+    const watch = new IntersectionObserver(([e]) => {
+      if (e.isIntersecting) seen = true
+      else if (seen) letGo()
+    })
+    // After the scroll that brings it into view.
+    const arm = setTimeout(() => { const el = document.getElementById('v' + target); if (el) watch.observe(el) }, 400)
+    const done = setTimeout(() => setGlow(0), 8200)
+    return () => { clearTimeout(arm); clearTimeout(done); clearTimeout(gone); watch.disconnect() }
   }, [book, chapter, target, loaded])
   useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
