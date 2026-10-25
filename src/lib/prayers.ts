@@ -65,6 +65,7 @@ export const prayers = {
 export const meta = {
   get: <T>(k: string) => tx<T | undefined>('readonly', s => s.get(k), META),
   set: (k: string, v: unknown) => (v === undefined ? tx('readwrite', s => s.delete(k), META) : tx('readwrite', s => s.put(v, k), META)).then(() => {}),
+  keys: () => tx<IDBValidKey[]>('readonly', s => s.getAllKeys(), META),
 }
 
 /** The first audio format this browser can record. iPhones record AAC in
