@@ -66,7 +66,7 @@ const bookTitle = (id: string, lang: string) => (lang.startsWith('fr') && french
 const heading = (s: Spot) => s.lang.startsWith('fr')
   ? `${bookTitle(s.book, s.lang)}, chapitre ${s.chapter}.` : `${bookTitle(s.book, s.lang)}, chapter ${s.chapter}.`
 
-const NO_SOUND = 'No sound? Turn off Silent mode, then tap play.'
+const NO_SOUND = 'No sound? Flip the side switch off Silent, then tap play.'
 
 function say(text: string, lang: string, my: number, then: () => void) {
   if (!synth || my !== run) return
@@ -191,10 +191,10 @@ export function ListenPlayer() {
   useEffect(() => {
     if (!n || !IPHONE) return
     const seen = Number(get(TIP_KEY)) || 0
-    if (seen >= 3) return
+    if (seen >= 5) return
     put(TIP_KEY, String(seen + 1))
     setTip(true)
-    const t = setTimeout(() => setTip(false), 7000)
+    const t = setTimeout(() => setTip(false), 9000)
     return () => clearTimeout(t)
   }, [!!n])
 
@@ -210,7 +210,7 @@ export function ListenPlayer() {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label="Choose the voice">
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? 'Silent mode off to hear it' : voice && !phoneChoice(n.lang) ? voice.name : 'Phone’s own voice')} ▾</span>
+          <span class={n.trouble || tip ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? 'Flip the side switch off Silent to hear' : voice && !phoneChoice(n.lang) ? voice.name : 'Phone’s own voice')} ▾</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={`Speed ${r} times. Change`}>{r}×</button>
         <button class="listen-stop" onClick={stopListening} aria-label="Stop reading aloud"><CloseIcon size={22} /></button>

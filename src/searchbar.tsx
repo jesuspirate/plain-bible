@@ -7,7 +7,7 @@
 // you are.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { BOOKS, bookById } from './lib/books'
-import { parseRef, formatRef, Ref } from './lib/refs'
+import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
@@ -197,7 +197,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   }, [])
 
   const trimmed = q.trim()
-  const ref = useMemo(() => /\d/.test(trimmed) ? parseRef(trimmed) : undefined, [trimmed])
+  const ref = useMemo(() => /\d/.test(spoken(trimmed)) ? parseRef(trimmed) : undefined, [trimmed])
   const books = useMemo(() => {
     if (!trimmed || ref) return []
     const k = trimmed.toLowerCase()
