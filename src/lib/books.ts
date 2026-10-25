@@ -159,6 +159,9 @@ const FRENCH: Record<string, string> = {
 for (const [id, name] of Object.entries(FRENCH)) BOOKS[BOOKS.findIndex(b => b.id === id)].aliases.push(name)
 BOOKS[BOOKS.findIndex(b => b.id === 'Ps')].aliases.push('psaume')
 
+/** A book's name in French ("Ésaïe"), if it has one. */
+export const frenchName = (id: string) => FRENCH[id] && FRENCH[id][0].toUpperCase() + FRENCH[id].slice(1)
+
 const normName = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/\./g, '').replace(/^(first|1st)\s+/, '1 ')
   .replace(/^(second|2nd)\s+/, '2 ').replace(/^(third|3rd)\s+/, '3 ').replace(/\s+/g, ' ').trim()
 

@@ -155,3 +155,17 @@ export const HighlightIcon = ({ size, class: c }: P) => (
 export const EditIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M16.2 4.2l3.6 3.6L8.5 19.1 4 20l.9-4.5zM13.8 6.6l3.6 3.6" {...line} /></svg>
 )
+
+/** A speaker with sound waves: listen. */
+export const SpeakerIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M3.5 9.5h3.5l5-4.5v14l-5-4.5H3.5z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" />
+    <path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.3a8 8 0 0 1 0 11.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+)
+
+export const PlayIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M7 4.5v15l13-7.5z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
+)
+
+export const PauseIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><rect x="5.5" y="4.5" width="4.5" height="15" rx="1.2" fill="currentColor" /><rect x="14" y="4.5" width="4.5" height="15" rx="1.2" fill="currentColor" /></svg>
+)

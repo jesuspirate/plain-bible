@@ -5,6 +5,7 @@ import { Search } from './search'
 import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
+import { ListenPlayer } from './listen'
 import { Saved } from './saved'
 import { HistoryIcon, RefreshIcon } from './icons'
 import { applyUpdate, useUpdate } from './lib/update'
@@ -241,6 +242,7 @@ export function App() {
           and opens the same panel. */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: route.path[1], book: route.path[2], chapter: +route.path[3] } : undefined} />}
+      <ListenPlayer />
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
