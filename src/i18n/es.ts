@@ -458,6 +458,7 @@ export default {
   "Go to": "Ir a",
   ", best first": ", los mejores primero",
   "No verses found": "No se encontraron versículos",
+  "Not worded so in {version}. Found in {others}:": "No está así en {version}. Encontrado en {others}:",
   "Listening…": "Escuchando…",
   "Search in {versions}. Change": "Buscar en {versions}. Cambiar",
   "in {versions}": "en {versions}",
