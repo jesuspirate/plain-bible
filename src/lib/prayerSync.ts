@@ -166,6 +166,25 @@ export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'
   return 'on'
 }
 
+/** A new account key, for when no device can open the old one any more
+ *  (an app deleted, Safari's storage cleared, a passkey that can't unlock
+ *  keys). What the old key locked on the server is dropped: nobody can open
+ *  it. Prayers kept on this device stay, and sync again with the new key. */
+export async function startOver() {
+  const acct = loadAccount()
+  if (!SYNC_URL || !acct) throw new SyncError('Sign in first, under Settings → Account.')
+  const raw = newKey(), pk = await prayerKey(raw)
+  await api('/prayers/key/new', { method: 'POST', token: acct.token, body: { keyId: pk.id } })
+  await meta.set('acct', raw)
+  if (prayerSyncOn()) { await meta.set('key', raw); setOn(pk.id) } else await meta.set('key', undefined)
+  // The passkey that just tried can unlock the new key from now on.
+  if (pendingSecret) {
+    await api(`/prayers/wrap/${encodeURIComponent(pendingSecret.credId)}`, { method: 'PUT', token: acct.token, body: { wrapped: await wrapKey(raw, pendingSecret.secret) } }).catch(() => {})
+    pendingSecret = null
+  }
+  keepStorage()
+}
+
 /** Let a passkey unlock the prayer key on other devices too (say one just
  *  saved on a new address). Asks for the passkey; false if it can't. */
 export async function keepKeyWithPasskey(): Promise<boolean> {
