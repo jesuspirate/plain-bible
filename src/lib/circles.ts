@@ -43,8 +43,16 @@ export interface CircleInfo { id: string; name: string; members: number }
 /** `streak`: the days they read and prayed, if they show their streaks here. */
 export interface Member { mid: string; name: string; streak?: Days }
 export interface Reply { id: string; by: string; at: number; text: string }
-/** `amenAt`: when each 🙏 was given, by member (missing in feeds kept by older versions). */
-export interface FeedItem { id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; amenAt?: Record<string, number>; replies: Reply[] }
+/** The reactions besides 🙏 (which is `amens`): love, strength, and
+ *  encouragement. Sealed, so only the circle knows which were given. */
+export const REACTS = ['love', 'strength', 'cheer'] as const
+export type Reaction = typeof REACTS[number]
+/** `amenAt`: when each 🙏 was given, by member (missing in feeds kept by older versions).
+ *  `reacts`: each member's other reactions, and when they last added one. */
+export interface FeedItem {
+  id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; amenAt?: Record<string, number>; replies: Reply[]
+  reacts?: Record<string, { at: number; e: Reaction[] }>
+}
 export interface Feed { me: string; members: Member[]; items: FeedItem[] }
 
 function token() {
@@ -322,6 +330,7 @@ export async function loadFeed(circle: string): Promise<Feed> {
   const r = await api<{
     me: string; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
     amens: { item: string; mid: string; at?: number }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
+    reacts?: { item: string; mid: string; at: number; body: string }[]
   }>(`/circles/${circle}`, { token: token() })
   const members: Member[] = await Promise.all(r.members.map(async m => ({
     mid: m.mid, name: text(await openJson(key, m.name, `${circle}/me`).catch(() => ''), 60) || 'Someone',
@@ -337,30 +346,44 @@ export async function loadFeed(circle: string): Promise<Feed> {
     const said = text(await openJson(key, x.body, `${circle}/${x.item}/${x.id}`).catch(() => ''), 2000)
     if (said) replies.set(x.item, [...(replies.get(x.item) ?? []), { id: x.id, by: x.mid, at: x.at, text: said }])
   }
+  const reacts = new Map<string, Record<string, { at: number; e: Reaction[] }>>()
+  for (const x of r.reacts ?? []) {
+    const e = cleanReacts(await openJson(key, x.body, reactAad(circle, x.item, x.mid)).catch(() => undefined))
+    if (e.length) reacts.set(x.item, { ...reacts.get(x.item), [x.mid]: { at: x.at, e } })
+  }
   const items: FeedItem[] = []
   for (const i of r.items) {
     const body = cleanShared(await openJson(key, i.body, `${circle}/${i.id}`).catch(() => undefined))
-    if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], amenAt: amenAt.get(i.id) ?? {}, replies: replies.get(i.id) ?? [] })
+    if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], amenAt: amenAt.get(i.id) ?? {}, replies: replies.get(i.id) ?? [], reacts: reacts.get(i.id) ?? {} })
   }
   const feed = { me: r.me, members, items }
   await meta.set(`circle:${circle}`, feed)
   return feed
 }
 
+/** Reactions as they came out of their seal: known ones, once each, in order. */
+export const cleanReacts = (v: unknown): Reaction[] =>
+  Array.isArray((v as { e?: unknown })?.e) ? REACTS.filter(x => ((v as { e: unknown[] }).e).includes(x)) : []
+/** Tied to the member, so the server can't pass one person's off as another's. */
+const reactAad = (circle: string, item: string, mid: string) => `${circle}/${item}/react/${mid}`
+
+export interface News { item: boolean; replies: Set<string>; amens: Set<string>; reacts: Set<string> }
 /** What's new for you in a feed since `since`: things others shared, their
- *  replies, and their 🙏 on what you shared. The same rule the server uses
- *  for the dot, so looking at the circle clears it. */
+ *  replies, and their 🙏 and other reactions on what you shared. The same
+ *  rule the server uses for the dot, so looking at the circle clears it. */
 export function newsIn(feed: Feed, since: number) {
-  const items = new Map<string, { item: boolean; replies: Set<string>; amens: Set<string> }>()
+  const items = new Map<string, News>()
   let latest = 0
   for (const i of feed.items) {
     const item = i.by !== feed.me && i.at > since
     const replies = new Set(i.replies.filter(r => r.by !== feed.me && r.at > since).map(r => r.id))
     const amens = new Set(i.by === feed.me ? Object.entries(i.amenAt ?? {}).filter(([m, at]) => m !== feed.me && at > since).map(([m]) => m) : [])
+    const reacts = new Set(i.by === feed.me ? Object.entries(i.reacts ?? {}).filter(([m, x]) => m !== feed.me && x.at > since).map(([m]) => m) : [])
     if (i.by !== feed.me) latest = Math.max(latest, i.at)
     for (const r of i.replies) if (r.by !== feed.me) latest = Math.max(latest, r.at)
     if (i.by === feed.me) for (const [m, at] of Object.entries(i.amenAt ?? {})) if (m !== feed.me) latest = Math.max(latest, at)
-    if (item || replies.size || amens.size) items.set(i.id, { item, replies, amens })
+    if (i.by === feed.me) for (const [m, x] of Object.entries(i.reacts ?? {})) if (m !== feed.me) latest = Math.max(latest, x.at)
+    if (item || replies.size || amens.size || reacts.size) items.set(i.id, { item, replies, amens, reacts })
   }
   return { items, latest }
 }
@@ -460,6 +483,14 @@ export async function pushStreaks(ids: string[]) {
 
 export const amen = (circle: string, item: string, on: boolean) =>
   api(`/circles/${circle}/items/${item}/amen`, { method: on ? 'PUT' : 'DELETE', token: token() })
+
+/** Your reactions on something shared, all of them (none takes them away).
+ *  `added`: one was just given, which tells whoever shared it. */
+export async function react(circle: string, item: string, mid: string, e: Reaction[], added: boolean) {
+  const path = `/circles/${circle}/items/${item}/react`
+  if (!e.length) return api(path, { method: 'DELETE', token: token() })
+  return api(path, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), { e }, reactAad(circle, item, mid)), added } })
+}
 
 /** A few words back on something shared. */
 export async function reply(circle: string, item: string, said: string) {

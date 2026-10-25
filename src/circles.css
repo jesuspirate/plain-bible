@@ -44,7 +44,18 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-reply { margin-top: 10px; }
 .c-reply textarea { box-sizing: border-box; width: 100%; font: 16px/1.4 var(--sans); padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
 .c-reply .c-row { margin: 6px 0 0; }
-.c-who { margin: 6px 0 0; }
+/* Reactions: big round buttons, the count small beside the emoji, who gave
+   what written out underneath. */
+.c-reacts { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 12px; }
+.c-react { min-width: 48px; height: 48px; padding: 0 7px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 3px;
+  font: 600 15px var(--sans); -webkit-tap-highlight-color: transparent; }
+.c-react-emoji { font-size: 24px; line-height: 1; }
+.c-react-n { color: var(--muted); font-variant-numeric: tabular-nums; }
+.c-react.on { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-color: var(--accent); }
+.c-react.on .c-react-n { color: var(--text); }
+.c-item-foot .c-amen { min-height: 44px; }
+.c-who { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); }
+.c-who-group { white-space: nowrap; }
 .c-paste { margin: 14px 0; }
 .c-paste input { flex: 1; min-width: 0; }
 .c-notes { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }

@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from 'vitest'
 import { circlesWithNews, hasNews, markSeen, noteLatest, seenAt } from './circleNews'
-import { Feed, newsIn } from './circles'
+import { Feed, newsIn, cleanReacts } from './circles'
 
 beforeEach(() => {
   const store = new Map<string, string>()
@@ -56,5 +56,18 @@ describe('newsIn', () => {
     expect([...items.get('b')!.amens]).toEqual(['mom'])
     expect([...items.get('c')!.replies]).toEqual(['r2'])
     expect(newsIn(feed, 300).items.size).toBe(0)
+  })
+  it('counts reactions on what you shared, only when someone else gave them', () => {
+    const own = { id: 'd', by: 'me', at: 100, body: { k: 'verse' as const, verse: v, version: 'KJV', text: 't' }, chunks: 0, amens: [], replies: [],
+      reacts: { mom: { at: 500, e: ['love' as const] }, me: { at: 600, e: ['cheer' as const] }, dad: { at: 150, e: ['strength' as const] } } }
+    const theirs = { ...own, id: 'e', by: 'mom', at: 90, reacts: { dad: { at: 700, e: ['love' as const] } } }
+    const { items, latest } = newsIn({ ...feed, items: [own, theirs] }, 200)
+    expect([...items.get('d')!.reacts]).toEqual(['mom'])
+    expect(items.has('e')).toBe(false)
+    expect(latest).toBe(500)
+  })
+  it('keeps only reactions it knows, in order, once each', () => {
+    expect(cleanReacts({ e: ['cheer', 'love', 'love', 'party', 3] })).toEqual(['love', 'cheer'])
+    expect(cleanReacts('love')).toEqual([])
   })
 })
