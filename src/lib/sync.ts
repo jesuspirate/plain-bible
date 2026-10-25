@@ -4,6 +4,7 @@
 import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
 import { mergeMark, Marks, upgrade } from './marks'
 import { Days, mergeDays } from './streaks'
+import { PRF_SALT } from './prayerCrypto'
 
 export const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
 
@@ -103,16 +104,37 @@ export async function api<T>(path: string, init: { method?: string; token?: stri
 
 const cancelled = (e: unknown) => e instanceof Error && (e.name === 'NotAllowedError' || e.name === 'AbortError')
 
+// The same tap that signs in also asks the passkey for its PRF secret, the
+// one that unlocks the account key (see prayerSync). Then circles and
+// prayers open with no second passkey sheet. The secret stays on this
+// device: it is taken out before the answer goes to the server.
+const withPrf = (options: any) => ({ ...options, extensions: { ...options.extensions, prf: { eval: { first: PRF_SALT } } } })
+type Answer = { rawId: string; clientExtensionResults: { prf?: { results?: { first?: BufferSource } } } }
+function takeSecret(response: Answer) {
+  const first = response.clientExtensionResults?.prf?.results?.first
+  delete response.clientExtensionResults?.prf
+  if (!first) return null
+  const secret = new Uint8Array(first instanceof ArrayBuffer ? first : (first as ArrayBufferView).buffer).slice()
+  return { credId: response.rawId, secret }
+}
+async function keepFromPasskey(token: string, s: ReturnType<typeof takeSecret>) {
+  await import('./prayerSync').then(m => m.passkeySignedIn(token, s)).catch(() => {})
+}
+
 /** Create an account, or with a token add a passkey to that account. */
 export async function register(token?: string): Promise<string | undefined> {
   const { challengeId, options } = await api<{ challengeId: string; options: any }>('/auth/register/options', { method: 'POST', token, body: {} })
   let response
-  try { response = await startRegistration({ optionsJSON: options }) } catch (e) {
+  try { response = await startRegistration({ optionsJSON: withPrf(options) }) } catch (e) {
     if (cancelled(e)) throw new SyncError('Cancelled')
     throw new SyncError((e as Error).message)
   }
+  // Only some passkeys give the secret as they're made (iCloud Keychain does).
+  const secret = takeSecret(response as Answer)
   const r = await api<{ token?: string }>('/auth/register/verify', { method: 'POST', token, body: { challengeId, response } })
   setNoPasskey(false)
+  const t = r.token ?? token
+  if (t) await keepFromPasskey(t, secret)
   return r.token
 }
 
@@ -134,12 +156,14 @@ export async function signIn(): Promise<string> {
   prepared = null
   const { challengeId, options } = await ready
   let response
-  try { response = await startAuthentication({ optionsJSON: options }) } catch (e) {
+  try { response = await startAuthentication({ optionsJSON: withPrf(options) }) } catch (e) {
     if (cancelled(e)) throw new SyncError('Cancelled')
     throw new SyncError((e as Error).message)
   }
+  const secret = takeSecret(response as Answer)
   const { token } = await api<{ token: string }>('/auth/login/verify', { method: 'POST', body: { challengeId, response } })
   setNoPasskey(false)
+  await keepFromPasskey(token, secret)
   return token
 }
 
