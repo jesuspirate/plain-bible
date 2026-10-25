@@ -2,6 +2,8 @@
 // the word, and praying. A tap says how they count.
 import { useEffect, useState } from 'preact/hooks'
 import { addDays, dayOf, DAYS_EVENT, Days, loadDays, PRAY, streaks } from './lib/streaks'
+import type { ComponentChildren } from 'preact'
+import { BookIcon } from './icons'
 
 /** The days you've read and prayed, as they change. */
 export function useDays() {
@@ -32,7 +34,7 @@ export function StreakRow() {
     <>
       <button class="set-row streak-row" aria-expanded={why} onClick={() => setWhy(w => !w)}
         aria-label={`Reading: ${daysText(s.read)} in a row${s.readToday ? ', done today' : ''}. Prayer: ${daysText(s.pray)} in a row${s.prayToday ? ', done today' : ''}. Tap to see how streaks count.`}>
-        <Streak icon="📖" n={s.read} today={s.readToday} />
+        <Streak icon={<BookIcon size={24} />} n={s.read} today={s.readToday} />
         <Streak icon="🙏" n={s.pray} today={s.prayToday} />
       </button>
       {why && (
@@ -45,7 +47,7 @@ export function StreakRow() {
   )
 }
 
-function Streak({ icon, n, today }: { icon: string; n: number; today: boolean }) {
+function Streak({ icon, n, today }: { icon: ComponentChildren; n: number; today: boolean }) {
   return (
     <span class={'streak' + (today ? ' today' : '')}>
       <span class="set-icon" aria-hidden="true">{icon}</span>
