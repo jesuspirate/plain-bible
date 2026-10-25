@@ -627,6 +627,12 @@ article.chapter.turning { position: relative; z-index: 6; background: var(--bg);
 /* While a page turns the top bar is solid, so the pages and shade moving
    under it never show through: everything stops at its bottom line. */
 html.page-turning header.top { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+/* Side by side, going back, your page slides off to the right, and at the
+   very start of the Bible a swipe back pulls the page a little to the right;
+   nothing may reach past the right edge (see above), so while you read the
+   pages are cut off at it. (Not on body: that would pass to the whole window
+   and not cut anything.) */
+html.page-turning main, main:has(.reader) { overflow-x: clip; }
 
 /* Double-tap never zooms the page (a quick second tap on a verse highlights
    it instead); pinching to zoom still works everywhere. */
