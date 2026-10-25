@@ -20,12 +20,12 @@ export function wordsIn(b: Bible | undefined, v: PrayerVerse) {
 /** How many verses `b` has in that chapter (0 if none). */
 export const chapterSize = (b: Bible | undefined, book: string, chapter: number) => b?.books[book]?.[chapter - 1]?.length ?? 0
 
-/** The Bibles to look a passage up in, in order: the one you're reading now,
- *  the one the app opens in, then your other versions in the same language. */
-export function readerVersions(s: { version: string; favorite?: string; myVersions: string[] }, langOf: (id: string) => string | undefined): string[] {
+/** The Bibles to look a passage up in, in order: yours, then your other
+ *  versions in the same language. */
+export function readerVersions(s: { version: string; myVersions: string[] }, langOf: (id: string) => string | undefined): string[] {
   const lang = langOf(s.version)
   const same = s.myVersions.filter(id => lang && langOf(id) === lang)
-  return [...new Set([s.version, ...(s.favorite && langOf(s.favorite) === lang ? [s.favorite] : []), ...same])]
+  return [...new Set([s.version, ...same])]
 }
 
 /** What to show for a passage. `yours` is false only when none of your

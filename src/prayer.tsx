@@ -29,7 +29,7 @@ function wordsOf(b: Bible | undefined, v: PrayerVerse) {
 
 export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const { data, settings } = useApp()
-  const version = settings.favorite || settings.version
+  const version = settings.version
   const [phase, setPhase] = useState<Phase>('idle')
   // Praying, Your prayers, or Circles: the people you pray with live here too.
   const [view, setView] = useState<'pray' | 'list' | 'circles'>(at ? 'circles' : 'pray')

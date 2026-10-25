@@ -239,8 +239,8 @@ function Row({ label, sub, value, onClick, href, icon }: { label: string; sub?: 
   return href ? <a class="set-row" href={href}>{inner}</a> : <button class="set-row" onClick={onClick}>{inner}</button>
 }
 
-// The Bible you're reading, the ones beside it, and the one that opens every
-// time. (This used to be the version button in the top bar.)
+// The Bible you're reading and the ones beside it. (This used to be the
+// version button in the top bar.)
 function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
   const { settings, update, byId } = useApp()
   const route = useRoute()
@@ -251,9 +251,14 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
   const goTo = (v: string, p: string[]) => {
     const others = p.filter(id => id !== v)
     if (reading) go(readPath(v, route.path[2], +route.path[3], +(route.params.get('v') || 0) || undefined, others))
-    else { update({ version: v, parallel: others }); go('read/' + v) }
+    else go('read/' + v)
   }
-  const fav = settings.favorite === version
+  // Picking a version here makes it your Bible (the reader never does that
+  // by itself), and the one the app opens in.
+  const choose = (v: string) => {
+    update({ version: v, parallel: parallel.filter(id => id !== v) })
+    goTo(v, parallel)
+  }
   return (
     <section class="set-group">
       <h2 class="set-kicker">Bible</h2>
@@ -263,14 +268,12 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
           <span class="set-label">{byId.get(version)?.name ?? version}</span>
           <span class="set-chev" aria-hidden="true">›</span>
         </button>
+        {version !== settings.version && byId.has(settings.version) &&
+          <Row label={`Back to ${settings.version}`} sub="Your Bible" onClick={() => goTo(settings.version, parallel)} />}
         <Row label="Compare side by side" value={parallel.length ? parallel.join(', ') : 'Off'} onClick={() => setOpen('compare')} />
-        <button class="set-row" onClick={() => update({ favorite: version })} disabled={fav}>
-          <span class="set-label">{fav ? `${version} opens every time` : `Open ${version} every time`}</span>
-          <span class="set-star" aria-hidden="true">{fav ? '★' : '☆'}</span>
-        </button>
         <Row label="Manage versions" onClick={() => setPage('versions')} />
       </div>
-      {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => goTo(id, parallel)} />}
+      {open === 'version' && <VersionPicker title="Version" selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
       {open === 'compare' && (
         <VersionPicker title="Compare with" multi max={5} selected={parallel} onClose={() => setOpen('')}
           onChange={ids => { update({ parallel: ids }); goTo(version, ids) }} />
@@ -354,7 +357,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       // Only the settings: highlights, notes, history and the account stay.
       if (confirm('Reset font, theme, layout and version choices to their defaults?\n\nYour highlights, bookmarks and notes are kept, and you stay signed in.'
         + (sync.account ? ' Your other synced devices will get the default settings too.' : ''))) {
-        update({ ...defaultSettings(catalog), favorite: undefined })
+        update(defaultSettings(catalog))
       }
     }}>Reset settings</button></p>
   </>
