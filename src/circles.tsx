@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, openInvited, makeCode, dropCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -664,12 +664,19 @@ function StreakBoard({ circle, name, feed, onChange }: { circle: string; name?: 
 function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   circle: string; item: FeedItem; mine: boolean; me: string; nameOf: (mid: string) => string; fav: string; onChange: () => void
   /** what's new on it since you last looked */
-  news?: { item: boolean; replies: Set<string>; amens: Set<string> }
+  news?: News
 }) {
-  const { marks, setMarks } = useApp()
+  const { marks, setMarks, settings } = useApp()
   const b = item.body
-  const prayed = item.amens.includes(me)
-  const names = item.amens.map(nameOf)
+  // Your own 🙏 and reactions show the moment you tap; the circle catches up.
+  const [tapped, setTapped] = useState<{ prayed?: boolean; reacts?: Reaction[] }>({})
+  useEffect(() => setTapped({}), [item])
+  const prayed = tapped.prayed ?? item.amens.includes(me)
+  const amens = prayed === item.amens.includes(me) ? item.amens : prayed ? [...item.amens, me] : item.amens.filter(m => m !== me)
+  const reacts: Record<string, Reaction[]> = Object.fromEntries(Object.entries(item.reacts ?? {}).map(([m, x]) => [m, x.e]))
+  if (tapped.reacts) reacts[me] = tapped.reacts
+  const myReacts = reacts[me] ?? []
+  const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone)
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
   const [writing, setWriting] = useState(false)
@@ -681,6 +688,19 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
     try { await fn(); onChange() } catch (e) { setErr(message(e)) } finally { setBusy(false) }
   }
   const send = act(async () => { await reply(circle, item.id, said.trim()); setSaid(''); setWriting(false) })
+  const tap = (fn: () => Promise<unknown>, undo: () => void) => async () => {
+    setErr('')
+    try { await fn(); onChange() } catch (e) { undo(); setErr(message(e)) }
+  }
+  const pray = () => { setTapped(x => ({ ...x, prayed: !prayed })); tap(() => amen(circle, item.id, !prayed), () => setTapped(x => ({ ...x, prayed: undefined })))() }
+  const toggle = (r: Reaction) => {
+    const on = !myReacts.includes(r)
+    const next = REACTS.filter(x => x === r ? on : myReacts.includes(x))
+    setTapped(x => ({ ...x, reacts: next }))
+    tap(() => react(circle, item.id, me, next, on), () => setTapped(x => ({ ...x, reacts: undefined })))()
+  }
+  // Who gave what, in the order of the buttons; nobody, nothing.
+  const who = [['pray', amens] as const, ...REACTS.map(r => [r, Object.keys(reacts).filter(m => reacts[m].includes(r))] as const)].filter(([, ms]) => ms.length)
   // Never the sender's Bible: the reader's own, unless theirs lacks it.
   const shown = usePassage(b.verse, b.k === 'prayer' ? undefined : { text: b.text, version: b.version, size: b.size })
   // The passage as your Bible numbers it (the Psalms differ in some).
@@ -708,7 +728,11 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   const kind = b.k === 'bookmark' ? t('bookmarked') : b.k === 'note' ? t('wrote a note') : b.k === 'prayer' ? t('prayed') : t('shared')
   // New itself, or something new on it: a reply, or someone praying with you.
   const fresh = news && !news.item && (news.replies.size ? (news.replies.size === 1 ? t('New reply') : t('New replies'))
-    : tn(news.amens.size, '{names} is praying with you', '{names} are praying with you', { names: [...news.amens].map(nameOf).join(', ') }))
+    : news.amens.size ? tn(news.amens.size, '{names} is praying with you', '{names} are praying with you', { names: [...news.amens].map(nameOf).join(', ') })
+    : t('{emoji} from {names}', {
+      names: [...news.reacts].map(nameOf).join(', '),
+      emoji: REACTS.filter(r => [...news.reacts].some(m => reacts[m]?.includes(r))).map(emoji).join(' '),
+    }))
   return (
     <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '')}>
       {fresh && <p class="c-new-word small">{fresh}</p>}
@@ -746,11 +770,26 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
           </div>
         </div>
       )}
-      <div class="c-item-foot">
-        <button class={'c-amen' + (prayed ? ' on' : '')} aria-pressed={prayed} disabled={busy} onClick={act(() => amen(circle, item.id, !prayed))}
-          title={names.length ? t('Praying with you: {names}', { names: names.join(', ') }) : t('Praying with you')}>
-          🙏 {prayed ? t('Praying') : t('Pray with')}{names.length ? ` · ${names.length}` : ''}
+      <div class="c-reacts" role="group" aria-label={t('Reactions')}>
+        <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={pray} aria-label={prayed ? t('Praying') : t('Pray with')}
+          title={prayed ? t('Praying') : t('Pray with')}>
+          <span class="c-react-emoji" aria-hidden="true">{emoji('pray')}</span>{amens.length > 0 && <span class="c-react-n">{amens.length}</span>}
         </button>
+        {REACTS.map(r => {
+          const on = myReacts.includes(r), n = Object.values(reacts).filter(e => e.includes(r)).length
+          return (
+            <button class={'c-react' + (on ? ' on' : '')} aria-pressed={on} onClick={() => toggle(r)} aria-label={REACT_WORDS[r]()} title={REACT_WORDS[r]()}>
+              <span class="c-react-emoji" aria-hidden="true">{emoji(r)}</span>{n > 0 && <span class="c-react-n">{n}</span>}
+            </button>
+          )
+        })}
+      </div>
+      {who.length > 0 && (
+        <p class="c-who small">
+          {who.map(([r, ms]) => <span class="c-who-group"><span aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span> {ms.map(nameOf).join(', ')}</span>)}
+        </p>
+      )}
+      <div class="c-item-foot">
         {!writing && <button class="c-amen" onClick={() => setWriting(true)}>{t('Reply')}</button>}
         {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
           ? <button class="link small" onClick={keepNote}>{t('Keep note')}</button>
@@ -760,11 +799,17 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
           ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
           : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
       </div>
-      {names.length > 0 && <p class="muted small c-who">{t('Praying: {names}', { names: names.join(', ') })}</p>}
       {kept && <p class="muted small">{kept}</p>}
       {err && <p class="note small">{err}</p>}
     </li>
   )
+}
+
+/** Love, strength, encouragement. The hands take the skin tone picked for 🙏. */
+const reactEmoji = (r: Reaction | 'pray', tone: string) =>
+  r === 'pray' ? '🙏' + tone : r === 'love' ? '❤️' : r === 'strength' ? '💪' + tone : '🙌' + tone
+const REACT_WORDS: Record<Reaction, () => string> = {
+  love: () => t('Love'), strength: () => t('Strength'), cheer: () => t('Encouragement'),
 }
 
 function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedItem; onError: (m: string) => void }) {

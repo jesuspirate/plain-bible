@@ -413,12 +413,13 @@ function leaveCircle(db: D1Database, circle: string, userId: string) {
   return [
     db.prepare(`DELETE FROM circle_chunks WHERE circle_id = ?1 AND item IN (${mine})`).bind(circle, userId),
     db.prepare(`DELETE FROM circle_amens WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
+    db.prepare(`DELETE FROM circle_reacts WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
     db.prepare(`DELETE FROM circle_replies WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
     db.prepare('DELETE FROM circle_items WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_invites WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM push_circles WHERE circle_id = ?1 AND endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?2)').bind(circle, userId),
-    ...['circle_chunks', 'circle_amens', 'circle_replies', 'circle_items', 'circle_invites'].map(t =>
+    ...['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies', 'circle_items', 'circle_invites'].map(t =>
       db.prepare(`DELETE FROM ${t} WHERE circle_id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)`).bind(circle)),
     db.prepare('DELETE FROM circles WHERE id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)').bind(circle),
   ]
@@ -521,7 +522,9 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       MAX(COALESCE((SELECT MAX(at) FROM circle_items i WHERE i.circle_id = c.id AND i.user_id != m.user_id), 0),
         COALESCE((SELECT MAX(at) FROM circle_replies r WHERE r.circle_id = c.id AND r.user_id != m.user_id), 0),
         COALESCE((SELECT MAX(a.at) FROM circle_amens a JOIN circle_items i ON i.circle_id = a.circle_id AND i.id = a.item
-          WHERE a.circle_id = c.id AND a.user_id != m.user_id AND i.user_id = m.user_id), 0)) AS latest
+          WHERE a.circle_id = c.id AND a.user_id != m.user_id AND i.user_id = m.user_id), 0),
+        COALESCE((SELECT MAX(x.at) FROM circle_reacts x JOIN circle_items i ON i.circle_id = x.circle_id AND i.id = x.item
+          WHERE x.circle_id = c.id AND x.user_id != m.user_id AND i.user_id = m.user_id), 0)) AS latest
       FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE m.user_id = ? ORDER BY m.joined`).bind(userId).all()
     return json({ circles: rows.results })
   }
@@ -630,7 +633,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
 
   // Who's in it and what's been shared, newest first.
   if (req.method === 'GET' && !b) {
-    const [members, items, amens, replies] = await Promise.all([
+    const [members, items, amens, replies, reacts] = await Promise.all([
       db.prepare('SELECT mid, name, streak FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
       db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
         WHERE i.circle_id = ?1 AND (i.chunks = 0 OR i.chunks = (SELECT COUNT(*) FROM circle_chunks k WHERE k.circle_id = ?1 AND k.item = i.id))
@@ -639,8 +642,10 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
         WHERE a.circle_id = ? ORDER BY a.at`).bind(circle).all<{ item: string; mid: string; at: number }>(),
       db.prepare(`SELECT r.item, r.id, m.mid, r.at, r.body FROM circle_replies r JOIN circle_members m ON m.circle_id = r.circle_id AND m.user_id = r.user_id
         WHERE r.circle_id = ? ORDER BY r.at`).bind(circle).all(),
+      db.prepare(`SELECT x.item, m.mid, x.at, x.body FROM circle_reacts x JOIN circle_members m ON m.circle_id = x.circle_id AND m.user_id = x.user_id
+        WHERE x.circle_id = ? ORDER BY x.at`).bind(circle).all(),
     ])
-    return json({ me: mid, members: members.results, items: items.results, amens: amens.results, replies: replies.results })
+    return json({ me: mid, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results })
   }
   // Joining with a code, on the member's side: make one, see who typed it,
   // and allow them by sealing the circle key to their public key.
@@ -728,7 +733,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     }
     if (req.method === 'DELETE') {
       if (!(await own())) throw new HttpError(404, 'Not found')
-      await db.batch(['circle_chunks', 'circle_amens', 'circle_replies'].map(t => db.prepare(`DELETE FROM ${t} WHERE circle_id = ? AND item = ?`).bind(circle, item)).concat(
+      await db.batch(['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies'].map(t => db.prepare(`DELETE FROM ${t} WHERE circle_id = ? AND item = ?`).bind(circle, item)).concat(
         db.prepare('DELETE FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item)))
       return json({ ok: true })
     }
@@ -761,6 +766,24 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     }
     if (req.method === 'DELETE') {
       await db.prepare('DELETE FROM circle_amens WHERE circle_id = ? AND item = ? AND user_id = ?').bind(circle, item, userId).run()
+      return json({ ok: true })
+    }
+  }
+  // Your reactions on it (❤️ 💪 🙌), sealed. `added`: one was just given,
+  // which makes it news to whoever shared it; taking one back isn't.
+  if (d === 'react' && !e) {
+    if (req.method === 'PUT') {
+      const { body, added } = await readJson<{ body: string; added?: boolean }>(req)
+      if (!sealedText(body, 500)) throw new HttpError(400, 'Bad request')
+      const it = await db.prepare('SELECT user_id FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first<{ user_id: string }>()
+      if (!it) throw new HttpError(404, 'Not found')
+      await db.prepare(`INSERT INTO circle_reacts (circle_id, item, user_id, at, body) VALUES (?1, ?2, ?3, ?4, ?5)
+        ON CONFLICT DO UPDATE SET body = excluded.body, at = CASE WHEN ?6 THEN excluded.at ELSE circle_reacts.at END`).bind(circle, item, userId, now, body, added ? 1 : 0).run()
+      if (added) ctx.waitUntil(notifyCircle(env, circle, userId, it.user_id))
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('DELETE FROM circle_reacts WHERE circle_id = ? AND item = ? AND user_id = ?').bind(circle, item, userId).run()
       return json({ ok: true })
     }
   }
@@ -963,7 +986,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
       await env.DB.prepare('DELETE FROM push_circles WHERE endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?)').bind(userId).run()
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })
