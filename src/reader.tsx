@@ -156,7 +156,7 @@ export function Reader({ route }: { route: Route }) {
       else if (!prev) { const p = loadPlace(); toVerse(p && p.book === book && p.chapter === chapter ? p.verse : 1) }
       else window.scrollTo(0, 0)
       settling.current = false
-      if (peekDir.current) close()
+      if (peekDir.current) { close(); settle() }
     })
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
 
@@ -274,13 +274,18 @@ export function Reader({ route }: { route: Route }) {
   // side and move across together. Off in Settings, or with reduced motion,
   // the chapter just changes.
   const article = useRef<HTMLElement>(null)
-  const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number }>()
+  const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number; x0: number; tx: number; late: boolean }>()
   const mode = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
   const animate = mode !== 'off'
   const [peek, setPeek] = useState<{ dir: 1 | -1; from: string; b: string; c: number; top: number; left: number; width: number }>()
   const peekDir = useRef<1 | -1>()
   const peekEl = useRef<HTMLElement>(null), dimEl = useRef<HTMLDivElement>(null)
   const x = useRef(0), busy = useRef(false)
+  // Turns asked for while a page is still turning (a quick run of swipes, or
+  // arrow keys held down), counted forward (+) and back (-); each one turns
+  // as soon as the page before it has landed, and quicker.
+  const queued = useRef(0), lastTurn = useRef(0), runs = useRef<Animation[]>([]), stuck = useRef(0)
+  const quick = () => queued.current !== 0 || Date.now() - lastTurn.current < 700
   // How far a page goes to be off screen; a stacked page has a shadow to hide too.
   const away = () => innerWidth + (mode === 'stack' ? 48 : 0)
   // Where the page, the chapter beside it and the shade over the page
@@ -317,26 +322,49 @@ export function Reader({ route }: { route: Route }) {
     if (article.current) article.current.style.transform = ''
     setPeek(undefined)
   }
-  useEffect(() => () => document.documentElement.classList.remove('page-turning'), [])
+  useEffect(() => () => { document.documentElement.classList.remove('page-turning'); clearTimeout(stuck.current) }, [])
   // Glide to dx, quick at first and settling at the end. Run as browser
   // animations of transform and opacity, which stay smooth off the main thread.
   const glide = (to: number, then: () => void) => {
     const from = looks(x.current), end = looks(to)
-    const opts = { duration: 340 * Math.max(.45, Math.min(1, Math.abs(to - x.current) / innerWidth)), easing: 'cubic-bezier(.2, .7, .25, 1)' }
-    const runs = [
+    const opts = { duration: (quick() ? 170 : 340) * Math.max(.45, Math.min(1, Math.abs(to - x.current) / innerWidth)), easing: 'cubic-bezier(.2, .7, .25, 1)' }
+    runs.current = [
       article.current?.animate([{ transform: from.page }, { transform: end.page }], opts),
       peekEl.current?.animate([{ transform: from.peek }, { transform: end.peek }], opts),
       dimEl.current?.animate([{ opacity: from.dim }, { opacity: end.dim }], opts),
     ].filter(a => a) as Animation[]
     setX(to)
     busy.current = true
-    const done = () => { busy.current = false; then() }
-    Promise.all(runs.map(a => a.finished)).then(done, done)
+    Promise.all(runs.current.map(a => a.finished)).then(then, then)
   }
-  const finish = (dir: 1 | -1) => glide(-dir * away(), () => step(dir))
+  // Another swipe while a page is still on its way: let it land sooner.
+  const hurry = () => runs.current.forEach(a => { if (a.playState === 'running') a.updatePlaybackRate ? a.updatePlaybackRate(3) : a.playbackRate = 3 })
+  const queue = (dir: 1 | -1) => { queued.current = Math.max(-30, Math.min(30, queued.current + dir)); hurry() }
+  // A page has landed (or gone back): ready for the next turn, which may
+  // already be waiting.
+  const settle = () => {
+    clearTimeout(stuck.current)
+    busy.current = false
+    runs.current = []
+    const q = queued.current
+    if (!q) return
+    const dir = q > 0 ? 1 : -1
+    queued.current -= dir
+    if (dest(dir)) turn(dir)
+    else queued.current = 0
+  }
+  // The next chapter is shown once it has been drawn (see above), which
+  // settles the turn; in case that never comes, swiping still works after a bit.
+  const finish = (dir: 1 | -1) => glide(-dir * away(), () => {
+    lastTurn.current = Date.now()
+    stuck.current = window.setTimeout(() => { if (peekDir.current) close(); settle() }, 1500)
+    step(dir)
+  })
   const turn = (dir: 1 | -1) => {
-    if (!dest(dir) || busy.current) return
     if (!animate) return step(dir)
+    if (busy.current) return queue(dir)
+    if (!dest(dir)) return
+    busy.current = true
     open(dir)
     // Let the chapter beside it be drawn first.
     requestAnimationFrame(() => requestAnimationFrame(() => finish(dir)))
@@ -351,34 +379,67 @@ export function Reader({ route }: { route: Route }) {
     setX(dx)
   }
   // Let go: turn to the next (1) or previous (-1) chapter, or put the page back (0).
+  // A swipe while a page is still turning is kept for when it lands.
   const release = (dir: 1 | -1 | 0) => {
-    if (!animate || busy.current) return
-    if (dir && dest(dir) && peekDir.current === dir) return finish(dir)
+    if (!animate) { if (dir) step(dir); return }
+    if (busy.current) { if (dir) queue(dir); return }
+    if (dir && dest(dir)) {
+      if (peekDir.current === dir) return finish(dir)
+      if (!peekDir.current) return turn(dir)
+    }
     if (!peekDir.current) { if (article.current) article.current.style.transform = ''; return }
-    glide(0, close)
+    glide(0, () => { close(); settle() })
   }
   // A second finger (a pinch) ends the swipe and puts the page back, rather
   // than leaving it stuck half way.
   const abandon = () => { const s = touch.current; touch.current = undefined; if (s?.axis === 'x') release(0) }
+  // A swipe can start while the page before is still sliding away, when the
+  // finger isn't on the page at all, so touches are heard on the whole window
+  // and then followed on what the finger first touched (which hears them to
+  // the end, even once the chapter it was in has gone).
   const onTouchStart = (e: TouchEvent) => {
     if (e.touches.length > 1) return abandon()
-    const p = e.touches[0]; touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 }
+    const el = e.target as HTMLElement
+    if (el.closest?.('.sb, dialog, .selbar, .pager, header') || !(el.closest?.('.reader') || busy.current || peekDir.current)) return
+    if (busy.current) hurry()
+    const p = e.touches[0]
+    touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0, x0: p.clientX, tx: 0, late: busy.current }
+    const move = (e: TouchEvent) => swipe.current.move(e)
+    const end = () => { el.removeEventListener('touchmove', move); el.removeEventListener('touchend', end); el.removeEventListener('touchcancel', end); swipe.current.end() }
+    el.addEventListener('touchmove', move, { passive: true })
+    el.addEventListener('touchend', end)
+    el.addEventListener('touchcancel', end)
   }
   const onTouchMove = (e: TouchEvent) => {
     const s = touch.current, p = e.touches[0]
     if (!s) return
     if (e.touches.length > 1) return abandon()
-    const dx = p.clientX - s.x, dy = p.clientY - s.y
-    if (!s.axis && Math.hypot(dx, dy) > 10) s.axis = Math.abs(dx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
-    if (s.axis === 'x') { s.dx = dx; follow(dx) }
+    const tx = p.clientX - s.x0, dy = p.clientY - s.y
+    if (!s.axis && Math.hypot(tx, dy) > 10) s.axis = Math.abs(tx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
+    if (s.axis !== 'x') return
+    s.tx = tx
+    // Started while the page before was landing: the new page follows from
+    // where the finger is once it's there, without a jump.
+    if (busy.current) { s.late = true; return }
+    if (s.late) { s.late = false; s.x = p.clientX - s.dx }
+    s.dx = p.clientX - s.x
+    follow(s.dx)
   }
   const onTouchEnd = () => {
     const s = touch.current
     touch.current = undefined
     if (!s || s.axis !== 'x') return
-    const fast = Date.now() - s.t < 300 && Math.abs(s.dx) > 40
-    release(Math.abs(s.dx) > innerWidth * .25 || fast ? s.dx < 0 ? 1 : -1 : 0)
+    const fast = Date.now() - s.t < 300 && Math.abs(s.tx) > 40
+    const d = Math.abs(s.dx) > innerWidth * .25 ? s.dx : fast || Math.abs(s.tx) > innerWidth * .25 ? s.tx : 0
+    release(d ? d < 0 ? 1 : -1 : 0)
   }
+  const swipe = useRef({ start: onTouchStart, move: onTouchMove, end: onTouchEnd })
+  swipe.current = { start: onTouchStart, move: onTouchMove, end: onTouchEnd }
+  useEffect(() => {
+    const start = (e: TouchEvent) => swipe.current.start(e)
+    window.addEventListener('touchstart', start, { passive: true })
+    return () => window.removeEventListener('touchstart', start)
+  }, [])
 
   // Two-finger swipe on a trackpad (or a swipe on a Magic Mouse) does the
   // same as a touch swipe.
@@ -489,7 +550,7 @@ export function Reader({ route }: { route: Route }) {
       {loaded && rows === 0 && <p class="muted center">{t?.name} does not include {bookById(book).name} {chapter}.</p>}
 
       {loaded && rows > 0 && (
-        <article key={`${book}.${chapter}`} ref={article} onTouchStart={onTouchStart} onTouchMove={onTouchMove} onTouchEnd={onTouchEnd} onTouchCancel={onTouchEnd}
+        <article key={`${book}.${chapter}`} ref={article}
           class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
           {page(book, chapter, true)}
         </article>
