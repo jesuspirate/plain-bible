@@ -265,6 +265,18 @@ main.with-bar { padding-bottom: 120px; }
 .tones button { font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; padding: 8px 10px; }
 .tones button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
 .sb-pray:active { transform: scale(.94); }
+/* Circles, just left of 🙏: a plain round button with three people, the
+   height of the search bar, so the two read as a pair and 🙏 still leads. */
+.sb-circles {
+  all: unset; cursor: pointer; flex: none; position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  color: var(--text); background: var(--surface); border: 1px solid var(--line); box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0,0,0,.14); -webkit-tap-highlight-color: transparent;
+}
+.sb-circles svg * { stroke-width: 2.6; }
+.sb-circles::before { content: ''; position: absolute; inset: -5px; border-radius: 50%; }
+.sb-circles:active { transform: scale(.94); }
+.sb-circles:focus-visible, .sb-pray:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
+.sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
 /* Buttons you can press and hold (hold.tsx): no text selection, no callout, no scrolling away. */
 .holdable { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none; }
@@ -285,7 +297,7 @@ main.with-bar { padding-bottom: 120px; }
 .hold-pick button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
 @keyframes hold-in { from { opacity: 0; transform: translateY(6px) scale(.96); } }
 @media (prefers-reduced-motion: reduce) { .hold-pick { animation: none; } }
-.sb-bar { display: flex; align-items: center; gap: 12px; }
+.sb-bar { display: flex; align-items: center; gap: 10px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
 .sb-cancel {
   all: unset; cursor: pointer; flex: none; box-sizing: border-box; height: 52px; padding: 0 18px; border-radius: 26px;
@@ -349,6 +361,8 @@ main.with-mini { padding-bottom: 144px; }
 .sb-mini .sb-clear { display: none; }
 .sb-mini .sb-field:active { transform: scale(.94); }
 .sb-mini .sb-bar .sb-field { flex: none; }
+@media (max-width: 359px) { .sb-bar { gap: 8px; } .sb-circles { width: 48px; height: 48px; } }
+.sb-mini .sb-circles { width: 48px; height: 48px; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
 
 .sb-chapters { padding-bottom: 6px; }
 .sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; scroll-behavior: smooth; }
@@ -564,13 +578,14 @@ html.sb-lock, html.sb-lock body { overflow: hidden; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(255,255,255,.13); } }
 @supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   :root { --glass-open: color-mix(in srgb, var(--surface) 86%, transparent); }
-  .sb-field, .sb-mini .sb-field, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
+  .sb-field, .sb-mini .sb-field, .sb-circles, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
     -webkit-backdrop-filter: blur(10px) saturate(160%); backdrop-filter: blur(10px) saturate(160%);
   }
   .sb-field { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
+  .sb-circles { border-color: transparent; background: var(--glass-tint); }
   /* The rim: a 1px ring drawn with a gradient, light top and bottom, dark at the sides. */
-  .sb-field::after, .sb-pray::after {
+  .sb-field::after, .sb-pray::after, .sb-circles::after {
     content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
     background: linear-gradient(to bottom, var(--rim-light), var(--rim-dark) 34%, var(--rim-dark) 66%, var(--rim-light));
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
@@ -661,7 +676,7 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 @media (hover: none) {
   /* Not the verse numbers and Strong's words: they sit under your finger as you scroll.
      Not 🙏 either: it's held while you pick a skin tone, and it shrinks instead. */
-  :where(button, a, [role='button']):active:not(:disabled, .vn, .w, .sb-pray) { opacity: .6; }
+  :where(button, a, [role='button']):active:not(:disabled, .vn, .w, .sb-pray, .sb-circles) { opacity: .6; }
 }
 
 /* ---- new version ---- */
@@ -753,4 +768,3 @@ body:has(.pick-verse) .sb { display: none; }
 .account-open { display: block; margin: 8px 0 4px; padding: 8px 0; font-weight: 600; font-size: 16px; }
 
 /* Something new in a circle: a small dot on 🙏, nothing more. */
-.sb-pray-dot { position: absolute; top: 3px; right: 3px; width: 12px; height: 12px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2px var(--bg); pointer-events: none; }

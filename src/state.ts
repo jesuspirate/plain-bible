@@ -94,7 +94,7 @@ export const AppContext = createContext<AppState>(null!)
 export const useApp = () => useContext(AppContext)
 
 /** Open the prayer overlay over whatever is on screen: to pray, or on
- *  Circles (and one circle), which live there beside Your prayers. */
+ *  Circles (and one circle), which have their own button but open there. */
 export const PRAY_EVENT = 'plain-bible:pray'
 export type PrayAt = { circles: true; circle?: { id: string; name: string } }
 export const openPrayer = (at?: PrayAt) => window.dispatchEvent(new CustomEvent(PRAY_EVENT, { detail: at }))

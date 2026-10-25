@@ -9,8 +9,10 @@ import { parseRef, formatRef, Ref } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, inCircles, openPrayer, readPath, TONES, useApp } from './state'
+import { go, inCircles, openCircles, openPrayer, readPath, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
+import { SYNC_URL } from './lib/sync'
+import { CircleIcon } from './icons'
 import { VerseText } from './ui'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
@@ -25,18 +27,33 @@ function PrayButton() {
     value: settings.prayTone, onPick: t => update({ prayTone: t }), onTap: () => openPrayer(),
     label: 'Prayer button skin tone', cls: 'tone-pick', cell: 42,
   })
-  useCircleNews()
-  const news = inCircles() && circlesWithNews() > 0
   return (
     <>
-      <button {...button} type="button" class="sb-pray holdable" aria-label={news ? 'Pray · something new in your circles' : 'Pray'} title="Pray · hold for skin tones">
+      <button {...button} type="button" class="sb-pray holdable" aria-label="Pray" title="Pray · hold for skin tones">
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
-        {news && <span class="sb-pray-dot" aria-hidden="true" />}
       </button>
       {picker}
     </>
   )
 }
+
+/** Circles: the people you read and pray with, one tap away beside 🙏.
+ *  A dot when someone shared, replied or prayed with you since you last looked. */
+function CirclesButton() {
+  useCircleNews()
+  const news = inCircles() && circlesWithNews() > 0
+  return (
+    <button type="button" class="sb-circles" onClick={() => openCircles()}
+      aria-label={news ? 'Circles · something new' : 'Circles'} title="Circles">
+      <CircleIcon size={30} />
+      {news && <span class="sb-news-dot" aria-hidden="true" />}
+    </button>
+  )
+}
+
+// On a phone the bar shares its row with Circles and 🙏, so long book names
+// are shortened (1 Thess, Deut) to keep the version in view.
+const shortName = (id: string) => { const b = bookById(id); return innerWidth < 430 && b.name.length > 10 ? b.abbr : b.name }
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -384,13 +401,14 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? 'Search' : `Search ${version} or go to a passage`}
-            placeholder={here && !open ? `${bookById(here.book).name} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
+            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : `Search ${version} or John 3:16`}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
         </form>
-        {/* Prayer, always one tap away, on its own just right of search: opens
-            the glowing microphone over the page. */}
+        {/* Circles, then prayer, always one tap away just right of search.
+            🙏 opens the glowing microphone over the page. */}
+        {!open && SYNC_URL && <CirclesButton />}
         {!open && <PrayButton />}
         {open && <button type="button" class="sb-cancel" onClick={close}>Cancel</button>}
         </div>
