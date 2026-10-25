@@ -264,6 +264,22 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
     if (cur?.key_id !== keyId) throw new HttpError(409, 'This account already has a prayer key', { keyId: cur?.key_id })
     return json({ ok: true })
   }
+  // Starting over with a new key, when no device of theirs holds the old one.
+  // What the old key locked can't be opened by anyone any more, so it goes:
+  // the synced prayers and the passkeys' copies of the old key. Circles stay;
+  // each needs a new invite to open with the new key (see the invite join).
+  if (a === 'key' && b === 'new' && !c && req.method === 'POST') {
+    const { keyId } = await readJson<{ keyId: string }>(req)
+    if (typeof keyId !== 'string' || !/^[\w-]{8,64}$/.test(keyId)) throw new HttpError(400, 'Bad key id')
+    await db.batch([
+      db.prepare('INSERT INTO prayer_keys (user_id, key_id, created) VALUES (?, ?, ?) ON CONFLICT(user_id) DO UPDATE SET key_id = excluded.key_id, created = excluded.created')
+        .bind(userId, keyId, Date.now()),
+      db.prepare('DELETE FROM prayer_wraps WHERE user_id = ?').bind(userId),
+      db.prepare('DELETE FROM prayer_chunks WHERE user_id = ?').bind(userId),
+      db.prepare('DELETE FROM prayer_parts WHERE user_id = ?').bind(userId),
+    ])
+    return json({ ok: true })
+  }
   // The key wrapped for one passkey.
   if (a === 'wrap' && b && !c) {
     if (req.method === 'GET') {
@@ -367,6 +383,9 @@ const SEALED_MAX = 20_000
 const CIRCLE_QUOTA = 1_000_000_000
 const MAX_CIRCLES = 20
 const MAX_MEMBERS = 50
+const CODE_MS = 15 * 60_000
+const CODE_MISSES = 10
+const HOUR = 3_600_000
 const INVITE_DAYS = 7
 const sealedText = (v: unknown, max = SEALED_MAX) => typeof v === 'string' && v.length > 0 && v.length <= max && /^[\w-]+$/.test(v)
 
@@ -509,6 +528,58 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     return json({ ok: true })
   }
 
+  // Joining with a code, on the joining side: type it (which leaves your
+  // public key), wait for the member who made it to allow you, then join.
+  if (a === 'code') {
+    if (!b && req.method === 'POST') {
+      const { code, pub, label } = await readJson<{ code: string; pub: string; label: string }>(req)
+      if (typeof code !== 'string' || !/^\d{6}$/.test(code) || !sealedText(pub, 200) || typeof label !== 'string' || label.length > 60) throw new HttpError(400, 'Bad request')
+      const misses = await db.prepare('SELECT COUNT(*) AS n FROM circle_code_misses WHERE user_id = ? AND at > ?').bind(userId, now - HOUR).first<{ n: number }>()
+      if ((misses?.n ?? 0) >= CODE_MISSES) throw new HttpError(429, 'Too many wrong codes. Try again in an hour.')
+      const row = await db.prepare('UPDATE circle_codes SET joiner = ?, pub = ?, label = ? WHERE code = ? AND joiner IS NULL AND expires > ? RETURNING code')
+        .bind(userId, pub, label, code, now).first()
+      if (!row) {
+        await db.batch([
+          db.prepare('DELETE FROM circle_code_misses WHERE at < ?').bind(now - HOUR),
+          db.prepare('INSERT INTO circle_code_misses (user_id, at) VALUES (?, ?)').bind(userId, now),
+        ])
+        throw new HttpError(404, 'That code isn’t right, or it has expired. Check it and try again.')
+      }
+      return json({ ok: true })
+    }
+    if (!b || !/^\d{6}$/.test(b) || d) throw new HttpError(404, 'Not found')
+    const row = await db.prepare('SELECT circle_id, epk, sealed FROM circle_codes WHERE code = ? AND joiner = ? AND expires > ?').bind(b, userId, now)
+      .first<{ circle_id: string; epk: string | null; sealed: string | null }>()
+    if (req.method === 'DELETE' && !c) {
+      await db.prepare('DELETE FROM circle_codes WHERE code = ? AND joiner = ?').bind(b, userId).run()
+      return json({ ok: true })
+    }
+    if (!row) throw new HttpError(404, 'This code has expired. Ask for a new one.')
+    if (req.method === 'GET' && !c) return json({ circle: row.circle_id, epk: row.epk, sealed: row.sealed })
+    if (req.method === 'POST' && c === 'join') {
+      if (!row.sealed) throw new HttpError(409, 'Not allowed in yet.')
+      const { wrapped, me } = await readJson<{ wrapped: string; me: string }>(req)
+      if (!sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
+      const circle = row.circle_id
+      const already = await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(circle, userId).first()
+      if (!already) {
+        const [members, mine] = await Promise.all([
+          db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE circle_id = ?').bind(circle).first<{ n: number }>(),
+          db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>(),
+        ])
+        if ((members?.n ?? 0) >= MAX_MEMBERS) throw new HttpError(413, `A circle can have up to ${MAX_MEMBERS} people`)
+        if ((mine?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
+      }
+      await db.batch([
+        db.prepare(`INSERT INTO circle_members (circle_id, user_id, mid, wrapped, name, joined) VALUES (?, ?, ?, ?, ?, ?)
+          ON CONFLICT DO UPDATE SET wrapped = excluded.wrapped`).bind(circle, userId, random(9), wrapped, me, now),
+        db.prepare('DELETE FROM circle_codes WHERE code = ?').bind(b),
+      ])
+      return json({ ok: true, circle })
+    }
+    throw new HttpError(404, 'Not found')
+  }
+
   // Invites. Anyone signed in who has the link can look, and join once.
   if (a === 'invite' && b && !c) {
     if (!CIRCLE_ID.test(b)) throw new HttpError(404, 'Not found')
@@ -520,8 +591,16 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     const already = !!userId && !!(await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(inv.circle_id, userId).first())
     if (req.method === 'GET') return json({ circle: inv.circle_id, wrapped: inv.wrapped, name: inv.name, by: inv.by_name, members: inv.members, already })
     if (req.method === 'POST' && userId) {
-      if (already) return json({ ok: true, circle: inv.circle_id })
       const { wrapped, me } = await readJson<{ wrapped: string; me: string }>(req)
+      // Already in: a new invite replaces your locked copy of the circle key,
+      // for someone whose old copy no device of theirs can open any more.
+      if (already) {
+        if (!sealedText(wrapped, 500)) return json({ ok: true, circle: inv.circle_id })
+        const taken = await db.prepare('DELETE FROM circle_invites WHERE id = ? AND expires > ? RETURNING circle_id').bind(b, now).first()
+        if (!taken) throw new HttpError(404, 'This invite has been used or has expired. Ask for a new one.')
+        await db.prepare('UPDATE circle_members SET wrapped = ? WHERE circle_id = ? AND user_id = ?').bind(wrapped, inv.circle_id, userId).run()
+        return json({ ok: true, circle: inv.circle_id })
+      }
       if (!sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
       if (inv.members >= MAX_MEMBERS) throw new HttpError(413, `A circle can have up to ${MAX_MEMBERS} people`)
       const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
@@ -552,6 +631,39 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
         WHERE r.circle_id = ? ORDER BY r.at`).bind(circle).all(),
     ])
     return json({ me: mid, members: members.results, items: items.results, amens: amens.results, replies: replies.results })
+  }
+  // Joining with a code, on the member's side: make one, see who typed it,
+  // and allow them by sealing the circle key to their public key.
+  if (b === 'code') {
+    if (!c && req.method === 'POST') {
+      const open = await db.prepare('SELECT COUNT(*) AS n FROM circle_codes WHERE circle_id = ? AND expires > ?').bind(circle, now).first<{ n: number }>()
+      if ((open?.n ?? 0) >= 5) throw new HttpError(429, 'Several codes are already waiting. Try again in a few minutes.')
+      await db.prepare('DELETE FROM circle_codes WHERE expires < ?').bind(now).run()
+      for (let i = 0; i < 5; i++) {
+        const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, '0')
+        const res = await db.prepare('INSERT INTO circle_codes (code, circle_id, user_id, created, expires) VALUES (?, ?, ?, ?, ?) ON CONFLICT DO NOTHING')
+          .bind(code, circle, userId, now, now + CODE_MS).run()
+        if (res.meta.changes) return json({ code, expires: now + CODE_MS })
+      }
+      throw new HttpError(503, 'Try again')
+    }
+    if (!c || !/^\d{6}$/.test(c) || d) throw new HttpError(404, 'Not found')
+    if (req.method === 'DELETE') {
+      await db.prepare('DELETE FROM circle_codes WHERE code = ? AND circle_id = ? AND user_id = ?').bind(c, circle, userId).run()
+      return json({ ok: true })
+    }
+    const row = await db.prepare('SELECT pub, label, sealed FROM circle_codes WHERE code = ? AND circle_id = ? AND user_id = ? AND expires > ?').bind(c, circle, userId, now)
+      .first<{ pub: string | null; label: string | null; sealed: string | null }>()
+    if (!row) throw new HttpError(404, 'This code has expired. Make a new one.')
+    if (req.method === 'GET') return json({ pub: row.pub, label: row.label, allowed: !!row.sealed })
+    if (req.method === 'PUT') {
+      const { epk, sealed } = await readJson<{ epk: string; sealed: string }>(req)
+      if (!sealedText(epk, 200) || !sealedText(sealed, 500)) throw new HttpError(400, 'Bad request')
+      const res = await db.prepare('UPDATE circle_codes SET epk = ?, sealed = ? WHERE code = ? AND circle_id = ? AND user_id = ? AND joiner IS NOT NULL AND sealed IS NULL AND expires > ?')
+        .bind(epk, sealed, c, circle, userId, now).run()
+      if (!res.meta.changes) throw new HttpError(404, 'They stopped waiting. Make a new code.')
+      return json({ ok: true })
+    }
   }
   // Your name in this circle.
   if (b === 'me' && !c) {

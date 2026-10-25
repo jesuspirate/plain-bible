@@ -83,3 +83,13 @@ p.c-new-word { display: block; margin: 0 0 4px; }
 .c-switch.on { background: var(--accent); border-color: var(--accent); }
 .c-switch.on span { transform: translateX(24px); }
 @media (prefers-reduced-motion: reduce) { .c-switch, .c-switch span { transition: none; } }
+/* Joining with a code */
+.c-card-title { margin: 0 0 8px; font: 700 18px var(--sans); }
+.c-two > .c-btn { flex: 1 1 0; }
+.c-codebox { text-align: center; }
+.c-codebox .c-two, .c-codebox .c-label { text-align: left; }
+.c-bigcode { margin: 6px 0 10px; font: 700 44px/1.1 var(--sans); letter-spacing: .12em; font-variant-numeric: tabular-nums; }
+.c-code-input {
+  box-sizing: border-box; width: 100%; margin: 4px 0 14px; padding: 10px 12px; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--bg); color: var(--text); font: 700 34px var(--sans); letter-spacing: .3em; text-align: center; font-variant-numeric: tabular-nums;
+}

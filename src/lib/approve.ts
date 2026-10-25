@@ -8,7 +8,7 @@ import { meta } from './prayers'
 import { aesKey, b64url, keyCode, open, seal } from './prayerCrypto'
 import { api, loadAccount, SyncError } from './sync'
 
-const EC = { name: 'ECDH', namedCurve: 'P-256' } as const
+export const EC = { name: 'ECDH', namedCurve: 'P-256' } as const
 const DAY = 86_400_000
 const subtle = () => crypto.subtle
 
@@ -32,7 +32,7 @@ export async function matchCode(pub: string) {
   return String(new DataView(h.buffer).getUint32(0) % 10000).padStart(4, '0')
 }
 
-function deviceLabel() {
+export function deviceLabel() {
   const ua = navigator.userAgent
   if (/iPhone/.test(ua)) return 'iPhone'
   if (/iPad/.test(ua) || (/Macintosh/.test(ua) && navigator.maxTouchPoints > 1)) return 'iPad'
@@ -42,7 +42,9 @@ function deviceLabel() {
   return 'device'
 }
 
-async function shared(priv: CryptoKey, pub: string, id: string) {
+/** The key two devices share for one request: this one's private half and
+ *  the other's public half. Circle codes use it too. */
+export async function shared(priv: CryptoKey, pub: string, id: string) {
   const other = await subtle().importKey('raw', b64url.decode(pub), EC, false, [])
   const bits = new Uint8Array(await subtle().deriveBits({ name: 'ECDH', public: other }, priv, 256))
   return aesKey(bits, `approve v1 ${id}`)
