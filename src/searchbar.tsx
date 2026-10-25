@@ -16,6 +16,7 @@ import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
 import { CircleIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
+import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
 import { locale, N_, t, tn } from './i18n'
@@ -75,7 +76,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [q, setQ] = useState('')
   const [open, setOpen] = useState(false)
   const [recent, setRecent] = useState<string[]>(loadRecent)
-  const [live, setLive] = useState<{ q: string; key: string; total: number; hits: number[]; verses: PageVerse[] }>()
+  const [live, setLive] = useState<{ q: string; key: string; total: number; hits: number[]; verses: PageVerse[]; also?: string[] }>()
   // Versions to search: the one you're reading, unless you picked others.
   const [picked, setPicked] = useState<string[]>()
   const [pickIn, setPickIn] = useState(false)
@@ -236,11 +237,23 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       const base = data.url('')
       const options = settings.searchOptions
       try {
-        const r = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: inV, langs, options })
+        let vs = inV, ls = langs, also: string[] | undefined
+        let r = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: vs, langs: ls, options })
         if (stale) return
+        // Nothing in your Bible: look in the other Bibles of its language
+        // (wordings differ), the ones this phone already has or can fetch.
+        if (!r.hits.length && !picked && info) {
+          const others = await sameLanguage([...byId.values()], (path: string) => data.url(path), info, version, settings.version)
+          if (stale) return
+          if (others.length) {
+            const r2 = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: others, langs: others.map(() => info.lang), options })
+            if (stale) return
+            if (r2.hits.length) { r = r2; vs = others; ls = others.map(() => info.lang); also = others }
+          }
+        }
         const refs = pageOf(r.hits, 0, FIRST)
-        const page = refs.length ? await call<PageResponse>({ type: 'page', base, query: trimmed, versions: inV, langs, options, refs }) : { verses: [] }
-        if (!stale) setLive({ q: trimmed, key, total: r.hits.length / 4, hits: r.hits, verses: page.verses })
+        const page = refs.length ? await call<PageResponse>({ type: 'page', base, query: trimmed, versions: vs, langs: ls, options, refs }) : { verses: [] }
+        if (!stale) setLive({ q: trimmed, key, total: r.hits.length / 4, hits: r.hits, verses: page.verses, also })
       } catch { if (!stale) setLive(undefined) }
     }, 220)
     return () => { stale = true; clearTimeout(timer) }
@@ -251,7 +264,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     setLoadingMore(true)
     const refs = pageOf(live.hits, live.verses.length, live.verses.length + MORE)
     try {
-      const page = await call<PageResponse>({ type: 'page', base: data.url(''), query: live.q, versions: inV, langs, options: settings.searchOptions, refs })
+      const vs = live.also ?? inV
+      const page = await call<PageResponse>({ type: 'page', base: data.url(''), query: live.q, versions: vs, langs: live.also ? vs.map(() => info?.lang ?? '') : langs, options: settings.searchOptions, refs })
       setLive(l => l && l.q === live.q && l.key === live.key ? { ...l, verses: [...l.verses, ...page.verses] } : l)
     } finally { setLoadingMore(false) }
   }
@@ -439,7 +453,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <div class="sb-live">
                 <div class="sb-kicker">
                   <span>{live && live.q === trimmed && live.key === key
-                    ? live.total ? tn(live.total, '{n} verse', '{n} verses') + (live.total > 1 && trimmed.includes(' ') ? t(', best first') : '') : t('No verses found')
+                    ? live.also ? t('Not worded so in {version}. Found in {others}:', { version, others: live.also.filter(id => live.verses.some(v => v.texts.some(x => x.matched && x.version === id))).join(', ') || live.also.join(', ') })
+                    : live.total ? tn(live.total, '{n} verse', '{n} verses') + (live.total > 1 && trimmed.includes(' ') ? t(', best first') : '') : t('No verses found')
                     : listening ? t('Listening…') : t('Searching…')}</span>
                   <button type="button" class="sb-in" onClick={() => setPickIn(true)} aria-label={t('Search in {versions}. Change', { versions: inV.join(', ') })}>
                     {t('in {versions}', { versions: inV.length > 2 ? tn(inV.length, '{n} version', '{n} versions') : inV.join(', ') })} ▾
@@ -450,7 +465,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                   const tv = byId.get(shown?.version ?? version)
                   return (
                     <button class="sb-item" onClick={() => openHit(v)}>
-                      <span class="sb-title">{formatRef(v)}{inV.length > 1 && shown && <span class="sb-vtag">{shown.version}</span>}</span>
+                      <span class="sb-title">{formatRef(v)}{(inV.length > 1 || live.also) && shown && <span class="sb-vtag">{shown.version}</span>}</span>
                       <span class="sb-verse" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}><VerseText raw={shown?.text ?? ''} ranges={shown?.ranges} /></span>
                     </button>
                   )
@@ -592,6 +607,18 @@ function rememberKeyboard(key: string, kb: number) {
 }
 
 const FIRST = 12, MORE = 20
+/** The other Bibles in the same language as yours that can be searched
+ *  now: all of them online, only those already on the phone offline. */
+async function sameLanguage(all: Translation[], url: (path: string) => string, info: Translation, version: string, yours: string): Promise<string[]> {
+  // Your own Bible first, then the best-known ones (the list's order); two
+  // at most, so a miss never downloads a pile of Bibles.
+  const ids = all.filter(x => x.lang === info.lang && x.id !== version).map(x => x.id).sort((a, b) => +(b === yours) - +(a === yours))
+  if (typeof caches === 'undefined') return ids.slice(0, 2)
+  const here = await Promise.all(ids.map(id => caches.match(url(`bibles/${id}.json`)).then(Boolean, () => false)))
+  const kept = ids.filter((_, i) => here[i])
+  return (navigator.onLine ? [...kept, ...ids.filter(id => !kept.includes(id))] : kept).slice(0, 2)
+}
+
 const EN_TRY = ['John 3:16', 'the Lord is my shepherd', 'no weapon formed against me', 'love your enemies']
 const FR_TRY = ['Jean 3:16', 'l’Éternel est mon berger', 'aucune arme forgée contre toi', 'aimez vos ennemis']
 const ES_TRY = ['Juan 3:16', 'Jehová es mi pastor', 'en el principio era el Verbo', 'amad a vuestros enemigos']

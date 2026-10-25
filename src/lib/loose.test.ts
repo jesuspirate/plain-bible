@@ -58,3 +58,13 @@ describe('forgiving search', () => {
     expect(looseRanges(text, looseQuery(['weapons', 'formed'], l), l).map(([a, b]) => text.slice(a, b))).toEqual(['weapon', 'formed'])
   })
 })
+
+describe('words that Bibles of one language use alike', () => {
+  it('finds Crampon wording from an LSG memory, and the other way', () => {
+    const fr = lang('fr')
+    const idx = buildIndex([[1, ' yahweh est mon pasteur je ne manquerai de rien '], [2, ' l eternel est mon berger ']], fr)
+    const hits = (q: string) => looseSearch(idx, looseQuery(looseWords(q)!, fr)).map(h => h.ref).sort()
+    expect(hits("l'Éternel est mon berger")).toEqual([1, 2])
+    expect(hits('Yahweh est mon pasteur')).toEqual([1, 2])
+  })
+})

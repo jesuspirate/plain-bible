@@ -96,14 +96,22 @@ function frStem(w: string): string {
 
 export interface Lang { stop: Set<string>; key: (w: string) => string }
 
-function makeLang(stop: Set<string>, same: Record<string, string>, me: Set<string>, him: Set<string>, stem: (w: string) => string): Lang {
+// Words that different Bibles of one language use for the same thing, so a
+// verse remembered from one Bible is found in another ("l'Éternel est mon
+// berger" in LSG is "Yahweh est mon pasteur" in Crampon).
+const EN_ALIKE = [['lord', 'jehovah', 'yahweh'], ['shepherd', 'pastor'], ['lamp', 'candle']]
+const FR_ALIKE = [['eternel', 'yahweh', 'yahve', 'jehovah', 'iahve', 'seigneur'], ['berger', 'pasteur'], ['lampe', 'flambeau']]
+
+function makeLang(stop: Set<string>, same: Record<string, string>, me: Set<string>, him: Set<string>, stem: (w: string) => string, alike: string[][] = []): Lang {
   const memo = new Map<string, string>()
+  const one = new Map(alike.flatMap(group => group.map(w => [stem(w), stem(group[0])] as const)))
   return {
     stop,
     key: w => {
       let k = memo.get(w)
       if (k === undefined) {
         k = me.has(w) ? '§me' : him.has(w) ? '§him' : stem(same[w] ?? w)
+        k = one.get(k) ?? k
         memo.set(w, k)
       }
       return k
@@ -118,8 +126,8 @@ const LANGS: Record<string, Lang> = {}
  *  languages match whole words, still loosely and ranked. */
 export function lang(code = ''): Lang {
   const c = code.split('-')[0]
-  return LANGS[c] ??= c === 'en' ? makeLang(EN_STOP, EN_SAME, EN_ME, EN_HIM, enStem)
-    : c === 'fr' ? makeLang(FR_STOP, {}, FR_ME, FR_HIM, frStem)
+  return LANGS[c] ??= c === 'en' ? makeLang(EN_STOP, EN_SAME, EN_ME, EN_HIM, enStem, EN_ALIKE)
+    : c === 'fr' ? makeLang(FR_STOP, {}, FR_ME, FR_HIM, frStem, FR_ALIKE)
     : makeLang(NONE, {}, NONE, NONE, w => w)
 }
 
