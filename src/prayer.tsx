@@ -344,7 +344,10 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
                   : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
               </button>
               <span class="pray-when">{when(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
-                {p.verse && <button class="link pray-list-verse" onClick={() => onRead(p.verse!)}>{verseLabel(p.verse)}</button>}</span>
+                {p.verse
+                  ? <button class="link pray-list-verse" onClick={() => onRead(p.verse!)}>{verseLabel(p.verse)}</button>
+                  // Thought of a verse later? The next verse you tap is tied to this prayer.
+                  : <button class="link pray-list-verse pray-list-add" onClick={() => { release(); awaitVerse(p.id); onClose() }}>+ Add a verse</button>}</span>
               {confirm !== p.id && <>
                 <button class="pray-icon" aria-label="Share or save this prayer" title="Share or save" onClick={() => save(p)}>
                   {again === p.id ? 'Share' : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}
