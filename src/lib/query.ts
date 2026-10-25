@@ -25,11 +25,11 @@ export type Node =
 
 export interface ParsedQuery { node?: Node; books?: Set<string>; errors: string[] }
 
-type Tok =
+export type Tok =
   | { k: 'word'; v: string } | { k: 'phrase'; v: string } | { k: 'regex'; v: string; flags: string }
   | { k: 'and' | 'or' | 'not' | 'lp' | 'rp' } | { k: 'near'; n: number } | { k: 'in'; v: string }
 
-function lex(q: string, errors: string[]): Tok[] {
+export function lex(q: string, errors: string[]): Tok[] {
   const out: Tok[] = []
   let i = 0
   while (i < q.length) {

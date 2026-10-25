@@ -209,12 +209,12 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       const base = data.url('')
       const options = settings.searchOptions
       try {
-        const r = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: [version], options })
+        const r = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: [version], langs: [byId.get(version)?.lang ?? ''], options })
         if (stale) return
         const total = r.hits.length / 4
         const refs: [string, number, number, number][] = []
         for (let i = 0; i < Math.min(4, total); i++) refs.push([BOOKS[r.hits[i * 4]].id, r.hits[i * 4 + 1], r.hits[i * 4 + 2], r.hits[i * 4 + 3]])
-        const page = refs.length ? await call<PageResponse>({ type: 'page', base, query: trimmed, versions: [version], options, refs }) : { verses: [] }
+        const page = refs.length ? await call<PageResponse>({ type: 'page', base, query: trimmed, versions: [version], langs: [byId.get(version)?.lang ?? ''], options, refs }) : { verses: [] }
         if (!stale) setLive({ q: trimmed, total, verses: page.verses })
       } catch { if (!stale) setLive(undefined) }
     }, 220)

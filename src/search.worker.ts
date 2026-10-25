@@ -5,12 +5,15 @@ import { BOOKS, BOOK_INDEX } from './lib/books'
 import { Bible, DataSource } from './lib/data'
 import { compile, highlight, parseQuery, Range, SearchOptions, VerseCtx } from './lib/query'
 import { normalize, plain, segments } from './lib/text'
+import { buildIndex, lang, looseQuery, looseRanges, looseSearch, looseWords, LooseIndex } from './lib/loose'
 
 export interface SearchRequest {
   type: 'search'; seq: number; base: string; query: string; versions: string[]; options: SearchOptions; books?: string[]
+  /** Language of each version, for forgiving search of plain words. */
+  langs?: string[]
 }
 export interface PageRequest {
-  type: 'page'; seq: number; base: string; query: string; versions: string[]; options: SearchOptions
+  type: 'page'; seq: number; base: string; query: string; versions: string[]; options: SearchOptions; langs?: string[]
   refs: [string, number, number, number][]
 }
 export interface SearchResponse {
@@ -20,6 +23,8 @@ export interface SearchResponse {
   perBook: Record<string, number>
   perVersion: number[]
   ms: number
+  /** Plain words were matched forgivingly, and hits are best first. */
+  loose?: boolean
 }
 export interface PageVerse { book: string; chapter: number; verse: number; texts: { version: string; text: string; ranges: Range[]; matched: boolean }[] }
 export interface PageResponse { type: 'page'; seq: number; verses: PageVerse[] }
@@ -56,12 +61,35 @@ function contexts(bible: Bible, o: SearchOptions): VerseCtx[][][] {
   return c
 }
 
+/** Plain words are matched forgivingly unless an exactness option is on. */
+function forgiving(q: string, o: SearchOptions) {
+  return o.caseSensitive || o.accentSensitive || o.partialWords ? undefined : looseWords(q)
+}
+
+const looseCache = new Map<string, LooseIndex>()
+
+function looseIndex(bible: Bible, code: string | undefined): LooseIndex {
+  const key = `${bible.id}|${code ?? ''}`
+  let idx = looseCache.get(key)
+  if (idx) return idx
+  const ctx = contexts(bible, { caseSensitive: false, accentSensitive: false, partialWords: false })
+  idx = buildIndex((function* () {
+    for (let bi = 0; bi < ctx.length; bi++)
+      for (let ci = 0; ci < ctx[bi].length; ci++)
+        for (let v = 0; v < ctx[bi][ci].length; v++) yield [(bi << 20) | ((ci + 1) << 10) | (v + 1), ctx[bi][ci][v].normText] as [number, string]
+  })(), lang(code))
+  if (looseCache.size >= 6) looseCache.delete(looseCache.keys().next().value!)
+  looseCache.set(key, idx)
+  return idx
+}
+
 async function search(req: SearchRequest): Promise<SearchResponse> {
   const t0 = performance.now()
   const parsed = parseQuery(req.query)
   const empty: SearchResponse = { type: 'search', seq: req.seq, errors: parsed.errors, hits: [], perBook: {}, perVersion: req.versions.map(() => 0), ms: 0 }
   if (!parsed.node || parsed.errors.some(e => e.startsWith('Add at least') || e.startsWith('Invalid'))) return empty
-  const match = compile(parsed.node, req.options)
+  const loose = forgiving(req.query, req.options)
+  const match = loose ? undefined : compile(parsed.node, req.options)
   let allowed: Set<string> | undefined = parsed.books
   if (req.books) {
     const ui = new Set(req.books)
@@ -69,10 +97,21 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
   }
   data ??= new DataSource(req.base)
   const masks = new Map<number, number>() // key = book<<20 | ch<<10 | v
+  const scores = new Map<number, number>()
   const perVersion = req.versions.map(() => 0)
   for (let vi = 0; vi < req.versions.length; vi++) {
     post({ type: 'progress', seq: req.seq, message: `Searching ${req.versions[vi]}…` })
     const bible = await data.bible(req.versions[vi])
+    if (loose) {
+      const idx = looseIndex(bible, req.langs?.[vi])
+      const allow = allowed && ((ref: number) => allowed!.has(BOOKS[ref >> 20].id))
+      for (const h of looseSearch(idx, looseQuery(loose, idx.lang), allow)) {
+        masks.set(h.ref, (masks.get(h.ref) ?? 0) | (1 << vi))
+        scores.set(h.ref, Math.max(scores.get(h.ref) ?? -Infinity, h.score))
+        perVersion[vi]++
+      }
+      continue
+    }
     const ctx = contexts(bible, req.options)
     for (let bi = 0; bi < ctx.length; bi++) {
       if (allowed && !allowed.has(BOOKS[bi].id)) continue
@@ -80,7 +119,7 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
       for (let ci = 0; ci < chapters.length; ci++) {
         const verses = chapters[ci]
         for (let v = 0; v < verses.length; v++) {
-          if (verses[v].normText.length > 1 && match(verses[v])) {
+          if (verses[v].normText.length > 1 && match!(verses[v])) {
             const key = (bi << 20) | ((ci + 1) << 10) | (v + 1)
             masks.set(key, (masks.get(key) ?? 0) | (1 << vi))
             perVersion[vi]++
@@ -89,7 +128,9 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
       }
     }
   }
-  const keys = [...masks.keys()].sort((a, b) => a - b)
+  // One word keeps Bible order; more words put the best matches first.
+  const ranked = !!loose && loose.length > 1
+  const keys = [...masks.keys()].sort(ranked ? (a, b) => scores.get(b)! - scores.get(a)! || a - b : (a, b) => a - b)
   const hits: number[] = []
   const perBook: Record<string, number> = {}
   for (const k of keys) {
@@ -97,11 +138,12 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
     hits.push(bi, (k >> 10) & 1023, k & 1023, masks.get(k)!)
     perBook[BOOKS[bi].id] = (perBook[BOOKS[bi].id] ?? 0) + 1
   }
-  return { type: 'search', seq: req.seq, errors: parsed.errors, hits, perBook, perVersion, ms: Math.round(performance.now() - t0) }
+  return { type: 'search', seq: req.seq, errors: parsed.errors, hits, perBook, perVersion, ms: Math.round(performance.now() - t0), loose: !!loose }
 }
 
 async function page(req: PageRequest): Promise<PageResponse> {
   const parsed = parseQuery(req.query)
+  const loose = forgiving(req.query, req.options)
   data ??= new DataSource(req.base)
   const bibles = await Promise.all(req.versions.map(v => data!.bible(v)))
   const verses: PageVerse[] = req.refs.map(([book, chapter, verse, mask]) => ({
@@ -111,7 +153,10 @@ async function page(req: PageRequest): Promise<PageResponse> {
       if (!raw) return []
       const text = plain(raw)
       const matched = !!(mask & (1 << vi))
-      return [{ version: b.id, text: raw, matched, ranges: matched && parsed.node ? highlight(parsed.node, raw, text, req.options) : [] }]
+      const ranges = !matched ? []
+        : loose ? looseRanges(text, looseQuery(loose, lang(req.langs?.[vi])), lang(req.langs?.[vi]))
+        : parsed.node ? highlight(parsed.node, raw, text, req.options) : []
+      return [{ version: b.id, text: raw, matched, ranges }]
     }),
   }))
   return { type: 'page', seq: req.seq, verses }

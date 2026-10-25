@@ -23,6 +23,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
   const scope = route.params.get('s') ?? ''
   const bookFilter = route.params.get('b') ?? ''
   const opts = settings.searchOptions
+  const langs = versions.map(id => byId.get(id)?.lang ?? '')
 
   const [input, setInput] = useState(q)
   const [result, setResult] = useState<SearchResponse>()
@@ -67,7 +68,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
     if (bookFilter) books = [bookFilter]
     setBusy('Searching…')
     let stale = false
-    call<SearchResponse>({ type: 'search', base: data.url(''), query: q, versions, options: opts, books }, m => !stale && setBusy(m))
+    call<SearchResponse>({ type: 'search', base: data.url(''), query: q, versions, langs, options: opts, books }, m => !stale && setBusy(m))
       .then(r => { if (!stale) { setResult(r); setBusy('') } })
       .catch(e => { if (!stale) { setError(e.message); setBusy('') } })
     return () => { stale = true }
@@ -83,7 +84,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
     const refs: [string, number, number, number][] = []
     for (let i = from; i < to; i++) refs.push([BOOKS[result.hits[i * 4]].id, result.hits[i * 4 + 1], result.hits[i * 4 + 2], result.hits[i * 4 + 3]])
     let stale = false
-    call<PageResponse>({ type: 'page', base: data.url(''), query: q, versions, options: opts, refs })
+    call<PageResponse>({ type: 'page', base: data.url(''), query: q, versions, langs, options: opts, refs })
       .then(r => { if (!stale) setShown(s => [...s, ...r.verses]) })
     return () => { stale = true }
   }, [result, limit])
@@ -153,6 +154,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
             <strong>{total.toLocaleString()}</strong> {total === 1 ? 'verse' : 'verses'}
             {versions.length > 1 && <span class="muted"> ({versions.map((v, i) => `${v}: ${result.perVersion[i].toLocaleString()}`).join(' · ')})</span>}
             <span class="muted small"> · {result.ms} ms</span>
+            {result.loose && total > 0 && <span class="muted small"> · {q.trim().split(/\s+/).length > 1 ? 'best matches first, close wording included' : 'all forms of the word'}</span>}
             {bookFilter && <button class="chip" onClick={() => setParams({ b: undefined })}>{bookById(bookFilter).name} ✕</button>}
             {total > 0 && <button class="link small" onClick={copyAll} title="Copy the results shown below">Copy shown</button>}
           </div>
@@ -226,8 +228,9 @@ function SearchHelp({ onPick }: { onPick?: (q: string) => void }) {
       <table>
         <tbody>
           {ex('faith', 'the whole word, any case or accent')}
+          {ex('no weapons formed against me', 'plain words find a verse as you remember it: any form of a word (weapon, weapons), small words and me/thee/you not required, best matches first')}
           {ex('"in the beginning"', 'an exact phrase')}
-          {ex('faith works', 'verses with both words (same as faith AND works)')}
+          {ex('faith AND works', 'verses with both exact words')}
           {ex('mercy OR grace', 'either word')}
           {ex('love -hate', 'love but not hate (also NOT hate)')}
           {ex('(mercy OR grace) peace', 'group with parentheses')}
