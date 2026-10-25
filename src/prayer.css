@@ -101,4 +101,5 @@ button.pray-over.offer { border: 1px dashed rgba(255, 227, 163, .7); padding-rig
 .pray-tied strong { color: #ffe3a3; font-weight: 600; }
 .pray-add { margin: 6px 0 8px; }
 button.pray-list-verse { display: block; margin: 0; padding: 2px 0 0; font-size: 14px; text-align: left; }
+button.pray-list-add { min-height: 36px; font-size: 15px; }
 .pray-pill .news-dot { display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: #9a5a1c; vertical-align: middle; }
