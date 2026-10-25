@@ -384,6 +384,7 @@ main.with-mini { padding-bottom: 144px; }
 .sb-mini .sb-circles { width: 48px; height: 48px; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
 
 .sb-chapters { padding-bottom: 6px; }
+.sb-fold { all: unset; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; min-height: 36px; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; }
 .sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; scroll-behavior: smooth; }
 .sb-chapter-row::-webkit-scrollbar { display: none; }
 .sb-ch { flex: none; min-width: 40px; height: 40px; border-radius: 12px; border: none; background: var(--chip); font-variant-numeric: tabular-nums; }
