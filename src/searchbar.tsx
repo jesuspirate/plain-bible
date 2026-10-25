@@ -148,7 +148,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const onWheel = (e: WheelEvent) => {
     const row = chapterRow.current
     if (!row || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return
-    row.scrollBy({ left: e.deltaY, behavior: 'auto' }); e.preventDefault()
+    row.scrollBy({ left: e.deltaY, behavior: 'smooth' }); e.preventDefault()
   }
   const onPointerDown = (e: PointerEvent) => {
     if (e.pointerType !== 'mouse' || !chapterRow.current) return
@@ -174,14 +174,22 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     requestAnimationFrame(() => { el.scrollTop = 0; el.style.overflowY = '' })
   }
   const [showRecent, setShowRecent] = useState(false)
-  useEffect(() => {
+  // Your chapter is already in the middle of the strip when the panel first
+  // shows, rather than the strip gliding there from chapter 1 as it opens.
+  useLayoutEffect(() => {
     const row = chapterRow.current, on = row?.querySelector<HTMLElement>('.on')
     if (row && on) row.scrollLeft = on.offsetLeft - row.clientWidth / 2 + on.clientWidth / 2
   }, [open, browse, lens])
 
+  // The chapter counts are ready before search opens (the Bible you're
+  // reading is already loaded), so the books never pop in after the panel.
+  const lensOf = useRef('')
   useEffect(() => {
-    if (open) data.bible(version).then(b => setLens(Object.fromEntries(Object.entries(b.books).map(([k, v]) => [k, v.length]))))
-  }, [open, version])
+    if ((!open && !here) || lensOf.current === version) return
+    const v = lensOf.current = version
+    data.bible(v).then(b => { if (lensOf.current === v) setLens(Object.fromEntries(Object.entries(b.books).map(([k, ch]) => [k, ch.length]))) },
+      () => { if (lensOf.current === v) lensOf.current = '' })
+  }, [open, version, !here])
   useEffect(() => { if (!open) setBrowse(undefined) }, [open])
   const browseBook = browse ?? here?.book ?? 'Gen'
   const chapters = lens[browseBook] ?? 0
@@ -421,7 +429,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
 
   return (
     <>
-      {open && <div class="sb-scrim" onClick={close} />}
+      {/* A swipe on the dimmed page doesn't turn its chapter behind search. */}
+      {open && <div class="sb-scrim" onClick={close} onWheel={e => e.stopPropagation()} />}
       <div ref={sb} class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}
