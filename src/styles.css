@@ -548,6 +548,20 @@ button.danger, .set-row.danger { color: #b3261e; }
 .set-list .move-card { margin: 0; border: none; border-top: 1px solid var(--line); border-radius: 0; padding: 12px 16px; }
 .set-note { margin: 0; padding: 8px 16px; }
 :root[data-theme='dark'] button.danger, :root[data-theme='dark'] .set-row.danger { color: #ff8a80; }
+/* Sign out and Delete account ask first, right where they were tapped. */
+.confirm-card { margin: 0 0 18px; padding: 16px; border-radius: 16px; background: var(--surface); border: 2px solid var(--line); }
+.confirm-card.danger { border-color: #b3261e; }
+:root[data-theme='dark'] .confirm-card.danger { border-color: #ff8a80; }
+.account .confirm-card p { margin: 0 0 10px; font-size: 16px; }
+.account .confirm-card p.small { font-size: 15px; }
+.confirm-card #confirm-title { font-size: 18px; }
+.confirm-buttons { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 6px; }
+.confirm-buttons button { min-height: 52px; border-radius: 14px; font: 600 17px var(--sans); width: 100%; }
+.hold-confirm { position: relative; overflow: hidden; color: #fff; background: #b3261e; border: none; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.hold-fill { position: absolute; inset: 0; background: #6e1610; transform: scaleX(0); transform-origin: left; }
+.hold-confirm.held .hold-fill { transform: scaleX(1); transition: transform var(--hold-ms, 2500ms) linear; }
+.hold-label { position: relative; }
+:root[data-theme='dark'] .hold-confirm { background: #c62828; }
 .account-box { margin: 0 0 20px; } .account-box h2 { margin-top: 0; }
 .email-code { margin-top: 12px; }
 .email-code form .move-input { flex: 1 1 14em; width: auto; }
@@ -822,6 +836,9 @@ body:has(.pick-verse) .sb { display: none; }
 .approve-wait { margin: 8px 0; }
 .approve-wait p { margin: 0 0 6px; }
 .approve-card { z-index: 60; }
+.approve-type { display: block; margin: 0 0 8px; }
+.approve-input { display: block; margin-top: 6px; max-width: 7em; font: 700 28px var(--sans); letter-spacing: 6px; text-align: center; font-variant-numeric: tabular-nums; }
+.approve-input[aria-invalid="true"] { border-color: var(--ribbon); }
 
 /* Read aloud: a small player just above the search bar, and a soft mark on
    the verse being read. */

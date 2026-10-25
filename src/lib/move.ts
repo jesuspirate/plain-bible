@@ -9,7 +9,7 @@
 import { mergeMark, Marks } from './marks'
 import { meta, Prayer, prayers } from './prayers'
 import { b64url, open, seal } from './prayerCrypto'
-import { api, changedAt, loadAccount, SettingsT, SYNC_URL, SyncError } from './sync'
+import { api, changedAt, claim, loadAccount, SettingsT, SYNC_URL, SyncError } from './sync'
 import { Days, mergeDays } from './streaks'
 import { t } from '../i18n'
 
@@ -300,7 +300,7 @@ export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn
     same = !!a && a === b
     // This device keeps its own sign-in, so the one that came isn't needed.
     api('/auth/logout', { method: 'POST', token: cameToken }).catch(() => {})
-  }
+  } else if (cameToken) await claim(cameToken)
   const get = (k: string) => localStorage.getItem(k)
   for (const [k, v] of Object.entries(mergeLocal(get, bundle.local, !!own, same))) localStorage.setItem(k, v)
   for (const p of list) if (!(await prayers.get(p.id))) await prayers.put(p)

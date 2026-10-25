@@ -4,7 +4,8 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
   Account, accountInfo, changedAt, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
-  removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, verifyEmailCode,
+  noteOwner, removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, takeSwitched,
+  verifyEmailCode,
 } from './lib/sync'
 import { Settings, useApp } from './state'
 import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
@@ -21,6 +22,8 @@ export interface SyncApi {
   run: () => void
   signedIn: (token: string) => void
   signedOut: () => void
+  /** Send everything to the account now; throws if it couldn't. */
+  flush: () => Promise<void>
 }
 
 const T_KEY = 'plain-bible:settings-t'
@@ -122,11 +125,68 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     return () => { clearTimeout(timer); removeEventListener(DAYS_EVENT, on) }
   }, [])
 
+  useEffect(() => { if (account) noteOwner(account.token) }, [account?.token])
+
   return {
     enabled: !!SYNC_URL, account, busy, error, run: () => { run() },
-    signedIn: token => { setAccount({ token, rev: 0 }); setError(''); setTimeout(run, 0) },
+    signedIn: token => {
+      setAccount({ token, rev: 0 }); setError('')
+      // Another account's things were just cleared from here: start afresh,
+      // so none of them is still on screen to sync into this one.
+      if (takeSwitched()) location.reload()
+      else setTimeout(run, 0)
+    },
     signedOut: () => setAccount(null),
+    flush: async () => {
+      const acct = loadAccount(), local = localDoc()
+      if (!acct || !local) return
+      if (navigator.onLine === false) throw new SyncError("You're offline. Connect to the internet to sign in or sync.")
+      await syncNow(acct, local)
+      if (localStorage.getItem('plain-bible:prayer-sync')) await (await import('./lib/prayerSync')).syncPrayers()
+    },
   }
+}
+
+const LEFT = 'plain-bible:left'
+const prayerSyncing = () => { try { return !!localStorage.getItem('plain-bible:prayer-sync') } catch { return false } }
+
+/** A button that acts only once pressed and held until it fills, so a slip
+ *  of the finger (or the mouse) can't set it off. Enter or Space held works
+ *  too. */
+function HoldToConfirm({ label, busy, onDone, ms = 2500 }: { label: string; busy: string; onDone: () => void; ms?: number }) {
+  const [held, setHeld] = useState(false)
+  const timer = useRef(0)
+  const start = () => {
+    if (busy || timer.current) return
+    setHeld(true)
+    timer.current = window.setTimeout(() => { timer.current = 0; setHeld(false); onDone() }, ms)
+  }
+  const stop = () => { clearTimeout(timer.current); timer.current = 0; setHeld(false) }
+  useEffect(() => stop, [])
+  return (
+    <button class={'hold-confirm' + (held ? ' held' : '')} style={{ '--hold-ms': `${ms}ms` }} disabled={!!busy}
+      onPointerDown={e => { (e.currentTarget as HTMLElement).setPointerCapture?.(e.pointerId); start() }}
+      onPointerUp={stop} onPointerCancel={stop} onPointerLeave={stop} onContextMenu={e => e.preventDefault()}
+      onKeyDown={e => { if ((e.key === 'Enter' || e.key === ' ') && !e.repeat) { e.preventDefault(); start() } }}
+      onKeyUp={e => { if (e.key === 'Enter' || e.key === ' ') stop() }}>
+      <span class="hold-fill" aria-hidden="true" />
+      <span class="hold-label">{busy || label}</span>
+    </button>
+  )
+}
+
+/** Just signed out, or deleted the account: said once, after the app starts afresh. */
+export function LeftNote() {
+  const [note, setNote] = useState(() => { try { const n = sessionStorage.getItem(LEFT); sessionStorage.removeItem(LEFT); return n } catch { return null } })
+  useEffect(() => { if (note) { const id = setTimeout(() => setNote(null), 6000); return () => clearTimeout(id) } }, [note])
+  if (!note) return null
+  return (
+    <div class="move-welcome" role="status" onClick={() => setNote(null)}>
+      <p>{note === 'deleted'
+        ? <><strong>{t('Account deleted.')}</strong> {t('Your highlights, notes and prayers stay on this device.')}</>
+        : <><strong>{t('Signed out.')}</strong> {t('Nothing of your account is left on this device.')}</>}</p>
+    </div>
+  )
 }
 
 /** Sign in with a 6-digit code sent by email, or with `token`, add an email
@@ -221,14 +281,39 @@ export function AccountSection() {
     try { sync.signedIn(await signIn()) } catch (e) { prepareSignIn(); throw e }
   })
   const addKey = act('add', async () => { await register(acct!.token); setMsg(t('Passkey added. You can now sign in with it on that device too.')) })
-  const logout = act('logout', async () => { await signOut(acct!.token); sync.signedOut() })
+  // Signing out leaves nothing of the account here (see lib/signout). What
+  // syncs is sent first, so it's all safe in the account; if that can't
+  // happen, you're asked before anything is lost.
+  const [confirming, setConfirm] = useState<'' | 'out' | 'unsaved' | 'delete'>('')
+  const [onlyHere, setOnlyHere] = useState(0)
+  const ask = async (which: 'out' | 'delete') => {
+    setMsg('')
+    if (which === 'out') setOnlyHere(await import('./lib/signout').then(m => m.prayersOnlyHere(prayerSyncing())).catch(() => 0))
+    setConfirm(which)
+  }
+  const leave = async (note: 'out' | 'deleted', personal: boolean, prayers: boolean) => {
+    await (await import('./lib/signout')).forgetAccount({ personal, prayers })
+    try { sessionStorage.setItem(LEFT, note) } catch { /* ignore */ }
+    sync.signedOut()
+    location.reload()
+  }
+  const logout = (anyway: boolean) => act('logout', async () => {
+    const syncing = prayerSyncing()
+    if (!anyway) {
+      try { await sync.flush() } catch { setConfirm('unsaved'); return }
+    }
+    await signOut(acct!.token)
+    // Prayers go too only when they're all in the account.
+    await leave('out', true, syncing && !anyway)
+  })()
   const dropEmail = act('email', async () => {
     if (!confirm(t('Stop signing in with this email? You’ll sign in with your passkey only.'))) return
     await removeEmail(acct!.token); setMsg(t('Email removed.'))
   })
+  // What's on this device stays: the account it synced with is gone.
   const remove = act('delete', async () => {
-    if (!confirm(t('Delete your account and its synced copy? Highlights stay on this device.'))) return
-    await deleteAccount(acct!.token); sync.signedOut(); setMsg(t('Account deleted.'))
+    await deleteAccount(acct!.token)
+    await leave('deleted', false, false)
   })
 
   if (!acct) {
@@ -316,10 +401,43 @@ export function AccountSection() {
       </div>
       {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(t('You can now also sign in with {email}.', { email: hint })) }} />}
 
-      <div class="set-list">
-        <button class="set-row" onClick={logout} disabled={!!working}><span class="set-icon" aria-hidden="true"><SignOutIcon size={24} /></span><span class="set-label">{t('Sign out')}</span></button>
-        <button class="set-row danger" onClick={remove} disabled={!!working}><span class="set-icon" aria-hidden="true"><TrashIcon size={24} /></span><span class="set-label">{t('Delete account')}</span></button>
-      </div>
+      {confirming === 'out' ? (
+        <div class="confirm-card" role="alertdialog" aria-labelledby="confirm-title">
+          <p id="confirm-title"><strong>{t('Sign out of this device?')}</strong></p>
+          <p>{t('Your highlights, notes, prayers and circles stay safe in your account and come back when you sign in again. This device forgets them.')}</p>
+          {onlyHere > 0 && <p class="small">{tn(onlyHere, '{n} prayer recorded here isn’t in your account. It stays on this device.', '{n} prayers recorded here aren’t in your account. They stay on this device.')}</p>}
+          <div class="confirm-buttons">
+            <button class="primary" disabled={!!working} onClick={() => logout(false)}>{working ? t('Signing out…') : t('Sign out')}</button>
+            <button disabled={!!working} onClick={() => setConfirm('')}>{t('Cancel')}</button>
+          </div>
+        </div>
+      ) : confirming === 'unsaved' ? (
+        <div class="confirm-card" role="alertdialog" aria-labelledby="confirm-title">
+          <p id="confirm-title"><strong>{t('Your latest changes couldn’t reach your account')}</strong></p>
+          <p>{t('Connect to the internet and try again. If you sign out anyway, changes since you last synced are lost here. Prayers stay on this device.')}</p>
+          <div class="confirm-buttons">
+            <button class="primary" disabled={!!working} onClick={() => logout(false)}>{working ? t('Signing out…') : t('Try again')}</button>
+            <button class="danger" disabled={!!working} onClick={() => logout(true)}>{t('Sign out anyway')}</button>
+            <button disabled={!!working} onClick={() => setConfirm('')}>{t('Cancel')}</button>
+          </div>
+        </div>
+      ) : confirming === 'delete' ? (
+        <div class="confirm-card danger" role="alertdialog" aria-labelledby="confirm-title">
+          <p id="confirm-title"><strong>{t('Delete your account for good?')}</strong></p>
+          <p>{t('This can’t be undone. Deleted on every device: your synced highlights, notes and settings, your synced prayers, and your place in every circle, with what you shared there.')}</p>
+          <p class="small">{t('This device keeps its own highlights, notes and prayers.')}</p>
+          <div class="confirm-buttons">
+            <HoldToConfirm label={t('Hold to delete')} busy={working === 'delete' ? t('Deleting…') : ''} onDone={remove} />
+            <button disabled={!!working} onClick={() => setConfirm('')}>{t('Cancel')}</button>
+          </div>
+          <p class="muted small">{t('Press and hold the red button until it fills.')}</p>
+        </div>
+      ) : (
+        <div class="set-list">
+          <button class="set-row" onClick={() => ask('out')} disabled={!!working}><span class="set-icon" aria-hidden="true"><SignOutIcon size={24} /></span><span class="set-label">{t('Sign out')}</span></button>
+          <button class="set-row danger" onClick={() => ask('delete')} disabled={!!working}><span class="set-icon" aria-hidden="true"><TrashIcon size={24} /></span><span class="set-label">{t('Delete account')}</span></button>
+        </div>
+      )}
       {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
     </div>
   )

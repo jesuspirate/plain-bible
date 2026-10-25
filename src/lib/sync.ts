@@ -135,6 +135,7 @@ export async function register(token?: string): Promise<string | undefined> {
   // Only some passkeys give the secret as they're made (iCloud Keychain does).
   const secret = takeSecret(response as Answer)
   const r = await api<{ token?: string }>('/auth/register/verify', { method: 'POST', token, body: { challengeId, response } })
+  if (r.token) await claim(r.token)
   setNoPasskey(false)
   const t = r.token ?? token
   if (t) await keepFromPasskey(t, secret)
@@ -165,9 +166,37 @@ export async function signIn(): Promise<string> {
   }
   const secret = takeSecret(response as Answer)
   const { token } = await api<{ token: string }>('/auth/login/verify', { method: 'POST', body: { challengeId, response } })
+  await claim(token)
   setNoPasskey(false)
   await keepFromPasskey(token, secret)
   return token
+}
+
+// Which account this device's things belong to. A sign-in to another one
+// first clears what the last one left (see lib/signout), so nothing of one
+// account ends up in another: not its keys, not its circles, not its
+// highlights. Accounts are told apart by when they were made.
+const OWNER = 'plain-bible:owner'
+let switched = false
+const owner = () => { try { return localStorage.getItem(OWNER) } catch { return null } }
+const setOwner = (who: string) => { try { localStorage.setItem(OWNER, who) } catch { /* ignore */ } }
+export async function claim(token: string) {
+  const info = await accountInfo(token).catch(() => null)
+  if (!info?.created) return
+  const who = String(info.created), prev = owner()
+  if (prev && prev !== who) {
+    await import('./signout').then(m => m.forgetAccount({ personal: true }))
+    switched = true
+  }
+  setOwner(who)
+}
+/** A sign-in that cleared another account's things: the app starts afresh. */
+export const takeSwitched = () => { const s = switched; switched = false; return s }
+/** Devices signed in before owners were kept: this one is the owner. */
+export async function noteOwner(token: string) {
+  if (owner()) return
+  const info = await accountInfo(token).catch(() => null)
+  if (info?.created && !owner()) setOwner(String(info.created))
 }
 
 export async function signOut(token: string) {
@@ -201,7 +230,7 @@ export const sendEmailCode = (email: string, token?: string) =>
 /** A token to sign in with, or with a token, the address added. */
 export async function verifyEmailCode(email: string, code: string, token?: string) {
   const r = await api<{ token?: string; added?: boolean; email?: string; passkeys?: number }>('/auth/email/verify', { method: 'POST', token, body: { email, code } })
-  if (r.token) setNoPasskey(!r.passkeys)
+  if (r.token) { await claim(r.token); setNoPasskey(!r.passkeys) }
   return r
 }
 

@@ -13,7 +13,7 @@ import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history
 import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
-import { touchSettings, useSync } from './account'
+import { LeftNote, touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveBanner, MoveWelcome } from './move'
@@ -279,6 +279,7 @@ export function App() {
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
       <ApproveCard />
+      <LeftNote />
     </AppContext.Provider>
   )
 }
