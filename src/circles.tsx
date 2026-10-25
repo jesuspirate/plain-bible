@@ -11,6 +11,8 @@ import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
 import { duration, prayers } from './lib/prayers'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
+import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
+import { renumbered, toStandard } from './lib/versification'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
@@ -27,6 +29,34 @@ const message = (e: unknown) => {
   const m = (e as Error).message
   return m === 'Cancelled' ? 'The passkey request was cancelled. Tap to try again.' : m
 }
+/** A passage someone shared, in the reader's own Bible: undefined while it's
+ *  looked up (so their words never flash first), null if there's nothing
+ *  to show. The sender's words are only the last resort (see lib/passage). */
+function usePassage(verse: PrayerVerse | undefined, theirs?: { text: string; version: string; size?: number }) {
+  const { data, settings, byId } = useApp()
+  const ids = verse ? readerVersions(settings, id => byId.get(id)?.lang).filter(id => byId.get(id)?.books.includes(verse.book) ?? true) : []
+  const [shown, setShown] = useState<Shown | null>()
+  const at = verse ? `${verse.book} ${verse.chapter}:${verse.verses.join()}` : ''
+  useEffect(() => {
+    let alive = true
+    setShown(undefined)
+    if (!verse) { setShown(null); return }
+    inYourBible(id => data.bible(id), ids, verse, theirs).then(s => { if (alive) setShown(s ?? null) }, () => { if (alive) setShown(null) })
+    return () => { alive = false }
+  }, [at, ids.join()])
+  return shown
+}
+
+/** The passage's words, said plainly when they had to be the sender's. */
+function Passage({ shown, small, from }: { shown: Shown | null | undefined; small?: boolean; from: string }) {
+  const { settings } = useApp()
+  if (shown === null) return null
+  return <>
+    <p class={'c-quote' + (small ? ' small' : '') + (shown ? '' : ' c-quote-wait')} aria-busy={!shown}>{shown?.text}</p>
+    {shown && !shown.yours && <p class="muted small">Your {settings.version} doesn’t have this here, so it’s shown as {from} shared it ({shown.version}).</p>}
+  </>
+}
+
 const when = (at: number) => new Date(at).toLocaleString(undefined, { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
 
 /** How the circles move between their pages. Inside the prayer screen it
@@ -418,10 +448,13 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
     try { await fn(); onChange() } catch (e) { setErr(message(e)) } finally { setBusy(false) }
   }
   const send = act(async () => { await reply(circle, item.id, said.trim()); setSaid(''); setWriting(false) })
-  const verse = b.verse
+  // Never the sender's Bible: the reader's own, unless theirs lacks it.
+  const shown = usePassage(b.verse, b.k === 'prayer' ? undefined : { text: b.text, version: b.version, size: b.size })
+  // The passage as your Bible numbers it (the Psalms differ in some).
+  const verse = shown?.at ?? b.verse
   const nav = useNav()
-  const open = (v: PrayerVerse) => { nav.away(); go(readPath(fav, v.book, v.chapter, v.verses[0])) }
-  const ref = (v: PrayerVerse) => <button class="link c-ref" onClick={() => open(v)}>{verseLabel(v)}{b.k !== 'prayer' && b.version && <span class="muted small"> ({b.version})</span>}</button>
+  const open = (v: PrayerVerse) => { nav.away(); go(readPath(shown?.version ?? fav, v.book, v.chapter, v.verses[0])) }
+  const ref = (v: PrayerVerse) => <button class="link c-ref" onClick={() => open(v)}>{verseLabel(v)}{shown && <span class="muted small"> ({shown.version})</span>}</button>
   // Keep it as your own: a bookmark, or a copy of the note in your notes.
   const bookmarked = !!verse && verse.verses.every(n => marks[markKey(verse.book, verse.chapter, n)]?.b)
   const bookmark = () => {
@@ -435,8 +468,8 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
     setKept('Bookmarked. It’s in your Saved.')
   }
   const keepNote = () => {
-    if (b.k !== 'note') return
-    setMarks(all => setNote(all, markKey(b.verse.book, b.verse.chapter, b.verse.verses[0]), newNoteId(), `${b.note}\n— ${nameOf(item.by)}`, Date.now(), b.verse.verses))
+    if (b.k !== 'note' || !verse) return
+    setMarks(all => setNote(all, markKey(verse.book, verse.chapter, verse.verses[0]), newNoteId(), `${b.note}\n— ${nameOf(item.by)}`, Date.now(), verse.verses))
     setKept('Added to your notes on this verse.')
   }
   const kind = b.k === 'bookmark' ? 'bookmarked' : b.k === 'note' ? 'wrote a note' : b.k === 'prayer' ? 'prayed' : 'shared'
@@ -449,16 +482,17 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
       <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">New</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at)}</span></div>
       {b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
-        {verse && <button class="link c-ref" onClick={() => open(verse)}>With {verseLabel(verse)}</button>}
+        {verse && <button class="link c-ref" onClick={() => open(verse)}>With {verseLabel(verse)}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
+        {verse && <Passage shown={shown} small from={nameOf(item.by)} />}
         {b.note && <p class="c-note">{b.note}</p>}
       </> : b.k === 'note' ? <>
         <p class="c-note c-note-main">{b.note}</p>
-        {b.text && <p class="c-quote small">{b.text}</p>}
-        {ref(b.verse)}
+        <Passage shown={shown} small from={nameOf(item.by)} />
+        {ref(verse!)}
       </> : <>
         {b.k === 'bookmark' && <BookmarkIcon size={18} class="c-bm" />}
-        <p class="c-quote">{b.text}</p>
-        {ref(b.verse)}
+        <Passage shown={shown} from={nameOf(item.by)} />
+        {ref(verse!)}
         {b.note && <p class="c-note">{b.note}</p>}
       </>}
       {item.replies.length > 0 && (
@@ -546,7 +580,7 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
 /** Share verses, a bookmark, a note or a prayer with one of your circles:
  *  one tap to choose the circle (if there's more than one), and Share. */
 export function ShareSheet({ request, onClose }: { request: ShareRequest; onClose: () => void }) {
-  const { marks } = useApp()
+  const { marks, data, settings } = useApp()
   const [list, setList] = useState<CircleInfo[]>()
   const [pick, setPick] = useState('')
   const [words, setWords] = useState('')
@@ -571,8 +605,18 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
     if (!pick) return
     setBusy(true); setMsg('')
     try {
-      if ('prayer' in request) await sharePrayer(pick, request.prayer, words.trim())
-      else await shareVerse(pick, kind, request.verse, request.version, request.text, kind === 'note' ? theNote : words.trim())
+      // The reference goes in standard numbering, so each reader finds it
+      // in their own Bible (see lib/passage), with how many verses your
+      // Bible has in that chapter, so one that numbers it differently
+      // doesn't show them the wrong verse.
+      if ('prayer' in request) {
+        const b = await data.bible(settings.version).catch(() => undefined)
+        await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v))
+      } else {
+        const b = await data.bible(request.version).catch(() => undefined), v = request.verse
+        const size = renumbered(b, v.book) ? 0 : chapterSize(b, v.book, v.chapter)
+        await shareVerse(pick, kind, toStandard(b, v), request.version, request.text, kind === 'note' ? theNote : words.trim(), size)
+      }
       setDone(true)
       setTimeout(onClose, 900)
     } catch (e) { setMsg(navigator.onLine === false ? 'You’re offline. Share again once you’re connected.' : message(e)) } finally { setBusy(false) }

@@ -18,6 +18,8 @@ import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveBanner, MoveWelcome } from './move'
 import { DAYS_EVENT } from './lib/streaks'
 import { checkCircleNews } from './lib/circleNews'
+import { readerVersions } from './lib/passage'
+import { fromStandard } from './lib/versification'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -239,10 +241,22 @@ export function App() {
 }
 
 function ReaderRoute({ route }: { route: Route }) {
-  const { settings } = useApp()
+  const { settings, byId, data } = useApp()
+  // A link someone sent opens in the Bible YOU read, not theirs; theirs
+  // only if none of yours has that book. Swapped before the reader opens,
+  // so their version never shows and never becomes yours. The link is in
+  // standard numbering, turned into your Bible's (see versification).
+  const shared = route.path.length >= 4 && route.params.has('shared')
   // "#/read" with no reference resumes the last place read.
   useEffect(() => {
-    if (route.path.length < 4) {
+    if (shared) {
+      const book = route.path[2], chapter = +route.path[3] || 1, verse = +(route.params.get('v') || 0)
+      const own = readerVersions(settings, id => byId.get(id)?.lang).find(id => byId.get(id)?.books.includes(book)) ?? route.path[1]
+      data.bible(own).catch(() => undefined).then(b => {
+        const at = fromStandard(b, { book, chapter, verses: [verse || 1] })
+        go(readPath(own, at.book, at.chapter, verse ? at.verses[0] : undefined), true)
+      })
+    } else if (route.path.length < 4) {
       const last = loadPlace()
       go(readPath(route.path[1] || settings.favorite || settings.version, last?.book ?? 'Gen', last?.chapter ?? 1), true)
     } else {
@@ -253,8 +267,8 @@ function ReaderRoute({ route }: { route: Route }) {
       if (last?.book !== book || last.chapter !== chapter) savePlace({ book, chapter, verse })
       visit({ book, chapter, verse })
     }
-  }, [route.path.join('/')])
-  return route.path.length >= 4 ? <Reader route={route} /> : null
+  }, [route.path.join('/'), shared])
+  return route.path.length >= 4 && !shared ? <Reader route={route} /> : null
 }
 
 // The one button in the top right corner: everything else lives behind it.
