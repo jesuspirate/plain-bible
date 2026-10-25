@@ -23,7 +23,8 @@ let run = 0 // bumped on every start, pause and stop, so old utterances stand do
 const emit = () => dispatchEvent(new Event(EVENT))
 
 const RATES = [0.8, 0.9, 1, 1.15, 1.3]
-const RATE_KEY = 'plain-bible:listen-rate', VOICE_KEY = 'plain-bible:listen-voice:'
+const RATE_KEY = 'plain-bible:listen-rate', VOICE_KEY = 'plain-bible:listen-voice:', TIP_KEY = 'plain-bible:listen-tip'
+const IPHONE = typeof navigator !== 'undefined' && (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
 const get = (k: string) => { try { return localStorage.getItem(k) } catch { return null } }
 const put = (k: string, v: string) => { try { localStorage.setItem(k, v) } catch { /* private mode */ } }
 const rate = () => { const r = Number(get(RATE_KEY)); return RATES.includes(r) ? r : 1 }
@@ -184,6 +185,19 @@ export function ListenPlayer() {
   }, [n?.book, n?.chapter, n?.verse, !!n])
   useEffect(() => () => { document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking')) }, [])
 
+  // iPhones mute web speech in Silent mode, so say so gently the first few
+  // times reading starts there.
+  const [tip, setTip] = useState(false)
+  useEffect(() => {
+    if (!n || !IPHONE) return
+    const seen = Number(get(TIP_KEY)) || 0
+    if (seen >= 3) return
+    put(TIP_KEY, String(seen + 1))
+    setTip(true)
+    const t = setTimeout(() => setTip(false), 7000)
+    return () => clearTimeout(t)
+  }, [!!n])
+
   if (!n) return null
   const r = rate()
   const voice = voiceFor(n.lang)
@@ -196,7 +210,7 @@ export function ListenPlayer() {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label="Choose the voice">
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble ? 'listen-trouble' : 'muted'}>{n.trouble ?? (voice && !phoneChoice(n.lang) ? voice.name : 'Phone’s own voice')} ▾</span>
+          <span class={n.trouble ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? 'Silent mode off to hear it' : voice && !phoneChoice(n.lang) ? voice.name : 'Phone’s own voice')} ▾</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={`Speed ${r} times. Change`}>{r}×</button>
         <button class="listen-stop" onClick={stopListening} aria-label="Stop reading aloud"><CloseIcon size={22} /></button>

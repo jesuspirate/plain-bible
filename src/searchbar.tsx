@@ -273,6 +273,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   }
   const listen = () => {
     if (rec.current) return stopListening()
+    // The iPhone home-screen app can't use the browser's speech recognition,
+    // but the keyboard's own microphone works there and is just as good.
+    if (IOS_APP) { setVoiceNote(KEYBOARD_MIC); input.current?.focus(); return }
     const SR = speechRecognition()
     if (!SR) return
     const r = new SR()
@@ -516,7 +519,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && !listening && <button type="button" class="sb-clear" aria-label="Clear" onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
-          {(!q || listening) && open && speechRecognition() && (
+          {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}
               aria-label={listening ? 'Stop listening' : 'Search by voice'} title={listening ? 'Stop listening' : 'Search by voice'}>
               <MicIcon />
@@ -590,6 +593,8 @@ const FIRST = 12, MORE = 20
 const EN_TRY = ['John 3:16', 'the Lord is my shepherd', 'no weapon formed against me', 'love your enemies']
 const FR_TRY = ['Jean 3:16', 'l’Éternel est mon berger', 'aucune arme forgée contre toi', 'aimez vos ennemis']
 
+const IOS_APP = typeof navigator !== 'undefined' && (navigator as any).standalone === true
+const KEYBOARD_MIC = 'Tap the 🎤 on your keyboard, then speak.'
 const VOICE_OFF = 'plain-bible:voice-off'
 const VOICE_BROKEN = 'Voice search doesn’t work in the app on this phone. Use the 🎤 on your keyboard instead.'
 const voiceOff = () => { try { return localStorage.getItem(VOICE_OFF) === '1' } catch { return false } }
