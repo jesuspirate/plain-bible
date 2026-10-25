@@ -28,14 +28,26 @@ const get = (k: string) => { try { return localStorage.getItem(k) } catch { retu
 const put = (k: string, v: string) => { try { localStorage.setItem(k, v) } catch { /* private mode */ } }
 const rate = () => { const r = Number(get(RATE_KEY)); return RATES.includes(r) ? r : 1 }
 
-/** The phone's voices for a language, the most natural first. */
+/** How natural a voice is: iPhones name the better downloads "Enhanced" or
+ * "Premium", sometimes only in the voice's id. */
+export function quality(v: SpeechSynthesisVoice): '' | 'Enhanced' | 'Premium' {
+  const s = v.name + ' ' + v.voiceURI
+  return /premium/i.test(s) ? 'Premium' : /enhanced|natural|neural|wavenet/i.test(s) ? 'Enhanced' : ''
+}
+
+/** The phone's voices for a language, the most natural first, each once. */
 export function voicesFor(lang: string): SpeechSynthesisVoice[] {
   const code = lang.split('-')[0].toLowerCase()
   const region = ({ en: 'en-us', fr: 'fr-fr' } as Record<string, string>)[code]
   const score = (v: SpeechSynthesisVoice) =>
-    (/premium|enhanced|natural|neural|wavenet/i.test(v.name) ? 4 : 0) + (v.lang.toLowerCase().replace('_', '-') === region ? 2 : 0)
-    + (v.localService ? 1 : 0) + (v.default ? 0.5 : 0) - (/compact|eloquence|novelty|bad news|bells|bubbles|jester|organ|whisper|zarvox|trinoids|cellos|bahh|boing|wobble|superstar|grandma|grandpa|rocko|shelley|flo|reed|sandy/i.test(v.name) ? 5 : 0)
+    ({ Premium: 5, Enhanced: 4, '': 0 })[quality(v)] + (v.lang.toLowerCase().replace('_', '-') === region ? 2 : 0)
+    + (v.localService ? 1 : 0) + (v.default ? 0.5 : 0) - (/compact/i.test(v.voiceURI) ? 0.25 : 0)
+    - (/eloquence|novelty|bad news|bells|bubbles|jester|organ|whisper|zarvox|trinoids|cellos|bahh|boing|wobble|superstar|grandma|grandpa|rocko|shelley|flo|reed|sandy/i.test(v.name) ? 5 : 0)
+  // iPhones often list the same voice twice (two copies of one download):
+  // keep only the best copy of each name.
+  const seen = new Set<string>()
   return (synth?.getVoices() ?? []).filter(v => v.lang.toLowerCase().startsWith(code)).sort((a, b) => score(b) - score(a))
+    .filter(v => { const k = `${v.name.replace(/\s*\((enhanced|premium|compact)\)/i, '')}|${v.lang}|${quality(v)}`; return !seen.has(k) && !!seen.add(k) })
 }
 
 function voiceFor(lang: string): SpeechSynthesisVoice | undefined {
@@ -186,6 +198,16 @@ const SAMPLE: Record<string, string> = {
 
 function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => void; onPick: () => void }) {
   const code = lang.split('-')[0]
+  // Ask the phone again each time the sheet opens: a voice downloaded a
+  // moment ago can take a while to show.
+  const [, fresh] = useState(0)
+  useEffect(() => {
+    const on = () => fresh(x => x + 1)
+    synth?.getVoices()
+    synth?.addEventListener?.('voiceschanged', on)
+    const t = setTimeout(on, 400)
+    return () => { clearTimeout(t); synth?.removeEventListener?.('voiceschanged', on) }
+  }, [])
   const list = voicesFor(lang)
   const current = voiceFor(lang)
   const sample = (v: SpeechSynthesisVoice) => {
@@ -196,13 +218,13 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
   }
   return (
     <Sheet title="Voice" onClose={onClose}>
-      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free in Settings → Accessibility → Spoken Content → Voices.</p>
+      <p class="muted small">These are the voices on your phone. On iPhone, more natural ones ("Enhanced" or "Premium") can be added free in Settings → Accessibility → Spoken Content → Voices. After a download, close Quiet Bible fully (swipe it away) and open it again. Voices chosen for Live Speech are a separate list, and your Personal Voice can't be used by web apps.</p>
       <div class="voice-list">
         {list.length === 0 && <p class="muted">No voice for this language on this phone.</p>}
         {list.map(v => (
           <div class={'voice-row' + (v.voiceURI === current?.voiceURI ? ' on' : '')}>
             <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, v.voiceURI); onPick() }}>
-              <strong>{v.name}</strong>
+              <strong>{v.name.replace(/\s*\((enhanced|premium)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
               <span class="muted small">{v.lang}{v.localService ? '' : ' · needs a connection'}</span>
             </button>
             <button class="voice-try" onClick={() => sample(v)} aria-label={`Hear ${v.name}`}><PlayIcon size={20} /></button>
