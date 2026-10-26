@@ -20,6 +20,7 @@ import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
+import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookmarkIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
@@ -61,7 +62,8 @@ function Passage({ shown, small, from }: { shown: Shown | null | undefined; smal
   </>
 }
 
-const when = (at: number) => new Date(at).toLocaleString(locale(), { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+/** The day is said above each group, so only the hour, except among the new. */
+const when = (at: number, day = false) => new Date(at).toLocaleString(locale(), day ? { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' } : { hour: 'numeric', minute: '2-digit' })
 
 /** How the circles move between their pages. Inside the prayer screen it
  *  keeps track (its back button steps out), and anything that leads to the
@@ -490,6 +492,8 @@ function CircleView({ id }: { id: string }) {
   const [busy, setBusy] = useState(false)
   const [leaving, setLeaving] = useState(false)
   const [showCode, setShowCode] = useState(false)
+  const [page, setPage] = useState<'shared' | 'people'>()
+  const [limit, setLimit] = useState(PAGE)
   // What came in since you last looked shows first, marked, until you next
   // come back. Looking at it clears the dot.
   const [since] = useState(() => seenAt(id))
@@ -532,38 +536,70 @@ function CircleView({ id }: { id: string }) {
   const nameOf = (mid: string) => mid === feed?.me ? t('You') : feed?.members.find(m => m.mid === mid)?.name ?? t('Someone who left')
   const fav = settings.version
   const news = feed ? newsIn(feed, since).items : undefined
-  const items = feed ? [...feed.items.filter(i => news!.has(i.id)), ...feed.items.filter(i => !news!.has(i.id))] : []
+  // A few days at a time, then a clear end: never an endless stack.
+  const { days, more } = feed ? byDay(feed.items, news!, limit) : { days: [], more: false }
+  // A circle with only you in it starts on People, where the invite is.
+  const tab = page ?? (feed && feed.members.length < 2 && !feed.items.length ? 'people' : 'shared')
 
   return (
     <div class="circles">
       {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? t('Circle')}</button></h1>}
-      {feed && <p class="muted small">{feed.members.map(m => m.mid === feed.me ? t('You') : m.name).join(', ')}</p>}
-      {feed && <Notify circle={id} name={info?.name} />}
-      {feed && <StreakBoard circle={id} name={info?.name} feed={feed} onChange={load} />}
-      {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} /> : (
-        <div class="c-card">
-          <p class="c-card-title">{t('Invite someone')}</p>
-          <div class="c-row c-two">
-            <button class="c-btn primary" onClick={() => { setMsg(''); setShowCode(true) }}>{t('Show a code')}</button>
-            {invite && !sent
-              ? <button class="c-btn" onClick={() => sendInvite(invite)}>{canShare ? t('Send the link') : t('Copy the link')}</button>
-              : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? t('Making link…') : t('Send a link')}</button>}
-          </div>
-          <p class="muted small">{sent ? t('Link sent.') + ' ' : ''}{t('A code is for someone beside you or on a call. A link works from far away, once, for 7 days.')}</p>
+      {feed && (
+        <div class="seg c-tabs" role="tablist">
+          <button role="tab" aria-selected={tab === 'shared'} class={tab === 'shared' ? 'on' : ''} onClick={() => setPage('shared')}>{t('Shared')}</button>
+          <button role="tab" aria-selected={tab === 'people'} class={tab === 'people' ? 'on' : ''} onClick={() => setPage('people')}>{t('People')}</button>
         </div>
       )}
       {msg && <p class="note small">{msg}</p>}
-      {feed && !feed.items.length && <p class="muted c-empty">{t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
-      <ol class="c-feed">
-        {feed && items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
-      </ol>
-      <div class="c-foot">
-        {leaving
-          ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>{t('Stay')}</button><button class="c-btn danger" disabled={busy} onClick={leave}>{t('Leave and remove what I shared')}</button></div>
-          : <button class="link small" onClick={() => setLeaving(true)}>{t('Leave this circle')}</button>}
-      </div>
+      {feed && tab === 'people' && <>
+        <p class="c-members">{feed.members.map(m => m.mid === feed.me ? t('You') : m.name).join(', ')}</p>
+        <Notify circle={id} name={info?.name} />
+        <StreakBoard circle={id} name={info?.name} feed={feed} onChange={load} />
+        {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} /> : (
+          <div class="c-card">
+            <p class="c-card-title">{t('Invite someone')}</p>
+            <div class="c-row c-two">
+              <button class="c-btn primary" onClick={() => { setMsg(''); setShowCode(true) }}>{t('Show a code')}</button>
+              {invite && !sent
+                ? <button class="c-btn" onClick={() => sendInvite(invite)}>{canShare ? t('Send the link') : t('Copy the link')}</button>
+                : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? t('Making link…') : t('Send a link')}</button>}
+            </div>
+            <p class="muted small">{sent ? t('Link sent.') + ' ' : ''}{t('A code is for someone beside you or on a call. A link works from far away, once, for 7 days.')}</p>
+          </div>
+        )}
+        <div class="c-foot">
+          {leaving
+            ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>{t('Stay')}</button><button class="c-btn danger" disabled={busy} onClick={leave}>{t('Leave and remove what I shared')}</button></div>
+            : <button class="link small" onClick={() => setLeaving(true)}>{t('Leave this circle')}</button>}
+        </div>
+      </>}
+      {feed && tab === 'shared' && <>
+        {!feed.items.length && <p class="muted c-empty">{t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
+        {days.map(d => (
+          <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
+            <h3 class="c-day-name">{d.day === 'new' ? t('New since you last looked') : dayName(d.day)}</h3>
+            <ol class="c-feed">
+              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
+            </ol>
+          </section>
+        ))}
+        {more
+          ? <button class="c-btn c-earlier" onClick={() => setLimit(n => n + PAGE)}>{t('Show earlier days')}</button>
+          : feed.items.length > 0 && <p class="c-end">{t('That’s everything shared in {circle}.', { circle: info?.name ?? t('this circle') })}</p>}
+      </>}
     </div>
   )
+}
+
+/** How many things show at first, and each time you ask for earlier days. */
+const PAGE = 8
+
+/** "Today", "Yesterday", or the day itself. */
+function dayName(day: number) {
+  const today = dayOf(Date.now())
+  if (day === today) return t('Today')
+  if (day === dayOf(today - 12 * 3600e3)) return t('Yesterday')
+  return new Date(day).toLocaleDateString(locale(), { weekday: 'long', month: 'long', day: 'numeric', ...(new Date(day).getFullYear() === new Date().getFullYear() ? {} : { year: 'numeric' }) })
 }
 
 /** Notifications for this circle, on this phone: one big switch. They say
@@ -679,6 +715,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone)
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
+  const [tray, setTray] = useState(false)
   const [writing, setWriting] = useState(false)
   const [said, setSaid] = useState('')
   const [err, setErr] = useState('')
@@ -736,7 +773,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   return (
     <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '')}>
       {fresh && <p class="c-new-word small">{fresh}</p>}
-      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at)}</span></div>
+      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at, !!news)}</span></div>
       {b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {verse && <button class="link c-ref" onClick={() => open(verse)}>{t('With {verse}', { verse: verseLabel(verse) })}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
@@ -770,35 +807,44 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
           </div>
         </div>
       )}
-      <div class="c-reacts" role="group" aria-label={t('Reactions')}>
-        <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={pray} aria-label={prayed ? t('Praying') : t('Pray with')}
-          title={prayed ? t('Praying') : t('Pray with')}>
-          <span class="c-react-emoji" aria-hidden="true">{emoji('pray')}</span>{amens.length > 0 && <span class="c-react-n">{amens.length}</span>}
-        </button>
-        {REACTS.map(r => {
-          const on = myReacts.includes(r), n = Object.values(reacts).filter(e => e.includes(r)).length
-          return (
-            <button class={'c-react' + (on ? ' on' : '')} aria-pressed={on} onClick={() => toggle(r)} aria-label={REACT_WORDS[r]()} title={REACT_WORDS[r]()}>
-              <span class="c-react-emoji" aria-hidden="true">{emoji(r)}</span>{n > 0 && <span class="c-react-n">{n}</span>}
-            </button>
-          )
-        })}
-      </div>
-      {who.length > 0 && (
-        <p class="c-who small">
-          {who.map(([r, ms]) => <span class="c-who-group"><span aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span> {ms.map(nameOf).join(', ')}</span>)}
-        </p>
+      {/* Quiet until asked: who prayed or reacted, in one small line, and a
+          single button that opens the reactions and the rest. */}
+      {!writing && (
+        <div class="c-respond-row">
+          <p class="c-who small">
+            {who.map(([r, ms]) => <span class="c-who-group"><span aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span> {ms.map(nameOf).join(', ')}</span>)}
+          </p>
+          <button class={'c-respond' + (tray ? ' on' : '')} aria-expanded={tray} onClick={() => { setTray(!tray); setConfirm(false) }}>{tray ? t('Done') : t('Respond')}</button>
+        </div>
       )}
-      <div class="c-item-foot">
-        {!writing && <button class="c-amen" onClick={() => setWriting(true)}>{t('Reply')}</button>}
-        {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
-          ? <button class="link small" onClick={keepNote}>{t('Keep note')}</button>
-          : !bookmarked && <button class="link small" onClick={bookmark}>{t('Bookmark')}</button>)}
-        <span class="spacer" />
-        {mine && (confirm
-          ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
-          : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
-      </div>
+      {tray && !writing && (
+        <div class="c-tray">
+          <div class="c-reacts" role="group" aria-label={t('Reactions')}>
+            <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={() => { pray(); setTray(false) }}
+              aria-label={prayed ? t('Praying') : t('Pray with')} title={prayed ? t('Praying') : t('Pray with')}>
+              <span class="c-react-emoji" aria-hidden="true">{emoji('pray')}</span>
+            </button>
+            {REACTS.map(r => {
+              const on = myReacts.includes(r)
+              return (
+                <button class={'c-react' + (on ? ' on' : '')} aria-pressed={on} onClick={() => { toggle(r); setTray(false) }} aria-label={REACT_WORDS[r]()} title={REACT_WORDS[r]()}>
+                  <span class="c-react-emoji" aria-hidden="true">{emoji(r)}</span>
+                </button>
+              )
+            })}
+          </div>
+          <div class="c-item-foot">
+            <button class="c-amen" onClick={() => { setWriting(true); setTray(false) }}>{t('Reply')}</button>
+            {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
+              ? <button class="c-amen" onClick={() => { keepNote(); setTray(false) }}>{t('Keep note')}</button>
+              : !bookmarked && <button class="c-amen" onClick={() => { bookmark(); setTray(false) }}>{t('Bookmark')}</button>)}
+            <span class="spacer" />
+            {mine && (confirm
+              ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
+              : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
+          </div>
+        </div>
+      )}
       {kept && <p class="muted small">{kept}</p>}
       {err && <p class="note small">{err}</p>}
     </li>
