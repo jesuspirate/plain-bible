@@ -131,6 +131,16 @@ export const openCircles = (circle?: { id: string; name: string }) => openPrayer
 export const SETTINGS_EVENT = 'plain-bible:settings'
 export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
 
+/** The guided tour: a few calm steps over the reader, shown once to someone
+ *  new, and again from Settings whenever asked. */
+export const TOUR_EVENT = 'plain-bible:tour'
+export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
+const TOUR = 'plain-bible:tour'
+/** Someone new: the tour waits for them from the app's first start until it shows. */
+export const tourDue = () => { try { return localStorage.getItem(TOUR) === 'due' } catch { return false } }
+export const markTourDue = () => { try { localStorage.setItem(TOUR, 'due') } catch { /* ignore */ } }
+export const markTourSeen = () => { try { localStorage.setItem(TOUR, 'seen') } catch { /* ignore */ } }
+
 // A prayer can be tied to a verse. Verses you just selected are offered when
 // you open prayer soon after; Pray on the selection bar ties them at once.
 let picked: { verse: PrayerVerse; at: number; sure: boolean } | undefined
