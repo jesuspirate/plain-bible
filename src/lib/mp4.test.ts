@@ -1,6 +1,6 @@
 import { readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import { defragment, playable } from './mp4'
+import { defragment, lengthMs, playable } from './mp4'
 
 // Recorded the way an iPhone records a prayer: a fragment every second,
 // with every duration in the header left at 0.
@@ -68,5 +68,22 @@ describe('defragment', () => {
     expect(defragment(webm)).toBe(webm)
     const cut = fragmented.slice(0, fragmented.byteLength - 500)
     expect(defragment(cut)).toBe(cut)
+  })
+})
+
+describe('lengthMs', () => {
+  it('tells how much sound a recording holds, fragmented or not', () => {
+    expect(lengthMs(fragmented, 'audio/mp4')).toBeCloseTo(4040, -2)
+    expect(lengthMs(defragment(fragmented), 'audio/mp4')).toBeCloseTo(4040, -2)
+  })
+  it('a recording cut short says so, whatever the clock said', () => {
+    // The first fragments only: what a microphone that went quiet leaves.
+    const b = new Uint8Array(fragmented), moofs = boxes(b).filter(x => x.type === 'moof')
+    const cut = fragmented.slice(0, moofs[2].start)
+    expect(lengthMs(cut, 'audio/mp4')!).toBeLessThan(2500)
+  })
+  it('stays quiet about other formats and junk', () => {
+    expect(lengthMs(fragmented, 'audio/webm')).toBeUndefined()
+    expect(lengthMs(new ArrayBuffer(10), 'audio/mp4')).toBeUndefined()
   })
 })
