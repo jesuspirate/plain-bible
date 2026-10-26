@@ -861,3 +861,12 @@ body.selecting .listen { display: none; }
 .listen .listen-rate { flex: none; min-width: 48px; height: 44px; display: grid; place-items: center; border-radius: 22px; background: var(--chip); font: 600 15px var(--sans); }
 .listen .listen-stop { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--chip); color: var(--text); }
 .speaking { background: color-mix(in srgb, var(--accent) 14%, transparent); border-radius: 6px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); transition: background .3s; }
+.voice-help { margin: 2px 0 4px; }
+.voice-help ol { margin: 0 0 6px; padding-left: 22px; }
+.voice-help li { margin-bottom: 4px; }
+.voice-list { display: flex; flex-direction: column; gap: 6px; margin-top: 10px; }
+.voice-row { display: flex; align-items: center; gap: 8px; border-radius: 14px; background: var(--chip); padding: 4px 6px 4px 4px; }
+.voice-row.on { outline: 2px solid var(--accent); }
+.voice-pick { all: unset; cursor: pointer; flex: 1; display: flex; flex-direction: column; gap: 2px; padding: 10px 12px; min-height: 40px; }
+.voice-tag { margin-left: 8px; padding: 1px 7px; border-radius: 8px; font-size: 0.72em; font-weight: 600; background: var(--accent); color: var(--bg); vertical-align: 2px; }
+.voice-try { all: unset; cursor: pointer; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--surface); color: var(--text); }
