@@ -238,10 +238,10 @@ const iphoneHelp = () => (
     <summary>{t('Add better voices on iPhone or iPad')}</summary>
     <ol class="muted small">
       <li>{t('Open the Settings app and search “Voices” (Accessibility → Read & Speak → Voices, called Spoken Content on older iPhones).')}</li>
-      <li>{t('Pick your language and download a voice marked “Enhanced” or “Premium”.')}</li>
-      <li>{t('Close My Quiet Bible fully (swipe it away), open it again, and pick the new voice here.')}</li>
+      <li>{t('Pick your language, download a voice marked “Enhanced” or “Premium”, and tap it so it’s checked.')}</li>
+      <li>{t('Come back here and use “Phone’s own voice”. Tap ▶ to hear it.')}</li>
     </ol>
-    <p class="muted small">{t('Siri voices are kept for Apple’s own apps and can’t be used here. Enhanced and Premium voices are the most natural ones that work.')}</p>
+    <p class="muted small">{t('Downloaded voices don’t show up in this list on iPhone, but “Phone’s own voice” speaks with the one you checked. Siri voices are kept for Apple’s own apps and can’t be used here.')}</p>
   </details>
 )
 const androidHelp = () => (
@@ -278,9 +278,20 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
     u.lang = v?.lang ?? speechTag(lang); u.rate = rate()
     synth?.speak(u)
   }
+  const named = list.map(v => (
+    <div class={'voice-row' + (!mine && v.voiceURI === current?.voiceURI ? ' on' : '')}>
+      <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, v.voiceURI); onPick() }}>
+        <strong>{v.name.replace(/\s*\((enhanced|premium|améliorée|mejorada)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
+        <span class="muted small">{v.lang}{v.localService ? '' : ' · ' + t('needs a connection')}</span>
+      </button>
+      <button class="voice-try" onClick={() => sample(v)} aria-label={t('Hear {voice}', { voice: v.name })}><PlayIcon size={20} /></button>
+    </div>
+  ))
   return (
     <Sheet title={t('Voice')} onClose={onClose}>
-      <p class="muted small">{t('These are the voices on this phone. Every phone has its own list, so yours may not match someone else’s. Tap ▶ to hear one, then tap its name to use it.')}</p>
+      <p class="muted small">{IPHONE
+        ? t('On iPhone, “Phone’s own voice” is the one you pick in the iPhone’s settings. Voices you download there don’t show up in this list.')
+        : t('These are the voices on this phone. Every phone has its own list, so yours may not match someone else’s. Tap ▶ to hear one, then tap its name to use it.')}</p>
       {IPHONE ? <>{iphoneHelp()}{androidHelp()}</> : <>{androidHelp()}{iphoneHelp()}</>}
       <div class="voice-list">
         <div class={'voice-row' + (mine ? ' on' : '')}>
@@ -290,16 +301,16 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
           </button>
           <button class="voice-try" onClick={() => sample()} aria-label={t('Hear the phone’s own voice')}><PlayIcon size={20} /></button>
         </div>
-        {list.map(v => (
-          <div class={'voice-row' + (!mine && v.voiceURI === current?.voiceURI ? ' on' : '')}>
-            <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, v.voiceURI); onPick() }}>
-              <strong>{v.name.replace(/\s*\((enhanced|premium|améliorée|mejorada)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
-              <span class="muted small">{v.lang}{v.localService ? '' : ' · ' + t('needs a connection')}</span>
-            </button>
-            <button class="voice-try" onClick={() => sample(v)} aria-label={t('Hear {voice}', { voice: v.name })}><PlayIcon size={20} /></button>
-          </div>
-        ))}
+        {!IPHONE && named}
       </div>
+      {IPHONE && list.length > 0 && (
+        // iPhones list only their basic built-in voices here, which can look
+        // like a download failed: keep them out of the way.
+        <details class="account-more voice-help" open={!mine}>
+          <summary>{t('Other voices on this phone')}</summary>
+          <div class="voice-list">{named}</div>
+        </details>
+      )}
     </Sheet>
   )
 }
