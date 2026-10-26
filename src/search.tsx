@@ -62,7 +62,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
   useEffect(() => {
     setResult(undefined); setShown([]); setLimit(PAGE); setError('')
     if (!q.trim() || !versions.length) return
-    document.title = `${q} · ${t('Search')} · Quiet Bible`
+    document.title = `${q} · ${t('Search')} · My Quiet Bible`
     if (versions.join() !== settings.searchVersions.join()) update({ searchVersions: versions })
     rememberSearch(q.trim())
     let books = scopeBooks()

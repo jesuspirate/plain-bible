@@ -254,7 +254,7 @@ function VoiceSheet({ lang, onClose, onPick }: { lang: string; onClose: () => vo
   }
   return (
     <Sheet title={t('Voice')} onClose={onClose}>
-      <p class="muted small">{t('These are the voices on your phone. On iPhone, more natural ones (“Enhanced” or “Premium”) can be added free: in the iPhone Settings app, search “Voices” (it lives under Accessibility → Read & Speak, called Spoken Content on older iPhones). After a download, close Quiet Bible fully (swipe it away) and open it again. If your iPhone still doesn’t list it here, pick it as the voice for the language in your iPhone settings and choose “Phone’s own voice” below. Voices chosen for Live Speech are a separate list, and your Personal Voice can’t be used by web apps.')}</p>
+      <p class="muted small">{t('These are the voices on your phone. On iPhone, more natural ones (“Enhanced” or “Premium”) can be added free: in the iPhone Settings app, search “Voices” (it lives under Accessibility → Read & Speak, called Spoken Content on older iPhones). After a download, close My Quiet Bible fully (swipe it away) and open it again. If your iPhone still doesn’t list it here, pick it as the voice for the language in your iPhone settings and choose “Phone’s own voice” below. Voices chosen for Live Speech are a separate list, and your Personal Voice can’t be used by web apps.')}</p>
       <div class="voice-list">
         <div class={'voice-row' + (mine ? ' on' : '')}>
           <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, PHONE); onPick() }}>

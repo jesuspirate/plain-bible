@@ -1,4 +1,4 @@
-# Quiet Bible
+# My Quiet Bible
 
 Live at https://myquietbible.com (formerly Plain Bible, at bible.chama.community).
 
@@ -42,7 +42,7 @@ no reading plans, devotionals, accounts, or feeds.
 
 ## Welcome page
 
-`welcome/` is the landing page: what Quiet Bible is, the lamp verse in a few languages, and the
+`welcome/` is the landing page: what My Quiet Bible is, the lamp verse in a few languages, and the
 steps to put it on a Home Screen, in the app's own colours and fonts (Light, Sepia or Dark). A first
 visit to the bare address opens it (`index.html` sends you there when nothing has been saved on the
 device and the address carries no link); the Bible is one tap away, and after that the bare address

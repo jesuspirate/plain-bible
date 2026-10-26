@@ -40,7 +40,7 @@ export function AskApproval({ onDone, btn = 'c-btn' }: { onDone: () => void; btn
 
   return code ? (
     <div class="approve-wait" ref={wait}>
-      <p>{tj('{open} (or computer) where your prayers already open, and type these 4 digits there:', { open: <strong>{t('Open Quiet Bible on your other phone')}</strong> })}</p>
+      <p>{tj('{open} (or computer) where your prayers already open, and type these 4 digits there:', { open: <strong>{t('Open My Quiet Bible on your other phone')}</strong> })}</p>
       <p class="approve-code">{spaced(code)}</p>
       <p class="muted small">{t('Waiting… this unlocks here by itself.')}</p>
     </div>

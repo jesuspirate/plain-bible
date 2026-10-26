@@ -1,4 +1,4 @@
-# Optional account sync for Quiet Bible: passkey sign-in and a small
+# Optional account sync for My Quiet Bible: passkey sign-in and a small
 # per-account store for highlights, bookmarks and settings.
 name = "plain-bible-sync"
 main = "src/index.ts"
@@ -11,13 +11,13 @@ compatibility_flags = ["nodejs_compat"]
 # several, which is how the app moved from bible.chama.community to
 # myquietbible.com.
 RP_ID = "myquietbible.com"
-RP_NAME = "Quiet Bible"
+RP_NAME = "My Quiet Bible"
 # Comma-separated origins allowed to call this API and to use passkeys.
 ORIGINS = "https://myquietbible.com,https://bible.chama.community"
 # Sign-in codes come from this address, sent through Resend. Email sign-in
 # stays off until the secrets RESEND_API_KEY and EMAIL_SECRET are set (the
 # deploy script sets both, from the repository secret RESEND_API_KEY).
-EMAIL_FROM = "Quiet Bible <hello@myquietbible.com>"
+EMAIL_FROM = "My Quiet Bible <hello@myquietbible.com>"
 
 [[d1_databases]]
 binding = "DB"

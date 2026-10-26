@@ -9,8 +9,8 @@ const sha = (process.env.GITHUB_SHA || '').slice(0, 7)
 const BUILD = new Date().toISOString().slice(0, 10) + (sha ? ' · ' + sha : '')
 
 const manifest = {
-  name: 'Quiet Bible',
-  short_name: 'Quiet Bible',
+  name: 'My Quiet Bible',
+  short_name: 'My Quiet Bible',
   description: 'Just the Bible, in many versions and languages, with thorough search.',
   theme_color: '#2b2a28',
   background_color: '#f4ecd8',
@@ -65,7 +65,7 @@ export default defineConfig({
   // Relative base works on a custom domain and on a GitHub Pages project path.
   base: './',
   // Two pages: the Bible at the root, and the welcome page at /welcome/
-  // (what Quiet Bible is, and how to put it on a Home Screen). Built
+  // (what My Quiet Bible is, and how to put it on a Home Screen). Built
   // together, so the welcome page shares the app's fonts and is saved
   // offline with it.
   build: { rollupOptions: { input: { main: 'index.html', welcome: 'welcome/index.html' } } },

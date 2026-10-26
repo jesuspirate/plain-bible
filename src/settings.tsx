@@ -27,7 +27,7 @@ import { deviceLang, LANGS, locale, N_, t, tj } from './i18n'
 function VersionLine() {
   const state = useUpdate()
   const [copied, setCopied] = useState(false)
-  const version = `Quiet Bible ${__BUILD__}`
+  const version = `My Quiet Bible ${__BUILD__}`
   const copy = async () => {
     try { await copyText(version); setCopied(true); setTimeout(() => setCopied(false), 1500) } catch { /* nothing to do */ }
   }
@@ -194,7 +194,7 @@ export function closeSettingsPage() {
 }
 
 export function SettingsView() {
-  useEffect(() => { document.title = t('Settings') + ' · Quiet Bible' }, [])
+  useEffect(() => { document.title = t('Settings') + ' · My Quiet Bible' }, [])
   const box = useRef<HTMLDivElement>(null)
   const nav = useSettingsNav()
   usePullDown(box, () => window.scrollY, closeSettingsPage)
@@ -389,10 +389,10 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   </>
 
   if (page === 'about') return <>
-    <p>{t('Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.', { n: catalog.translations.length })}{' '}
+    <p>{t('My Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.', { n: catalog.translations.length })}{' '}
       {sync.account ? t('Your highlights and settings are stored on your device and synced with your passkey account.') : t('Your highlights and settings are stored on your device.')}</p>
     {/* The welcome page is what a first visit to the bare address shows: what this is, and how to put it on a Home Screen. */}
-    <p>{tj('To pass Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.', {
+    <p>{tj('To pass My Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.', {
       site: <strong>myquietbible.com</strong>, welcome: <a href="welcome/">{t('welcome page')}</a> })}</p>
     <p class="muted small">{tj('Texts come from the {scrollmapper} and the {oshb} (CC BY 4.0).', {
       scrollmapper: <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">{t('Scrollmapper Bible databases')}</a>,

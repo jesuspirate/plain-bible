@@ -26,8 +26,8 @@ export function pushSupport(): 'ok' | 'install' | 'old' | 'blocked' | 'no' {
   return Notification.permission === 'denied' ? 'blocked' : 'ok'
 }
 export const blockedHelp = () => isIOS()
-  ? t('Notifications are turned off for Quiet Bible. To allow them: iPhone Settings → Notifications → Quiet Bible.')
-  : t('Notifications are blocked for Quiet Bible. To allow them: tap the lock or ⋮ by the address, then Notifications. On an installed app: hold its icon → App info → Notifications.')
+  ? t('Notifications are turned off for My Quiet Bible. To allow them: iPhone Settings → Notifications → My Quiet Bible.')
+  : t('Notifications are blocked for My Quiet Bible. To allow them: tap the lock or ⋮ by the address, then Notifications. On an installed app: hold its icon → App info → Notifications.')
 
 /** Whether this device hears about this circle. */
 export const pushOn = (circle: string) => readOn().includes(circle) && typeof Notification !== 'undefined' && Notification.permission === 'granted'

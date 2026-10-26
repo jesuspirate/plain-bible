@@ -51,7 +51,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const [undo, setUndo] = useState<{ what: string; before: Marks }>()
   const version = settings.version
   const rtl = byId.get(version)?.rtl ? 'rtl' as const : undefined
-  useEffect(() => { document.title = t('Saved') + ' · Quiet Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
+  useEffect(() => { document.title = t('Saved') + ' · My Quiet Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
 
   const keys = useMemo(() => Object.keys(marks).filter(k => hasContent(marks[k])).sort(compareKeys), [marks])
   const runs = useMemo(() => runsOf(keys, marks), [keys])

@@ -1,4 +1,4 @@
-// Quiet Bible sync: accounts you sign in to with a passkey or a code sent by
+// My Quiet Bible sync: accounts you sign in to with a passkey or a code sent by
 // email, and one small JSON document per account (highlights, bookmarks,
 // settings). No passwords, no tracking, and email addresses are never
 // stored, only a fingerprint of them. The app works fully without it.
@@ -154,9 +154,9 @@ const emailHint = (email: string) => { const [name, domain] = email.split('@'); 
 
 // The code email in the language the app is in (src/lib/sync.ts sends it).
 const CODE_MAIL = {
-  en: { subject: '{code} is your Quiet Bible code', is: 'Your Quiet Bible code is', type: 'Type it into the app to sign in. It works for {min} minutes.', ignore: 'If you didn’t ask for it, you can ignore this email.' },
-  fr: { subject: '{code} est votre code Quiet Bible', is: 'Votre code Quiet Bible est', type: 'Saisissez-le dans l’application pour vous connecter. Il reste valable {min}\u00a0minutes.', ignore: 'Si vous ne l’avez pas demandé, vous pouvez ignorer cet e-mail.' },
-  es: { subject: '{code} es tu código de Quiet Bible', is: 'Tu código de Quiet Bible es', type: 'Escríbelo en la app para iniciar sesión. Sirve durante {min} minutos.', ignore: 'Si no lo pediste, puedes ignorar este correo.' },
+  en: { subject: '{code} is your My Quiet Bible code', is: 'Your My Quiet Bible code is', type: 'Type it into the app to sign in. It works for {min} minutes.', ignore: 'If you didn’t ask for it, you can ignore this email.' },
+  fr: { subject: '{code} est votre code My Quiet Bible', is: 'Votre code My Quiet Bible est', type: 'Saisissez-le dans l’application pour vous connecter. Il reste valable {min}\u00a0minutes.', ignore: 'Si vous ne l’avez pas demandé, vous pouvez ignorer cet e-mail.' },
+  es: { subject: '{code} es tu código de My Quiet Bible', is: 'Tu código de My Quiet Bible es', type: 'Escríbelo en la app para iniciar sesión. Sirve durante {min} minutos.', ignore: 'Si no lo pediste, puedes ignorar este correo.' },
 }
 
 async function sendCode(env: Env, to: string, code: string, lang?: string) {
@@ -164,13 +164,13 @@ async function sendCode(env: Env, to: string, code: string, lang?: string) {
   const type = w.type.replace('{min}', String(CODE_MINUTES))
   // Plain and link-free on purpose: mail filters trust short transactional
   // mail with a matching text part, and no tracking or links to judge.
-  const text = `${w.is} ${code}\n\n${type}\n\n${w.ignore}\n\n— Quiet Bible`
-  const html = `<!doctype html><html lang="${lang && lang in CODE_MAIL ? lang : 'en'}"><head><meta charset="utf-8"><title>Quiet Bible</title></head>
+  const text = `${w.is} ${code}\n\n${type}\n\n${w.ignore}\n\n— My Quiet Bible`
+  const html = `<!doctype html><html lang="${lang && lang in CODE_MAIL ? lang : 'en'}"><head><meta charset="utf-8"><title>My Quiet Bible</title></head>
 <body><div style="font-family:Georgia,serif;font-size:17px;line-height:1.5;color:#3b2f22">
 <p>${w.is}</p><p style="font-size:32px;letter-spacing:6px;margin:8px 0 16px"><strong>${code}</strong></p>
 <p>${type}</p>
 <p style="color:#8a7a66;font-size:14px">${w.ignore}</p>
-<p style="color:#8a7a66;font-size:14px">— Quiet Bible</p></div></body></html>`
+<p style="color:#8a7a66;font-size:14px">— My Quiet Bible</p></div></body></html>`
   const res = await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
@@ -230,7 +230,7 @@ async function emailVerify(req: Request, env: Env) {
   // Adding (or changing) the address of the signed-in account.
   if (row.user_id) {
     if (await session(req, env) !== row.user_id) throw new HttpError(400, expired)
-    if (owner && owner.user_id !== row.user_id) throw new HttpError(409, 'This email already signs in to another Quiet Bible account.')
+    if (owner && owner.user_id !== row.user_id) throw new HttpError(409, 'This email already signs in to another My Quiet Bible account.')
     await db.batch([
       db.prepare('DELETE FROM emails WHERE user_id = ?').bind(row.user_id),
       db.prepare('INSERT INTO emails (hash, user_id, hint, created) VALUES (?, ?, ?, ?)').bind(hash, row.user_id, hint, now),

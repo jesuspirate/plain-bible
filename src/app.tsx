@@ -249,7 +249,7 @@ export function App() {
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
       <header class="top">
-        <a class="brand" href="#/read" title={t('Back to where you were reading')}>Quiet Bible</a>
+        <a class="brand" href="#/read" title={t('Back to where you were reading')}>My Quiet Bible</a>
         <nav>
           <HistoryButton route={route} />
           <UpdateButton />
