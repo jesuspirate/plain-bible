@@ -101,7 +101,7 @@ function toSheet(circle?: { id: string; name: string }) {
 }
 
 export function CirclesPage({ route }: { route: Route }) {
-  useEffect(() => { document.title = t('Circles') + ' · Quiet Bible' }, [])
+  useEffect(() => { document.title = t('Circles') + ' · My Quiet Bible' }, [])
   // Circles live in the prayer screen; #/circles (an older link) opens them there.
   const at = route.path[0] === 'circles' ? route.path[1] : undefined
   useEffect(() => {
@@ -178,7 +178,7 @@ function StartOver({ onDone }: { onDone: () => void }) {
   }
   return (
     <div class="c-card">
-      <p class="small">{t('First check the other places you use Quiet Bible. On iPhone, Safari and the Home Screen app keep separate keys. If one of them opens your circles, tap “Approve from my other phone” above and allow it there.')}</p>
+      <p class="small">{t('First check the other places you use My Quiet Bible. On iPhone, Safari and the Home Screen app keep separate keys. If one of them opens your circles, tap “Approve from my other phone” above and allow it there.')}</p>
       <p class="small">{t('If nothing opens them, start over with a new key. Prayers saved on this phone stay. Prayers kept only on the server can’t be opened by anyone and are removed. To get back into a circle, ask someone in it for a new invite link.')}</p>
       <div class="c-row">
         <button class="c-btn primary" disabled={busy} onClick={begin}>{busy ? t('Starting over…') : t('Start over with a new key')}</button>
@@ -428,7 +428,7 @@ function OpenInApp() {
   const [copied, setCopied] = useState(false)
   return (
     <div class="c-card">
-      <p><strong>{t('Have Quiet Bible on your Home Screen?')}</strong> {t('Open this invite there, so you join with the account you already use:')}</p>
+      <p><strong>{t('Have My Quiet Bible on your Home Screen?')}</strong> {t('Open this invite there, so you join with the account you already use:')}</p>
       <p class="small">{tj('Copy it, open the app, then Circles → {paste}.', { paste: <strong>{t('Have an invite link? Paste it')}</strong> })}</p>
       <button class="c-btn primary" onClick={() => copyText(location.href).then(() => setCopied(true), () => {})}>{copied ? t('Copied: now open the app') : t('Copy invite')}</button>
       <p class="muted small">{t('No app yet? Join right here below.')}</p>
@@ -506,17 +506,17 @@ function CircleView({ id }: { id: string }) {
     document.addEventListener('visibilitychange', back)
     return () => document.removeEventListener('visibilitychange', back)
   }, [id])
-  useEffect(() => { if (info) document.title = `${info.name} · Quiet Bible` }, [info])
+  useEffect(() => { if (info) document.title = `${info.name} · My Quiet Bible` }, [info])
 
   // One tap: make the link and open the share sheet. If the phone says the
   // tap was too long ago (Safari does, after a slow network), the button
   // turns into "Send invite link" and the next tap sends it at once.
   const sendInvite = async (link: string) => {
-    const text = (info?.name ? t('Come read the word and pray with {circle} in Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
-      : t('Come read the word and pray with my circle in Quiet Bible. This private link is just for you: it works once, for 7 days.'))
-      + ' ' + t('Already have the Quiet Bible app? Copy this link and paste it in Circles there.')
+    const text = (info?.name ? t('Come read the word and pray with {circle} in My Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
+      : t('Come read the word and pray with my circle in My Quiet Bible. This private link is just for you: it works once, for 7 days.'))
+      + ' ' + t('Already have My Quiet Bible? Copy this link and paste it in Circles there.')
     if (canShare) {
-      try { await navigator.share({ title: 'Quiet Bible', text, url: link }); setSent(true) } catch (e) {
+      try { await navigator.share({ title: 'My Quiet Bible', text, url: link }); setSent(true) } catch (e) {
         if ((e as Error).name !== 'AbortError') setInvite(link)
       }
     } else await copyText(link).then(() => { setSent(true); setMsg(t('Invite link copied. Paste it in a message to the person you’re inviting.')) }, () => setInvite(link))
@@ -626,7 +626,7 @@ function Notify({ circle, name = t('this circle') }: { circle: string; name?: st
     <div class="c-card c-notify">
       {support === 'install' ? <>
         <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>{t('Notifications')}</strong></p>
-        <p class="small">{tj('On iPhone, notifications only work once Quiet Bible is on your Home Screen. Tap Share, then {add}, and open Quiet Bible from there. Then turn them on here.', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>
+        <p class="small">{tj('On iPhone, notifications only work once My Quiet Bible is on your Home Screen. Tap Share, then {add}, and open My Quiet Bible from there. Then turn them on here.', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>
       </> : support === 'old' ? <>
         <p class="c-notify-head"><BellIcon class="c-notify-ico" /> <strong>{t('Notifications')}</strong></p>
         <p class="small">{t('Notifications need iOS 16.4 or newer. Update your iPhone in Settings → General → Software Update to turn them on.')}</p>

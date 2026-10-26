@@ -5,8 +5,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
     <meta name="description" content="Just the Bible: {{versions}} versions in {{languages}} languages, a search that finds things, and nothing else. No plans, no ads, works offline." />
     <meta property="og:type" content="website" />
-    <meta property="og:site_name" content="Quiet Bible" />
-    <meta property="og:title" content="Quiet Bible" />
+    <meta property="og:site_name" content="My Quiet Bible" />
+    <meta property="og:title" content="My Quiet Bible" />
     <meta property="og:description" content="Just the Bible. Many versions and languages, a search that finds things, and nothing else. Free, no ads, works offline." />
     <meta property="og:url" content="https://myquietbible.com/" />
     <meta property="og:image" content="https://myquietbible.com/icon-512.png" />
@@ -81,9 +81,9 @@
             if (!/^(en|fr|es)$/.test(l)) l = String(navigator.language).toLowerCase().split('-')[0]
           } catch (e) {}
           var W = {
-            en: ['Quiet Bible didn’t start properly.', 'Quiet Bible is taking a while to start.', 'Your highlights, notes and settings are safe on this device.', 'Repair and reload', 'Just reload', 'Repairing…'],
-            fr: ['Quiet Bible n’a pas démarré correctement.', 'Quiet Bible met du temps à démarrer.', 'Vos surlignages, notes et réglages sont en sécurité sur cet appareil.', 'Réparer et recharger', 'Simplement recharger', 'Réparation…'],
-            es: ['Quiet Bible no se inició bien.', 'Quiet Bible está tardando en iniciarse.', 'Tus resaltados, notas y ajustes están a salvo en este dispositivo.', 'Reparar y recargar', 'Solo recargar', 'Reparando…'],
+            en: ['My Quiet Bible didn’t start properly.', 'My Quiet Bible is taking a while to start.', 'Your highlights, notes and settings are safe on this device.', 'Repair and reload', 'Just reload', 'Repairing…'],
+            fr: ['My Quiet Bible n’a pas démarré correctement.', 'My Quiet Bible met du temps à démarrer.', 'Vos surlignages, notes et réglages sont en sécurité sur cet appareil.', 'Réparer et recharger', 'Simplement recharger', 'Réparation…'],
+            es: ['My Quiet Bible no se inició bien.', 'My Quiet Bible está tardando en iniciarse.', 'Tus resaltados, notas y ajustes están a salvo en este dispositivo.', 'Reparar y recargar', 'Solo recargar', 'Reparando…'],
           }
           var w = W[l] || W.en
           box.innerHTML = '<p style="margin:0;max-width:22em">' + (failed ? w[0] : w[1])
@@ -106,7 +106,7 @@
     </script>
     <link rel="icon" href="icon.svg" type="image/svg+xml" />
     <link rel="apple-touch-icon" href="icon-192.png" />
-    <title>Quiet Bible</title>
+    <title>My Quiet Bible</title>
   </head>
   <body>
     <div id="app"></div>

@@ -1,4 +1,4 @@
-// The welcome page: what Quiet Bible is, in the app's own colours and fonts,
+// The welcome page: what My Quiet Bible is, in the app's own colours and fonts,
 // and the way in. Plain HTML; this script only does the theme and language
 // buttons, the verse in other languages, the Home Screen steps, and the way in.
 import '@fontsource-variable/literata'
