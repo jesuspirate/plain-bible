@@ -287,9 +287,10 @@ export function App() {
           <HistoryButton route={route} />
           <UpdateButton />
           {/* #/settings opened as a page has its own Done, and so do the pages
-              Settings opens (Circles, Saved): Done takes you back to the word. */}
+              Settings opens (Circles, Saved) and the full search page that
+              "Find every H1234" opens: Done takes you back to the word. */}
           {view === 'settings' ? <button class="done-btn" onClick={closeSettingsPage}>{t('Done')}</button>
-            : view === 'circles' || view === 'join' || view === 'saved' ? <button class="done-btn" onClick={() => go('read')}>{t('Done')}</button>
+            : view === 'circles' || view === 'join' || view === 'saved' || view === 'search' ? <button class="done-btn" onClick={() => go('read')}>{t('Done')}</button>
             : <ProfileButton onOpen={() => setSettingsOpen(true)} />}
         </nav>
       </header>
