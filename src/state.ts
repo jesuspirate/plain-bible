@@ -136,9 +136,8 @@ export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT)
 export const TOUR_EVENT = 'plain-bible:tour'
 export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
 const TOUR = 'plain-bible:tour'
-/** Someone new: the tour waits for them from the app's first start until it shows. */
-export const tourDue = () => { try { return localStorage.getItem(TOUR) === 'due' } catch { return false } }
-export const markTourDue = () => { try { localStorage.setItem(TOUR, 'due') } catch { /* ignore */ } }
+/** Everyone, new or not, gets the tour once on each device, until it has shown. */
+export const tourDue = () => { try { return localStorage.getItem(TOUR) !== 'seen' } catch { return false } }
 export const markTourSeen = () => { try { localStorage.setItem(TOUR, 'seen') } catch { /* ignore */ } }
 
 // A prayer can be tied to a verse. Verses you just selected are offered when

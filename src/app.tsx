@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, markTourDue, parseHash } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { ListenPlayer } from './listen'
@@ -54,9 +54,6 @@ if (IOS_HOME_SCREEN) {
 
 // Nothing saved yet: this is the app's very first start on this address.
 const FIRST_START = (() => { try { return !localStorage.getItem('plain-bible:settings') } catch { return false } })()
-// Someone new gets the guided tour once, as soon as the reader is free of
-// anything else asking for them.
-if (FIRST_START) markTourDue()
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -167,8 +164,8 @@ export function App() {
   }, [])
   useEffect(() => { setSettingsOpen(false) }, [route.path.join('/')])
 
-  // The guided tour loads only when it opens: for someone new, once the
-  // reader is up with nothing else over it, or from Settings any time.
+  // The guided tour loads only when it opens: once for everyone, as soon as
+  // the reader is up with nothing else over it, or from Settings any time.
   const [Tour, setTour] = useState<typeof import('./tour').Tour>()
   const showTour = () => import('./tour').then(m => setTour(() => m.Tour)).catch(() => {})
   useEffect(() => {

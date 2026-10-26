@@ -1,9 +1,10 @@
 // The guided tour: a handful of calm steps for someone new. Each one dims the
 // page, leaves the one thing it's about lit, and says in a sentence or two
-// what it does. Nothing can be pressed by mistake behind it, and it never
-// comes back by itself once seen. Loaded only when it opens.
+// what it does. Nothing can be pressed by mistake behind it, the × on every
+// step puts it away, and it never comes back by itself once seen. Loaded only when it opens.
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
 import { t } from './i18n'
+import { CloseIcon } from './icons'
 import { markTourSeen as markSeen } from './state'
 import './tour.css'
 
@@ -92,7 +93,11 @@ export function Tour({ onClose }: { onClose: () => void }) {
             borderRadius: box.width < 90 && Math.abs(box.width - box.height) < 12 ? '50%' : undefined }} aria-hidden="true" />
         : <div class="tour-dim" aria-hidden="true" />}
       <div class={'tour-card ' + place} style={style} key={i}>
-        <p class="tour-count">{t('{n} of {total}', { n: i + 1, total: list.length })}</p>
+        <div class="tour-top">
+          <p class="tour-count">{t('{n} of {total}', { n: i + 1, total: list.length })}</p>
+          {/* Dismiss: the same bold × as every sheet, on every step. */}
+          <button class="close-btn" aria-label={t('End the tour')} title={t('End the tour')} onClick={close}><CloseIcon size={22} /></button>
+        </div>
         <h2 id="tour-title">{step.title}</h2>
         <p id="tour-body">{step.body}</p>
         <div class="tour-buttons">
@@ -103,7 +108,6 @@ export function Tour({ onClose }: { onClose: () => void }) {
             {i === 0 ? t('Show me') : last ? t('Done') : t('Next')}
           </button>
         </div>
-        {i > 0 && !last && <button class="tour-skip link" onClick={close}>{t('End the tour')}</button>}
       </div>
     </div>
   )

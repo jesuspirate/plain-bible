@@ -17,9 +17,9 @@
 .tour-mid { top: 50%; transform: translateY(-50%); }
 .tour-card h2 { margin: 0 0 6px; font: 700 22px/1.25 var(--sans); }
 .tour-card p { margin: 0; font-size: 18px; line-height: 1.45; }
-.tour-card .tour-count { margin: 0 0 4px; font-size: 14px; font-weight: 600; color: var(--muted); }
+.tour-top { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin: -4px -6px 0 0; }
+.tour-card .tour-count { margin: 4px 0 4px; font-size: 14px; font-weight: 600; color: var(--muted); }
 .tour-buttons { display: flex; gap: 10px; margin-top: 16px; }
 .tour-btn { flex: 1; min-height: 52px; border-radius: 14px; font-size: 18px; font-weight: 700; }
-.tour-skip { display: block; margin: 10px auto 0; padding: 8px 12px; font-size: 16px; font-weight: 600; }
 @keyframes tour-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .tour-hole { transition: none; } .tour-card { animation: none; } }
