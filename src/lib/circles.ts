@@ -37,7 +37,8 @@ export type Shared =
   | { k: 'verse' | 'bookmark'; verse: PrayerVerse; version: string; text: string; size?: number; note?: string }
   /** a note of yours: `note` is the note itself, `text` the verses it's on */
   | { k: 'note'; verse: PrayerVerse; version: string; text: string; size?: number; note: string }
-  | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; note?: string }
+  /** `prayed`: when it was prayed, which can be long before it was shared */
+  | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; note?: string; prayed?: number }
 
 export interface CircleInfo { id: string; name: string; members: number }
 /** `streak`: the days they read and prayed, if they show their streaks here. */
@@ -53,6 +54,9 @@ export interface FeedItem {
   id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; amenAt?: Record<string, number>; replies: Reply[]
   reacts?: Record<string, { at: number; e: Reaction[] }>
 }
+/** When it belongs in the circle's days: a prayer on the day it was prayed
+ *  (never later than it was shared), anything else when it was shared. */
+export const dayAt = (i: FeedItem) => i.body.k === 'prayer' && i.body.prayed ? Math.min(i.body.prayed, i.at) : i.at
 export interface Feed { me: string; members: Member[]; items: FeedItem[] }
 
 function token() {
@@ -318,7 +322,8 @@ export function cleanShared(v: unknown): Shared | undefined {
     const parts = x.parts.filter(p => p && Number.isInteger(p.size) && p.size > 0 && typeof p.type === 'string')
       .map(p => ({ ms: Number(p.ms) || 0, type: text(p.type, 60), size: p.size as number }))
     if (!parts.length) return
-    return { k: 'prayer', ms: Number(x.ms) || 0, parts, verse: cleanVerse(x.verse), note }
+    const prayed = Number.isFinite(x.prayed) && (x.prayed as number) > 0 ? x.prayed as number : undefined
+    return { k: 'prayer', ms: Number(x.ms) || 0, parts, verse: cleanVerse(x.verse), note, ...(prayed ? { prayed } : {}) }
   }
 }
 
@@ -421,7 +426,7 @@ export async function sharePrayer(circle: string, prayerId: string, note?: strin
   const audio = new Uint8Array(parts.reduce((n, x) => n + x.audio.byteLength, 0))
   parts.reduce((o, x) => { audio.set(new Uint8Array(x.audio), o); return o + x.audio.byteLength }, 0)
   return send(circle, {
-    k: 'prayer', ms: p.ms, verse: p.verse && standard(p.verse), note: note || undefined,
+    k: 'prayer', ms: p.ms, verse: p.verse && standard(p.verse), note: note || undefined, prayed: p.at,
     parts: parts.map(x => ({ ms: x.ms, type: x.type, size: x.audio.byteLength })),
   }, audio)
 }

@@ -15,14 +15,19 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-label input { font-weight: 400; }
 .c-code { letter-spacing: .06em; margin-bottom: 4px; }
 .c-list { list-style: none; padding: 0; margin: 12px 0; display: grid; gap: 8px; }
-.c-feed { list-style: none; padding: 0; margin: 14px 0; display: grid; gap: 10px; }
-.c-item { padding: 12px 14px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); }
+.c-feed { list-style: none; padding: 0; margin: 0; }
+/* A circle reads like a journal: a day, then what was shared that day, with
+   room around the words and a thin line between, not a stack of cards. */
+.c-item, .pray-list li.c-item { display: block; padding: 16px 0 14px; border-radius: 0; }
+.c-item + .c-item { border-top: 1px solid var(--line); }
 .c-item-head { display: flex; justify-content: space-between; align-items: baseline; gap: 8px; margin-bottom: 6px; }
-.c-quote { margin: 0 0 4px; padding: 8px 12px; border-left: 3px solid var(--accent); border-radius: 0 10px 10px 0; background: var(--bg);
-  font-family: var(--reading); font-size: calc(var(--font-size) * .9); line-height: 1.55; white-space: pre-wrap; }
+.c-quote { margin: 0 0 4px; padding: 2px 0 2px 14px; border-left: 3px solid color-mix(in srgb, var(--accent) 55%, transparent);
+  font-family: var(--reading); font-size: calc(var(--font-size) * .95); line-height: 1.55; white-space: pre-wrap; }
 .c-quote.small { font-size: calc(var(--font-size) * .8); max-height: 9em; overflow: auto; }
 .c-quote-wait { min-height: 2.4em; opacity: .5; }
 .c-note { margin: 8px 0 0; white-space: pre-wrap; }
+/* A note shared with a prayer sits right under it, as part of it. */
+.c-prayer-note { margin: 2px 0 8px 58px; font-size: 17px; }
 .c-prayer { display: flex; align-items: center; gap: 12px; margin: 2px 0 4px; }
 .c-play { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; padding: 0; flex: none;
   background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
@@ -40,22 +45,36 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-bm { color: var(--ribbon); float: right; margin: 2px 0 0 8px; }
 .c-note-main { margin: 4px 0 8px; font-size: 17px; }
 .c-replies { list-style: none; padding: 0; margin: 10px 0 0; display: grid; gap: 6px; }
-.c-replies li { padding: 6px 10px; border-radius: 10px; background: var(--bg); white-space: pre-wrap; }
+.c-replies li, .pray-list .c-replies li { display: block; padding: 2px 0 2px 12px; border-radius: 0; border-left: 2px solid var(--line); white-space: pre-wrap; }
 .c-reply { margin-top: 10px; }
 .c-reply textarea { box-sizing: border-box; width: 100%; font: 16px/1.4 var(--sans); padding: 8px 10px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
 .c-reply .c-row { margin: 6px 0 0; }
-/* Reactions: big round buttons, the count small beside the emoji, who gave
-   what written out underneath. */
-.c-reacts { display: flex; flex-wrap: wrap; align-items: center; gap: 5px; margin-top: 12px; }
-.c-react { min-width: 48px; height: 48px; padding: 0 7px; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center; gap: 3px;
-  font: 600 15px var(--sans); -webkit-tap-highlight-color: transparent; }
-.c-react-emoji { font-size: 24px; line-height: 1; }
-.c-react-n { color: var(--muted); font-variant-numeric: tabular-nums; }
-.c-react.on { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-color: var(--accent); }
-.c-react.on .c-react-n { color: var(--text); }
-.c-item-foot .c-amen { min-height: 44px; }
-.c-who { margin: 8px 0 0; display: flex; flex-wrap: wrap; gap: 4px 14px; color: var(--muted); }
+/* Reactions stay quiet: who gave what in one small line, and one button
+   that opens them. Inside, big round buttons, easy to hit. */
+.c-respond-row { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
+.c-who { flex: 1; min-width: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 2px 12px; color: var(--muted); }
 .c-who-group { white-space: nowrap; }
+.c-respond { flex: none; min-height: 44px; padding: 6px 16px; border-radius: 999px; font: 600 15px var(--sans); color: var(--muted);
+  background: transparent; -webkit-tap-highlight-color: transparent; }
+.c-respond.on { color: var(--text); border-color: var(--accent); }
+.c-tray { margin-top: 10px; padding: 10px 12px; border-radius: 14px; background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+.c-reacts { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; }
+.c-react { width: 52px; height: 52px; padding: 0; border-radius: 999px; display: inline-flex; align-items: center; justify-content: center;
+  -webkit-tap-highlight-color: transparent; }
+.c-react-emoji { font-size: 26px; line-height: 1; }
+.c-react.on { background: color-mix(in srgb, var(--accent) 16%, var(--surface)); border-color: var(--accent); }
+.c-tray .c-item-foot { margin-top: 10px; }
+.c-item-foot .c-amen { min-height: 44px; }
+/* The two halves of a circle, and its days. */
+.c-tabs { display: flex; margin: 4px 0 6px; border-radius: 12px; }
+.c-tabs button { flex: 1; min-height: 46px; font: 600 16px var(--sans); }
+.c-members { margin: 14px 0 4px; font-weight: 600; }
+.c-day { margin-top: 18px; }
+.c-day-name { margin: 0; padding-bottom: 2px; font: 600 14px var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
+.c-day-new .c-day-name { color: var(--accent); }
+.c-earlier { display: block; width: 100%; margin: 18px 0 4px; }
+.c-end { margin: 22px 0 6px; text-align: center; color: var(--muted); font-size: 15px; }
+.c-end::before { content: '✦'; display: block; margin-bottom: 6px; color: color-mix(in srgb, var(--accent) 60%, transparent); }
 .c-paste { margin: 14px 0; }
 .c-paste input { flex: 1; min-width: 0; }
 .c-notes { list-style: none; padding: 0; margin: 0; display: grid; gap: 6px; }
@@ -73,11 +92,11 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-streak-toggle input { margin-top: 4px; flex: none; }
 
 /* Something new since you last looked: a warm edge and a word, no counts. */
-.c-item.c-new { border-color: color-mix(in srgb, var(--accent) 50%, var(--line)); background: color-mix(in srgb, var(--accent) 7%, var(--surface)); }
+.c-item.c-new, .pray-list li.c-item.c-new { margin-left: -10px; padding-left: 7px; border-left: 3px solid var(--accent); }
 .c-new-word { color: var(--accent); font-weight: 600; }
 .c-new-tag { color: var(--accent); font-weight: 600; margin-right: 6px; }
 p.c-new-word { display: block; margin: 0 0 4px; }
-.c-replies li.c-new-reply { background: color-mix(in srgb, var(--accent) 12%, var(--surface)); }
+.c-replies li.c-new-reply, .pray-list .c-replies li.c-new-reply { border-left-color: var(--accent); }
 .news-dot { display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: var(--accent); vertical-align: middle; }
 
 /* Notifications: one big switch, easy to see and to hit. */

@@ -766,4 +766,13 @@ export default {
   "{open} (or computer) where your prayers already open, and type these 4 digits there:": "{open} (o computadora) donde ya se abren tus oraciones, y escribe allí estos 4 dígitos:",
   "Type the 4 digits your {device} shows:": "Escribe los 4 dígitos que muestra tu {device}:",
   "Those digits don’t match. Look at your {device} again. If it shows no digits, tap Not me.": "Esos dígitos no coinciden. Mira de nuevo tu {device}. Si no muestra dígitos, toca No soy yo.",
+  "Shared": "Compartido",
+  "People": "Personas",
+  "New since you last looked": "Nuevo desde tu última visita",
+  "Show earlier days": "Ver días anteriores",
+  "That’s everything shared in {circle}.": "Eso es todo lo compartido en {circle}.",
+  "Today": "Hoy",
+  "Yesterday": "Ayer",
+  "Respond": "Reaccionar",
+  "Add a note about this prayer (optional)": "Añade una nota sobre esta oración (opcional)",
 } as Record<string, string>
