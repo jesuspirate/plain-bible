@@ -253,11 +253,16 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   )
 }
 
+// Circles' code and the list kept on this phone, loaded before the card first
+// shows (see app.tsx), so it opens filled in instead of growing up the screen.
+let circlesMod: typeof import('./circles') | undefined
+export const warmCircles = () => import('./circles').then(m => { circlesMod = m; return m.warmList() })
+
 /** Circles, opened from its own button: the same card as Your prayers. Inside one circle the top
  *  has only ‹ back; on the list, Done (or a pull down) closes. */
 function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
-  const [mod, setMod] = useState<typeof import('./circles')>()
-  useEffect(() => { import('./circles').then(m => setMod(() => m)).catch(() => {}) }, [])
+  const [mod, setMod] = useState(() => circlesMod)
+  useEffect(() => { if (!mod) warmCircles().then(() => setMod(() => circlesMod), () => {}) }, [])
   const [circle, setCircle] = useState(at?.circle)
   useEffect(() => setCircle(at?.circle), [at])
   const box = useRef<HTMLDivElement>(null)

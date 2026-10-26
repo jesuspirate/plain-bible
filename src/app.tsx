@@ -142,7 +142,14 @@ export function App() {
   const [praying, setPraying] = useState(false)
   const [prayAt, setPrayAt] = useState<PrayAt>()
   useEffect(() => {
-    const on = (e: Event) => { setPrayAt((e as CustomEvent<PrayAt | undefined>).detail); setPraying(true); import('./prayer').then(m => setPrayer(() => m.Prayer)).catch(() => setPraying(false)) }
+    const on = (e: Event) => {
+      const at = (e as CustomEvent<PrayAt | undefined>).detail
+      // Circles open whole: their code and the list kept on this phone are
+      // ready before the card shows, so it never grows into place in front of you.
+      import('./prayer')
+        .then(m => at?.circles ? Promise.race([m.warmCircles().catch(() => {}), new Promise(r => setTimeout(r, 400))]).then(() => m) : m)
+        .then(m => { setPrayAt(at); setPraying(true); setPrayer(() => m.Prayer) }, () => {})
+    }
     addEventListener(PRAY_EVENT, on)
     return () => removeEventListener(PRAY_EVENT, on)
   }, [])
