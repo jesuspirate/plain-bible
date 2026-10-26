@@ -53,15 +53,16 @@ export function voicesFor(lang: string): SpeechSynthesisVoice[] {
 }
 
 const PHONE = 'phone' // no voice named: the phone speaks with the one picked in its own settings
-const phoneChoice = (lang: string) => get(VOICE_KEY + lang.split('-')[0]) === PHONE
 
+/** The voice someone picked for a language, if they did and it can speak now.
+ * Otherwise none: the phone's own voice, so nobody is surprised by an odd one. */
 function voiceFor(lang: string): SpeechSynthesisVoice | undefined {
-  const list = voicesFor(lang), chosen = get(VOICE_KEY + lang.split('-')[0])
-  if (chosen === PHONE) return undefined
+  const chosen = get(VOICE_KEY + lang.split('-')[0])
+  if (!chosen || chosen === PHONE) return undefined
   // Offline, only a voice on the phone itself can speak.
-  return list.find(v => v.voiceURI === chosen && (navigator.onLine || v.localService))
-    ?? list.find(v => navigator.onLine || v.localService) ?? list[0]
+  return voicesFor(lang).find(v => v.voiceURI === chosen && (navigator.onLine || v.localService))
 }
+const phoneChoice = (lang: string) => !voiceFor(lang)
 
 // Book names and the chapter heading in the language of the Bible being read
 // (they're spoken with its words), not the app's.
