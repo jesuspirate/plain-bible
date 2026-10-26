@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -311,14 +311,14 @@ function ShowCode({ circle, onDone }: { circle: string; onDone: () => void }) {
   useEffect(() => { makeCode(circle).then(setCode, e => setMsg(message(e))) }, [circle])
   useEvery(2500, async () => {
     if (!code) return
-    if (Date.now() > code.expires) { setMsg(t('This code has expired.')); return true }
+    if (Date.now() > code.expires) { doneWithCode(circle); setMsg(t('This code has expired.')); return true }
     const a = await codeAsk(circle, code.code)
     if (a) { setAsk(a); return true }
   }, !!code && !ask && !done && !msg)
   const close = () => { if (code && !done) dropCode(circle, code.code); onDone() }
   const allow = async () => {
     setBusy(true); setMsg('')
-    try { await allowCode(circle, code!.code, ask!.pub); setDone(true) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+    try { await allowCode(circle, code!.code, ask!.pub); doneWithCode(circle); setDone(true) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   return (
     <div class="c-card c-codebox">
@@ -560,7 +560,7 @@ function CircleView({ id }: { id: string }) {
           <div class="c-card">
             <p class="c-card-title">{t('Invite someone')}</p>
             <div class="c-row c-two">
-              <button class="c-btn primary" onClick={() => { setMsg(''); setShowCode(true) }}>{t('Show a code')}</button>
+              <button class="c-btn primary" onClick={() => { setMsg(''); setPage('people'); setShowCode(true) }}>{t('Show a code')}</button>
               {invite && !sent
                 ? <button class="c-btn" onClick={() => sendInvite(invite)}>{canShare ? t('Send the link') : t('Copy the link')}</button>
                 : <button class="c-btn" disabled={busy} onClick={makeInvite}>{busy ? t('Making link…') : t('Send a link')}</button>}

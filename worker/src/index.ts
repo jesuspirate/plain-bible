@@ -557,8 +557,10 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       if (typeof code !== 'string' || !/^\d{6}$/.test(code) || !sealedText(pub, 200) || typeof label !== 'string' || label.length > 60) throw new HttpError(400, 'Bad request')
       const misses = await db.prepare('SELECT COUNT(*) AS n FROM circle_code_misses WHERE user_id = ? AND at > ?').bind(userId, now - HOUR).first<{ n: number }>()
       if ((misses?.n ?? 0) >= CODE_MISSES) throw new HttpError(429, 'Too many wrong codes. Try again in an hour.')
-      const row = await db.prepare('UPDATE circle_codes SET joiner = ?, pub = ?, label = ? WHERE code = ? AND joiner IS NULL AND expires > ? RETURNING code')
-        .bind(userId, pub, label, code, now).first()
+      // The same ask again (a second tap, or a retry after a dropped answer)
+      // finds its own request and changes nothing.
+      const row = await db.prepare('UPDATE circle_codes SET joiner = ?, pub = ?, label = ? WHERE code = ? AND (joiner IS NULL OR (joiner = ? AND pub = ?)) AND expires > ? RETURNING code')
+        .bind(userId, pub, label, code, userId, pub, now).first()
       if (!row) {
         await db.batch([
           db.prepare('DELETE FROM circle_code_misses WHERE at < ?').bind(now - HOUR),

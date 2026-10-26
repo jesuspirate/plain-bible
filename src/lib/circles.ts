@@ -242,8 +242,30 @@ export async function openInvited(id: string, invite: Invite, me: string) {
 // checking that both screens show the same four digits.
 
 /** The member's side: a code for one person, for 15 minutes. */
-export const makeCode = (circle: string) => api<{ code: string; expires: number }>(`/circles/${circle}/code`, { method: 'POST', token: token() })
-export const dropCode = (circle: string, code: string) => api(`/circles/${circle}/code/${code}`, { method: 'DELETE', token: token() }).catch(() => {})
+// The code stays the same while it's open: showing the code box again (it
+// came back after the screen redrew, or someone tapped twice) shows the
+// same code instead of making another one under the person typing it.
+const madeCodes = new Map<string, Promise<{ code: string; expires: number }>>()
+export function makeCode(circle: string): Promise<{ code: string; expires: number }> {
+  let p = madeCodes.get(circle)
+  if (!p) {
+    p = api<{ code: string; expires: number }>(`/circles/${circle}/code`, { method: 'POST', token: token() })
+    madeCodes.set(circle, p)
+    p.catch(() => madeCodes.delete(circle))
+    return p
+  }
+  return p.then(c => {
+    if (Date.now() < c.expires - 60_000) return c
+    madeCodes.delete(circle)
+    return makeCode(circle)
+  })
+}
+/** The code is done with: let in, cancelled, or expired. */
+export const doneWithCode = (circle: string) => { madeCodes.delete(circle) }
+export const dropCode = (circle: string, code: string) => {
+  doneWithCode(circle)
+  return api(`/circles/${circle}/code/${code}`, { method: 'DELETE', token: token() }).catch(() => {})
+}
 /** Who typed the code, once someone has, with the four digits their screen shows. */
 export async function codeAsk(circle: string, code: string): Promise<{ label: string; match: string; pub: string } | null> {
   const r = await api<{ pub: string | null; label: string | null }>(`/circles/${circle}/code/${code}`, { token: token() })
@@ -263,14 +285,44 @@ export async function allowCode(circle: string, code: string, pub: string) {
 
 export interface Typed { code: string; pub: string; priv: CryptoKey; match: string }
 /** The joining side: type the code. Returns the four digits to compare. */
-export async function typeCode(code: string): Promise<Typed> {
-  const { EC, deviceLabel, matchCode } = await import('./approve')
-  const pair = await crypto.subtle.generateKey(EC, false, ['deriveBits']) as CryptoKeyPair
-  const pub = b64url.encode(new Uint8Array(await crypto.subtle.exportKey('raw', pair.publicKey)))
-  await api('/circles/code', { method: 'POST', token: token(), body: { code, pub, label: deviceLabel() } })
-  return { code, pub, priv: pair.privateKey, match: await matchCode(pub) }
+// One key for each code typed here, kept while it's in use. A second tap,
+// or trying again after a dropped answer, sends the same key, so the four
+// digits never change under anyone (a new key would show new digits).
+const codeKeys = new Map<string, Promise<{ pub: string; priv: CryptoKey }>>()
+const typing = new Map<string, Promise<Typed>>()
+export function typeCode(code: string): Promise<Typed> {
+  let p = typing.get(code)
+  if (!p) {
+    p = sendCode(code).finally(() => typing.delete(code))
+    typing.set(code, p)
+  }
+  return p
 }
-export const stopWaiting = (typed: Typed) => api(`/circles/code/${typed.code}`, { method: 'DELETE', token: token() }).catch(() => {})
+async function sendCode(code: string): Promise<Typed> {
+  const { EC, deviceLabel, matchCode } = await import('./approve')
+  let key = codeKeys.get(code)
+  if (!key) {
+    key = (async () => {
+      const pair = await crypto.subtle.generateKey(EC, false, ['deriveBits']) as CryptoKeyPair
+      return { pub: b64url.encode(new Uint8Array(await crypto.subtle.exportKey('raw', pair.publicKey))), priv: pair.privateKey }
+    })()
+    codeKeys.set(code, key)
+    key.catch(() => codeKeys.delete(code))
+  }
+  const { pub, priv } = await key
+  try {
+    await api('/circles/code', { method: 'POST', token: token(), body: { code, pub, label: deviceLabel() } })
+  } catch (e) {
+    // A wrong or expired code: nothing of it is kept.
+    if (e instanceof SyncError && e.status === 404) codeKeys.delete(code)
+    throw e
+  }
+  return { code, pub, priv, match: await matchCode(pub) }
+}
+export const stopWaiting = (typed: Typed) => {
+  codeKeys.delete(typed.code)
+  return api(`/circles/code/${typed.code}`, { method: 'DELETE', token: token() }).catch(() => {})
+}
 /** Once allowed: join, and the circle opens here. Null while still waiting. */
 export async function joinWithCode(typed: Typed, me: string, code?: string): Promise<CircleInfo | 'needCode' | null> {
   const r = await api<{ circle: string; epk: string | null; sealed: string | null }>(`/circles/code/${typed.code}`, { token: token() })
@@ -286,6 +338,7 @@ export async function joinWithCode(typed: Typed, me: string, code?: string): Pro
       wrapped: b64url.encode(await seal(lock, raw, `circle/${r.circle}`)), me: await sealJson(key, me, `${r.circle}/me`),
     },
   })
+  codeKeys.delete(typed.code)
   const list = await listCircles().catch(() => null)
   return (list && list !== 'needCode' ? list.circles.find(c => c.id === r.circle) : undefined) ?? { id: r.circle, name: t('Circle'), members: 0 }
 }
