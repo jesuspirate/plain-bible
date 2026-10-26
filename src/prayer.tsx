@@ -5,7 +5,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
-import { playable } from './lib/mp4'
+import { lengthMs, playable } from './lib/mp4'
 import { awaitVerse, go, inCircles, openSettings, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
@@ -19,9 +19,10 @@ import { addDays, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
 import './prayer.css'
 import { locale, N_, t, tj, tn } from './i18n'
 
-// paused: the phone locked mid-prayer. What was said is kept, and the next
+// paused: the phone locked, or the microphone stopped, mid-prayer. What was said is kept, and the next
 // tap carries on in the same prayer.
 type Phase = 'idle' | 'asking' | 'recording' | 'paused' | 'heard'
+type Cut = 'lock' | 'mic'
 
 /** The words of `v` in `b`, or undefined if that Bible lacks any of them. */
 function wordsOf(b: Bible | undefined, v: PrayerVerse) {
@@ -33,6 +34,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const { data, settings } = useApp()
   const version = settings.version
   const [phase, setPhase] = useState<Phase>('idle')
+  // Why the last pause happened.
+  const [pausedBy, setPausedBy] = useState<Cut>('lock')
   // Praying, Your prayers, or Circles (opened from its own button beside 🙏).
   const [view, setView] = useState<'pray' | 'list' | 'circles'>(at ? 'circles' : 'pray')
   useEffect(() => { if (at) setView('circles') }, [at])
@@ -50,7 +53,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const setVerse = (v: PrayerVerse | undefined) => { verseRef.current = v; setVerseNow(v) }
   // The prayer just kept, and the verse it's tied to.
   const [kept, setKept] = useState<{ id: string; verse?: PrayerVerse }>()
-  const rec = useRef<{ recorder: MediaRecorder; stream: MediaStream; started: number; timer: number; lock?: WakeLockSentinel; interrupted?: boolean }>()
+  const rec = useRef<{ recorder: MediaRecorder; stream: MediaStream; started: number; timer: number; lock?: WakeLockSentinel; interrupted?: Cut }>()
   // The prayer a paused recording carries on, and how long it already is.
   const resume = useRef<{ id: string; ms: number }>()
   const alive = useRef(true)
@@ -73,7 +76,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
     // Phones cut the microphone off when the app goes to the background or
     // the screen locks: keep what was said so far, and offer to carry on.
-    const hidden = () => { if (document.visibilityState === 'hidden') stop(true) }
+    const hidden = () => { if (document.visibilityState === 'hidden') stop('lock') }
     addEventListener('keydown', esc)
     document.addEventListener('visibilitychange', hidden)
     return () => {
@@ -113,12 +116,24 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     recorder.ondataavailable = e => { if (e.data.size) chunks.push(e.data) }
     recorder.onstop = async () => {
       stream.getTracks().forEach(track => track.stop())
-      const ms = Date.now() - started
+      const wall = Date.now() - started
       const blob = new Blob(chunks, { type: recorder.mimeType || type || 'audio/mp4' })
-      const interrupted = !!this_.interrupted
-      if (!blob.size || ms < 800) { if (alive.current) setPhase(before ? (interrupted ? 'paused' : 'heard') : 'idle'); return }
+      let interrupted = this_.interrupted
+      if (!blob.size || wall < 800) { if (alive.current) setPhase(before ? (interrupted ? 'paused' : 'heard') : 'idle'); return }
       try {
-        const part = { ms, type: blob.type, audio: await blob.arrayBuffer() }
+        const audio = await blob.arrayBuffer()
+        // A microphone that went quiet without a word (Bluetooth in a car,
+        // say) leaves less sound than time went by. Count only what was
+        // heard, and pause so the prayer can carry on.
+        const heard = lengthMs(audio, blob.type)
+        const short = heard !== undefined && heard < wall - 2000
+        const ms = short ? heard : wall
+        if (short) interrupted = 'mic'
+        if (ms < 800) {
+          if (alive.current) { setPausedBy('mic'); setElapsed(before?.ms ?? 0); setPhase(before ? 'paused' : 'idle'); if (!before) setNote(t('The microphone stopped, so nothing was recorded. This can happen with Bluetooth, like in a car. Tap to try again.')) }
+          return
+        }
+        const part = { ms, type: blob.type, audio }
         let id = before?.id
         const tie = verseRef.current
         if (id) await prayers.append(id, part).catch(() => { id = undefined })
@@ -128,7 +143,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         navigator.storage?.persist?.().catch(() => {})
         resume.current = interrupted ? { id, ms: (before?.ms ?? 0) + ms } : undefined
         if (alive.current) {
-          if (interrupted) setPhase('paused')
+          if (interrupted) { setPausedBy(interrupted); setElapsed((before?.ms ?? 0) + ms); setPhase('paused') }
           else heardNow(id)
           refresh()
         }
@@ -141,13 +156,22 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     recorder.start(1000)
     const this_: NonNullable<typeof rec.current> = { recorder, stream, started, timer: window.setInterval(() => setElapsed((before?.ms ?? 0) + Date.now() - started), 250) }
     rec.current = this_
+    // The microphone going silent under us (a call, or the phone switching
+    // to a car's Bluetooth) would leave the timer running over silence.
+    const track = stream.getAudioTracks()[0]
+    if (track) {
+      let quiet = 0
+      track.onended = () => { if (rec.current === this_) stop('mic') }
+      track.onmute = () => { clearTimeout(quiet); quiet = window.setTimeout(() => { if (rec.current === this_) stop('mic') }, 1500) }
+      track.onunmute = () => clearTimeout(quiet)
+    }
     // Keep the screen awake while praying, so the phone doesn't lock itself
     // and cut the microphone off.
     navigator.wakeLock?.request('screen').then(l => { if (rec.current === this_) this_.lock = l; else l.release() }).catch(() => {})
     setElapsed(before?.ms ?? 0); setPhase('recording')
   }
 
-  function stop(interrupted = false) {
+  function stop(interrupted?: Cut) {
     const r = rec.current
     if (!r) return
     r.interrupted = interrupted
@@ -197,7 +221,9 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
               : phase === 'asking' ? <p>…</p>
               : phase === 'paused' ? <>
                   <p class="pray-time">{duration(elapsed)}</p>
-                  <p>{t('The phone locked, so your prayer paused. Everything you said is kept.')}</p>
+                  <p>{pausedBy === 'mic'
+                    ? t('The microphone stopped, so your prayer paused. This can happen with Bluetooth, like in a car. What it heard is kept.')
+                    : t('The phone locked, so your prayer paused. Everything you said is kept.')}</p>
                   <p>{t('Tap the light to keep praying, or')}</p>
                   <button class="pray-pill pray-amen-btn" onClick={amen}>{t('Amen')}</button>
                 </>

@@ -302,6 +302,8 @@ export default {
   "Start praying out loud": "Empezar a orar en voz alta",
   "Tap when you’re done.": "Toca cuando termines.",
   "The phone locked, so your prayer paused. Everything you said is kept.": "El teléfono se bloqueó, así que tu oración quedó en pausa. Todo lo que dijiste está guardado.",
+  "The microphone stopped, so your prayer paused. This can happen with Bluetooth, like in a car. What it heard is kept.": "El micrófono se detuvo, así que tu oración quedó en pausa. Puede pasar con Bluetooth, por ejemplo en el coche. Lo que escuchó está guardado.",
+  "The microphone stopped, so nothing was recorded. This can happen with Bluetooth, like in a car. Tap to try again.": "El micrófono se detuvo, así que no se grabó nada. Puede pasar con Bluetooth, por ejemplo en el coche. Toca para intentarlo de nuevo.",
   "Tap the light to keep praying, or": "Toca la luz para seguir orando, o",
   "Amen": "Amén",
   "Amen. He heard you.": "Amén. Él te escuchó.",

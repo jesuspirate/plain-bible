@@ -135,3 +135,19 @@ function join(input: ArrayBuffer): ArrayBuffer | undefined {
 
 /** A recording, ready for any player. */
 export const playable = (audio: ArrayBuffer, type: string) => /mp4|m4a|aac/i.test(type) ? defragment(audio) : audio
+
+/** How much sound an MP4 recording really holds, in ms, or undefined when
+ *  it can't tell (another format, or no length written). */
+export function lengthMs(audio: ArrayBuffer, type: string): number | undefined {
+  if (!/mp4|m4a|aac/i.test(type)) return
+  try {
+    const b = new Uint8Array(defragment(audio)), v = new DataView(b.buffer, b.byteOffset, b.byteLength)
+    const moov = boxes(b, v, 0, b.length).find(x => x.type === 'moov')
+    const trak = moov && child(b, v, moov, 'trak'), mdia = trak && child(b, v, trak, 'mdia'), mdhd = mdia && child(b, v, mdia, 'mdhd')
+    if (!mdhd) return
+    const v1 = b[mdhd.body] === 1
+    const scale = v.getUint32(mdhd.body + (v1 ? 20 : 12))
+    const d = v1 ? Number(v.getBigUint64(mdhd.body + 24)) : v.getUint32(mdhd.body + 16)
+    return scale && d ? d * 1000 / scale : undefined
+  } catch { return }
+}
