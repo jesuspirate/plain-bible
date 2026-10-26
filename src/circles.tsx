@@ -4,7 +4,7 @@
 import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
-  accountKeyCode, amen, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
+  accountKeyCode, amen, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
@@ -537,7 +537,7 @@ function CircleView({ id }: { id: string }) {
   const fav = settings.version
   const news = feed ? newsIn(feed, since).items : undefined
   // A few days at a time, then a clear end: never an endless stack.
-  const { days, more } = feed ? byDay(feed.items, news!, limit) : { days: [], more: false }
+  const { days, more } = feed ? byDay(feed.items, news!, limit, dayAt) : { days: [], more: false }
   // A circle with only you in it starts on People, where the invite is.
   const tab = page ?? (feed && feed.members.length < 2 && !feed.items.length ? 'people' : 'shared')
 
@@ -773,12 +773,12 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   return (
     <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '')}>
       {fresh && <p class="c-new-word small">{fresh}</p>}
-      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(item.at, !!news)}</span></div>
+      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(dayAt(item), !!news || dayOf(dayAt(item)) !== dayOf(item.at))}</span></div>
       {b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
+        {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
         {verse && <button class="link c-ref" onClick={() => open(verse)}>{t('With {verse}', { verse: verseLabel(verse) })}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
         {verse && <Passage shown={shown} small from={nameOf(item.by)} />}
-        {b.note && <p class="c-note">{b.note}</p>}
       </> : b.k === 'note' ? <>
         <p class="c-note c-note-main">{b.note}</p>
         <Passage shown={shown} small from={nameOf(item.by)} />
@@ -970,7 +970,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
             {list.map(c => <button role="radio" aria-checked={pick === c.id} class={pick === c.id ? 'on' : ''} onClick={() => setPick(c.id)}>{c.name}</button>)}
           </div>
         )}
-        {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
+        {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
         {'prayer' in request && <p class="muted small">{circle ? t('Everyone in {circle} will be able to hear this prayer.', { circle: circle.name }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
         <button class="c-btn primary" disabled={busy || done || !pick || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…') : circle ? t('Share with {circle}', { circle: circle.name }) : t('Share with circle')}</button>
         {msg && <p class="note small">{msg}</p>}

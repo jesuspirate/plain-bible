@@ -26,6 +26,8 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-quote.small { font-size: calc(var(--font-size) * .8); max-height: 9em; overflow: auto; }
 .c-quote-wait { min-height: 2.4em; opacity: .5; }
 .c-note { margin: 8px 0 0; white-space: pre-wrap; }
+/* A note shared with a prayer sits right under it, as part of it. */
+.c-prayer-note { margin: 2px 0 8px 58px; font-size: 17px; }
 .c-prayer { display: flex; align-items: center; gap: 12px; margin: 2px 0 4px; }
 .c-play { width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; padding: 0; flex: none;
   background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }

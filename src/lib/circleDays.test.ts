@@ -19,6 +19,13 @@ describe('circle days', () => {
     const { days } = byDay(items, new Set(['c']), 10)
     expect(days.map(d => d.day === 'new' ? 'new' : d.items.map(i => i.id).join())).toEqual(['new', 'a,b', 'd,e'])
   })
+  it('puts an old prayer shared today back on the day it was prayed', () => {
+    const old = { id: 'p', at: at(25, 20), prayed: at(22, 8) }
+    const when = (i: { at: number; prayed?: number }) => i.prayed ?? i.at
+    const { days } = byDay([old, ...items], new Set(), 10, when)
+    expect(days.map(d => d.items.map(i => i.id))).toEqual([['a', 'b'], ['c'], ['p', 'd', 'e']])
+    expect(byDay([old, ...items], new Set(['p']), 10, when).days[0].items.map(i => i.id)).toEqual(['p'])
+  })
   it('stops after whole days once enough are shown', () => {
     const { days, more } = byDay(items, new Set(), 2)
     expect(days.map(d => d.items.length)).toEqual([2])

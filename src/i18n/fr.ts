@@ -774,4 +774,5 @@ export default {
   "Today": "Aujourd’hui",
   "Yesterday": "Hier",
   "Respond": "Réagir",
+  "Add a note about this prayer (optional)": "Ajouter une note sur cette prière (facultatif)",
 } as Record<string, string>
