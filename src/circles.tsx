@@ -190,10 +190,14 @@ function StartOver({ onDone }: { onDone: () => void }) {
   )
 }
 
+// The last list seen, so Circles opens with it already in place (see warmCircles).
+let lastList: CircleInfo[] | undefined
+export const warmList = () => keptCircles().then(k => { lastList = k })
+
 function CircleList() {
   const nav = useNav()
   useCircleNews()
-  const [list, setList] = useState<CircleInfo[]>()
+  const [list, setList] = useState<CircleInfo[] | undefined>(lastList)
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
   const [needCode, setNeedCode] = useState<'list' | 'create' | ''>('')
@@ -210,12 +214,12 @@ function CircleList() {
     try {
       const r = await listCircles(unlock, code)
       if (r === 'needCode') setNeedCode('list')
-      else { setList(r.circles); setLocked(r.locked); setStale(r.stale); setNeedCode('') }
+      else { setList(lastList = r.circles); setLocked(r.locked); setStale(r.stale); setNeedCode('') }
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   // What's kept shows at once (and offline); the server fills in the rest.
   // Unlocking can ask for the passkey, so that waits for a tap.
-  useEffect(() => { keptCircles().then(k => { setList(k); if (navigator.onLine !== false) load() }) }, [])
+  useEffect(() => { keptCircles().then(k => { setList(lastList = k); if (navigator.onLine !== false) load() }) }, [])
   const unlock = () => load(true)
 
   const create = async (code?: string) => {
