@@ -10,6 +10,7 @@ import {
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
 import { duration, prayers } from './lib/prayers'
+import { playable } from './lib/mp4'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
@@ -874,7 +875,8 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
     let parts
     try { parts = await prayerAudio(circle, item) } catch (e) { setState('idle'); onError(message(e)); return }
     const ms = item.body.k === 'prayer' ? item.body.parts.map(p => p.ms) : []
-    const urls = parts.map(p => URL.createObjectURL(new Blob([p.audio], { type: p.type })))
+    // One plain file per part: an iPhone stops a fragmented recording early.
+    const urls = parts.map(p => URL.createObjectURL(new Blob([playable(p.audio, p.type)], { type: p.type })))
     const el = new Audio()
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)

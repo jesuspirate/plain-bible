@@ -5,6 +5,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
+import { playable } from './lib/mp4'
 import { awaitVerse, go, inCircles, openSettings, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import { PrayerVerse, verseLabel } from './lib/prayerVerses'
@@ -272,7 +273,7 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
     if (!full) return
     // A prayer picked up again after the phone locked plays its parts in turn.
     const parts = partsOf(full)
-    const urls = parts.map(x => URL.createObjectURL(new Blob([x.audio], { type: x.type })))
+    const urls = parts.map(x => URL.createObjectURL(new Blob([playable(x.audio, x.type)], { type: x.type })))
     const el = new Audio()
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
@@ -296,7 +297,7 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
       const full = await prayers.get(p.id)
       if (!full) return
       const parts = partsOf(full), name = fileName(full.at)
-      files = parts.map((x, i) => new File([x.audio], `${name}${parts.length > 1 ? ` (${t('{i} of {n}', { i: i + 1, n: parts.length })})` : ''}.${extension(x.type)}`, { type: x.type }))
+      files = parts.map((x, i) => new File([playable(x.audio, x.type)], `${name}${parts.length > 1 ? ` (${t('{i} of {n}', { i: i + 1, n: parts.length })})` : ''}.${extension(x.type)}`, { type: x.type }))
     }
     if (navigator.canShare?.({ files })) {
       try { await navigator.share({ files }); ready.current = undefined; setAgain(undefined) } catch (e) {
