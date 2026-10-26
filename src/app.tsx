@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, markTourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { ListenPlayer } from './listen'
@@ -23,6 +23,7 @@ import { ApproveCard } from './approve'
 import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
+import { overlayOpen } from './lib/overlay'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -53,6 +54,9 @@ if (IOS_HOME_SCREEN) {
 
 // Nothing saved yet: this is the app's very first start on this address.
 const FIRST_START = (() => { try { return !localStorage.getItem('plain-bible:settings') } catch { return false } })()
+// Someone new gets the guided tour once, as soon as the reader is free of
+// anything else asking for them.
+if (FIRST_START) markTourDue()
 
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
@@ -162,6 +166,31 @@ export function App() {
     return () => removeEventListener(SETTINGS_EVENT, on)
   }, [])
   useEffect(() => { setSettingsOpen(false) }, [route.path.join('/')])
+
+  // The guided tour loads only when it opens: for someone new, once the
+  // reader is up with nothing else over it, or from Settings any time.
+  const [Tour, setTour] = useState<typeof import('./tour').Tour>()
+  const showTour = () => import('./tour').then(m => setTour(() => m.Tour)).catch(() => {})
+  useEffect(() => {
+    const on = () => {
+      setSettingsOpen(false)
+      if ((parseHash().path[0] || 'read') !== 'read') go('read')
+      setTimeout(showTour, 450)
+    }
+    addEventListener(TOUR_EVENT, on)
+    return () => removeEventListener(TOUR_EVENT, on)
+  }, [])
+  useEffect(() => {
+    if (page !== 'read' || !tourDue()) return
+    let timer = 0
+    const tryNow = () => {
+      if (!tourDue()) return
+      if (overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 2000)
+      else showTour()
+    }
+    timer = window.setTimeout(tryNow, 1500)
+    return () => clearTimeout(timer)
+  }, [page])
 
   // Circles load only when opened, or when something is shared with one.
   const [circles, setCircles] = useState<typeof import('./circles')>()
@@ -284,6 +313,7 @@ export function App() {
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
+      {Tour && <Tour onClose={() => setTour(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
       <ApproveCard />
       <LeftNote />

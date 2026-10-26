@@ -4,10 +4,10 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute } from './state'
+import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute, openTour } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
+import { BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { checkForUpdate, useUpdate } from './lib/update'
@@ -436,6 +436,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
           <Row icon={<GlobeIcon size={24} />} label={t('Language')} value={settings.language === 'auto' ? t('Automatic') : LANGS.find(l => l.id === settings.language)?.name}
             onClick={() => setPage('language')} />
           <Row icon={<DataIcon size={24} />} label={t('Your data')} onClick={() => setPage('data')} />
+          <Row icon={<CompassIcon size={24} />} label={t('Take the tour')} sub={t('A one-minute look around the app')} onClick={openTour} />
           <Row icon={<InfoIcon size={24} />} label={t('About')} onClick={() => setPage('about')} />
         </div>
       </section>
