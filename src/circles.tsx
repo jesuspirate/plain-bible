@@ -987,13 +987,14 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         </>}
         {list && list.length > 1 && (
           <div class="c-circles-pick" role="group" aria-label={t('Circles')}>
-            {list.map(c => <button aria-pressed={picks.includes(c.id)} class={picks.includes(c.id) ? 'on' : ''} onClick={() => toggle(c.id)}>{c.name}</button>)}
+            {list.map(c => <button aria-pressed={picks.includes(c.id)} class={picks.includes(c.id) ? 'on' : ''} onClick={() => toggle(c.id)}>{picks.includes(c.id) && '✓ '}{c.name}</button>)}
           </div>
         )}
         {list && list.length > 1 && picks.length < 2 && <p class="muted small c-pick-more">{t('Tap more circles to share with them too')}</p>}
         {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
         {'prayer' in request && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear this prayer.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
         <button class="c-btn primary" disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…')
+          : chosen.length === 2 ? t('Share with {a} and {b}', { a: chosen[0].name, b: chosen[1].name })
           : chosen.length > 1 ? t('Share with {n} circles', { n: chosen.length }) : chosen.length ? t('Share with {circle}', { circle: chosen[0].name }) : t('Share with circle')}</button>
         {msg && <p class="note small">{msg}</p>}
         {list && !list.length && <p class="muted">{t('You’re not in a circle on this device yet. Open Circles, beside 🙏.')}</p>}
