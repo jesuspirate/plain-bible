@@ -3,15 +3,21 @@
 // The audio is stored as raw bytes with its type: older iPhones can't keep a
 // Blob in IndexedDB.
 
-import type { PrayerVerse } from './prayerVerses'
+import { PrayerVerse, sameVerses } from './prayerVerses'
 
 /** One stretch of recording. */
 export interface Part { ms: number; type: string; audio: ArrayBuffer }
 /** A prayer: its first part, plus any parts added after it was interrupted
  *  (the phone locked) and picked up again. `ms` is the length of them all.
- *  `verse`: the verses it was prayed using, if any. Once set it stays, so
- *  every device ends up with the same one. */
-export interface Prayer extends Part { id: string; at: number; more?: Part[]; verse?: PrayerVerse }
+ *  `verses`: the verses it was prayed using, from anywhere in the Bible.
+ *  `verse` is the first of them, the only one apps from before several
+ *  could keep (a prayer from then has only that).
+ *  For sync: `vrev` counts changes to the verses, `vdirty` says the last
+ *  hasn't been sent yet, and `vsize` is how big they were on the server. */
+export interface Prayer extends Part {
+  id: string; at: number; more?: Part[]; verse?: PrayerVerse
+  verses?: PrayerVerse[]; vrev?: number; vdirty?: boolean; vsize?: number
+}
 /** A prayer without its audio; `parts` counts its parts. */
 export type PrayerInfo = Omit<Prayer, 'audio' | 'more'> & { parts: number }
 
@@ -53,11 +59,29 @@ export const prayers = {
     if (!p) throw new Error('gone')
     await prayers.put(withPart(p, part))
   },
-  /** Tie a prayer to a verse, unless it already has one. */
+  /** Tie a prayer to a verse, unless it already has one: from an app that
+   *  keeps only one. */
   setVerse: async (id: string, verse: PrayerVerse) => {
     const p = await prayers.get(id)
     if (!p) throw new Error('gone')
-    if (!p.verse) await prayers.put({ ...p, verse })
+    if (!p.verse && !p.verses) await prayers.put({ ...p, verse })
+  },
+  /** The verses a prayer is prayed using, changed here. */
+  tie: async (id: string, verses: PrayerVerse[]) => {
+    const p = await prayers.get(id)
+    if (!p) throw new Error('gone')
+    if (sameVerses(verses, p.verses ?? (p.verse ? [p.verse] : []))) return
+    await prayers.put({ ...p, verse: verses[0], verses, vrev: (p.vrev ?? 0) + 1, vdirty: true })
+  },
+  /** The verses as another device left them (`rev` and `size` as sent). */
+  tiedElsewhere: async (id: string, verses: PrayerVerse[], rev: number, size: number) => {
+    const p = await prayers.get(id)
+    if (p && !p.vdirty) await prayers.put({ ...p, verse: verses[0], verses, vrev: rev, vsize: size })
+  },
+  /** The verses are on the server now, unless they changed again meanwhile. */
+  versesSent: async (id: string, rev: number, size: number) => {
+    const p = await prayers.get(id)
+    if (p && (p.vrev ?? 0) === rev) await prayers.put({ ...p, vdirty: false, vsize: size })
   },
   delete: (id: string) => tx('readwrite', s => s.delete(id)).then(() => {}),
 }

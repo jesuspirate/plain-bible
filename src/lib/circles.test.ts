@@ -12,6 +12,13 @@ describe('cleanShared', () => {
   })
   it('skips kinds it does not know, and broken ones', () => {
     expect(cleanShared({ k: 'read', book: 'John', chapter: 3 })).toBeUndefined()
+  })
+  it('keeps every verse a prayer was prayed using', () => {
+    const parts = [{ ms: 9000, type: 'audio/mp4', size: 90 }]
+    const verses = [{ book: 'Ps', chapter: 23, verses: [1] }, { book: 'John', chapter: 3, verses: [16, 17] }]
+    expect(cleanShared({ k: 'prayer', ms: 9000, parts, verse: verses[0], verses })).toMatchObject({ verse: verses[0], verses })
+    // One verse travels as `verse` alone, as before.
+    expect(cleanShared({ k: 'prayer', ms: 9000, parts, verse: verses[0], verses: [verses[0]] })).not.toHaveProperty('verses')
     expect(cleanShared({ k: 'verse', verse: { book: 'Nope', chapter: 1, verses: [1] } })).toBeUndefined()
     expect(cleanShared({ k: 'prayer', ms: 1, parts: [] })).toBeUndefined()
     expect(cleanShared(null)).toBeUndefined()

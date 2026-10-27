@@ -6,9 +6,9 @@ import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
-import { awaitVerse, go, inCircles, openSettings, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
+import { go, inCircles, openSettings, pickVerses, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
-import { PrayerVerse, verseLabel } from './lib/prayerVerses'
+import { MAX_TIED, PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
 import type { Bible } from './lib/data'
 import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSync, turnOnPrayerSync } from './lib/prayerSync'
@@ -45,14 +45,15 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [bible, setBible] = useState<Bible>()
   // Said back once a prayer is kept: a verse picked at random, in the Bible you read.
   const [comfort, setComfort] = useState<Comfort>(pickComfort)
-  // The verses this prayer is prayed using. Verses you just selected are
-  // offered; Pray on the selection bar ties them straight away.
+  // The verses this prayer is prayed using, from anywhere in the Bible.
+  // Verses you just selected are offered; Pray on the selection bar (or
+  // Done after Add a verse) ties them straight away.
   const [offer] = useState(verseToPrayOver)
-  const [verse, setVerseNow] = useState<PrayerVerse | undefined>(offer?.sure ? offer.verse : undefined)
-  const verseRef = useRef(verse)
-  const setVerse = (v: PrayerVerse | undefined) => { verseRef.current = v; setVerseNow(v) }
-  // The prayer just kept, and the verse it's tied to.
-  const [kept, setKept] = useState<{ id: string; verse?: PrayerVerse }>()
+  const [tied, setTiedNow] = useState<PrayerVerse[]>(offer?.sure ? offer.verses : [])
+  const tiedRef = useRef(tied)
+  const setTied = (v: PrayerVerse[]) => { tiedRef.current = v; setTiedNow(v) }
+  // The prayer just kept, and the verses it's tied to.
+  const [kept, setKept] = useState<{ id: string; verses: PrayerVerse[] }>()
   const rec = useRef<{ recorder: MediaRecorder; stream: MediaStream; started: number; timer: number; lock?: WakeLockSentinel; interrupted?: Cut }>()
   // The prayer a paused recording carries on, and how long it already is.
   const resume = useRef<{ id: string; ms: number }>()
@@ -166,10 +167,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         }
         const part = { ms, type: blob.type, audio }
         let id = before?.id
-        const tie = verseRef.current
+        const tie = tiedRef.current
         if (id) await prayers.append(id, part).catch(() => { id = undefined })
-        if (id && tie) await prayers.setVerse(id, tie).catch(() => {})
-        if (!id) await prayers.put({ id: id = started.toString(36) + Math.random().toString(36).slice(2, 6), at: started, ...part, ...(tie ? { verse: tie } : {}) })
+        if (id) await prayers.tie(id, tie).catch(() => {})
+        if (!id) await prayers.put({ id: id = started.toString(36) + Math.random().toString(36).slice(2, 6), at: started, ...part, ...(tie.length ? { verse: tie[0], verses: tie, vrev: 1, vdirty: true } : {}) })
         markDay(PRAY, dayOf(started))
         navigator.storage?.persist?.().catch(() => {})
         resume.current = interrupted ? { id, ms: (before?.ms ?? 0) + ms } : undefined
@@ -213,17 +214,24 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     else r.stream.getTracks().forEach(track => track.stop())
   }
 
-  // Amen: a new verse to take away, and the prayer's own verse, if it has one.
+  // Amen: a new verse to take away, and the prayer's own verses, if it has any.
   function heardNow(id?: string) {
     setComfort(pickComfort())
-    if (id) prayers.get(id).then(p => { if (alive.current && p) setKept({ id, verse: p.verse }) }, () => {})
-    setVerse(undefined)
+    if (id) prayers.get(id).then(p => { if (alive.current && p) setKept({ id, verses: versesOf(p) }) }, () => {})
+    setTied([])
     setPhase('heard')
   }
-  const amen = () => { const id = resume.current?.id; resume.current = undefined; heardNow(id) }
+  // Amen while paused: verses changed meanwhile are kept with the prayer.
+  const amen = () => {
+    const id = resume.current?.id
+    resume.current = undefined
+    if (!id) return heardNow()
+    prayers.tie(id, tiedRef.current).catch(() => {}).then(() => { heardNow(id); refresh(); sync() })
+  }
   const read = (v: PrayerVerse) => { onClose(); go(readPath(version, v.book, v.chapter, v.verses[0])) }
-  // After Amen, the next verse you tap on the page is tied to this prayer.
-  const addVerse = () => { if (kept) { awaitVerse(kept.id); onClose() } }
+  // Add a verse: the prayer steps aside, and the verses you tap on the page,
+  // in any chapter or book, are added to it, until Done.
+  const pickFor = (verses: PrayerVerse[], prayer?: string) => { pickVerses({ prayer, verses, from: verses }); onClose() }
   const busy = phase === 'recording' || phase === 'paused' || phase === 'asking'
   const toggle = () => phase === 'recording' ? stop() : phase !== 'asking' && start()
   const count = list?.length ?? 0
@@ -232,14 +240,22 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     <div class="pray" role="dialog" aria-modal="true" ref={root} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
       {/* The list has its own Done, so only one close is ever on screen. */}
       {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
-      {view === 'pray' && phase !== 'heard' && (verse
+      {view === 'pray' && phase !== 'heard' && (tied.length
         ? <div class="pray-over">
-            <span>{tj('Praying using {verse}', { verse: <strong>{verseLabel(verse)}</strong> })}</span>
-            <button class="pray-over-x" aria-label={t('Don’t tie this prayer to {verse}', { verse: verseLabel(verse) })} onClick={() => setVerse(undefined)}>✕</button>
+            <p class="pray-over-head">{t('Praying using')}</p>
+            <ul>
+              {tied.map(v => <li>
+                <strong>{verseLabel(v)}</strong>
+                <button class="pray-over-x" aria-label={t('Don’t tie this prayer to {verse}', { verse: verseLabel(v) })} onClick={() => setTied(tied.filter(x => x !== v))}>✕</button>
+              </li>)}
+            </ul>
+            {!busy && tied.length < MAX_TIED && <button class="pray-over-add" onClick={() => pickFor(tied)}>+ {t('Add a verse')}</button>}
           </div>
-        : offer && !busy && <button class="pray-over offer" onClick={() => setVerse(offer.verse)}>
-            <span>+ {tj('Pray using {verse}', { verse: <strong>{verseLabel(offer.verse)}</strong> })}</span>
-          </button>)}
+        : !busy && (offer
+          ? <button class="pray-over offer" onClick={() => setTied(offer.verses)}>
+              <span>+ {tj('Pray using {verse}', { verse: <strong>{offer.verses.map(verseLabel).join(', ')}</strong> })}</span>
+            </button>
+          : <button class="pray-over offer" onClick={() => pickFor([])}><span>+ {t('Add a verse')}</span></button>))}
       {view === 'pray' ? (
         <div class="pray-center">
           <button class={'pray-mic' + (phase === 'recording' ? ' on' : '')} onClick={toggle}
@@ -264,14 +280,17 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
                   <button class="pray-verse" onClick={() => read(comfort)}>
                     “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
                   </button>
-                  {kept?.verse
-                    ? <button class="pray-tied" onClick={() => read(kept.verse!)}>{tj('Prayed using {verse}', { verse: <strong>{verseLabel(kept.verse)}</strong> })} ›</button>
-                    : kept && <button class="pray-pill pray-add" onClick={addVerse}>+ {t('Add a verse')}</button>}
+                  {kept && kept.verses.length === 1 && <button class="pray-tied" onClick={() => read(kept.verses[0])}>{tj('Prayed using {verse}', { verse: <strong>{verseLabel(kept.verses[0])}</strong> })} ›</button>}
+                  {kept && kept.verses.length > 1 && <div class="pray-tied-all">
+                    <p>{t('Prayed using')}</p>
+                    {kept.verses.map(v => <button class="pray-tied" onClick={() => read(v)}><strong>{verseLabel(v)}</strong> ›</button>)}
+                  </div>}
+                  {kept && kept.verses.length < MAX_TIED && <button class="pray-pill pray-add" onClick={() => pickFor(kept.verses, kept.id)}>+ {t('Add a verse')}</button>}
                 </>
               : <p>{t('Tap and speak to God. Only you will hear this again.')}</p>}
           </div>
         </div>
-      ) : view === 'list' ? <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} />
+      ) : view === 'list' ? <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} onPick={pickFor} />
         : <CirclesCard at={at} onClose={onClose} />}
       <div class="pray-foot">
         {view === 'list'
@@ -322,7 +341,9 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   )
 }
 
-function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; onChange: () => void; onClose: () => void; onRead: (v: PrayerVerse) => void }) {
+function PrayerList({ list, onChange, onClose, onRead, onPick }: {
+  list?: PrayerInfo[]; onChange: () => void; onClose: () => void; onRead: (v: PrayerVerse) => void; onPick: (verses: PrayerVerse[], prayer: string) => void
+}) {
   const [playing, setPlaying] = useState<string>()
   const [pos, setPos] = useState(0)
   const [confirm, setConfirm] = useState<string>()
@@ -414,10 +435,9 @@ function PrayerList({ list, onChange, onClose, onRead }: { list?: PrayerInfo[]; 
                   : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
               </button>
               <span class="pray-when">{when(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
-                {p.verse
-                  ? <button class="link pray-list-verse" onClick={() => onRead(p.verse!)}>{verseLabel(p.verse)}</button>
-                  // Thought of a verse later? The next verse you tap is tied to this prayer.
-                  : <button class="link pray-list-verse pray-list-add" onClick={() => { release(); awaitVerse(p.id); onClose() }}>+ {t('Add a verse')}</button>}</span>
+                {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
+                {/* Thought of a verse later, or tapped the wrong one? Tap verses on the page to add or take them off. */}
+                <button class="link pray-list-verse pray-list-add" onClick={() => { release(); onPick(versesOf(p), p.id) }}>{versesOf(p).length ? t('Change verses') : `+ ${t('Add a verse')}`}</button></span>
               {confirm !== p.id && <>
                 <button class="pray-icon" aria-label={t('Share or save this prayer')} title={t('Share or save')} onClick={() => save(p)}>
                   {again === p.id ? t('Share') : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}

@@ -9,9 +9,9 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { awaitVerse, go, inCircles, PICK_EVENT, prayerAwaitingVerse, prayOver, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, inCircles, PICK_EVENT, pickVerses, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
-import { verseLabel } from './lib/prayerVerses'
+import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
@@ -208,23 +208,34 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
   // Verses you select are offered if you go to pray soon after.
   useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
-  // After a prayer, "Add a verse": the next verse you tap is tied to it.
-  const [picking, setPicking] = useState(prayerAwaitingVerse)
+  // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
+  const [picking, setPicking] = useState(versePick)
   const [tied, setTied] = useState('')
   useEffect(() => {
-    const on = () => setPicking(prayerAwaitingVerse())
+    const on = () => setPicking(versePick())
     addEventListener(PICK_EVENT, on)
     return () => removeEventListener(PICK_EVENT, on)
   }, [])
   useEffect(() => { if (tied) { const timer = setTimeout(() => setTied(''), 3000); return () => clearTimeout(timer) } }, [tied])
-  const tieVerse = (id: string, v: number) => {
-    const verse = { book, chapter, verses: [v] }
-    awaitVerse(undefined)
+  const pickedHere = picking?.verses.find(x => x.book === book && x.chapter === chapter)?.verses ?? []
+  const pickDone = async () => {
+    const p = picking
+    pickVerses(undefined)
+    if (!p) return
+    // The prayer about to be prayed opens again, with them.
+    if (!p.prayer) return prayOver(...p.verses)
+    const { prayers } = await import('./lib/prayers')
     // Prayers load only once you've prayed, so reading never waits on them.
-    import('./lib/prayers').then(m => m.prayers.setVerse(id, verse)).then(() => {
-      setTied(t('Your prayer is tied to {verse}.', { verse: verseLabel(verse) }))
+    prayers.tie(p.prayer, p.verses).then(() => {
+      setTied(p.verses.length ? t('Your prayer is tied to {verse}.', { verse: p.verses.map(verseLabel).join(', ') }) : t('Your prayer has no verses now.'))
       import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {})
     }, () => setTied(t('That prayer is no longer on this device.')))
+  }
+  // Cancel leaves the prayer as it was; one about to be prayed opens again.
+  const pickCancel = () => {
+    const p = picking
+    pickVerses(undefined)
+    if (p && !p.prayer) prayOver(...p.from)
   }
 
   const nav = (b: string, c: number, v?: number) => go(readPath(version, b, c, v, parallel))
@@ -287,7 +298,7 @@ export function Reader({ route }: { route: Route }) {
     return () => document.removeEventListener('pointerdown', down, true)
   }, [])
   const tapVerse = (e: MouseEvent, v: number) => {
-    if (picking) { tieVerse(picking, v); return }
+    if (picking) { pickVerses({ ...picking, verses: toggleVerse(picking.verses, book, chapter, v) }); return }
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     // Selecting words isn't a tap, and neither is a tap on the selected
     // words (that's for the copy menu). A tap elsewhere while words are still
@@ -588,7 +599,7 @@ export function Reader({ route }: { route: Route }) {
   const page = (b: string, c: number, live: boolean) => {
     const mark = (v: number) => marks[markKey(b, c, v)]
     const rowsOf = Math.max(...versions.map(v => bibles[v].books[b]?.[c - 1]?.length ?? 0))
-    const cls = (base: string, v: number) => base + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && selected.includes(v) ? ' picked' : '')
+    const cls = (base: string, v: number) => base + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }
@@ -666,9 +677,20 @@ export function Reader({ route }: { route: Route }) {
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
       {picking && (
-        <div class="pick-verse" role="status">
-          <span><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap a verse for your prayer')}</span>
-          <button class="small" onClick={() => awaitVerse(undefined)}>{t('Cancel')}</button>
+        <div class="pick-verse" role="region" aria-label={t('Verses for your prayer')}>
+          <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap verses for your prayer')}</p>
+          {picking.verses.length > 0 && <ul class="pick-list">
+            {picking.verses.map(x => <li>
+              <span>{verseLabel(x)}</span>
+              <button class="pick-x" aria-label={t('Take {verse} off', { verse: verseLabel(x) })}
+                onClick={() => pickVerses({ ...picking, verses: picking.verses.filter(y => y !== x) })}><CloseIcon size={18} /></button>
+            </li>)}
+          </ul>}
+          <p class="pick-hint muted">{t('Turn the page, or search, to add verses from other chapters and books.')}</p>
+          <div class="pick-btns">
+            <button class="pick-btn" onClick={pickCancel}>{t('Cancel')}</button>
+            <button class="pick-btn primary" onClick={pickDone}>{t('Done')}</button>
+          </div>
         </div>
       )}
       {tied && <div class="pick-verse done" role="status">{tied}</div>}
