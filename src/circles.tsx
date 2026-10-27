@@ -78,7 +78,7 @@ export function CirclesPanel({ circle, onOpen, onAway }: { circle?: string; onOp
   if (!SYNC_URL) return <p class="muted">{t('Circles aren’t available in this copy of the app.')}</p>
   return (
     <NavCtx.Provider value={{ sheet: true, open: onOpen, away: onAway }}>
-      {!loadAccount() ? <SignedOut /> : circle ? <CircleView id={circle} /> : <CircleList />}
+      {!loadAccount() ? <SignedOut /> : circle ? <CircleView key={circle} id={circle} /> : <CircleList />}
     </NavCtx.Provider>
   )
 }
@@ -486,11 +486,17 @@ function Join({ id, secret }: { id: string; secret: string }) {
   )
 }
 
+// What each circle held when last seen, so one opens with it already in place
+// (see warmFeed) instead of as a bare title that fills in a moment later.
+const lastFeed = new Map<string, Feed>()
+export const warmFeed = (id: string) => lastFeed.has(id) ? Promise.resolve() : keptFeed(id).then(f => { if (f) lastFeed.set(id, f) })
+
 function CircleView({ id }: { id: string }) {
   const nav = useNav()
   const { settings, update } = useApp()
-  const [info, setInfo] = useState<CircleInfo>()
-  const [feed, setFeed] = useState<Feed>()
+  const [info, setInfo] = useState(() => lastList?.find(c => c.id === id))
+  const [feed, setShown] = useState(() => lastFeed.get(id))
+  const setFeed = (f: Feed) => { lastFeed.set(id, f); setShown(f) }
   const [msg, setMsg] = useState('')
   const [invite, setInvite] = useState('')
   const [sent, setSent] = useState(false)
@@ -505,7 +511,9 @@ function CircleView({ id }: { id: string }) {
   const load = () => loadFeed(id).then(f => { setFeed(f); setMsg(''); markSeen(id, newsIn(f, 0).latest, true); clearNotifications(id).catch(() => {}) }, e => setMsg(message(e)))
   useEffect(() => {
     keptCircles().then(cs => setInfo(cs.find(c => c.id === id)))
-    keptFeed(id).then(f => { if (f) { setFeed(f); markSeen(id, newsIn(f, 0).latest) } })
+    const kept = lastFeed.get(id)
+    if (kept) markSeen(id, newsIn(kept, 0).latest)
+    else keptFeed(id).then(f => { if (f) { setFeed(f); markSeen(id, newsIn(f, 0).latest) } })
     load()
     const back = () => { if (document.visibilityState === 'visible') load() }
     document.addEventListener('visibilitychange', back)
@@ -912,7 +920,8 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
 export function ShareSheet({ request, onClose }: { request: ShareRequest; onClose: () => void }) {
   const { marks, data, settings } = useApp()
   const [list, setList] = useState<CircleInfo[]>()
-  const [pick, setPick] = useState('')
+  // One circle or several: each gets its own copy.
+  const [picks, setPicks] = useState<string[]>([])
   const [words, setWords] = useState('')
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
@@ -926,26 +935,31 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const [noteId, setNoteId] = useState(() => (notes.find(x => 'verse' in request && x.n === request.note) ?? notes[notes.length - 1])?.id ?? '')
   const theNote = 'verse' in request && request.note && !notes.some(x => x.id === noteId) ? request.note : notes.find(x => x.id === noteId)?.n
   useEffect(() => {
-    keptCircles().then(cs => { setList(cs); setPick(cs[0]?.id ?? '') })
+    keptCircles().then(cs => { setList(cs); setPicks(cs[0] ? [cs[0].id] : []) })
     if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${p.verse ? ` · ${verseLabel(p.verse)}` : ''}` : ''))
     else setWhat(verseLabel(request.verse))
   }, [])
-  const circle = list?.find(c => c.id === pick)
+  const chosen = (list ?? []).filter(c => picks.includes(c.id))
+  const toggle = (id: string) => setPicks(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
   const send = async () => {
-    if (!pick) return
+    if (!picks.length) return
     setBusy(true); setMsg('')
     try {
-      // The reference goes in standard numbering, so each reader finds it
-      // in their own Bible (see lib/passage), with how many verses your
-      // Bible has in that chapter, so one that numbers it differently
-      // doesn't show them the wrong verse.
-      if ('prayer' in request) {
-        const b = await data.bible(settings.version).catch(() => undefined)
-        await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v))
-      } else {
-        const b = await data.bible(request.version).catch(() => undefined), v = request.verse
-        const size = renumbered(b, v.book) ? 0 : chapterSize(b, v.book, v.chapter)
-        await shareVerse(pick, kind, toStandard(b, v), request.version, request.text, kind === 'note' ? theNote : words.trim(), size)
+      for (const pick of picks) {
+        // The reference goes in standard numbering, so each reader finds it
+        // in their own Bible (see lib/passage), with how many verses your
+        // Bible has in that chapter, so one that numbers it differently
+        // doesn't show them the wrong verse.
+        if ('prayer' in request) {
+          const b = await data.bible(settings.version).catch(() => undefined)
+          await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v))
+        } else {
+          const b = await data.bible(request.version).catch(() => undefined), v = request.verse
+          const size = renumbered(b, v.book) ? 0 : chapterSize(b, v.book, v.chapter)
+          await shareVerse(pick, kind, toStandard(b, v), request.version, request.text, kind === 'note' ? theNote : words.trim(), size)
+        }
+        // Shared already: a second tap won't send it there twice.
+        setPicks(p => p.filter(x => x !== pick))
       }
       setDone(true)
       setTimeout(onClose, 900)
@@ -972,13 +986,15 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           {kind === 'bookmark' && <p class="muted small">{t('They can bookmark it too, with one tap.')}</p>}
         </>}
         {list && list.length > 1 && (
-          <div class="c-circles-pick" role="radiogroup" aria-label={t('Circle')}>
-            {list.map(c => <button role="radio" aria-checked={pick === c.id} class={pick === c.id ? 'on' : ''} onClick={() => setPick(c.id)}>{c.name}</button>)}
+          <div class="c-circles-pick" role="group" aria-label={t('Circles')}>
+            {list.map(c => <button aria-pressed={picks.includes(c.id)} class={picks.includes(c.id) ? 'on' : ''} onClick={() => toggle(c.id)}>{c.name}</button>)}
           </div>
         )}
+        {list && list.length > 1 && picks.length < 2 && <p class="muted small c-pick-more">{t('Tap more circles to share with them too')}</p>}
         {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
-        {'prayer' in request && <p class="muted small">{circle ? t('Everyone in {circle} will be able to hear this prayer.', { circle: circle.name }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
-        <button class="c-btn primary" disabled={busy || done || !pick || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…') : circle ? t('Share with {circle}', { circle: circle.name }) : t('Share with circle')}</button>
+        {'prayer' in request && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear this prayer.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
+        <button class="c-btn primary" disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…')
+          : chosen.length > 1 ? t('Share with {n} circles', { n: chosen.length }) : chosen.length ? t('Share with {circle}', { circle: chosen[0].name }) : t('Share with circle')}</button>
         {msg && <p class="note small">{msg}</p>}
         {list && !list.length && <p class="muted">{t('You’re not in a circle on this device yet. Open Circles, beside 🙏.')}</p>}
       </div>

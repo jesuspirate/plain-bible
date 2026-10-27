@@ -190,6 +190,8 @@ export default {
   "Everyone in the circle will be able to hear this prayer.": "Todos en el círculo podrán oír esta oración.",
   "Shared ✓": "Compartido ✓",
   "Sharing…": "Compartiendo…",
+  "Share with {n} circles": "Compartir con {n} círculos",
+  "Tap more circles to share with them too": "Toca más círculos para añadirlos",
   "Share with {circle}": "Compartir con {circle}",
   "Share with circle": "Compartir con el círculo",
   "You’re not in a circle on this device yet. Open Circles, beside 🙏.": "Aún no estás en un círculo en este dispositivo. Abre Círculos, junto a 🙏.",

@@ -61,6 +61,37 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // colour the app opened with (an installed iPhone app can't repaint it),
   // so dimming the bar too left a bright strip over a grey one.
   const [cut] = useState(() => Math.max(0, Math.round(document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0)))
+  // With the keyboard up (naming a new circle, say), iPhone slides the whole
+  // page up under it, but this screen stays put: the dim stopped halfway down
+  // and the Bible showed, undimmed, between it and the keyboard. So while the
+  // keyboard is up the screen covers just what's left of the view, and the
+  // card sits right above the keyboard.
+  const root = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const vv = window.visualViewport, el = root.current
+    if (!vv || !el) return
+    const fit = () => {
+      const up = vv.height < innerHeight - 100
+      el.style.top = up ? vv.offsetTop + 'px' : ''
+      el.style.height = up ? vv.height + 'px' : ''
+      el.style.bottom = up ? 'auto' : ''
+      // The top bar slid up with the page.
+      el.style.setProperty('--cut', Math.max(0, cut - (up ? vv.offsetTop : 0)) + 'px')
+    }
+    const resized = () => {
+      fit()
+      // Keep the field you're typing in in sight once the card has shrunk.
+      // (The card, not the page: that would move the Bible underneath.)
+      const f = document.activeElement, box = f instanceof HTMLElement && el.contains(f) ? f.closest('.pray-list') : null
+      if (!f || !box) return
+      const r = f.getBoundingClientRect(), b = box.getBoundingClientRect()
+      if (r.bottom > b.bottom - 12) box.scrollTop += r.bottom - b.bottom + 12
+      else if (r.top < b.top + 12) box.scrollTop -= b.top + 12 - r.top
+    }
+    vv.addEventListener('resize', resized)
+    vv.addEventListener('scroll', fit)
+    return () => { vv.removeEventListener('resize', resized); vv.removeEventListener('scroll', fit) }
+  }, [])
 
   // Every prayer kept (here, or synced from another device) is a day prayed.
   const refresh = () => prayers.list().then(l => {
@@ -198,7 +229,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const count = list?.length ?? 0
 
   return (
-    <div class="pray" role="dialog" aria-modal="true" aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
+    <div class="pray" role="dialog" aria-modal="true" ref={root} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
       {/* The list has its own Done, so only one close is ever on screen. */}
       {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
       {view === 'pray' && phase !== 'heard' && (verse
@@ -256,14 +287,20 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
 // Circles' code and the list kept on this phone, loaded before the card first
 // shows (see app.tsx), so it opens filled in instead of growing up the screen.
 let circlesMod: typeof import('./circles') | undefined
-export const warmCircles = () => import('./circles').then(m => { circlesMod = m; return m.warmList() })
+export const warmCircles = (circle?: string) => import('./circles').then(m => { circlesMod = m; return Promise.all([m.warmList(), circle && m.warmFeed(circle)]) })
 
 /** Circles, opened from its own button: the same card as Your prayers. Inside one circle the top
  *  has only ‹ back; on the list, Done (or a pull down) closes. */
 function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [mod, setMod] = useState(() => circlesMod)
   useEffect(() => { if (!mod) warmCircles().then(() => setMod(() => circlesMod), () => {}) }, [])
-  const [circle, setCircle] = useState(at?.circle)
+  const [circle, setShown] = useState(at?.circle)
+  // A circle opens once what it holds is ready (it's kept on this phone, so
+  // that's a moment), not as a bare title that then fills in.
+  const setCircle = (c?: { id: string; name: string }) => {
+    if (!c || !circlesMod) return setShown(c)
+    Promise.race([circlesMod.warmFeed(c.id).catch(() => {}), new Promise(r => setTimeout(r, 300))]).then(() => setShown(c))
+  }
   useEffect(() => setCircle(at?.circle), [at])
   const box = useRef<HTMLDivElement>(null)
   usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)

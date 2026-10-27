@@ -127,4 +127,5 @@ p.c-new-word { display: block; margin: 0 0 4px; }
 /* Which circle to share with: pills that wrap, however many circles. */
 .c-circles-pick { display: flex; flex-wrap: wrap; gap: 8px; }
 .c-circles-pick button { min-height: 40px; padding: 6px 14px; border-radius: 999px; font: 600 15px var(--sans); }
+.c-pick-more { margin-top: -4px; }
 .c-circles-pick button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
