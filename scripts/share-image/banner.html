@@ -1,0 +1,43 @@
+<!doctype html>
+<!-- The picture shown when a link to the Bible is shared (Open Graph /
+     Twitter card, 1200×630). render.mjs turns this page into
+     public/share.png. Same paper, ink, lamp and type as the app. -->
+<html lang="en">
+<head>
+<meta charset="UTF-8" />
+<style>
+  @font-face { font-family: 'Literata'; font-weight: 200 900; src: url('../../node_modules/@fontsource-variable/literata/files/literata-latin-wght-normal.woff2') format('woff2'); }
+  @font-face { font-family: 'Literata'; font-style: italic; font-weight: 200 900; src: url('../../node_modules/@fontsource-variable/literata/files/literata-latin-wght-italic.woff2') format('woff2'); }
+  @font-face { font-family: 'Inter'; font-weight: 100 900; src: url('../../node_modules/@fontsource-variable/inter/files/inter-latin-wght-normal.woff2') format('woff2'); }
+  * { box-sizing: border-box; margin: 0; }
+  html, body { width: 1200px; height: 630px; overflow: hidden; }
+  body {
+    background:
+      radial-gradient(circle at 303px 255px, rgba(242, 181, 106, .42) 0, rgba(242, 181, 106, .14) 190px, rgba(242, 181, 106, 0) 330px),
+      #f4ecd8;
+    color: #3b2f22;
+    display: flex; align-items: center;
+    font-family: 'Inter', sans-serif;
+  }
+  .frame { position: absolute; inset: 22px; border: 2px solid #e0d3b6; border-radius: 28px; }
+  .lamp { width: 360px; height: 360px; flex: none; margin: 0 22px 18px 120px; }
+  .words { display: flex; flex-direction: column; }
+  h1 { font: 600 96px/1.02 'Literata', serif; letter-spacing: -.02em; }
+  .tag { font: italic 500 54px/1.2 'Literata', serif; color: #7a4b1e; margin-top: 14px; }
+  .what { font: 500 31px/1.45 'Inter', sans-serif; color: #5e503d; margin-top: 30px; }
+  .url { position: absolute; left: 0; right: 0; bottom: 50px; text-align: center; font: 600 28px 'Inter', sans-serif; color: #5e503d; letter-spacing: .01em; }
+</style>
+</head>
+<body>
+  <div class="frame"></div>
+  <svg class="lamp" viewBox="0 0 512 512" aria-hidden="true">
+    <path fill-rule="evenodd" fill="#7a4b1e" d="M272.1 72C264.9 115.2 303.8 144 321 180C336.9 213.1 332.6 256.3 306.6 280.8C292.2 295.2 276.4 302.4 257.7 302.4C217.4 302.4 191.4 272.2 191.4 236.2C191.4 201.6 213 177.1 231.8 157C251.9 135.4 269.2 110.9 272.1 72Z M264.9 185.8C270.6 210.2 290.8 223.2 290.8 249.1C290.8 269.3 276.4 283.7 257.7 283.7C239 283.7 224.6 269.3 224.6 250.6C224.6 226.1 249 213.1 264.9 185.8Z" />
+    <path fill="#3b2f22" d="M104 326H408C408 390 340 436 256 436C172 436 104 390 104 326Z" />
+  </svg>
+  <div class="words">
+    <h1>My Quiet<br />Bible</h1>
+    <p class="tag">Just the Bible.</p>
+    <p class="what">Many versions and languages.<br />A search that finds things.<br />Free, no ads, works offline.</p>
+  </div>
+</body>
+</html>
