@@ -12,7 +12,7 @@ import { meta, partsOf, prayers } from './prayers'
 import { aesKey, b64url, keyCode, open, prayerKey, seal } from './prayerCrypto'
 import { api, loadAccount, SYNC_URL, SyncError } from './sync'
 import { keepStorage, unlockKey } from './prayerSync'
-import { cleanVerse, PrayerVerse } from './prayerVerses'
+import { cleanVerse, cleanVerses, PrayerVerse, versesOf } from './prayerVerses'
 import { shareLink } from './native'
 import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
@@ -38,7 +38,7 @@ export type Shared =
   /** a note of yours: `note` is the note itself, `text` the verses it's on */
   | { k: 'note'; verse: PrayerVerse; version: string; text: string; size?: number; note: string }
   /** `prayed`: when it was prayed, which can be long before it was shared */
-  | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; note?: string; prayed?: number }
+  | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; verses?: PrayerVerse[]; note?: string; prayed?: number }
 
 export interface CircleInfo { id: string; name: string; members: number }
 /** `streak`: the days they read and prayed, if they show their streaks here. */
@@ -376,7 +376,8 @@ export function cleanShared(v: unknown): Shared | undefined {
       .map(p => ({ ms: Number(p.ms) || 0, type: text(p.type, 60), size: p.size as number }))
     if (!parts.length) return
     const prayed = Number.isFinite(x.prayed) && (x.prayed as number) > 0 ? x.prayed as number : undefined
-    return { k: 'prayer', ms: Number(x.ms) || 0, parts, verse: cleanVerse(x.verse), note, ...(prayed ? { prayed } : {}) }
+    const verses = cleanVerses(x.verses)
+    return { k: 'prayer', ms: Number(x.ms) || 0, parts, verse: cleanVerse(x.verse), ...(verses.length > 1 ? { verses } : {}), note, ...(prayed ? { prayed } : {}) }
   }
 }
 
@@ -471,15 +472,17 @@ export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', ver
   return send(circle, k === 'note' ? { k, ...base, note: note! } : { k, ...base, note: note || undefined })
 }
 
-/** `standard`: the prayer's verse as everyone numbers it (see versification). */
+/** `standard`: the prayer's verses as everyone numbers them (see versification).
+ *  `verse` is the first, for apps that show only one; `verses` all of them. */
 export async function sharePrayer(circle: string, prayerId: string, note?: string, standard = (v: PrayerVerse) => v) {
   const p = await prayers.get(prayerId)
   if (!p) throw new SyncError('That prayer is no longer on this device.')
   const parts = partsOf(p)
   const audio = new Uint8Array(parts.reduce((n, x) => n + x.audio.byteLength, 0))
   parts.reduce((o, x) => { audio.set(new Uint8Array(x.audio), o); return o + x.audio.byteLength }, 0)
+  const verses = versesOf(p).map(standard)
   return send(circle, {
-    k: 'prayer', ms: p.ms, verse: p.verse && standard(p.verse), note: note || undefined, prayed: p.at,
+    k: 'prayer', ms: p.ms, verse: verses[0], ...(verses.length > 1 ? { verses } : {}), note: note || undefined, prayed: p.at,
     parts: parts.map(x => ({ ms: x.ms, type: x.type, size: x.audio.byteLength })),
   }, audio)
 }

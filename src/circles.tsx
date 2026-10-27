@@ -11,7 +11,7 @@ import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
 import { duration, prayers } from './lib/prayers'
 import { playable } from './lib/mp4'
-import { PrayerVerse, verseLabel } from './lib/prayerVerses'
+import { PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
@@ -51,6 +51,17 @@ function usePassage(verse: PrayerVerse | undefined, theirs?: { text: string; ver
     return () => { alive = false }
   }, [at, ids.join()])
   return shown
+}
+
+/** Another verse a prayer was prayed using: a link to it in your own Bible. */
+function MoreVerse({ verse }: { verse: PrayerVerse }) {
+  const { settings } = useApp()
+  const shown = usePassage(verse)
+  const nav = useNav()
+  const at = shown?.at ?? verse
+  return <button class="link c-ref c-ref-more" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>
+    {t('With {verse}', { verse: verseLabel(at) })}{shown && <span class="muted small"> ({shown.version})</span>}
+  </button>
 }
 
 /** The passage's words, said plainly when they had to be the sender's. */
@@ -792,6 +803,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
         {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
         {verse && <button class="link c-ref" onClick={() => open(verse)}>{t('With {verse}', { verse: verseLabel(verse) })}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
         {verse && <Passage shown={shown} small from={nameOf(item.by)} />}
+        {b.verses?.slice(1).map(v => <MoreVerse verse={v} />)}
       </> : b.k === 'note' ? <>
         <p class="c-note c-note-main">{b.note}</p>
         <Passage shown={shown} small from={nameOf(item.by)} />
@@ -936,7 +948,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const theNote = 'verse' in request && request.note && !notes.some(x => x.id === noteId) ? request.note : notes.find(x => x.id === noteId)?.n
   useEffect(() => {
     keptCircles().then(cs => { setList(cs); setPicks(cs[0] ? [cs[0].id] : []) })
-    if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${p.verse ? ` · ${verseLabel(p.verse)}` : ''}` : ''))
+    if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${versesOf(p).map(v => ` · ${verseLabel(v)}`).join('')}` : ''))
     else setWhat(verseLabel(request.verse))
   }, [])
   const chosen = (list ?? []).filter(c => picks.includes(c.id))

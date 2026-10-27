@@ -140,19 +140,19 @@ const TOUR = 'plain-bible:tour'
 export const tourDue = () => { try { return localStorage.getItem(TOUR) !== 'seen' } catch { return false } }
 export const markTourSeen = () => { try { localStorage.setItem(TOUR, 'seen') } catch { /* ignore */ } }
 
-// A prayer can be tied to a verse. Verses you just selected are offered when
+// A prayer can be tied to verses. Verses you just selected are offered when
 // you open prayer soon after; Pray on the selection bar ties them at once.
-let picked: { verse: PrayerVerse; at: number; sure: boolean } | undefined
+let picked: { verses: PrayerVerse[]; at: number; sure: boolean } | undefined
 /** The reader calls this as verses are selected. */
-export const versesPicked = (verse: PrayerVerse) => { picked = { verse, at: Date.now(), sure: false } }
+export const versesPicked = (verse: PrayerVerse) => { picked = { verses: [verse], at: Date.now(), sure: false } }
 /** Pray using these verses. */
-export const prayOver = (verse: PrayerVerse) => { picked = { verse, at: Date.now(), sure: true }; openPrayer() }
+export const prayOver = (...verses: PrayerVerse[]) => { picked = { verses, at: Date.now(), sure: true }; openPrayer() }
 /** What to offer as the prayer opens: verses selected in the last two
  *  minutes, and whether they were chosen for this prayer. Asked once. */
 export function verseToPrayOver() {
   const p = picked
   picked = undefined
-  return p && Date.now() - p.at < 120_000 ? { verse: p.verse, sure: p.sure } : undefined
+  return p && Date.now() - p.at < 120_000 ? { verses: p.verses, sure: p.sure } : undefined
 }
 
 // Circles. Sharing buttons show only for people in at least one circle,
@@ -166,12 +166,16 @@ export type ShareRequest = { verse: PrayerVerse; version: string; text: string; 
 export const SHARE_EVENT = 'plain-bible:share-circle'
 export const shareWithCircle = (r: ShareRequest) => window.dispatchEvent(new CustomEvent(SHARE_EVENT, { detail: r }))
 
-// After a prayer, "Add a verse" lets you tap one on the page.
+// "Add a verse": the prayer steps aside, and verses you tap on the page are
+// added to it (or taken off), turning pages or searching to reach others,
+// until Done. `prayer`: a prayer already kept; without it, the one about to
+// be prayed, which opens again with them.
 export const PICK_EVENT = 'plain-bible:pick-verse'
-let awaiting: string | undefined
-/** The prayer waiting for a verse to be tapped, if any. */
-export const prayerAwaitingVerse = () => awaiting
-export const awaitVerse = (id: string | undefined) => { awaiting = id; window.dispatchEvent(new Event(PICK_EVENT)) }
+export type VersePick = { prayer?: string; verses: PrayerVerse[]; from: PrayerVerse[] }
+let picking: VersePick | undefined
+/** The verses being picked for a prayer, if any. */
+export const versePick = () => picking
+export const pickVerses = (p: VersePick | undefined) => { picking = p; window.dispatchEvent(new Event(PICK_EVENT)) }
 
 // ---- hash routing ------------------------------------------------------------
 

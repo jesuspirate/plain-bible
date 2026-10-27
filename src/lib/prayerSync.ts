@@ -7,7 +7,7 @@ import {
   b64url, keyCode, newKey, open, packPart, parseKeyCode, prayerKey, PRF_SALT, seal, unpackPart, unwrapKey, wrapKey,
 } from './prayerCrypto'
 import { api, loadAccount, noPasskey, setNoPasskey, SYNC_URL, SyncError } from './sync'
-import { cleanVerse } from './prayerVerses'
+import { cleanVerse, cleanVerses } from './prayerVerses'
 import { t } from '../i18n'
 
 /** Set on a device whose prayers sync: the fingerprint of the key it holds. */
@@ -19,6 +19,10 @@ const CHUNK = 1_000_000
 // The verse a prayer was prayed over travels as its own small sealed part,
 // numbered past any audio, so apps from before verses simply skip it.
 const VERSE_PART = 999
+// All of a prayer's verses, which can change, as a list. Its size on the
+// server tells when another device changed it: each change adds a space to
+// the end, so the size never comes back the same.
+const VERSES_PART = 998
 const enc = new TextEncoder(), dec = new TextDecoder()
 
 interface Remote { keyId: string | null; passkeys?: number; parts: { prayer: string; part: number; chunks: number; size: number }[]; gone: string[] }
@@ -249,9 +253,11 @@ async function run(): Promise<boolean> {
 
   // How many parts of each prayer are on the server, in order.
   const chunks = new Map<string, Map<number, number>>()
+  const versesSize = new Map<string, number>()
   for (const r of remote.parts) {
     if (!chunks.has(r.prayer)) chunks.set(r.prayer, new Map())
     chunks.get(r.prayer)!.set(r.part, r.chunks)
+    if (r.part === VERSES_PART) versesSize.set(r.prayer, r.size)
   }
   const sent = (id: string) => { let n = 0; while (chunks.get(id)?.has(n)) n++; return n }
 
@@ -273,13 +279,21 @@ async function run(): Promise<boolean> {
     }
     if (p.verse && !chunks.get(p.id)?.has(VERSE_PART)) {
       const sealed = await seal(pk.key, enc.encode(JSON.stringify(p.verse)), `${p.id}/${VERSE_PART}`)
-      if (await put(`/prayers/${p.id}/${VERSE_PART}/0?of=1`, token, sealed) === 'gone') { await prayers.delete(p.id); changed = true }
+      if (await put(`/prayers/${p.id}/${VERSE_PART}/0?of=1`, token, sealed) === 'gone') { await prayers.delete(p.id); changed = true; continue }
+    }
+    if (p.vdirty) {
+      const rev = p.vrev ?? 0
+      const sealed = await seal(pk.key, enc.encode(JSON.stringify(p.verses ?? []) + ' '.repeat(rev)), `${p.id}/${VERSES_PART}`)
+      if (await put(`/prayers/${p.id}/${VERSES_PART}/0?of=1`, token, sealed) === 'gone') { await prayers.delete(p.id); changed = true; continue }
+      await prayers.versesSent(p.id, rev, sealed.length)
+      versesSize.set(p.id, sealed.length)
     }
   }
 
   // Down: prayers, or later parts of them, recorded elsewhere.
   const mine = new Map(local.map(p => [p.id, p.parts]))
-  const verseHere = new Set(local.filter(p => p.verse).map(p => p.id))
+  const verseHere = new Set(local.filter(p => p.verse || p.verses).map(p => p.id))
+  const versesHere = new Map(local.map(p => [p.id, p]))
   for (const id of chunks.keys()) {
     if (gone.has(id)) continue
     const have = mine.get(id) ?? 0, total = sent(id)
@@ -294,7 +308,20 @@ async function run(): Promise<boolean> {
       else await prayers.append(id, part)
       changed = true
     }
-    // The verse it was prayed over, tied on another device.
+    // The verses it was prayed using, changed on another device.
+    const size = versesSize.get(id), here = versesHere.get(id)
+    if ((have || total) && size !== undefined) {
+      if (here?.vdirty || here?.vsize === size) continue
+      const sealed = await get(`/prayers/${id}/${VERSES_PART}/0`, token)
+      const plain = await open(pk.key, sealed, `${id}/${VERSES_PART}`).then(b => dec.decode(b), () => undefined)
+      if (plain === undefined) continue
+      let verses
+      try { verses = cleanVerses(JSON.parse(plain)) } catch { continue }
+      await prayers.tiedElsewhere(id, verses, plain.length - plain.trimEnd().length, size)
+      changed = true
+      continue
+    }
+    // The verse it was prayed over, tied on another device (by an app that keeps only one).
     if ((have || total) && chunks.get(id)!.get(VERSE_PART) === 1 && !verseHere.has(id)) {
       const sealed = await get(`/prayers/${id}/${VERSE_PART}/0`, token)
       // One unreadable verse mustn't stop the prayers themselves syncing.
