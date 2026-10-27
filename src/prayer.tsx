@@ -308,8 +308,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
 let circlesMod: typeof import('./circles') | undefined
 export const warmCircles = (circle?: string) => import('./circles').then(m => { circlesMod = m; return Promise.all([m.warmList(), circle && m.warmFeed(circle)]) })
 
-/** Circles, opened from its own button: the same card as Your prayers. Inside one circle the top
- *  has only ‹ back; on the list, Done (or a pull down) closes. */
+/** Circles, opened from its own button: the same card as Your prayers. Done (or a pull down)
+ *  closes it from anywhere, back to the word; inside one circle, ‹ back goes to the list. */
 function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [mod, setMod] = useState(() => circlesMod)
   useEffect(() => { if (!mod) warmCircles().then(() => setMod(() => circlesMod), () => {}) }, [])
@@ -332,8 +332,9 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         <button type="button" class="settings-grabber" aria-label={t('Close')} onClick={done} />
         <div class="pray-title">
           {circle
-            ? <button class="settings-back" onClick={() => setCircle(undefined)}><BackIcon class="back-ico" /> {circle.name}</button>
-            : <><h2>{t('Circles')}</h2><button class="done-btn" onClick={done}>{t('Done')}</button></>}
+            ? <button class="settings-back" onClick={() => setCircle(undefined)}><BackIcon class="back-ico" /> <span class="back-name">{circle.name}</span></button>
+            : <h2>{t('Circles')}</h2>}
+          <button class="done-btn" onClick={done}>{t('Done')}</button>
         </div>
       </div>
       {mod ? <mod.CirclesPanel circle={circle?.id} onOpen={setCircle} onAway={onClose} /> : <p class="muted">{t('Opening…')}</p>}
