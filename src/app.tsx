@@ -148,7 +148,7 @@ export function App() {
       // Circles open whole: their code and the list kept on this phone are
       // ready before the card shows, so it never grows into place in front of you.
       import('./prayer')
-        .then(m => at?.circles ? Promise.race([m.warmCircles().catch(() => {}), new Promise(r => setTimeout(r, 400))]).then(() => m) : m)
+        .then(m => at?.circles ? Promise.race([m.warmCircles(at.circle?.id).catch(() => {}), new Promise(r => setTimeout(r, 400))]).then(() => m) : m)
         .then(m => { setPrayAt(at); setPraying(true); setPrayer(() => m.Prayer) }, () => {})
     }
     addEventListener(PRAY_EVENT, on)
