@@ -356,6 +356,9 @@ export function Reader({ route }: { route: Route }) {
     if (!d || !a || peekDir.current === dir) return
     a.style.transform = ''
     const r = a.getBoundingClientRect()
+    // Read to the end of a chapter, the page stops part way down the screen;
+    // the page you turn reaches to the bottom, not just a strip of its last verses.
+    a.style.setProperty('--below', Math.max(0, innerHeight - r.bottom) + 'px')
     peekDir.current = dir
     document.documentElement.classList.add('page-turning')
     setPeek({ dir, from: `${book}.${chapter}`, b: d[0], c: d[1], top: r.top + scrollY, left: r.left, width: r.width })
@@ -364,7 +367,7 @@ export function Reader({ route }: { route: Route }) {
     peekDir.current = undefined
     document.documentElement.classList.remove('page-turning')
     x.current = 0
-    if (article.current) article.current.style.transform = ''
+    if (article.current) { article.current.style.transform = ''; article.current.style.removeProperty('--below') }
     setPeek(undefined)
   }
   useEffect(() => () => { document.documentElement.classList.remove('page-turning'); clearTimeout(stuck.current) }, [])

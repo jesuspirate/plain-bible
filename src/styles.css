@@ -700,7 +700,7 @@ article.chapter.turning { position: relative; z-index: 6; background: var(--bg);
    narrow shadow runs down the edge the page leads with. The shadow is a
    box-shadow, which never makes the page wider: anything that pokes past the
    right edge makes iPhone zoom the whole app out mid-swipe and drop the swipe. */
-.chapter.turning::before { content: ''; position: absolute; top: -200px; bottom: 0; left: -16px; right: -16px; z-index: -1; background: var(--bg);
+.chapter.turning::before { content: ''; position: absolute; top: -200px; bottom: calc(-1 * var(--below, 0px)); left: -16px; right: -16px; z-index: -1; background: var(--bg);
   box-shadow: 14px 0 18px -6px rgba(0,0,0,.18); }
 
 /* While a page turns the top bar is solid, so the pages and shade moving
