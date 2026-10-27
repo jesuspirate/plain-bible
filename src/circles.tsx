@@ -918,7 +918,7 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
 /** Share verses, a bookmark, a note or a prayer with one of your circles:
  *  one tap to choose the circle (if there's more than one), and Share. */
 export function ShareSheet({ request, onClose }: { request: ShareRequest; onClose: () => void }) {
-  const { marks, data, settings } = useApp()
+  const { marks, setMarks, data, settings } = useApp()
   const [list, setList] = useState<CircleInfo[]>()
   // One circle or several: each gets its own copy.
   const [picks, setPicks] = useState<string[]>([])
@@ -961,6 +961,15 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         // Shared already: a second tap won't send it there twice.
         setPicks(p => p.filter(x => x !== pick))
       }
+      // Shared as a bookmark is one of yours too, if it wasn't yet.
+      if ('verse' in request && kind === 'bookmark' && !bookmarked) {
+        const v = request.verse, now = Date.now()
+        setMarks(all => {
+          const out = { ...all }
+          for (const n of v.verses) { const k = markKey(v.book, v.chapter, n); out[k] = tidy({ ...all[k], b: 1, t: now }) }
+          return out
+        })
+      }
       setDone(true)
       setTimeout(onClose, 900)
     } catch (e) { setMsg(navigator.onLine === false ? t('You’re offline. Share again once you’re connected.') : message(e)) } finally { setBusy(false) }
@@ -983,7 +992,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           )}
           {kind === 'note' && notes.length <= 1 && theNote && <p class="c-note c-note-main">{theNote}</p>}
           <p class="c-quote small">{request.text}</p>
-          {kind === 'bookmark' && <p class="muted small">{t('They can bookmark it too, with one tap.')}</p>}
+          {kind === 'bookmark' && <p class="muted small">{bookmarked ? t('They can bookmark it too, with one tap.') : t('It goes in your bookmarks too. They can bookmark it with one tap.')}</p>}
         </>}
         {list && list.length > 1 && (
           <div class="c-circles-pick" role="group" aria-label={t('Circles')}>

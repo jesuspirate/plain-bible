@@ -190,6 +190,7 @@ export default {
   "Everyone in the circle will be able to hear this prayer.": "Tout le monde dans le cercle pourra écouter cette prière.",
   "Shared ✓": "Partagé ✓",
   "Sharing…": "Partage…",
+  "It goes in your bookmarks too. They can bookmark it with one tap.": "Il va aussi dans vos signets. Eux peuvent l’ajouter aux leurs d’une touche.",
   "Share with {a} and {b}": "Partager avec {a} et {b}",
   "Share with {n} circles": "Partager avec {n} cercles",
   "Tap more circles to share with them too": "Touchez d’autres cercles pour les ajouter",
