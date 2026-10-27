@@ -317,7 +317,7 @@ function useEvery(ms: number, fn: () => Promise<boolean | void>, on: boolean) {
 const spaced = (code: string) => `${code.slice(0, 3)} ${code.slice(3)}`
 
 /** A member's side of joining with a code: the code, then "Let them in?". */
-function ShowCode({ circle, onDone }: { circle: string; onDone: () => void }) {
+function ShowCode({ circle, onDone, onAllowed }: { circle: string; onDone: () => void; onAllowed: () => void }) {
   const [code, setCode] = useState<{ code: string; expires: number }>()
   const [ask, setAsk] = useState<{ label: string; match: string; pub: string }>()
   const [busy, setBusy] = useState(false)
@@ -333,7 +333,7 @@ function ShowCode({ circle, onDone }: { circle: string; onDone: () => void }) {
   const close = () => { if (code && !done) dropCode(circle, code.code); onDone() }
   const allow = async () => {
     setBusy(true); setMsg('')
-    try { await allowCode(circle, code!.code, ask!.pub); doneWithCode(circle); setDone(true) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+    try { await allowCode(circle, code!.code, ask!.pub); doneWithCode(circle); setDone(true); onAllowed() } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
   return (
     <div class="c-card c-codebox">
@@ -514,6 +514,9 @@ function CircleView({ id }: { id: string }) {
   const [busy, setBusy] = useState(false)
   const [leaving, setLeaving] = useState(false)
   const [showCode, setShowCode] = useState(false)
+  // Let in with a code: look every few seconds (for two minutes at most)
+  // until their phone finishes joining, so they show up here on their own.
+  const [joining, setJoining] = useState<{ was: number; until: number }>()
   const [page, setPage] = useState<'shared' | 'people'>()
   const [limit, setLimit] = useState(PAGE)
   // What came in since you last looked shows first, marked, until you next
@@ -530,6 +533,12 @@ function CircleView({ id }: { id: string }) {
     document.addEventListener('visibilitychange', back)
     return () => document.removeEventListener('visibilitychange', back)
   }, [id])
+  useEvery(2500, async () => {
+    if (!joining || Date.now() > joining.until) { setJoining(undefined); return true }
+    const f = await loadFeed(id)
+    setFeed(f)
+    if (f.members.length > joining.was) { setJoining(undefined); setShowCode(false); return true }
+  }, !!joining)
   useEffect(() => { if (info) document.title = `${info.name} · My Quiet Bible` }, [info])
 
   // One tap: make the link and open the share sheet. If the phone says the
@@ -579,7 +588,7 @@ function CircleView({ id }: { id: string }) {
         <p class="c-members">{feed.members.map(m => m.mid === feed.me ? t('You') : m.name).join(', ')}</p>
         <Notify circle={id} name={info?.name} />
         <StreakBoard circle={id} name={info?.name} feed={feed} onChange={load} />
-        {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} /> : (
+        {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} onAllowed={() => setJoining({ was: feed?.members.length ?? 1, until: Date.now() + 120_000 })} /> : (
           <div class="c-card">
             <p class="c-card-title">{t('Invite someone')}</p>
             <div class="c-row c-two">

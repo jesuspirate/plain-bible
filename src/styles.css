@@ -534,6 +534,9 @@ main.with-mini { padding-bottom: 144px; }
 .set-version .set-label { font-weight: 400; color: var(--muted); }
 /* Back: the arrow sits in its own solid round button, so it can't be missed. */
 .settings-back { all: unset; cursor: pointer; display: inline-flex; align-items: center; gap: 12px; min-height: 52px; font: 700 24px var(--sans); color: var(--text); -webkit-tap-highlight-color: transparent; }
+.pray-title .settings-back { min-width: 0; }
+.pray-title .done-btn { flex: none; }
+.back-name { overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .settings-back .back-ico { flex: none; box-sizing: border-box; width: 46px; height: 46px; padding: 11px 13px 11px 9px; border-radius: 50%; background: var(--text); color: var(--bg); }
 .settings-back:active .back-ico { transform: scale(.92); }
 .settings-back:focus-visible .back-ico { outline: 3px solid color-mix(in srgb, var(--accent) 55%, transparent); outline-offset: 2px; }
