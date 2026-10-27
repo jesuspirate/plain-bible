@@ -130,7 +130,9 @@ export function Reader({ route }: { route: Route }) {
     const onResize = () => {
       if (innerWidth === width) return // the keyboard, or the browser bar
       width = innerWidth
-      if (topVerse.current && !peekDir.current) toVerse(topVerse.current)
+      // A page part way through a turn no longer fits; let it go.
+      if (peekDir.current) swipe.current.drop()
+      else if (topVerse.current) toVerse(topVerse.current)
     }
     const onHide = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save() }
     addEventListener('scroll', onScroll, { passive: true })
@@ -371,15 +373,31 @@ export function Reader({ route }: { route: Route }) {
   const glide = (to: number, then: () => void) => {
     const from = looks(x.current), end = looks(to)
     const opts = { duration: (quick() ? 170 : 340) * Math.max(.45, Math.min(1, Math.abs(to - x.current) / innerWidth)), easing: 'cubic-bezier(.2, .7, .25, 1)' }
-    runs.current = [
+    const these = runs.current = [
       article.current?.animate([{ transform: from.page }, { transform: end.page }], opts),
       peekEl.current?.animate([{ transform: from.peek }, { transform: end.peek }], opts),
       dimEl.current?.animate([{ opacity: from.dim }, { opacity: end.dim }], opts),
     ].filter(a => a) as Animation[]
     setX(to)
     busy.current = true
-    Promise.all(runs.current.map(a => a.finished)).then(then, then)
+    // iPhone can leave an animation frozen part way (the app put away, Low
+    // Power Mode), and its end never comes: the page stayed half turned over
+    // the next chapter, and every swipe after it waited for it. A little after
+    // it should have ended, it ends anyway, right where it was going.
+    let done = false
+    const land = () => {
+      if (done) return
+      done = true
+      clearTimeout(late)
+      if (landNow.current === land) landNow.current = undefined
+      these.forEach(a => a.cancel())
+      then()
+    }
+    const late = window.setTimeout(land, opts.duration + 400)
+    landNow.current = land
+    Promise.all(these.map(a => a.finished)).then(land, land)
   }
+  const landNow = useRef<() => void>()
   // Another swipe while a page is still on its way: let it land sooner.
   const hurry = () => runs.current.forEach(a => { if (a.playState === 'running') a.updatePlaybackRate ? a.updatePlaybackRate(3) : a.playbackRate = 3 })
   const queue = (dir: 1 | -1) => { queued.current = Math.max(-30, Math.min(30, queued.current + dir)); hurry() }
@@ -387,6 +405,7 @@ export function Reader({ route }: { route: Route }) {
   // already be waiting.
   const settle = () => {
     clearTimeout(stuck.current)
+    landNow.current = undefined
     busy.current = false
     runs.current = []
     const q = queued.current
@@ -436,12 +455,29 @@ export function Reader({ route }: { route: Route }) {
   // A second finger (a pinch) ends the swipe and puts the page back, rather
   // than leaving it stuck half way.
   const abandon = () => { const s = touch.current; touch.current = undefined; if (s?.axis === 'x') release(0) }
+  // Put away mid-turn (or turned on its side): finish at once, or put a half
+  // swiped page back, so nothing is left part way when you come back.
+  const drop = () => {
+    touch.current = undefined
+    if (landNow.current) landNow.current()
+    else if (peekDir.current && !busy.current) { close(); settle() }
+  }
+  useEffect(() => {
+    const onHide = () => { if (document.visibilityState !== 'visible') drop() }
+    document.addEventListener('visibilitychange', onHide)
+    addEventListener('pagehide', onHide)
+    return () => { document.removeEventListener('visibilitychange', onHide); removeEventListener('pagehide', onHide) }
+  }, [])
   // A swipe can start while the page before is still sliding away, when the
   // finger isn't on the page at all, so touches are heard on the whole window
   // and then followed on what the finger first touched (which hears them to
   // the end, even once the chapter it was in has gone).
   const onTouchStart = (e: TouchEvent) => {
     if (e.touches.length > 1) return abandon()
+    // A page left part way with no finger on it: its swipe ended without
+    // word (iPhone took the touch for itself), so it stayed over the next
+    // chapter. Any touch, even a tap on a button, puts it back first.
+    if (!busy.current && peekDir.current && !trackpad()) { touch.current = undefined; release(0) }
     if (overlayOpen()) return
     const el = e.target as HTMLElement
     if (el.closest?.('.sb, dialog, .selbar, .pager, header') || !(el.closest?.('.reader') || busy.current || peekDir.current)) return
@@ -449,10 +485,13 @@ export function Reader({ route }: { route: Route }) {
     const p = e.touches[0]
     touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0, x0: p.clientX, tx: 0, late: busy.current }
     const move = (e: TouchEvent) => swipe.current.move(e)
-    const end = () => { el.removeEventListener('touchmove', move); el.removeEventListener('touchend', end); el.removeEventListener('touchcancel', end); swipe.current.end() }
+    const off = () => { el.removeEventListener('touchmove', move); el.removeEventListener('touchend', end); el.removeEventListener('touchcancel', cancel) }
+    const end = () => { off(); swipe.current.end() }
+    // Taken away (a call, a system swipe): not a turn, the page goes back.
+    const cancel = () => { off(); if (touch.current?.axis === 'x') touch.current.dx = touch.current.tx = 0; swipe.current.end() }
     el.addEventListener('touchmove', move, { passive: true })
     el.addEventListener('touchend', end)
-    el.addEventListener('touchcancel', end)
+    el.addEventListener('touchcancel', cancel)
   }
   const onTouchMove = (e: TouchEvent) => {
     const s = touch.current, p = e.touches[0]
@@ -477,8 +516,8 @@ export function Reader({ route }: { route: Route }) {
     const d = Math.abs(s.dx) > innerWidth * .25 ? s.dx : fast || Math.abs(s.tx) > innerWidth * .25 ? s.tx : 0
     release(d ? d < 0 ? 1 : -1 : 0)
   }
-  const swipe = useRef({ start: onTouchStart, move: onTouchMove, end: onTouchEnd })
-  swipe.current = { start: onTouchStart, move: onTouchMove, end: onTouchEnd }
+  const swipe = useRef({ start: onTouchStart, move: onTouchMove, end: onTouchEnd, drop })
+  swipe.current = { start: onTouchStart, move: onTouchMove, end: onTouchEnd, drop }
   useEffect(() => {
     const start = (e: TouchEvent) => swipe.current.start(e)
     window.addEventListener('touchstart', start, { passive: true })
@@ -488,6 +527,7 @@ export function Reader({ route }: { route: Route }) {
   // Two-finger swipe on a trackpad (or a swipe on a Magic Mouse) does the
   // same as a touch swipe.
   const wheel = useRef({ dx: 0, done: false, timer: 0, at: 0, low: 0, peak: 0 })
+  const trackpad = () => wheel.current.dx !== 0 && !wheel.current.done
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
       const w = wheel.current, ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY)
