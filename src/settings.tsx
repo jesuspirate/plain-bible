@@ -143,8 +143,8 @@ function putAway(box: HTMLElement | null, done: () => void) {
 
 /** Settings as a sheet that rises over the page (a panel from the right on a
  *  wide screen), from the button in the top right corner. The word stays in
- *  view behind it: a tap there, a pull down, or Done puts it away, from
- *  any page. Inside pages also have ‹ back. */
+ *  view behind it: a tap there, a pull down, or Done puts it away. Inside
+ *  pages have only ‹ back. */
 export function SettingsSheet({ onClose }: { onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
   const nav = useSettingsNav()
@@ -175,9 +175,8 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
         <button type="button" class="settings-grabber" aria-label={t('Close settings')} onClick={done} />
         <div class="settings-title">
           {nav.page === 'home'
-            ? <h1>{t('Settings')}</h1>
-            : <button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> <span class="back-name">{nav.title}</span></button>}
-          <button class="done-btn" onClick={done}>{t('Done')}</button>
+            ? <><h1>{t('Settings')}</h1><button class="done-btn" onClick={done}>{t('Done')}</button></>
+            : <button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> {nav.title}</button>}
         </div>
       </div>
       <div class="settings"><SettingsBody nav={nav} /></div>
