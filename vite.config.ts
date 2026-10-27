@@ -84,6 +84,8 @@ export default defineConfig({
         // Notifications for circles (public/push-sw.js).
         importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,png}'],
+        // The picture for shared links is for other apps to fetch, not part of the offline Bible.
+        globIgnores: ['share.png'],
         // /welcome without the slash is the site's redirect to /welcome/, not a page the app should answer for.
         navigateFallbackDenylist: [/\/welcome$/],
         runtimeCaching: [
