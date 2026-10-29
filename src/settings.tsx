@@ -390,7 +390,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   </>
 
   if (page === 'about') return <>
-    <p>{t('My Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.', { n: catalog.translations.length })}{' '}
+    <p>{t('My Quiet Bible: read, pray, share, repeat. {n} versions, a fast search, prayer with one button, and private circles. No plans, no tracking, and an account is optional.', { n: catalog.translations.length })}{' '}
       {sync.account ? t('Your highlights and settings are stored on your device and synced with your passkey account.') : t('Your highlights and settings are stored on your device.')}</p>
     {/* The welcome page is what a first visit to the bare address shows: what this is, and how to put it on a Home Screen. */}
     <p>{tj('To pass My Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.', {
