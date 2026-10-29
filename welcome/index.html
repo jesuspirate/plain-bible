@@ -3,25 +3,25 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
-    <title>My Quiet Bible · Just the Bible</title>
-    <meta name="description" content="Just the Bible: {{versions}} versions in {{languages}} languages, a search that finds things, and nothing else. No plans, no ads, no paywall. Free, and it works offline." />
+    <title>My Quiet Bible · Read, pray, share, repeat</title>
+    <meta name="description" content="Read, pray, share, repeat. The Bible in {{versions}} versions and {{languages}} languages, a 🙏 button to pray out loud about what you read, and small private circles to share your prayers. Free, no ads, works offline." />
     <link rel="canonical" href="https://myquietbible.com/welcome/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="My Quiet Bible" />
-    <meta property="og:title" content="My Quiet Bible · Just the Bible" />
-    <meta property="og:description" content="Just the Bible: {{versions}} versions in {{languages}} languages, a search that finds things, and nothing else. Free, no ads, works offline." />
-    <meta name="twitter:description" content="Just the Bible: {{versions}} versions in {{languages}} languages, a search that finds things, and nothing else. Free, no ads, works offline." />
+    <meta property="og:title" content="My Quiet Bible · Read, pray, share, repeat" />
+    <meta property="og:description" content="Read, pray, share, repeat. The Bible in {{versions}} versions and {{languages}} languages, a 🙏 button to pray out loud about what you read, and small private circles to share your prayers. Free, no ads, works offline." />
+    <meta name="twitter:description" content="Read, pray, share, repeat. The Bible in {{versions}} versions and {{languages}} languages, a 🙏 button to pray out loud about what you read, and small private circles to share your prayers. Free, no ads, works offline." />
     <meta property="og:url" content="https://myquietbible.com/welcome/" />
     <meta property="og:image" content="https://myquietbible.com/share.png" />
     <meta property="og:image:type" content="image/png" />
     <meta property="og:image:width" content="1200" />
     <meta property="og:image:height" content="630" />
-    <meta property="og:image:alt" content="A lit lamp beside the words My Quiet Bible. Just the Bible." />
+    <meta property="og:image:alt" content="A lit lamp beside the words My Quiet Bible. Read, pray, share, repeat." />
     <meta property="og:locale" content="en_US" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="twitter:title" content="My Quiet Bible · Just the Bible" />
+    <meta name="twitter:title" content="My Quiet Bible · Read, pray, share, repeat" />
     <meta name="twitter:image" content="https://myquietbible.com/share.png" />
-    <meta name="twitter:image:alt" content="A lit lamp beside the words My Quiet Bible. Just the Bible." />
+    <meta name="twitter:image:alt" content="A lit lamp beside the words My Quiet Bible. Read, pray, share, repeat." />
     <meta name="theme-color" content="#f4ecd8" />
     <meta name="apple-mobile-web-app-title" content="My Quiet Bible" />
     <link rel="icon" href="../icon.svg" type="image/svg+xml" />
@@ -112,9 +112,15 @@
         <div class="hero-text">
           <div class="lamp" aria-hidden="true"><svg><use href="#lamp" /></svg></div>
           <h1>My Quiet Bible</h1>
-          <p class="lead" data-t="lead">Just the Bible.</p>
-          <p class="sub" data-t="sub">Many versions and languages, a search that finds things, and nothing else.
-            No plans, no feeds, no ads. Free, and it works offline.</p>
+          <p class="lead" data-t="lead">Read, pray, share, repeat.</p>
+          <!-- What it is for, in four words: the Bible, the 🙏 button, the circles, and coming back. -->
+          <ol class="rhythm">
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6.5C10 5 7.2 4.3 3.5 4.5v13c3.7-.2 6.5.5 8.5 2 2-1.5 4.8-2.2 8.5-2v-13c-3.7-.2-6.5.5-8.5 2zM12 6.5v13" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linejoin="round" /></svg><span><strong data-t="readW">Read</strong> <span data-t="readP">the Bible, in {{versions}} versions, free.</span></span></li>
+            <li><span class="emoji" aria-hidden="true">🙏</span><span><strong data-t="prayW">Pray</strong> <span data-t="prayP">out loud, with one button, about what you just read.</span></span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg><span><strong data-t="shareW">Share</strong> <span data-t="shareP">your prayers, when you want to, with a few people close to you.</span></span></li>
+            <li><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4.6 13.5a7.6 7.6 0 1 0 1.6-6.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /><path d="M3.5 3.8v4.6h4.6" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg><span><strong data-t="repeatW">Repeat</strong> <span data-t="repeatP">tomorrow. It keeps your place, and your streak.</span></span></li>
+          </ol>
+          <p class="sub" data-t="sub">Just the Bible: no plans, no feeds, no ads. Free, and it works offline.</p>
           <div class="cta">
             <a class="btn primary" href="../#/read" data-open data-t="open">Open the Bible</a>
             <a class="btn" href="#install" data-device-label>Put it on your Home Screen</a>
@@ -149,10 +155,46 @@
                 <span data-t="mbar">Ps 119 · KJV</span>
               </div>
               <div class="m-circles"><svg viewBox="0 0 24 24" width="26" height="26"><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.6" /><circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.6" /><circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.6" /><path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" /></svg></div>
-              <div class="m-pray"><span>🙏</span></div>
+              <div class="m-pray"><span>🙏</span><em class="m-tip" data-t="mtip">Tap to pray</em></div>
             </div>
           </div>
         </div>
+      </section>
+
+      <!-- The two things no other Bible app does, right after the top. -->
+      <section class="spots" aria-label="Pray and share" data-t-label="spotsLabel">
+        <article class="spot" id="pray">
+          <div class="spot-art" aria-hidden="true"><span class="big-pray">🙏</span></div>
+          <div>
+            <h2 data-t="prayH">Pray with one button</h2>
+            <p data-t="prayLong">The 🙏 button is always there, beside the search bar. Tap it and say your prayer out loud. It's kept with the verses you were reading, so later you can hear it again and see what you prayed about.</p>
+            <ul class="ticks" data-t="prayTicks">
+              <li>Nothing to type and nothing to set up.</li>
+              <li>Your prayers stay on your phone, or sync locked with a key only you hold.</li>
+            </ul>
+          </div>
+        </article>
+        <article class="spot" id="circles">
+          <div class="spot-art" aria-hidden="true">
+            <div class="m-circle">
+              <div class="mc-head"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg><span data-t="mcName">Family</span></div>
+              <div class="mc-item">
+                <span class="mc-play"><svg viewBox="0 0 24 24"><path d="M8 5.5v13l10.5-6.5z" fill="currentColor" /></svg></span>
+                <span class="mc-text"><strong data-t="mcKind">A prayer</strong><span data-t="mcRef">Psalm 23 · 0:48</span></span>
+              </div>
+              <div class="mc-react"><span>🙏 3</span><span>❤ 2</span></div>
+            </div>
+          </div>
+          <div>
+            <h2 data-t="circlesH">Pray together, in a circle</h2>
+            <p class="spot-verse"><span data-t="circlesVerse">“For where two or three are gathered together in my name, there am I in the midst of them.”</span> <cite data-t="circlesRef">Matthew 18:20</cite></p>
+            <p data-t="circlesLong">When you want to, make a small circle for your family or a few friends. Share a prayer, a verse or a note with one tap. They listen, reply with a word, or answer with a 🙏, and each one reads the verse in their own Bible.</p>
+            <ul class="ticks" data-t="circlesTicks">
+              <li>Never required. Nothing leaves your phone unless you tap Share.</li>
+              <li>Each circle has its own key. Only its members can open what's in it; not even we can.</li>
+            </ul>
+          </div>
+        </article>
       </section>
 
       <section class="verse-section" aria-labelledby="verse-h">
@@ -176,7 +218,7 @@
       </section>
 
       <section id="whats-in" aria-labelledby="in-h">
-        <h2 id="in-h" data-t="inH">What's in it</h2>
+        <h2 id="in-h" data-t="inH">And everything else</h2>
         <div class="cards">
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M3 12h18M12 3c3 3.2 3 14.8 0 18M12 3c-3 3.2-3 14.8 0 18" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
@@ -189,6 +231,11 @@
             <p data-t="searchP">A word, a phrase, two words near each other, in one Bible or many, with the results counted by book. Type a reference and you're there. Strong's numbers, too.</p>
           </article>
           <article class="card">
+            <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round" /><path d="M15.5 9a4 4 0 0 1 0 6M18 6.5a7.5 7.5 0 0 1 0 11" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+            <h3 data-t="listenH">Listen</h3>
+            <p data-t="listenP">Tap a verse, then Listen, and your phone reads the chapter aloud in its own voice. For the car, the kitchen, or tired eyes.</p>
+          </article>
+          <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v11M7.5 9.5 12 14l4.5-4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /><path d="M4 15v3.5A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5V15" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
             <h3 data-t="offlineH">Works offline</h3>
             <p data-t="offlineP">The Bibles you read stay on your phone. On a plane, in the hills, in a basement: it opens on the verse where you left off, with no connection at all.</p>
@@ -197,16 +244,6 @@
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6.5 2.5h11a1.5 1.5 0 0 1 1.5 1.5v18l-7-4.6L5 22V4a1.5 1.5 0 0 1 1.5-1.5z" fill="currentColor" stroke="currentColor" stroke-width="2" stroke-linejoin="round" /></svg>
             <h3 data-t="marksH">Highlights, notes and bookmarks</h3>
             <p data-t="marksP">Eight colors, a note on a verse or on a whole passage, a ribbon for the places you come back to. Bring over what you kept in another Bible app.</p>
-          </article>
-          <article class="card">
-            <span class="emoji" aria-hidden="true">🙏</span>
-            <h3 data-t="prayerH">Prayer</h3>
-            <p data-t="prayerP">Record a prayer with the 🙏 button, or pray using a verse. Recordings stay on your device, or sync locked with a key that only you hold.</p>
-          </article>
-          <article class="card">
-            <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
-            <h3 data-t="circlesH">Circles</h3>
-            <p data-t="circlesP">A small private circle for family and friends. Share a verse, a note or a prayer, and reply with a word or a 🙏. What you share is locked with the circle's own key, and opens in each reader's own Bible.</p>
           </article>
           <article class="card">
             <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M10 14a4.5 4.5 0 0 0 6.4 0l3.2-3.2a4.5 4.5 0 0 0-6.4-6.4L12 5.6M14 10a4.5 4.5 0 0 0-6.4 0l-3.2 3.2a4.5 4.5 0 0 0 6.4 6.4l1.2-1.2" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>

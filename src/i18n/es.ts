@@ -557,7 +557,7 @@ export default {
   "Your highlights, bookmarks and notes are kept, and you stay signed in.": "Tus resaltados, marcadores y notas se conservan, y sigues con la sesión iniciada.",
   "Your other synced devices will get the default settings too.": "Tus otros dispositivos sincronizados también recibirán los ajustes predeterminados.",
   "Reset settings": "Restablecer ajustes",
-  "My Quiet Bible is just the Bible: {n} versions, a fast search, and nothing else. No plans, no tracking, and an account is optional.": "My Quiet Bible es solo la Biblia: {n} versiones, una búsqueda rápida y nada más. Sin planes, sin rastreo, y la cuenta es opcional.",
+  "My Quiet Bible: read, pray, share, repeat. {n} versions, a fast search, prayer with one button, and private circles. No plans, no tracking, and an account is optional.": "My Quiet Bible: lee, ora, comparte, repite. {n} versiones, una búsqueda rápida, la oración con un solo botón y círculos privados. Sin planes, sin rastreo, y la cuenta es opcional.",
   "Your highlights and settings are stored on your device and synced with your passkey account.": "Tus resaltados y ajustes se guardan en tu dispositivo y se sincronizan con tu cuenta de llave de acceso.",
   "Your highlights and settings are stored on your device.": "Tus resaltados y ajustes se guardan en tu dispositivo.",
   "To pass My Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.": "Para compartir My Quiet Bible, envía {site}. Se abre en una {welcome} que explica qué es y cómo ponerla en una pantalla de inicio.",

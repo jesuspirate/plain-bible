@@ -11,7 +11,7 @@ const BUILD = new Date().toISOString().slice(0, 10) + (sha ? ' · ' + sha : '')
 const manifest = {
   name: 'My Quiet Bible',
   short_name: 'My Quiet Bible',
-  description: 'Just the Bible, in many versions and languages, with thorough search.',
+  description: 'Read, pray, share, repeat. The Bible in many versions and languages, prayer with one button, and private circles to share it.',
   theme_color: '#2b2a28',
   background_color: '#f4ecd8',
   display: 'standalone' as const,

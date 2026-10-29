@@ -83,6 +83,14 @@ h1 { font-size: 54px; line-height: 1.02; margin: 4px 0 10px; }
 @media (min-width: 900px) { .lead { font-size: 33px; } }
 .sub { font-size: 21px; line-height: 1.5; max-width: 26em; margin: 0 0 28px; }
 @media (min-width: 900px) { .sub { font-size: 23px; } }
+/* Read, pray, share, repeat: the four words big, what each means after it. */
+.rhythm { list-style: none; margin: 0 0 22px; padding: 0; display: grid; gap: 12px; max-width: 30em; }
+.rhythm li { display: grid; grid-template-columns: 40px 1fr; gap: 14px; align-items: start; font-size: 21px; line-height: 1.4; }
+.rhythm li > svg, .rhythm .emoji { width: 36px; height: 36px; color: var(--accent); }
+.rhythm .emoji { font: 28px/36px 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; text-align: center; }
+.rhythm li > span { padding-top: 3px; }
+.rhythm strong { font: 700 23px var(--sans); }
+@media (min-width: 900px) { .rhythm li { font-size: 22px; } }
 .cta { display: flex; flex-wrap: wrap; gap: 12px; }
 .btn {
   display: inline-flex; align-items: center; justify-content: center; gap: 10px; min-height: 62px; padding: 0 30px; border-radius: 31px;
@@ -139,6 +147,48 @@ h1 { font-size: 54px; line-height: 1.02; margin: 4px 0 10px; }
   -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
   mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
 }
+
+/* "Tap to pray", pointing at the button in the drawn reader. */
+.m-tip {
+  position: absolute; right: -4px; bottom: calc(100% + 12px); padding: 7px 12px; border-radius: 12px; white-space: nowrap;
+  background: var(--text); color: var(--bg); font: 700 14px var(--sans); font-style: normal; box-shadow: 0 6px 16px rgba(0,0,0,.18);
+}
+.m-tip::after { content: ''; position: absolute; right: 24px; top: 100%; border: 7px solid transparent; border-top-color: var(--text); }
+
+/* ---- pray, and pray together: the two things to see first ---- */
+.spots { display: grid; gap: 18px; }
+.spot {
+  display: grid; gap: 20px 32px; align-items: center; padding: 28px 24px; border: 1px solid var(--line); border-radius: 28px; background: var(--surface);
+}
+@media (min-width: 760px) { .spot { grid-template-columns: 240px 1fr; padding: 40px 44px; } }
+.spot h2 { margin-bottom: 12px; }
+.spot p { margin: 0 0 14px; font-size: 21px; }
+.spot-art { display: grid; place-items: center; min-height: 160px; }
+.big-pray {
+  display: grid; place-items: center; width: 150px; height: 150px; border-radius: 50%;
+  font: 78px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif;
+  background: radial-gradient(circle at 50% 40%, #fffdf6 0%, #fff1cc 55%, #ffd98a 100%);
+  box-shadow: 0 0 34px 8px rgba(245,190,95,.5), inset 0 0 0 2px rgba(255,255,255,.9);
+  animation: pray-glow 5s ease-in-out infinite;
+}
+@keyframes pray-glow { 0%, 100% { box-shadow: 0 0 22px 4px rgba(245,190,95,.4), inset 0 0 0 2px rgba(255,255,255,.9); } 50% { box-shadow: 0 0 40px 12px rgba(245,190,95,.6), inset 0 0 0 2px rgba(255,255,255,.9); } }
+.spot-verse { font: italic 400 22px/1.45 var(--serif); }
+.spot-verse cite { display: block; margin-top: 4px; font: 500 17px var(--sans); font-style: normal; color: var(--soft); }
+.ticks { list-style: none; margin: 0; padding: 0; display: grid; gap: 8px; font-size: 19px; }
+.ticks li { display: grid; grid-template-columns: 22px 1fr; gap: 10px; }
+.ticks li::before { content: '✓'; color: var(--accent); font-weight: 800; }
+/* A circle, drawn: one shared prayer and its answers. */
+.m-circle { width: 230px; padding: 14px; border-radius: 22px; background: var(--bg); border: 1px solid var(--line); box-shadow: 0 14px 30px rgba(0,0,0,.12); }
+.mc-head { display: flex; align-items: center; gap: 8px; font: 700 18px var(--sans); margin-bottom: 12px; }
+.mc-head svg { width: 28px; height: 28px; color: var(--accent); }
+.mc-item { display: flex; align-items: center; gap: 10px; padding: 10px; border-radius: 16px; background: var(--surface); border: 1px solid var(--line); }
+.mc-play { flex: none; display: grid; place-items: center; width: 40px; height: 40px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); }
+.mc-play svg { width: 20px; height: 20px; }
+.mc-text { display: grid; line-height: 1.25; }
+.mc-text strong { font: 700 16px var(--sans); }
+.mc-text span { font-size: 14px; color: var(--soft); }
+.mc-react { display: flex; gap: 8px; margin-top: 10px; }
+.mc-react span { padding: 4px 10px; border-radius: 999px; background: var(--chip); font: 600 14px var(--sans); }
 
 /* ---- the verse ---- */
 .verse-card { margin: 0 0 18px; padding: 28px 28px 24px; border: 1px solid var(--line); border-radius: 24px; background: var(--surface); }
@@ -234,5 +284,6 @@ footer nav a { font-weight: 600; }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .lamp::before { animation: none; opacity: .8; }
+  .big-pray { animation: none; }
   .float { transition: none; }
 }
