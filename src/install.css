@@ -1,0 +1,28 @@
+/* ---- Put it on your Home Screen (install.tsx) ---- */
+.hs { position: fixed; inset: 0; z-index: 70; }
+.hs-dim { position: absolute; inset: 0; background: rgba(10, 10, 12, .45); animation: hs-fade .2s; }
+/* At the bottom, where the browser's own Share and menu buttons are on most phones. */
+.hs-card {
+  position: absolute; left: 12px; right: 12px; bottom: calc(12px + env(safe-area-inset-bottom)); max-width: 28em; margin: 0 auto;
+  max-height: calc(100% - 24px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); overflow-y: auto; overscroll-behavior: contain;
+  padding: 16px 18px; border-radius: 22px; background: var(--surface); color: var(--text);
+  border: 1px solid var(--line); box-shadow: 0 12px 40px rgba(0, 0, 0, .3);
+  display: flex; flex-direction: column; gap: 12px; animation: hs-in .25s ease-out;
+}
+.hs-top { display: flex; align-items: center; gap: 12px; }
+.hs-icon { flex: none; width: 56px; height: 56px; border-radius: 13px; box-shadow: 0 1px 4px rgba(0, 0, 0, .2); }
+.hs-top h2 { flex: 1; margin: 0; font: 700 21px/1.25 var(--sans); }
+.hs-why { margin: 0; font-size: 17px; line-height: 1.45; color: var(--muted); }
+.hs-steps { list-style: none; margin: 0; padding: 0; display: flex; flex-direction: column; gap: 10px; }
+.hs-steps li { display: flex; align-items: flex-start; gap: 12px; font-size: 18px; line-height: 1.45; }
+.hs-n { flex: none; display: grid; place-items: center; width: 30px; height: 30px; margin-top: -1px; border-radius: 50%; background: var(--accent); color: var(--accent-ink); font: 700 16px var(--sans); }
+.hs-glyph { display: inline-block; width: 1.2em; height: 1.2em; vertical-align: -.25em; margin: 0 0 0 1px; color: var(--accent); }
+.hs-steps .nb, .hs-note .nb { white-space: nowrap; }
+/* Safari's page menu button sits in a little rounded box in the address bar. */
+.hs-boxed { width: 1.5em; height: 1.3em; padding: 1px 3px; border-radius: 8px; background: var(--chip); }
+.hs-note { margin: -2px 0 0; font-size: 16px; line-height: 1.4; color: var(--muted); }
+.hs-help { align-self: flex-start; font-size: 16px; font-weight: 600; padding: 4px 0; }
+.hs-btn { min-height: 54px; border-radius: 14px; font-size: 18px; font-weight: 700; }
+@keyframes hs-fade { from { opacity: 0; } }
+@keyframes hs-in { from { opacity: 0; transform: translateY(24px); } }
+@media (prefers-reduced-motion: reduce) { .hs-dim, .hs-card { animation: none; } }

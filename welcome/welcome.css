@@ -37,6 +37,7 @@ h2 { font-size: 36px; line-height: 1.15; margin: 0 0 10px; }
 @media (min-width: 900px) { h2 { font-size: 44px; } }
 .section-sub { font-size: 21px; max-width: 32em; margin: 0 0 26px; }
 .note { color: var(--soft); font-size: 18px; margin: 14px 0 0; max-width: 36em; }
+.official { font-size: 18px; font-weight: 600; margin: 14px 0 0; }
 section { padding: 44px 0; border-top: 1px solid var(--line); }
 section.hero { border-top: none; }
 @media (min-width: 900px) { section { padding: 64px 0; } }

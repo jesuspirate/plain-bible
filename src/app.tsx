@@ -24,6 +24,7 @@ import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
+import { HOME_SCREEN_EVENT, homeScreenDue, markHomeScreenShown } from './lib/install'
 
 // The status bar colour the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -189,6 +190,27 @@ export function App() {
     return () => clearTimeout(timer)
   }, [page])
 
+  // In a phone's browser, once the tour is done: how to put the Bible on the
+  // Home Screen (a few times at most, days apart), or from Settings any time.
+  const [HomeScreen, setHomeScreen] = useState<typeof import('./install').HomeScreen>()
+  const showHomeScreen = () => import('./install').then(m => setHomeScreen(() => m.HomeScreen)).catch(() => {})
+  useEffect(() => {
+    const on = () => { setSettingsOpen(false); setTimeout(showHomeScreen, 300) }
+    addEventListener(HOME_SCREEN_EVENT, on)
+    return () => removeEventListener(HOME_SCREEN_EVENT, on)
+  }, [])
+  useEffect(() => {
+    if (page !== 'read' || !homeScreenDue()) return
+    let timer = 0
+    const tryNow = () => {
+      if (!homeScreenDue()) return
+      if (tourDue() || overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 2000)
+      else { markHomeScreenShown(); showHomeScreen() }
+    }
+    timer = window.setTimeout(tryNow, 4000)
+    return () => clearTimeout(timer)
+  }, [page])
+
   // Circles load only when opened, or when something is shared with one.
   const [circles, setCircles] = useState<typeof import('./circles')>()
   const [sharing, setSharing] = useState<ShareRequest>()
@@ -312,6 +334,7 @@ export function App() {
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       {Tour && <Tour onClose={() => setTour(undefined)} />}
+      {HomeScreen && <HomeScreen onClose={() => setHomeScreen(undefined)} />}
       <MoveWelcome firstStart={FIRST_START} />
       <ApproveCard />
       <LeftNote />
