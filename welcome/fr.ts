@@ -59,7 +59,7 @@ export default {
   installSub: 'Elle s’ouvre alors en plein écran comme n’importe quelle application, garde votre page et marche sans connexion.',
   device: 'Votre appareil',
   computer: 'Ordinateur',
-  iosSteps: '<li><span><a href="../#/read" data-open>Ouvrez la Bible</a> dans Safari.</span></li><li><span>Touchez le bouton Partager <span class="nb">{svg},</span> le carré avec une flèche vers le haut. Sur les iPhone récents, il se trouve derrière le bouton <strong>•••</strong> en bas.</span></li><li><span>Touchez <strong>Sur l’écran</strong> <span class="nb"><strong>d’accueil</strong> {svg}.</span> Il faut parfois faire défiler vers le bas pour le trouver.</span></li><li><span>Touchez <strong>Ajouter</strong>. Si vous voyez <strong>Ouvrir en tant qu’app web</strong>, laissez-le activé. La lampe apparaît sur votre écran d’accueil.</span></li>',
+  iosSteps: '<li><span><a href="../#/read" data-open>Ouvrez la Bible</a> dans Safari.</span></li><li><span>Touchez le bouton de menu dans la barre d’adresse, puis <strong>Partager</strong> <span class="nb">{svg}.</span> Sur les iPhone plus anciens, Partager est directement dans la barre du bas.</span></li><li><span>Touchez <strong>Afficher plus</strong>, puis <strong>Sur l’écran</strong> <span class="nb"><strong>d’accueil</strong> {svg}.</span></span></li><li><span>Laissez <strong>Ouvrir en tant qu’app web</strong> activé et touchez <strong>Ajouter</strong>. La lampe apparaît sur votre écran d’accueil.</span></li>',
   iosNote: 'Faites-le depuis la Bible, pas depuis cette page, pour que la lampe ouvre directement votre lecture. Utilisez Safari : les autres navigateurs sur iPhone et iPad ne savent pas toujours ajouter une application.',
   install: 'Installer My Quiet Bible',
   androidNote: 'Un seul geste. Rien ne passe par un magasin d’applications.',
@@ -74,4 +74,6 @@ export default {
   privacy: 'Confidentialité',
   source: 'Code source',
   footNote: 'Chaque texte est du domaine public ou sous licence libre. La licence de chaque version est indiquée dans l’application.',
+  appleHelp: 'Les instructions d’Apple ↗',
+  googleHelp: 'Les instructions de Google ↗',
 }

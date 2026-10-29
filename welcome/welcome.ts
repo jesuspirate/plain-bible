@@ -144,6 +144,10 @@ async function applyLang(l: Lang, remember: boolean) {
   closing.textContent = word('closing')
   showVerse(l === 'en' ? (chip === 'fr' || chip === 'es' ? 'en' : chip) : l)
   for (const b of $$<HTMLButtonElement>('.langs button')) b.setAttribute('aria-pressed', String(b.dataset.lang === l))
+  // Apple's and Google's own pages, in the same language.
+  for (const el of $$<HTMLAnchorElement>('[data-help]')) el.href = el.dataset.help === 'apple'
+    ? `https://support.apple.com/${l === 'en' ? '' : l + '-' + l + '/'}guide/iphone/iph42ab2f3a7/ios`
+    : `https://support.google.com/chrome/answer/9658361?hl=${l}&co=GENIE.Platform%3D${el.dataset.help === 'android' ? 'Android' : 'Desktop'}`
   wireLinks()
   root.classList.remove('i18n-wait')
   // The Bible starts in this language too, the first time (src/state.ts).

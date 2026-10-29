@@ -59,7 +59,7 @@ export default {
   installSub: 'Así se abre a pantalla completa como cualquier otra app, recuerda dónde ibas y funciona sin conexión.',
   device: 'Tu dispositivo',
   computer: 'Computadora',
-  iosSteps: '<li><span><a href="../#/read" data-open>Abre la Biblia</a> en Safari.</span></li><li><span>Toca el botón Compartir <span class="nb">{svg},</span> el cuadrado con una flecha hacia arriba. En los iPhone más nuevos está detrás del botón <strong>•••</strong> de abajo.</span></li><li><span>Toca <strong>Añadir a pantalla</strong> <span class="nb"><strong>de inicio</strong> {svg}.</span> Quizá tengas que desplazarte hacia abajo para encontrarlo.</span></li><li><span>Toca <strong>Añadir</strong>. Si ves <strong>Abrir como app web</strong>, déjalo activado. La lámpara aparece en tu pantalla de inicio.</span></li>',
+  iosSteps: '<li><span><a href="../#/read" data-open>Abre la Biblia</a> en Safari.</span></li><li><span>Toca el botón de menú en la barra de direcciones y luego <strong>Compartir</strong> <span class="nb">{svg}.</span> En iPhone más antiguos, Compartir está directamente en la barra de abajo.</span></li><li><span>Toca <strong>Ver más</strong> y luego <strong>Añadir a pantalla</strong> <span class="nb"><strong>de inicio</strong> {svg}.</span></span></li><li><span>Deja <strong>Abrir como app web</strong> activado y toca <strong>Añadir</strong>. La lámpara aparece en tu pantalla de inicio.</span></li>',
   iosNote: 'Hazlo desde la Biblia, no desde esta página, para que la lámpara abra directamente tu lectura. Usa Safari: otros navegadores en iPhone y iPad no siempre pueden añadir una app.',
   install: 'Instalar My Quiet Bible',
   androidNote: 'Un toque. Nada pasa por una tienda de apps.',
@@ -74,4 +74,6 @@ export default {
   privacy: 'Privacidad',
   source: 'Código fuente',
   footNote: 'Cada texto es de dominio público o con licencia libre. La licencia de cada versión aparece en la app.',
+  appleHelp: 'Las instrucciones de Apple ↗',
+  googleHelp: 'Las instrucciones de Google ↗',
 }

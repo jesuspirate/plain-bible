@@ -116,6 +116,11 @@ export const CompassIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><circle cx="12" cy="12" r="9" {...line} /><path d="M15.6 8.4l-2 5.2-5.2 2 2-5.2z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /></svg>
 )
 
+/** A square with a plus, as Safari draws Add to Home Screen. */
+export const AddHomeIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><rect x="3.5" y="3.5" width="17" height="17" rx="4.5" {...line} /><path d="M12 8v8M8 12h8" {...line} stroke-width="2.6" /></svg>
+)
+
 /** A globe: the app's language. */
 export const GlobeIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><circle cx="12" cy="12" r="9" {...line} /><path d="M3 12h18M12 3c2.6 2.6 3.8 5.6 3.8 9s-1.2 6.4-3.8 9c-2.6-2.6-3.8-5.6-3.8-9S9.4 5.6 12 3z" {...line} /></svg>
