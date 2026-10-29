@@ -541,7 +541,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
-            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Search {version} or John 3:16', { version })}
+            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}

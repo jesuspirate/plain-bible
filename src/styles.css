@@ -258,7 +258,7 @@ main.with-bar { padding-bottom: 120px; }
 .sb-glass { color: var(--muted); flex: none; }
 .sb-field input {
   flex: 1; min-width: 0; height: 100%; border: none; outline: none; background: none; font-size: 17px;
-  -webkit-appearance: none; appearance: none;
+  -webkit-appearance: none; appearance: none; text-overflow: ellipsis;
 }
 .sb-field input::-webkit-search-cancel-button { display: none; }
 .sb-field input::placeholder { color: var(--muted); }
@@ -783,6 +783,19 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .settings-grabber { all: unset; cursor: pointer; display: block; width: 100%; height: 22px; position: relative; -webkit-tap-highlight-color: transparent; }
 .settings-grabber::before { content: ''; position: absolute; left: 50%; top: 9px; width: 40px; height: 5px; margin-left: -20px; border-radius: 3px; background: color-mix(in srgb, var(--muted) 45%, transparent); }
 .settings-grabber:focus-visible::before { background: var(--accent); }
+/* The pages inside Settings use the same big, clear controls as its first
+   page: full-width choices, large ticks, and buttons as tall as the rest. */
+.settings .field > .seg, .settings .field > .col { flex: 1 1 260px; min-width: 0; }
+.settings .field .seg { display: flex; border-radius: 12px; }
+.settings .field .seg button { flex: 1; min-height: 46px; padding: 8px 6px; font-size: 16px; }
+.settings .field label { display: flex; align-items: flex-start; gap: 12px; font-size: 16px; line-height: 1.45; cursor: pointer; }
+.settings .field input[type='checkbox'] { flex: none; width: 24px; height: 24px; margin: 0; accent-color: var(--accent); }
+.settings .row > button:not(.link), .settings .row > .button, .settings p > button:not(.link) {
+  display: inline-flex; align-items: center; justify-content: center; min-height: 46px; padding: 8px 18px; border-radius: 12px; font: 600 16px var(--sans);
+}
+.settings .move-input { min-height: 46px; border-radius: 12px; padding: 8px 12px; }
+/* A link inside a sentence lines up with the words around it. */
+p > button.link { padding: 0; text-decoration: underline; text-underline-offset: 2px; }
 @media (prefers-reduced-motion: reduce) { .settings-sheet, .settings-scrim { animation: none; } }
 /* Wide screens: a panel at the right, full height, the text in view beside it. */
 @media (min-width: 900px) {

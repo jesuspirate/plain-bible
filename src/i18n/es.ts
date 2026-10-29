@@ -489,7 +489,7 @@ export default {
   "Clear": "Borrar",
   "Try": "Prueba",
   "Search {version} or go to a passage": "Busca en {version} o ve a un pasaje",
-  "Search {version} or John 3:16": "Busca en {version} o Juan 3:16",
+  "Words or John 3:16": "Palabras o Juan 3:16",
   "Stop listening": "Dejar de escuchar",
   "Search by voice": "Buscar por voz",
   "Tap the 🎤 on your keyboard, then speak.": "Toca el 🎤 de tu teclado y habla.",

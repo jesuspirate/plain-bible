@@ -754,6 +754,16 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
     return () => { document.body.classList.remove('selecting'); removeEventListener('keydown', onKey) }
   }, [])
 
+  // A verse tapped low on the screen would sit under this bar: lift it into
+  // view, never so far that its top goes under the top bar.
+  const bar = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = document.getElementById('v' + verses[0])
+    if (!el || !bar.current) return
+    const at = el.getBoundingClientRect(), over = at.bottom + 16 - bar.current.getBoundingClientRect().top
+    if (over > 0) window.scrollBy({ top: Math.min(over, at.top - 90), behavior: 'smooth' })
+  }, [])
+
   const apply = (patch: { c?: string | null; b?: 1 | null }) => { setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
@@ -781,7 +791,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
 
   return (
     <>
-      <div class="selbar" role="toolbar" aria-label={t('{ref} selected', { ref })}>
+      <div class="selbar" ref={bar} role="toolbar" aria-label={t('{ref} selected', { ref })}>
         <div class="selbar-head">
           <strong>{ref}</strong>
           <span class="muted small">{verses.length > 1 ? tn(verses.length, '{n} verse', '{n} verses') : t('Tap more verses to add them')}</span>
