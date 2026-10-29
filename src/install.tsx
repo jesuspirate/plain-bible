@@ -47,9 +47,11 @@ export function HomeScreen({ onClose }: { onClose: () => void }) {
     tj('Tap {more}, then {add}.', { more: <strong class="nb">{t('View More')} <ChevronGlyph /></strong>, add: <strong class="nb">{t('Add to Home Screen')} <AddGlyph /></strong> }),
     tj('Leave {webApp} on and tap {add}. The lamp appears on your Home Screen.', { webApp: <strong>{t('Open as Web App')}</strong>, add: <strong>{t('Add')}</strong> }),
   ] : android ? [
-    tj('Tap the browser’s menu {icon}.', { icon: <MenuGlyph /> }),
-    tj('Tap {install} or {add}.', { install: <strong>{t('Install app')}</strong>, add: <strong>{t('Add to Home screen')}</strong> }),
-    t('Tap Install. The lamp appears with your other apps.'),
+    // As Chrome draws it: ⋮, Install and create shortcut, then Install
+    // (Create shortcut only opens the site in Chrome), then Install again.
+    tj('Tap the menu {icon} at the top right.', { icon: <MenuGlyph /> }),
+    tj('Tap {install}. Some browsers say {add}.', { install: <strong>{t('Install and create shortcut')}</strong>, add: <strong>{t('Add to Home screen')}</strong> }),
+    tj('Choose {install}, not {shortcut}. Then tap {install} again. The lamp appears with your other apps.', { install: <strong>{t('Install')}</strong>, shortcut: <strong>{t('Create shortcut')}</strong> }),
   ] : [
     t('In Chrome or Edge, click the install icon at the right end of the address bar.'),
     tj('In Safari on a Mac: {file}, then {dock}.', { file: <strong>{t('File')}</strong>, dock: <strong>{t('Add to Dock')}</strong> }),
