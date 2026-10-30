@@ -170,6 +170,9 @@ export function Reader({ route }: { route: Route }) {
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
 
   useEffect(() => setSelected([]), [book, chapter, version])
+  // The verse the mouse last came to rest on (computers only): it keeps the ribbon.
+  const [reading, setReading] = useState<number>()
+  useEffect(() => setReading(undefined), [book, chapter, version])
 
   // The verse a search, link or reminder lands on glows long enough to find
   // and read it, then fades so you are just reading. A small scroll to read
@@ -626,15 +629,18 @@ export function Reader({ route }: { route: Route }) {
       </>
     }
     const lex = live ? setLex : undefined
-    // With a mouse, a quiet ribbon shows beside the verse under it: a sign,
-    // while reading, that a verse has things you can do. It opens the same
-    // bar as clicking the verse.
-    const tab = (v: number) => live && !picking && (
+    // With a mouse, a quiet ribbon sits at the end of the verse you're on,
+    // just where you finish reading it: a sign that a verse has things you
+    // can do. It stays there until the mouse comes to another verse, and it
+    // opens the same bar as clicking the verse.
+    // In a paragraph each verse keeps a little room for it, so it never sits
+    // on the next verse's number and nothing moves as it goes from verse to verse.
+    const tab = (v: number) => live && (fine || undefined) && <span class="tab-end">{!picking && reading === v && (
       <button class="verse-tab" tabIndex={-1} title={t('Verse {v} options', { v })} aria-hidden="true"
         onClick={e => { e.stopPropagation(); setSelected(s => s.includes(v) ? s : [...s, v].sort((a, b) => a - b)) }}>
         <BookmarkIcon size={20} filled={false} />
-      </button>
-    )
+      </button>)}</span>
+    const rest = (v: number) => live ? { onPointerEnter: (e: PointerEvent) => { if (e.pointerType === 'mouse' && fine) setReading(v) } } : {}
     return <>
       <h1 class="chapter-title"><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
       {live && reminder}
@@ -644,15 +650,14 @@ export function Reader({ route }: { route: Route }) {
       {versions.length === 1 && settings.layout === 'paragraph' ? (
         <p class="para" dir={info?.rtl ? 'rtl' : undefined} lang={info?.lang}>
           {primary.books[b][c - 1].map((raw, i) => raw && (
-            <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
-              <span class="tab-at">{tab(i + 1)}</span><sup class="vn">{i + 1}</sup>{after(i + 1)}
-              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span>{' '}
+            <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
+              <sup class="vn">{i + 1}</sup>{after(i + 1)}
+              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span>{tab(i + 1)}{' '}
             </span>
           ))}
         </p>
       ) : Array.from({ length: rowsOf }, (_, i) => (
-        <div id={verse(i + 1).id} class={cls('verse', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
-          {tab(i + 1)}
+        <div id={verse(i + 1).id} class={cls('verse', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
           {versions.map(v => {
             const raw = bibles[v].books[b]?.[c - 1]?.[i]
             const tv = byId.get(v)
@@ -660,6 +665,7 @@ export function Reader({ route }: { route: Route }) {
               <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
                 <button class="vn" aria-label={t('Verse {v} options', { v: i + 1 })} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
                 {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span> : <span class="muted">—</span>}
+                {v === version && tab(i + 1)}
               </div>
             )
           })}
@@ -753,6 +759,9 @@ function toVerse(v: number) {
 }
 
 export { verseRanges }
+
+// A mouse or trackpad, not a finger.
+const fine = typeof matchMedia === 'function' && matchMedia('(hover: hover) and (pointer: fine)').matches
 
 /** What you can do with some verses: marks, the quote and link, copying. */
 function useVerseActions(book: string, chapter: number, verses: number[], versions: string[], bibles: Record<string, Bible>) {
