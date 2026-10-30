@@ -4,7 +4,6 @@
 export default {
   title: 'My Quiet Bible · Lee, ora, comparte, repite',
   description: 'Lee, ora, comparte, repite. La Biblia en {versions} versiones y {languages} idiomas, un botón 🙏 para orar en voz alta sobre lo que lees, y pequeños círculos privados para compartir tus oraciones. Gratis, sin anuncios, funciona sin conexión.',
-  brand: 'My Quiet Bible, inicio de la página',
   theme: 'Tema',
   language: 'Idioma',
   light: 'Claro',

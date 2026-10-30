@@ -4,7 +4,6 @@
 export default {
   title: 'My Quiet Bible · Lire, prier, partager, recommencer',
   description: 'Lire, prier, partager, recommencer. La Bible en {versions} versions et {languages} langues, un bouton 🙏 pour prier à voix haute sur ce que vous lisez, et de petits cercles privés pour partager vos prières. Gratuite, sans publicité, elle marche hors ligne.',
-  brand: 'My Quiet Bible, haut de la page',
   theme: 'Thème',
   language: 'Langue',
   light: 'Clair',
