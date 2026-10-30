@@ -148,7 +148,24 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
 }
 
 const LEFT = 'plain-bible:left'
+/** What the server said before signing out or deleting the account. */
+type Safety = { offline: true } | { error: string } | { here: number; notSent: number; notHere: number; syncing: boolean }
+type Checked = Extract<Safety, { syncing: boolean }>
+const checked = (s: Safety | null): s is Checked => !!s && 'syncing' in s
+/** Nothing would be lost by signing out: everything reached the account, and
+ *  prayers that don't sync here stay here. */
+const outOk = (s: Safety | null): s is Checked => checked(s) && !(s.syncing && s.notSent > 0)
+/** Nothing in the account that isn't here too, unless you said to go without it. */
+const deleteOk = (s: Safety | null, without: boolean): s is Checked => checked(s) && (s.notHere === 0 || without)
 const prayerSyncing = () => { try { return !!localStorage.getItem('plain-bible:prayer-sync') } catch { return false } }
+
+/** Why signing out or deleting has to wait, or that it's being checked. */
+function SafetyNote({ safety }: { safety: Safety | null }) {
+  if (!safety) return <p class="muted">{t('Syncing first and making sure nothing is lost…')}</p>
+  if ('offline' in safety) return <p>{t('You’re offline. Connect to the internet so your latest highlights, notes and prayers can reach your account first.')}</p>
+  if ('error' in safety) return <p>{t('Your latest changes couldn’t reach your account: {error}. Try again in a moment.', { error: safety.error.replace(/\.$/, '') })}</p>
+  return null
+}
 
 /** A button that acts only once pressed and held until it fills, so a slip
  *  of the finger (or the mouse) can't set it off. Enter or Space held works
@@ -340,37 +357,58 @@ export function AccountSection() {
     try { sync.signedIn(await signIn()) } catch (e) { prepareSignIn(); throw e }
   })
   const addKey = act('add', async () => { await register(acct!.token); setMsg(t('Passkey added. You can now sign in with it on that device too.')) })
-  // Signing out leaves nothing of the account here (see lib/signout). What
-  // syncs is sent first, so it's all safe in the account; if that can't
-  // happen, you're asked before anything is lost.
-  const [confirming, setConfirm] = useState<'' | 'out' | 'unsaved' | 'delete'>('')
-  const [onlyHere, setOnlyHere] = useState(0)
-  const ask = async (which: 'out' | 'delete') => {
-    setMsg('')
-    if (which === 'out') setOnlyHere(await import('./lib/signout').then(m => m.prayersOnlyHere(prayerSyncing())).catch(() => 0))
-    setConfirm(which)
+  // Signing out leaves nothing of the account here (see lib/signout), and
+  // deleting it leaves nothing on the server. So before either, everything
+  // is synced by itself and checked with the server: you can't sign out or
+  // delete while something would be lost, and you're told why and what to do.
+  const [confirming, setConfirm] = useState<'' | 'out' | 'delete'>('')
+  const [safety, setSafety] = useState<Safety | null>(null)
+  const [withoutThem, setWithoutThem] = useState(false)
+  const check = async (): Promise<Safety> => {
+    if (navigator.onLine === false) return { offline: true }
+    try {
+      await sync.flush()
+      const c = await (await import('./lib/prayerSync')).prayerCheck()
+      return { ...c, syncing: prayerSyncing() }
+    } catch (e) { return { error: (e as Error).message } }
   }
+  // Only the latest check counts (a card closed and opened again meanwhile).
+  const checking = useRef(0)
+  const recheck = async () => { const n = ++checking.current; setSafety(null); const s = await check(); if (n === checking.current) setSafety(s) }
+  const ask = (which: 'out' | 'delete') => { setMsg(''); setWithoutThem(false); setConfirm(which); recheck() }
+  const close = () => { checking.current++; setConfirm(''); setSafety(null) }
   const leave = async (note: 'out' | 'deleted', personal: boolean, prayers: boolean) => {
     await (await import('./lib/signout')).forgetAccount({ personal, prayers })
     try { sessionStorage.setItem(LEFT, note) } catch { /* ignore */ }
     sync.signedOut()
     location.reload()
   }
-  const logout = (anyway: boolean) => act('logout', async () => {
-    const syncing = prayerSyncing()
-    if (!anyway) {
-      try { await sync.flush() } catch { setConfirm('unsaved'); return }
-    }
+  const logout = act('logout', async () => {
+    // Once more, in case something changed since the card opened.
+    const s = await check()
+    if (!outOk(s)) { setSafety(s); return }
     await signOut(acct!.token)
-    // Prayers go too only when they're all in the account.
-    await leave('out', true, syncing && !anyway)
-  })()
+    // Prayers go from here only when the account holds every one of them.
+    await leave('out', true, s.syncing && s.notSent === 0)
+  })
+  // Prayers in the account but not here, fetched before they're deleted with it.
+  const bringHome = act('bring', async () => {
+    const m = await import('./lib/prayerSync')
+    if (m.prayerSyncOn()) await m.syncPrayers()
+    else if (await m.turnOnPrayerSync() === 'needCode') {
+      setMsg(t('This device can’t unlock your prayers by itself yet. Open Your prayers and tap Sync my prayers to finish.'))
+      return
+    }
+    await recheck()
+  })
   const dropEmail = act('email', async () => {
     if (!confirm(t('Stop signing in with this email? You’ll sign in with your passkey only.'))) return
     await removeEmail(acct!.token); setMsg(t('Email removed.'))
   })
   // What's on this device stays: the account it synced with is gone.
   const remove = act('delete', async () => {
+    const s = await check()
+    if (!deleteOk(s, withoutThem)) { setSafety(s); return }
     await deleteAccount(acct!.token)
     await leave('deleted', false, false)
   })
@@ -464,34 +502,55 @@ export function AccountSection() {
 
       {confirming === 'out' ? (
         <div class="confirm-card" role="alertdialog" aria-labelledby="confirm-title">
-          <p id="confirm-title"><strong>{t('Sign out of this device?')}</strong></p>
-          <p>{t('Your highlights, notes, prayers and circles stay safe in your account and come back when you sign in again. This device forgets them.')}</p>
-          {onlyHere > 0 && <p class="small">{tn(onlyHere, '{n} prayer recorded here isn’t in your account. It stays on this device.', '{n} prayers recorded here aren’t in your account. They stay on this device.')}</p>}
+          <p id="confirm-title"><strong>{safety && !outOk(safety) ? t('Not yet, so nothing is lost') : t('Sign out of this device?')}</strong></p>
+          <SafetyNote safety={safety} />
+          {checked(safety) && (safety.syncing && safety.notSent > 0
+            ? <p>{tn(safety.notSent, '{n} prayer hasn’t reached your account yet. Wait a moment, then try again.', '{n} prayers haven’t reached your account yet. Wait a moment, then try again.')}</p>
+            : <>
+              <p>✓ {safety.syncing
+                ? t('Everything is safe in your account: highlights, notes, prayers and circles. It all comes back when you sign in again.')
+                : t('Your highlights, notes and circles are safe in your account. They come back when you sign in again.')}</p>
+              {!safety.syncing && safety.notSent > 0 && <p class="small"><strong>{tn(safety.notSent,
+                '{n} prayer is only on this device. It stays here after you sign out, but it isn’t on your other devices. Sync it first to keep it in your account too.',
+                '{n} prayers are only on this device. They stay here after you sign out, but they aren’t on your other devices. Sync them first to keep them in your account too.')}</strong></p>}
+            </>)}
           <div class="confirm-buttons">
-            <button class="primary" disabled={!!working} onClick={() => logout(false)}>{working ? t('Signing out…') : t('Sign out')}</button>
-            <button disabled={!!working} onClick={() => setConfirm('')}>{t('Cancel')}</button>
-          </div>
-        </div>
-      ) : confirming === 'unsaved' ? (
-        <div class="confirm-card" role="alertdialog" aria-labelledby="confirm-title">
-          <p id="confirm-title"><strong>{t('Your latest changes couldn’t reach your account')}</strong></p>
-          <p>{t('Connect to the internet and try again. If you sign out anyway, changes since you last synced are lost here. Prayers stay on this device.')}</p>
-          <div class="confirm-buttons">
-            <button class="primary" disabled={!!working} onClick={() => logout(false)}>{working ? t('Signing out…') : t('Try again')}</button>
-            <button class="danger" disabled={!!working} onClick={() => logout(true)}>{t('Sign out anyway')}</button>
-            <button disabled={!!working} onClick={() => setConfirm('')}>{t('Cancel')}</button>
+            {!checked(safety) || !outOk(safety)
+              ? <button class="primary" disabled={!safety || !!working} onClick={recheck}>{safety ? t('Try again') : t('Checking…')}</button>
+              : <>
+                {!safety.syncing && safety.notSent > 0 && <button class="primary" disabled={!!working} onClick={bringHome}>{working === 'bring' ? t('Waiting for passkey…') : t('Sync my prayers')}</button>}
+                <button class={safety.syncing || !safety.notSent ? 'primary' : ''} disabled={!!working} onClick={logout}>{working === 'logout' ? t('Signing out…') : t('Sign out')}</button>
+              </>}
+            <button disabled={working === 'logout'} onClick={close}>{t('Cancel')}</button>
           </div>
         </div>
       ) : confirming === 'delete' ? (
         <div class="confirm-card danger" role="alertdialog" aria-labelledby="confirm-title">
           <p id="confirm-title"><strong>{t('Delete your account for good?')}</strong></p>
           <p>{t('This can’t be undone. Deleted on every device: your synced highlights, notes and settings, your synced prayers, and your place in every circle, with what you shared there.')}</p>
-          <p class="small">{t('This device keeps its own highlights, notes and prayers.')}</p>
-          <div class="confirm-buttons">
-            <HoldToConfirm label={t('Hold to delete')} busy={working === 'delete' ? t('Deleting…') : ''} onDone={remove} />
-            <button disabled={!!working} onClick={() => setConfirm('')}>{t('Cancel')}</button>
-          </div>
-          <p class="muted small">{t('Press and hold the red button until it fills.')}</p>
+          <SafetyNote safety={safety} />
+          {deleteOk(safety, withoutThem) ? <>
+            <p class="small">{t('This device keeps its own highlights, notes and prayers.')}</p>
+            <div class="confirm-buttons">
+              <HoldToConfirm label={t('Hold to delete')} busy={working === 'delete' ? t('Deleting…') : ''} onDone={remove} />
+              <button disabled={!!working} onClick={close}>{t('Cancel')}</button>
+            </div>
+            <p class="muted small">{t('Press and hold the red button until it fills.')}</p>
+          </> : checked(safety) ? <>
+            <p class="small"><strong>{tn(safety.notHere,
+              '{n} prayer is in your account but not on this device. Deleting the account would lose it for good. Bring it here first, and it stays on this device.',
+              '{n} prayers are in your account but not on this device. Deleting the account would lose them for good. Bring them here first, and they stay on this device.')}</strong></p>
+            <div class="confirm-buttons">
+              <button class="primary" disabled={!!working} onClick={bringHome}>{working === 'bring' ? t('Bringing them here…') : t('Bring them here')}</button>
+              <button disabled={!!working} onClick={() => setWithoutThem(true)}>{t('Delete without them')}</button>
+              <button disabled={!!working} onClick={close}>{t('Cancel')}</button>
+            </div>
+          </> : (
+            <div class="confirm-buttons">
+              <button class="primary" disabled={!safety || !!working} onClick={recheck}>{safety ? t('Try again') : t('Checking…')}</button>
+              <button disabled={!!working} onClick={close}>{t('Cancel')}</button>
+            </div>
+          )}
         </div>
       ) : (
         <div class="set-list">

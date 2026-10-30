@@ -2,7 +2,7 @@
 // encrypted here before they leave the device (see prayerCrypto); the server
 // only ever holds bytes it can't read. Loaded only when needed, so it costs
 // nothing at startup.
-import { meta, partsOf, prayers } from './prayers'
+import { meta, partsOf, PrayerInfo, prayers } from './prayers'
 import {
   b64url, keyCode, newKey, open, packPart, parseKeyCode, prayerKey, PRF_SALT, seal, unpackPart, unwrapKey, wrapKey,
 } from './prayerCrypto'
@@ -217,6 +217,38 @@ export async function deletedHere(id: string) {
   if (!prayerSyncOn()) return
   const list = (await meta.get<string[]>('deleted')) ?? []
   await meta.set('deleted', [...list, id])
+}
+
+// ---- before signing out or deleting the account --------------------------------
+
+/** What leaving the account would put at risk, asked of the server (throws
+ *  if it can't be reached). `notSent`: prayers here the account doesn't hold
+ *  in full yet. `notHere`: prayers in the account this device doesn't have.
+ *  Prayers are told apart by id, which the server can see, so this works
+ *  with sync off too. */
+export async function prayerCheck(): Promise<{ here: number; notSent: number; notHere: number }> {
+  const acct = loadAccount()
+  const local = await prayers.list().catch(() => [])
+  if (!SYNC_URL || !acct) return { here: local.length, notSent: local.length, notHere: 0 }
+  const remote = await api<Remote>('/prayers', { token: acct.token })
+  const gone = new Set(remote.gone)
+  const parts = new Map<string, Set<number>>()
+  for (const r of remote.parts) {
+    if (!parts.has(r.prayer)) parts.set(r.prayer, new Set())
+    parts.get(r.prayer)!.add(r.part)
+  }
+  const sentAll = (p: PrayerInfo) => {
+    const has = parts.get(p.id)
+    if (!has) return false
+    for (let i = 0; i < p.parts; i++) if (!has.has(i)) return false
+    return !p.vdirty && (!p.verse || has.has(VERSE_PART))
+  }
+  const ids = new Set(local.map(p => p.id))
+  return {
+    here: local.length,
+    notSent: local.filter(p => !gone.has(p.id) && !sentAll(p)).length,
+    notHere: [...parts.keys()].filter(id => !gone.has(id) && !ids.has(id) && parts.get(id)!.has(0)).length,
+  }
 }
 
 // ---- syncing -----------------------------------------------------------------
