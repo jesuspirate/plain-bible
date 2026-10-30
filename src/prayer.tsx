@@ -15,7 +15,7 @@ import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSyn
 import { loadAccount, SYNC_URL } from './lib/sync'
 import { slideAway, usePullDown } from './settings'
 import { DeviceLink } from './move'
-import { addDays, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
+import { addDays, dayBefore, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
 import './prayer.css'
 import { locale, N_, t, tj, tn } from './i18n'
 
@@ -417,6 +417,13 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
   const done = () => slideAway(box.current, onClose)
   const when = (at: number) => new Date(at).toLocaleString(locale(), { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
+  const time = (at: number) => new Date(at).toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' })
+  // By the day each was prayed, newest first, like the circles.
+  const days: { day: string; list: PrayerInfo[] }[] = []
+  for (const p of list ?? []) {
+    const d = dayOf(p.at), last = days[days.length - 1]
+    if (last?.day === d) last.list.push(p); else days.push({ day: d, list: [p] })
+  }
   return (
     <div class="pray-list" ref={box}>
       <div class="pray-head">
@@ -428,14 +435,22 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
       </div>
       {!list?.length ? <p class="muted">{t('No prayers yet.')}</p> : (
         <ol>
-          {list.map(p => (
+          {days.map(({ day, list: some }) => <>
+            <li class="pray-day">
+              <h3>{dayName(day)}</h3>
+              {/* The whole day at once, oldest first: optional, like every share. */}
+              {inCircles() && some.length > 1 && <button class="pray-day-share" onClick={() => shareWithCircle({ prayers: some.map(p => p.id).reverse() })}>
+                <CircleIcon size={22} /> <span>{t('Share all {n}', { n: some.length })}</span>
+              </button>}
+            </li>
+          {some.map(p => (
             <li class={playing === p.id ? 'on' : ''}>
               <button class="pray-play" aria-label={playing === p.id ? t('Stop') : t('Play prayer from {when}', { when: when(p.at) })} onClick={() => play(p)}>
                 {playing === p.id
                   ? <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>
                   : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
               </button>
-              <span class="pray-when">{when(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
+              <span class="pray-when">{time(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
                 {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
                 {/* Thought of a verse later, or tapped the wrong one? Tap verses on the page to add or take them off. */}
                 <button class="link pray-list-verse pray-list-add" onClick={() => { release(); onPick(versesOf(p), p.id) }}>{versesOf(p).length ? t('Change verses') : `+ ${t('Add a verse')}`}</button></span>
@@ -455,12 +470,20 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
                 <button class="pray-btn danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
               </div>}
             </li>
-          ))}
+          ))}</>)}
         </ol>
       )}
       <PrayerSync onChange={onChange} onClose={onClose} />
     </div>
   )
+}
+
+/** "Today", "Yesterday", or the day itself (2026-10-24 on this device's clock). */
+function dayName(day: string) {
+  if (day === dayOf()) return t('Today')
+  if (day === dayBefore(dayOf())) return t('Yesterday')
+  const [y, m, d] = day.split('-').map(Number), date = new Date(y, m - 1, d, 12)
+  return date.toLocaleDateString(locale(), { weekday: 'long', month: 'long', day: 'numeric', ...(y === new Date().getFullYear() ? {} : { year: 'numeric' }) })
 }
 
 const pad = (n: number) => String(n).padStart(2, '0')

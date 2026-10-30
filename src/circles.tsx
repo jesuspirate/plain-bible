@@ -948,6 +948,10 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const [msg, setMsg] = useState('')
   const [done, setDone] = useState(false)
   const [what, setWhat] = useState('')
+  // A day's prayers: each one shared on its own, so it keeps the day it was
+  // prayed. What already went to a circle isn't sent there again on a retry.
+  const many = 'prayers' in request
+  const sent = useRef(new Set<string>())
   // Your notes on exactly these verses (or covering the one verse).
   const v = 'verse' in request ? request.verse : undefined
   const notes = v ? notesCovering(marks, v.book, v.chapter, v.verses[0]).filter(x => v.verses.length === 1 || x.verses.join() === v.verses.join()) : []
@@ -957,7 +961,11 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const theNote = 'verse' in request && request.note && !notes.some(x => x.id === noteId) ? request.note : notes.find(x => x.id === noteId)?.n
   useEffect(() => {
     keptCircles().then(cs => { setList(cs); setPicks(cs[0] ? [cs[0].id] : []) })
-    if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${versesOf(p).map(v => ` · ${verseLabel(v)}`).join('')}` : ''))
+    if ('prayers' in request) Promise.all(request.prayers.map(id => prayers.get(id))).then(ps => {
+      const kept = ps.filter(p => !!p)
+      setWhat(`${tn(kept.length, '{n} prayer', '{n} prayers')} · ${duration(kept.reduce((n, p) => n + p!.ms, 0))}`)
+    })
+    else if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${versesOf(p).map(v => ` · ${verseLabel(v)}`).join('')}` : ''))
     else setWhat(verseLabel(request.verse))
   }, [])
   const chosen = (list ?? []).filter(c => picks.includes(c.id))
@@ -971,7 +979,17 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         // in their own Bible (see lib/passage), with how many verses your
         // Bible has in that chapter, so one that numbers it differently
         // doesn't show them the wrong verse.
-        if ('prayer' in request) {
+        if ('prayers' in request) {
+          const b = await data.bible(settings.version).catch(() => undefined)
+          for (const [i, id] of request.prayers.entries()) {
+            if (sent.current.has(`${pick}/${id}`)) continue
+            // Gone since the list was opened: nothing to send.
+            if (!await prayers.get(id)) continue
+            // The few words go with the first one only.
+            await sharePrayer(pick, id, i ? '' : words.trim(), v => toStandard(b, v))
+            sent.current.add(`${pick}/${id}`)
+          }
+        } else if ('prayer' in request) {
           const b = await data.bible(settings.version).catch(() => undefined)
           await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v))
         } else {
@@ -1021,7 +1039,8 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           </div>
         )}
         {list && list.length > 1 && picks.length < 2 && <p class="muted small c-pick-more">{t('Tap more circles to share with them too')}</p>}
-        {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
+        {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={many ? t('Add a note about these prayers (optional)') : 'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
+        {many && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear these prayers.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear these prayers.')}</p>}
         {'prayer' in request && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear this prayer.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
         <button class="c-btn primary" disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…')
           : chosen.length === 2 ? t('Share with {a} and {b}', { a: chosen[0].name, b: chosen[1].name })

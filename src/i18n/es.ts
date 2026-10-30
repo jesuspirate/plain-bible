@@ -844,4 +844,8 @@ export default {
   "Choose {install}, not {shortcut}. Then tap {install} again. The lamp appears with your other apps.": "Elige {install}, no {shortcut}. Luego toca {install} otra vez. La lámpara aparece con tus otras aplicaciones.",
   "Install": "Instalar",
   "Create shortcut": "Crear acceso directo",
+  "Share all {n}": "Compartir las {n}",
+  "Add a note about these prayers (optional)": "Añade una nota sobre estas oraciones (opcional)",
+  "Everyone in {circle} will be able to hear these prayers.": "Todos en {circle} podrán oír estas oraciones.",
+  "Everyone in the circle will be able to hear these prayers.": "Todos en el círculo podrán oír estas oraciones.",
 } as Record<string, string>
