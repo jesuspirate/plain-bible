@@ -208,7 +208,12 @@ blockquote[lang='he'] .vn { margin: 0 0 0 6px; }
 
 /* ---- cards, as the rows in Settings ---- */
 .cards { display: grid; gap: 14px; }
-@media (min-width: 760px) { .cards { grid-template-columns: 1fr 1fr; gap: 18px; } }
+@media (min-width: 760px) {
+  .cards { grid-template-columns: 1fr 1fr; gap: 18px; }
+  /* An odd card out takes the whole row, so two columns never leave a hole. */
+  .cards > .card:last-child:nth-child(odd) { grid-column: 1 / -1; }
+  .cards > .card:last-child:nth-child(odd) p { max-width: 36em; }
+}
 .card {
   /* Rows stay their own height when a card is stretched to match the one beside it. */
   display: grid; grid-template-columns: 44px 1fr; gap: 4px 16px; align-items: start; align-content: start;
