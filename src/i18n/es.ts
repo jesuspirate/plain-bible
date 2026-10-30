@@ -856,7 +856,6 @@ export default {
   "Save name": "Guardar nombre",
   "Everyone in the circle will see the new name.": "Todos en el círculo verán el nuevo nombre.",
   "Passkey {n} is the one you just used. It now says “This one”.": "La llave de acceso {n} es la que acabas de usar. Ahora dice «Esta».",
-  "Remove passkey {n}?": "¿Quitar la llave de acceso {n}?",
   "It won’t sign in to your account anymore. Your password manager still keeps a copy: delete the one made {date} there too.": "Ya no servirá para entrar en tu cuenta. Tu gestor de contraseñas aún guarda una copia: borra también allí la creada el {date}.",
   "Passkey removed. Now delete it in your password manager too.": "Llave de acceso quitada. Bórrala también en tu gestor de contraseñas.",
   "Removing…": "Quitando…",
@@ -870,4 +869,9 @@ export default {
   "Pick the one you use. It gets marked “This one”, then you can remove the others.": "Elige la que usas. Quedará marcada como «Esta» y luego podrás quitar las demás.",
   "This passkey belongs to another account.": "Esta llave de acceso pertenece a otra cuenta.",
   "This is your only way to sign in. Add another passkey or an email first.": "Es tu única forma de entrar. Añade antes otra llave de acceso o un correo.",
+  "Remove {name}?": "¿Quitar «{name}»?",
+  "Name saved.": "Nombre guardado.",
+  "Name of this passkey": "Nombre de esta llave de acceso",
+  "For example: Bitwarden, iPhone Passwords": "Por ejemplo: Bitwarden, Contraseñas del iPhone",
+  "Remove this passkey": "Quitar esta llave de acceso",
 } as Record<string, string>

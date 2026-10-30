@@ -213,8 +213,9 @@ export async function signOut(token: string) {
 export const deleteAccount = (token: string) => api('/account', { method: 'DELETE', token })
 /** A passkey on the account. `current` marks the one this device signed in
  *  with; `site` is the address it belongs to, once known. */
-export interface PasskeyInfo { id: string; created: number; lastUsed: number | null; site: string | null; current: boolean }
+export interface PasskeyInfo { id: string; name: string | null; created: number; lastUsed: number | null; site: string | null; current: boolean }
 export const accountInfo = (token: string) => api<{ created: number; passkeys: number; list?: PasskeyInfo[]; updated: number | null; email: string | null }>('/account', { token })
+export const renamePasskey = (token: string, id: string, name: string) => api<{ name: string | null }>('/auth/passkey', { method: 'PUT', token, body: { id, name } })
 export const removePasskey = (token: string, id: string) => api('/auth/passkey', { method: 'DELETE', token, body: { id } })
 
 /** Ask for a passkey only to learn which one this device uses. */
