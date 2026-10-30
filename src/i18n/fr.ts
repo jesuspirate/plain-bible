@@ -849,4 +849,8 @@ export default {
   "Everyone in {circle} will be able to hear these prayers.": "Tout le monde dans {circle} pourra écouter ces prières.",
   "Everyone in the circle will be able to hear these prayers.": "Tout le monde dans le cercle pourra écouter ces prières.",
   "Highlight": "Surligner",
+  "Rename": "Renommer",
+  "Circle name": "Nom du cercle",
+  "Save name": "Enregistrer le nom",
+  "Everyone in the circle will see the new name.": "Tout le monde dans le cercle verra le nouveau nom.",
 } as Record<string, string>

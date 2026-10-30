@@ -57,7 +57,8 @@ export interface FeedItem {
 /** When it belongs in the circle's days: a prayer on the day it was prayed
  *  (never later than it was shared), anything else when it was shared. */
 export const dayAt = (i: FeedItem) => i.body.k === 'prayer' && i.body.prayed ? Math.min(i.body.prayed, i.at) : i.at
-export interface Feed { me: string; members: Member[]; items: FeedItem[] }
+/** `name`: the circle's name as it is now, if someone renamed it. */
+export interface Feed { me: string; name?: string; members: Member[]; items: FeedItem[] }
 
 function token() {
   const a = loadAccount()
@@ -343,6 +344,22 @@ export async function joinWithCode(typed: Typed, me: string, code?: string): Pro
   return (list && list !== 'needCode' ? list.circles.find(c => c.id === r.circle) : undefined) ?? { id: r.circle, name: t('Circle'), members: 0 }
 }
 
+/** Give the circle a new name, for everyone in it. */
+export async function renameCircle(circle: string, name: string) {
+  const sealed = await sealJson(await keyOf(circle), name, `${circle}/name`)
+  await api(`/circles/${circle}/name`, { method: 'PUT', token: token(), body: { name: sealed } })
+  await keepCircleName(circle, name)
+}
+
+/** The kept list (and the names notifications use) with this circle's new name. */
+async function keepCircleName(circle: string, name: string) {
+  const kept = await keptCircles()
+  if (!kept.some(c => c.id === circle && c.name !== name)) return
+  const out = kept.map(c => c.id === circle ? { ...c, name } : c)
+  await meta.set('circles', out)
+  keepNames(out).catch(() => {})
+}
+
 export async function leaveCircle(circle: string) {
   await api(`/circles/${circle}/me`, { method: 'DELETE', token: token() })
   const raws = await rawKeys()
@@ -387,7 +404,7 @@ export const keptFeed = (circle: string) => meta.get<Feed>(`circle:${circle}`)
 export async function loadFeed(circle: string): Promise<Feed> {
   const key = await keyOf(circle)
   const r = await api<{
-    me: string; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
+    me: string; name?: string | null; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
     amens: { item: string; mid: string; at?: number }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
     reacts?: { item: string; mid: string; at: number; body: string }[]
   }>(`/circles/${circle}`, { token: token() })
@@ -415,7 +432,10 @@ export async function loadFeed(circle: string): Promise<Feed> {
     const body = cleanShared(await openJson(key, i.body, `${circle}/${i.id}`).catch(() => undefined))
     if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], amenAt: amenAt.get(i.id) ?? {}, replies: replies.get(i.id) ?? [], reacts: reacts.get(i.id) ?? {} })
   }
-  const feed = { me: r.me, members, items }
+  // Someone may have renamed it since the list was last fetched.
+  const name = r.name ? text(await openJson(key, r.name, `${circle}/name`).catch(() => ''), 80) : ''
+  if (name) await keepCircleName(circle, name)
+  const feed: Feed = { me: r.me, ...(name ? { name } : {}), members, items }
   await meta.set(`circle:${circle}`, feed)
   return feed
 }

@@ -49,12 +49,16 @@ export const RefreshIcon = ({ size, class: c }: P) => (
 )
 
 
-/** Three people around a circle: share with your circle. */
+/** A ring of people with one filled in (you), around the cross: where two
+ *  or three gather in his name (Matthew 18:20). Share with your circle. */
 export const CircleIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" />
-    <circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
-    <circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
-    <path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+  <svg {...svg(size, c)}><path d="M15.05 3.96A8.6 8.6 0 0 1 18.71 6.62M20.59 12.42A8.6 8.6 0 0 1 19.19 16.71M14.26 20.30A8.6 8.6 0 0 1 9.74 20.30M4.81 16.71A8.6 8.6 0 0 1 3.41 12.42M5.29 6.62A8.6 8.6 0 0 1 8.95 3.96" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" />
+    <circle cx="12" cy="3.40" r="2.8" fill="currentColor" />
+    <circle cx="20.18" cy="9.34" r="1.8" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="17.05" cy="18.96" r="1.8" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="6.95" cy="18.96" r="1.8" fill="none" stroke="currentColor" stroke-width="2" />
+    <circle cx="3.82" cy="9.34" r="1.8" fill="none" stroke="currentColor" stroke-width="2" />
+    <path d="M12 8.6v6.8M9.6 10.9h4.8" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" /></svg>
 )
 
 /** A thick ×: close. Drawn, not typed, so it stays bold on every phone. */

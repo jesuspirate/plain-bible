@@ -643,7 +643,8 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
 
   // Who's in it and what's been shared, newest first.
   if (req.method === 'GET' && !b) {
-    const [members, items, amens, replies, reacts] = await Promise.all([
+    const [named, members, items, amens, replies, reacts] = await Promise.all([
+      db.prepare('SELECT name FROM circles WHERE id = ?').bind(circle).first<{ name: string }>(),
       db.prepare('SELECT mid, name, streak FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
       db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
         WHERE i.circle_id = ?1 AND (i.chunks = 0 OR i.chunks = (SELECT COUNT(*) FROM circle_chunks k WHERE k.circle_id = ?1 AND k.item = i.id))
@@ -655,7 +656,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       db.prepare(`SELECT x.item, m.mid, x.at, x.body FROM circle_reacts x JOIN circle_members m ON m.circle_id = x.circle_id AND m.user_id = x.user_id
         WHERE x.circle_id = ? ORDER BY x.at`).bind(circle).all(),
     ])
-    return json({ me: mid, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results })
+    return json({ me: mid, name: named?.name, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results })
   }
   // Joining with a code, on the member's side: make one, see who typed it,
   // and allow them by sealing the circle key to their public key.
@@ -689,6 +690,14 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       if (!res.meta.changes) throw new HttpError(404, 'They stopped waiting. Make a new code.')
       return json({ ok: true })
     }
+  }
+  // The circle's own name: anyone in it may change it. It's sealed with
+  // the circle's key, so this side never knows what it says.
+  if (b === 'name' && !c && req.method === 'PUT') {
+    const { name } = await readJson<{ name: string }>(req)
+    if (!sealedText(name, 2000)) throw new HttpError(400, 'Bad request')
+    await db.prepare('UPDATE circles SET name = ? WHERE id = ?').bind(name, circle).run()
+    return json({ ok: true })
   }
   // Your name in this circle.
   if (b === 'me' && !c) {
