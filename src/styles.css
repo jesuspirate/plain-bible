@@ -591,28 +591,18 @@ button.danger, .set-row.danger { color: #b3261e; }
 .selbar .actions button.on { background: var(--chip); color: var(--accent); }
 .selbar .actions .bm-icon { color: var(--ribbon); }
 .selbar-note { margin: 6px 0 0; text-align: center; }
-/* ---- the ribbon beside a verse under the mouse (computers only) ---- */
-.verse-tab { display: none; }
-@media (hover: hover) and (pointer: fine) {
-  .verse, .pv { position: relative; }
-  /* In the margin, level with the verse's first line; between verses in a
-     paragraph, or when the window leaves no margin, just above its number. */
-  /* It lingers a moment after the mouse leaves the verse, so moving onto it
-     never makes it vanish; shown, it appears at once. */
-  .verse-tab {
-    display: grid; place-items: center; position: absolute; z-index: 2; width: 34px; height: 34px; padding: 0; border: none; border-radius: 10px;
-    background: none; color: var(--muted); cursor: pointer; opacity: 0; visibility: hidden; transition: opacity .2s .5s, visibility 0s .7s;
-  }
-  /* Reaches right up to the text, so there's no gap to cross. */
-  .verse > .verse-tab { left: -50px; width: 50px; padding-right: 12px; top: calc(.85em - 15px); background-clip: content-box; }
-  /* In a paragraph: just above the verse number, where the verse starts. */
-  .tab-at { position: relative; }
-  .tab-at > .verse-tab { left: -6px; bottom: .95em; width: 30px; height: 30px; }
-  @media (max-width: 860px) { .verse > .verse-tab { left: -8px; width: 34px; padding-right: 0; top: 0; transform: translateY(-80%); } }
-  .verse:hover > .verse-tab, .pv:hover > .tab-at > .verse-tab, .verse-tab:hover { opacity: .75; visibility: visible; transition: none; }
-  .verse-tab:hover { opacity: 1 !important; color: var(--accent); background: var(--chip); }
-  .verse.picked > .verse-tab, .pv.picked > .tab-at > .verse-tab { opacity: 0 !important; visibility: hidden; transition: none; }
+/* ---- the ribbon at the end of the verse you're on (computers only) ---- */
+/* Takes no room, so nothing moves when it goes from verse to verse. */
+.tab-end { position: relative; display: inline-block; width: 0; height: 1em; }
+.verse-tab {
+  position: absolute; left: .3em; top: 50%; transform: translateY(-50%); z-index: 2; display: grid; place-items: center;
+  width: 34px; height: 34px; padding: 0; border: none; border-radius: 10px; background: none; color: var(--muted); opacity: .8; cursor: pointer;
 }
+.verse-tab:hover { opacity: 1; color: var(--accent); background: var(--chip); }
+.para .tab-end { width: 1em; }
+.para .verse-tab { left: 0; width: 28px; height: 28px; }
+.picked .verse-tab { display: none; }
+@media not ((hover: hover) and (pointer: fine)) { .tab-end { display: none; } }
 body.selecting .sb { display: none; }
 body.selecting main { padding-bottom: 200px; }
 
