@@ -1,0 +1,44 @@
+/* The support page: the welcome page's look (welcome.css), plus the two ways to give. */
+header.top { justify-content: space-between; flex-wrap: wrap; }
+@media (max-width: 640px) { header.top .pickers { width: 100%; justify-content: flex-start; } }
+.back {
+  display: inline-flex; align-items: center; gap: 6px; min-height: 48px; padding: 0 18px 0 10px; border-radius: 999px;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text); font: 700 18px var(--sans); text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.back svg { width: 26px; height: 26px; color: var(--accent); }
+
+.give-hero { border-top: none; padding-top: 16px; max-width: 760px; }
+.give-hero .lamp { width: 104px; height: 104px; }
+.kicker { margin: 0 0 4px; font: 600 22px var(--serif); color: var(--soft); }
+.give-hero h1 { font-size: 44px; line-height: 1.1; margin: 0 0 14px; }
+@media (min-width: 900px) { .give-hero h1 { font-size: 60px; } }
+
+/* The two ways to give: big, side by side on a wide screen, stacked on a phone. */
+.gives { display: grid; gap: 14px; margin: 6px 0 0; }
+@media (min-width: 640px) { .gives { grid-template-columns: 1fr 1fr; } }
+.give {
+  display: grid; gap: 4px; align-content: center; min-height: 104px; padding: 18px 24px; border-radius: 26px;
+  border: 2px solid var(--line); background: var(--surface); color: var(--text); text-decoration: none;
+  -webkit-tap-highlight-color: transparent;
+}
+.give strong { font: 700 23px var(--sans); }
+.give strong::after { content: ' ↗'; font-weight: 600; }
+.give span { font-size: 18px; line-height: 1.4; color: var(--soft); }
+.give.primary { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); box-shadow: 0 6px 18px rgba(0,0,0,.16); }
+.give.primary span { color: var(--accent-ink); opacity: .9; }
+.give:active { transform: scale(.98); }
+@media (hover: hover) { .give:hover { filter: brightness(1.06); } .give:not(.primary):hover { border-color: var(--muted); } }
+
+.section-sub.after { margin: 22px 0 0; }
+
+/* ---- Bitcoin ---- */
+.btc-pay { margin: 0 0 24px; }
+.qrs { display: grid; gap: 16px; }
+@media (min-width: 640px) { .qrs { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
+.qr { margin: 0; display: grid; gap: 14px; justify-items: start; padding: 20px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); }
+.qr-code { width: min(240px, 100%); }
+.qr-code svg { display: block; width: 100%; height: auto; border-radius: 10px; }
+.qr figcaption { display: grid; gap: 8px; justify-items: start; min-width: 0; width: 100%; }
+.qr code { font: 16px/1.4 ui-monospace, Menlo, Consolas, monospace; overflow-wrap: anywhere; user-select: all; }
+.btn.copy { min-height: 48px; padding: 0 22px; font-size: 18px; }

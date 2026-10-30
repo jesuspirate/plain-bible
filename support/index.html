@@ -1,0 +1,178 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover" />
+    <title>Support My Quiet Bible</title>
+    <meta name="description" content="My Quiet Bible is free for everyone, forever. If it helps you, you can help keep the lamp lit." />
+    <link rel="canonical" href="https://myquietbible.com/support/" />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="My Quiet Bible" />
+    <meta property="og:title" content="Support My Quiet Bible" />
+    <meta property="og:description" content="Free for everyone, forever. If it helps you, you can help keep the lamp lit." />
+    <meta property="og:url" content="https://myquietbible.com/support/" />
+    <meta property="og:image" content="https://myquietbible.com/share.png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="A lit lamp beside the words My Quiet Bible. Read, pray, share, repeat." />
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="theme-color" content="#f4ecd8" />
+    <meta name="apple-mobile-web-app-title" content="My Quiet Bible" />
+    <link rel="icon" href="../icon.svg" type="image/svg+xml" />
+    <link rel="apple-touch-icon" href="../icon-192.png" />
+    <script>
+      // Before the first paint: the theme of the Bible on this device, as on
+      // the welcome page. An app on a Home Screen that somehow opens here on
+      // its own goes to the Bible; a tap in Settings → About shows this page.
+      (function () {
+        var t = 'sepia'
+        try {
+          var mode = function (m) { return matchMedia('(display-mode: ' + m + ')').matches }
+          var installed = navigator.standalone === true || mode('standalone') || mode('fullscreen') || mode('minimal-ui')
+          if (installed && document.referrer.indexOf(location.origin + '/') !== 0) {
+            document.documentElement.style.visibility = 'hidden'
+            location.replace('../#/read')
+            return
+          }
+          var settings = localStorage.getItem('plain-bible:settings')
+          t = (settings && JSON.parse(settings).theme) || localStorage.getItem('plain-bible:welcome-theme') || t
+        } catch (e) {}
+        if (t === 'system') t = matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light'
+        if (t !== 'light' && t !== 'dark') t = 'sepia'
+        document.documentElement.dataset.theme = t
+        document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]
+      })()
+    </script>
+    <script>
+      // The language, as on the welcome page: picked there or here, the app's, or the phone's.
+      (function () {
+        var ok = /^(en|fr|es)$/, l = null
+        try {
+          l = localStorage.getItem('plain-bible:welcome-lang') || JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').language
+        } catch (e) {}
+        if (!ok.test(l || '')) {
+          l = 'en'
+          var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']
+          for (var i = 0; i < list.length; i++) {
+            var c = String(list[i]).toLowerCase().split('-')[0]
+            if (ok.test(c)) { l = c; break }
+          }
+        }
+        document.documentElement.lang = l
+        if (l !== 'en') {
+          document.documentElement.classList.add('i18n-wait')
+          setTimeout(function () { document.documentElement.classList.remove('i18n-wait') }, 3000)
+        }
+      })()
+    </script>
+    <style>.i18n-wait body { visibility: hidden; }</style>
+    <script type="module" src="./support.ts"></script>
+  </head>
+  <body>
+    <svg width="0" height="0" style="position:absolute" aria-hidden="true">
+      <symbol id="lamp" viewBox="0 0 512 512">
+        <path fill="var(--flame)" fill-rule="evenodd" d="M272.1 72C264.9 115.2 303.8 144 321 180C336.9 213.1 332.6 256.3 306.6 280.8C292.2 295.2 276.4 302.4 257.7 302.4C217.4 302.4 191.4 272.2 191.4 236.2C191.4 201.6 213 177.1 231.8 157C251.9 135.4 269.2 110.9 272.1 72Z M264.9 185.8C270.6 210.2 290.8 223.2 290.8 249.1C290.8 269.3 276.4 283.7 257.7 283.7C239 283.7 224.6 269.3 224.6 250.6C224.6 226.1 249 213.1 264.9 185.8Z" />
+        <path fill="var(--bowl)" d="M104 326H408C408 390 340 436 256 436C172 436 104 390 104 326Z" />
+      </symbol>
+    </svg>
+
+    <header class="top">
+      <!-- In a Home Screen app there is no browser Back button: this is the way back. -->
+      <a class="back" href="../#/read" data-t="back"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M15 5l-7 7 7 7" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>Back to the Bible</a>
+      <div class="pickers">
+        <div class="themes" role="group" aria-label="Theme" data-t-label="theme">
+          <button type="button" data-theme="light" aria-pressed="false" data-t="light">Light</button>
+          <button type="button" data-theme="sepia" aria-pressed="false" data-t="sepia">Sepia</button>
+          <button type="button" data-theme="dark" aria-pressed="false" data-t="dark">Dark</button>
+        </div>
+        <div class="themes langs" role="group" aria-label="Language" data-t-label="language">
+          <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
+          <button type="button" data-lang="fr" lang="fr" aria-pressed="false" aria-label="Français">FR</button>
+          <button type="button" data-lang="es" lang="es" aria-pressed="false" aria-label="Español">ES</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <section class="give-hero">
+        <div class="lamp" aria-hidden="true"><svg><use href="#lamp" /></svg></div>
+        <p class="kicker">My Quiet Bible</p>
+        <h1 data-t="lead">Read, pray, share, repeat.</h1>
+        <p class="sub" data-t="sub">Free for everyone, forever. If it helps you, you can help keep the lamp lit.</p>
+
+        <div class="gives">
+          <a class="give primary" href="https://liberapay.com/my_quiet_bible/donate" target="_blank" rel="noopener">
+            <strong data-t="liberapay">Give with Liberapay</strong>
+            <span data-t="liberapaySub">A gift every week, month or year. Card or PayPal.</span>
+          </a>
+          <a class="give" href="https://ko-fi.com/quietbible" target="_blank" rel="noopener">
+            <strong data-t="kofi">Give with Ko-fi</strong>
+            <span data-t="kofiSub">A one-time gift, like buying a coffee, or monthly.</span>
+          </a>
+        </div>
+        <p class="note" data-t="leave">Both open in a new page. Come back here, or to the Bible, when you're done.</p>
+      </section>
+
+      <!-- Bitcoin, once the BTCPay Server is up. Fill in data-btcpay (the store's pay link), and either or both of
+           data-address (an on-chain address) and data-lightning (a Lightning address like name@domain, or an LNURL).
+           Left empty, the section stays hidden. -->
+      <section id="bitcoin" data-btcpay="" data-address="" data-lightning="" hidden aria-labelledby="btc-h">
+        <h2 id="btc-h" data-t="btcH">Give with Bitcoin</h2>
+        <p class="section-sub" data-t="btcSub">On-chain or Lightning, straight to our own server, with no company in between.</p>
+        <p class="btc-pay" hidden><a class="btn primary" target="_blank" rel="noopener" data-t="btcPay">Give with Bitcoin</a></p>
+        <div class="qrs">
+          <figure class="qr" data-kind="address" hidden>
+            <div class="qr-code" role="img" aria-label="QR code of the Bitcoin address" data-t-label="btcAddressQr"></div>
+            <figcaption>
+              <strong data-t="btcAddress">Bitcoin address</strong>
+              <code></code>
+              <button type="button" class="btn copy" data-t="copy">Copy</button>
+            </figcaption>
+          </figure>
+          <figure class="qr" data-kind="lightning" hidden>
+            <div class="qr-code" role="img" aria-label="QR code for Lightning" data-t-label="btcLightningQr"></div>
+            <figcaption>
+              <strong data-t="btcLightning">Lightning</strong>
+              <code></code>
+              <button type="button" class="btn copy" data-t="copy">Copy</button>
+            </figcaption>
+          </figure>
+        </div>
+      </section>
+
+      <section aria-labelledby="where-h">
+        <h2 id="where-h" data-t="whereH">Where it goes</h2>
+        <ul class="ticks" data-t="where">
+          <li>The servers that keep sync and circles running.</li>
+          <li>The domain names, so myquietbible.com keeps working.</li>
+          <li>The email that sends sign-in codes.</li>
+        </ul>
+        <p class="section-sub after" data-t="never">Nothing in the Bible will ever be locked. Giving is a thank-you, not a ticket in, and nothing changes in the app whether you give or not.</p>
+        <p class="note" data-t="tax">My Quiet Bible isn't a registered charity, so gifts are not tax-deductible.</p>
+      </section>
+
+      <section aria-labelledby="other-h">
+        <h2 id="other-h" data-t="otherH">Other ways to help</h2>
+        <ul class="ticks" data-t="other">
+          <li>Pray for this work, and for the people who read with it.</li>
+          <li>Send myquietbible.com to someone who'd like a quiet Bible.</li>
+        </ul>
+      </section>
+
+      <section class="closing">
+        <div class="lamp small" aria-hidden="true"><svg><use href="#lamp" /></svg></div>
+        <p class="lead" data-t="thanks">Thank you.</p>
+        <a class="btn primary" href="../#/read" data-t="open">Open the Bible</a>
+      </section>
+    </main>
+
+    <footer>
+      <p class="foot-brand"><svg aria-hidden="true"><use href="#lamp" /></svg> My Quiet Bible · myquietbible.com</p>
+      <nav aria-label="More" data-t-label="more">
+        <a href="../#/read" data-t="open">Open the Bible</a>
+        <a href="../welcome/" data-t="about">What is My Quiet Bible?</a>
+        <a href="../privacy.html" data-t="privacy">Privacy</a>
+      </nav>
+    </footer>
+  </body>
+</html>

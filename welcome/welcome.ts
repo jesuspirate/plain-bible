@@ -133,7 +133,7 @@ async function applyLang(l: Lang, remember: boolean) {
   for (const [el, en] of labels) el.setAttribute('aria-label', (words[el.dataset.tLabel as keyof Words] as string) ?? en)
   document.title = word('title')
   description.content = fill(word('description'))
-  for (const el of $$('[data-device-label]')) el.textContent = word(computer ? 'computerInstall' : 'homeScreen')
+  labelInstall()
   // The reader in the picture shows the Bible this language opens in.
   mock.forEach((p, i) => {
     const n = String(103 + i), text = word('mock')[i]
@@ -159,17 +159,24 @@ for (const b of $$<HTMLButtonElement>('.langs button')) b.addEventListener('clic
 const ua = navigator.userAgent
 const iOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 const android = /Android/i.test(ua)
+// A computer has no Home Screen: the button at the top says so for the device
+// in hand, the section's heading for the tab picked.
+const computer = !iOS && !android
+let panel = iOS ? 'iphone' : android ? 'android' : 'computer'
+function labelInstall() {
+  for (const el of $$('[data-device-label]')) el.textContent = word((el.id === 'install-h' ? panel === 'computer' : computer) ? 'computerInstall' : 'homeScreen')
+}
 function showPanel(id: string) {
+  panel = id
   for (const t of $$<HTMLButtonElement>('.seg button')) {
     const on = t.id === `tab-${id}`
     t.setAttribute('aria-pressed', String(on))
     $(`#${t.getAttribute('aria-controls')}`)!.hidden = !on
   }
+  labelInstall()
 }
 for (const t of $$<HTMLButtonElement>('.seg button')) t.addEventListener('click', () => showPanel(t.id.slice(4)))
-showPanel(iOS ? 'iphone' : android ? 'android' : 'computer')
-// A computer has no Home Screen.
-const computer = !iOS && !android
+showPanel(panel)
 applyLang((['en', 'fr', 'es'].includes(root.lang) ? root.lang : 'en') as Lang, false)
 
 // Where the browser offers to install (Chrome on Android and computers), one button does it.
