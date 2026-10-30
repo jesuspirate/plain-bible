@@ -848,5 +848,4 @@ export default {
   "Add a note about these prayers (optional)": "Ajouter une note sur ces prières (facultatif)",
   "Everyone in {circle} will be able to hear these prayers.": "Tout le monde dans {circle} pourra écouter ces prières.",
   "Everyone in the circle will be able to hear these prayers.": "Tout le monde dans le cercle pourra écouter ces prières.",
-  "Highlight": "Surligner",
 } as Record<string, string>

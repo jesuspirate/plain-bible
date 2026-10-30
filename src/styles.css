@@ -591,24 +591,25 @@ button.danger, .set-row.danger { color: #b3261e; }
 .selbar .actions button.on { background: var(--chip); color: var(--accent); }
 .selbar .actions .bm-icon { color: var(--ribbon); }
 .selbar-note { margin: 6px 0 0; text-align: center; }
-/* ---- the little bar over words picked with a mouse (desktop) ---- */
-.wordbar {
-  position: fixed; z-index: 31; display: flex; gap: 2px; padding: 5px;
-  background: color-mix(in srgb, var(--surface) 94%, transparent); backdrop-filter: blur(16px) saturate(1.4);
-  border: 1px solid var(--line); border-radius: 18px; box-shadow: 0 8px 28px rgba(0,0,0,.18);
-  animation: wordbar-in .14s ease-out;
+/* ---- the ribbon beside a verse under the mouse (computers only) ---- */
+.verse-tab { display: none; }
+@media (hover: hover) and (pointer: fine) {
+  .verse, .pv { position: relative; }
+  /* In the margin, level with the verse's first line; between verses in a
+     paragraph, or when the window leaves no margin, just above its number. */
+  .verse-tab {
+    display: grid; place-items: center; position: absolute; z-index: 2; width: 34px; height: 34px; padding: 0; border: none; border-radius: 10px;
+    background: none; color: var(--muted); cursor: pointer; opacity: 0; pointer-events: none; transition: opacity .15s;
+  }
+  .verse > .verse-tab { left: -46px; top: calc(.85em - 15px); }
+  /* In a paragraph: just above the verse number, where the verse starts. */
+  .tab-at { position: relative; }
+  .tab-at > .verse-tab { left: -6px; bottom: .95em; width: 30px; height: 30px; }
+  @media (max-width: 860px) { .verse > .verse-tab { left: -8px; top: 0; transform: translateY(-80%); } }
+  .verse:hover > .verse-tab, .pv:hover > .tab-at > .verse-tab { opacity: .75; pointer-events: auto; }
+  .verse-tab:hover { opacity: 1 !important; color: var(--accent); background: var(--chip); }
+  .verse.picked > .verse-tab, .pv.picked > .tab-at > .verse-tab { opacity: 0 !important; pointer-events: none; }
 }
-.wordbar.below { animation-name: wordbar-in-below; }
-@keyframes wordbar-in { from { opacity: 0; transform: translateY(4px); } }
-@keyframes wordbar-in-below { from { opacity: 0; transform: translateY(-4px); } }
-@media (prefers-reduced-motion: reduce) { .wordbar { animation: none; } }
-.wordbar button { min-width: 62px; display: flex; flex-direction: column; align-items: center; gap: 3px; padding: 8px 6px 6px; border: none; border-radius: 13px; background: none; font-size: 13px; font-weight: 500; white-space: nowrap; color: var(--text); cursor: pointer; }
-.wordbar button:hover { background: var(--chip); }
-.wordbar button:focus-visible { outline: 2px solid var(--accent); outline-offset: -2px; }
-.wordbar button.on { background: var(--chip); color: var(--accent); }
-.wordbar .bm-icon { color: var(--ribbon); }
-/* The marker shows the colour it will highlight in. */
-.wb-hl { display: inline-flex; height: 22px; border-radius: 6px; background: linear-gradient(transparent 62%, var(--c) 62%); }
 body.selecting .sb { display: none; }
 body.selecting main { padding-bottom: 200px; }
 

@@ -1,5 +1,5 @@
 import { ComponentChildren } from 'preact'
-import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
@@ -14,8 +14,7 @@ import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, HighlightIcon, LinkIcon, MoreIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
-import { Box, placeBar, tidyWords, versesOf } from './lib/wordbar'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
@@ -495,7 +494,7 @@ export function Reader({ route }: { route: Route }) {
     if (!busy.current && peekDir.current && !trackpad()) { touch.current = undefined; release(0) }
     if (overlayOpen()) return
     const el = e.target as HTMLElement
-    if (el.closest?.('.sb, dialog, .selbar, .wordbar, .pager, header') || !(el.closest?.('.reader') || busy.current || peekDir.current)) return
+    if (el.closest?.('.sb, dialog, .selbar, .pager, header') || !(el.closest?.('.reader') || busy.current || peekDir.current)) return
     if (busy.current) hurry()
     const p = e.touches[0]
     touch.current = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0, x0: p.clientX, tx: 0, late: busy.current }
@@ -561,7 +560,7 @@ export function Reader({ route }: { route: Route }) {
       // With a sheet or Circles up, the swipe isn't for the page behind.
       // A swipe already turning the page lets go of it.
       if (overlayOpen()) { if (w.dx && !w.done) release(0); w.dx = 0; w.done = false; w.peak = 0; return }
-      if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .wordbar, .sb-chapter-row')) return
+      if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .sb-chapter-row')) return
       e.preventDefault()
       clearTimeout(w.timer)
       // A gesture ends when the events (including the trackpad's glide) stop.
@@ -613,6 +612,15 @@ export function Reader({ route }: { route: Route }) {
       </>
     }
     const lex = live ? setLex : undefined
+    // With a mouse, a quiet ribbon shows beside the verse under it: a sign,
+    // while reading, that a verse has things you can do. It opens the same
+    // bar as clicking the verse.
+    const tab = (v: number) => live && !picking && (
+      <button class="verse-tab" tabIndex={-1} title={t('Verse {v} options', { v })} aria-hidden="true"
+        onClick={e => { e.stopPropagation(); setSelected(s => s.includes(v) ? s : [...s, v].sort((a, b) => a - b)) }}>
+        <BookmarkIcon size={20} filled={false} />
+      </button>
+    )
     return <>
       <h1 class="chapter-title"><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
       {live && reminder}
@@ -623,13 +631,14 @@ export function Reader({ route }: { route: Route }) {
         <p class="para" dir={info?.rtl ? 'rtl' : undefined} lang={info?.lang}>
           {primary.books[b][c - 1].map((raw, i) => raw && (
             <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
-              <sup class="vn">{i + 1}</sup>{after(i + 1)}
+              <span class="tab-at">{tab(i + 1)}</span><sup class="vn">{i + 1}</sup>{after(i + 1)}
               <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span>{' '}
             </span>
           ))}
         </p>
       ) : Array.from({ length: rowsOf }, (_, i) => (
         <div id={verse(i + 1).id} class={cls('verse', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick}>
+          {tab(i + 1)}
           {versions.map(v => {
             const raw = bibles[v].books[b]?.[c - 1]?.[i]
             const tv = byId.get(v)
@@ -677,9 +686,6 @@ export function Reader({ route }: { route: Route }) {
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
-      {loaded && rows > 0 && <WordsBar article={article} book={book} chapter={chapter} versions={versions} bibles={bibles}
-        off={selected.length > 0 || !!picking || !!noteFor || !!lex || chapterSheet || !!peek}
-        onNote={vs => openNote(vs)} onPray={vs => prayOver({ book, chapter, verses: vs })} onMore={vs => setSelected(vs)} />}
       {picking && (
         <div class="pick-verse" role="region" aria-label={t('Verses for your prayer')}>
           <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap verses for your prayer')}</p>
@@ -734,10 +740,8 @@ function toVerse(v: number) {
 
 export { verseRanges }
 
-/** What you can do with some verses: shared by the selection bar and the
- *  little bar over words picked with a mouse. `words`, when given, is what
- *  gets copied and shared instead of the whole verses. */
-function useVerseActions(book: string, chapter: number, verses: number[], versions: string[], bibles: Record<string, Bible>, words?: string) {
+/** What you can do with some verses: marks, the quote and link, copying. */
+function useVerseActions(book: string, chapter: number, verses: number[], versions: string[], bibles: Record<string, Bible>) {
   const { marks, setMarks } = useApp()
   const [note, setNote] = useState('')
   const version = versions[0]
@@ -760,7 +764,7 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const textOf = (b: Bible | undefined) => verses.length === 1
     ? plain(b?.books[book]?.[chapter - 1]?.[verses[0] - 1] ?? '')
     : verses.map(v => { const raw = b?.books[book]?.[chapter - 1]?.[v - 1]; return raw ? `${v} ${plain(raw)}` : '' }).filter(Boolean).join(' ')
-  const quote = `${words ?? textOf(bibles[version])}\n${ref} (${version})`
+  const quote = `${textOf(bibles[version])}\n${ref} (${version})`
   // For someone else: numbered as everyone numbers it, to open in their Bible.
   const std = toStandard(bibles[version], { book, chapter, verses })
   const link = shareLink(`#/${sharedPath(version, std.book, std.chapter, std.verses[0])}`)
@@ -850,105 +854,6 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
         </Sheet>
       )}
     </>
-  )
-}
-
-// With a mouse or a trackpad, picking words in the chapter brings up a small
-// bar just above them, as in a desktop app. On phones and tablets the
-// system's own Copy menu already sits right there (and a tap on a verse
-// gives the full bar), so this stays off for touch.
-const fine = typeof matchMedia === 'function' && matchMedia('(hover: hover) and (pointer: fine)').matches
-
-interface Picked { verses: number[]; version: string; words: string; first: Box; last: Box }
-
-function WordsBar({ article, book, chapter, versions, bibles, off, onNote, onPray, onMore }: {
-  article: { current: HTMLElement | null }; book: string; chapter: number; versions: string[]; bibles: Record<string, Bible>; off: boolean
-  onNote: (vs: number[]) => void; onPray: (vs: number[]) => void; onMore: (vs: number[]) => void
-}) {
-  const [picked, setPicked] = useState<Picked>()
-  useEffect(() => {
-    if (!fine || off) { setPicked(undefined); return }
-    const read = () => {
-      const sel = getSelection(), root = article.current
-      if (!sel || sel.isCollapsed || !root || overlayOpen() || !String(sel).trim()) return setPicked(undefined)
-      const range = sel.getRangeAt(0)
-      if (!root.contains(range.commonAncestorContainer)) return setPicked(undefined)
-      const verses = versesOf([...root.querySelectorAll<HTMLElement>('[id^="v"]')].filter(el => range.intersectsNode(el)).map(el => el.id))
-      const lines = [...range.getClientRects()].filter(r => r.width > 1)
-      if (!verses.length || !lines.length) return setPicked(undefined)
-      // Side by side, the words may be from another Bible than the first.
-      const cell = (range.startContainer.parentElement)?.closest('.cell')
-      const version = cell ? versions[[...cell.parentElement!.children].filter(c => c.classList.contains('cell')).indexOf(cell)] ?? versions[0] : versions[0]
-      // Only the words: no verse numbers or the little marks beside them.
-      const copy = document.createElement('div')
-      copy.append(range.cloneContents())
-      copy.querySelectorAll('.vn, .bm-mark, .note-mark, .chapter-title, .chapter-notes, .colhead').forEach(el => el.remove())
-      const box = (r: DOMRect): Box => ({ top: r.top, bottom: r.bottom, left: r.left, width: r.width })
-      setPicked({ verses, version, words: tidyWords(copy.textContent ?? ''), first: box(lines[0]), last: box(lines[lines.length - 1]) })
-    }
-    // Shown once the mouse lets go, not while you drag; gone with the words.
-    let timer = 0
-    const later = () => { clearTimeout(timer); timer = window.setTimeout(read) }
-    const up = (e: MouseEvent) => { if (e.detail !== 2) later() }
-    const keyUp = (e: KeyboardEvent) => { if (e.shiftKey || e.key === 'Shift') later() }
-    const changed = () => { if (getSelection()?.isCollapsed) setPicked(undefined) }
-    const scrolled = () => setPicked(p => p && (read(), p))
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') { getSelection()?.removeAllRanges(); setPicked(undefined) } }
-    document.addEventListener('mouseup', up)
-    document.addEventListener('keyup', keyUp)
-    document.addEventListener('selectionchange', changed)
-    addEventListener('scroll', scrolled, { passive: true })
-    addEventListener('resize', scrolled)
-    addEventListener('keydown', esc)
-    return () => {
-      clearTimeout(timer)
-      document.removeEventListener('mouseup', up)
-      document.removeEventListener('keyup', keyUp)
-      document.removeEventListener('selectionchange', changed)
-      removeEventListener('scroll', scrolled)
-      removeEventListener('resize', scrolled)
-      removeEventListener('keydown', esc)
-    }
-  }, [off, book, chapter, versions.join()])
-  if (!picked || off) return null
-  return <WordsPill key={picked.verses.join() + picked.version + picked.words} picked={picked} book={book} chapter={chapter} versions={versions} bibles={bibles}
-    onNote={onNote} onPray={onPray} onMore={onMore} />
-}
-
-function WordsPill({ picked, book, chapter, versions, bibles, onNote, onPray, onMore }: {
-  picked: Picked; book: string; chapter: number; versions: string[]; bibles: Record<string, Bible>
-  onNote: (vs: number[]) => void; onPray: (vs: number[]) => void; onMore: (vs: number[]) => void
-}) {
-  const { settings } = useApp()
-  const { verses } = picked
-  const { ref, current, allBookmarked, hasNote, apply, quote, link, copy, note } =
-    useVerseActions(book, chapter, verses, [picked.version, ...versions.filter(v => v !== picked.version)], bibles, picked.words)
-  const el = useRef<HTMLDivElement>(null)
-  const [at, setAt] = useState<{ x: number; y: number; below: boolean }>()
-  useLayoutEffect(() => {
-    if (el.current) setAt(placeBar(picked.first, picked.last, { w: el.current.offsetWidth, h: el.current.offsetHeight }, { w: innerWidth, top: headerBottom() }))
-  }, [picked.first.top, picked.first.left, picked.last.bottom])
-  const done = () => getSelection()?.removeAllRanges()
-  const act = (f: () => void) => () => { f(); done() }
-  return (
-    <div ref={el} class={'wordbar' + (at?.below ? ' below' : '')} role="toolbar" aria-label={t('{ref} selected', { ref })}
-      style={at ? { left: at.x + 'px', top: at.y + 'px' } : { visibility: 'hidden' }}
-      // Pressing a button mustn't let go of the words first.
-      onMouseDown={e => e.preventDefault()}>
-      <button class={current ? 'on' : ''} aria-pressed={!!current} onClick={act(() => apply({ c: current ? null : lastColor() }))}>
-        <span class="wb-hl" style={{ '--c': current ?? lastColor() }}><HighlightIcon size={22} /></span><span>{t('Highlight')}</span>
-      </button>
-      <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={act(() => apply({ b: allBookmarked ? null : 1 }))}>
-        <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
-      </button>
-      <button class={hasNote ? 'on' : ''} onClick={act(() => onNote(verses))}><NoteIcon size={22} /><span>{t('Note')}</span></button>
-      <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{note || t('Copy')}</span></button>
-      {canShare
-        ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>{t('Share')}</span></button>
-        : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>{t('Link')}</span></button>}
-      <button onClick={act(() => onPray(verses))}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
-      <button onClick={act(() => onMore(verses))}><MoreIcon size={22} /><span>{t('More')}</span></button>
-    </div>
   )
 }
 
