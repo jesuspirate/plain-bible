@@ -848,4 +848,8 @@ export default {
   "Add a note about these prayers (optional)": "Añade una nota sobre estas oraciones (opcional)",
   "Everyone in {circle} will be able to hear these prayers.": "Todos en {circle} podrán oír estas oraciones.",
   "Everyone in the circle will be able to hear these prayers.": "Todos en el círculo podrán oír estas oraciones.",
+  "Rename": "Cambiar nombre",
+  "Circle name": "Nombre del círculo",
+  "Save name": "Guardar nombre",
+  "Everyone in the circle will see the new name.": "Todos en el círculo verán el nuevo nombre.",
 } as Record<string, string>
