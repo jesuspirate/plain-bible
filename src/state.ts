@@ -161,8 +161,8 @@ const CIRCLES = 'plain-bible:circles'
 export const inCircles = () => { try { return +(localStorage.getItem(CIRCLES) || 0) > 0 } catch { return false } }
 export const setInCircles = (n: number) => { try { n ? localStorage.setItem(CIRCLES, String(n)) : localStorage.removeItem(CIRCLES) } catch { /* ignore */ } }
 /** Something to share with a circle: verses with their words (and maybe
- *  the note being written on them), or a prayer. */
-export type ShareRequest = { verse: PrayerVerse; version: string; text: string; note?: string } | { prayer: string }
+ *  the note being written on them), a prayer, or all of one day's prayers. */
+export type ShareRequest = { verse: PrayerVerse; version: string; text: string; note?: string } | { prayer: string } | { prayers: string[] }
 export const SHARE_EVENT = 'plain-bible:share-circle'
 export const shareWithCircle = (r: ShareRequest) => window.dispatchEvent(new CustomEvent(SHARE_EVENT, { detail: r }))
 
