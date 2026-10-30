@@ -9,7 +9,8 @@ import {
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
-import { duration, prayers } from './lib/prayers'
+import { duration, Prayer, prayers } from './lib/prayers'
+import { circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { playable } from './lib/mp4'
 import { PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
@@ -998,6 +999,10 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   // prayed. What already went to a circle isn't sent there again on a retry.
   const many = 'prayers' in request
   const sent = useRef(new Set<string>())
+  // Circles that already have the prayer (or every one of the day's) are
+  // greyed out, so nothing goes to the same circle twice.
+  const [shared, setShared] = useState<SharedIn>()
+  const [had, setHad] = useState(new Set<string>())
   // Your notes on exactly these verses (or covering the one verse).
   const v = 'verse' in request ? request.verse : undefined
   const notes = v ? notesCovering(marks, v.book, v.chapter, v.verses[0]).filter(x => v.verses.length === 1 || x.verses.join() === v.verses.join()) : []
@@ -1006,13 +1011,20 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const [noteId, setNoteId] = useState(() => (notes.find(x => 'verse' in request && x.n === request.note) ?? notes[notes.length - 1])?.id ?? '')
   const theNote = 'verse' in request && request.note && !notes.some(x => x.id === noteId) ? request.note : notes.find(x => x.id === noteId)?.n
   useEffect(() => {
-    keptCircles().then(cs => { setList(cs); setPicks(cs[0] ? [cs[0].id] : []) })
-    if ('prayers' in request) Promise.all(request.prayers.map(id => prayers.get(id))).then(ps => {
-      const kept = ps.filter(p => !!p)
-      setWhat(`${tn(kept.length, '{n} prayer', '{n} prayers')} · ${duration(kept.reduce((n, p) => n + p!.ms, 0))}`)
+    const ids = 'prayers' in request ? request.prayers : 'prayer' in request ? [request.prayer] : []
+    Promise.all([
+      keptCircles(),
+      Promise.all(ids.map(id => prayers.get(id).catch(() => undefined))),
+      ids.length ? loadShared().then(x => x.shared).catch(() => undefined) : undefined,
+    ]).then(([cs, ps, sh]) => {
+      const kept = ps.filter((p): p is Prayer => !!p)
+      const full = sh ? circlesWithAll(sh, kept.map(p => p.at)) : new Set<string>()
+      const first = cs.find(c => !full.has(c.id))
+      setList(cs); setShared(sh); setHad(full); setPicks(first ? [first.id] : [])
+      if ('prayers' in request) setWhat(`${tn(kept.length, '{n} prayer', '{n} prayers')} · ${duration(kept.reduce((n, p) => n + p.ms, 0))}`)
+      else if ('prayer' in request) setWhat(kept[0] ? `${t('Your prayer')} · ${duration(kept[0].ms)}${versesOf(kept[0]).map(v => ` · ${verseLabel(v)}`).join('')}` : '')
     })
-    else if ('prayer' in request) prayers.get(request.prayer).then(p => setWhat(p ? `${t('Your prayer')} · ${duration(p.ms)}${versesOf(p).map(v => ` · ${verseLabel(v)}`).join('')}` : ''))
-    else setWhat(verseLabel(request.verse))
+    if ('verse' in request) setWhat(verseLabel(request.verse))
   }, [])
   const chosen = (list ?? []).filter(c => picks.includes(c.id))
   const toggle = (id: string) => setPicks(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
@@ -1027,13 +1039,16 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         // doesn't show them the wrong verse.
         if ('prayers' in request) {
           const b = await data.bible(settings.version).catch(() => undefined)
-          for (const [i, id] of request.prayers.entries()) {
+          let first = true
+          for (const id of request.prayers) {
             if (sent.current.has(`${pick}/${id}`)) continue
-            // Gone since the list was opened: nothing to send.
-            if (!await prayers.get(id)) continue
+            // Gone since the list was opened, or in that circle already: nothing to send.
+            const p = await prayers.get(id)
+            if (!p || shared?.get(pick)?.has(p.at)) continue
             // The few words go with the first one only.
-            await sharePrayer(pick, id, i ? '' : words.trim(), v => toStandard(b, v))
+            await sharePrayer(pick, id, first ? words.trim() : '', v => toStandard(b, v))
             sent.current.add(`${pick}/${id}`)
+            first = false
           }
         } else if ('prayer' in request) {
           const b = await data.bible(settings.version).catch(() => undefined)
@@ -1055,11 +1070,14 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           return out
         })
       }
+      if (!('verse' in request)) dispatchEvent(new Event(SHARED_EVENT))
       setDone(true)
       setTimeout(onClose, 900)
     } catch (e) { setMsg(navigator.onLine === false ? t('You’re offline. Share again once you’re connected.') : message(e)) } finally { setBusy(false) }
   }
   const canNote = notes.length > 0 || ('verse' in request && !!request.note)
+  const left = (list ?? []).filter(c => !had.has(c.id))
+  const allHad = !!list?.length && !left.length
   return (
     <Sheet title={t('Share with your circle')} onClose={onClose}>
       <div class="c-share">
@@ -1081,14 +1099,17 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         </>}
         {list && list.length > 1 && (
           <div class="c-circles-pick" role="group" aria-label={t('Circles')}>
-            {list.map(c => <button aria-pressed={picks.includes(c.id)} class={picks.includes(c.id) ? 'on' : ''} onClick={() => toggle(c.id)}>{picks.includes(c.id) && '✓ '}{c.name}</button>)}
+            {list.map(c => had.has(c.id)
+              ? <button disabled class="had">{c.name} · {t('Already shared')}</button>
+              : <button aria-pressed={picks.includes(c.id)} class={picks.includes(c.id) ? 'on' : ''} onClick={() => toggle(c.id)}>{picks.includes(c.id) && '✓ '}{c.name}</button>)}
           </div>
         )}
-        {list && list.length > 1 && picks.length < 2 && <p class="muted small c-pick-more">{t('Tap more circles to share with them too')}</p>}
+        {left.length > 1 && picks.length < 2 && <p class="muted small c-pick-more">{t('Tap more circles to share with them too')}</p>}
+        {allHad && !done && <p class="muted">✓ {t('Already shared with {circle}.', { circle: list!.map(c => c.name).join(', ') })}</p>}
         {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={many ? t('Add a note about these prayers (optional)') : 'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
         {many && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear these prayers.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear these prayers.')}</p>}
         {'prayer' in request && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear this prayer.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
-        <button class="c-btn primary" disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…')
+        <button class="c-btn primary" disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…') : allHad ? t('Already shared')
           : chosen.length === 2 ? t('Share with {a} and {b}', { a: chosen[0].name, b: chosen[1].name })
           : chosen.length > 1 ? t('Share with {n} circles', { n: chosen.length }) : chosen.length ? t('Share with {circle}', { circle: chosen[0].name }) : t('Share with circle')}</button>
         {msg && <p class="note small">{msg}</p>}

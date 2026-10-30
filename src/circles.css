@@ -129,6 +129,7 @@ p.c-new-word { display: block; margin: 0 0 4px; }
 .c-circles-pick button { min-height: 40px; padding: 6px 14px; border-radius: 999px; font: 600 15px var(--sans); }
 .c-pick-more { margin-top: -4px; }
 .c-circles-pick button.on { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.c-circles-pick button.had { opacity: .55; border-style: dashed; cursor: default; }
 .c-rename-row { display: flex; align-items: center; gap: 12px; }
 .c-rename-text { display: grid; gap: 2px; flex: 1; min-width: 0; }
 .c-rename-text strong { font-size: 18px; overflow-wrap: anywhere; }

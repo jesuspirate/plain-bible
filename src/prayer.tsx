@@ -6,6 +6,7 @@ import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
+import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { go, inCircles, openSettings, pickVerses, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import { MAX_TIED, PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
@@ -355,6 +356,18 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     setPlaying(undefined); setPos(0)
   }
   useEffect(() => release, [])
+  // Where each prayer was shared already: a circle that has it isn't offered
+  // again, and once every circle has it, the circle button goes.
+  const [where, setWhere] = useState<{ circles: Circle[]; shared: SharedIn }>()
+  useEffect(() => {
+    if (!inCircles()) return
+    const load = () => { loadShared().then(setWhere).catch(() => {}) }
+    load()
+    addEventListener(SHARED_EVENT, load)
+    return () => removeEventListener(SHARED_EVENT, load)
+  }, [])
+  const sharedWith = (ps: PrayerInfo[]) => where ? where.circles.filter(c => circlesWithAll(where.shared, ps.map(p => p.at)).has(c.id)) : []
+  const leftToShare = (ps: PrayerInfo[]) => inCircles() && (!where?.circles.length || sharedWith(ps).length < where.circles.length)
 
   const play = async (p: PrayerInfo) => {
     if (playing === p.id) { release(); return }
@@ -439,7 +452,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
             <li class="pray-day">
               <h3>{dayName(day)}</h3>
               {/* The whole day at once, oldest first: optional, like every share. */}
-              {inCircles() && some.length > 1 && <button class="pray-day-share" onClick={() => shareWithCircle({ prayers: some.map(p => p.id).reverse() })}>
+              {some.length > 1 && leftToShare(some) && <button class="pray-day-share" onClick={() => shareWithCircle({ prayers: some.map(p => p.id).reverse() })}>
                 <CircleIcon size={22} /> <span>{t('Share all {n}', { n: some.length })}</span>
               </button>}
             </li>
@@ -453,12 +466,13 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
               <span class="pray-when">{time(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
                 {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
                 {/* Thought of a verse later, or tapped the wrong one? Tap verses on the page to add or take them off. */}
-                <button class="link pray-list-verse pray-list-add" onClick={() => { release(); onPick(versesOf(p), p.id) }}>{versesOf(p).length ? t('Change verses') : `+ ${t('Add a verse')}`}</button></span>
+                <button class="link pray-list-verse pray-list-add" onClick={() => { release(); onPick(versesOf(p), p.id) }}>{versesOf(p).length ? t('Change verses') : `+ ${t('Add a verse')}`}</button>
+                {sharedWith([p]).length > 0 && <span class="pray-shared muted">✓ {t('Shared with {circle}', { circle: sharedWith([p]).map(c => c.name).join(', ') })}</span>}</span>
               {confirm !== p.id && <>
                 <button class="pray-icon" aria-label={t('Share or save this prayer')} title={t('Share or save')} onClick={() => save(p)}>
                   {again === p.id ? t('Share') : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}
                 </button>
-                {inCircles() && <button class="pray-icon" aria-label={t('Share this prayer with your circle')} title={t('Share with your circle')} onClick={() => shareWithCircle({ prayer: p.id })}>
+                {leftToShare([p]) && <button class="pray-icon" aria-label={t('Share this prayer with your circle')} title={t('Share with your circle')} onClick={() => shareWithCircle({ prayer: p.id })}>
                   <CircleIcon size={24} />
                 </button>}
                 {/* A bin, not a cross: a cross reads as close. */}

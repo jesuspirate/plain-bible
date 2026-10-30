@@ -9,6 +9,7 @@
 // which browsers never send anywhere, and that secret unlocks the circle key
 // for one new member. Loaded only when circles are opened or used.
 import { meta, partsOf, prayers } from './prayers'
+import { forgetSent, keepSent as keepPrayerSent } from './prayerShared'
 import { aesKey, b64url, keyCode, open, prayerKey, seal } from './prayerCrypto'
 import { api, loadAccount, SYNC_URL, SyncError } from './sync'
 import { keepStorage, unlockKey } from './prayerSync'
@@ -501,10 +502,13 @@ export async function sharePrayer(circle: string, prayerId: string, note?: strin
   const audio = new Uint8Array(parts.reduce((n, x) => n + x.audio.byteLength, 0))
   parts.reduce((o, x) => { audio.set(new Uint8Array(x.audio), o); return o + x.audio.byteLength }, 0)
   const verses = versesOf(p).map(standard)
-  return send(circle, {
+  const id = await send(circle, {
     k: 'prayer', ms: p.ms, verse: verses[0], ...(verses.length > 1 ? { verses } : {}), note: note || undefined, prayed: p.at,
     parts: parts.map(x => ({ ms: x.ms, type: x.type, size: x.audio.byteLength })),
   }, audio)
+  // So it shows as shared there, even before the circle is opened again.
+  await keepPrayerSent(circle, p.at).catch(() => {})
+  return id
 }
 
 /** A shared prayer's recording, part by part. Kept on the device once heard. */
@@ -583,6 +587,8 @@ export const removeReply = (circle: string, item: string, id: string) =>
 
 export async function removeShared(circle: string, item: string) {
   await api(`/circles/${circle}/items/${item}`, { method: 'DELETE', token: token() })
+  const body = (await keptFeed(circle).catch(() => undefined))?.items.find(i => i.id === item)?.body
+  if (body?.k === 'prayer' && body.prayed) await forgetSent(circle, body.prayed).catch(() => {})
   await meta.set(`circle-audio:${circle}/${item}`, undefined)
 }
 
