@@ -106,6 +106,10 @@ const EN: Words = {
   description: description.content,
   homeScreen: 'Put it on your Home Screen',
   computerInstall: 'Install it on your computer',
+  installIphone: 'Put it on your iPhone',
+  installAndroid: 'Put it on your Android phone',
+  installSub: 'Then it opens full screen like any other app, keeps your place, and works with no connection.',
+  installSubComputer: 'Then it opens in its own window like any other app, keeps your place, and works with no connection.',
   verseRef: 'Psalm 119:105 · {version}',
   psalm118: ', where it is Psalm 118',
   mbar: 'Ps 119 · KJV',
@@ -134,6 +138,7 @@ async function applyLang(l: Lang, remember: boolean) {
   document.title = word('title')
   description.content = fill(word('description'))
   for (const el of $$('[data-device-label]')) el.textContent = word(computer ? 'computerInstall' : 'homeScreen')
+  installHead()
   // The reader in the picture shows the Bible this language opens in.
   mock.forEach((p, i) => {
     const n = String(103 + i), text = word('mock')[i]
@@ -159,7 +164,15 @@ for (const b of $$<HTMLButtonElement>('.langs button')) b.addEventListener('clic
 const ua = navigator.userAgent
 const iOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 const android = /Android/i.test(ua)
+// The section's heading and the line under it follow the device picked.
+let panel = 'iphone'
+function installHead() {
+  $('#install-h')!.textContent = word(panel === 'iphone' ? 'installIphone' : panel === 'android' ? 'installAndroid' : 'computerInstall')
+  $('#install-sub')!.textContent = word(panel === 'computer' ? 'installSubComputer' : 'installSub')
+}
 function showPanel(id: string) {
+  panel = id
+  installHead()
   for (const t of $$<HTMLButtonElement>('.seg button')) {
     const on = t.id === `tab-${id}`
     t.setAttribute('aria-pressed', String(on))
