@@ -562,6 +562,8 @@ export default {
   "Your highlights and settings are stored on your device.": "Vos surlignages et vos réglages sont gardés sur votre appareil.",
   "To pass My Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.": "Pour faire connaître My Quiet Bible, envoyez {site}. Le lien ouvre une {welcome} qui explique ce que c’est et comment l’ajouter à un écran d’accueil.",
   "welcome page": "page d’accueil",
+  "My Quiet Bible is free for everyone, forever. If it helps you, you can {support}.": "My Quiet Bible est gratuite pour tous, pour toujours. Si elle vous aide, vous pouvez {support}.",
+  "help keep the lamp lit": "aider à garder la lampe allumée",
   "Texts come from the {scrollmapper} and the {oshb} (CC BY 4.0).": "Les textes viennent des {scrollmapper} et de l’{oshb} (CC BY 4.0).",
   "Scrollmapper Bible databases": "bases de données bibliques Scrollmapper",
   "Strong’s dictionary from {source} (CC BY-SA).": "Dictionnaire de Strong issu de {source} (CC BY-SA).",

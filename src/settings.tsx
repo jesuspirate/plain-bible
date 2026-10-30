@@ -395,6 +395,9 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     {/* The welcome page is what a first visit to the bare address shows: what this is, and how to put it on a Home Screen. */}
     <p>{tj('To pass My Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.', {
       site: <strong>myquietbible.com</strong>, welcome: <a href="welcome/">{t('welcome page')}</a> })}</p>
+    {/* The only place the app asks: no banners, nothing inside the Bible. */}
+    <p>{tj('My Quiet Bible is free for everyone, forever. If it helps you, you can {support}.', {
+      support: <a href="support/">{t('help keep the lamp lit')}</a> })}</p>
     <p class="muted small">{tj('Texts come from the {scrollmapper} and the {oshb} (CC BY 4.0).', {
       scrollmapper: <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">{t('Scrollmapper Bible databases')}</a>,
       oshb: <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> })}{' '}

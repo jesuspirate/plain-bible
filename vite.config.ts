@@ -55,7 +55,7 @@ const themedManifests: Plugin = {
     order: 'post',
     handler(html, ctx) {
       html = html.replaceAll('{{versions}}', String(counts.versions)).replaceAll('{{languages}}', String(counts.languages))
-      return ctx.path.startsWith('/welcome/') ? html.replace('href="./manifest.webmanifest"', 'href="../manifest-sepia.webmanifest"') : html
+      return /^\/(welcome|support)\//.test(ctx.path) ? html.replace('href="./manifest.webmanifest"', 'href="../manifest-sepia.webmanifest"') : html
     },
   },
 }
@@ -64,11 +64,11 @@ export default defineConfig({
   define: { __BUILD__: JSON.stringify(BUILD) },
   // Relative base works on a custom domain and on a GitHub Pages project path.
   base: './',
-  // Two pages: the Bible at the root, and the welcome page at /welcome/
-  // (what My Quiet Bible is, and how to put it on a Home Screen). Built
-  // together, so the welcome page shares the app's fonts and is saved
-  // offline with it.
-  build: { rollupOptions: { input: { main: 'index.html', welcome: 'welcome/index.html' } } },
+  // Three pages: the Bible at the root, the welcome page at /welcome/
+  // (what My Quiet Bible is, and how to put it on a Home Screen), and the
+  // support page at /support/ (how to give). Built together, so the other
+  // pages share the app's fonts and are saved offline with it.
+  build: { rollupOptions: { input: { main: 'index.html', welcome: 'welcome/index.html', support: 'support/index.html' } } },
   plugins: [
     preact(),
     VitePWA({
@@ -85,9 +85,10 @@ export default defineConfig({
         importScripts: ['push-sw.js'],
         globPatterns: ['**/*.{js,css,html,svg,png}'],
         // The picture for shared links is for other apps to fetch, not part of the offline Bible.
-        globIgnores: ['share.png'],
-        // /welcome without the slash is the site's redirect to /welcome/, not a page the app should answer for.
-        navigateFallbackDenylist: [/\/welcome$/],
+        // Nor is the QR drawing, which only the support page loads, and only once Bitcoin is set up there.
+        globIgnores: ['share.png', '**/qrcode-*.js'],
+        // /welcome and /support without the slash are the site's redirects to the pages, not ones the app should answer for.
+        navigateFallbackDenylist: [/\/welcome$/, /\/support$/],
         runtimeCaching: [
           {
             // Bibles you open, or save from the Versions page, stay available offline.
