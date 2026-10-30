@@ -11,7 +11,7 @@ export default {
   lead: 'Lire, prier, partager, recommencer.',
   sub: 'Gratuite pour tous, pour toujours. Si elle vous aide, vous pouvez aider à garder la lampe allumée.',
   liberapay: 'Donner avec Liberapay',
-  liberapaySub: 'Un don chaque semaine, chaque mois ou chaque année. Par carte ou PayPal.',
+  liberapaySub: 'Un don chaque semaine, chaque mois ou chaque année, par carte.',
   kofi: 'Donner avec Ko-fi',
   kofiSub: 'Un don unique, comme offrir un café, ou chaque mois.',
   leave: 'Les deux s’ouvrent dans une nouvelle page. Revenez ici, ou à la Bible, quand vous avez fini.',

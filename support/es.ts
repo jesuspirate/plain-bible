@@ -13,7 +13,7 @@ export default {
   lead: 'Lee, ora, comparte, repite.',
   sub: 'Gratis para todos, para siempre. Si te ayuda, puedes ayudar a mantener la lámpara encendida.',
   liberapay: 'Dona con Liberapay',
-  liberapaySub: 'Un donativo cada semana, mes o año. Con tarjeta o PayPal.',
+  liberapaySub: 'Un donativo cada semana, mes o año, con tarjeta.',
   kofi: 'Dona con Ko-fi',
   kofiSub: 'Un donativo único, como invitar a un café, o cada mes.',
   leave: 'Los dos se abren en una página nueva. Vuelve aquí, o a la Biblia, cuando termines.',
