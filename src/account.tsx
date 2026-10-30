@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
-  Account, accountInfo, changedAt, checkPasskey, PasskeyInfo, removePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
+  Account, accountInfo, changedAt, checkPasskey, PasskeyInfo, removePasskey, renamePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
   noteOwner, removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, takeSwitched,
   verifyEmailCode,
 } from './lib/sync'
@@ -257,12 +257,13 @@ const stamp = (at: number) => {
 
 /** The account's passkeys, oldest first, with when each was made (the same
  *  date a password manager shows) and last used. The one this device signed
- *  in with says "This one" and can't be removed from here; the others can,
- *  but only once it's known which one that is, so the wrong one can't go. */
+ *  in with says "This one". Edit names one, or removes it: never "This one",
+ *  and only once it's known which one that is, so the wrong one can't go. */
 function PasskeyList({ list, token, canRemove, busy, onChange }: {
   list: PasskeyInfo[]; token: string; canRemove: boolean; busy: boolean; onChange: (note: string) => void
 }) {
-  const [asking, setAsking] = useState('')
+  const [open, setOpen] = useState<{ id: string; step: 'edit' | 'remove' }>()
+  const [name, setName] = useState('')
   const [working, setWorking] = useState('')
   const known = list.some(k => k.current)
   const run = (label: string, fn: () => Promise<string>) => async () => {
@@ -277,33 +278,50 @@ function PasskeyList({ list, token, canRemove, busy, onChange }: {
     const n = list.findIndex(k => k.id === id) + 1
     return t('Passkey {n} is the one you just used. It now says “This one”.', { n })
   })
+  const title = (k: PasskeyInfo, i: number) => k.name || t('Passkey {n}', { n: i + 1 })
   return <>
     {!known && <button class="set-row" onClick={check} disabled={busy || !!working}>
       <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
       <span class="set-label passkey-label">{working === 'check' ? t('Waiting for passkey…') : t('Which passkey is mine?')}
         <span class="set-sub">{t('Pick the one you use. It gets marked “This one”, then you can remove the others.')}</span></span>
     </button>}
-    {list.map((k, i) => asking === k.id ? (
+    {list.map((k, i) => open?.id === k.id && open.step === 'remove' ? (
       <div key={k.id} class="set-row set-static passkey-ask" role="alertdialog" aria-labelledby={'ask-' + k.id}>
-        <p id={'ask-' + k.id}><strong>{t('Remove passkey {n}?', { n: i + 1 })}</strong></p>
+        <p id={'ask-' + k.id}><strong>{t('Remove {name}?', { name: title(k, i) })}</strong></p>
         <p>{t('It won’t sign in to your account anymore. Your password manager still keeps a copy: delete the one made {date} there too.', { date: stamp(k.created) })}</p>
         <div class="confirm-buttons">
           <button class="danger" disabled={!!working} onClick={run('remove', async () => {
-            await removePasskey(token, k.id); setAsking('')
+            await removePasskey(token, k.id); setOpen(undefined)
             return t('Passkey removed. Now delete it in your password manager too.')
           })}>{working === 'remove' ? t('Removing…') : t('Remove')}</button>
-          <button disabled={!!working} onClick={() => setAsking('')}>{t('Cancel')}</button>
+          <button disabled={!!working} onClick={() => setOpen(undefined)}>{t('Cancel')}</button>
         </div>
       </div>
+    ) : open?.id === k.id ? (
+      <form key={k.id} class="set-row set-static passkey-ask" onSubmit={e => {
+        e.preventDefault()
+        run('name', async () => { await renamePasskey(token, k.id, name); setOpen(undefined); return t('Name saved.') })()
+      }}>
+        <label class="passkey-name">{t('Name of this passkey')}
+          <input value={name} maxLength={40} autoFocus placeholder={t('For example: Bitwarden, iPhone Passwords')}
+            onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
+        <p class="muted small">{t('Made {date}', { date: stamp(k.created) })}</p>
+        <div class="confirm-buttons">
+          <button type="submit" class="primary" disabled={!!working}>{working === 'name' ? t('Saving…') : t('Save name')}</button>
+          {!k.current && known && canRemove && <button type="button" class="danger" disabled={!!working}
+            onClick={() => setOpen({ id: k.id, step: 'remove' })}>{t('Remove this passkey')}</button>}
+          <button type="button" disabled={!!working} onClick={() => setOpen(undefined)}>{t('Cancel')}</button>
+        </div>
+      </form>
     ) : (
       <div key={k.id} class="set-row set-static passkey-row">
         <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
-        <span class="set-label passkey-label">{t('Passkey {n}', { n: i + 1 })}{k.current && <span class="passkey-this">{t('This one')}</span>}
+        <span class="set-label passkey-label">{title(k, i)}{k.current && <span class="passkey-this">{t('This one')}</span>}
           <span class="set-sub">{t('Made {date}', { date: stamp(k.created) })}</span>
           <span class="set-sub">{k.lastUsed ? t('Last used {date}', { date: stamp(k.lastUsed) }) : t('Never used to sign in')}{k.site && ` · ${k.site}`}</span>
           {k.current && <span class="set-sub">{t('You signed in with this one on this device')}</span>}
         </span>
-        {!k.current && known && canRemove && <button class="passkey-remove" disabled={busy || !!working} onClick={() => { onChange(''); setAsking(k.id) }}>{t('Remove')}</button>}
+        <button class="passkey-edit" disabled={busy || !!working} onClick={() => { onChange(''); setName(k.name ?? ''); setOpen({ id: k.id, step: 'edit' }) }}>{t('Edit')}</button>
       </div>
     ))}
   </>
