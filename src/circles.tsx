@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, renameCircle, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -522,7 +522,15 @@ function CircleView({ id }: { id: string }) {
   // What came in since you last looked shows first, marked, until you next
   // come back. Looking at it clears the dot.
   const [since] = useState(() => seenAt(id))
-  const load = () => loadFeed(id).then(f => { setFeed(f); setMsg(''); markSeen(id, newsIn(f, 0).latest, true); clearNotifications(id).catch(() => {}) }, e => setMsg(message(e)))
+  // The name as it is now (someone in the circle may have changed it).
+  const named = (name: string) => {
+    setInfo(i => i ? { ...i, name } : { id, name, members: 0 })
+    if (nav.sheet) nav.open({ id, name })
+  }
+  const load = () => loadFeed(id).then(f => {
+    setFeed(f); setMsg(''); markSeen(id, newsIn(f, 0).latest, true); clearNotifications(id).catch(() => {})
+    if (f.name && f.name !== info?.name) named(f.name)
+  }, e => setMsg(message(e)))
   useEffect(() => {
     keptCircles().then(cs => setInfo(cs.find(c => c.id === id)))
     const kept = lastFeed.get(id)
@@ -600,6 +608,7 @@ function CircleView({ id }: { id: string }) {
             <p class="muted small">{sent ? t('Link sent.') + ' ' : ''}{t('A code is for someone beside you or on a call. A link works from far away, once, for 7 days.')}</p>
           </div>
         )}
+        <Rename circle={id} name={info?.name ?? ''} onDone={named} />
         <div class="c-foot">
           {leaving
             ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>{t('Stay')}</button><button class="c-btn danger" disabled={busy} onClick={leave}>{t('Leave and remove what I shared')}</button></div>
@@ -620,6 +629,43 @@ function CircleView({ id }: { id: string }) {
           ? <button class="c-btn c-earlier" onClick={() => setLimit(n => n + PAGE)}>{t('Show earlier days')}</button>
           : feed.items.length > 0 && <p class="c-end">{t('That’s everything shared in {circle}.', { circle: info?.name ?? t('this circle') })}</p>}
       </>}
+    </div>
+  )
+}
+
+/** The circle's name, which anyone in it can change for everyone. */
+function Rename({ circle, name, onDone }: { circle: string; name: string; onDone: (name: string) => void }) {
+  const [editing, setEditing] = useState(false)
+  const [value, setValue] = useState(name)
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const save = async (e: Event) => {
+    e.preventDefault()
+    const next = value.trim()
+    if (!next || next === name) { setEditing(false); return }
+    setBusy(true); setErr('')
+    try { await renameCircle(circle, next); onDone(next); setEditing(false) } catch (e) {
+      setErr(navigator.onLine === false ? t('You’re offline. Try again once you’re connected.') : message(e))
+    } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card c-rename">
+      {editing ? (
+        <form onSubmit={save}>
+          <label class="c-label">{t('Name of the circle')}<input value={value} maxLength={60} autoFocus onInput={e => setValue((e.target as HTMLInputElement).value)} /></label>
+          <p class="muted small">{t('Everyone in the circle will see the new name.')}</p>
+          <div class="c-row c-two">
+            <button type="button" class="c-btn" onClick={() => { setEditing(false); setValue(name); setErr('') }}>{t('Cancel')}</button>
+            <button class="c-btn primary" disabled={busy || !value.trim()}>{busy ? t('Saving…') : t('Save name')}</button>
+          </div>
+        </form>
+      ) : (
+        <div class="c-rename-row">
+          <span class="c-rename-text"><span class="muted small">{t('Circle name')}</span><strong>{name || t('Circle')}</strong></span>
+          <button class="c-btn" onClick={() => { setValue(name); setEditing(true) }}>{t('Rename')}</button>
+        </div>
+      )}
+      {err && <p class="note small">{err}</p>}
     </div>
   )
 }
