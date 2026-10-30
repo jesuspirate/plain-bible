@@ -33,8 +33,3 @@ export async function forgetAccount({ personal = false, prayers: dropPrayers = f
   if (typeof caches !== 'undefined') await caches.delete('quiet-bible-push').catch(() => {})
 }
 
-/** Prayers recorded here that aren't in the account. */
-export async function prayersOnlyHere(syncing: boolean) {
-  if (syncing || typeof indexedDB === 'undefined') return 0
-  return (await prayers.list().catch(() => [])).length
-}
