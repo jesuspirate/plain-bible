@@ -540,31 +540,45 @@ export function Reader({ route }: { route: Route }) {
 
   // Two-finger swipe on a trackpad (or a swipe on a Magic Mouse) does the
   // same as a touch swipe.
-  const wheel = useRef({ dx: 0, done: false, timer: 0, at: 0, low: 0, peak: 0 })
+  const wheel = useRef({ dx: 0, done: false, timer: 0, at: 0, low: 0, peak: 0, axis: '' as '' | 'x' | 'y', sx: 0, sy: 0, px: 0, last: 0 })
   const trackpad = () => wheel.current.dx !== 0 && !wheel.current.done
   useEffect(() => {
     const onWheel = (e: WheelEvent) => {
-      const w = wheel.current, ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY)
+      const w = wheel.current, ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY), now = Date.now()
+      // With a sheet or Circles up, the swipe isn't for the page behind.
+      // A swipe already turning the page lets go of it.
+      if (overlayOpen()) { if (w.dx && !w.done) release(0); w.dx = 0; w.done = false; w.peak = 0; w.axis = ''; return }
+      // A gesture is a scroll or a swipe, decided once from its first few
+      // pixels: scrolling up and down always drifts a little sideways, and
+      // that drift used to slide the page and sometimes turn it.
+      if (now - w.last > 200) { w.axis = ''; w.sx = w.sy = w.px = 0 }
+      w.last = now
       // After a turn the Mac keeps sending the swipe's glide, fading away, for
       // a second or more; a new swipe would only count once that stopped, so
       // swipes came through every other time. A new swipe shows itself
       // early: it goes the other way, it's up or down, or it's suddenly
       // stronger than the fading glide.
-      if (w.done && Date.now() - w.at > 250) {
+      if (w.done && now - w.at > 250) {
         const back = ax > 2 && Math.sign(e.deltaX) === Math.sign(w.dx)
         const stronger = w.low <= w.peak / 2 && ax > Math.max(w.low * 2, w.low + 6)
-        if (back || ay > ax || stronger) { w.dx = 0; w.done = false; w.peak = 0 }
+        if (back || ay > ax || stronger) {
+          w.dx = 0; w.done = false; w.peak = 0
+          w.axis = ay > ax ? '' : 'x'; w.sx = w.sy = w.px = 0
+        }
         else w.low = Math.min(w.low, ax)
       }
-      if (ax <= ay && !w.dx && !w.done) return
-      // With a sheet or Circles up, the swipe isn't for the page behind.
-      // A swipe already turning the page lets go of it.
-      if (overlayOpen()) { if (w.dx && !w.done) release(0); w.dx = 0; w.done = false; w.peak = 0; return }
+      if (!w.axis) {
+        w.sx += ax; w.sy += ay; w.px += e.deltaX
+        if (w.sx + w.sy < 12) return
+        w.axis = w.sx > w.sy * 2 ? 'x' : 'y'
+        if (w.axis === 'x') w.dx = -(w.px - e.deltaX)
+      }
+      if (w.axis === 'y') return
       if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .sb-chapter-row')) return
       e.preventDefault()
       clearTimeout(w.timer)
       // A gesture ends when the events (including the trackpad's glide) stop.
-      w.timer = window.setTimeout(() => { if (!w.done) release(0); w.dx = 0; w.done = false; w.peak = 0 }, 160)
+      w.timer = window.setTimeout(() => { if (!w.done) release(0); w.dx = 0; w.done = false; w.peak = 0; w.axis = '' }, 160)
       if (w.done) return
       w.dx -= e.deltaX; w.peak = Math.max(w.peak, ax)
       follow(w.dx)
