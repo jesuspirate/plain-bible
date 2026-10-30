@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
-  Account, accountInfo, changedAt, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
+  Account, accountInfo, changedAt, checkPasskey, PasskeyInfo, removePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
   noteOwner, removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, takeSwitched,
   verifyEmailCode,
 } from './lib/sync'
@@ -250,13 +250,72 @@ function EmailCode({ token, onToken, onAdded }: { token?: string; onToken?: (t: 
   )
 }
 
+const stamp = (at: number) => {
+  const d = new Date(at)
+  return d.toLocaleString(locale(), { month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit', year: d.getFullYear() === new Date().getFullYear() ? undefined : 'numeric' })
+}
+
+/** The account's passkeys, oldest first, with when each was made (the same
+ *  date a password manager shows) and last used. The one this device signed
+ *  in with says "This one" and can't be removed from here; the others can,
+ *  but only once it's known which one that is, so the wrong one can't go. */
+function PasskeyList({ list, token, canRemove, busy, onChange }: {
+  list: PasskeyInfo[]; token: string; canRemove: boolean; busy: boolean; onChange: (note: string) => void
+}) {
+  const [asking, setAsking] = useState('')
+  const [working, setWorking] = useState('')
+  const known = list.some(k => k.current)
+  const run = (label: string, fn: () => Promise<string>) => async () => {
+    setWorking(label); onChange('')
+    try { onChange(await fn()) } catch (e) {
+      const m = (e as Error).message
+      onChange(m === 'Cancelled' ? '' : m)
+    } finally { setWorking('') }
+  }
+  const check = run('check', async () => {
+    const { id } = await checkPasskey(token)
+    const n = list.findIndex(k => k.id === id) + 1
+    return t('Passkey {n} is the one you just used. It now says “This one”.', { n })
+  })
+  return <>
+    {!known && <button class="set-row" onClick={check} disabled={busy || !!working}>
+      <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
+      <span class="set-label passkey-label">{working === 'check' ? t('Waiting for passkey…') : t('Which passkey is mine?')}
+        <span class="set-sub">{t('Pick the one you use. It gets marked “This one”, then you can remove the others.')}</span></span>
+    </button>}
+    {list.map((k, i) => asking === k.id ? (
+      <div key={k.id} class="set-row set-static passkey-ask" role="alertdialog" aria-labelledby={'ask-' + k.id}>
+        <p id={'ask-' + k.id}><strong>{t('Remove passkey {n}?', { n: i + 1 })}</strong></p>
+        <p>{t('It won’t sign in to your account anymore. Your password manager still keeps a copy: delete the one made {date} there too.', { date: stamp(k.created) })}</p>
+        <div class="confirm-buttons">
+          <button class="danger" disabled={!!working} onClick={run('remove', async () => {
+            await removePasskey(token, k.id); setAsking('')
+            return t('Passkey removed. Now delete it in your password manager too.')
+          })}>{working === 'remove' ? t('Removing…') : t('Remove')}</button>
+          <button disabled={!!working} onClick={() => setAsking('')}>{t('Cancel')}</button>
+        </div>
+      </div>
+    ) : (
+      <div key={k.id} class="set-row set-static passkey-row">
+        <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
+        <span class="set-label passkey-label">{t('Passkey {n}', { n: i + 1 })}{k.current && <span class="passkey-this">{t('This one')}</span>}
+          <span class="set-sub">{t('Made {date}', { date: stamp(k.created) })}</span>
+          <span class="set-sub">{k.lastUsed ? t('Last used {date}', { date: stamp(k.lastUsed) }) : t('Never used to sign in')}{k.site && ` · ${k.site}`}</span>
+          {k.current && <span class="set-sub">{t('You signed in with this one on this device')}</span>}
+        </span>
+        {!k.current && known && canRemove && <button class="passkey-remove" disabled={busy || !!working} onClick={() => { onChange(''); setAsking(k.id) }}>{t('Remove')}</button>}
+      </div>
+    ))}
+  </>
+}
+
 /** Settings → Account, all on one page: signed out, the ways in; signed in,
  *  who you are, sync, and the account's own buttons, as cards. */
 export function AccountSection() {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState('')
-  const [info, setInfo] = useState<{ passkeys: number; created: number; email: string | null }>()
+  const [info, setInfo] = useState<{ passkeys: number; list?: PasskeyInfo[]; created: number; email: string | null }>()
   const [email, setEmailOn] = useState(emailSignInOn)
   const [addEmail, setAddEmail] = useState(false)
   const acct = sync.account
@@ -392,6 +451,8 @@ export function AccountSection() {
           <span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span>
           <span class="set-label">{info?.email ? t('Change email') : t('Add an email')}{!info?.email && <span class="set-sub">{t('Another way in if you lose your passkey')}</span>}</span>
         </button>}
+        {info?.list?.length ? <PasskeyList list={info.list} token={acct.token} canRemove={info.list.length > 1 || !!info.email}
+          busy={!!working} onChange={note => setMsg(note)} /> : null}
         <button class="set-row" onClick={addKey} disabled={!!working}>
           <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
           <span class="set-label">{working === 'add' ? t('Waiting for passkey…') : keys ? t('Add another passkey') : t('Add a passkey')}

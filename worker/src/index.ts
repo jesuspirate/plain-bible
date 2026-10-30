@@ -103,11 +103,31 @@ async function session(req: Request, env: Env): Promise<string> {
   return row.user_id
 }
 
-async function newSession(env: Env, userId: string) {
+/** A sign-in made with a passkey remembers which one, for "This one". */
+async function newSession(env: Env, userId: string, credId: string | null = null) {
   const token = random(32), now = Date.now()
-  await env.DB.prepare('INSERT INTO sessions (token_hash, user_id, created, expires) VALUES (?, ?, ?, ?)')
-    .bind(await sha256(token), userId, now, now + SESSION_DAYS * DAY).run()
+  await env.DB.prepare('INSERT INTO sessions (token_hash, user_id, created, expires, cred_id) VALUES (?, ?, ?, ?, ?)')
+    .bind(await sha256(token), userId, now, now + SESSION_DAYS * DAY, credId).run()
   return token
+}
+
+const bearer = (req: Request) => /^Bearer (\S+)$/.exec(req.headers.get('Authorization') ?? '')?.[1]
+
+/** Checks a passkey's answer to a sign-in challenge, and notes its use. */
+async function assertion(env: Env, body: { challengeId: string; response: AuthenticationResponseJSON }, origin: string | string[], rpID: string) {
+  const ch = await takeChallenge(env, body.challengeId)
+  const cred = await env.DB.prepare('SELECT id, user_id, public_key, counter, transports FROM credentials WHERE id = ?')
+    .bind(body.response?.id).first<{ id: string; user_id: string; public_key: string; counter: number; transports: string | null }>()
+  if (!cred) throw new HttpError(404, 'This passkey is not linked to an account. It may have been deleted.')
+  const v = await verifyAuthenticationResponse({
+    response: body.response, expectedChallenge: ch.challenge,
+    expectedOrigin: origin, expectedRPID: rpID, requireUserVerification: false,
+    credential: { id: cred.id, publicKey: b64url.decode(cred.public_key), counter: cred.counter, transports: cred.transports ? JSON.parse(cred.transports) : undefined },
+  }).catch(e => { throw new HttpError(400, String(e.message || e)) })
+  if (!v.verified) throw new HttpError(400, 'Passkey could not be verified')
+  await env.DB.prepare('UPDATE credentials SET counter = ?, last_used = ?, rp_id = ? WHERE id = ?')
+    .bind(v.authenticationInfo.newCounter, Date.now(), rpID, cred.id).run()
+  return cred
 }
 
 async function takeChallenge(env: Env, id: unknown) {
@@ -945,11 +965,11 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       const isNew = !(await env.DB.prepare('SELECT 1 FROM users WHERE id = ?').bind(ch.user_id).first())
       await env.DB.batch([
         ...(isNew ? [env.DB.prepare('INSERT INTO users (id, created) VALUES (?, ?)').bind(ch.user_id, now)] : []),
-        env.DB.prepare('INSERT INTO credentials (id, user_id, public_key, counter, transports, created) VALUES (?, ?, ?, ?, ?, ?)')
+        env.DB.prepare('INSERT INTO credentials (id, user_id, public_key, counter, transports, created, rp_id) VALUES (?, ?, ?, ?, ?, ?, ?)')
           .bind(credential.id, ch.user_id, b64url.encode(credential.publicKey), credential.counter,
-            credential.transports ? JSON.stringify(credential.transports) : null, now),
+            credential.transports ? JSON.stringify(credential.transports) : null, now, rpID),
       ])
-      return json({ token: isNew ? await newSession(env, ch.user_id) : undefined, added: !isNew })
+      return json({ token: isNew ? await newSession(env, ch.user_id, credential.id) : undefined, added: !isNew })
     }
 
     // Sign in with any passkey saved for this site (no username).
@@ -959,20 +979,38 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
     }
 
     case 'POST /auth/login/verify': {
-      const body = await readJson<{ challengeId: string; response: AuthenticationResponseJSON }>(req)
-      const ch = await takeChallenge(env, body.challengeId)
-      const cred = await env.DB.prepare('SELECT id, user_id, public_key, counter, transports FROM credentials WHERE id = ?')
-        .bind(body.response?.id).first<{ id: string; user_id: string; public_key: string; counter: number; transports: string | null }>()
-      if (!cred) throw new HttpError(404, 'This passkey is not linked to an account. It may have been deleted.')
-      const v = await verifyAuthenticationResponse({
-        response: body.response, expectedChallenge: ch.challenge,
-        expectedOrigin: origin, expectedRPID: rpID, requireUserVerification: false,
-        credential: { id: cred.id, publicKey: b64url.decode(cred.public_key), counter: cred.counter, transports: cred.transports ? JSON.parse(cred.transports) : undefined },
-      }).catch(e => { throw new HttpError(400, String(e.message || e)) })
-      if (!v.verified) throw new HttpError(400, 'Passkey could not be verified')
-      await env.DB.prepare('UPDATE credentials SET counter = ?, last_used = ? WHERE id = ?')
-        .bind(v.authenticationInfo.newCounter, Date.now(), cred.id).run()
-      return json({ token: await newSession(env, cred.user_id) })
+      const cred = await assertion(env, await readJson<{ challengeId: string; response: AuthenticationResponseJSON }>(req), origin, rpID)
+      return json({ token: await newSession(env, cred.user_id, cred.id) })
+    }
+
+    // "Which passkey is mine?" for a device signed in before sign-ins
+    // remembered it, or by email: the passkey tapped becomes "This one".
+    case 'POST /auth/passkey/check': {
+      const userId = await session(req, env)
+      const cred = await assertion(env, await readJson<{ challengeId: string; response: AuthenticationResponseJSON }>(req), origin, rpID)
+      if (cred.user_id !== userId) throw new HttpError(400, 'This passkey belongs to another account.')
+      await env.DB.prepare('UPDATE sessions SET cred_id = ? WHERE token_hash = ?').bind(cred.id, await sha256(bearer(req)!)).run()
+      return json({ id: cred.id })
+    }
+
+    // Forget a passkey. Not the last way in, and the device's password
+    // manager still keeps its copy until it's deleted there too.
+    case 'DELETE /auth/passkey': {
+      const userId = await session(req, env)
+      const { id } = await readJson<{ id: string }>(req)
+      if (typeof id !== 'string') throw new HttpError(400, 'Bad request')
+      const [keys, mail] = await Promise.all([
+        env.DB.prepare('SELECT id FROM credentials WHERE user_id = ?').bind(userId).all<{ id: string }>(),
+        env.DB.prepare('SELECT 1 FROM emails WHERE user_id = ?').bind(userId).first(),
+      ])
+      if (!keys.results.some(k => k.id === id)) throw new HttpError(404, 'Not your passkey')
+      if (keys.results.length === 1 && !mail) throw new HttpError(400, 'This is your only way to sign in. Add another passkey or an email first.')
+      await env.DB.batch([
+        env.DB.prepare('DELETE FROM credentials WHERE id = ? AND user_id = ?').bind(id, userId),
+        env.DB.prepare('DELETE FROM prayer_wraps WHERE cred_id = ? AND user_id = ?').bind(id, userId),
+        env.DB.prepare('UPDATE sessions SET cred_id = NULL WHERE cred_id = ? AND user_id = ?').bind(id, userId),
+      ])
+      return json({ ok: true })
     }
 
     // A second sign-in for the same account, carried to the app's new
@@ -983,20 +1021,25 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
     }
 
     case 'POST /auth/logout': {
-      const m = /^Bearer (\S+)$/.exec(req.headers.get('Authorization') ?? '')
-      if (m) await env.DB.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(await sha256(m[1])).run()
+      const token = bearer(req)
+      if (token) await env.DB.prepare('DELETE FROM sessions WHERE token_hash = ?').bind(await sha256(token)).run()
       return json({ ok: true })
     }
 
     case 'GET /account': {
       const userId = await session(req, env)
-      const [user, passkeys, data, email] = await Promise.all([
+      const [user, keys, data, email, mine] = await Promise.all([
         env.DB.prepare('SELECT created FROM users WHERE id = ?').bind(userId).first<{ created: number }>(),
-        env.DB.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(userId).first<{ n: number }>(),
+        env.DB.prepare('SELECT id, created, last_used, rp_id FROM credentials WHERE user_id = ? ORDER BY created')
+          .bind(userId).all<{ id: string; created: number; last_used: number | null; rp_id: string | null }>(),
         env.DB.prepare('SELECT updated FROM data WHERE user_id = ?').bind(userId).first<{ updated: number }>(),
         env.DB.prepare('SELECT hint FROM emails WHERE user_id = ?').bind(userId).first<{ hint: string }>(),
+        env.DB.prepare('SELECT cred_id FROM sessions WHERE token_hash = ?').bind(await sha256(bearer(req)!)).first<{ cred_id: string | null }>(),
       ])
-      return json({ created: user?.created, passkeys: passkeys?.n ?? 0, updated: data?.updated ?? null, email: email?.hint ?? null })
+      // The passkey this device signed in with is told apart by its
+      // credential id: the one the session was made with.
+      const list = keys.results.map(k => ({ id: k.id, created: k.created, lastUsed: k.last_used, site: k.rp_id, current: k.id === mine?.cred_id }))
+      return json({ created: user?.created, passkeys: list.length, list, updated: data?.updated ?? null, email: email?.hint ?? null })
     }
 
     case 'DELETE /account': {

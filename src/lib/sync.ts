@@ -211,7 +211,22 @@ export async function signOut(token: string) {
   return api('/auth/logout', { method: 'POST', token }).catch(() => {})
 }
 export const deleteAccount = (token: string) => api('/account', { method: 'DELETE', token })
-export const accountInfo = (token: string) => api<{ created: number; passkeys: number; updated: number | null; email: string | null }>('/account', { token })
+/** A passkey on the account. `current` marks the one this device signed in
+ *  with; `site` is the address it belongs to, once known. */
+export interface PasskeyInfo { id: string; created: number; lastUsed: number | null; site: string | null; current: boolean }
+export const accountInfo = (token: string) => api<{ created: number; passkeys: number; list?: PasskeyInfo[]; updated: number | null; email: string | null }>('/account', { token })
+export const removePasskey = (token: string, id: string) => api('/auth/passkey', { method: 'DELETE', token, body: { id } })
+
+/** Ask for a passkey only to learn which one this device uses. */
+export async function checkPasskey(token: string) {
+  const { challengeId, options } = await loginOptions()
+  let response
+  try { response = await startAuthentication({ optionsJSON: options }) } catch (e) {
+    if (cancelled(e)) throw new SyncError('Cancelled')
+    throw new SyncError((e as Error).message)
+  }
+  return api<{ id: string }>('/auth/passkey/check', { method: 'POST', token, body: { challengeId, response } })
+}
 
 // Email sign-in, where the server has it turned on. Remembered, so the form
 // is there at once next time, offline included.
