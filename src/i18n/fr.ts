@@ -895,4 +895,5 @@ export default {
   "Works once, for 15 minutes. Keep this open.": "Valable une fois, pendant 15 minutes. Gardez cet écran ouvert.",
   "Your prayers are locked on this device, so they won’t open there yet. Unlock them here first under Your prayers.": "Vos prières sont verrouillées sur cet appareil, elles ne s’ouvriront donc pas encore là-bas. Déverrouillez-les d’abord ici, dans Vos prières.",
   "Your {device} is signing in.": "Votre {device} se connecte.",
+  "That code was closed on the other device, or it expired. Make a new one there.": "Ce code a été fermé sur l’autre appareil, ou il a expiré. Créez-en un nouveau là-bas.",
 } as Record<string, string>
