@@ -48,6 +48,9 @@ if (location.hash.startsWith('#/move/') && !moving) history.replaceState(null, '
 // offline with the app); English needs nothing.
 const start = () => render(<Crash>{moving ? <Arriving link={moving} /> : <App />}</Crash>, document.getElementById('app')!)
 const lang = savedLang()
+// A device link opened while the app is already running (macOS sends an
+// AirDropped link to the open Dock app): start over so it's taken in.
+addEventListener('hashchange', () => { if (location.hash.startsWith('#/move/')) location.reload() })
 if (!w.plainBibleWelcome) { if (lang === 'en') start(); else setLang(lang).catch(() => {}).then(start) }
 
 if (import.meta.env.PROD && 'serviceWorker' in navigator && !w.plainBibleWelcome) {
