@@ -16,7 +16,7 @@ import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { LeftNote, touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { MoveBanner, MoveWelcome } from './move'
+import { MoveWelcome } from './move'
 import { DAYS_EVENT } from './lib/streaks'
 import { checkCircleNews } from './lib/circleNews'
 import { ApproveCard } from './approve'
@@ -316,7 +316,6 @@ export function App() {
             : <ProfileButton onOpen={() => setSettingsOpen(true)} />}
         </nav>
       </header>
-      <MoveBanner />
       <main class={view === 'search' ? '' : settings.searchBar ? 'with-bar' : 'with-mini'}>
         {view === 'search' ? <Search route={route} />
           : view === 'versions' ? <Versions />
@@ -335,7 +334,7 @@ export function App() {
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       {Tour && <Tour onClose={() => setTour(undefined)} />}
       {HomeScreen && <HomeScreen onClose={() => setHomeScreen(undefined)} />}
-      <MoveWelcome firstStart={FIRST_START} />
+      <MoveWelcome />
       <ApproveCard />
       <LeftNote />
     </AppContext.Provider>

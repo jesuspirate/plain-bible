@@ -54,7 +54,7 @@ export function HomeScreen({ onClose }: { onClose: () => void }) {
     tj('Choose {install}, not {shortcut}. Then tap {install} again. The lamp appears with your other apps.', { install: <strong>{t('Install')}</strong>, shortcut: <strong>{t('Create shortcut')}</strong> }),
   ] : [
     t('In Chrome or Edge, click the install icon at the right end of the address bar.'),
-    tj('In Safari on a Mac: {file}, then {dock}.', { file: <strong>{t('File')}</strong>, dock: <strong>{t('Add to Dock')}</strong> }),
+    tj('In Safari on a Mac: click {share} at the top right, then {dock}.', { share: <strong class="nb">{t('Share')} <ShareGlyph /></strong>, dock: <strong>{t('Add to Dock')}</strong> }),
   ]
   const help = iphone ? { href: APPLE[lang], label: t('Apple’s instructions') }
     : { href: google(android ? 'Android' : 'Desktop', lang), label: t('Google’s instructions') }

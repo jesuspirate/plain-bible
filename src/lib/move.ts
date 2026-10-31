@@ -1,11 +1,9 @@
-// Moving to the app's new address. A browser keeps each web address's data
-// apart, and passkeys belong to one address, so nothing on the old address
-// is visible on the new one by itself. The old address packs everything on
-// the device (highlights, notes, settings, history, prayers and their sync
-// key, and a sign-in for the same account), encrypts it with a fresh key,
-// and leaves it with the sync server for a few days. The key travels only in
-// the move link's #fragment, which browsers never send to any server, so
-// the server holds bytes it can't read.
+// Linking another device. This device packs a sign-in for the same account
+// (and the prayer key, where prayers sync here), encrypts it with a fresh
+// key, and leaves it with the sync server for an hour. The key travels only
+// in the link's #fragment, which browsers never send to any server, so the
+// server holds bytes it can't read. The same pipe once moved whole devices
+// from the old address, which is why the names say "move".
 import { mergeMark, Marks } from './marks'
 import { meta, Prayer, prayers } from './prayers'
 import { b64url, open, seal } from './prayerCrypto'
@@ -13,21 +11,14 @@ import { api, changedAt, claim, loadAccount, SettingsT, SYNC_URL, SyncError } fr
 import { Days, mergeDays } from './streaks'
 import { t } from '../i18n'
 
-export const NEW_ORIGIN = 'https://myquietbible.com'
-export const NEW_HOST = 'myquietbible.com'
-const OLD_HOSTS = ['bible.chama.community']
-/** This copy is running on an old address, which can move to the new one. */
-export const onOldAddress = () => OLD_HOSTS.includes(location.hostname)
-/** This copy is running on the new address, which can take in a move. */
-export const onNewAddress = () => !onOldAddress() && !!SYNC_URL
+/** The sync service is set up, so links between devices work. */
+export const onNewAddress = () => !!SYNC_URL
 
 const PREFIX = 'plain-bible:'
 // Not carried: the list of versions (fetched fresh) and move bookkeeping.
 const SKIP = new Set([PREFIX + 'catalog', PREFIX + 'moved', PREFIX + 'moved-in', PREFIX + 'move-later'])
 const ACCOUNT = PREFIX + 'account', MARKS = PREFIX + 'marks', PRAYER_SYNC = PREFIX + 'prayer-sync'
-/** Set on the old address once a move link was made. */
-export const MOVED = PREFIX + 'moved'
-/** Set on the new address after a move came in: what came, for the welcome. */
+/** Set after a link came in: what came, for the welcome. */
 export const MOVED_IN = PREFIX + 'moved-in'
 
 const CHUNK = 1_000_000
@@ -98,38 +89,6 @@ export function unpack(bytes: Uint8Array): { bundle: Bundle; prayers: Prayer[] }
 
 // ---- the old address: making the move link -------------------------------------
 
-/** What's on this device, ready to pack. Signed in, the new address gets
- *  its own sign-in to the same account. */
-async function gather(): Promise<{ b: Omit<Bundle, 'prayers'>; list: Prayer[] }> {
-  const local: Record<string, string> = {}
-  for (let i = 0; i < localStorage.length; i++) {
-    const k = localStorage.key(i)
-    if (k?.startsWith(PREFIX) && !SKIP.has(k)) local[k] = localStorage.getItem(k) ?? ''
-  }
-  delete local[ACCOUNT]
-  const acct = loadAccount()
-  if (acct) {
-    try {
-      const { token } = await api<{ token: string }>('/auth/handoff', { method: 'POST', token: acct.token })
-      local[ACCOUNT] = JSON.stringify({ token, rev: 0 })
-    } catch (e) {
-      // Signed out meanwhile: the move still carries everything else.
-      if (!(e instanceof SyncError && e.status === 401)) throw e
-    }
-  }
-  let list: Prayer[] = [], key: Uint8Array | undefined, deleted: string[] | undefined
-  if (typeof indexedDB !== 'undefined') {
-    const ids = (await prayers.list()).map(p => p.id)
-    list = (await Promise.all(ids.map(id => prayers.get(id)))).filter((p): p is Prayer => !!p)
-    key = await meta.get<Uint8Array>('key')
-    deleted = await meta.get<string[]>('deleted')
-  }
-  return {
-    b: { v: 1, from: location.origin, at: Date.now(), local, prayerKey: key ? b64url.encode(key) : undefined, prayerDeleted: deleted },
-    list,
-  }
-}
-
 /** Encrypt and send packed bytes. Returns the link's id and key. */
 async function upload(bytes: Uint8Array, life: 'move' | 'link', progress: (done: number, of: number) => void) {
   if (!SYNC_URL) throw new SyncError('This needs the sync service, which isn’t set up here.')
@@ -145,19 +104,6 @@ async function upload(bytes: Uint8Array, life: 'move' | 'link', progress: (done:
     progress(n + 1, of)
   }
   return `#/move/${id}.${b64url.encode(raw)}`
-}
-
-/** Pack, encrypt and send everything on this device. Returns the move link
- *  and what it carries. */
-export async function makeMoveLink(progress: (done: number, of: number) => void = () => {}): Promise<{ link: string; prayers: number; marks: number; account: boolean; email?: string }> {
-  const { b, list } = await gather()
-  const acct = b.local[ACCOUNT] ? loadAccount() : null
-  const email = acct ? (await api<{ email: string | null }>('/account', { token: acct.token }).catch(() => null))?.email ?? undefined : undefined
-  const hash = await upload(pack(b, list), 'move', progress)
-  try { localStorage.setItem(MOVED, String(Date.now())) } catch { /* ignore */ }
-  let marks = 0
-  try { marks = Object.keys(JSON.parse(b.local[MARKS] || '{}')).length } catch { /* ignore */ }
-  return { link: `${NEW_ORIGIN}/${hash}`, prayers: list.length, marks, account: !!b.local[ACCOUNT], email }
 }
 
 /** A link that signs another device in to this account and, where prayers
@@ -181,7 +127,7 @@ export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean
   // carry their key, so say so rather than let the other device find none.
   const locked = !key && !!(await api<{ keyId: string | null }>('/prayers', { token: acct.token }).catch(() => null))?.keyId
   const hash = await upload(pack(b, []), 'link', () => {})
-  return { link: `${onOldAddress() ? NEW_ORIGIN : location.origin}/${hash}`, prayers: !!key, locked }
+  return { link: `${location.origin}/${hash}`, prayers: !!key, locked }
 }
 
 async function send(path: string, body: Uint8Array) {
@@ -198,7 +144,7 @@ async function send(path: string, body: Uint8Array) {
   }
 }
 
-// ---- the new address: taking a move in ------------------------------------------
+// ---- taking a link in ------------------------------------------------------------
 
 /** The id and key in a move link (or the whole URL pasted). */
 export function parseMoveLink(s: string): { id: string; key: string } | undefined {
@@ -214,9 +160,9 @@ export async function fetchMove(link: { id: string; key: string }, progress: (do
   progress(0, chunks)
   for (let n = 0; n < chunks; n++) {
     const res = await fetch(`${SYNC_URL}/move/${link.id}/${n}`).catch(() => null)
-    if (!res?.ok) throw new SyncError('Couldn’t download the move. Check the connection and try again.')
+    if (!res?.ok) throw new SyncError('Couldn’t download what the link carries. Check the connection and try again.')
     const plain = await open(key, new Uint8Array(await res.arrayBuffer()), aad(n, chunks)).catch(() => {
-      throw new SyncError('This move link is damaged. Copy it again from the old address.')
+      throw new SyncError('This link is damaged. Copy it again on the other device.')
     })
     parts.push(plain)
     progress(n + 1, chunks)
