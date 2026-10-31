@@ -335,7 +335,7 @@ export function App() {
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       {Tour && <Tour onClose={() => setTour(undefined)} />}
       {HomeScreen && <HomeScreen onClose={() => setHomeScreen(undefined)} />}
-      <MoveWelcome firstStart={FIRST_START} />
+      <MoveWelcome />
       <ApproveCard />
       <LeftNote />
     </AppContext.Provider>
