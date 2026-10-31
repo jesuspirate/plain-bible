@@ -407,7 +407,7 @@ async function moveRoute(req: Request, env: Env, parts: string[]): Promise<Respo
   if (!id || !MOVE_ID.test(id)) throw new HttpError(404, 'Not found')
   if (req.method === 'GET' && n0 === undefined) {
     const row = await db.prepare('SELECT COUNT(*) AS c, MAX(of) AS of FROM moves WHERE id = ? AND expires > ?').bind(id, Date.now()).first<{ c: number; of: number | null }>()
-    if (!row?.c || row.c !== row.of) throw new HttpError(404, 'This move link has expired or was never finished. Make a new one on the old address.')
+    if (!row?.c || row.c !== row.of) throw new HttpError(404, 'This link has expired or was never finished. Make a new one on the other device.')
     return json({ chunks: row.of })
   }
   if (req.method === 'DELETE' && n0 === undefined) {

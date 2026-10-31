@@ -857,15 +857,10 @@ body:has(.sb.sb-open) .pick-verse, body:has(.pick-verse) .listen { display: none
 @media (prefers-reduced-motion: reduce) { .pick-verse { animation: none; } }
 
 /* Moving to myquietbible.com */
-.move-banner { max-width: 1200px; margin: 0 auto; padding: 8px 16px; display: flex; flex-wrap: wrap; align-items: center; gap: 8px; font-size: 14px; border-bottom: 1px solid var(--line); background: var(--surface); }
-.move-banner > span { flex: 1 1 12em; }
-.move-banner.open { display: block; padding: 12px 16px; }
 .move-card p { margin: 0 0 10px; }
 .move-card .row { margin-bottom: 10px; }
 .move-card .button { display: inline-block; padding: 7px 12px; border-radius: 8px; border: 1px solid var(--line); background: var(--surface); color: var(--text); text-decoration: none; }
 .move-link { font: 12px/1.4 ui-monospace, Menlo, monospace; word-break: break-all; padding: 8px 10px; border-radius: 8px; background: var(--chip); -webkit-user-select: all; user-select: all; }
-.move-steps { margin: 0 0 10px; padding-left: 1.4em; }
-.move-steps li { margin: 2px 0; }
 .move-paste .row { margin-bottom: 8px; }
 .move-input { width: 100%; max-width: 28em; padding: 8px 10px; border: 1px solid var(--line); border-radius: 8px; background: var(--bg); font-size: 16px; }
 .move-welcome {
