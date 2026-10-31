@@ -25,6 +25,8 @@ describe('move', () => {
     expect(parseMoveLink(`https://myquietbible.com/#/move/${id}.${key}`)).toEqual({ id, key })
     expect(parseMoveLink(`  #/move/${id}.${key}\n`)).toEqual({ id, key })
     expect(parseMoveLink(`#/move/${id}.${key.slice(1)}`)).toBeUndefined()
+    expect(parseMoveLink(`https://myquietbible.com/#/read/${id}.${key}/Gen/1`)).toEqual({ id, key })
+    expect(parseMoveLink('#/read/Gen/1')).toBeUndefined()
     expect(parseMoveLink('hello')).toBeUndefined()
   })
 

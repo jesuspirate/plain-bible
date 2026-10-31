@@ -22,7 +22,8 @@ const ACCOUNT = PREFIX + 'account', MARKS = PREFIX + 'marks', PRAYER_SYNC = PREF
 export const MOVED_IN = PREFIX + 'moved-in'
 
 const CHUNK = 1_000_000
-const LINK = /#\/move\/([A-Za-z0-9_-]{22})\.([A-Za-z0-9_-]{43})$/
+// Also read where an open app already turned #/move/ into #/read/…/Gen/1.
+const LINK = /#\/(?:move|read)\/([A-Za-z0-9_-]{22})\.([A-Za-z0-9_-]{43})(?:\/|$)/
 
 type Ref = [number, number]
 interface PackedPart { ms: number; type: string; audio: Ref }
