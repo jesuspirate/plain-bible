@@ -1,6 +1,7 @@
 // Personal highlights and bookmarks. Marks belong to a verse, not to a
 // translation, so a highlight shows in every version you read.
 import { BOOK_INDEX, findBook } from './books'
+import type { PrayerVerse } from './prayerVerses'
 
 /** One note. A verse can have several, each edited and synced on its own. */
 export interface Note {
@@ -254,8 +255,12 @@ export function mergeImport(marks: Marks, items: ImportItem[], now = Date.now())
   return { marks: out, highlights, bookmarks, notes }
 }
 
-/** Our own backup format. */
-export interface Backup { app: 'plain-bible'; version: 1; exported: string; marks: Marks; settings?: unknown }
+/** The backup's name inside a Download everything .zip. */
+export const BACKUP_FILE = 'my-quiet-bible-backup.json'
+/** A prayer in a backup: its audio is in the same .zip, one file per part. */
+export interface BackupPrayer { id: string; at: number; verses?: PrayerVerse[]; parts: { file: string; ms: number; type: string }[] }
+/** Our own backup format. `prayers` only in a .zip from Download everything. */
+export interface Backup { app: 'plain-bible'; version: 1; exported: string; marks: Marks; settings?: unknown; prayers?: BackupPrayer[] }
 export function isBackup(x: unknown): x is Backup {
   return !!x && typeof x === 'object' && (x as Backup).app === 'plain-bible' && typeof (x as Backup).marks === 'object'
 }

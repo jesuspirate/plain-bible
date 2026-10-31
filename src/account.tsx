@@ -11,6 +11,7 @@ import { Settings, useApp } from './state'
 import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { DeviceLink, PasteMove } from './move'
 import { KeyBackup } from './approve'
+import { DownloadEverything } from './exporter'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
 import { locale, t, tj, tn } from './i18n'
 
@@ -158,6 +159,16 @@ const outOk = (s: Safety | null): s is Checked => checked(s) && !(s.syncing && s
 /** Nothing in the account that isn't here too, unless you said to go without it. */
 const deleteOk = (s: Safety | null, without: boolean): s is Checked => checked(s) && (s.notHere === 0 || without)
 const prayerSyncing = () => { try { return !!localStorage.getItem('plain-bible:prayer-sync') } catch { return false } }
+
+/** A copy of everything to keep, whatever the account does. */
+function KeepACopy() {
+  return (
+    <div class="keep-copy">
+      <p class="muted small">{t('Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.')}</p>
+      <DownloadEverything />
+    </div>
+  )
+}
 
 /** Why signing out or deleting has to wait, or that it's being checked. */
 function SafetyNote({ safety }: { safety: Safety | null }) {
@@ -541,6 +552,7 @@ export function AccountSection() {
               </>}
             <button disabled={working === 'logout'} onClick={close}>{t('Cancel')}</button>
           </div>
+          <KeepACopy />
         </div>
       ) : confirming === 'delete' ? (
         <div class="confirm-card danger" role="alertdialog" aria-labelledby="confirm-title">
@@ -569,6 +581,7 @@ export function AccountSection() {
               <button disabled={!!working} onClick={close}>{t('Cancel')}</button>
             </div>
           )}
+          <KeepACopy />
         </div>
       ) : (
         <div class="set-list">
