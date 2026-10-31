@@ -870,6 +870,7 @@ export default {
   "Never used to sign in": "Jamais utilisée pour se connecter",
   "You signed in with this one on this device": "Vous vous êtes connecté avec celle-ci sur cet appareil",
   "Which passkey is mine?": "Quelle clé d’accès est la mienne ?",
+  "Pick another one to see which it is. The one you pick says “This one”.": "Choisissez-en une autre pour voir laquelle c’est. Celle que vous choisissez indique « Celle-ci ».",
   "Pick the one you use. It gets marked “This one”, then you can remove the others.": "Choisissez celle que vous utilisez. Elle sera marquée « Celle-ci », puis vous pourrez retirer les autres.",
   "This passkey belongs to another account.": "Cette clé d’accès appartient à un autre compte.",
   "This is your only way to sign in. Add another passkey or an email first.": "C’est votre seul moyen de vous connecter. Ajoutez d’abord une autre clé d’accès ou une adresse e-mail.",

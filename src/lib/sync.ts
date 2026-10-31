@@ -1,7 +1,7 @@
 // Optional account sync. Sign-in is by passkey or by a code sent by email;
 // the server keeps one JSON document per account. Everything also works
 // signed out.
-import { startAuthentication, startRegistration } from '@simplewebauthn/browser'
+import { startAuthentication, startRegistration, WebAuthnAbortService } from '@simplewebauthn/browser'
 import { mergeMark, Marks, upgrade } from './marks'
 import { Days, mergeDays } from './streaks'
 import { PRF_SALT } from './prayerCrypto'
@@ -218,6 +218,9 @@ export const accountInfo = (token: string) => api<{ created: number; passkeys: n
 export const renamePasskey = (token: string, id: string, name: string) => api<{ name: string | null }>('/auth/passkey', { method: 'PUT', token, body: { id, name } })
 export const removePasskey = (token: string, id: string) => api('/auth/passkey', { method: 'DELETE', token, body: { id } })
 
+/** Stop waiting for a passkey: a password manager's window that closed
+ *  without an answer would otherwise leave it waiting for minutes. */
+export const stopPasskey = () => WebAuthnAbortService.cancelCeremony()
 /** Ask for a passkey only to learn which one this device uses. */
 export async function checkPasskey(token: string) {
   const { challengeId, options } = await loginOptions()
