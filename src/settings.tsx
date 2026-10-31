@@ -377,14 +377,11 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'data') return <>
     <DataTools />
     <h2>{t('Settings')}</h2>
-    <p><button onClick={() => {
+    <ResetSettings synced={!!sync.account} onReset={() => {
       // Only the settings: highlights, notes, history and the account stay.
-      if (confirm(t('Reset font, theme, layout and version choices to their defaults?') + '\n\n' + t('Your highlights, bookmarks and notes are kept, and you stay signed in.')
-        + (sync.account ? ' ' + t('Your other synced devices will get the default settings too.') : ''))) {
-        // The language stays: a reset shouldn't leave you in one you can't read.
-        update({ ...defaultSettings(catalog), language: settings.language })
-      }
-    }}>{t('Reset settings')}</button></p>
+      // The language stays: a reset shouldn't leave you in one you can't read.
+      update({ ...defaultSettings(catalog), language: settings.language })
+    }} />
   </>
 
   if (page === 'about') return <>
@@ -447,5 +444,25 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       </section>
       <VersionLine />
     </>
+  )
+}
+
+/** Reset settings, asked in the app's own card rather than the browser's box. */
+function ResetSettings({ synced, onReset }: { synced: boolean; onReset: () => void }) {
+  const [asking, setAsking] = useState(false)
+  const [done, setDone] = useState(false)
+  if (!asking) return <>
+    <p><button onClick={() => { setDone(false); setAsking(true) }}>{t('Reset settings')}</button></p>
+    {done && <p class="muted small">{t('Settings are back to their defaults.')}</p>}
+  </>
+  return (
+    <div class="confirm-card" role="alertdialog" aria-labelledby="reset-title">
+      <p id="reset-title" class="confirm-title"><strong>{t('Reset font, theme, layout and version choices to their defaults?')}</strong></p>
+      <p>{t('Your highlights, bookmarks and notes are kept, and you stay signed in.')}{synced ? ' ' + t('Your other synced devices will get the default settings too.') : ''}</p>
+      <div class="confirm-buttons">
+        <button class="primary" onClick={() => { onReset(); setAsking(false); setDone(true) }}>{t('Reset settings')}</button>
+        <button onClick={() => setAsking(false)}>{t('Cancel')}</button>
+      </div>
+    </div>
   )
 }

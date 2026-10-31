@@ -431,8 +431,9 @@ export function AccountSection() {
     }
     await recheck()
   })
+  const [askDrop, setAskDrop] = useState(false)
   const dropEmail = act('email', async () => {
-    if (!confirm(t('Stop signing in with this email? You’ll sign in with your passkey only.'))) return
+    setAskDrop(false)
     await removeEmail(acct!.token); setMsg(t('Email removed.'))
   })
   // What's on this device stays: the account it synced with is gone.
@@ -526,8 +527,15 @@ export function AccountSection() {
           <span class="set-label">{working === 'add' ? t('Waiting for passkey…') : keys ? t('Add another passkey') : t('Add a passkey')}
             <span class="set-sub">{keys ? t('Only for a device your passkeys don’t reach') : t('Face ID, a fingerprint or your screen lock')}</span></span>
         </button>
-        {email && info?.email && !!keys && <button class="set-row" onClick={dropEmail} disabled={!!working}><span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span><span class="set-label">{t('Remove email')}</span></button>}
+        {email && info?.email && !!keys && <button class="set-row" onClick={() => setAskDrop(true)} disabled={!!working}><span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span><span class="set-label">{t('Remove email')}</span></button>}
       </div>
+      {askDrop && <div class="confirm-card" role="alertdialog" aria-labelledby="drop-title">
+        <p id="drop-title" class="confirm-title"><strong>{t('Stop signing in with this email? You’ll sign in with your passkey only.')}</strong></p>
+        <div class="confirm-buttons">
+          <button class="primary" disabled={!!working} onClick={dropEmail}>{working === 'email' ? t('Removing…') : t('Remove email')}</button>
+          <button disabled={!!working} onClick={() => setAskDrop(false)}>{t('Cancel')}</button>
+        </div>
+      </div>}
       {addEmail && <EmailCode token={acct.token} onAdded={hint => { setAddEmail(false); setMsg(t('You can now also sign in with {email}.', { email: hint })) }} />}
 
       {confirming === 'out' ? (

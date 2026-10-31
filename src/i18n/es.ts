@@ -896,4 +896,5 @@ export default {
   "Your prayers are locked on this device, so they won’t open there yet. Unlock them here first under Your prayers.": "Tus oraciones están bloqueadas en este dispositivo, así que aún no se abrirán allí. Desbloquéalas primero aquí, en Tus oraciones.",
   "Your {device} is signing in.": "Tu {device} está iniciando sesión.",
   "That code was closed on the other device, or it expired. Make a new one there.": "Ese código se cerró en el otro dispositivo, o caducó. Crea uno nuevo allí.",
+  "Settings are back to their defaults.": "Los ajustes volvieron a sus valores predeterminados.",
 } as Record<string, string>
