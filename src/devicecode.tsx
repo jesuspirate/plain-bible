@@ -2,6 +2,7 @@
 // and allows; the new side types them. See lib/devicecode.ts.
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { t } from './i18n'
+import { PasteMove } from './move'
 
 type Lib = typeof import('./lib/devicecode')
 let lib: Promise<Lib> | undefined
@@ -79,6 +80,7 @@ export function EnterDeviceCode() {
   const [typed, setTyped] = useState<import('./lib/devicecode').Typed>()
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
+  const [link, setLink] = useState(false)
   const digits = text.replace(/\D/g, '').slice(0, 6)
   const send = async () => {
     if (digits.length !== 6) return
@@ -95,7 +97,7 @@ export function EnterDeviceCode() {
   }, !!typed && !msg)
   const cancel = () => { if (typed) load().then(l => l.stopTyped(typed)); setTyped(undefined); setText(''); setMsg('') }
   if (typed) return (
-    <div class="dc-card">
+    <div class="dc-enter">
       <p><strong>{t('Tap Allow on your other device')}</strong></p>
       <p class="muted small">{t('It shows these same digits:')}</p>
       <p class="dc-bigcode" aria-label={typed.match.split('').join(' ')}>{typed.match}</p>
@@ -105,13 +107,15 @@ export function EnterDeviceCode() {
     </div>
   )
   return (
-    <div class="dc-card">
+    <div class="dc-enter">
       <p class="muted small">{t('On a device where you’re signed in, open Settings → Account → Link another device. Type the code it shows:')}</p>
-      <input class="dc-input" value={digits} inputMode="numeric" autoComplete="one-time-code" maxLength={7} placeholder="000000"
-        aria-label={t('The 6-digit code')} onInput={e => { setText((e.target as HTMLInputElement).value); setMsg('') }}
-        onKeyDown={e => { if (e.key === 'Enter') send() }} />
-      <button class="primary" disabled={busy || digits.length !== 6} onClick={send}>{busy ? t('Checking…') : t('Sign in')}</button>
+      <form class="row wrap" onSubmit={e => { e.preventDefault(); send() }}>
+        <input class="move-input dc-input" value={digits} inputMode="numeric" autoComplete="one-time-code" maxLength={7} placeholder={t('6-digit code')}
+          aria-label={t('The 6-digit code')} onInput={e => { setText((e.target as HTMLInputElement).value); setMsg('') }} />
+        <button class="primary" disabled={busy || digits.length !== 6}>{busy ? t('Checking…') : t('Sign in')}</button>
+      </form>
       {msg && <p class="note small">{msg}</p>}
+      {link ? <PasteMove /> : <button class="link dc-or" onClick={() => setLink(true)}>{t('Have a link instead?')}</button>}
     </div>
   )
 }

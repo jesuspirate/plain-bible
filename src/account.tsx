@@ -462,8 +462,6 @@ export function AccountSection() {
         <details class="account-more">
           <summary>{t('Signed in on another device?')}</summary>
           <EnterDeviceCode />
-          <p class="muted small dc-or">{t('Or paste a link from it:')}</p>
-          <PasteMove />
         </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
       </div>
@@ -481,8 +479,6 @@ export function AccountSection() {
         <details class="account-more">
           <summary>{t('Signed in on another device?')}</summary>
           <EnterDeviceCode />
-          <p class="muted small dc-or">{t('Or paste a link from it:')}</p>
-          <PasteMove />
         </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
       </div>
