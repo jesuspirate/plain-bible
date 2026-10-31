@@ -20,7 +20,7 @@ import { AskApproval } from './approve'
 import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
-import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
+import { go, openCircles, prayEmoji, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookmarkIcon } from './icons'
@@ -792,7 +792,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   const reacts: Record<string, Reaction[]> = Object.fromEntries(Object.entries(item.reacts ?? {}).map(([m, x]) => [m, x.e]))
   if (tapped.reacts) reacts[me] = tapped.reacts
   const myReacts = reacts[me] ?? []
-  const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone)
+  const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone, prayEmoji(settings))
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
   const [tray, setTray] = useState(false)
@@ -932,9 +932,10 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   )
 }
 
-/** Love, strength, encouragement. The hands take the skin tone picked for 🙏. */
-const reactEmoji = (r: Reaction | 'pray', tone: string) =>
-  r === 'pray' ? '🙏' + tone : r === 'love' ? '❤️' : r === 'strength' ? '💪' + tone : '🙌' + tone
+/** Love, strength, encouragement. The hands take the skin tone picked for 🙏,
+ *  and praying shows your own praying hands. */
+const reactEmoji = (r: Reaction | 'pray', tone: string, pray: string) =>
+  r === 'pray' ? pray : r === 'love' ? '❤️' : r === 'strength' ? '💪' + tone : '🙌' + tone
 const REACT_WORDS: Record<Reaction, () => string> = {
   love: () => t('Love'), strength: () => t('Strength'), cheer: () => t('Encouragement'),
 }

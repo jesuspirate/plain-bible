@@ -464,7 +464,9 @@ export default {
   "Medium skin tone": "Peau intermédiaire",
   "Medium-dark skin tone": "Peau moyennement foncée",
   "Dark skin tone": "Peau foncée",
-  "Prayer button skin tone": "Teinte de peau du bouton de prière",
+  "Prayer hands and skin tone": "Mains de prière et teinte de peau",
+  "Folded hands": "Mains jointes",
+  "Open hands": "Mains ouvertes",
   "Pray · hold for skin tones": "Prier · maintenez pour les teintes de peau",
   "Circles · something new": "Cercles · du nouveau",
   "Allow the microphone to search by voice.": "Autorisez le micro pour chercher à la voix.",
@@ -895,4 +897,6 @@ export default {
   "Works once, for 15 minutes. Keep this open.": "Valable une fois, pendant 15 minutes. Gardez cet écran ouvert.",
   "Your prayers are locked on this device, so they won’t open there yet. Unlock them here first under Your prayers.": "Vos prières sont verrouillées sur cet appareil, elles ne s’ouvriront donc pas encore là-bas. Déverrouillez-les d’abord ici, dans Vos prières.",
   "Your {device} is signing in.": "Votre {device} se connecte.",
+  "That code was closed on the other device, or it expired. Make a new one there.": "Ce code a été fermé sur l’autre appareil, ou il a expiré. Créez-en un nouveau là-bas.",
+  "Settings are back to their defaults.": "Les réglages sont revenus à leurs valeurs par défaut.",
 } as Record<string, string>

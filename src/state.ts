@@ -34,6 +34,8 @@ export interface Settings {
   turn: 'stack' | 'slide' | 'off'
   /** skin tone of the 🙏 on the prayer button: a modifier character, or '' for the plain one */
   prayTone: string
+  /** the hands themselves: 🙏 folded, or 🤲 open. Folded unless you pick otherwise. */
+  prayHands: string
   /** a quiet line under the chapter title when you have notes on it */
   noteReminders: boolean
   /** show how many days in a row you've read and prayed */
@@ -53,6 +55,10 @@ export interface Settings {
 
 /** The skin tones of 🙏, plain first. */
 export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}']
+/** The hands for praying: folded, the usual one, and open. */
+export const HANDS = ['🙏', '🤲']
+/** Your praying hands, with your skin tone, as one string (see bible-prayer-sync). */
+export const prayEmoji = (s: Pick<Settings, 'prayHands' | 'prayTone'>) => (HANDS.includes(s.prayHands) ? s.prayHands : '🙏') + s.prayTone
 
 const KEY = 'plain-bible:settings'
 
@@ -68,7 +74,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', prayHands: '🙏', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['KJV', 'BSB', 'NHEB', 'ASV', 'YLT', 'DRC', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },

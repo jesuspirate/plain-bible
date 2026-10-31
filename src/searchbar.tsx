@@ -11,7 +11,7 @@ import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, inCircles, openCircles, openPrayer, readPath, TONES, useApp } from './state'
+import { go, inCircles, openCircles, openPrayer, prayEmoji, readPath, HANDS, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
 import { CircleIcon } from './icons'
@@ -22,19 +22,27 @@ import { isIOS } from './lib/native'
 import { locale, N_, t, tn } from './i18n'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
+const HAND_NAMES = [N_('Folded hands'), N_('Open hands')]
 
-/** 🙏: tap to pray. Press and hold for the skin tones. */
+/** 🙏: tap to pray. Press and hold for the skin tones, and a second row
+ *  with open hands 🤲 for those who pray that way. Folded stays the default. */
 function PrayButton() {
   const { settings, update } = useApp()
+  const hands = HANDS.includes(settings.prayHands) ? settings.prayHands : '🙏'
   const { button, picker } = useHoldPick({
-    options: TONES.map((tone, i) => ({ value: tone, label: t(TONE_NAMES[i]), body: '🙏' + tone })),
-    value: settings.prayTone, onPick: tone => update({ prayTone: tone }), onTap: () => openPrayer(),
-    label: t('Prayer button skin tone'), cls: 'tone-pick', cell: 42,
+    // Open hands on top, folded nearest the finger.
+    options: [...HANDS].reverse().map(h => TONES.map((tone, i) => ({
+      value: h + tone, label: `${t(HAND_NAMES[HANDS.indexOf(h)])}, ${t(TONE_NAMES[i])}`, body: h + tone,
+    }))),
+    value: hands + settings.prayTone,
+    onPick: v => { const h = HANDS.find(h => v.startsWith(h)) ?? '🙏'; update({ prayHands: h, prayTone: v.slice(h.length) }) },
+    onTap: () => openPrayer(),
+    label: t('Prayer hands and skin tone'), cls: 'tone-pick', cell: 42,
   })
   return (
     <>
       <button {...button} type="button" class="sb-pray holdable" aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
-        <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
+        <span class="sb-pray-emoji" aria-hidden="true">{prayEmoji(settings)}</span>
       </button>
       {picker}
     </>

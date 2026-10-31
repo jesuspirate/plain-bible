@@ -19,7 +19,10 @@ function useEvery(ms: number, fn: () => Promise<boolean | void>, on: boolean) {
     let stop = false, timer = 0
     const tick = async () => { if (stop) return; const done = await f.current().catch(() => false); if (!done && !stop) timer = window.setTimeout(tick, ms) }
     timer = window.setTimeout(tick, ms)
-    return () => { stop = true; clearTimeout(timer) }
+    // Back from another app or a locked screen: look at once, not after a wait.
+    const back = () => { if (document.visibilityState === 'visible') { clearTimeout(timer); tick() } }
+    document.addEventListener('visibilitychange', back)
+    return () => { stop = true; clearTimeout(timer); document.removeEventListener('visibilitychange', back) }
   }, [on, ms])
 }
 
@@ -38,6 +41,11 @@ export function ShowDeviceCode({ onClose, onLink }: { onClose: () => void; onLin
     if (a) { setAsk(a); return true }
   }, !!code && !ask && !done && !msg)
   const close = () => { if (code && !done) load().then(l => l.dropDeviceCode(code.code)); onClose() }
+  // Leaving the screen without Cancel (closing Settings) also closes the
+  // code, so the other device hears so instead of waiting for nobody.
+  const open = useRef({ code, done })
+  open.current = { code, done }
+  useEffect(() => () => { const o = open.current; if (o.code && !o.done) load().then(l => l.dropDeviceCode(o.code!.code)) }, [])
   const allow = async () => {
     setBusy(true); setMsg('')
     try {

@@ -302,11 +302,12 @@ main.with-bar { padding-bottom: 120px; }
 .holdable { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none; }
 .hold-catch { position: fixed; inset: 0; z-index: 60; }
 .hold-pick {
-  position: fixed; z-index: 61; display: flex; gap: 2px; padding: 6px; border-radius: 16px;
+  position: fixed; z-index: 61; display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px;
   background: var(--surface); border: .5px solid color-mix(in srgb, var(--text) 14%, transparent);
   box-shadow: 0 10px 30px rgba(0,0,0,.18); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   animation: hold-in .14s ease-out; transform-origin: 50% 100%;
 }
+.hold-row { display: flex; gap: 2px; }
 .hold-pick button {
   all: unset; cursor: pointer; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; -webkit-tap-highlight-color: transparent;
 }
@@ -565,7 +566,8 @@ button.danger, .set-row.danger { color: #b3261e; }
 :root[data-theme='dark'] .confirm-card.danger { border-color: #ff8a80; }
 .account .confirm-card p { margin: 0 0 10px; font-size: 16px; }
 .account .confirm-card p.small { font-size: 15px; }
-.confirm-card #confirm-title { font-size: 18px; }
+.confirm-card #confirm-title, .confirm-card .confirm-title { font-size: 18px; }
+.confirm-card p { margin: 0 0 10px; }
 .confirm-buttons { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 6px; }
 .confirm-buttons button { min-height: 52px; border-radius: 14px; font: 600 17px var(--sans); width: 100%; }
 .keep-copy { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
@@ -927,3 +929,8 @@ body.selecting .listen { display: none; }
 .dc-enter > button:not(.link) { min-height: 46px; }
 button.link.dc-or { display: block; margin: 4px 0 8px; padding: 6px 0; font-size: 15px; }
 .dc-enter .move-paste { margin-top: 14px; }
+
+/* Dark: on a small round button the bright top and bottom of the rim meet
+   and read as a white ring. A softer light keeps it glass, not outlined. */
+:root[data-theme='dark'] .sb-circles, :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .sb-circles, :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }

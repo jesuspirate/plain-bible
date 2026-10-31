@@ -965,7 +965,7 @@ async function deviceCodeRoute(req: Request, env: Env, parts: string[]): Promise
     if (!sealedText(pub, 200)) throw new HttpError(400, 'Bad request')
     const row = await db.prepare('SELECT epk, sealed FROM device_codes WHERE code = ? AND pub = ? AND expires > ?').bind(code, pub, now)
       .first<{ epk: string | null; sealed: string | null }>()
-    if (!row) throw new HttpError(404, 'This code has expired. Ask for a new one.')
+    if (!row) throw new HttpError(404, 'That code was closed on the other device, or it expired. Make a new one there.')
     // Picked up: it's done with.
     if (row.sealed) await db.prepare('DELETE FROM device_codes WHERE code = ?').bind(code).run()
     return json(row)
