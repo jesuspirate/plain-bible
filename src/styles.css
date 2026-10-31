@@ -577,6 +577,8 @@ button.danger, .set-row.danger { color: #b3261e; }
 .hold-confirm.held .hold-fill { transform: scaleX(1); transition: transform var(--hold-ms, 2500ms) linear; }
 .hold-label { position: relative; }
 :root[data-theme='dark'] .hold-confirm { background: #c62828; }
+.confirm-buttons button.leave-confirm { color: #fff; background: #b3261e; border-color: #b3261e; }
+:root[data-theme='dark'] .confirm-buttons button.leave-confirm { background: #c62828; border-color: #c62828; }
 .account-box { margin: 0 0 20px; } .account-box h2 { margin-top: 0; }
 .email-code { margin-top: 12px; }
 .email-code form .move-input { flex: 1 1 14em; width: auto; }

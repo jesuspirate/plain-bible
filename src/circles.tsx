@@ -567,6 +567,10 @@ function CircleView({ id }: { id: string }) {
     setBusy(true); setMsg(''); setSent(false)
     try { const link = await inviteLink(id); setInvite(link); await sendInvite(link) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
   }
+  // The card opens at the very bottom of the page: bring all of it into view,
+  // red button included, instead of leaving only Stay on screen.
+  const leaveCard = useRef<HTMLDivElement>(null)
+  useEffect(() => { if (leaving) leaveCard.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [leaving])
   const leave = async () => {
     setBusy(true)
     try {
@@ -612,7 +616,14 @@ function CircleView({ id }: { id: string }) {
         <Rename circle={id} name={info?.name ?? ''} onDone={named} />
         <div class="c-foot">
           {leaving
-            ? <div class="c-row"><button class="c-btn" onClick={() => setLeaving(false)}>{t('Stay')}</button><button class="c-btn danger" disabled={busy} onClick={leave}>{t('Leave and remove what I shared')}</button></div>
+            ? <div class="confirm-card danger" role="alertdialog" aria-labelledby="leave-title" ref={leaveCard}>
+              <p id="leave-title" class="confirm-title"><strong>{t('Leave {circle}?', { circle: info?.name ?? t('this circle') })}</strong></p>
+              <p>{t('What you shared here is removed for everyone. To come back, ask someone in it for a new invite.')}</p>
+              <div class="confirm-buttons">
+                <button class="leave-confirm" disabled={busy} onClick={leave}>{busy ? t('Leaving…') : t('Leave and remove what I shared')}</button>
+                <button disabled={busy} onClick={() => setLeaving(false)}>{t('Stay')}</button>
+              </div>
+            </div>
             : <button class="link small" onClick={() => setLeaving(true)}>{t('Leave this circle')}</button>}
         </div>
       </>}
