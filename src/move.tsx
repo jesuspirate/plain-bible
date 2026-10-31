@@ -4,6 +4,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { applyMove, fetchMove, makeDeviceLink, MOVED_IN, movedIn, parseMoveLink } from './lib/move'
 import { copyText, isIOS } from './lib/native'
 import { PhoneIcon } from './icons'
+import { ShowDeviceCode } from './devicecode'
 import { locale, t, tj } from './i18n'
 
 const standalone = () => (navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches
@@ -78,6 +79,7 @@ export function MoveWelcome() {
  *  in and unlocks prayers there. */
 export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boolean }) {
   const [state, setState] = useState<'idle' | 'working' | 'ready'>('idle')
+  const [showCode, setShowCode] = useState(false)
   const [made, setMade] = useState<{ link: string; prayers: boolean; locked: boolean }>()
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
@@ -103,17 +105,21 @@ export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boo
       {error && <p class="note">{error}</p>}
     </div>
   )
+  // First a code to type on the other device; a link only if asked for.
+  const codeCard = showCode && <ShowDeviceCode onClose={() => setShowCode(false)} onLink={make} />
   // As a row in a Settings card.
   if (row) return <>
-    <button class="set-row" disabled={state === 'working'} onClick={make}>
+    <button class="set-row" disabled={state === 'working'} onClick={() => { setError(''); setShowCode(true) }}>
       <span class="set-icon" aria-hidden="true"><PhoneIcon size={24} /></span>
-      <span class="set-label">{state === 'working' ? t('Making a link…') : t('Link another device')}<span class="set-sub">{t('Sign it in without typing anything')}</span></span>
+      <span class="set-label">{state === 'working' ? t('Making a link…') : t('Link another device')}<span class="set-sub">{t('Sign it in with a 6-digit code')}</span></span>
     </button>
+    {codeCard}
     {error && <p class="note small set-note">{error}</p>}
   </>
   return (
     <div class={cls}>
-      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={make}>{state === 'working' ? t('Making a link…') : t('Link another device')}</button>
+      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={() => { setError(''); setShowCode(true) }}>{state === 'working' ? t('Making a link…') : t('Link another device')}</button>
+      {codeCard}
       {error && <p class="note small">{error}</p>}
     </div>
   )

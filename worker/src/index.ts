@@ -916,6 +916,90 @@ async function approveRoute(req: Request, env: Env, parts: string[]): Promise<Re
   throw new HttpError(404, 'Not found')
 }
 
+// Signing in another device with a code. The signed-in side makes the code,
+// sees who typed it, and allows them by sealing a sign-in to their public
+// key. The new side isn't signed in yet: it types the code (leaving its
+// public key) and picks up what was sealed to it. Guessing a code gets
+// nobody in: the signed-in person still has to allow, after checking that
+// both screens show the same four digits.
+async function deviceCodeRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
+  const db = env.DB, now = Date.now()
+  const [code, step] = parts
+  if (!code) {
+    if (req.method !== 'POST') throw new HttpError(404, 'Not found')
+    const userId = await session(req, env)
+    const open = await db.prepare('SELECT COUNT(*) AS n FROM device_codes WHERE user_id = ? AND expires > ?').bind(userId, now).first<{ n: number }>()
+    if ((open?.n ?? 0) >= 5) throw new HttpError(429, 'Several codes are already waiting. Try again in a few minutes.')
+    await db.prepare('DELETE FROM device_codes WHERE expires < ?').bind(now).run()
+    for (let i = 0; i < 5; i++) {
+      const c = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, '0')
+      const res = await db.prepare('INSERT INTO device_codes (code, user_id, created, expires) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING')
+        .bind(c, userId, now, now + CODE_MS).run()
+      if (res.meta.changes) return json({ code: c, expires: now + CODE_MS })
+    }
+    throw new HttpError(503, 'Try again')
+  }
+  if (!/^\d{6}$/.test(code) || parts.length > 2) throw new HttpError(404, 'Not found')
+
+  // The new device, not signed in.
+  if (req.method === 'POST' && step === 'ask') {
+    const { pub, label } = await readJson<{ pub: string; label: string }>(req)
+    if (!sealedText(pub, 200) || typeof label !== 'string' || label.length > 60) throw new HttpError(400, 'Bad request')
+    const ip = req.headers.get('CF-Connecting-IP') ?? 'unknown'
+    const misses = await db.prepare('SELECT COUNT(*) AS n FROM device_code_misses WHERE ip = ? AND at > ?').bind(ip, now - HOUR).first<{ n: number }>()
+    if ((misses?.n ?? 0) >= CODE_MISSES) throw new HttpError(429, 'Too many wrong codes. Try again in an hour.')
+    // The same ask again (a second tap, a retry) finds its own request.
+    const row = await db.prepare('UPDATE device_codes SET pub = ?, label = ? WHERE code = ? AND (pub IS NULL OR pub = ?) AND expires > ? RETURNING code')
+      .bind(pub, label, code, pub, now).first()
+    if (!row) {
+      await db.batch([
+        db.prepare('DELETE FROM device_code_misses WHERE at < ?').bind(now - HOUR),
+        db.prepare('INSERT INTO device_code_misses (ip, at) VALUES (?, ?)').bind(ip, now),
+      ])
+      throw new HttpError(404, 'That code isn’t right, or it has expired. Check it and try again.')
+    }
+    return json({ ok: true })
+  }
+  if (req.method === 'POST' && step === 'take') {
+    const { pub } = await readJson<{ pub: string }>(req)
+    if (!sealedText(pub, 200)) throw new HttpError(400, 'Bad request')
+    const row = await db.prepare('SELECT epk, sealed FROM device_codes WHERE code = ? AND pub = ? AND expires > ?').bind(code, pub, now)
+      .first<{ epk: string | null; sealed: string | null }>()
+    if (!row) throw new HttpError(404, 'This code has expired. Ask for a new one.')
+    // Picked up: it's done with.
+    if (row.sealed) await db.prepare('DELETE FROM device_codes WHERE code = ?').bind(code).run()
+    return json(row)
+  }
+  if (req.method === 'POST' && step === 'stop') {
+    const { pub } = await readJson<{ pub: string }>(req)
+    await db.prepare('UPDATE device_codes SET pub = NULL, label = NULL WHERE code = ? AND pub = ? AND sealed IS NULL').bind(code, pub).run()
+    return json({ ok: true })
+  }
+
+  // The signed-in device that made the code.
+  if (step) throw new HttpError(404, 'Not found')
+  const userId = await session(req, env)
+  if (req.method === 'GET') {
+    const row = await db.prepare('SELECT pub, label FROM device_codes WHERE code = ? AND user_id = ? AND expires > ?').bind(code, userId, now)
+      .first<{ pub: string | null; label: string | null }>()
+    if (!row) throw new HttpError(404, 'This code has expired.')
+    return json(row)
+  }
+  if (req.method === 'PUT') {
+    const { pub, epk, sealed } = await readJson<{ pub: string; epk: string; sealed: string }>(req)
+    if (!sealedText(pub, 200) || !sealedText(epk, 200) || !sealedText(sealed)) throw new HttpError(400, 'Bad request')
+    const res = await db.prepare('UPDATE device_codes SET epk = ?, sealed = ? WHERE code = ? AND user_id = ? AND pub = ? AND sealed IS NULL AND expires > ?')
+      .bind(epk, sealed, code, userId, pub, now).run()
+    if (!res.meta.changes) throw new HttpError(404, 'That device stopped waiting. Ask it to type the code again.')
+    return json({ ok: true })
+  }
+  if (req.method === 'DELETE') {
+    await db.prepare('DELETE FROM device_codes WHERE code = ? AND user_id = ?').bind(code, userId).run()
+    return json({ ok: true })
+  }
+  throw new HttpError(404, 'Not found')
+}
+
 async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
@@ -925,6 +1009,9 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
   }
   if (pathname === '/prayers' || pathname.startsWith('/prayers/')) {
     return prayerRoute(req, env, pathname.split('/').slice(2).filter(Boolean).map(decodeURIComponent))
+  }
+  if (pathname === '/devicecode' || pathname.startsWith('/devicecode/')) {
+    return deviceCodeRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
   }
   if (pathname === '/approve' || pathname.startsWith('/approve/')) {
     return approveRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
