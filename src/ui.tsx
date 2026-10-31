@@ -19,16 +19,21 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
     d.addEventListener('close', close)
     // On a phone the sheet sits at the bottom of the screen, where the
     // keyboard would cover it (and the note you're typing): lift it above
-    // the keyboard and keep it within the space that's left.
+    // the keyboard and keep it within the space that's left. iPhone often
+    // slides the page up too, a moment after the keyboard arrives (the note
+    // was under it when tapped): follow that slide as well, or the sheet
+    // jumped to the top of the screen with the Bible showing below it.
     const vv = window.visualViewport
     const fit = () => {
       if (!vv) return
+      const up = vv.height < innerHeight - 100
       const kb = Math.max(0, innerHeight - vv.height - vv.offsetTop)
-      d.style.marginBottom = kb > 40 ? kb + 'px' : ''
-      d.style.maxHeight = kb > 40 ? vv.height - 12 + 'px' : ''
+      d.style.marginBottom = up ? kb + 'px' : ''
+      d.style.maxHeight = up ? vv.height - 12 + 'px' : ''
     }
     vv?.addEventListener('resize', fit)
-    return () => { d.removeEventListener('close', close); vv?.removeEventListener('resize', fit) }
+    vv?.addEventListener('scroll', fit)
+    return () => { d.removeEventListener('close', close); vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit) }
   }, [])
   // Only a tap that starts and ends on the dimmed area closes the sheet, not
   // a drag (say, selecting text in a note) that happens to end there.
