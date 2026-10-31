@@ -928,3 +928,8 @@ body.selecting .listen { display: none; }
 .dc-enter > button:not(.link) { min-height: 46px; }
 button.link.dc-or { display: block; margin: 4px 0 8px; padding: 6px 0; font-size: 15px; }
 .dc-enter .move-paste { margin-top: 14px; }
+
+/* Dark: on a small round button the bright top and bottom of the rim meet
+   and read as a white ring. A softer light keeps it glass, not outlined. */
+:root[data-theme='dark'] .sb-circles, :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .sb-circles, :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }

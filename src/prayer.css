@@ -54,7 +54,9 @@ html.praying { overflow: hidden; }
 .pray-private { margin: 0; padding: 4px 12px; border-radius: 99px; font-size: 13px; color: rgba(255, 255, 255, .85); background: rgba(28, 22, 14, .7); }
 .pray-list {
   margin-top: auto; width: min(480px, 100%); max-height: min(64vh, 100%); overflow: auto; overscroll-behavior: contain;
-  padding: 0 8px 8px; border-radius: 20px; background: var(--surface); color: var(--text); border: 1px solid var(--line); box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+  padding: 0 8px 8px; border-radius: 20px; background: var(--surface); color: var(--text); box-shadow: 0 20px 50px rgba(0, 0, 0, .3);
+  /* The same rim as the open search panel: light along the top and bottom, darker down the sides. */
+  border: 1.5px solid; border-color: var(--rim-light) var(--rim-dark) color-mix(in srgb, var(--rim-light) 70%, transparent) var(--rim-dark);
   animation: sb-rise .22s cubic-bezier(.2, .8, .2, 1);
 }
 /* Same top as Settings: a grabber to pull it down, the title, and a big Done. */
