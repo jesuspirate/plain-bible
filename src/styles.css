@@ -302,11 +302,12 @@ main.with-bar { padding-bottom: 120px; }
 .holdable { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; touch-action: none; }
 .hold-catch { position: fixed; inset: 0; z-index: 60; }
 .hold-pick {
-  position: fixed; z-index: 61; display: flex; gap: 2px; padding: 6px; border-radius: 16px;
+  position: fixed; z-index: 61; display: flex; flex-direction: column; gap: 2px; padding: 6px; border-radius: 16px;
   background: var(--surface); border: .5px solid color-mix(in srgb, var(--text) 14%, transparent);
   box-shadow: 0 10px 30px rgba(0,0,0,.18); -webkit-user-select: none; user-select: none; -webkit-touch-callout: none;
   animation: hold-in .14s ease-out; transform-origin: 50% 100%;
 }
+.hold-row { display: flex; gap: 2px; }
 .hold-pick button {
   all: unset; cursor: pointer; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; -webkit-tap-highlight-color: transparent;
 }
