@@ -59,6 +59,20 @@ addEventListener('hashchange', e => {
 })
 if (!w.plainBibleWelcome) { if (lang === 'en') start(); else setLang(lang).catch(() => {}).then(start) }
 
+// After an update the site keeps only the new version's files, so a page
+// opened before it can't fetch a part it hasn't used yet (Prayer, Circles,
+// Settings pages). Instead of a button that does nothing, reload once into
+// the new version, on the same page.
+addEventListener('vite:preloadError', e => {
+  try {
+    const at = +(sessionStorage.getItem('plain-bible:reloaded') || 0)
+    if (Date.now() - at < 30_000) return
+    sessionStorage.setItem('plain-bible:reloaded', String(Date.now()))
+  } catch { return }
+  e.preventDefault()
+  location.reload()
+})
+
 if (import.meta.env.PROD && 'serviceWorker' in navigator && !w.plainBibleWelcome) {
   import('virtual:pwa-register').then(({ registerSW }) => {
     registerSW({
