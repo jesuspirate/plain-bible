@@ -568,6 +568,9 @@ button.danger, .set-row.danger { color: #b3261e; }
 .confirm-card #confirm-title { font-size: 18px; }
 .confirm-buttons { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 6px; }
 .confirm-buttons button { min-height: 52px; border-radius: 14px; font: 600 17px var(--sans); width: 100%; }
+.keep-copy { margin-top: 14px; padding-top: 12px; border-top: 1px solid var(--line); }
+.keep-copy button { min-height: 52px; border-radius: 14px; font: 600 17px var(--sans); width: 100%; }
+.account .confirm-card .keep-copy p { margin: 0 0 10px; }
 .hold-confirm { position: relative; overflow: hidden; color: #fff; background: #b3261e; border: none; touch-action: none; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .hold-fill { position: absolute; inset: 0; background: #6e1610; transform: scaleX(0); transform-origin: left; }
 .hold-confirm.held .hold-fill { transform: scaleX(1); transition: transform var(--hold-ms, 2500ms) linear; }
