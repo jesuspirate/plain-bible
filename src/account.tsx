@@ -3,7 +3,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { Marks, saveMarks } from './lib/marks'
 import {
-  Account, accountInfo, changedAt, checkPasskey, PasskeyInfo, removePasskey, renamePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
+  Account, accountInfo, changedAt, checkPasskey, stopPasskey, PasskeyInfo, removePasskey, renamePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
   noteOwner, removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, takeSwitched,
   verifyEmailCode,
 } from './lib/sync'
@@ -309,10 +309,18 @@ function PasskeyList({ list, token, canRemove, busy, onChange }: {
   })
   const title = (k: PasskeyInfo, i: number) => k.name || t('Passkey {n}', { n: i + 1 })
   return <>
-    {!known && <button class="set-row" onClick={check} disabled={busy || !!working}>
+    {/* Stays after one use: with several passkeys, check each in turn. */}
+    {working === 'check' ? (
+      <div class="set-row set-static">
+        <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
+        <span class="set-label passkey-label">{t('Waiting for passkey…')}</span>
+        <button onClick={stopPasskey}>{t('Cancel')}</button>
+      </div>
+    ) : <button class="set-row" onClick={check} disabled={busy || !!working}>
       <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
-      <span class="set-label passkey-label">{working === 'check' ? t('Waiting for passkey…') : t('Which passkey is mine?')}
-        <span class="set-sub">{t('Pick the one you use. It gets marked “This one”, then you can remove the others.')}</span></span>
+      <span class="set-label passkey-label">{t('Which passkey is mine?')}
+        <span class="set-sub">{known ? t('Pick another one to see which it is. The one you pick says “This one”.')
+          : t('Pick the one you use. It gets marked “This one”, then you can remove the others.')}</span></span>
     </button>}
     {list.map((k, i) => open?.id === k.id && open.step === 'remove' ? (
       <div key={k.id} class="set-row set-static passkey-ask" role="alertdialog" aria-labelledby={'ask-' + k.id}>

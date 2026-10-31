@@ -17,6 +17,7 @@ export const onNewAddress = () => !!SYNC_URL
 const PREFIX = 'plain-bible:'
 // Not carried: the list of versions (fetched fresh) and move bookkeeping.
 const SKIP = new Set([PREFIX + 'catalog', PREFIX + 'moved', PREFIX + 'moved-in', PREFIX + 'move-later'])
+const PLACE = PREFIX + 'last'
 const ACCOUNT = PREFIX + 'account', MARKS = PREFIX + 'marks', PRAYER_SYNC = PREFIX + 'prayer-sync'
 /** Set after a link came in: what came, for the welcome. */
 export const MOVED_IN = PREFIX + 'moved-in'
@@ -127,6 +128,9 @@ export async function deviceBundle(): Promise<{ bytes: Uint8Array; prayers: bool
   const syncId = localStorage.getItem(PRAYER_SYNC)
   const key = syncId ? await meta.get<Uint8Array>('key') : undefined
   if (syncId && key) local[PRAYER_SYNC] = syncId
+  // Where you're reading, so the other device opens on the same page.
+  const place = localStorage.getItem(PLACE)
+  if (place) local[PLACE] = place
   const acctKey = key ? undefined : await meta.get<Uint8Array>('acct')
   const b: Omit<Bundle, 'prayers'> = {
     v: 1, kind: 'link', from: location.origin, at: Date.now(), local,
@@ -257,6 +261,8 @@ export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn
   } else if (cameToken) await claim(cameToken)
   const get = (k: string) => localStorage.getItem(k)
   for (const [k, v] of Object.entries(mergeLocal(get, bundle.local, !!own, same))) localStorage.setItem(k, v)
+  // Signing in from your other device: carry on where you're reading there.
+  if (bundle.kind === 'link' && bundle.local[PLACE]) localStorage.setItem(PLACE, bundle.local[PLACE])
   for (const p of list) if (!(await prayers.get(p.id))) await prayers.put(p)
   // A prayer key here stays: replacing it would lock the prayers it opens.
   const hadKey = !!(await meta.get('key'))
