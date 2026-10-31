@@ -1,8 +1,8 @@
 // Press and hold a button for a small row of choices above it, as on the
 // iPhone emoji keyboard: slide along and let go on one, or let go and tap
 // one. A plain tap still does the button's usual thing. Used by 🙏 (skin
-// tones, a row for each kind of hands) and the theme button (Light, Sepia,
-// Dark, Auto). With a mouse it works the same: press, glide, let go.
+// tones) and the theme button (Light, Sepia, Dark, Auto). With a mouse it
+// works the same: press, glide, let go.
 import { ComponentChildren } from 'preact'
 import { createPortal } from 'preact/compat'
 import { useEffect, useRef, useState } from 'preact/hooks'
@@ -11,13 +11,11 @@ import { holdTap } from './lib/native'
 export interface HoldOption { value: string; label: string; body: ComponentChildren }
 
 export function useHoldPick({ options, value, onPick, onTap, label, cls, cell }: {
-  /** one row of choices, or several rows (the nearest to the finger wins) */
-  options: HoldOption[] | HoldOption[][]; value: string; onPick: (v: string) => void; onTap: () => void
+  options: HoldOption[]; value: string; onPick: (v: string) => void; onTap: () => void
   /** names the row for screen readers */ label: string
   /** extra class on the row */ cls: string
   /** width of one choice, for keeping the row on screen */ cell: number
 }) {
-  const rows = (Array.isArray(options[0]) ? options : [options]) as HoldOption[][]
   const [at, setAt] = useState<DOMRect | null>(null)
   const [hover, setHover] = useState<string | null>(null)
   const timer = useRef(0)
@@ -30,14 +28,9 @@ export function useHoldPick({ options, value, onPick, onTap, label, cls, cell }:
   const choose = (v: string) => { onPick(v); setAt(null); setHover(null) }
   // Like the iPhone keyboard: while you slide, the choice is the one in line
   // with your finger, wherever it is up or down, so a finger that covers the
-  // row or drifts a little still lands on the one you mean. With two rows,
-  // the row is the one nearest the finger.
-  const optionAt = (x: number, y: number) => {
-    const lines = [...(row.current?.children ?? [])] as HTMLElement[]
-    if (!lines.length) return null
-    const mid = (el: HTMLElement) => { const b = el.getBoundingClientRect(); return Math.abs(y - (b.top + b.bottom) / 2) }
-    const line = lines.reduce((a, b) => mid(b) < mid(a) ? b : a)
-    const cells = [...line.children] as HTMLElement[]
+  // row or drifts a little still lands on the one you mean.
+  const optionAt = (x: number) => {
+    const cells = [...(row.current?.children ?? [])] as HTMLElement[]
     if (!cells.length) return null
     const i = cells.findIndex(c => x < c.getBoundingClientRect().right)
     return cells[i < 0 ? cells.length - 1 : i].dataset.value ?? null
@@ -60,7 +53,7 @@ export function useHoldPick({ options, value, onPick, onTap, label, cls, cell }:
       // Settle first: the jitter of a held finger doesn't count as a slide.
       if (!slid.current && Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) < 12) return
       slid.current = true
-      setHover(optionAt(e.clientX, e.clientY))
+      setHover(optionAt(e.clientX))
       return
     }
     if (Math.hypot(e.clientX - start.current.x, e.clientY - start.current.y) > 10) { clearTimeout(timer.current); start.current = null }
@@ -69,7 +62,7 @@ export function useHoldPick({ options, value, onPick, onTap, label, cls, cell }:
     clearTimeout(timer.current)
     if (held.current && start.current) {
       // Slid onto one: that's the one. Just let go: stay open for a tap.
-      const v = slid.current ? optionAt(e.clientX, e.clientY) : null
+      const v = slid.current ? optionAt(e.clientX) : null
       if (v !== null) choose(v)
     } else if (start.current && e.button === 0) {
       // A plain tap. Touches never send a click (see below), so it acts here.
@@ -104,7 +97,7 @@ export function useHoldPick({ options, value, onPick, onTap, label, cls, cell }:
     onClick: (e: MouseEvent) => { if (e.detail === 0) onTap() },
   }
   // Above the button (below it near the top of the screen), kept on screen.
-  const w = Math.max(...rows.map(o => o.length)) * (cell + 2) + 12
+  const w = options.length * (cell + 2) + 12
   const left = at ? Math.max(8, Math.min(innerWidth - w - 8, at.left + at.width / 2 - w / 2)) : 0
   const place = !at ? {} : at.top < 140 ? { left, top: at.bottom + 10 } : { left, bottom: innerHeight - at.top + 10 }
   // On the page itself: the bar's blur and slide would carry it along.
@@ -112,13 +105,9 @@ export function useHoldPick({ options, value, onPick, onTap, label, cls, cell }:
     {/* Only a tap that starts here closes it, not letting go of the hold. */}
     <div class="hold-catch" onPointerDown={() => { caught.current = true }} onClick={() => { if (caught.current) setAt(null); caught.current = false }} />
     <div ref={row} class={`hold-pick ${cls}`} role="radiogroup" aria-label={label} style={place}>
-      {rows.map(line => (
-        <div class="hold-row">
-          {line.map(o => (
-            <button type="button" role="radio" data-value={o.value} aria-checked={value === o.value} aria-label={o.label}
-              class={(hover ?? value) === o.value ? 'on' : ''} onClick={() => choose(o.value)}>{o.body}</button>
-          ))}
-        </div>
+      {options.map(o => (
+        <button type="button" role="radio" data-value={o.value} aria-checked={value === o.value} aria-label={o.label}
+          class={(hover ?? value) === o.value ? 'on' : ''} onClick={() => choose(o.value)}>{o.body}</button>
       ))}
     </div>
   </>, document.body)

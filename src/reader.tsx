@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, inCircles, PICK_EVENT, pickVerses, prayEmoji, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, inCircles, PICK_EVENT, pickVerses, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -708,7 +708,7 @@ export function Reader({ route }: { route: Route }) {
         onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
       {picking && (
         <div class="pick-verse" role="region" aria-label={t('Verses for your prayer')}>
-          <p class="pick-head"><span aria-hidden="true">{prayEmoji(settings)} </span>{t('Tap verses for your prayer')}</p>
+          <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap verses for your prayer')}</p>
           {picking.verses.length > 0 && <ul class="pick-list">
             {picking.verses.map(x => <li>
               <span>{verseLabel(x)}</span>
@@ -859,7 +859,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>{t('Share')}</span></button>
             : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>{t('Link')}</span></button>}
           <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
-          <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{prayEmoji(settings)}</span><span>{t('Pray')}</span></button>
+          <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
           {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>{t('Circle')}</span></button>}
         </div>
         {note && <p class="muted small selbar-note">{note}</p>}
