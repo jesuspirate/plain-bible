@@ -1,9 +1,10 @@
 // Linking another device: a link that signs it in and unlocks prayers there.
 // See lib/move.ts for how it works.
 import { useEffect, useState } from 'preact/hooks'
-import { applyMove, fetchMove, makeDeviceLink, MOVED_IN, movedIn, onNewAddress, parseMoveLink } from './lib/move'
+import { applyMove, fetchMove, makeDeviceLink, MOVED_IN, movedIn, parseMoveLink } from './lib/move'
 import { copyText, isIOS } from './lib/native'
 import { PhoneIcon } from './icons'
+import { ShowDeviceCode } from './devicecode'
 import { locale, t, tj } from './i18n'
 
 const standalone = () => (navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches
@@ -56,21 +57,8 @@ export function PasteMove({ onDone }: { onDone?: () => void }) {
   )
 }
 
-/** Settings → Your data. */
-export function MoveInSection() {
-  if (!onNewAddress()) return null
-  return (
-    <div class="field"><span>{t('Link from another device')}</span>
-      <div class="col">
-        <span class="muted small">{t('Paste a link from Settings → Account → Link another device.')}</span>
-        <PasteMove />
-      </div>
-    </div>
-  )
-}
-
 /** After a device link: what came. A fresh install opens quietly; pasting
- *  a link lives in Settings → Your data. */
+ *  a link lives in Settings → Account. */
 export function MoveWelcome() {
   const [info, setInfo] = useState(movedIn)
   // Moves from the old address ended; only device links remain.
@@ -81,7 +69,7 @@ export function MoveWelcome() {
       <p><strong>{t('This device is linked.')}</strong> {info.prayerKey
         ? t('You’re signed in and your prayers are unlocked. Your highlights, notes and settings arrive in a moment, and your prayers right after.')
         : t('You’re signed in. Your highlights, notes and settings arrive in a moment.')}</p>
-      {isIOS && !standalone() && <p class="small">{tj('To keep it on your Home Screen: tap Share, then {add}. If it opens signed out there, paste the same link once more under Settings → Your data (it works for an hour).', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>}
+      {isIOS && !standalone() && <p class="small">{tj('To keep it on your Home Screen: tap Share, then {add}. If it opens signed out there, paste the same link once more under Settings → Account (it works for an hour).', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>}
       <div class="row wrap"><button class="primary" onClick={close}>{t('Done')}</button></div>
     </div>
   )
@@ -91,6 +79,7 @@ export function MoveWelcome() {
  *  in and unlocks prayers there. */
 export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boolean }) {
   const [state, setState] = useState<'idle' | 'working' | 'ready'>('idle')
+  const [showCode, setShowCode] = useState(false)
   const [made, setMade] = useState<{ link: string; prayers: boolean; locked: boolean }>()
   const [error, setError] = useState('')
   const [copied, setCopied] = useState(false)
@@ -112,21 +101,25 @@ export function DeviceLink({ class: cls = '', row }: { class?: string; row?: boo
         <button class="primary" onClick={copy}>{copied ? t('Copied ✓') : t('Copy link')}</button>
         {'share' in navigator && <button onClick={share}>{t('Send…')}</button>}
       </div>
-      <p class="muted small">{tj('Send it to yourself privately: AirDrop, a note to yourself, or your password manager. On iPhone, add My Quiet Bible to the Home Screen first, open it, then go to Settings → Your data and tap {paste}.', { paste: <strong>{t('Paste link')}</strong> })}</p>
+      <p class="muted small">{tj('Send it to yourself privately: AirDrop, a note to yourself, or your password manager. On iPhone, add My Quiet Bible to the Home Screen first, open it, then go to Settings → Account and tap {paste}.', { paste: <strong>{t('Paste link')}</strong> })}</p>
       {error && <p class="note">{error}</p>}
     </div>
   )
+  // First a code to type on the other device; a link only if asked for.
+  const codeCard = showCode && <ShowDeviceCode onClose={() => setShowCode(false)} onLink={make} />
   // As a row in a Settings card.
   if (row) return <>
-    <button class="set-row" disabled={state === 'working'} onClick={make}>
+    <button class="set-row" disabled={state === 'working'} onClick={() => { setError(''); setShowCode(true) }}>
       <span class="set-icon" aria-hidden="true"><PhoneIcon size={24} /></span>
-      <span class="set-label">{state === 'working' ? t('Making a link…') : t('Link another device')}<span class="set-sub">{t('Sign it in without typing anything')}</span></span>
+      <span class="set-label">{state === 'working' ? t('Making a link…') : t('Link another device')}<span class="set-sub">{t('Sign it in with a 6-digit code')}</span></span>
     </button>
+    {codeCard}
     {error && <p class="note small set-note">{error}</p>}
   </>
   return (
     <div class={cls}>
-      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={make}>{state === 'working' ? t('Making a link…') : t('Link another device')}</button>
+      <button class={cls ? 'pray-btn' : ''} disabled={state === 'working'} onClick={() => { setError(''); setShowCode(true) }}>{state === 'working' ? t('Making a link…') : t('Link another device')}</button>
+      {codeCard}
       {error && <p class="note small">{error}</p>}
     </div>
   )

@@ -10,6 +10,7 @@ import {
 import { Settings, useApp } from './state'
 import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { DeviceLink, PasteMove } from './move'
+import { EnterDeviceCode } from './devicecode'
 import { KeyBackup } from './approve'
 import { DownloadEverything } from './exporter'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
@@ -459,7 +460,9 @@ export function AccountSection() {
         </>}
         <EmailCode onToken={sync.signedIn} />
         <details class="account-more">
-          <summary>{t('Got a link from your other device?')}</summary>
+          <summary>{t('Signed in on another device?')}</summary>
+          <EnterDeviceCode />
+          <p class="muted small dc-or">{t('Or paste a link from it:')}</p>
           <PasteMove />
         </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
@@ -476,7 +479,9 @@ export function AccountSection() {
           </div>
         ) : <p class="note">{t('This browser does not support passkeys.')}</p>}
         <details class="account-more">
-          <summary>{t('Got a link from your other device?')}</summary>
+          <summary>{t('Signed in on another device?')}</summary>
+          <EnterDeviceCode />
+          <p class="muted small dc-or">{t('Or paste a link from it:')}</p>
           <PasteMove />
         </details>
         {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}

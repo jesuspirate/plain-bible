@@ -14,7 +14,6 @@ import { installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
-import { MoveInSection } from './move'
 import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
@@ -376,7 +375,6 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'language') return <LanguagePage />
 
   if (page === 'data') return <>
-    <MoveInSection />
     <DataTools />
     <h2>{t('Settings')}</h2>
     <p><button onClick={() => {

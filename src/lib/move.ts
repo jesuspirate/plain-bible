@@ -22,7 +22,8 @@ const ACCOUNT = PREFIX + 'account', MARKS = PREFIX + 'marks', PRAYER_SYNC = PREF
 export const MOVED_IN = PREFIX + 'moved-in'
 
 const CHUNK = 1_000_000
-const LINK = /#\/move\/([A-Za-z0-9_-]{22})\.([A-Za-z0-9_-]{43})$/
+// Also read where an open app already turned #/move/ into #/read/…/Gen/1.
+const LINK = /#\/(?:move|read)\/([A-Za-z0-9_-]{22})\.([A-Za-z0-9_-]{43})(?:\/|$)/
 
 type Ref = [number, number]
 interface PackedPart { ms: number; type: string; audio: Ref }
@@ -111,6 +112,14 @@ async function upload(bytes: Uint8Array, life: 'move' | 'link', progress: (done:
  *  Highlights, notes and settings then arrive by the usual sync. It works
  *  for an hour. */
 export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean; locked: boolean }> {
+  const { bytes, prayers, locked } = await deviceBundle()
+  const hash = await upload(bytes, 'link', () => {})
+  return { link: `${location.origin}/${hash}`, prayers, locked }
+}
+
+/** What signs another device in, packed: a sign-in for this account and,
+ *  where prayers sync here, their key. Used by links and by codes. */
+export async function deviceBundle(): Promise<{ bytes: Uint8Array; prayers: boolean; locked: boolean }> {
   const acct = loadAccount()
   if (!acct) throw new SyncError('Sign in first, under Settings → Account.')
   const { token } = await api<{ token: string }>('/auth/handoff', { method: 'POST', token: acct.token })
@@ -126,8 +135,7 @@ export async function makeDeviceLink(): Promise<{ link: string; prayers: boolean
   // Prayers on the account that this device can't open: the link can't
   // carry their key, so say so rather than let the other device find none.
   const locked = !key && !!(await api<{ keyId: string | null }>('/prayers', { token: acct.token }).catch(() => null))?.keyId
-  const hash = await upload(pack(b, []), 'link', () => {})
-  return { link: `${location.origin}/${hash}`, prayers: !!key, locked }
+  return { bytes: pack(b, []), prayers: !!key, locked }
 }
 
 async function send(path: string, body: Uint8Array) {
