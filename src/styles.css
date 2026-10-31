@@ -919,9 +919,11 @@ body.selecting .listen { display: none; }
 
 /* Signing in another device with a 6-digit code. */
 .dc-card { text-align: center; }
-.dc-card p { margin: 0 0 8px; }
+.dc-card p, .dc-enter p { margin: 0 0 8px; }
 .dc-card .row { justify-content: center; }
 .dc-bigcode { margin: 6px 0 10px !important; font: 700 40px/1.1 var(--sans); letter-spacing: .12em; font-variant-numeric: tabular-nums; }
-.dc-input { box-sizing: border-box; width: 100%; max-width: 14em; margin: 4px auto 12px; display: block; min-height: 56px; padding: 8px 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--bg); color: var(--text); font: 700 30px var(--sans); letter-spacing: .3em; text-align: center; font-variant-numeric: tabular-nums; }
-.dc-card > button { min-height: 46px; }
-.dc-or { margin: 16px 0 8px; }
+.dc-enter form .dc-input { flex: 0 1 10em; font-variant-numeric: tabular-nums; }
+.dc-enter .dc-input:not(:placeholder-shown) { letter-spacing: 3px; }
+.dc-enter > button:not(.link) { min-height: 46px; }
+button.link.dc-or { display: block; margin: 4px 0 8px; padding: 6px 0; font-size: 15px; }
+.dc-enter .move-paste { margin-top: 14px; }

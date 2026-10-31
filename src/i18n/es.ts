@@ -884,7 +884,7 @@ export default {
   "On a device where you’re signed in, open Settings → Account → Link another device. Type the code it shows:": "En un dispositivo donde ya iniciaste sesión, abre Ajustes → Cuenta → Vincular otro dispositivo. Escribe el código que muestra:",
   "On the other device, open Settings → Account, tap “Signed in on another device?” and type:": "En el otro dispositivo, abre Ajustes → Cuenta, toca «¿Iniciaste sesión en otro dispositivo?» y escribe:",
   "Only if its screen shows these same digits:": "Solo si su pantalla muestra estos mismos dígitos:",
-  "Or paste a link from it:": "O pega un enlace que venga de él:",
+  "Have a link instead?": "¿Tienes un enlace?",
   "Sign in your {device}?": "¿Iniciar sesión en tu {device}?",
   "Sign it in with a 6-digit code": "Iniciar sesión con un código de 6 dígitos",
   "Signed in on another device?": "¿Iniciaste sesión en otro dispositivo?",

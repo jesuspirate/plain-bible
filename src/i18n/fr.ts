@@ -884,7 +884,7 @@ export default {
   "On a device where you’re signed in, open Settings → Account → Link another device. Type the code it shows:": "Sur un appareil où vous êtes connecté, ouvrez Réglages → Compte → Relier un autre appareil. Tapez le code affiché :",
   "On the other device, open Settings → Account, tap “Signed in on another device?” and type:": "Sur l’autre appareil, ouvrez Réglages → Compte, touchez « Connecté sur un autre appareil ? » et tapez :",
   "Only if its screen shows these same digits:": "Seulement si son écran affiche ces mêmes chiffres :",
-  "Or paste a link from it:": "Ou collez un lien venu de lui :",
+  "Have a link instead?": "Vous avez plutôt un lien ?",
   "Sign in your {device}?": "Connecter votre {device} ?",
   "Sign it in with a 6-digit code": "Le connecter avec un code à 6 chiffres",
   "Signed in on another device?": "Connecté sur un autre appareil ?",
