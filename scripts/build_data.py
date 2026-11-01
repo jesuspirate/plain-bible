@@ -251,6 +251,23 @@ def build_oshb():
 
 
 # Public-domain texts from github.com/Beblia/Holy-Bible-XML-Format (books numbered 1–66).
+# Typos in the upstream texts, fixed here so the fix survives every rebuild:
+# version -> (book, chapter, verse, wrong words, right words). The build stops
+# if the wrong words are no longer there, so a fix made upstream is noticed.
+CORRECTIONS = {
+    # "crainte" is feminine (also fixes EthFr, which is built on this text).
+    "FreCrampon": [("Eph", 5, 21, "dans le crainte du Christ", "dans la crainte du Christ")],
+}
+
+
+def apply_corrections(tid, books):
+    for book, ch, vs, wrong, right in CORRECTIONS.get(tid, []):
+        verses = books[book][ch - 1]
+        if wrong not in verses[vs - 1]:
+            sys.exit("%s %s %d:%d no longer reads %r: remove this correction" % (tid, book, ch, vs, wrong))
+        verses[vs - 1] = verses[vs - 1].replace(wrong, right)
+
+
 BEBLIA = {"LSG": ("FrenchBible.xml", "fr", "La Sainte Bible, Louis Segond (1910)")}
 
 
@@ -420,6 +437,7 @@ def main():
         full, books = load_books(path, tagged)
         if not books:
             continue
+        apply_corrections(tid, books)
         if tid in parts:
             built[tid] = books
         if only and tid not in only:
