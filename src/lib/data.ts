@@ -9,6 +9,36 @@ export interface Bible { id: string; books: Record<string, string[][]> }
 export interface LexEntry { lemma?: string; xlit?: string; translit?: string; pron?: string; derivation?: string; strongs_def?: string; kjv_def?: string }
 
 const CATALOG_KEY = 'plain-bible:catalog'
+const CHECKED_KEY = 'plain-bible:saved-checked'
+const DAY = 24 * 3600 * 1000
+
+/** Bibles saved on this device are read from the saved copy first, so a fix
+ *  to a text (say a typo) would never reach them. Once a day, online, each
+ *  saved Bible asks the site whether it changed: an unchanged one costs a tiny
+ *  "not modified" answer, a changed one is downloaded again. */
+export async function refreshSaved(base: string, now = Date.now()) {
+  if (typeof caches === 'undefined' || !navigator.onLine) return
+  try {
+    if (now - Number(localStorage.getItem(CHECKED_KEY) || 0) < DAY) return
+    localStorage.setItem(CHECKED_KEY, String(now))
+  } catch { return }
+  const c = await caches.open('bible-data')
+  const prefix = new URL('bibles/', base).href
+  for (const req of await c.keys()) {
+    if (!req.url.startsWith(prefix)) continue
+    const old = await c.match(req)
+    const tag = old?.headers.get('etag')
+    if (!old || !tag) continue
+    // The saved copy steps aside, so the request reaches the site.
+    await c.delete(req)
+    try {
+      const res = await fetch(req.url, { cache: 'no-store', headers: { 'If-None-Match': tag } })
+      await c.put(req.url, res.status === 200 ? res : old)
+    } catch {
+      await c.put(req.url, old)
+    }
+  }
+}
 
 export class DataSource {
   private bibles = new Map<string, Promise<Bible>>()
