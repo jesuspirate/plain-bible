@@ -1,5 +1,5 @@
 import { ComponentChildren } from 'preact'
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
@@ -18,6 +18,7 @@ import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, N
 import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
+import { grow, keepCaretInView } from './lib/caret'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -995,6 +996,16 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
     setMarks(m => setNote(m, markK, id, s, undefined, verses))
   }
   useEffect(() => { if (!draft) area.current?.focus() }, [])
+  // The box grows with the note and the line being typed stays in view
+  // above the keyboard, also once the keyboard has finished coming up.
+  useLayoutEffect(() => { const a = area.current; if (a) { grow(a); keepCaretInView(a) } }, [draft])
+  useEffect(() => {
+    const vv = window.visualViewport
+    let raf = 0
+    const fit = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => area.current && keepCaretInView(area.current)) }
+    vv?.addEventListener('resize', fit)
+    return () => { cancelAnimationFrame(raf); vv?.removeEventListener('resize', fit) }
+  }, [])
   useEffect(() => { const timer = setTimeout(() => save(draft), 600); return () => clearTimeout(timer) }, [draft])
   // Switching away (or an app update reloading the page) mustn't lose the
   // last words typed.
