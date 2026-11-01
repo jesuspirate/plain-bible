@@ -32,6 +32,9 @@ function scroller(el: HTMLElement): HTMLElement | null {
 
 /** Grow the box to fit what's written (never below its own rows). */
 export function grow(ta: HTMLTextAreaElement) {
+  // Not on screen yet (the sheet opens a moment later): nothing to measure,
+  // and measuring would squash the box to nothing.
+  if (!ta.getClientRects().length) return
   const box = scroller(ta) ?? ta.parentElement
   const keep = box?.scrollTop ?? 0
   ta.style.height = 'auto'
@@ -52,7 +55,10 @@ export function keepCaretInView(ta: HTMLTextAreaElement) {
   const b = box.getBoundingClientRect()
   const vv = window.visualViewport
   const seenTop = Math.max(b.top, vv ? vv.offsetTop : 0)
-  const seenBottom = Math.min(b.bottom, vv ? vv.offsetTop + vv.height : innerHeight)
+  let seenBottom = Math.min(b.bottom, vv ? vv.offsetTop + vv.height : innerHeight)
+  // Buttons pinned to the bottom of the sheet cover the last lines too.
+  const after = ta.nextElementSibling
+  if (after && getComputedStyle(after).position === 'sticky') seenBottom = Math.min(seenBottom, after.getBoundingClientRect().top)
   const room = Math.min((seenBottom - seenTop) / 3, (bottom - top) * 3)
   if (y1 > seenBottom - room) box.scrollTop += y1 - (seenBottom - room)
   else if (y0 < seenTop + 8) box.scrollTop -= seenTop + 8 - y0
