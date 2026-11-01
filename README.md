@@ -43,7 +43,7 @@ no reading plans, devotionals, accounts, or feeds.
 ## Welcome page
 
 `welcome/` is the landing page: what My Quiet Bible is, the lamp verse in a few languages, and the
-steps to put it on a Home Screen, in the app's own colours and fonts (Light, Sepia or Dark). A first
+steps to put it on a Home Screen, in the app's own colors and fonts (Light, Sepia or Dark). A first
 visit to the bare address opens it (`index.html` sends you there when nothing has been saved on the
 device and the address carries no link); the Bible is one tap away, and after that the bare address
 opens the Bible. An app on a Home Screen never sees it, nor does any link into the Bible (a shared

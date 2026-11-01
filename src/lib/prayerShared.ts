@@ -1,5 +1,5 @@
 // Which circles already have each of your prayers, so the share sheet can
-// grey those out and Your prayers can say where one went. A prayer is known
+// gray those out and Your prayers can say where one went. A prayer is known
 // by when it was prayed: a shared prayer carries that (`prayed`), on every
 // device. Two sources, both kept on this device: your own prayers in each
 // circle as last loaded, and what this device sent since.

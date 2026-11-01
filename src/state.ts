@@ -26,7 +26,7 @@ export interface Settings {
   font: FontId
   searchBar: boolean
   layout: 'paragraph' | 'verses'
-  /** how highlights look: behind the letters like a pen, a full block, or coloured letters */
+  /** how highlights look: behind the letters like a pen, a full block, or colored letters */
   highlight: 'marker' | 'block' | 'text'
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'

@@ -37,7 +37,7 @@ describe('typing a code', () => {
     expect(t.pub).toBe(posts[0].body.pub)
     await stopWaiting(t)
   })
-  it('a wrong code keeps nothing; cancelling starts fresh', async () => {
+  it('a wrong code keeps nothing; canceling starts fresh', async () => {
     answer = () => { throw new SyncError('wrong', 404) }
     await expect(typeCode('333333')).rejects.toThrow()
     answer = () => ({ ok: true })
@@ -63,7 +63,7 @@ describe('showing a code', () => {
     answer = () => ({ ok: true })
     await dropCode('c1', a.code)
   })
-  it('a new code once the old one is used, cancelled or nearly expired', async () => {
+  it('a new code once the old one is used, canceled or nearly expired', async () => {
     let n = 0
     answer = () => ({ code: String(200000 + ++n), expires: Date.now() + (n === 1 ? 30_000 : 15 * 60_000) })
     const a = await makeCode('c2')

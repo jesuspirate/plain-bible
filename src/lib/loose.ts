@@ -180,7 +180,7 @@ export function buildIndex(verses: Iterable<[number, string]>, l: Lang): LooseIn
   return { lang: l, texts, refs: Int32Array.from(refs), postings, vocab }
 }
 
-/** The query with misspelt words swapped for the closest word this edition
+/** The query with misspelled words swapped for the closest word this edition
  *  has (shepard → shepherd, rightousness → righteousness). Only when most
  *  of the query is in the edition's language, so French words aren't
  *  "corrected" into English ones. */
@@ -216,7 +216,7 @@ export function fixTypos(idx: LooseIndex, q: LooseQuery): LooseQuery {
   return { ...q, words, stems: [...new Set(q.stems.map(s => swap.get(s) ?? s))] }
 }
 
-/** Edit distance (with swapped neighbours as one edit), giving up past `max`. */
+/** Edit distance (with swapped neighbors as one edit), giving up past `max`. */
 function distance(a: string, b: string, max: number): number {
   const m = a.length, n = b.length
   let pp = new Array<number>(n + 1).fill(0), prev = Array.from({ length: n + 1 }, (_, j) => j), cur = new Array<number>(n + 1)

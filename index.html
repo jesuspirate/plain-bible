@@ -39,7 +39,7 @@
       } catch (e) {}
 
       // Apply the saved theme before the first paint, so the status bar and
-      // page start in the right colour. On the first start, the theme picked
+      // page start in the right color. On the first start, the theme picked
       // on the welcome page, if any.
       try {
         var t = (JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').theme) || localStorage.getItem('plain-bible:welcome-theme') || 'sepia'

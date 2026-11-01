@@ -1,7 +1,7 @@
 :root {
   --bg: #faf8f3; --surface: #ffffff; --text: #22211f; --muted: #6b675f; --line: #e4dfd4;
   --accent: #7a4b1e; --accent-ink: #ffffff; --mark: #fde9a6; --mark-ink: #22211f; --chip: #f1ece1;
-  /* bookmark ribbon, and how much of a highlight colour tints letters */
+  /* bookmark ribbon, and how much of a highlight color tints letters */
   --ribbon: #b3261e; --hl-ink: 30%;
   --font-size: 19px;
   --serif: 'Literata Variable', Georgia, 'Noto Serif', serif;
@@ -60,7 +60,7 @@ header.top {
   position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px;
   padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
   padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right));
-  /* Solid page colour unless the phone can both mix colours and blur. Older
+  /* Solid page color unless the phone can both mix colors and blur. Older
      iPhones (iOS before 16.2) can't mix: the bar went see-through and the
      blur smeared the chapter number into a dirty band. When it does blur, the
      bar is nearly solid, so what slides under it is only a soft hint. */
@@ -158,7 +158,7 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
 dialog.sheet { border: none; padding: 0; background: var(--surface); color: var(--text); border-radius: 14px; width: min(560px, calc(100vw - 24px)); max-height: min(80vh, 760px); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
 dialog.sheet.wide { width: min(860px, calc(100vw - 24px)); }
 dialog.sheet::backdrop { background: rgba(0,0,0,.35); }
-/* Keyboard up: the sheet's own colour reaches down past the keyboard, so no
+/* Keyboard up: the sheet's own color reaches down past the keyboard, so no
    Bible text shows between them (or through the keyboard). Starts below the
    rounded top corners so they keep their shape. */
 dialog.sheet.kb { box-shadow: 0 calc(100vh + 14px) 0 100vh var(--surface); }
@@ -315,7 +315,7 @@ main.with-bar { padding-bottom: 120px; }
   all: unset; cursor: pointer; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 10px; -webkit-tap-highlight-color: transparent;
 }
 .tone-pick button { font: 26px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; }
-/* Light, Sepia, Dark, Auto: a page of each colour with its name under it. */
+/* Light, Sepia, Dark, Auto: a page of each color with its name under it. */
 .theme-pick button { width: 58px; height: 64px; align-content: center; gap: 5px; font: 500 12px/1 var(--sans); color: var(--text); }
 .theme-swatch { width: 28px; height: 28px; border-radius: 50%; box-shadow: inset 0 0 0 1px color-mix(in srgb, var(--text) 22%, transparent); }
 .hold-pick button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
@@ -394,13 +394,13 @@ main.with-mini { padding-bottom: 144px; }
 /* ---- highlights & bookmarks ---- */
 .verse, .pv { cursor: pointer; -webkit-tap-highlight-color: transparent; }
 .hl { --hl-mix: 55%; }
-/* Marker (default): colour behind the letters only, line by line, like a highlighter pen. */
+/* Marker (default): color behind the letters only, line by line, like a highlighter pen. */
 .hl .vt { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: .3em; padding: .04em .12em; margin: 0 -.06em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 /* Block: the whole verse. */
 :root[data-hl='block'] .hl .vt { background: none; padding: 0; margin: 0; }
 :root[data-hl='block'] .verse.hl .cell, :root[data-hl='block'] .pv.hl { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 :root[data-hl='block'] .verse.hl .cell { padding: 1px 4px; margin: 0 -4px; }
-/* Colored text: the letters take the colour, with a line of it underneath. */
+/* Colored text: the letters take the color, with a line of it underneath. */
 :root[data-hl='text'] .hl .vt { background: none; padding: 0; margin: 0; color: color-mix(in srgb, var(--hl) var(--hl-ink), var(--text));
   text-decoration: underline; text-decoration-color: var(--hl); text-decoration-thickness: .16em; text-underline-offset: .22em; text-decoration-skip-ink: none; }
 .hl-preview { margin: 4px 0 0; font-family: var(--reading); font-size: 18px; line-height: 1.7; }
@@ -440,7 +440,7 @@ main.with-mini { padding-bottom: 144px; }
 .selbar .confirm-card.selbar-ask { margin: 0; padding: 12px 14px 4px; }
 .saved-list .confirm-card { margin: 10px 0 4px; }
 .note-actions { position: sticky; bottom: -20px; margin: 0 -16px -20px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); }
-/* Selected verses: a dotted underline, so the highlight colours stay visible */
+/* Selected verses: a dotted underline, so the highlight colors stay visible */
 .picked .vt { text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: .28em; }
 .picked .vn { color: var(--accent); }
 .menu-verse { font-family: var(--reading); font-size: 17px; line-height: 1.5; margin: 0 0 14px; max-height: 7.5em; overflow: auto; }
@@ -665,11 +665,11 @@ html.sb-lock { overflow: hidden; }
    Frosted like iPhone: the page shows through, softly blurred. The rim is
    what makes it glass, as on Apple's: a thin bright line along the top and
    bottom, fading to a thin dark line down the sides. Only where the phone can
-   both mix colours and blur; older iPhones (before iOS 16.2) keep the solid
+   both mix colors and blur; older iPhones (before iOS 16.2) keep the solid
    look above, as the top bar does, instead of a see-through smear. Nothing
    here animates, so it costs nothing while you read. */
 :root { --rim-light: #fff; --rim-dark: rgba(0,0,0,.32); }
-/* What tints the glass: the page colour in Light and Sepia; in Dark a faint white, as on iPhone, so it reads lighter than the page. */
+/* What tints the glass: the page color in Light and Sepia; in Dark a faint white, as on iPhone, so it reads lighter than the page. */
 :root { --glass-tint: color-mix(in srgb, var(--surface) 55%, transparent); }
 :root[data-theme='sepia'] { --rim-light: #fffcf2; --rim-dark: rgba(70,45,15,.38); }
 :root[data-theme='dark'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(62,62,72,.66); }
@@ -683,7 +683,7 @@ html.sb-lock { overflow: hidden; }
   .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
   .sb-circles { border-color: transparent; background: var(--glass-tint); }
   /* Whatever shows through, the words on the glass stay readable: full text
-     colour, not the faded grey, with a soft halo of the glass behind them. */
+     color, not the faded gray, with a soft halo of the glass behind them. */
   .sb-field input::placeholder, .sb-field input { color: var(--text); text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface); }
   .sb-field input::placeholder { color: color-mix(in srgb, var(--text) 82%, transparent); }
   .sb-field .sb-glass { color: var(--text); filter: drop-shadow(0 0 3px var(--surface)); }
@@ -723,7 +723,7 @@ article.chapter { touch-action: pan-y pinch-zoom; }
 /* Keep sideways swipes for turning chapters, not the browser's back/forward. */
 html, body { overscroll-behavior-x: none; }
 /* Turning chapters: the chapter beside yours while you swipe. A page that
-   slides over another is a card with the page colour all round and a soft
+   slides over another is a card with the page color all round and a soft
    shadow on its edge. */
 .turn-peek { position: fixed; inset: 0; z-index: 5; pointer-events: none; overflow: hidden; }
 .turn-peek.under { background: var(--bg); }
@@ -735,7 +735,7 @@ html, body { overscroll-behavior-x: none; }
 article.chapter.turning { position: relative; z-index: 6; background: var(--bg); min-height: 100vh; will-change: transform; }
 .turn-peek article, .turn-peek article.chapter.turning { position: absolute; z-index: 2; will-change: transform; }
 .turn-peek.under article.chapter { z-index: 0; }
-/* The page colour reaches past the margins and up under the top bar, and a
+/* The page color reaches past the margins and up under the top bar, and a
    narrow shadow runs down the edge the page leads with. The shadow is a
    box-shadow, which never makes the page wider: anything that pokes past the
    right edge makes iPhone zoom the whole app out mid-swipe and drop the swipe. */
@@ -771,7 +771,7 @@ html, body { touch-action: manipulation; }
 .vtop .vrow { padding: 12px 8px; font-size: 17px; }
 
 /* ---- touch feel ----
-   Phones: no grey flash over whatever you tap, and no text selection or
+   Phones: no gray flash over whatever you tap, and no text selection or
    copy menu when you hold a button. A pressed button dims instead (on an
    iPhone :active needs the touch listener in main.tsx). */
 html { -webkit-tap-highlight-color: transparent; }

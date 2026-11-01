@@ -35,10 +35,10 @@ function catalogCounts() {
 const counts = catalogCounts()
 
 // One copy of the manifest per theme. Android paints the installed app's
-// window in its background colour, and that shows for a moment behind the
+// window in its background color, and that shows for a moment behind the
 // keyboard as it slides up or down; a cream window flashed white in Dark.
 // The app points at the copy for the theme in use (src/app.tsx), so the
-// home-screen app takes the colour of the theme it was installed in.
+// home-screen app takes the color of the theme it was installed in.
 const THEMES = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }
 const themedManifests: Plugin = {
   name: 'themed-manifests',

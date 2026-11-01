@@ -1,4 +1,4 @@
-// The support page: how to give, in the welcome page's colours and fonts.
+// The support page: how to give, in the welcome page's colors and fonts.
 // Plain HTML; this script only does the theme and language buttons, and the
 // Bitcoin section once it is filled in (index.html, #bitcoin).
 import '@fontsource-variable/literata'

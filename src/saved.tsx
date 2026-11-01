@@ -15,7 +15,7 @@ const PAGE = 60
 const TAB = 'plain-bible:saved-tab'
 type Tab = 'highlights' | 'notes' | 'bookmarks'
 
-/** Verses next to each other in one colour read as one highlight. */
+/** Verses next to each other in one color read as one highlight. */
 interface Run { keys: string[]; book: string; chapter: number; verses: number[]; color: string }
 function runsOf(keys: string[], marks: Marks): Run[] {
   const out: Run[] = []
@@ -42,7 +42,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const [missing, setMissing] = useState(false)
   const [limit, setLimit] = useState(PAGE)
   const [editing, setEditing] = useState<NotesTarget & { key: string }>()
-  // The highlight whose colours are open.
+  // The highlight whose colors are open.
   const [recolor, setRecolor] = useState<string>()
   const [color, setColor] = useState('all')
   const [find, setFind] = useState('')
@@ -133,7 +133,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   ]
   const more = (n: number) => n > limit && <button class="more" onClick={() => setLimit(l => l + PAGE)}>{t('Show more ({n} left)', { n: n - limit })}</button>
   const empty = t({
-    highlights: N_('No highlights yet. Tap a verse while reading and pick a colour, or tap a verse twice quickly.'),
+    highlights: N_('No highlights yet. Tap a verse while reading and pick a color, or tap a verse twice quickly.'),
     notes: N_('No notes yet. Tap a verse while reading, then the note button, to write one.'),
     bookmarks: N_('No bookmarks yet. Tap a verse while reading, then Bookmark.'),
   }[shownTab])
@@ -163,7 +163,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                 <Ref {...r} />
                 <span class="spacer" />
                 <button class={'saved-act' + (recolor === id ? ' on' : '')} aria-expanded={recolor === id} onClick={() => setRecolor(recolor === id ? undefined : id)}>
-                  <span class="dot big" style={{ background: r.color }} />{t('Colour')}
+                  <span class="dot big" style={{ background: r.color }} />{t('Color')}
                 </button>
               </div>
               <Text {...r} />

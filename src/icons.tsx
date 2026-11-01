@@ -1,5 +1,5 @@
 // Icons drawn as solid, simple shapes so they stay clear at any size and
-// for tired eyes. They take the colour of the text around them.
+// for tired eyes. They take the color of the text around them.
 type P = { size?: number | string; class?: string }
 const svg = (size: number | string = '1em', cls?: string) => ({ viewBox: '0 0 24 24', width: size, height: size, 'aria-hidden': true, class: cls })
 
@@ -67,7 +67,7 @@ export const BackIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M15 4.5L7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
-// Settings rows. Each row has one of these at its left, in the accent colour,
+// Settings rows. Each row has one of these at its left, in the accent color,
 // so the names line up down the whole sheet.
 const line = { fill: 'none', stroke: 'currentColor', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const
 
