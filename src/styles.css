@@ -434,8 +434,11 @@ main.with-mini { padding-bottom: 144px; }
 .nc-meta { display: block; margin-bottom: 3px; }
 .nc-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; white-space: pre-wrap; font: 16px/1.5 var(--sans); color: var(--text); }
 .note-text { width: 100%; box-sizing: border-box; font: 16px/1.5 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); resize: none; overflow-y: auto; margin-bottom: 12px; }
-/* Done / Share / Delete stay at the bottom of the note sheet, however long
+/* Done / Share / Delete (or "Delete this note?") stay at the bottom of the note sheet, however long
    the note, so they're always one tap away. */
+.note-actions .confirm-card { margin: 0; }
+.selbar .confirm-card.selbar-ask { margin: 0; padding: 12px 14px 4px; }
+.saved-list .confirm-card { margin: 10px 0 4px; }
 .note-actions { position: sticky; bottom: -20px; margin: 0 -16px -20px; padding: 10px 16px calc(12px + env(safe-area-inset-bottom)); background: var(--surface); border-top: 1px solid var(--line); }
 /* Selected verses: a dotted underline, so the highlight colours stay visible */
 .picked .vt { text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: .28em; }

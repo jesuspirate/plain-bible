@@ -806,6 +806,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
 }) {
   const { settings, byId, data } = useApp()
   const [compare, setCompare] = useState<Bible[]>()
+  const [askUnmark, setAskUnmark] = useState(false)
   const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note } = useVerseActions(book, chapter, verses, versions, bibles)
 
   useEffect(() => {
@@ -848,8 +849,14 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           ))}
           {colors.size > 0 && <button class="swatch none" aria-label={t('Remove highlight')} onClick={() => { apply({ c: null }); onClose() }}>✕</button>}
         </div>
-        <div class="actions">
-          <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { apply({ b: allBookmarked ? null : 1 }); onClose() }}>
+        {askUnmark ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="unmark-title">
+          <p id="unmark-title" class="confirm-title"><strong>{t('Remove this bookmark?')}</strong></p>
+          <div class="confirm-buttons">
+            <button class="leave-confirm" onClick={() => { apply({ b: null }); onClose() }}>{t('Remove bookmark')}</button>
+            <button onClick={() => setAskUnmark(false)}>{t('Cancel')}</button>
+          </div>
+        </div> : <div class="actions">
+          <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { if (allBookmarked) setAskUnmark(true); else { apply({ b: 1 }); onClose() } }}>
             <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
           </button>
           <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
@@ -862,7 +869,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
           <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
           {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>{t('Circle')}</span></button>}
-        </div>
+        </div>}
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
       {compare && (
@@ -990,8 +997,11 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
   const [draft, setDraft] = useState(initial)
   const area = useRef<HTMLTextAreaElement>(null)
   const saved = useRef(initial)
-  const save = (s: string) => {
+  // Emptying the box never deletes a note by itself (a slip of select-all,
+  // say): only "Delete note", confirmed, does.
+  const save = (s: string, remove = false) => {
     if (s.trim() === saved.current.trim()) return
+    if (!s.trim() && !remove) return
     saved.current = s
     setMarks(m => setNote(m, markK, id, s, undefined, verses))
   }
@@ -1011,6 +1021,7 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
   useEffect(() => { const timer = setTimeout(() => save(draft), 600); return () => clearTimeout(timer) }, [draft])
   // Switching away (or an app update reloading the page) mustn't lose the
   // last words typed.
+  const [asking, setAsking] = useState(false)
   const latest = useRef(draft)
   latest.current = draft
   useEffect(() => {
@@ -1028,10 +1039,19 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
       {passage}
       <textarea ref={area} class="note-text" rows={6} placeholder={verses.length > 1 ? t('Write a note on these verses…') : t('Write a note on this verse…')} value={draft}
         onInput={e => setDraft((e.target as HTMLTextAreaElement).value)} />
-      <div class="row note-actions">
-        <button class="primary" onClick={onDone}>{t('Done')}</button>
-        {onShare && draft.trim() && <button onClick={() => { save(draft); onShare(draft.trim(), verses) }}><CircleIcon size={18} /> {t('Share with circle')}</button>}
-        {saved.current && <button onClick={() => { latest.current = ''; save(''); onDone() }}>{t('Delete note')}</button>}
+      <div class="note-actions">
+        {asking ? <div class="confirm-card danger" role="alertdialog" aria-labelledby="del-note">
+          <p id="del-note" class="confirm-title"><strong>{t('Delete this note?')}</strong></p>
+          <p>{t('It can’t be brought back.')}</p>
+          <div class="confirm-buttons">
+            <button class="leave-confirm" onClick={() => { latest.current = ''; save('', true); onDone() }}>{t('Delete note')}</button>
+            <button onClick={() => setAsking(false)}>{t('Cancel')}</button>
+          </div>
+        </div> : <div class="row">
+          <button class="primary" onClick={onDone}>{t('Done')}</button>
+          {onShare && draft.trim() && <button onClick={() => { save(draft); onShare(draft.trim(), verses) }}><CircleIcon size={18} /> {t('Share with circle')}</button>}
+          {saved.current && <button onClick={() => setAsking(true)}>{t('Delete note')}</button>}
+        </div>}
       </div>
     </>
   )
