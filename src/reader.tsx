@@ -1002,7 +1002,9 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
   useEffect(() => {
     const vv = window.visualViewport
     let raf = 0
-    const fit = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => area.current && keepCaretInView(area.current)) }
+    const fit = () => { cancelAnimationFrame(raf); raf = requestAnimationFrame(() => { const a = area.current; if (a) { grow(a); keepCaretInView(a) } }) }
+    // Once the sheet is on screen, size the box to the note already written.
+    fit()
     vv?.addEventListener('resize', fit)
     return () => { cancelAnimationFrame(raf); vv?.removeEventListener('resize', fit) }
   }, [])
@@ -1026,7 +1028,7 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
       {passage}
       <textarea ref={area} class="note-text" rows={6} placeholder={verses.length > 1 ? t('Write a note on these verses…') : t('Write a note on this verse…')} value={draft}
         onInput={e => setDraft((e.target as HTMLTextAreaElement).value)} />
-      <div class="row">
+      <div class="row note-actions">
         <button class="primary" onClick={onDone}>{t('Done')}</button>
         {onShare && draft.trim() && <button onClick={() => { save(draft); onShare(draft.trim(), verses) }}><CircleIcon size={18} /> {t('Share with circle')}</button>}
         {saved.current && <button onClick={() => { latest.current = ''; save(''); onDone() }}>{t('Delete note')}</button>}
