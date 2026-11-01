@@ -49,6 +49,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const [newest, setNewest] = useState(false)
   // What was just removed, to put back.
   const [undo, setUndo] = useState<{ what: string; before: Marks }>()
+  const [askBm, setAskBm] = useState<string>()
   const version = settings.version
   const rtl = byId.get(version)?.rtl ? 'rtl' as const : undefined
   useEffect(() => { document.title = t('Saved') + ' · My Quiet Bible'; setMissing(false); data.bible(version).then(setBible, () => setMissing(true)) }, [version])
@@ -229,10 +230,17 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                 <span class="bm-mark" aria-hidden="true"><BookmarkIcon /></span>
                 <Ref book={r.book} chapter={r.chapter} verses={vs} />
                 <span class="spacer" />
-                <button class="saved-act" onClick={() => change([k], { b: undefined }, t('Bookmark on {ref} removed.', { ref: refOf(r.book, r.chapter, vs) }))}>
+                <button class="saved-act" onClick={() => setAskBm(k)}>
                   <TrashIcon size={20} />{t('Remove')}
                 </button>
               </div>
+              {askBm === k && <div class="confirm-card danger" role="alertdialog" aria-labelledby={'bm-' + k}>
+                <p id={'bm-' + k} class="confirm-title"><strong>{t('Remove this bookmark?')}</strong></p>
+                <div class="confirm-buttons">
+                  <button class="leave-confirm" onClick={() => { setAskBm(undefined); change([k], { b: undefined }, t('Bookmark on {ref} removed.', { ref: refOf(r.book, r.chapter, vs) })) }}>{t('Remove bookmark')}</button>
+                  <button onClick={() => setAskBm(undefined)}>{t('Cancel')}</button>
+                </div>
+              </div>}
               <Text book={r.book} chapter={r.chapter} verses={vs} />
             </li>
           )
