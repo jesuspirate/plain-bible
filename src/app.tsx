@@ -1,5 +1,5 @@
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { Catalog, DataSource } from './lib/data'
+import { Catalog, DataSource, refreshSaved } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
 import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, parseHash } from './state'
@@ -134,6 +134,12 @@ export function App() {
       if (!(await c.match(url))) await c.add(url)
     }))).catch(() => {})
   }, [offlineId, strongs])
+
+  // A fixed text reaches Bibles already saved on this device (src/lib/data.ts).
+  useEffect(() => {
+    const t = setTimeout(() => { refreshSaved(data.url('')).catch(() => {}) }, 5000)
+    return () => clearTimeout(t)
+  }, [])
 
   // The reader manages its own scroll position; other pages start at the top.
   const page = route.path[0] || 'read'
