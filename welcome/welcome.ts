@@ -1,4 +1,4 @@
-// The welcome page: what My Quiet Bible is, in the app's own colours and fonts,
+// The welcome page: what My Quiet Bible is, in the app's own colors and fonts,
 // and the way in. Plain HTML; this script only does the theme and language
 // buttons, the verse in other languages, the Home Screen steps, and the way in.
 import '@fontsource-variable/literata'
@@ -19,7 +19,7 @@ const $$ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = doc
 function applyTheme(t: Theme, remember: boolean) {
   document.documentElement.dataset.theme = t
   $<HTMLMetaElement>('meta[name="theme-color"]')!.content = COLORS[t]
-  // Installing from here takes the window colour of the theme in use, as the app does.
+  // Installing from here takes the window color of the theme in use, as the app does.
   let link = $<HTMLLinkElement>('link[rel="manifest"]')
   if (!link) { link = document.createElement('link'); link.rel = 'manifest'; document.head.appendChild(link) }
   link.href = `../manifest-${t}.webmanifest`

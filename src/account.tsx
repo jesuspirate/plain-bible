@@ -384,9 +384,9 @@ export function AccountSection() {
     setWorking(label); setMsg('')
     try { await fn() } catch (e) {
       const m = (e as Error).message
-      // Safari also reports a passkey sheet that never opened as cancelled.
+      // Safari also reports a passkey sheet that never opened as canceled.
       if (m !== 'Cancelled') setMsg(m)
-      else if (label === 'login' || label === 'create') setMsg(t('The passkey request was cancelled or timed out. Tap the button to try again.'))
+      else if (label === 'login' || label === 'create') setMsg(t('The passkey request was canceled or timed out. Tap the button to try again.'))
     }
     finally { setWorking('') }
   }

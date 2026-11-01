@@ -292,7 +292,7 @@ export function Reader({ route }: { route: Route }) {
     setNoteFor({ verses: same ? all[0].verses : vs, start: mine.length ? undefined : 'new' })
   }
   // One tap selects a verse; a quick second tap on it instead highlights it
-  // in the colour you used last, or takes its highlight off.
+  // in the color you used last, or takes its highlight off.
   const lastTap = useRef<{ v: number; t: number; before: number[] }>()
   // Whether words were already selected when the finger went down.
   const selectedBefore = useRef(false)

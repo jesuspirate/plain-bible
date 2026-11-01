@@ -295,7 +295,7 @@ def build_beblia(fname):
 # Jubilees in R. H. Charles' translation. With 1 Enoch below, these are the books the Ethiopian canon keeps that no
 # other canon has in print, so they finish an English Ethiopian Bible.
 # 4 Baruch is left out: the scrollmapper copy reads as a modern translation
-# with no stated licence.
+# with no stated license.
 ETH_EN = {"Jub": "book-of-jubilees"}
 
 

@@ -40,7 +40,7 @@ export type Marks = Record<string, Mark>
 
 import { N_ } from '../i18n'
 
-/** The highlight colours; each name is translated where it's shown. */
+/** The highlight colors; each name is translated where it's shown. */
 export const PALETTE: { color: string; name: string }[] = [
   { color: '#fff193', name: N_('Yellow') },
   { color: '#b3e487', name: N_('Green') },
@@ -52,7 +52,7 @@ export const PALETTE: { color: string; name: string }[] = [
   { color: '#ffadaf', name: N_('Red') },
 ]
 
-/** The colour last picked, for double-tap highlighting. */
+/** The color last picked, for double-tap highlighting. */
 const LAST_COLOR = 'plain-bible:last-color'
 export function lastColor() {
   try { return localStorage.getItem(LAST_COLOR) || PALETTE[0].color } catch { return PALETTE[0].color }

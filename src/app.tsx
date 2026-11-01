@@ -26,18 +26,18 @@ import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { HOME_SCREEN_EVENT, homeScreenDue, markHomeScreenShown } from './lib/install'
 
-// The status bar colour the page loaded with (set in index.html before first paint).
+// The status bar color the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
 const IOS_HOME_SCREEN = (navigator as { standalone?: boolean }).standalone === true
 
 /** Match the phone's status bar (and the browser bar) to the theme. iPhone
- *  home-screen apps only read this colour when the page loads, and reloading
+ *  home-screen apps only read this color when the page loads, and reloading
  *  on the tap made every theme change pause. So the theme switches at once,
  *  and the page reloads quietly the next time the app goes to the
  *  background (it comes back on the same verse, with the bar matching). */
 function setTint(bg: string) {
   document.querySelector('meta[name="theme-color"]')?.setAttribute('content', bg)
-  // Installing on Android takes the window colour from this theme's manifest
+  // Installing on Android takes the window color from this theme's manifest
   // (vite.config.ts), so the keyboard doesn't slide in over a light window.
   const theme = ({ '#faf8f3': 'light', '#f4ecd8': 'sepia', '#16161a': 'dark' } as Record<string, string>)[bg]
   if (theme) document.querySelector('link[rel="manifest"]')?.setAttribute('href', `./manifest-${theme}.webmanifest`)

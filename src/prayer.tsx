@@ -60,8 +60,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const resume = useRef<{ id: string; ms: number }>()
   const alive = useRef(true)
   // The dim starts under the top bar: the clock strip above it keeps the
-  // colour the app opened with (an installed iPhone app can't repaint it),
-  // so dimming the bar too left a bright strip over a grey one.
+  // color the app opened with (an installed iPhone app can't repaint it),
+  // so dimming the bar too left a bright strip over a gray one.
   const [cut] = useState(() => Math.max(0, Math.round(document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0)))
   // With the keyboard up (naming a new circle, say), iPhone slides the whole
   // page up under it, but this screen stays put: the dim stopped halfway down
@@ -525,7 +525,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
     setBusy(true); setMsg('')
     try { await fn() } catch (e) {
       const m = (e as Error).message
-      setMsg(m === 'Cancelled' ? t('The passkey request was cancelled. Tap to try again.') : m)
+      setMsg(m === 'Cancelled' ? t('The passkey request was canceled. Tap to try again.') : m)
     } finally { setBusy(false); setOn(prayerSyncOn()); onChange() }
   }
   const start = act(async () => {

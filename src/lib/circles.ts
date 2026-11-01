@@ -262,7 +262,7 @@ export function makeCode(circle: string): Promise<{ code: string; expires: numbe
     return makeCode(circle)
   })
 }
-/** The code is done with: let in, cancelled, or expired. */
+/** The code is done with: let in, canceled, or expired. */
 export const doneWithCode = (circle: string) => { madeCodes.delete(circle) }
 export const dropCode = (circle: string, code: string) => {
   doneWithCode(circle)

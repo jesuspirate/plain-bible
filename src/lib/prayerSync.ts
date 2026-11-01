@@ -107,7 +107,7 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
   if (!SYNC_URL || !acct) throw new SyncError('Sign in first, under Settings → Account.')
   // The passkey is asked for at once, in the same tap, while the server is
   // asked alongside. Safari drops a passkey sheet that opens after a network
-  // wait and reports it as cancelled, so a second tap failed the same way.
+  // wait and reports it as canceled, so a second tap failed the same way.
   // Not where the last look found no passkey (an account signed in by email).
   // A key already here (from another device's approval, or from circles)
   // needs nothing asked. Nor does a secret the passkey already gave (at

@@ -34,7 +34,7 @@ const lastName = () => { try { return localStorage.getItem(NAME) || '' } catch {
 const keepName = (s: string) => { try { localStorage.setItem(NAME, s) } catch { /* ignore */ } }
 const message = (e: unknown) => {
   const m = (e as Error).message
-  return m === 'Cancelled' ? t('The passkey request was cancelled. Tap to try again.') : m
+  return m === 'Cancelled' ? t('The passkey request was canceled. Tap to try again.') : m
 }
 /** A passage someone shared, in the reader's own Bible: undefined while it's
  *  looked up (so their words never flash first), null if there's nothing
@@ -142,7 +142,7 @@ function SignIn({ joining }: { joining?: boolean }) {
     setWorking(label); setMsg('')
     try { const token = await fn(); if (token) sync.signedIn(token) } catch (e) {
       const m = (e as Error).message
-      setMsg(m === 'Cancelled' ? t('The passkey request was cancelled. Tap to try again.') : m)
+      setMsg(m === 'Cancelled' ? t('The passkey request was canceled. Tap to try again.') : m)
       if (label === 'login') prepareSignIn()
     } finally { setWorking('') }
   }
@@ -1011,7 +1011,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const many = 'prayers' in request
   const sent = useRef(new Set<string>())
   // Circles that already have the prayer (or every one of the day's) are
-  // greyed out, so nothing goes to the same circle twice.
+  // grayed out, so nothing goes to the same circle twice.
   const [shared, setShared] = useState<SharedIn>()
   const [had, setHad] = useState(new Set<string>())
   // Your notes on exactly these verses (or covering the one verse).
