@@ -30,6 +30,10 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
       const kb = Math.max(0, innerHeight - vv.height - vv.offsetTop)
       d.style.marginBottom = up ? kb + 'px' : ''
       d.style.maxHeight = up ? vv.height - 12 + 'px' : ''
+      // Newer iPhones leave a gap between the page and the see-through
+      // keyboard, where the Bible behind showed through (bent by the glass
+      // of the keyboard's arrow bar): fill everything below the sheet.
+      d.classList.toggle('kb', up)
     }
     vv?.addEventListener('resize', fit)
     vv?.addEventListener('scroll', fit)

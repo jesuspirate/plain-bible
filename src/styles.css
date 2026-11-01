@@ -158,6 +158,10 @@ mark { background: var(--mark); color: var(--mark-ink); border-radius: 3px; padd
 dialog.sheet { border: none; padding: 0; background: var(--surface); color: var(--text); border-radius: 14px; width: min(560px, calc(100vw - 24px)); max-height: min(80vh, 760px); box-shadow: 0 20px 60px rgba(0,0,0,.25); }
 dialog.sheet.wide { width: min(860px, calc(100vw - 24px)); }
 dialog.sheet::backdrop { background: rgba(0,0,0,.35); }
+/* Keyboard up: the sheet's own colour reaches down past the keyboard, so no
+   Bible text shows between them (or through the keyboard). Starts below the
+   rounded top corners so they keep their shape. */
+dialog.sheet.kb { box-shadow: 0 calc(100vh + 14px) 0 100vh var(--surface); }
 .sheet-inner { display: flex; flex-direction: column; max-height: inherit; }
 .sheet-head { display: flex; align-items: center; justify-content: space-between; padding: 12px 16px; border-bottom: 1px solid var(--line); }
 .sheet-head h2 { margin: 0; font-size: 20px; }
@@ -429,7 +433,7 @@ main.with-mini { padding-bottom: 144px; }
 .note-card { all: unset; box-sizing: border-box; display: block; width: 100%; cursor: pointer; padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); }
 .nc-meta { display: block; margin-bottom: 3px; }
 .nc-text { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: 6; overflow: hidden; white-space: pre-wrap; font: 16px/1.5 var(--sans); color: var(--text); }
-.note-text { width: 100%; box-sizing: border-box; font: 16px/1.5 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); resize: vertical; margin-bottom: 12px; }
+.note-text { width: 100%; box-sizing: border-box; font: 16px/1.5 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); resize: none; overflow: hidden; margin-bottom: 12px; }
 /* Selected verses: a dotted underline, so the highlight colours stay visible */
 .picked .vt { text-decoration: underline dotted var(--accent); text-decoration-thickness: 2px; text-underline-offset: .28em; }
 .picked .vn { color: var(--accent); }
