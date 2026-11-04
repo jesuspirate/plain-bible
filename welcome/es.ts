@@ -51,7 +51,7 @@ export default {
   readingH: 'Hecha para leer',
   readingP: 'Seis fuentes, una de ellas diseñada para baja visión. Texto tan grande como lo necesites, y botones imposibles de pasar por alto. Desliza para cambiar de capítulo. Claro, Sepia u Oscuro, como esta página.',
   notH: 'Y lo que no trae',
-  nots: '<li>Sin planes de lectura. Sin devocionales. Nada «seleccionado para ti».</li><li>Sin anuncios. Sin rastreo. Sin analíticas.</li><li>Sin pagos. Nada está bloqueado.</li><li>Sin cuenta obligatoria. Inicia sesión solo si quieres sincronizar.</li>',
+  nots: '<li>Sin planes de lectura. Sin devocionales. Nada «seleccionado para ti».</li><li>Sin anuncios. Sin rastreo. Sin cookies.</li><li>Sin pagos. Nada está bloqueado.</li><li>Sin cuenta obligatoria. Inicia sesión solo si quieres sincronizar.</li>',
   free: 'My Quiet Bible es gratis, y lo seguirá siendo. Si te ayuda, puedes <a href="../support/">ayudar a mantener la lámpara encendida</a>. Nada dependerá nunca de ello.',
   installSub: 'Así se abre a pantalla completa como cualquier otra app, recuerda dónde ibas y funciona sin conexión.',
   installSubComputer: 'Así se abre en su propia ventana como cualquier otra app, recuerda dónde ibas y funciona sin conexión.',

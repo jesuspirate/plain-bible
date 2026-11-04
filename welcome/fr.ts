@@ -51,7 +51,7 @@ export default {
   readingH: 'Faite pour lire',
   readingP: 'Six polices, dont une conçue pour les malvoyants. Le texte aussi grand qu’il le faut, et des boutons qu’on ne peut pas manquer. Glissez pour changer de chapitre. Clair, Sépia ou Sombre, comme cette page.',
   notH: 'Et ce qu’elle ne contient pas',
-  nots: '<li>Pas de plans de lecture. Pas de méditations du jour. Rien de « sélectionné pour vous ».</li><li>Pas de publicité. Pas de pistage. Pas de statistiques.</li><li>Pas d’abonnement. Rien n’est verrouillé.</li><li>Pas besoin de compte. Connectez-vous seulement si vous voulez synchroniser.</li>',
+  nots: '<li>Pas de plans de lecture. Pas de méditations du jour. Rien de « sélectionné pour vous ».</li><li>Pas de publicité. Pas de pistage. Pas de cookies.</li><li>Pas d’abonnement. Rien n’est verrouillé.</li><li>Pas besoin de compte. Connectez-vous seulement si vous voulez synchroniser.</li>',
   free: 'My Quiet Bible est gratuite, et le restera. Si elle vous aide, vous pouvez <a href="../support/">aider à garder la lampe allumée</a>. Rien n’en dépendra jamais.',
   installSub: 'Elle s’ouvre alors en plein écran comme n’importe quelle application, garde votre page et marche sans connexion.',
   installSubComputer: 'Elle s’ouvre alors dans sa propre fenêtre comme n’importe quelle application, garde votre page et marche sans connexion.',

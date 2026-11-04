@@ -22,6 +22,8 @@ export interface Env {
    *  once by the deploy script, then never changed, or every device would
    *  have to turn notifications on again). */
   VAPID_KEY?: string
+  /** The private numbers page (/stats?key=…) is on when this is set. */
+  STATS_KEY?: string
 }
 
 const DAY = 86_400_000
@@ -1000,6 +1002,79 @@ async function deviceCodeRoute(req: Request, env: Env, parts: string[]): Promise
   throw new HttpError(404, 'Not found')
 }
 
+// ---------------------------------------------------------------------------
+// Counting how many use the app, without knowing who (src/lib/hello.ts).
+// Each device says hello at most once a day with a few yes/no answers; the
+// service adds one to some counters. No id, no address, nothing else kept.
+
+/** The ISO week a day falls in, like "2026-W45". */
+export function isoWeek(d: Date) {
+  const t = new Date(Date.UTC(d.getUTCFullYear(), d.getUTCMonth(), d.getUTCDate()))
+  t.setUTCDate(t.getUTCDate() + 4 - (t.getUTCDay() || 7))
+  const y = t.getUTCFullYear()
+  const week = Math.ceil(((t.getTime() - Date.UTC(y, 0, 1)) / DAY + 1) / 7)
+  return `${y}-W${String(week).padStart(2, '0')}`
+}
+
+async function helloRoute(req: Request, env: Env) {
+  // Only the app itself counts (a stray visit to the address doesn't).
+  if (!origins(env).includes(req.headers.get('Origin') ?? '')) throw new HttpError(403, 'Not from the app')
+  const q = new URL(req.url).searchParams, now = new Date()
+  const day = now.toISOString().slice(0, 10)
+  const counts: [string, string][] = [[day, 'day']]
+  if (q.get('new') === '1') counts.push([day, 'new'])
+  if (q.get('home') === '1') counts.push([day, 'home'])
+  if (q.get('week') === '1') counts.push([isoWeek(now), 'week'])
+  if (q.get('month') === '1') counts.push([day.slice(0, 7), 'month'])
+  await env.DB.batch(counts.map(([period, kind]) =>
+    env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, 1) ON CONFLICT (period, kind) DO UPDATE SET n = n + 1').bind(period, kind)))
+  return json({ ok: true })
+}
+
+const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
+
+/** The private numbers page, for the app's maker only. */
+async function statsRoute(req: Request, env: Env) {
+  const key = new URL(req.url).searchParams.get('key') ?? ''
+  if (!env.STATS_KEY || key.length < 8 || key !== env.STATS_KEY) throw new HttpError(404, 'Not found')
+  const now = new Date(), day = now.toISOString().slice(0, 10)
+  const [rows, accounts, circles] = await Promise.all([
+    env.DB.prepare('SELECT period, kind, n FROM hello').all<{ period: string; kind: string; n: number }>(),
+    env.DB.prepare('SELECT COUNT(*) AS n FROM users').first<{ n: number }>(),
+    env.DB.prepare('SELECT COUNT(*) AS n FROM circles').first<{ n: number }>().catch(() => null),
+  ])
+  const get = (period: string, kind: string) => rows.results.find(r => r.period === period && r.kind === kind)?.n ?? 0
+  const sum = (kind: string, from = '') => rows.results.filter(r => r.kind === kind && r.period >= from).reduce((a, r) => a + r.n, 0)
+  const since30 = new Date(now.getTime() - 29 * DAY).toISOString().slice(0, 10)
+  const big: [string, number, string][] = [
+    ['Today', get(day, 'day'), 'devices opened the app'],
+    ['This week', get(isoWeek(now), 'week'), 'devices opened the app'],
+    ['This month', get(day.slice(0, 7), 'month'), 'devices opened the app'],
+    ['New in 30 days', sum('new', since30), 'devices opened it for the first time'],
+    ['All devices ever', sum('new'), 'counted since the count began'],
+    ['On a Home Screen today', get(day, 'home'), 'of today’s devices'],
+    ['Accounts', accounts?.n ?? 0, 'signed up to sync'],
+    ...(circles ? [['Circles', circles.n, 'made so far'] as [string, number, string]] : []),
+  ]
+  const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
+  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>
+body{font:20px/1.5 Georgia,serif;max-width:44em;margin:0 auto;padding:24px 16px 48px;background:#faf8f3;color:#22211f}
+h1{font-size:1.5em}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px}
+.card{border:2px solid #d9cdb8;border-radius:14px;padding:14px 16px;background:#fff}
+.card b{display:block;font-size:2.4em;line-height:1.1}.card span{color:#6b6255;font-size:.85em}
+table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #e3dccf}
+td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
+@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card{background:#202026;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}}
+</style></head><body><h1>My Quiet Bible in numbers</h1><div class="grid">
+${big.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')}
+</div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
+${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
+</table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
+On the first day, every device already using the app counts as new. Days are in UTC.</p></body></html>`
+  return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } })
+}
+
 async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
@@ -1024,6 +1099,8 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
   }
 
   switch (key) {
+    case 'GET /hello': return helloRoute(req, env)
+    case 'GET /stats': return statsRoute(req, env)
     case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env) })
 
     // Sign in (or sign up) with a code sent by email, or add an email to
