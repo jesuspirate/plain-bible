@@ -32,6 +32,11 @@ if [ -n "${RESEND_API_KEY:-}" ]; then
     openssl rand -base64 32 | tr -d '\n' | npx wrangler secret put EMAIL_SECRET >&2
   fi
 fi
+# The private numbers page (/stats?key=…): on once STATS_KEY is a
+# repository secret. Any long word works; it's the page's only lock.
+if [ -n "${STATS_KEY:-}" ]; then
+  printf '%s' "$STATS_KEY" | npx wrangler secret put STATS_KEY >&2
+fi
 # Notifications for circles: the service's own key (VAPID), made here once
 # and kept only as a Worker secret. Never changed after, or every phone
 # would have to turn its notifications on again.

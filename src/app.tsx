@@ -25,6 +25,7 @@ import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { HOME_SCREEN_EVENT, homeScreenDue, markHomeScreenShown } from './lib/install'
+import { hello } from './lib/hello'
 
 // The status bar color the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -135,9 +136,10 @@ export function App() {
     }))).catch(() => {})
   }, [offlineId, strongs])
 
-  // A fixed text reaches Bibles already saved on this device (src/lib/data.ts).
+  // A fixed text reaches Bibles already saved on this device (src/lib/data.ts),
+  // and the day's anonymous hello is counted (src/lib/hello.ts).
   useEffect(() => {
-    const t = setTimeout(() => { refreshSaved(data.url('')).catch(() => {}) }, 5000)
+    const t = setTimeout(() => { refreshSaved(data.url('')).catch(() => {}); hello() }, 5000)
     return () => clearTimeout(t)
   }, [])
 

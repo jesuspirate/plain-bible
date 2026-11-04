@@ -670,6 +670,7 @@ export default {
   "Too large": "Demasiado grande",
   "Invalid JSON": "JSON no válido",
   "Not signed in": "No has iniciado sesión",
+  "Not from the app": "No viene de la aplicación",
   "Missing challenge": "Falta el desafío",
   "Challenge expired, please try again": "El desafío caducó, inténtalo de nuevo",
   "That doesn’t look like an email address.": "Eso no parece una dirección de correo.",
