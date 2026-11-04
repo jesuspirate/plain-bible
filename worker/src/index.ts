@@ -1033,10 +1033,47 @@ async function helloRoute(req: Request, env: Env) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
-/** The private numbers page, for the app's maker only. */
+const STATS_STYLE = `body{font:20px/1.5 Georgia,serif;max-width:44em;margin:0 auto;padding:24px 16px 48px;background:#faf8f3;color:#22211f}
+h1{font-size:1.5em}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px}
+.card{border:2px solid #d9cdb8;border-radius:14px;padding:14px 16px;background:#fff}
+.card b{display:block;font-size:2.4em;line-height:1.1}.card span{color:#6b6255;font-size:.85em}
+table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #e3dccf}
+td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
+input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #d9cdb8;width:100%;box-sizing:border-box;margin-top:10px}
+button{background:#8a5a2b;color:#fff;border-color:#8a5a2b;font-weight:bold;min-height:56px}p.error{color:#b3261e;font-weight:bold}
+@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card,input{background:#202026;color:#e6e3dc;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}}`
+const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>${STATS_STYLE}</style></head><body><h1>My Quiet Bible in numbers</h1>${body}</body></html>`,
+  { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer' } })
+
+/** Two strings equal, compared in the same time whatever they hold. */
+async function same(a: string, b: string) {
+  const [x, y] = await Promise.all([sha256(a), sha256(b)])
+  let d = 0
+  for (let i = 0; i < x.length; i++) d |= x.charCodeAt(i) ^ y.charCodeAt(i)
+  return d === 0
+}
+// Wrong words, kept only in this Worker's memory for a minute.
+const statsMisses = new Map<string, number[]>()
+
+/** The private numbers page, for the app's maker only. The word is typed in
+ *  a password box and sent in the request body, never in the address, so it
+ *  stays out of history, bookmarks and logs; a password manager can fill it. */
 async function statsRoute(req: Request, env: Env) {
-  const key = new URL(req.url).searchParams.get('key') ?? ''
-  if (!env.STATS_KEY || key.length < 8 || key !== env.STATS_KEY) throw new HttpError(404, 'Not found')
+  if (!env.STATS_KEY) throw new HttpError(404, 'Not found')
+  const form = (error = '') => statsPage(`${error ? `<p class="error">${esc(error)}</p>` : ''}
+<form method="post" action="/stats"><input type="text" name="username" value="numbers" autocomplete="username" hidden>
+<label>Your word<input type="password" name="key" autocomplete="current-password" autofocus required></label>
+<button type="submit">Show the numbers</button></form>`, error ? 403 : 200)
+  if (req.method === 'GET') return form()
+  const ip = req.headers.get('CF-Connecting-IP') ?? '', at = Date.now()
+  const recent = (statsMisses.get(ip) ?? []).filter(t => at - t < 60_000)
+  if (recent.length >= 5) return form('Too many tries. Wait a minute.')
+  const key = String((await req.formData().catch(() => null))?.get('key') ?? '')
+  if (!(await same(key, env.STATS_KEY))) {
+    statsMisses.set(ip, [...recent, at])
+    return form('That word isn’t right.')
+  }
   const now = new Date(), day = now.toISOString().slice(0, 10)
   const [rows, accounts, circles] = await Promise.all([
     env.DB.prepare('SELECT period, kind, n FROM hello').all<{ period: string; kind: string; n: number }>(),
@@ -1057,22 +1094,12 @@ async function statsRoute(req: Request, env: Env) {
     ...(circles ? [['Circles', circles.n, 'made so far'] as [string, number, string]] : []),
   ]
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
-  const html = `<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>
-body{font:20px/1.5 Georgia,serif;max-width:44em;margin:0 auto;padding:24px 16px 48px;background:#faf8f3;color:#22211f}
-h1{font-size:1.5em}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px}
-.card{border:2px solid #d9cdb8;border-radius:14px;padding:14px 16px;background:#fff}
-.card b{display:block;font-size:2.4em;line-height:1.1}.card span{color:#6b6255;font-size:.85em}
-table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #e3dccf}
-td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
-@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card{background:#202026;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}}
-</style></head><body><h1>My Quiet Bible in numbers</h1><div class="grid">
+  return statsPage(`<div class="grid">
 ${big.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')}
 </div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
 </table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
-On the first day, every device already using the app counts as new. Days are in UTC.</p></body></html>`
-  return new Response(html, { headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex' } })
+On the first day, every device already using the app counts as new. Days are in UTC.</p>`)
 }
 
 async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -1100,7 +1127,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
 
   switch (key) {
     case 'GET /hello': return helloRoute(req, env)
-    case 'GET /stats': return statsRoute(req, env)
+    case 'GET /stats': case 'POST /stats': return statsRoute(req, env)
     case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env) })
 
     // Sign in (or sign up) with a code sent by email, or add an email to
