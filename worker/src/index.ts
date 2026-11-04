@@ -1016,6 +1016,9 @@ export function isoWeek(d: Date) {
   return `${y}-W${String(week).padStart(2, '0')}`
 }
 
+const LANGS = ['en', 'fr', 'es']
+const LANG_NAMES: Record<string, string> = { en: 'English', fr: 'French', es: 'Spanish' }
+
 async function helloRoute(req: Request, env: Env) {
   // Only the app itself counts (a stray visit to the address doesn't).
   if (!origins(env).includes(req.headers.get('Origin') ?? '')) throw new HttpError(403, 'Not from the app')
@@ -1026,6 +1029,8 @@ async function helloRoute(req: Request, env: Env) {
   if (q.get('home') === '1') counts.push([day, 'home'])
   if (q.get('week') === '1') counts.push([isoWeek(now), 'week'])
   if (q.get('month') === '1') counts.push([day.slice(0, 7), 'month'])
+  const lang = q.get('lang')
+  if (lang && LANGS.includes(lang)) counts.push([day, `lang:${lang}`])
   await env.DB.batch(counts.map(([period, kind]) =>
     env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, 1) ON CONFLICT (period, kind) DO UPDATE SET n = n + 1').bind(period, kind)))
   return json({ ok: true })
@@ -1075,10 +1080,17 @@ async function statsRoute(req: Request, env: Env) {
     return form('That word isn’t right.')
   }
   const now = new Date(), day = now.toISOString().slice(0, 10)
-  const [rows, accounts, circles] = await Promise.all([
+  const week = Date.now() - 7 * DAY
+  const count = (sql: string, ...args: unknown[]) => env.DB.prepare(sql).bind(...args).first<{ n: number }>().then(r => r?.n ?? 0)
+  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified] = await Promise.all([
     env.DB.prepare('SELECT period, kind, n FROM hello').all<{ period: string; kind: string; n: number }>(),
-    env.DB.prepare('SELECT COUNT(*) AS n FROM users').first<{ n: number }>(),
-    env.DB.prepare('SELECT COUNT(*) AS n FROM circles').first<{ n: number }>().catch(() => null),
+    count('SELECT COUNT(*) AS n FROM users'),
+    count('SELECT COUNT(*) AS n FROM circles'),
+    count('SELECT COUNT(*) AS n FROM users WHERE created > ?', week),
+    count('SELECT COUNT(DISTINCT circle_id) AS n FROM circle_items WHERE at > ?', week),
+    count('SELECT COUNT(*) AS n FROM circle_items WHERE at > ?', week),
+    count('SELECT COUNT(*) AS n FROM circle_amens WHERE at > ?', week),
+    count('SELECT COUNT(DISTINCT user_id) AS n FROM push_subs'),
   ])
   const get = (period: string, kind: string) => rows.results.find(r => r.period === period && r.kind === kind)?.n ?? 0
   const sum = (kind: string, from = '') => rows.results.filter(r => r.kind === kind && r.period >= from).reduce((a, r) => a + r.n, 0)
@@ -1090,12 +1102,21 @@ async function statsRoute(req: Request, env: Env) {
     ['New in 30 days', sum('new', since30), 'devices opened it for the first time'],
     ['All devices ever', sum('new'), 'counted since the count began'],
     ['On a Home Screen today', get(day, 'home'), 'of today’s devices'],
-    ['Accounts', accounts?.n ?? 0, 'signed up to sync'],
-    ...(circles ? [['Circles', circles.n, 'made so far'] as [string, number, string]] : []),
+    ['Accounts', accounts, 'signed up to sync'],
+    ['New accounts', newAccounts, 'in the last 7 days'],
+    ['Circles', circles, 'made so far'],
+    ['Active circles', activeCircles, 'shared something in the last 7 days'],
+    ['Shared in circles', shared, 'verses, notes and prayers in the last 7 days'],
+    ['Prayed with', prayedWith, '🙏 on something shared, last 7 days'],
+    ['Notifications on', notified, 'accounts hearing from their circles'],
   ]
+  const langs = LANGS.map(l => [LANG_NAMES[l], sum(`lang:${l}`, since30)] as [string, number])
+  const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
   return statsPage(`<div class="grid">
 ${big.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')}
+</div><h2>Languages, last 30 days</h2><div class="grid">
+${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round(100 * n / langTotal) : 0}%</b><span>${n.toLocaleString('en')} daily hellos</span></div>`).join('')}
 </div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
 </table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
