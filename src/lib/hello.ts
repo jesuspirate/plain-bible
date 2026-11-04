@@ -1,11 +1,13 @@
 // Counting how many use the app, without knowing who. Once a day the app
 // says "hello" to the sync service, with no account, no id and no cookie,
-// only a few yes/no answers: is this the device's first hello, its first
-// this week or this month, and is it on a Home Screen. The service adds
+// only a few yes/no answers (is this the device's first hello, its first
+// this week or this month, and is it on a Home Screen) and the app's
+// language. The service adds
 // one to a few counters and keeps nothing else, not even the address it
 // came from. That's enough to tell how many devices open the app each
 // day, week and month, and how many are new.
 import { installed } from './install'
+import { savedLang } from '../i18n'
 
 const KEY = 'plain-bible:hello'
 const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
@@ -27,13 +29,14 @@ export const periods = (d: Date): Seen => {
 
 /** What to tell the service today, or nothing if this device already said
  *  hello today. */
-export function helloQuery(last: Seen | null, now: Seen, home: boolean): string | null {
+export function helloQuery(last: Seen | null, now: Seen, home: boolean, lang = 'en'): string | null {
   if (last?.day === now.day) return null
   const q = new URLSearchParams()
   if (!last) q.set('new', '1')
   if (last?.week !== now.week) q.set('week', '1')
   if (last?.month !== now.month) q.set('month', '1')
   if (home) q.set('home', '1')
+  q.set('lang', lang)
   return q.toString()
 }
 
@@ -44,9 +47,9 @@ export function hello() {
   let last: Seen | null = null
   try { last = JSON.parse(localStorage.getItem(KEY) || 'null') } catch { return }
   const now = periods(new Date())
-  const q = helloQuery(last, now, installed())
+  const q = helloQuery(last, now, installed(), savedLang())
   if (q === null) return
-  fetch(`${SYNC_URL}/hello${q ? '?' + q : ''}`, { cache: 'no-store', credentials: 'omit', keepalive: true })
+  fetch(`${SYNC_URL}/hello?${q}`, { cache: 'no-store', credentials: 'omit', keepalive: true })
     .then(res => { if (res.ok) try { localStorage.setItem(KEY, JSON.stringify(now)) } catch { /* private mode */ } })
     .catch(() => {})
 }
