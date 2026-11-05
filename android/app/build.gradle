@@ -55,7 +55,7 @@ android {
     namespace "com.myquietbible.app"
     defaultConfig {
         applicationId "com.myquietbible.app"
-        minSdkVersion 21
+        minSdkVersion 24
         targetSdkVersion 36
         // Each upload to Google Play needs a higher number; the build workflow
         // passes its run number.
