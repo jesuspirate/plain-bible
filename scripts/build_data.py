@@ -390,6 +390,25 @@ COMPOSITES = {
 }
 
 
+# Inside each language, the versions easiest to read come first: plain
+# modern wording before older and word-for-word ones. Partial Bibles (one
+# Testament only) and archaic texts go last. A version not named here is
+# listed after these, by id.
+EASIEST_FIRST = {
+    "en": ["BSB", "BBE", "OEB", "OEBcth", "NHEB", "NHEBME", "NHEBJE", "Twenty", "CPDV",
+           "UKJV", "ACV", "RLT", "ASV", "RWebster", "Webster", "JPS", "Noyes", "Anderson",
+           "KJV", "KJVPCE", "KJVA", "EthEn", "EthExtraEn", "RNKJV", "Darby", "DRC",
+           "Haweis", "Rotherham", "YLT", "Geneva1599", "Tyndale"],
+    "fr": ["LSG", "FreCrampon", "EthFr", "FreStapfer1889", "FreSynodale1921", "FreOltramare1874",
+           "FreJND", "FrePGR", "FreLXXGiguet", "FreLXX", "FreBDM1744", "FreGeneve1669"],
+    "es": ["SpaRV", "SpaPlatense", "SpaRV1865"],
+    "pt": ["PorNVA", "PorBLivre", "PorBLivreTR"],
+    "de": ["GerMenge", "GerAlbrecht", "GerGruenewald", "GerZurcher", "GerTextbibel",
+           "GerElb1905", "GerElb1871", "GerTafel", "GerOffBiSt", "GerBoLut"],
+    "nl": ["NlCanisius1939", "DutSVV", "DutSVVA"],
+}
+
+
 def build_composite(spec, built):
     books = dict(built[spec["base"]])
     for code, chapters in built[spec["extra"]].items():
@@ -502,8 +521,10 @@ def main():
     for c in catalog:
         en, native = LANGS.get(c["lang"], (c["lang"], c["lang"]))
         c["langName"], c["langNative"] = en, native
-    featured = ["KJV", "BSB", "EthEn", "LSG", "EthFr"]
-    catalog.sort(key=lambda c: (c["lang"] != "en", c["langName"], c["id"] not in featured, c["id"]))
+    # English first, then languages by name; inside a language the easiest
+    # to read comes first (see EASIEST_FIRST), the rest by id.
+    ease = {tid: i for ids in EASIEST_FIRST.values() for i, tid in enumerate(ids)}
+    catalog.sort(key=lambda c: (c["lang"] != "en", c["langName"], ease.get(c["id"], len(ease)), c["id"]))
 
     write_json(os.path.join(OUT, "catalog.json"), {
         "books": [{"id": code, "name": name} for code, name, _ in BOOKS],
