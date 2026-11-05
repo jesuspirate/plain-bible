@@ -52,6 +52,10 @@ Vite build (`vite.config.ts`), so it shares the fonts and is saved offline with 
 of versions and languages in its text (and in the app's description) is read from the catalog at build
 time. Screenshots are in `docs/welcome/`.
 
+## iPhone and iPad app
+
+A small native app in [ios/](ios/README.md) shows this same website in its own window, for the App Store.
+
 ## Search syntax
 
 | Query | Finds |

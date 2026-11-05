@@ -24,7 +24,7 @@ import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
-import { HOME_SCREEN_EVENT, homeScreenDue, markHomeScreenShown } from './lib/install'
+import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
 import { hello } from './lib/hello'
 
 // The status bar color the page loaded with (set in index.html before first paint).
@@ -43,7 +43,7 @@ function setTint(bg: string) {
   const theme = ({ '#faf8f3': 'light', '#f4ecd8': 'sepia', '#16161a': 'dark' } as Record<string, string>)[bg]
   if (theme) document.querySelector('link[rel="manifest"]')?.setAttribute('href', `./manifest-${theme}.webmanifest`)
 }
-if (IOS_HOME_SCREEN) {
+if (IOS_HOME_SCREEN && !inStoreApp()) {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'hidden') return
     if (document.querySelector('meta[name="theme-color"]')?.getAttribute('content') === LOAD_TINT) return

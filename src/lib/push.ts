@@ -6,6 +6,7 @@
 import { api, loadAccount, SYNC_URL, SyncError } from './sync'
 import type { CircleInfo } from './circles'
 import { t } from '../i18n'
+import { inStoreApp } from './install'
 
 const ON = 'plain-bible:push-circles'
 const NAMES_CACHE = 'quiet-bible-push', NAMES_URL = 'push/circles.json'
@@ -21,6 +22,8 @@ const standalone = () => (navigator as { standalone?: boolean }).standalone === 
  *  16.4. blocked: said no before (the phone's settings can undo that).
  *  no: this browser can't. */
 export function pushSupport(): 'ok' | 'install' | 'old' | 'blocked' | 'no' {
+  // The App Store app has no web notifications (they'd come through Apple's own).
+  if (inStoreApp()) return 'no'
   const can = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
   if (!can) return !isIOS() ? 'no' : standalone() ? 'old' : 'install'
   return Notification.permission === 'denied' ? 'blocked' : 'ok'
