@@ -28,6 +28,12 @@ function applyTheme(t: Theme, remember: boolean) {
   if (remember) set(THEME_KEY, t)
 }
 applyTheme((document.documentElement.dataset.theme as Theme) || 'sepia', false)
+
+// In the Google Play app (android/), whose rules allow gifts only through Play,
+// the page doesn't point to the support page (src/lib/install.ts keeps the note).
+try {
+  if (sessionStorage.getItem('plain-bible:play-app') === '1') for (const a of $$<HTMLAnchorElement>('a[href="../support/"]')) (a.closest('p') ?? a).remove()
+} catch { /* private mode */ }
 for (const b of $$<HTMLButtonElement>('.themes button[data-theme]')) b.addEventListener('click', () => applyTheme(b.dataset.theme as Theme, true))
 
 // ---- the way in ----

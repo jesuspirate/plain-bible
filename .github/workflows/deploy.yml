@@ -54,6 +54,11 @@ jobs:
           STATS_KEY: ${{ secrets.STATS_KEY }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
+      # Links the Play Store app to this site (android/README.md).
+      - name: Android app link
+        env:
+          ANDROID_CERT_SHA256: ${{ vars.ANDROID_CERT_SHA256 }}
+        run: bash scripts/assetlinks.sh
       # The old address (bible.chama.community), served from Cloudflare Pages,
       # now redirects to myquietbible.com. Never blocks the main site.
       - name: Deploy old address
