@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- webcredentials: the site's passkeys work in the app.
+	     applinks: myquietbible.com links (verses, circle invites) open the app.
+	     Both need public/.well-known/apple-app-site-association, written at deploy. -->
+	<key>com.apple.developer.associated-domains</key>
+	<array>
+		<string>webcredentials:myquietbible.com</string>
+		<string>applinks:myquietbible.com</string>
+	</array>
+</dict>
+</plist>
