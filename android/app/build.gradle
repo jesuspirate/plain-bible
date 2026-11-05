@@ -59,8 +59,9 @@ android {
         targetSdkVersion 36
         // Each upload to Google Play needs a higher number; the build workflow
         // passes its run number.
-        versionCode (System.getenv('ANDROID_VERSION_CODE') ?: '1').toInteger()
-        versionName "1.0." + (System.getenv('ANDROID_VERSION_CODE') ?: '1')
+        def buildNumber = System.getenv('ANDROID_VERSION_CODE') ?: '1'
+        versionCode Integer.parseInt(buildNumber)
+        versionName "1.0.${buildNumber}"
 
         // The name for the application
         resValue "string", "appName", twaManifest.name
