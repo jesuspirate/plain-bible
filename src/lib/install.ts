@@ -17,6 +17,17 @@ export const isAndroid = () => /Android/.test(nav.userAgent ?? '')
 export const inStoreApp = () => /QuietBibleApp\//.test(nav.userAgent ?? '')
 export const installed = () => nav.standalone === true || mode('standalone') || mode('fullscreen') || mode('minimal-ui')
 
+// Opened from the Google Play app (android/): its first page load comes with
+// this referrer, and the tab keeps a note so a reload still knows. A session
+// note, not a saved one, because the Play app and Chrome share the site's storage.
+const PLAY_KEY = 'plain-bible:play-app'
+export const fromPlayStore = () => {
+  try {
+    if (typeof document !== 'undefined' && document.referrer.startsWith('android-app://com.myquietbible.app')) sessionStorage.setItem(PLAY_KEY, '1')
+    return sessionStorage.getItem(PLAY_KEY) === '1'
+  } catch { return false }
+}
+
 let offer: InstallPrompt | undefined
 export const INSTALL_EVENT = 'plain-bible:install'
 if (typeof window !== 'undefined') {

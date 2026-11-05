@@ -15,7 +15,11 @@ const manifest = {
   theme_color: '#2b2a28',
   background_color: '#f4ecd8',
   display: 'standalone' as const,
+  // The app's lasting identity (the same address it always had), which the
+  // Google Play app (android/) and installed copies share.
+  id: '/',
   start_url: './',
+  scope: './',
   icons: [
     { src: 'icon-192.png', sizes: '192x192', type: 'image/png' },
     { src: 'icon-512.png', sizes: '512x512', type: 'image/png' },

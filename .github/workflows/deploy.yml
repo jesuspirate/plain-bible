@@ -68,6 +68,11 @@ jobs:
              {"/":"/support/*","exclude":true},{"/":"/welcome/*","exclude":true},{"/":"/privacy.html","exclude":true},{"/":"/*"}]}]}}
           JSON
           python3 -m json.tool dist/.well-known/apple-app-site-association
+      # Links the Play Store app to this site (android/README.md).
+      - name: Android app link
+        env:
+          ANDROID_CERT_SHA256: ${{ vars.ANDROID_CERT_SHA256 }}
+        run: bash scripts/assetlinks.sh
       # The old address (bible.chama.community), served from Cloudflare Pages,
       # now redirects to myquietbible.com. Never blocks the main site.
       - name: Deploy old address

@@ -10,7 +10,7 @@ import { VersionPicker } from './ui'
 import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
-import { inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
+import { fromPlayStore, inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { AccountSection } from './account'
@@ -391,8 +391,9 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <p>{tj('To pass My Quiet Bible on, send {site}. It opens on a {welcome} that says what this is and how to put it on a Home Screen.', {
       site: <strong>myquietbible.com</strong>, welcome: <a href="welcome/">{t('welcome page')}</a> })}</p>
     {/* The only place the app asks: no banners, nothing inside the Bible.
-        Never in the App Store app, where Apple doesn't allow it. */}
-    {!inStoreApp() && <p>{tj('My Quiet Bible is free for everyone, forever. If it helps you, you can {support}.', {
+        Never in the store apps: Apple doesn't allow it, and Google Play allows
+        gifts only through Play itself. */}
+    {!inStoreApp() && !fromPlayStore() && <p>{tj('My Quiet Bible is free for everyone, forever. If it helps you, you can {support}.', {
       support: <a href="support/">{t('help keep the lamp lit')}</a> })}</p>}
     <p class="muted small">{tj('Texts come from the {scrollmapper} and the {oshb} (CC BY 4.0).', {
       scrollmapper: <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">{t('Scrollmapper Bible databases')}</a>,
