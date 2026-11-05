@@ -54,6 +54,20 @@ jobs:
           STATS_KEY: ${{ secrets.STATS_KEY }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
+      # Lets the iOS app (ios/) use this site's passkeys and open its links.
+      # Turns on once the APPLE_TEAM_ID repository variable is set.
+      - name: Apple app site association
+        if: vars.APPLE_TEAM_ID != ''
+        env:
+          APP_ID: ${{ vars.APPLE_TEAM_ID }}.com.myquietbible.app
+        run: |
+          mkdir -p dist/.well-known
+          cat > dist/.well-known/apple-app-site-association <<JSON
+          {"webcredentials":{"apps":["$APP_ID"]},
+           "applinks":{"details":[{"appIDs":["$APP_ID"],"components":[
+             {"/":"/support/*","exclude":true},{"/":"/welcome/*","exclude":true},{"/":"/privacy.html","exclude":true},{"/":"/*"}]}]}}
+          JSON
+          python3 -m json.tool dist/.well-known/apple-app-site-association
       # Links the Play Store app to this site (android/README.md).
       - name: Android app link
         env:

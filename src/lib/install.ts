@@ -13,6 +13,8 @@ export const isIPhone = () => /iPhone|iPad|iPod/.test(nav.userAgent ?? '')
   || (/Macintosh/.test(nav.userAgent ?? '') && (nav.maxTouchPoints ?? 0) > 1)
 export const isAndroid = () => /Android/.test(nav.userAgent ?? '')
 /** Already on a Home Screen (or in its own window on a computer). */
+/** The App Store app (ios/), which shows this site in its own window. */
+export const inStoreApp = () => /QuietBibleApp\//.test(nav.userAgent ?? '')
 export const installed = () => nav.standalone === true || mode('standalone') || mode('fullscreen') || mode('minimal-ui')
 
 // Opened from the Google Play app (android/): its first page load comes with
