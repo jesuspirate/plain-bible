@@ -58,7 +58,7 @@ button.icon { background: none; border: none; font-size: 18px; padding: 4px 8px;
 /* ---- header ---- */
 header.top {
   position: sticky; top: 0; z-index: 10; display: flex; align-items: center; gap: 12px;
-  padding: 10px 16px; padding-top: max(10px, var(--safe-top));
+  padding: 10px 16px; padding-top: max(10px, env(safe-area-inset-top));
   padding-left: max(16px, env(safe-area-inset-left)); padding-right: max(16px, env(safe-area-inset-right));
   /* Solid page color unless the phone can both mix colors and blur. Older
      iPhones (iOS before 16.2) can't mix: the bar went see-through and the
@@ -72,12 +72,6 @@ header.top {
     -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
   }
 }
-/* How far down the top of the screen is covered: the notch and clock, and on
-   the iPhone Home Screen app also the blurred band iOS 26 draws below them
-   (about 40pt; no setting turns it off), so the top bar starts below it.
-   Upright only: on its side the iPhone hides the clock and space is short. */
-:root { --safe-top: env(safe-area-inset-top, 0px); }
-@media (orientation: portrait) { html.ios-home { --safe-top: calc(env(safe-area-inset-top, 0px) + 40px); } }
 /* On a Home Screen app, iOS 26 blurs the top of the screen below the clock,
    and that blur landed on this bar: title and buttons looked out of focus.
    iPhone leaves it off only when a full-width bar with a solid color sits at
@@ -85,7 +79,6 @@ header.top {
 @media (display-mode: standalone) {
   header.top { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
 }
-html.ios-home header.top { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
 .brand { font: 600 19px var(--serif); letter-spacing: .01em; color: var(--text); text-decoration: none; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
 .history { position: relative; }
 .history-btn { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; color: var(--text); display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; padding: 0; border: none; background: none; -webkit-tap-highlight-color: transparent; }
@@ -95,7 +88,7 @@ html.ios-home header.top { background: var(--bg); -webkit-backdrop-filter: none;
 .history-btn.idle { color: var(--muted); }
 /* What the history button will do, shown on the first tap */
 .peek {
-  position: fixed; z-index: 40; top: calc(max(10px, var(--safe-top)) + 64px); right: 12px; width: min(340px, calc(100vw - 24px));
+  position: fixed; z-index: 40; top: calc(max(10px, env(safe-area-inset-top)) + 64px); right: 12px; width: min(340px, calc(100vw - 24px));
   padding: 8px; border-radius: 18px; background: var(--surface); border: 1px solid var(--line);
   box-shadow: 0 18px 48px rgba(0,0,0,.22); animation: peek-in .18s cubic-bezier(.2, .8, .2, 1); transform-origin: 80% 0;
 }
@@ -649,7 +642,7 @@ body.selecting main { padding-bottom: 200px; }
 .sb.sb-open {
   top: var(--vv-top); bottom: auto; height: var(--vv-h); box-sizing: border-box;
   display: flex; flex-direction: column; justify-content: flex-end;
-  padding: max(10px, var(--safe-top)) 0 10px; transition: none;
+  padding: max(10px, env(safe-area-inset-top)) 0 10px; transition: none;
 }
 .sb.sb-open .sb-panel { max-height: none; flex: 0 1 auto; min-height: 0; overscroll-behavior: contain; }
 .sb.sb-open .sb-bar { flex: none; }
@@ -813,7 +806,7 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 /* ---- Settings: a sheet over the word, which stays in view above it ---- */
 .settings-scrim { position: fixed; inset: 0; z-index: 34; background: rgba(10, 10, 12, .28); animation: sb-fade .25s; }
 .settings-sheet {
-  position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; top: calc(max(10px, var(--safe-top)) + 56px);
+  position: fixed; z-index: 35; left: 0; right: 0; bottom: 0; top: calc(max(10px, env(safe-area-inset-top)) + 56px);
   overflow-y: auto; overscroll-behavior: contain; -webkit-overflow-scrolling: touch; touch-action: pan-y; outline: none;
   background: var(--bg); border-radius: 20px 20px 0 0;
   /* The second shadow is the sheet again, just below it: when the iPhone
