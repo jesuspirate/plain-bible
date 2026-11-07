@@ -48,6 +48,15 @@
         document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]
       } catch (e) {}
 
+      // The iPhone Home Screen app (iOS 26 and later): the phone blurs a band
+      // about 40pt deep below the clock, and nothing on the page can turn it
+      // off. Marking the page lets the top bar start below that band (see
+      // --safe-top in styles.css). Not in the App Store app, which turns the
+      // blur off itself.
+      try {
+        if (navigator.standalone === true && !/QuietBibleApp\//.test(navigator.userAgent)) document.documentElement.classList.add('ios-home')
+      } catch (e) {}
+
       // If the app's code can't load (say a half-finished update left the
       // saved copy pointing at files the site no longer has), the page would
       // stay blank. Repair clears the saved app files (not your highlights,
