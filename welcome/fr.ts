@@ -71,6 +71,7 @@ export default {
   more: 'Plus',
   support: 'La soutenir',
   privacy: 'Confidentialité',
+  contact: 'Contact',
   source: 'Code source',
   footNote: 'Chaque texte est du domaine public ou sous licence libre. La licence de chaque version est indiquée dans l’application.',
   appleHelp: 'Les instructions d’Apple ↗',
