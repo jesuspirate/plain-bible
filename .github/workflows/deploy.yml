@@ -59,7 +59,7 @@ jobs:
       - name: Apple app site association
         if: vars.APPLE_TEAM_ID != ''
         env:
-          APP_ID: ${{ vars.APPLE_TEAM_ID }}.com.myquietbible.app
+          APP_ID: ${{ vars.APPLE_TEAM_ID }}.com.myquietbible.ios
         run: |
           mkdir -p dist/.well-known
           cat > dist/.well-known/apple-app-site-association <<JSON
