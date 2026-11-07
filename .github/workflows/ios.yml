@@ -23,7 +23,7 @@ jobs:
   build:
     runs-on: macos-15
     steps:
-      - uses: actions/checkout@v4
+      - uses: actions/checkout@v7
       - name: Test build (simulator, unsigned)
         # shell: bash adds pipefail, so a failed build fails the step despite `tail`.
         shell: bash
