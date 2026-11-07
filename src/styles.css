@@ -72,6 +72,13 @@ header.top {
     -webkit-backdrop-filter: saturate(160%) blur(14px); backdrop-filter: saturate(160%) blur(14px);
   }
 }
+/* On a Home Screen app, iOS 26 blurs the top of the screen below the clock,
+   and that blur landed on this bar: title and buttons looked out of focus.
+   iPhone leaves it off only when a full-width bar with a solid color sits at
+   the top, so there the bar is solid (at 95% the frost barely showed). */
+@media (display-mode: standalone) {
+  header.top { background: var(--bg); -webkit-backdrop-filter: none; backdrop-filter: none; }
+}
 .brand { font: 600 19px var(--serif); letter-spacing: .01em; color: var(--text); text-decoration: none; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
 .history { position: relative; }
 .history-btn { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; color: var(--text); display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; padding: 0; border: none; background: none; -webkit-tap-highlight-color: transparent; }
