@@ -2,7 +2,7 @@
 html.praying { overflow: hidden; }
 .pray {
   position: fixed; inset: 0; z-index: 60; display: flex; flex-direction: column; align-items: center; justify-content: center;
-  padding: max(16px, calc(var(--cut) + 12px), var(--safe-top)) 16px max(16px, env(safe-area-inset-bottom));
+  padding: max(16px, calc(var(--cut) + 12px), env(safe-area-inset-top)) 16px max(16px, env(safe-area-inset-bottom));
   /* just enough to know the words are still there; no blur, so it stays smooth.
      The top bar (above --cut) stays crisp, in one piece with the clock strip. */
   --cut: 0px; --dim: rgba(12, 10, 6, .38);
@@ -12,7 +12,7 @@ html.praying { overflow: hidden; }
 :root[data-theme='dark'] .pray { --dim: rgba(0, 0, 0, .5); }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray { --dim: rgba(0, 0, 0, .5); } }
 .pray-close {
-  all: unset; cursor: pointer; position: absolute; top: max(12px, calc(var(--cut) + 12px), var(--safe-top)); right: max(14px, env(safe-area-inset-right));
+  all: unset; cursor: pointer; position: absolute; top: max(12px, calc(var(--cut) + 12px), env(safe-area-inset-top)); right: max(14px, env(safe-area-inset-right));
   display: grid; place-items: center; width: 56px; height: 56px; border-radius: 50%;
   /* the same white as the pills below, so it reads on the dimmed page */
   background: rgba(255, 255, 255, .92); color: #2a2218; box-shadow: 0 4px 16px rgba(0, 0, 0, .3);
@@ -99,7 +99,7 @@ button.pray-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff
 .pray-code { width: 100%; box-sizing: border-box; margin-bottom: 10px; min-height: 50px; padding: 10px 12px; border-radius: 12px; border: 1px solid var(--line); background: var(--bg); font: 17px ui-monospace, Menlo, monospace; text-transform: uppercase; }
 /* The verses a prayer is prayed using: at the top, out of the way of the light. */
 .pray-over {
-  position: absolute; top: max(14px, calc(var(--cut) + 16px), var(--safe-top)); left: 74px; right: 74px; margin: 0 auto; width: fit-content; max-width: calc(100% - 148px);
+  position: absolute; top: max(14px, calc(var(--cut) + 16px), env(safe-area-inset-top)); left: 74px; right: 74px; margin: 0 auto; width: fit-content; max-width: calc(100% - 148px);
   display: flex; align-items: center; gap: 6px; box-sizing: border-box; min-height: 44px; padding: 6px 6px 6px 16px; border-radius: 99px;
   font: 16px/1.3 var(--sans); color: #fff7e6; background: rgba(20, 16, 10, .86);
 }
