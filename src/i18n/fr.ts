@@ -828,6 +828,7 @@ export default {
   "End the tour": "Terminer la visite",
   "Praying using": "Prière sur",
   "Prayed using": "Prié sur",
+  "Kept with this prayer": "Gardé avec cette prière",
   "Change verses": "Changer les versets",
   "Verses for your prayer": "Versets pour votre prière",
   "Tap verses for your prayer": "Touchez des versets pour votre prière",

@@ -55,3 +55,19 @@ export function toggleVerse(list: PrayerVerse[], book: string, chapter: number, 
 /** Two lists name the same verses in the same order. */
 export const sameVerses = (a: PrayerVerse[], b: PrayerVerse[]) =>
   a.length === b.length && a.every((x, i) => x.book === b[i].book && x.chapter === b[i].chapter && x.verses.join() === b[i].verses.join())
+
+/** The list with verse group `v` added: joined to the entry for its chapter
+ *  if there is one (a prayer keeps one entry per chapter), else at the end,
+ *  room allowing. The same list back when nothing changes. */
+export function withVerse(list: PrayerVerse[], v: PrayerVerse): PrayerVerse[] {
+  const i = list.findIndex(x => x.book === v.book && x.chapter === v.chapter)
+  if (i < 0) return list.length >= MAX_TIED ? list : [...list, { book: v.book, chapter: v.chapter, verses: [...v.verses] }]
+  const had = list[i].verses
+  if (v.verses.every(n => had.includes(n))) return list
+  const verses = [...new Set([...had, ...v.verses])].sort((a, b) => a - b)
+  return list.map((x, j) => j === i ? { ...x, verses } : x)
+}
+
+/** Verse group `v` is all within the list. */
+export const holdsVerse = (list: PrayerVerse[], v: PrayerVerse) =>
+  list.some(x => x.book === v.book && x.chapter === v.chapter && v.verses.every(n => x.verses.includes(n)))
