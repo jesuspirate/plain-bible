@@ -137,7 +137,11 @@ function join(input: ArrayBuffer): ArrayBuffer | undefined {
 export const playable = (audio: ArrayBuffer, type: string) => /mp4|m4a|aac/i.test(type) ? defragment(audio) : audio
 
 /** How much sound an MP4 recording really holds, in ms, or undefined when
- *  it can't tell (another format, or no length written). */
+ *  it can't tell (another format, or no length written).
+ *  Counted as samples times their usual length: Chrome (on Android too)
+ *  marks the last sample of every one-second piece as much shorter than it
+ *  is, so the written length falls about 4% behind the clock. Adding those
+ *  up made every long prayer look as if the microphone had stopped. */
 export function lengthMs(audio: ArrayBuffer, type: string): number | undefined {
   if (!/mp4|m4a|aac/i.test(type)) return
   try {
@@ -147,7 +151,19 @@ export function lengthMs(audio: ArrayBuffer, type: string): number | undefined {
     if (!mdhd) return
     const v1 = b[mdhd.body] === 1
     const scale = v.getUint32(mdhd.body + (v1 ? 20 : 12))
+    if (!scale) return
+    const minf = child(b, v, mdia!, 'minf'), stbl = minf && child(b, v, minf, 'stbl'), stts = stbl && child(b, v, stbl, 'stts')
+    if (stts) {
+      // The most common sample length, and how many samples there are.
+      let count = 0, usual = 0, most = 0
+      for (let i = 0, n = v.getUint32(stts.body + 4); i < n; i++) {
+        const c = v.getUint32(stts.body + 8 + i * 8), d = v.getUint32(stts.body + 12 + i * 8)
+        count += c
+        if (c > most) { most = c; usual = d }
+      }
+      if (count && usual) return count * usual * 1000 / scale
+    }
     const d = v1 ? Number(v.getBigUint64(mdhd.body + 24)) : v.getUint32(mdhd.body + 16)
-    return scale && d ? d * 1000 / scale : undefined
+    return d ? d * 1000 / scale : undefined
   } catch { return }
 }

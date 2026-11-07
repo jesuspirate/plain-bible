@@ -159,7 +159,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         // say) leaves less sound than time went by. Count only what was
         // heard, and pause so the prayer can carry on.
         const heard = lengthMs(audio, blob.type)
-        const short = heard !== undefined && heard < wall - 2000
+        // A little slack, as recorders round their lengths a little.
+        const short = heard !== undefined && heard < wall - Math.max(2000, wall * 0.03)
         const ms = short ? heard : wall
         if (short) interrupted = 'mic'
         if (ms < 800) {
