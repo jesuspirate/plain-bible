@@ -41,6 +41,14 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         web.allowsLinkPreview = false
         // The page lays itself out under the notch and home bar (viewport-fit=cover).
         web.scrollView.contentInsetAdjustmentBehavior = .never
+        // iOS 26 softly blurs a scroll view's content near the top and bottom
+        // edges, under the clock and the home bar. Here that smeared the
+        // page's own top bar (title and buttons looked out of focus). The page
+        // draws its own bars, so turn the system's blur off.
+        if #available(iOS 26.0, *) {
+            web.scrollView.topEdgeEffect.isHidden = true
+            web.scrollView.bottomEdgeEffect.isHidden = true
+        }
         web.isOpaque = false
         let paper = UIColor(named: "LaunchBackground")
         web.backgroundColor = paper
