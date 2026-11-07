@@ -1,9 +1,23 @@
 import { describe, expect, it } from 'vitest'
 import { BOOK_INDEX } from './books'
 import { COMFORT, pickComfort } from './comfort'
-import { cleanVerse, cleanVerses, MAX_TIED, sameVerses, toggleVerse, verseLabel, versesOf } from './prayerVerses'
+import { cleanVerse, cleanVerses, holdsVerse, MAX_TIED, sameVerses, toggleVerse, verseLabel, versesOf, withVerse } from './prayerVerses'
 
 describe('prayer verses', () => {
+  it('adds the verse after Amen to the prayer, once, joined to its chapter', () => {
+    const ps = { book: 'Ps', chapter: 145, verses: [18] }
+    expect(withVerse([], ps)).toEqual([ps])
+    const john = { book: 'John', chapter: 3, verses: [16] }
+    expect(withVerse([john], ps)).toEqual([john, ps])
+    const same = [john, ps]
+    expect(withVerse(same, { ...ps })).toBe(same)
+    expect(withVerse([{ book: 'Ps', chapter: 145, verses: [20, 1] }], ps)).toEqual([{ book: 'Ps', chapter: 145, verses: [1, 18, 20] }])
+    const full = Array.from({ length: MAX_TIED }, (_, i) => ({ book: 'Ps', chapter: i + 1, verses: [1] }))
+    expect(withVerse(full, ps)).toBe(full)
+    expect(holdsVerse([john, ps], ps)).toBe(true)
+    expect(holdsVerse([john], ps)).toBe(false)
+    expect(holdsVerse([{ book: 'Phil', chapter: 4, verses: [6] }], { book: 'Phil', chapter: 4, verses: [6, 7] })).toBe(false)
+  })
   it('names verses the way people say them', () => {
     expect(verseLabel({ book: 'Ps', chapter: 34, verses: [17] })).toBe('Psalm 34:17')
     expect(verseLabel({ book: 'Phil', chapter: 4, verses: [6, 7] })).toBe('Philippians 4:6–7')

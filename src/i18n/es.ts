@@ -828,6 +828,7 @@ export default {
   "End the tour": "Terminar el recorrido",
   "Praying using": "Orando con",
   "Prayed using": "Oraste con",
+  "Kept with this prayer": "Guardado con esta oración",
   "Change verses": "Cambiar versículos",
   "Verses for your prayer": "Versículos para tu oración",
   "Tap verses for your prayer": "Toca versículos para tu oración",

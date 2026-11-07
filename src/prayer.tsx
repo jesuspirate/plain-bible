@@ -9,7 +9,7 @@ import { lengthMs, playable } from './lib/mp4'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { go, inCircles, openSettings, pickVerses, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
-import { MAX_TIED, PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
+import { holdsVerse, MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
 import type { Bible } from './lib/data'
 import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSync, turnOnPrayerSync } from './lib/prayerSync'
@@ -177,7 +177,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         resume.current = interrupted ? { id, ms: (before?.ms ?? 0) + ms } : undefined
         if (alive.current) {
           if (interrupted) { setPausedBy(interrupted); setElapsed((before?.ms ?? 0) + ms); setPhase('paused') }
-          else heardNow(id)
+          else await heardNow(id)
           refresh()
         }
         sync()
@@ -215,19 +215,30 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     else r.stream.getTracks().forEach(track => track.stop())
   }
 
-  // Amen: a new verse to take away, and the prayer's own verses, if it has any.
+  // Amen: a new verse to take away, kept with the prayer as one of its
+  // verses (by reference, so a circle reads it in their own Bible), and the
+  // prayer's own verses, if it has any.
   function heardNow(id?: string) {
-    setComfort(pickComfort())
-    if (id) prayers.get(id).then(p => { if (alive.current && p) setKept({ id, verses: versesOf(p) }) }, () => {})
+    const c = pickComfort()
+    setComfort(c)
     setTied([])
     setPhase('heard')
+    if (!id) return Promise.resolve()
+    const v = { book: c.book, chapter: c.chapter, verses: c.verses }
+    return prayers.get(id).then(async p => {
+      if (!p) return
+      const verses = withVerse(versesOf(p), v)
+      if (verses !== versesOf(p)) await prayers.tie(id, verses).catch(() => {})
+      const now = await prayers.get(id).catch(() => p)
+      if (alive.current && now) setKept({ id, verses: versesOf(now) })
+    }, () => {})
   }
   // Amen while paused: verses changed meanwhile are kept with the prayer.
   const amen = () => {
     const id = resume.current?.id
     resume.current = undefined
     if (!id) return heardNow()
-    prayers.tie(id, tiedRef.current).catch(() => {}).then(() => { heardNow(id); refresh(); sync() })
+    prayers.tie(id, tiedRef.current).catch(() => {}).then(() => heardNow(id)).then(() => { refresh(); sync() })
   }
   const read = (v: PrayerVerse) => { onClose(); go(readPath(version, v.book, v.chapter, v.verses[0])) }
   // Add a verse: the prayer steps aside, and the verses you tap on the page,
@@ -236,6 +247,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const busy = phase === 'recording' || phase === 'paused' || phase === 'asking'
   const toggle = () => phase === 'recording' ? stop() : phase !== 'asking' && start()
   const count = list?.length ?? 0
+  const others = (kept?.verses ?? []).filter(v => !(v.book === comfort.book && v.chapter === comfort.chapter && v.verses.join() === comfort.verses.join()))
 
   return (
     <div class="pray" role="dialog" aria-modal="true" ref={root} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
@@ -280,11 +292,13 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
                   {settings.streaks && <PrayStreak />}
                   <button class="pray-verse" onClick={() => read(comfort)}>
                     “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
+                    {kept && holdsVerse(kept.verses, comfort) && <span class="pray-kept">✓ {t('Kept with this prayer')}</span>}
                   </button>
-                  {kept && kept.verses.length === 1 && <button class="pray-tied" onClick={() => read(kept.verses[0])}>{tj('Prayed using {verse}', { verse: <strong>{verseLabel(kept.verses[0])}</strong> })} ›</button>}
-                  {kept && kept.verses.length > 1 && <div class="pray-tied-all">
+                  {/* The verse above is already on screen: list only the others. */}
+                  {others.length === 1 && <button class="pray-tied" onClick={() => read(others[0])}>{tj('Prayed using {verse}', { verse: <strong>{verseLabel(others[0])}</strong> })} ›</button>}
+                  {others.length > 1 && <div class="pray-tied-all">
                     <p>{t('Prayed using')}</p>
-                    {kept.verses.map(v => <button class="pray-tied" onClick={() => read(v)}><strong>{verseLabel(v)}</strong> ›</button>)}
+                    {others.map(v => <button class="pray-tied" onClick={() => read(v)}><strong>{verseLabel(v)}</strong> ›</button>)}
                   </div>}
                   {kept && kept.verses.length < MAX_TIED && <button class="pray-pill pray-add" onClick={() => pickFor(kept.verses, kept.id)}>+ {t('Add a verse')}</button>}
                 </>
