@@ -4,7 +4,7 @@
 import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
-  accountKeyCode, amen, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
+  accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
@@ -278,6 +278,7 @@ function CircleList() {
             <div class="c-card">
               <label class="c-label">{t('Name of the circle')}<input value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+              <p class="muted small c-rules">{t('Circles are for kind words. Anything hateful, abusive or sexual can be reported, and it’s removed along with whoever shared it.')}</p>
               <div class="c-row">
                 <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? t('Making…') : t('Make circle')}</button>
                 <button class="c-btn" onClick={() => setMaking(false)}>{t('Cancel')}</button>
@@ -486,6 +487,7 @@ function Join({ id, secret }: { id: string; secret: string }) {
           <p>{invite.by ? tj('{name} invited you to {circle}', { name: <strong>{invite.by}</strong>, circle: <strong>{invite.name}</strong> }) : tj('You’re invited to {circle}', { circle: <strong>{invite.name}</strong> })}
             <span class="muted"> · {tn(invite.members, '{n} person', '{n} people')}</span></p>
           <p class="muted small">{t('A private circle to read the word and pray together. You’ll see what they share, and they’ll see only what you choose to share, one tap at a time. Everything is encrypted: not even the server can read it.')}</p>
+          <p class="muted small c-rules">{t('Circles are for kind words. Anything hateful, abusive or sexual can be reported, and it’s removed along with whoever shared it.')}</p>
           {!loadAccount() ? <SignIn joining /> : <>
             <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
             <button class="c-btn primary" disabled={busy || !me.trim()} onClick={() => join()}>{busy ? t('Joining…') : t('Join {circle}', { circle: invite.name })}</button>
@@ -601,6 +603,7 @@ function CircleView({ id }: { id: string }) {
         <p class="c-members">{feed.members.map(m => m.mid === feed.me ? t('You') : m.name).join(', ')}</p>
         <Notify circle={id} name={info?.name} />
         <StreakBoard circle={id} name={info?.name} feed={feed} onChange={load} />
+        <Blocking circle={id} feed={feed} onChange={load} />
         {showCode ? <ShowCode circle={id} onDone={() => { setShowCode(false); load() }} onAllowed={() => setJoining({ was: feed?.members.length ?? 1, until: Date.now() + 120_000 })} /> : (
           <div class="c-card">
             <p class="c-card-title">{t('Invite someone')}</p>
@@ -811,6 +814,8 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   const [said, setSaid] = useState('')
   const [err, setErr] = useState('')
   const [kept, setKept] = useState('')
+  // Reporting the shared thing itself ({}), or one reply on it.
+  const [reporting, setReporting] = useState<{ reply?: Reply } | null>(null)
   const act = (fn: () => Promise<unknown>) => async () => {
     setBusy(true); setErr('')
     try { await fn(); onChange() } catch (e) { setErr(message(e)) } finally { setBusy(false) }
@@ -885,7 +890,8 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
         <ul class="c-replies">
           {item.replies.map(r => (
             <li class={news?.replies.has(r.id) ? 'c-new-reply' : ''}><strong>{nameOf(r.by)}</strong> {r.text}
-              {r.by === me && <button class="link small" disabled={busy} aria-label={t('Remove your reply')} onClick={act(() => removeReply(circle, item.id, r.id))}>{t('Remove')}</button>}</li>
+              {r.by === me && <button class="link small" disabled={busy} aria-label={t('Remove your reply')} onClick={act(() => removeReply(circle, item.id, r.id))}>{t('Remove')}</button>}
+              {r.by !== me && <button class="link small c-report" onClick={() => { setReporting({ reply: r }); setTray(false) }}>{t('Report')}</button>}</li>
           ))}
         </ul>
       )}
@@ -934,12 +940,100 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
             {mine && (confirm
               ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
               : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
+            {!mine && <button class="link small c-report" onClick={() => { setReporting({}); setTray(false) }}>{t('Report')}</button>}
           </div>
         </div>
       )}
+      {reporting && <ReportCard circle={circle} item={item} reply={reporting.reply} nameOf={nameOf}
+        onDone={(said, blocked) => { setReporting(null); if (said) setKept(said); if (blocked) onChange() }} />}
       {kept && <p class="muted small">{kept}</p>}
       {err && <p class="note small">{err}</p>}
     </li>
+  )
+}
+
+/** The words someone reported, as they saw them, for the app's maker to
+ *  read (everything is sealed, so this is the only way they reach anyone). */
+function reportedWords(item: FeedItem, reply: Reply | undefined, nameOf: (mid: string) => string) {
+  if (reply) return `${nameOf(reply.by)} replied: ${reply.text}`
+  const b = item.body, who = nameOf(item.by)
+  if (b.k === 'prayer') return `${who} shared a spoken prayer${b.note ? ` with these words: ${b.note}` : ' (audio only)'}`
+  const verse = `${verseLabel(b.verse)} (${b.version}): ${b.text}`
+  return b.k === 'note' ? `${who} shared a note: ${b.note}\n\nOn ${verse}` : `${who} shared ${verse}${b.note ? `\n\nWith: ${b.note}` : ''}`
+}
+
+/** "Report this?": straight to the app's maker, and optionally block them
+ *  too. A card in place, never a browser pop-up. */
+function ReportCard({ circle, item, reply, nameOf, onDone }: {
+  circle: string; item: FeedItem; reply?: Reply; nameOf: (mid: string) => string
+  /** `said`: what to show after; `blocked`: they were blocked too */
+  onDone: (said?: string, blocked?: boolean) => void
+}) {
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const card = useRef<HTMLDivElement>(null)
+  useEffect(() => card.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }), [])
+  const mid = reply?.by ?? item.by, name = nameOf(mid)
+  const send = (andBlock: boolean) => async () => {
+    setBusy(true); setErr('')
+    try {
+      await report(circle, { mid, item: item.id, ...(reply ? { reply: reply.id } : {}), what: reportedWords(item, reply, nameOf) })
+      if (andBlock) await block(circle, mid, true)
+      onDone(t('Thank you. We’ll look at it within 24 hours.'), andBlock)
+    } catch (e) { setErr(message(e)); setBusy(false) }
+  }
+  return (
+    <div class="confirm-card danger c-report-card" role="alertdialog" aria-labelledby={`report-${item.id}`} ref={card}>
+      <p id={`report-${item.id}`} class="confirm-title"><strong>{reply ? t('Report this reply?') : t('Report this?')}</strong></p>
+      <p>{t('It’s sent to My Quiet Bible, and we act on it within 24 hours. {name} isn’t told who reported it.', { name })}</p>
+      <div class="confirm-buttons">
+        <button class="leave-confirm" disabled={busy} onClick={send(false)}>{busy ? t('Sending…') : t('Report')}</button>
+        <button class="leave-confirm" disabled={busy} onClick={send(true)}>{t('Report and block {name}', { name })}</button>
+        <button disabled={busy} onClick={() => onDone()}>{t('Cancel')}</button>
+      </div>
+      {err && <p class="note small">{err}</p>}
+    </div>
+  )
+}
+
+/** Block someone in this circle (or stop): what they share or write here no
+ *  longer shows for you, and they aren't told. */
+function Blocking({ circle, feed, onChange }: { circle: string; feed: Feed; onChange: () => void }) {
+  const [asking, setAsking] = useState<string>()
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const others = feed.members.filter(m => m.mid !== feed.me)
+  if (!others.length) return null
+  const blocked = new Set(feed.blocked ?? [])
+  const set = (mid: string, on: boolean) => async () => {
+    setBusy(true); setErr('')
+    try { await block(circle, mid, on); setAsking(undefined); onChange() } catch (e) { setErr(message(e)) } finally { setBusy(false) }
+  }
+  const who = others.find(m => m.mid === asking)
+  return (
+    <div class="c-card c-blocking">
+      <p class="c-card-title">{t('Block someone')}</p>
+      <p class="muted small">{t('You stop seeing what they share or write in this circle. They aren’t told.')}</p>
+      {who ? (
+        <div class="confirm-card danger" role="alertdialog" aria-labelledby="block-title">
+          <p id="block-title" class="confirm-title"><strong>{t('Block {name}?', { name: who.name })}</strong></p>
+          <div class="confirm-buttons">
+            <button class="leave-confirm" disabled={busy} onClick={set(who.mid, true)}>{busy ? t('Blocking…') : t('Block')}</button>
+            <button disabled={busy} onClick={() => setAsking(undefined)}>{t('Cancel')}</button>
+          </div>
+        </div>
+      ) : (
+        <ul class="c-block-list">
+          {others.map(m => (
+            <li><span>{m.name}{blocked.has(m.mid) && <span class="muted small"> · {t('blocked')}</span>}</span>
+              {blocked.has(m.mid)
+                ? <button class="c-btn small" disabled={busy} onClick={set(m.mid, false)}>{t('Unblock')}</button>
+                : <button class="c-btn small" disabled={busy} onClick={() => setAsking(m.mid)}>{t('Block')}</button>}</li>
+          ))}
+        </ul>
+      )}
+      {err && <p class="note small">{err}</p>}
+    </div>
   )
 }
 

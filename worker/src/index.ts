@@ -228,6 +228,18 @@ async function sendCode(env: Env, to: string, code: string, lang?: string) {
   }
 }
 
+/** A note to the app's maker that something in a circle was reported.
+ *  Never blocks the report: it's kept either way, on the /stats page. */
+async function tellAboutReport(env: Env, what: string) {
+  if (!emailOn(env)) return
+  const text = `Someone reported this in a circle:\n\n${what}\n\nOpen the private stats page (/stats on the sync service) to remove it, take the person out of the circle, or keep it. Apple asks for an answer within 24 hours.\n\n— My Quiet Bible`
+  await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({ from: env.EMAIL_FROM, to: ['hello@myquietbible.com'], subject: 'Something was reported in a circle', text }),
+  }).then(r => { if (!r.ok) console.error('report email', r.status) }, e => console.error('report email', e))
+}
+
 async function emailStart(req: Request, env: Env) {
   if (!emailOn(env)) throw new HttpError(404, 'Email sign-in isn’t set up yet.')
   const adding = req.headers.has('Authorization') ? await session(req, env) : null
@@ -457,6 +469,10 @@ async function membership(db: D1Database, circle: string, userId: string) {
   return row.mid
 }
 
+/** The accounts the member `m` blocked in circle `c` (inside a query that names them so). */
+const BLOCKED = 'SELECT bm.user_id FROM circle_blocks bl JOIN circle_members bm ON bm.circle_id = bl.circle_id AND bm.mid = bl.mid WHERE bl.user_id = m.user_id AND bl.circle_id = c.id'
+const REPORTS_PER_DAY = 30
+
 /** Take a member out, with what they shared. The last one out closes the circle. */
 function leaveCircle(db: D1Database, circle: string, userId: string) {
   const mine = 'SELECT id FROM circle_items WHERE circle_id = ?1 AND user_id = ?2'
@@ -467,9 +483,10 @@ function leaveCircle(db: D1Database, circle: string, userId: string) {
     db.prepare(`DELETE FROM circle_replies WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
     db.prepare('DELETE FROM circle_items WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_invites WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
+    db.prepare(`DELETE FROM circle_blocks WHERE circle_id = ?1 AND (user_id = ?2 OR mid IN (SELECT mid FROM circle_members WHERE circle_id = ?1 AND user_id = ?2))`).bind(circle, userId),
     db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM push_circles WHERE circle_id = ?1 AND endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?2)').bind(circle, userId),
-    ...['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies', 'circle_items', 'circle_invites'].map(t =>
+    ...['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies', 'circle_items', 'circle_invites', 'circle_blocks'].map(t =>
       db.prepare(`DELETE FROM ${t} WHERE circle_id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)`).bind(circle)),
     db.prepare('DELETE FROM circles WHERE id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)').bind(circle),
   ]
@@ -494,7 +511,9 @@ async function notifyCircle(env: Env, circle: string, from: string, to?: string)
   const now = Date.now()
   const rows = (await env.DB.prepare(`SELECT s.endpoint, s.p256dh, s.auth FROM push_circles p JOIN push_subs s ON s.endpoint = p.endpoint
     JOIN circle_members m ON m.circle_id = p.circle_id AND m.user_id = s.user_id
-    WHERE p.circle_id = ?1 AND s.user_id != ?2 AND (?3 IS NULL OR s.user_id = ?3) AND (p.sent IS NULL OR p.sent < ?4)`)
+    WHERE p.circle_id = ?1 AND s.user_id != ?2 AND (?3 IS NULL OR s.user_id = ?3) AND (p.sent IS NULL OR p.sent < ?4)
+      AND NOT EXISTS (SELECT 1 FROM circle_blocks bl JOIN circle_members bm ON bm.circle_id = bl.circle_id AND bm.mid = bl.mid
+        WHERE bl.circle_id = ?1 AND bl.user_id = s.user_id AND bm.user_id = ?2)`)
     .bind(circle, from, to ?? null, now - PUSH_GAP).all<Subscription>()).results
   if (!rows.length) return
   await env.DB.batch(rows.map(r => env.DB.prepare('UPDATE push_circles SET sent = ? WHERE endpoint = ? AND circle_id = ?').bind(now, r.endpoint, circle)))
@@ -569,12 +588,12 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   // (so the app can show a quiet dot; it says nothing of what).
   if (req.method === 'GET' && !a) {
     const rows = await db.prepare(`SELECT c.id, c.name, m.mid, m.wrapped, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = c.id) AS members,
-      MAX(COALESCE((SELECT MAX(at) FROM circle_items i WHERE i.circle_id = c.id AND i.user_id != m.user_id), 0),
-        COALESCE((SELECT MAX(at) FROM circle_replies r WHERE r.circle_id = c.id AND r.user_id != m.user_id), 0),
+      MAX(COALESCE((SELECT MAX(at) FROM circle_items i WHERE i.circle_id = c.id AND i.user_id != m.user_id AND i.user_id NOT IN (${BLOCKED})), 0),
+        COALESCE((SELECT MAX(at) FROM circle_replies r WHERE r.circle_id = c.id AND r.user_id != m.user_id AND r.user_id NOT IN (${BLOCKED})), 0),
         COALESCE((SELECT MAX(a.at) FROM circle_amens a JOIN circle_items i ON i.circle_id = a.circle_id AND i.id = a.item
-          WHERE a.circle_id = c.id AND a.user_id != m.user_id AND i.user_id = m.user_id), 0),
+          WHERE a.circle_id = c.id AND a.user_id != m.user_id AND i.user_id = m.user_id AND a.user_id NOT IN (${BLOCKED})), 0),
         COALESCE((SELECT MAX(x.at) FROM circle_reacts x JOIN circle_items i ON i.circle_id = x.circle_id AND i.id = x.item
-          WHERE x.circle_id = c.id AND x.user_id != m.user_id AND i.user_id = m.user_id), 0)) AS latest
+          WHERE x.circle_id = c.id AND x.user_id != m.user_id AND i.user_id = m.user_id AND x.user_id NOT IN (${BLOCKED})), 0)) AS latest
       FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE m.user_id = ? ORDER BY m.joined`).bind(userId).all()
     return json({ circles: rows.results })
   }
@@ -685,7 +704,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
 
   // Who's in it and what's been shared, newest first.
   if (req.method === 'GET' && !b) {
-    const [named, members, items, amens, replies, reacts] = await Promise.all([
+    const [named, members, items, amens, replies, reacts, blocked] = await Promise.all([
       db.prepare('SELECT name FROM circles WHERE id = ?').bind(circle).first<{ name: string }>(),
       db.prepare('SELECT mid, name, streak FROM circle_members WHERE circle_id = ? ORDER BY joined').bind(circle).all(),
       db.prepare(`SELECT i.id, m.mid, i.at, i.body, i.chunks, i.size FROM circle_items i JOIN circle_members m ON m.circle_id = i.circle_id AND m.user_id = i.user_id
@@ -697,8 +716,10 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
         WHERE r.circle_id = ? ORDER BY r.at`).bind(circle).all(),
       db.prepare(`SELECT x.item, m.mid, x.at, x.body FROM circle_reacts x JOIN circle_members m ON m.circle_id = x.circle_id AND m.user_id = x.user_id
         WHERE x.circle_id = ? ORDER BY x.at`).bind(circle).all(),
+      db.prepare('SELECT mid FROM circle_blocks WHERE circle_id = ? AND user_id = ?').bind(circle, userId).all<{ mid: string }>(),
     ])
-    return json({ me: mid, name: named?.name, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results })
+    return json({ me: mid, name: named?.name, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results,
+      blocked: blocked.results.map(r => r.mid) })
   }
   // Joining with a code, on the member's side: make one, see who typed it,
   // and allow them by sealing the circle key to their public key.
@@ -763,6 +784,36 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       await db.prepare('UPDATE circle_members SET streak = NULL, streak_at = NULL WHERE circle_id = ? AND user_id = ?').bind(circle, userId).run()
       return json({ ok: true })
     }
+  }
+  // Block someone in this circle: you stop seeing what they share or write
+  // here, and hearing about it. They aren't told.
+  if (b === 'blocks' && c && /^[\w-]{4,20}$/.test(c) && !d) {
+    if (c === mid) throw new HttpError(400, 'Bad request')
+    if (req.method === 'PUT') {
+      await db.prepare('INSERT INTO circle_blocks (user_id, circle_id, mid, at) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(userId, circle, c, now).run()
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('DELETE FROM circle_blocks WHERE user_id = ? AND circle_id = ? AND mid = ?').bind(userId, circle, c).run()
+      return json({ ok: true })
+    }
+  }
+  // Report something someone shared or wrote. It's sealed here, so `what` is
+  // the words the person reporting saw, sent by them on purpose.
+  if (b === 'report' && !c && req.method === 'POST') {
+    const r = await readJson<{ mid: string; item?: string; reply?: string; what: string }>(req)
+    const what = typeof r.what === 'string' ? r.what.trim().slice(0, 4000) : ''
+    const id = (v: unknown) => v == null ? null : typeof v === 'string' && CIRCLE_ID.test(v) ? v : undefined
+    const item = id(r.item), reply = id(r.reply)
+    if (typeof r.mid !== 'string' || r.mid === mid || !what || item === undefined || reply === undefined) throw new HttpError(400, 'Bad request')
+    const about = await db.prepare('SELECT user_id FROM circle_members WHERE circle_id = ? AND mid = ?').bind(circle, r.mid).first<{ user_id: string }>()
+    if (!about) throw new HttpError(404, 'They’re no longer in this circle.')
+    const sent = await db.prepare('SELECT COUNT(*) AS n FROM circle_reports WHERE by_user = ? AND at > ?').bind(userId, now - DAY).first<{ n: number }>()
+    if ((sent?.n ?? 0) >= REPORTS_PER_DAY) throw new HttpError(429, 'Too many reports today. Try again tomorrow.')
+    await db.prepare('INSERT INTO circle_reports (id, circle_id, by_user, about, item, reply, what, at) VALUES (?, ?, ?, ?, ?, ?, ?, ?)')
+      .bind(random(12), circle, userId, about.user_id, item, reply, what, now).run()
+    ctx.waitUntil(tellAboutReport(env, what))
+    return json({ ok: true })
   }
   if (b === 'invites' && !c && req.method === 'POST') {
     const { id, wrapped } = await readJson<{ id: string; wrapped: string }>(req)
@@ -1046,6 +1097,8 @@ table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right
 td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
 input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #d9cdb8;width:100%;box-sizing:border-box;margin-top:10px}
 button{background:#8a5a2b;color:#fff;border-color:#8a5a2b;font-weight:bold;min-height:56px}p.error{color:#b3261e;font-weight:bold}
+.report{border:2px solid #b3261e;border-radius:14px;padding:14px 16px;background:#fff;margin-bottom:16px}.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}
+.report .when{color:#6b6255;font-size:.85em;margin:0}button.quiet{background:transparent;color:inherit;border-color:#d9cdb8}
 @media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card,input{background:#202026;color:#e6e3dc;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}}`
 const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>${STATS_STYLE}</style></head><body><h1>My Quiet Bible in numbers</h1>${body}</body></html>`,
@@ -1074,11 +1127,20 @@ async function statsRoute(req: Request, env: Env) {
   const ip = req.headers.get('CF-Connecting-IP') ?? '', at = Date.now()
   const recent = (statsMisses.get(ip) ?? []).filter(t => at - t < 60_000)
   if (recent.length >= 5) return form('Too many tries. Wait a minute.')
-  const key = String((await req.formData().catch(() => null))?.get('key') ?? '')
+  const sent = await req.formData().catch(() => null)
+  const key = String(sent?.get('key') ?? '')
   if (!(await same(key, env.STATS_KEY))) {
     statsMisses.set(ip, [...recent, at])
     return form('That word isn’t right.')
   }
+  const act = String(sent?.get('act') ?? ''), which = String(sent?.get('report') ?? '')
+  if (act && which) await moderate(env, act, which)
+  const reports = (await env.DB.prepare('SELECT id, what, at, item, reply FROM circle_reports WHERE done IS NULL ORDER BY at LIMIT 50')
+    .all<{ id: string; what: string; at: number; item: string | null; reply: string | null }>()).results
+  const reportList = reports.length ? `<h2>Reported, waiting for you</h2>
+${reports.map(r => `<div class="report"><p class="when">${new Date(r.at).toISOString().slice(0, 16).replace('T', ' ')} UTC</p><pre>${esc(r.what)}</pre>
+<form method="post" action="/stats"><input type="hidden" name="key" value="${esc(key)}"><input type="hidden" name="report" value="${esc(r.id)}">
+${r.item || r.reply ? '<button name="act" value="remove">Remove it</button>' : ''}<button name="act" value="out">Take the person out of the circle</button><button name="act" value="keep" class="quiet">Keep it, it’s fine</button></form></div>`).join('')}` : ''
   const now = new Date(), day = now.toISOString().slice(0, 10)
   const week = Date.now() - 7 * DAY
   const count = (sql: string, ...args: unknown[]) => env.DB.prepare(sql).bind(...args).first<{ n: number }>().then(r => r?.n ?? 0)
@@ -1113,7 +1175,7 @@ async function statsRoute(req: Request, env: Env) {
   const langs = LANGS.map(l => [LANG_NAMES[l], sum(`lang:${l}`, since30)] as [string, number])
   const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
-  return statsPage(`<div class="grid">
+  return statsPage(`${reportList}<div class="grid">
 ${big.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')}
 </div><h2>Languages, last 30 days</h2><div class="grid">
 ${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round(100 * n / langTotal) : 0}%</b><span>${n.toLocaleString('en')} daily hellos</span></div>`).join('')}
@@ -1121,6 +1183,24 @@ ${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
 </table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
 On the first day, every device already using the app counts as new. Days are in UTC.</p>`)
+}
+
+/** What the maker decided about a report: remove what was reported, take
+ *  the person out of the circle (with everything they shared there), or
+ *  keep it. */
+async function moderate(env: Env, act: string, id: string) {
+  const db = env.DB
+  const r = await db.prepare('SELECT circle_id, about, item, reply FROM circle_reports WHERE id = ? AND done IS NULL').bind(id)
+    .first<{ circle_id: string; about: string; item: string | null; reply: string | null }>()
+  if (!r) return
+  if (act === 'remove' && r.reply && r.item) await db.prepare('DELETE FROM circle_replies WHERE circle_id = ? AND item = ? AND id = ? AND user_id = ?').bind(r.circle_id, r.item, r.reply, r.about).run()
+  else if (act === 'remove' && r.item) {
+    const own = await db.prepare('SELECT 1 FROM circle_items WHERE circle_id = ? AND id = ? AND user_id = ?').bind(r.circle_id, r.item, r.about).first()
+    if (own) await db.batch(['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies'].map(t => db.prepare(`DELETE FROM ${t} WHERE circle_id = ? AND item = ?`).bind(r.circle_id, r.item))
+      .concat(db.prepare('DELETE FROM circle_items WHERE circle_id = ? AND id = ?').bind(r.circle_id, r.item)))
+  } else if (act === 'out') await db.batch(leaveCircle(db, r.circle_id, r.about))
+  else if (act !== 'keep') return
+  await db.prepare('UPDATE circle_reports SET done = ? WHERE id = ?').bind(Date.now(), id).run()
 }
 
 async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
@@ -1291,7 +1371,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
       await env.DB.prepare('DELETE FROM push_circles WHERE endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?)').bind(userId).run()
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'circle_blocks', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

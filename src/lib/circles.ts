@@ -58,8 +58,9 @@ export interface FeedItem {
 /** When it belongs in the circle's days: a prayer on the day it was prayed
  *  (never later than it was shared), anything else when it was shared. */
 export const dayAt = (i: FeedItem) => i.body.k === 'prayer' && i.body.prayed ? Math.min(i.body.prayed, i.at) : i.at
-/** `name`: the circle's name as it is now, if someone renamed it. */
-export interface Feed { me: string; name?: string; members: Member[]; items: FeedItem[] }
+/** `name`: the circle's name as it is now, if someone renamed it.
+ *  `blocked`: the members you blocked here; nothing of theirs is in `items`. */
+export interface Feed { me: string; name?: string; members: Member[]; items: FeedItem[]; blocked?: string[] }
 
 function token() {
   const a = loadAccount()
@@ -407,8 +408,12 @@ export async function loadFeed(circle: string): Promise<Feed> {
   const r = await api<{
     me: string; name?: string | null; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
     amens: { item: string; mid: string; at?: number }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
-    reacts?: { item: string; mid: string; at: number; body: string }[]
+    reacts?: { item: string; mid: string; at: number; body: string }[]; blocked?: string[]
   }>(`/circles/${circle}`, { token: token() })
+  // Someone you blocked: nothing they share, write, or react with shows here.
+  const blocked = new Set(r.blocked ?? [])
+  const shown = <T extends { mid: string }>(rows: T[]) => rows.filter(x => !blocked.has(x.mid))
+  r.items = shown(r.items); r.amens = shown(r.amens); r.replies = shown(r.replies ?? []); r.reacts = shown(r.reacts ?? [])
   const members: Member[] = await Promise.all(r.members.map(async m => ({
     mid: m.mid, name: text(await openJson(key, m.name, `${circle}/me`).catch(() => ''), 60) || 'Someone',
     ...(m.streak ? { streak: fromShared(await openJson(key, m.streak, `${circle}/streak/${m.mid}`).catch(() => undefined)) } : {}),
@@ -436,7 +441,7 @@ export async function loadFeed(circle: string): Promise<Feed> {
   // Someone may have renamed it since the list was last fetched.
   const name = r.name ? text(await openJson(key, r.name, `${circle}/name`).catch(() => ''), 80) : ''
   if (name) await keepCircleName(circle, name)
-  const feed: Feed = { me: r.me, ...(name ? { name } : {}), members, items }
+  const feed: Feed = { me: r.me, ...(name ? { name } : {}), members, items, ...(blocked.size ? { blocked: [...blocked] } : {}) }
   await meta.set(`circle:${circle}`, feed)
   return feed
 }
@@ -584,6 +589,17 @@ export async function reply(circle: string, item: string, said: string) {
 }
 export const removeReply = (circle: string, item: string, id: string) =>
   api(`/circles/${circle}/items/${item}/replies/${id}`, { method: 'DELETE', token: token() })
+
+/** Block someone in this circle, or stop: you no longer see what they share
+ *  or write here. They aren't told. */
+export async function block(circle: string, mid: string, on: boolean) {
+  await api(`/circles/${circle}/blocks/${mid}`, { method: on ? 'PUT' : 'DELETE', token: token() })
+}
+/** Report something to the app's maker. Everything is sealed, so the words
+ *  you saw are sent along with it, by you, on purpose. */
+export async function report(circle: string, about: { mid: string; item?: string; reply?: string; what: string }) {
+  await api(`/circles/${circle}/report`, { method: 'POST', token: token(), body: about })
+}
 
 export async function removeShared(circle: string, item: string) {
   await api(`/circles/${circle}/items/${item}`, { method: 'DELETE', token: token() })
