@@ -7,6 +7,11 @@ import { defragment, lengthMs, playable } from './mp4'
 const file = readFileSync('src/lib/fixtures/fragmented.m4a')
 const fragmented = file.buffer.slice(file.byteOffset, file.byteOffset + file.byteLength) as ArrayBuffer
 
+// Recorded by Chrome (as on an Android phone) for 6 seconds: it marks the
+// last sample of every fragment as shorter than it is.
+const chromeFile = readFileSync('src/lib/fixtures/chrome.m4a')
+const chrome = chromeFile.buffer.slice(chromeFile.byteOffset, chromeFile.byteOffset + chromeFile.byteLength) as ArrayBuffer
+
 type Box = { type: string; start: number; end: number }
 function boxes(b: Uint8Array, start = 0, end = b.length): Box[] {
   const v = new DataView(b.buffer, b.byteOffset), out: Box[] = []
@@ -81,6 +86,11 @@ describe('lengthMs', () => {
     const b = new Uint8Array(fragmented), moofs = boxes(b).filter(x => x.type === 'moof')
     const cut = fragmented.slice(0, moofs[2].start)
     expect(lengthMs(cut, 'audio/mp4')!).toBeLessThan(2500)
+  })
+  it('counts a whole Chrome recording, not its short-changed durations', () => {
+    // 6 seconds on the clock; the durations written add up to about 5.75.
+    expect(lengthMs(chrome, 'audio/mp4;codecs=opus')!).toBeGreaterThan(5800)
+    expect(lengthMs(chrome, 'audio/mp4;codecs=opus')!).toBeLessThan(6100)
   })
   it('stays quiet about other formats and junk', () => {
     expect(lengthMs(fragmented, 'audio/webm')).toBeUndefined()
