@@ -33,7 +33,7 @@ The web app spots the app by `QuietBibleApp/` in its user agent
 2. Open `ios/QuietBible.xcodeproj` in Xcode (16 or later).
 3. Click **QuietBible** (blue icon, top left) → target **QuietBible** →
    **Signing & Capabilities** → pick the team. The bundle ID is
-   `com.myquietbible.app`; Xcode registers it.
+   `com.myquietbible.ios`; Xcode registers it.
 
 ## Sending a version to the App Store
 
