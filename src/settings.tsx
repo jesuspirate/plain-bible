@@ -18,6 +18,7 @@ import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
 import { StreakRow } from './streaks'
+import { AWAY } from './sideways'
 import { deviceLang, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
@@ -365,6 +366,15 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     </div>
     <div class="field"><span>{t('Search bar')}</span>
       <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> {t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.')}</label>
+    </div>
+    <div class="field"><span>{t('Phone on its side')}</span>
+      <div class="col">
+        <span class="muted small">{t('While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.')}</span>
+        {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
+          <label><input type="checkbox" checked={settings.sideways.includes(a)}
+            onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} /> {label}</label>
+        ))}
+      </div>
     </div>
   </>
 

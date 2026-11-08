@@ -26,6 +26,7 @@ import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
 import { hello } from './lib/hello'
+import { AWAY, useSideways } from './sideways'
 
 // The status bar color the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -292,6 +293,9 @@ export function App() {
     return () => clearTimeout(t)
   }, [sync.account?.token])
 
+  // The phone on its side: the bars slide away as you read on.
+  const sidewaysEdge = useSideways(page === 'read' && !!settings, (Array.isArray(settings?.sideways) ? settings!.sideways : []).filter(a => AWAY.includes(a)))
+
   if (error) return (
     <div class="center">
       <p class="error">{t('Could not load the list of versions: {error}', { error })}</p>
@@ -336,6 +340,7 @@ export function App() {
           and opens the same panel. */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: byId.has(route.path[1]) ? route.path[1] : settings.version, book: route.path[2], chapter: +route.path[3] } : undefined} />}
+      {sidewaysEdge}
       <ListenPlayer />
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
