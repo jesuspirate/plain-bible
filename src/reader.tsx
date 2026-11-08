@@ -19,6 +19,8 @@ import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
+import { draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
+import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, WIDE } from './lib/spread'
 
 export function Reader({ route }: { route: Route }) {
@@ -239,6 +241,29 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
   // Verses you select are offered if you go to pray soon after.
+  // A new highlight is drawn in slowly, like a marker in your hand (a
+  // setting). The mark is already saved; this is only how it appears.
+  const pen = penAllowed(settings.penDraw)
+  const pens = useRef<{ keys: string[]; stop: () => void }[]>([])
+  useLayoutEffect(() => {
+    const keys = takeWaiting()
+    // A highlight taken off or given another color while it's still being
+    // drawn: that pen stops (and a new color starts again from the beginning).
+    for (const p of [...pens.current]) if (p.keys.some(k => !marks[k]?.c || keys.includes(k))) p.stop()
+    penHold(keys)
+    if (!keys.length) return
+    const here = keys.filter(k => k.startsWith(`${book}.${chapter}.`))
+    penUp(keys.filter(k => !here.includes(k)))
+    const els = here.map(k => document.getElementById('v' + k.slice(k.lastIndexOf('.') + 1))).filter((x): x is HTMLElement => !!x && !!marks[`${book}.${chapter}.${x.id.slice(1)}`]?.c)
+    if (!pen || !els.length || !article.current) { penUp(here); for (const x of els) x.classList.remove('hl-draw'); return }
+    for (const x of els) x.classList.add('hl-draw')
+    els.sort((a, z) => a.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
+    const p = { keys: here, stop: () => {} }
+    pens.current.push(p)
+    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) })
+  }, [marks])
+  // Turning the page puts the pen down at once.
+  useEffect(() => () => { for (const p of [...pens.current]) p.stop() }, [book, chapter])
   useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
   // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
   const [picking, setPicking] = useState(versePick)
@@ -426,7 +451,8 @@ export function Reader({ route }: { route: Route }) {
       const key = markKey(book, chapter, v), had = marks[key]?.c
       setMarks(all => {
         const next = { ...all[key], t: now } as Record<string, unknown>
-        if (had) delete next.c; else { next.c = lastColor(); next.v = version }
+        delete next.r
+        if (had) delete next.c; else { next.c = lastColor(); next.v = version; penDown([key]) }
         return { ...all, [key]: tidy(next as never) }
       })
       return
@@ -441,6 +467,116 @@ export function Reader({ route }: { route: Route }) {
   // side and move across together. Off in Settings, or with reduced motion,
   // the chapter just changes.
   const article = useRef<HTMLElement>(null)
+  // With a pen, the color follows the pen across the words, as slowly as you
+  // draw, and stays on just the words you crossed (src/lib/stroke.ts).
+  // A tap with the pen still selects the verse, like a finger.
+  useEffect(() => {
+    const el = article.current
+    if (!el || picking) return
+    const single = versions.length === 1
+    type At = { vt: HTMLElement; off: number }
+    let start: At | undefined, last: At | undefined, x0 = 0, y0 = 0, moved = false, frame = 0
+    let strips: HTMLElement[] = [], color = '', swallow = false
+    const vts = () => [...el.querySelectorAll<HTMLElement>(single ? '[id^="v"] .vt' : '[id^="v"] > .cell:first-child .vt')]
+    const at = (x: number, y: number): At | undefined => {
+      const c = caretAt(x, y)
+      const node = c?.node.nodeType === Node.TEXT_NODE ? c.node.parentElement : c?.node as HTMLElement | undefined
+      const vt = node?.closest<HTMLElement>('.vt')
+      if (!c || !vt || !el.contains(vt) || !vts().includes(vt)) return undefined
+      return { vt, off: offsetIn(vt, c.node, c.offset) }
+    }
+    const len = (vt: HTMLElement) => textNodes(vt).reduce((n, t) => n + t.length, 0)
+    // The verses between where the pen went down and where it is now.
+    const pieces = () => {
+      if (!start || !last) return []
+      const all = vts()
+      let [a, b] = [start, last]
+      const ia = all.indexOf(a.vt), ib = all.indexOf(b.vt)
+      if (ia > ib || (ia === ib && a.off > b.off)) [a, b] = [b, a]
+      return all.slice(Math.min(ia, ib), Math.max(ia, ib) + 1).map(vt => ({ vt, a: vt === a.vt ? a.off : 0, b: vt === b.vt ? b.off : len(vt) }))
+    }
+    const clear = () => { for (const x of strips) x.remove(); strips = []; if (!start) el.classList.remove('penning') }
+    const paint = () => {
+      frame = 0
+      clear()
+      const box = el.getBoundingClientRect(), fs = parseFloat(getComputedStyle(el).fontSize) || 18
+      for (const p of pieces()) {
+        if (p.b <= p.a) continue
+        for (const r of rangeOf(p.vt, p.a, p.b).getClientRects()) {
+          if (r.width < 1) continue
+          const s = inkStrip(r, el, box, color, settings.highlight, fs)
+          el.appendChild(s); strips.push(s)
+        }
+      }
+    }
+    const down = (e: PointerEvent) => {
+      if (e.pointerType !== 'pen' || e.button !== 0) return
+      const s = at(e.clientX, e.clientY)
+      if (!s) return
+      start = last = s; x0 = e.clientX; y0 = e.clientY; moved = false; color = lastColor()
+      el.classList.add('penning')
+      el.setPointerCapture(e.pointerId)
+      e.preventDefault()
+    }
+    const move = (e: PointerEvent) => {
+      if (!start || e.pointerType !== 'pen') return
+      if (!moved && Math.hypot(e.clientX - x0, e.clientY - y0) < 6) return
+      moved = true
+      last = at(e.clientX, e.clientY) ?? last
+      if (!frame) frame = requestAnimationFrame(paint)
+    }
+    const up = (e: PointerEvent) => {
+      if (!start || e.pointerType !== 'pen') return
+      const done = moved ? pieces() : []
+      start = last = undefined
+      if (frame) { cancelAnimationFrame(frame); frame = 0 }
+      if (!done.length) { clear(); return }
+      swallow = true
+      const now = Date.now()
+      setMarks(all => {
+        const out = { ...all }
+        for (const p of done) {
+          const v = Number(p.vt.closest('[id^="v"]')!.id.slice(1))
+          const text = textNodes(p.vt).map(t => t.data).join('')
+          const span = toWords(text, p.a, p.b)
+          if (span[1] <= span[0]) continue
+          const key = markKey(book, chapter, v), m = all[key]
+          if (m?.c && !m.r?.length && m.c === color) continue // already all highlighted
+          const spans = m?.c === color && m.r?.length && m.v === version ? addSpan(m.r, span, text) : [span]
+          const next = { ...m, c: color, v: version, t: now } as Record<string, unknown>
+          if (coversAll(spans, text)) delete next.r; else next.r = spans
+          out[key] = tidy(next as never)
+        }
+        return out
+      })
+      // The ink stays until the page shows the highlight itself.
+      requestAnimationFrame(() => requestAnimationFrame(clear))
+    }
+    const cancel = () => { start = last = undefined; clear() }
+    // The tap a drawn stroke ends with isn't a tap on the verse.
+    const click = (e: MouseEvent) => { if (swallow) { swallow = false; e.stopPropagation(); e.preventDefault() } }
+    // A pen on a touch screen would scroll the page; here it draws instead.
+    const touch = (e: TouchEvent) => {
+      if (start || [...e.touches].some(t => (t as Touch & { touchType?: string }).touchType === 'stylus')) e.preventDefault()
+    }
+    el.addEventListener('pointerdown', down)
+    el.addEventListener('pointermove', move)
+    el.addEventListener('pointerup', up)
+    el.addEventListener('pointercancel', cancel)
+    el.addEventListener('click', click, true)
+    el.addEventListener('touchstart', touch, { passive: false })
+    el.addEventListener('touchmove', touch, { passive: false })
+    return () => {
+      cancel()
+      el.removeEventListener('pointerdown', down)
+      el.removeEventListener('pointermove', move)
+      el.removeEventListener('pointerup', up)
+      el.removeEventListener('pointercancel', cancel)
+      el.removeEventListener('click', click, true)
+      el.removeEventListener('touchstart', touch)
+      el.removeEventListener('touchmove', touch)
+    }
+  }, [book, chapter, loaded, version, versions.join(), settings.highlight, !!picking])
   const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number; x0: number; tx: number; late: boolean }>()
   const mode = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
   const animate = mode !== 'off'
@@ -727,7 +863,11 @@ export function Reader({ route }: { route: Route }) {
   const page = (b: string, c: number, live: boolean) => {
     const mark = (v: number) => marks[markKey(b, c, v)]
     const rowsOf = Math.max(...versions.map(v => bibles[v].books[b]?.[c - 1]?.length ?? 0))
-    const cls = (base: string, v: number) => base + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
+    // Only some words highlighted (with a pen): shown in the version they were
+    // drawn in; in other versions the whole verse is highlighted.
+    const partial = (v: number) => { const m = mark(v); return !!(m?.c && m.r?.length && versions.includes(m.v!)) }
+    const part = (v: number, ver: string) => { const m = mark(v); return partial(v) && m!.v === ver ? m!.r : undefined }
+    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }
@@ -763,7 +903,7 @@ export function Reader({ route }: { route: Route }) {
           {primary.books[b][c - 1].map((raw, i) => raw && (
             <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
               <sup class="vn">{i + 1}</sup>{after(i + 1)}
-              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span>{tab(i + 1)}{' '}
+              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} ranges={part(i + 1, version)} markClass="hl-part" /></span>{tab(i + 1)}{' '}
             </span>
           ))}
         </p>
@@ -775,7 +915,7 @@ export function Reader({ route }: { route: Route }) {
             return (
               <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
                 <button class="vn" aria-label={t('Verse {v} options', { v: i + 1 })} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
-                {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span> : <span class="muted">—</span>}
+                {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} ranges={part(i + 1, v)} markClass="hl-part" /></span> : <span class="muted">—</span>}
                 {v === version && tab(i + 1)}
               </div>
             )
@@ -895,11 +1035,12 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
   const hasNote = notesCovering(marks, book, chapter, verses[0]).length > 0
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => { setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>
       for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
+      if ('c' in patch) delete next.r
       if (patch.c) next.v = version
       out[key] = tidy(next as never)
     }

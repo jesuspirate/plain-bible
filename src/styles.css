@@ -400,7 +400,7 @@ main.with-mini { padding-bottom: 144px; }
 
 /* ---- highlights & bookmarks ---- */
 .verse, .pv { cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.hl { --hl-mix: 55%; }
+.hl, .hlp { --hl-mix: 55%; }
 /* Marker (default): color behind the letters only, line by line, like a highlighter pen. */
 .hl .vt { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: .3em; padding: .04em .12em; margin: 0 -.06em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 /* Block: the whole verse. */
@@ -412,8 +412,22 @@ main.with-mini { padding-bottom: 144px; }
   text-decoration: underline; text-decoration-color: var(--hl); text-decoration-thickness: .16em; text-underline-offset: .22em; text-decoration-skip-ink: none; }
 .hl-preview { margin: 4px 0 0; font-family: var(--reading); font-size: 18px; line-height: 1.7; }
 .hl-preview .pv { cursor: default; }
-:root[data-theme='dark'] .hl { --hl-mix: 32%; }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl { --hl-mix: 32%; } }
+:root[data-theme='dark'] .hl, :root[data-theme='dark'] .hlp { --hl-mix: 32%; }
+/* Only some words highlighted, drawn with a pen (src/lib/stroke.ts). */
+mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: .3em; padding: .04em .12em; margin: 0 -.12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
+:root[data-hl='text'] mark.hl-part { background: none; padding: 0; margin: 0; color: color-mix(in srgb, var(--hl) var(--hl-ink), var(--text));
+  text-decoration: underline; text-decoration-color: var(--hl); text-decoration-thickness: .16em; text-underline-offset: .22em; text-decoration-skip-ink: none; }
+/* A new highlight drawn in by hand (src/lib/pen.ts): strips of ink behind the
+   words, while the verse's own highlight waits until the pen is done. */
+.hl-preview, article.chapter { position: relative; }
+.pen-ink { position: absolute; z-index: 0; pointer-events: none; background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); }
+.pen-ink.pen-line { background: var(--hl); }
+.hl-draw .vt, .hl-draw .vn, .penning .vt { position: relative; z-index: 1; }
+.penning { -webkit-user-select: none; user-select: none; }
+.hl.hl-draw .vt { background: none; }
+:root[data-hl='block'] .verse.hl.hl-draw .cell, :root[data-hl='block'] .pv.hl.hl-draw { background: none; }
+:root[data-hl='text'] .hl.hl-draw .vt { text-decoration-color: transparent; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl, :root[data-theme='system'] .hlp { --hl-mix: 32%; } }
 /* After the verse number: a bookmark ribbon and a note icon */
 .note-mark { all: unset; cursor: pointer; display: inline-flex; vertical-align: -.08em; font-size: .9em; color: var(--accent); margin: 0 5px 0 -1px; padding: 2px; border-radius: 5px; }
 @media (hover: hover) { .note-mark:hover { background: var(--chip); } }

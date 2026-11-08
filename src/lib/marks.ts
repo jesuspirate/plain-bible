@@ -21,8 +21,11 @@ export interface Mark {
   c?: string
   /** bookmarked */
   b?: 1
-  /** version it was made in (informational) */
+  /** version it was made in */
   v?: string
+  /** only these words are highlighted (letter spans in the verse's text in
+   *  version `v`), drawn with a pen; none means the whole verse */
+  r?: [number, number][]
   /** your notes, by id. A note on a passage lives on its first verse. */
   ns?: Record<string, Note>
   /** Older single note, its verses and when it changed. Read once and moved

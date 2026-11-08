@@ -57,9 +57,9 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
 }
 
 /** Verse text with optional highlight ranges (plain-text offsets) and Strong's tagging. */
-export function VerseText({ raw, ranges = [], strongs, numbers, onStrongs, mark = [] }: {
+export function VerseText({ raw, ranges = [], strongs, numbers, onStrongs, mark = [], markClass }: {
   raw: string; ranges?: Range[]; strongs?: boolean; numbers?: boolean
-  onStrongs?: (num: string) => void; mark?: string[]
+  onStrongs?: (num: string) => void; mark?: string[]; markClass?: string
 }) {
   const segs = segments(raw)
   const out: preact.JSX.Element[] = []
@@ -74,7 +74,7 @@ export function VerseText({ raw, ranges = [], strongs, numbers, onStrongs, mark 
       const [a, b] = ranges[ri]
       if (a > p) pieces.push(<>{s.text.slice(p - start, a - start)}</>)
       const hs = Math.max(a, p), he = Math.min(b, end)
-      if (he > hs) pieces.push(<mark>{s.text.slice(hs - start, he - start)}</mark>)
+      if (he > hs) pieces.push(<mark class={markClass}>{s.text.slice(hs - start, he - start)}</mark>)
       p = Math.max(p, he)
       if (b <= end) ri++
       else break

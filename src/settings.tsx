@@ -13,6 +13,7 @@ import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
+import { draw, penAllowed } from './lib/pen'
 import { AccountSection } from './account'
 import { Saved } from './saved'
 import { Search } from './search'
@@ -337,12 +338,10 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
     <div class="field"><span>{t('Highlights')}</span>
       <div class="col">
-        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')}</span>
+        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</span>
         {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
-        <p class="hl-preview" aria-hidden="true">
-          <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
-          <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
-        </p>
+        <HlPreview />
+        <label><input type="checkbox" checked={settings.penDraw} onChange={e => update({ penDraw: (e.target as HTMLInputElement).checked })} /> {t('Draw each new highlight slowly, like a marker in your hand.')}</label>
       </div>
     </div>
     <div class="field"><span>{t('Chapter turn')}</span>
@@ -472,5 +471,27 @@ function ResetSettings({ synced, onReset }: { synced: boolean; onReset: () => vo
         <button onClick={() => setAsking(false)}>{t('Cancel')}</button>
       </div>
     </div>
+  )
+}
+
+// Two highlighted lines, as the reader shows them. With the pen on, they're
+// drawn in again whenever you change how highlights look, so you can see it.
+function HlPreview() {
+  const { settings } = useApp()
+  const box = useRef<HTMLParagraphElement>(null)
+  const first = useRef(true)
+  useEffect(() => {
+    if (first.current) { first.current = false; return }
+    const el = box.current
+    if (!el || !penAllowed(settings.penDraw)) return
+    const vs = [...el.querySelectorAll<HTMLElement>('.pv')]
+    for (const v of vs) v.classList.add('hl-draw')
+    return draw(vs, settings.highlight, el, () => {})
+  }, [settings.penDraw, settings.highlight])
+  return (
+    <p class="hl-preview" aria-hidden="true" ref={box}>
+      <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
+      <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
+    </p>
   )
 }
