@@ -48,7 +48,10 @@ html.praying { overflow: hidden; }
 .pray-streak { margin: -4px 0 4px; font-size: 15px; opacity: .8; }
 .pray-verse { all: unset; cursor: pointer; display: block; padding-bottom: 6px; font: italic 17px/1.5 var(--reading); color: #fff7e6; }
 .pray-ref { display: block; margin-top: 4px; font: 600 13px var(--sans); font-style: normal; color: #ffe3a3; }
-.pray-kept { display: block; margin-top: 4px; font: 15px var(--sans); font-style: normal; color: #fff7e6; opacity: .8; }
+.pray-kept { all: unset; display: block; margin: 2px auto 8px; padding: 8px 4px; font: 16px/1.5 var(--sans); color: #fff7e6; text-align: center; }
+button.pray-kept { cursor: pointer; }
+.pray-kept strong, .pray-kept-ref { color: #ffe3a3; font-weight: 600; white-space: nowrap; }
+.pray-kept-ref { all: unset; cursor: pointer; display: inline-block; padding: 8px 2px; color: #ffe3a3; font-weight: 600; }
 .pray-foot { margin-top: auto; display: flex; flex-direction: column; align-items: center; gap: 8px; }
 .pray-pills { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; }
 .pray-pill { min-height: 50px; border: none; border-radius: 99px; padding: 10px 26px; font: 600 18px var(--sans); background: rgba(255, 255, 255, .92); color: #2a2218; }
@@ -112,11 +115,6 @@ div.pray-over { flex-direction: column; align-items: stretch; gap: 2px; padding:
 .pray-over ul { margin: 0; padding: 0; list-style: none; }
 .pray-over li { display: flex; align-items: center; justify-content: space-between; gap: 10px; min-height: 40px; }
 .pray-over-add { all: unset; cursor: pointer; align-self: flex-start; min-height: 40px; padding: 0 4px 0 0; font: 600 16px var(--sans); color: #ffe3a3; }
-.pray-tied-all p { margin: 4px 0 0; font: 15px var(--sans); color: #fff7e6; }
-.pray-tied-all .pray-tied { margin: 0 auto; }
-.pray-tied { all: unset; cursor: pointer; display: block; margin: 4px auto 8px; padding: 6px 4px; font: 15px var(--sans); color: #fff7e6; }
-.pray-tied strong { color: #ffe3a3; font-weight: 600; }
-.pray-add { margin: 6px 0 8px; }
 button.pray-list-verse { display: block; margin: 0; padding: 2px 0 0; font-size: 14px; text-align: left; }
 .pray-shared { display: block; padding-top: 2px; font-size: 14px; }
 button.pray-list-add { min-height: 36px; font-size: 15px; }
