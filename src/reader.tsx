@@ -19,6 +19,9 @@ import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
+import { draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
+import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
+import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, WIDE } from './lib/spread'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -31,6 +34,20 @@ export function Reader({ route }: { route: Route }) {
   const resumeAt = +(route.params.get('at') || 0)
   const parallel = (route.params.get('p')?.split(',') ?? settings.parallel).filter(id => byId.has(id) && id !== version)
   const versions = [version, ...parallel]
+  // On an iPad on its side or a computer, the chapter is an open book of two
+  // pages that you turn, unless you chose one page (Settings, Reading). Side
+  // by side versions keep their columns, which scroll.
+  const [wide, setWide] = useState(() => matchMedia(WIDE).matches)
+  useEffect(() => {
+    const m = matchMedia(WIDE), on = () => setWide(m.matches)
+    m.addEventListener?.('change', on)
+    return () => m.removeEventListener?.('change', on)
+  }, [])
+  const spread = wide && settings.spread !== 'single' && versions.length === 1
+  useEffect(() => {
+    document.documentElement.classList.toggle('spread-on', spread)
+    return () => document.documentElement.classList.remove('spread-on')
+  }, [spread])
 
   const [bibles, setBibles] = useState<Record<string, Bible>>({})
   const [error, setError] = useState('')
@@ -133,7 +150,7 @@ export function Reader({ route }: { route: Route }) {
       width = innerWidth
       // A page part way through a turn no longer fits; let it go.
       if (peekDir.current) swipe.current.drop()
-      else if (topVerse.current) toVerse(topVerse.current)
+      else if (topVerse.current) seek.current(topVerse.current)
     }
     const onHide = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save() }
     addEventListener('scroll', onScroll, { passive: true })
@@ -158,17 +175,30 @@ export function Reader({ route }: { route: Route }) {
     const same = prev && prev.book === book && prev.chapter === chapter
     if (!same) topVerse.current = 0
     requestAnimationFrame(() => {
+      // Turned to here from the chapter before (or after) in the open book:
+      // its first two pages (or its last two).
+      const into = arriving.current
+      arriving.current = 0
       // Same chapter, different version, columns, layout or text size: keep your verse.
-      if (same && prev.target === target && prev.at === resumeAt) toVerse(topVerse.current)
-      else if (target) document.getElementById('v' + target)?.scrollIntoView({ block: 'center' })
-      else if (resumeAt) toVerse(resumeAt)
+      if (same && prev.target === target && prev.at === resumeAt) seek.current(topVerse.current)
+      else if (target) spreadOn.current ? seek.current(target) : document.getElementById('v' + target)?.scrollIntoView({ block: 'center' })
+      else if (resumeAt) seek.current(resumeAt)
       // Opening the app, or coming back from Settings: the verse you were on.
-      else if (!prev) { const p = loadPlace(); toVerse(p && p.book === book && p.chapter === chapter ? p.verse : 1) }
+      else if (!prev) { const p = loadPlace(); seek.current(p && p.book === book && p.chapter === chapter ? p.verse : 1) }
+      else if (spreadOn.current && into === -1) toSheet(Infinity)
+      else if (spreadOn.current) toSheet(0)
       else window.scrollTo(0, 0)
       settling.current = false
       if (peekDir.current) { close(); settle() }
+      const l = landing.current
+      landing.current = undefined
+      if (l && !same) {
+        const a = article.current
+        if (a && spreadOn.current) l.fill(copyOf(a), into === -1 ? 2 * sheet.current + 1 : 0)
+        l.turn().then(() => { if (flipping.current === l) flipping.current = undefined })
+      }
     })
-  }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font])
+  }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font, spread])
 
   useEffect(() => setSelected([]), [book, chapter, version])
   // The verse the mouse last came to rest on (computers only): it keeps the ribbon.
@@ -211,6 +241,29 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
   // Verses you select are offered if you go to pray soon after.
+  // A new highlight is drawn in slowly, like a marker in your hand (a
+  // setting). The mark is already saved; this is only how it appears.
+  const pen = penAllowed(settings.penDraw)
+  const pens = useRef<{ keys: string[]; stop: () => void }[]>([])
+  useLayoutEffect(() => {
+    const keys = takeWaiting()
+    // A highlight taken off or given another color while it's still being
+    // drawn: that pen stops (and a new color starts again from the beginning).
+    for (const p of [...pens.current]) if (p.keys.some(k => !marks[k]?.c || keys.includes(k))) p.stop()
+    penHold(keys)
+    if (!keys.length) return
+    const here = keys.filter(k => k.startsWith(`${book}.${chapter}.`))
+    penUp(keys.filter(k => !here.includes(k)))
+    const els = here.map(k => document.getElementById('v' + k.slice(k.lastIndexOf('.') + 1))).filter((x): x is HTMLElement => !!x && !!marks[`${book}.${chapter}.${x.id.slice(1)}`]?.c)
+    if (!pen || !els.length || !article.current) { penUp(here); for (const x of els) x.classList.remove('hl-draw'); return }
+    for (const x of els) x.classList.add('hl-draw')
+    els.sort((a, z) => a.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
+    const p = { keys: here, stop: () => {} }
+    pens.current.push(p)
+    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) })
+  }, [marks])
+  // Turning the page puts the pen down at once.
+  useEffect(() => () => { for (const p of [...pens.current]) p.stop() }, [book, chapter])
   useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
   // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
   const [picking, setPicking] = useState(versePick)
@@ -255,6 +308,85 @@ export function Reader({ route }: { route: Route }) {
     if (i >= 0 && i < order.length) return [order[i].id, dir === 1 ? 1 : chapterCount(order[i].id)]
   }
   const step = (dir: 1 | -1) => { const d = dest(dir); if (d) nav(...d) }
+
+  // ---- the open book (see lib/spread) ----
+  const spreadOn = useRef(spread)
+  spreadOn.current = spread
+  const flowEl = useRef<HTMLDivElement>(null), leafBox = useRef<HTMLDivElement>(null)
+  // Which spread (two pages) of the chapter is open, from 0.
+  const sheet = useRef(0)
+  // The page turning over, and one waiting for the next chapter to be drawn.
+  const flipping = useRef<Leaf>(), landing = useRef<Leaf>()
+  // Arriving from the chapter after (-1, open at its end) or before (1).
+  const arriving = useRef<0 | 1 | -1>(0)
+  /** Opens spread k (Infinity: the last), and remembers its first verse as where you are. */
+  const toSheet = (k: number) => {
+    const f = flowEl.current, a = article.current
+    if (!f || !a) return
+    const pw = pageWidth(a)
+    k = Math.max(0, Math.min(k, sheetsOf(f, pw) - 1))
+    sheet.current = k
+    f.style.transform = k ? `translateX(${-k * 2 * pw}px)` : ''
+    const v = firstVerseOn(f, k, pw)
+    if (!v) return
+    topVerse.current = v
+    savePlace({ ...here.current, verse: v })
+    touchTrail({ ...here.current, verse: v })
+  }
+  /** Brings verse v into view: the spread it's on in the book, else scrolled to just under the top bar. */
+  const seek = useRef((v: number) => toVerse(v))
+  seek.current = (v: number) => {
+    if (!spreadOn.current) return toVerse(v)
+    const f = flowEl.current, a = article.current, el = v > 1 && document.getElementById('v' + v)
+    window.scrollTo(0, 0)
+    if (!f || !a || !el) return toSheet(0)
+    toSheet(sheetOf(f, el, pageWidth(a)))
+    // The reading font may still be loading; once it has, find it again.
+    const at = sheet.current
+    document.fonts?.ready.then(() => { if (sheet.current === at && spreadOn.current && el.isConnected) toSheet(sheetOf(f, el, pageWidth(a))) })
+  }
+  // Turn the page: the next two pages, or the next chapter after the last.
+  const flip = (dir: 1 | -1) => {
+    const f = flowEl.current, a = article.current, box = leafBox.current
+    if (!f || !a || !box || flipping.current) return
+    const pw = pageWidth(a), k = sheet.current
+    const inside = dir === 1 ? k < sheetsOf(f, pw) - 1 : k > 0
+    if (!inside && !dest(dir)) return
+    // From here the address leads to where you are, not to a verse you jumped to.
+    if (/[?&](v|at)=/.test(location.hash)) history.replaceState(history.state, '', withoutVerse(location.hash))
+    if (!animate) {
+      if (inside) return toSheet(k + dir)
+      arriving.current = dir
+      return step(dir)
+    }
+    const l = leaf(box, copyOf(a), k, dir, pw, 620)
+    flipping.current = l
+    if (inside) {
+      toSheet(k + dir)
+      l.fill(copyOf(a), dir === 1 ? 2 * sheet.current : 2 * sheet.current + 1)
+      l.turn().then(() => { if (flipping.current === l) flipping.current = undefined })
+      return
+    }
+    // The page lifts once the next chapter is drawn beneath it (above).
+    // Should that never come, it goes away by itself.
+    arriving.current = dir
+    landing.current = l
+    setTimeout(() => { if (landing.current === l) { landing.current = undefined; l.drop(); if (flipping.current === l) flipping.current = undefined } }, 2000)
+    step(dir)
+  }
+  // With a mouse wheel (or two fingers up and down on a trackpad) the book
+  // turns a page each time you scroll; one long scroll turns just one.
+  const wy = useRef({ acc: 0, done: false, timer: 0 })
+  const scrollTurn = (e: WheelEvent) => {
+    if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .settings-sheet, .peek')) return
+    e.preventDefault()
+    const w = wy.current
+    clearTimeout(w.timer)
+    w.timer = window.setTimeout(() => { w.acc = 0; w.done = false }, 220)
+    if (w.done) return
+    w.acc += e.deltaY
+    if (Math.abs(w.acc) > 40) { w.done = true; flip(w.acc > 0 ? 1 : -1) }
+  }
 
   useEffect(() => {
     const onKey = (e: KeyboardEvent) => {
@@ -319,7 +451,8 @@ export function Reader({ route }: { route: Route }) {
       const key = markKey(book, chapter, v), had = marks[key]?.c
       setMarks(all => {
         const next = { ...all[key], t: now } as Record<string, unknown>
-        if (had) delete next.c; else { next.c = lastColor(); next.v = version }
+        delete next.r
+        if (had) delete next.c; else { next.c = lastColor(); next.v = version; penDown([key]) }
         return { ...all, [key]: tidy(next as never) }
       })
       return
@@ -334,6 +467,116 @@ export function Reader({ route }: { route: Route }) {
   // side and move across together. Off in Settings, or with reduced motion,
   // the chapter just changes.
   const article = useRef<HTMLElement>(null)
+  // With a pen, the color follows the pen across the words, as slowly as you
+  // draw, and stays on just the words you crossed (src/lib/stroke.ts).
+  // A tap with the pen still selects the verse, like a finger.
+  useEffect(() => {
+    const el = article.current
+    if (!el || picking) return
+    const single = versions.length === 1
+    type At = { vt: HTMLElement; off: number }
+    let start: At | undefined, last: At | undefined, x0 = 0, y0 = 0, moved = false, frame = 0
+    let strips: HTMLElement[] = [], color = '', swallow = false
+    const vts = () => [...el.querySelectorAll<HTMLElement>(single ? '[id^="v"] .vt' : '[id^="v"] > .cell:first-child .vt')]
+    const at = (x: number, y: number): At | undefined => {
+      const c = caretAt(x, y)
+      const node = c?.node.nodeType === Node.TEXT_NODE ? c.node.parentElement : c?.node as HTMLElement | undefined
+      const vt = node?.closest<HTMLElement>('.vt')
+      if (!c || !vt || !el.contains(vt) || !vts().includes(vt)) return undefined
+      return { vt, off: offsetIn(vt, c.node, c.offset) }
+    }
+    const len = (vt: HTMLElement) => textNodes(vt).reduce((n, t) => n + t.length, 0)
+    // The verses between where the pen went down and where it is now.
+    const pieces = () => {
+      if (!start || !last) return []
+      const all = vts()
+      let [a, b] = [start, last]
+      const ia = all.indexOf(a.vt), ib = all.indexOf(b.vt)
+      if (ia > ib || (ia === ib && a.off > b.off)) [a, b] = [b, a]
+      return all.slice(Math.min(ia, ib), Math.max(ia, ib) + 1).map(vt => ({ vt, a: vt === a.vt ? a.off : 0, b: vt === b.vt ? b.off : len(vt) }))
+    }
+    const clear = () => { for (const x of strips) x.remove(); strips = []; if (!start) el.classList.remove('penning') }
+    const paint = () => {
+      frame = 0
+      clear()
+      const box = el.getBoundingClientRect(), fs = parseFloat(getComputedStyle(el).fontSize) || 18
+      for (const p of pieces()) {
+        if (p.b <= p.a) continue
+        for (const r of rangeOf(p.vt, p.a, p.b).getClientRects()) {
+          if (r.width < 1) continue
+          const s = inkStrip(r, el, box, color, settings.highlight, fs)
+          el.appendChild(s); strips.push(s)
+        }
+      }
+    }
+    const down = (e: PointerEvent) => {
+      if (e.pointerType !== 'pen' || e.button !== 0) return
+      const s = at(e.clientX, e.clientY)
+      if (!s) return
+      start = last = s; x0 = e.clientX; y0 = e.clientY; moved = false; color = lastColor()
+      el.classList.add('penning')
+      el.setPointerCapture(e.pointerId)
+      e.preventDefault()
+    }
+    const move = (e: PointerEvent) => {
+      if (!start || e.pointerType !== 'pen') return
+      if (!moved && Math.hypot(e.clientX - x0, e.clientY - y0) < 6) return
+      moved = true
+      last = at(e.clientX, e.clientY) ?? last
+      if (!frame) frame = requestAnimationFrame(paint)
+    }
+    const up = (e: PointerEvent) => {
+      if (!start || e.pointerType !== 'pen') return
+      const done = moved ? pieces() : []
+      start = last = undefined
+      if (frame) { cancelAnimationFrame(frame); frame = 0 }
+      if (!done.length) { clear(); return }
+      swallow = true
+      const now = Date.now()
+      setMarks(all => {
+        const out = { ...all }
+        for (const p of done) {
+          const v = Number(p.vt.closest('[id^="v"]')!.id.slice(1))
+          const text = textNodes(p.vt).map(t => t.data).join('')
+          const span = toWords(text, p.a, p.b)
+          if (span[1] <= span[0]) continue
+          const key = markKey(book, chapter, v), m = all[key]
+          if (m?.c && !m.r?.length && m.c === color) continue // already all highlighted
+          const spans = m?.c === color && m.r?.length && m.v === version ? addSpan(m.r, span, text) : [span]
+          const next = { ...m, c: color, v: version, t: now } as Record<string, unknown>
+          if (coversAll(spans, text)) delete next.r; else next.r = spans
+          out[key] = tidy(next as never)
+        }
+        return out
+      })
+      // The ink stays until the page shows the highlight itself.
+      requestAnimationFrame(() => requestAnimationFrame(clear))
+    }
+    const cancel = () => { start = last = undefined; clear() }
+    // The tap a drawn stroke ends with isn't a tap on the verse.
+    const click = (e: MouseEvent) => { if (swallow) { swallow = false; e.stopPropagation(); e.preventDefault() } }
+    // A pen on a touch screen would scroll the page; here it draws instead.
+    const touch = (e: TouchEvent) => {
+      if (start || [...e.touches].some(t => (t as Touch & { touchType?: string }).touchType === 'stylus')) e.preventDefault()
+    }
+    el.addEventListener('pointerdown', down)
+    el.addEventListener('pointermove', move)
+    el.addEventListener('pointerup', up)
+    el.addEventListener('pointercancel', cancel)
+    el.addEventListener('click', click, true)
+    el.addEventListener('touchstart', touch, { passive: false })
+    el.addEventListener('touchmove', touch, { passive: false })
+    return () => {
+      cancel()
+      el.removeEventListener('pointerdown', down)
+      el.removeEventListener('pointermove', move)
+      el.removeEventListener('pointerup', up)
+      el.removeEventListener('pointercancel', cancel)
+      el.removeEventListener('click', click, true)
+      el.removeEventListener('touchstart', touch)
+      el.removeEventListener('touchmove', touch)
+    }
+  }, [book, chapter, loaded, version, versions.join(), settings.highlight, !!picking])
   const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number; x0: number; tx: number; late: boolean }>()
   const mode = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
   const animate = mode !== 'off'
@@ -441,6 +684,7 @@ export function Reader({ route }: { route: Route }) {
     step(dir)
   })
   const turn = (dir: 1 | -1) => {
+    if (spread) return flip(dir)
     if (!animate) return step(dir)
     if (busy.current) return queue(dir)
     if (!dest(dir)) return
@@ -452,7 +696,7 @@ export function Reader({ route }: { route: Route }) {
   // The page follows a sideways drag of dx pixels; at the start or end of the
   // Bible it only gives a little.
   const follow = (dx: number) => {
-    if (!animate || busy.current || !dx) return
+    if (spread || !animate || busy.current || !dx) return
     const dir = dx < 0 ? 1 : -1
     if (!dest(dir)) { if (article.current) article.current.style.transform = `translateX(${dx * .2}px)`; return }
     open(dir)
@@ -461,6 +705,7 @@ export function Reader({ route }: { route: Route }) {
   // Let go: turn to the next (1) or previous (-1) chapter, or put the page back (0).
   // A swipe while a page is still turning is kept for when it lands.
   const release = (dir: 1 | -1 | 0) => {
+    if (spread) { if (dir) flip(dir); return }
     if (!animate) { if (dir) step(dir); return }
     if (busy.current) { if (dir) queue(dir); return }
     if (dir && dest(dir)) {
@@ -477,6 +722,7 @@ export function Reader({ route }: { route: Route }) {
   // swiped page back, so nothing is left part way when you come back.
   const drop = () => {
     touch.current = undefined
+    flipping.current?.drop(); flipping.current = undefined; landing.current = undefined
     if (landNow.current) landNow.current()
     else if (peekDir.current && !busy.current) { close(); settle() }
   }
@@ -577,7 +823,7 @@ export function Reader({ route }: { route: Route }) {
         w.axis = w.sx > w.sy * 2 ? 'x' : 'y'
         if (w.axis === 'x') w.dx = -(w.px - e.deltaX)
       }
-      if (w.axis === 'y') return
+      if (w.axis === 'y') return spread ? scrollTurn(e) : undefined
       if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .sb-chapter-row')) return
       e.preventDefault()
       clearTimeout(w.timer)
@@ -617,7 +863,11 @@ export function Reader({ route }: { route: Route }) {
   const page = (b: string, c: number, live: boolean) => {
     const mark = (v: number) => marks[markKey(b, c, v)]
     const rowsOf = Math.max(...versions.map(v => bibles[v].books[b]?.[c - 1]?.length ?? 0))
-    const cls = (base: string, v: number) => base + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
+    // Only some words highlighted (with a pen): shown in the version they were
+    // drawn in; in other versions the whole verse is highlighted.
+    const partial = (v: number) => { const m = mark(v); return !!(m?.c && m.r?.length && versions.includes(m.v!)) }
+    const part = (v: number, ver: string) => { const m = mark(v); return partial(v) && m!.v === ver ? m!.r : undefined }
+    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }
@@ -653,7 +903,7 @@ export function Reader({ route }: { route: Route }) {
           {primary.books[b][c - 1].map((raw, i) => raw && (
             <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
               <sup class="vn">{i + 1}</sup>{after(i + 1)}
-              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span>{tab(i + 1)}{' '}
+              <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} ranges={part(i + 1, version)} markClass="hl-part" /></span>{tab(i + 1)}{' '}
             </span>
           ))}
         </p>
@@ -665,7 +915,7 @@ export function Reader({ route }: { route: Route }) {
             return (
               <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
                 <button class="vn" aria-label={t('Verse {v} options', { v: i + 1 })} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
-                {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} /></span> : <span class="muted">—</span>}
+                {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} ranges={part(i + 1, v)} markClass="hl-part" /></span> : <span class="muted">—</span>}
                 {v === version && tab(i + 1)}
               </div>
             )
@@ -681,11 +931,21 @@ export function Reader({ route }: { route: Route }) {
       {!loaded && !error && <p class="muted center">{t('Loading…')}</p>}
       {loaded && rows === 0 && <p class="muted center">{t('{version} does not include {book} {chapter}.', { version: info?.name ?? version, book: bookName(book), chapter: String(chapter) })}</p>}
 
-      {loaded && rows > 0 && (
+      {loaded && rows > 0 && !spread && (
         <article key={`${book}.${chapter}`} ref={article}
           class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
           {page(book, chapter, true)}
         </article>
+      )}
+      {loaded && rows > 0 && spread && (
+        <div class="spread-box">
+          <article key={`${book}.${chapter}`} ref={article} class={`chapter ${settings.layout} cols-1 spread`}>
+            <div class="spread-flow" ref={flowEl}>{page(book, chapter, true)}</div>
+          </article>
+          <div class="leaf-box" ref={leafBox} />
+          <button class="spread-turn back" aria-label={t('Previous')} onClick={() => flip(-1)}><span aria-hidden="true">‹</span></button>
+          <button class="spread-turn on" aria-label={t('Next')} onClick={() => flip(1)}><span aria-hidden="true">›</span></button>
+        </div>
       )}
 
       {peek && (
@@ -775,11 +1035,12 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
   const hasNote = notesCovering(marks, book, chapter, verses[0]).length > 0
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => { setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>
       for (const [k, v] of Object.entries(patch)) { if (v === null) delete next[k]; else next[k] = v }
+      if ('c' in patch) delete next.r
       if (patch.c) next.v = version
       out[key] = tidy(next as never)
     }

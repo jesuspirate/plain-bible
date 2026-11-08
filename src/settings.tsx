@@ -13,6 +13,7 @@ import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
+import { draw, penAllowed } from './lib/pen'
 import { AccountSection } from './account'
 import { Saved } from './saved'
 import { Search } from './search'
@@ -338,12 +339,10 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
     <div class="field"><span>{t('Highlights')}</span>
       <div class="col">
-        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')}</span>
+        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</span>
         {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
-        <p class="hl-preview" aria-hidden="true">
-          <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
-          <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
-        </p>
+        <HlPreview />
+        <label><input type="checkbox" checked={settings.penDraw} onChange={e => update({ penDraw: (e.target as HTMLInputElement).checked })} /> {t('Draw each new highlight slowly, like a marker in your hand.')}</label>
       </div>
     </div>
     <div class="field"><span>{t('Chapter turn')}</span>
@@ -352,6 +351,12 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
       </div>
     </div>
+    {matchMedia('(min-width: 1000px)').matches && <div class="field"><span>{t('Big screen')}</span>
+      <div class="col">
+        {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
+        <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
+      </div>
+    </div>}
     <div class="field"><span>{t('Notes')}</span>
       <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> {t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.')}</label>
     </div>
@@ -476,5 +481,27 @@ function ResetSettings({ synced, onReset }: { synced: boolean; onReset: () => vo
         <button onClick={() => setAsking(false)}>{t('Cancel')}</button>
       </div>
     </div>
+  )
+}
+
+// Two highlighted lines, as the reader shows them. With the pen on, they're
+// drawn in again whenever you change how highlights look, so you can see it.
+function HlPreview() {
+  const { settings } = useApp()
+  const box = useRef<HTMLParagraphElement>(null)
+  const first = useRef(true)
+  useEffect(() => {
+    if (first.current) { first.current = false; return }
+    const el = box.current
+    if (!el || !penAllowed(settings.penDraw)) return
+    const vs = [...el.querySelectorAll<HTMLElement>('.pv')]
+    for (const v of vs) v.classList.add('hl-draw')
+    return draw(vs, settings.highlight, el, () => {})
+  }, [settings.penDraw, settings.highlight])
+  return (
+    <p class="hl-preview" aria-hidden="true" ref={box}>
+      <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
+      <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
+    </p>
   )
 }
