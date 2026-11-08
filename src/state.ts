@@ -1,6 +1,7 @@
 import type { SyncApi } from './account'
 import { createContext } from 'preact'
 import { useContext, useEffect, useState } from 'preact/hooks'
+import { holdUpdate } from './lib/update'
 import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
 import type { Marks } from './lib/marks'
@@ -177,7 +178,7 @@ export type VersePick = { prayer?: string; verses: PrayerVerse[]; from: PrayerVe
 let picking: VersePick | undefined
 /** The verses being picked for a prayer, if any. */
 export const versePick = () => picking
-export const pickVerses = (p: VersePick | undefined) => { picking = p; window.dispatchEvent(new Event(PICK_EVENT)) }
+export const pickVerses = (p: VersePick | undefined) => { picking = p; holdUpdate('pick', !!p); window.dispatchEvent(new Event(PICK_EVENT)) }
 
 // ---- hash routing ------------------------------------------------------------
 

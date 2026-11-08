@@ -3,6 +3,7 @@
 // say is recorded and kept on this device only; nothing is sent anywhere.
 import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
+import { holdUpdate } from './lib/update'
 import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
@@ -247,6 +248,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // in any chapter or book, are added to it, until Done.
   const pickFor = (verses: PrayerVerse[], prayer?: string) => { pickVerses({ prayer, verses, from: verses }); onClose() }
   const busy = phase === 'recording' || phase === 'paused' || phase === 'asking'
+  // Never update the app by itself in the middle of a prayer.
+  useEffect(() => { holdUpdate('prayer', busy); return () => holdUpdate('prayer', false) }, [busy])
   const toggle = () => phase === 'recording' ? stop() : phase !== 'asking' && start()
   const count = list?.length ?? 0
   const others = (kept?.verses ?? []).filter(v => !(v.book === comfort.book && v.chapter === comfort.chapter && v.verses.join() === comfort.verses.join()))
