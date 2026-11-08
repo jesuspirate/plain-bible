@@ -35,6 +35,7 @@ header.top { justify-content: space-between; flex-wrap: wrap; }
 .btc-pay { margin: 0 0 24px; }
 .qrs { display: grid; gap: 16px; }
 @media (min-width: 640px) { .qrs { grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); } }
+.qr[hidden] { display: none; }
 .qr { margin: 0; display: grid; gap: 14px; justify-items: start; padding: 20px; border: 1px solid var(--line); border-radius: 22px; background: var(--surface); }
 .qr-code { width: min(240px, 100%); }
 .qr-code svg { display: block; width: 100%; height: auto; border-radius: 10px; }
