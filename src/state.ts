@@ -28,6 +28,8 @@ export interface Settings {
   layout: 'paragraph' | 'verses'
   /** how highlights look: behind the letters like a pen, a full block, or colored letters */
   highlight: 'marker' | 'block' | 'text'
+  /** a new highlight is drawn in slowly, line by line, like a marker in your hand */
+  penDraw: boolean
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'
   /** how the page turns when you swipe to another chapter: over the next one, or side by side */
@@ -68,7 +70,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', penDraw: true, verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },

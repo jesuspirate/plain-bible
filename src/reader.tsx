@@ -19,6 +19,7 @@ import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
+import { draw, penAllowed, penDown, penOn, penUp, takeWaiting } from './lib/pen'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -211,6 +212,23 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
   // Verses you select are offered if you go to pray soon after.
+  // A new highlight is drawn in slowly, like a marker in your hand (a
+  // setting). The mark is already saved; this is only how it appears.
+  const pen = penAllowed(settings.penDraw)
+  const stopPens = useRef<(() => void)[]>([])
+  useLayoutEffect(() => {
+    const keys = takeWaiting()
+    if (!keys.length) return
+    const here = keys.filter(k => k.startsWith(`${book}.${chapter}.`))
+    penUp(keys.filter(k => !here.includes(k)))
+    const els = here.map(k => document.getElementById('v' + k.slice(k.lastIndexOf('.') + 1))).filter((x): x is HTMLElement => !!x && x.classList.contains('hl-draw'))
+    if (!pen || !els.length || !article.current) { penUp(here); for (const x of els) x.classList.remove('hl-draw'); return }
+    els.sort((a, z) => a.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
+    const stop = draw(els, settings.highlight, article.current, () => { penUp(here); stopPens.current = stopPens.current.filter(f => f !== stop) })
+    stopPens.current.push(stop)
+  }, [marks])
+  // Turning the page puts the pen down at once.
+  useEffect(() => () => { for (const f of [...stopPens.current]) f() }, [book, chapter])
   useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
   // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
   const [picking, setPicking] = useState(versePick)
@@ -319,7 +337,7 @@ export function Reader({ route }: { route: Route }) {
       const key = markKey(book, chapter, v), had = marks[key]?.c
       setMarks(all => {
         const next = { ...all[key], t: now } as Record<string, unknown>
-        if (had) delete next.c; else { next.c = lastColor(); next.v = version }
+        if (had) delete next.c; else { next.c = lastColor(); next.v = version; penDown([key]) }
         return { ...all, [key]: tidy(next as never) }
       })
       return
@@ -617,7 +635,7 @@ export function Reader({ route }: { route: Route }) {
   const page = (b: string, c: number, live: boolean) => {
     const mark = (v: number) => marks[markKey(b, c, v)]
     const rowsOf = Math.max(...versions.map(v => bibles[v].books[b]?.[c - 1]?.length ?? 0))
-    const cls = (base: string, v: number) => base + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
+    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? ' hl' : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }
@@ -775,7 +793,7 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
   const hasNote = notesCovering(marks, book, chapter, verses[0]).length > 0
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => { setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>

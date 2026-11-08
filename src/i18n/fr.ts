@@ -539,6 +539,7 @@ export default {
   "Medium": "Moyen",
   "Large": "Grand",
   "Tap a verse twice quickly to highlight it in the last color you used.": "Touchez deux fois rapidement un verset pour le surligner de la dernière couleur utilisée.",
+  "Draw each new highlight slowly, like a marker in your hand.": "Tracer chaque nouveau surlignage lentement, comme au surligneur à la main.",
   "Marker": "Surligneur",
   "Colored text": "Texte coloré",
   "Block": "Bloc",

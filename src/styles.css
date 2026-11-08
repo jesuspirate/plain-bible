@@ -413,6 +413,15 @@ main.with-mini { padding-bottom: 144px; }
 .hl-preview { margin: 4px 0 0; font-family: var(--reading); font-size: 18px; line-height: 1.7; }
 .hl-preview .pv { cursor: default; }
 :root[data-theme='dark'] .hl { --hl-mix: 32%; }
+/* A new highlight drawn in by hand (src/lib/pen.ts): strips of ink behind the
+   words, while the verse's own highlight waits until the pen is done. */
+.hl-preview, article.chapter { position: relative; }
+.pen-ink { position: absolute; z-index: 0; pointer-events: none; background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); }
+.pen-ink.pen-line { background: var(--hl); }
+.hl-draw .vt, .hl-draw .vn { position: relative; z-index: 1; }
+.hl.hl-draw .vt { background: none; }
+:root[data-hl='block'] .verse.hl.hl-draw .cell, :root[data-hl='block'] .pv.hl.hl-draw { background: none; }
+:root[data-hl='text'] .hl.hl-draw .vt { text-decoration-color: transparent; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl { --hl-mix: 32%; } }
 /* After the verse number: a bookmark ribbon and a note icon */
 .note-mark { all: unset; cursor: pointer; display: inline-flex; vertical-align: -.08em; font-size: .9em; color: var(--accent); margin: 0 5px 0 -1px; padding: 2px; border-radius: 5px; }
