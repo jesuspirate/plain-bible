@@ -8,7 +8,7 @@ import { SearchBar } from './searchbar'
 import { ListenPlayer } from './listen'
 import { Saved } from './saved'
 import { HistoryIcon, RefreshIcon } from './icons'
-import { applyUpdate, useUpdate } from './lib/update'
+import { applyUpdate, COUNTDOWN, readySince, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
 import { formatRef } from './lib/refs'
 import { plain } from './lib/text'
@@ -479,14 +479,19 @@ function HistoryButton({ route }: { route: Route }) {
 }
 
 // Shows only when a new version of the app is in: one tap switches to it,
-// back on the same verse.
+// back on the same verse. A ring around it runs down for a minute; then the
+// app updates by itself at the first quiet moment (src/lib/update.ts).
 function UpdateButton() {
   const state = useUpdate()
   const [busy, setBusy] = useState(false)
   if (state !== 'ready') return null
+  const gone = Math.min(COUNTDOWN, Date.now() - readySince())
   return (
-    <button class={'update-btn' + (busy ? ' busy' : '')} aria-label={t('New version ready. Tap to update')} title={t('New version ready: tap to update')}
+    <button class={'update-btn' + (busy ? ' busy' : '')} aria-label={t('New version ready. Tap to update now, or it updates by itself in a minute')} title={t('New version ready: tap to update now, or it updates by itself in a minute')}
       onClick={() => { setBusy(true); applyUpdate() }}>
+      <svg class="update-ring" viewBox="0 0 46 46" aria-hidden="true">
+        <circle cx="23" cy="23" r="19" pathLength="100" style={{ animationDuration: `${COUNTDOWN}ms`, animationDelay: `-${gone}ms` }} />
+      </svg>
       <RefreshIcon size={24} />
     </button>
   )

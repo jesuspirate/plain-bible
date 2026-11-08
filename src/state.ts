@@ -1,6 +1,7 @@
 import type { SyncApi } from './account'
 import { createContext } from 'preact'
 import { useContext, useEffect, useState } from 'preact/hooks'
+import { holdUpdate } from './lib/update'
 import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
 import type { Marks } from './lib/marks'
@@ -34,6 +35,8 @@ export interface Settings {
   verseNumbers: 'small' | 'medium' | 'large'
   /** how the page turns when you swipe to another chapter: over the next one, or side by side */
   turn: 'stack' | 'slide' | 'off'
+  /** on a wide screen (an iPad on its side, a computer): an open book of two pages, or one page that scrolls */
+  spread: 'double' | 'single'
   /** skin tone of the 🙏 on the prayer button: a modifier character, or '' for the plain one */
   prayTone: string
   /** a quiet line under the chapter title when you have notes on it */
@@ -70,7 +73,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', penDraw: true, verseNumbers: 'medium', turn: 'stack', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', penDraw: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -177,7 +180,7 @@ export type VersePick = { prayer?: string; verses: PrayerVerse[]; from: PrayerVe
 let picking: VersePick | undefined
 /** The verses being picked for a prayer, if any. */
 export const versePick = () => picking
-export const pickVerses = (p: VersePick | undefined) => { picking = p; window.dispatchEvent(new Event(PICK_EVENT)) }
+export const pickVerses = (p: VersePick | undefined) => { picking = p; holdUpdate('pick', !!p); window.dispatchEvent(new Event(PICK_EVENT)) }
 
 // ---- hash routing ------------------------------------------------------------
 

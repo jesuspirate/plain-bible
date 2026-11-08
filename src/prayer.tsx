@@ -1,7 +1,9 @@
 // A quiet moment to pray out loud. One glowing microphone over the page you
 // were reading, dimmed just enough that the words are still there. What you
 // say is recorded and kept on this device only; nothing is sent anywhere.
+import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
+import { holdUpdate } from './lib/update'
 import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
@@ -246,9 +248,15 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // in any chapter or book, are added to it, until Done.
   const pickFor = (verses: PrayerVerse[], prayer?: string) => { pickVerses({ prayer, verses, from: verses }); onClose() }
   const busy = phase === 'recording' || phase === 'paused' || phase === 'asking'
+  // Never update the app by itself in the middle of a prayer.
+  useEffect(() => { holdUpdate('prayer', busy); return () => holdUpdate('prayer', false) }, [busy])
   const toggle = () => phase === 'recording' ? stop() : phase !== 'asking' && start()
   const count = list?.length ?? 0
   const others = (kept?.verses ?? []).filter(v => !(v.book === comfort.book && v.chapter === comfort.chapter && v.verses.join() === comfort.verses.join()))
+  const comfortKept = !!kept && holdsVerse(kept.verses, comfort)
+  const keptLine = (refs: ComponentChildren) => !others.length ? t('Kept with this prayer')
+    : comfortKept ? tj('Kept with this prayer, along with {verses}', { verses: refs })
+    : tj('Prayed using {verse}', { verse: refs })
 
   return (
     <div class="pray" role="dialog" aria-modal="true" ref={root} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
@@ -293,15 +301,12 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
                   {settings.streaks && <PrayStreak />}
                   <button class="pray-verse" onClick={() => read(comfort)}>
                     “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
-                    {kept && holdsVerse(kept.verses, comfort) && <span class="pray-kept">✓ {t('Kept with this prayer')}</span>}
                   </button>
-                  {/* The verse above is already on screen: list only the others. */}
-                  {others.length === 1 && <button class="pray-tied" onClick={() => read(others[0])}>{tj('Prayed using {verse}', { verse: <strong>{verseLabel(others[0])}</strong> })} ›</button>}
-                  {others.length > 1 && <div class="pray-tied-all">
-                    <p>{t('Prayed using')}</p>
-                    {others.map(v => <button class="pray-tied" onClick={() => read(v)}><strong>{verseLabel(v)}</strong> ›</button>)}
-                  </div>}
-                  {kept && kept.verses.length < MAX_TIED && <button class="pray-pill pray-add" onClick={() => pickFor(kept.verses, kept.id)}>+ {t('Add a verse')}</button>}
+                  {/* One line says where the verses went: the verse above is
+                      kept with the prayer, and so are any picked before it. */}
+                  {(comfortKept || others.length > 0) && (others.length === 1
+                    ? <button class="pray-kept" onClick={() => read(others[0])}>✓ {keptLine(<strong>{verseLabel(others[0])}</strong>)} ›</button>
+                    : <p class="pray-kept">✓ {keptLine(others.map((v, i) => <>{i ? ', ' : ''}<button class="pray-kept-ref" onClick={() => read(v)}>{verseLabel(v)}</button></>))}</p>)}
                 </>
               : <p>{t('Tap and speak to God. Only you will hear this again.')}</p>}
           </div>
