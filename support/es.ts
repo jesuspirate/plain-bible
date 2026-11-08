@@ -16,7 +16,7 @@ export default {
   kofiSub: 'Una vez, o cada mes. Con tarjeta, Apple Pay o Google Pay, sin crear una cuenta.',
   leave: 'Se abre en una página nueva. Vuelve aquí, o a la Biblia, cuando termines.',
   btcH: 'Dona con bitcoin',
-  btcSub: 'On-chain o Lightning, directo a nuestro propio servidor, sin ninguna empresa de por medio.',
+  btcSub: 'On-chain o Lightning, directo a nuestro propio servidor, sin intermediarios ni terceros.',
   btcPay: 'Dona con bitcoin',
   btcAddress: 'Dirección bitcoin',
   btcAddressQr: 'Código QR de la dirección bitcoin',
