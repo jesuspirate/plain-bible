@@ -7,6 +7,7 @@ import type { SearchOptions } from './lib/query'
 import type { Marks } from './lib/marks'
 import type { PrayerVerse } from './lib/prayerVerses'
 import { N_, type Lang } from './i18n'
+import type { Away } from './sideways'
 
 export type FontId = 'literata' | 'source-serif' | 'garamond' | 'inter' | 'atkinson' | 'system'
 
@@ -26,6 +27,8 @@ export interface Settings {
   fontSize: number
   font: FontId
   searchBar: boolean
+  /** what slides away while you read with the phone on its side (none: nothing does) */
+  sideways: Away[]
   layout: 'paragraph' | 'verses'
   /** how highlights look: behind the letters like a pen, a full block, or colored letters */
   highlight: 'marker' | 'block' | 'text'
@@ -73,7 +76,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, layout: 'verses', highlight: 'marker', penDraw: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penDraw: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },

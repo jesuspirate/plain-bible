@@ -1063,3 +1063,22 @@ body.selecting .spread-turn { display: none; }
   .spread-box { --book-h: calc(100dvh - 216px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
   .spread-turn { width: 62px; height: 62px; font-size: 36px; }
 }
+
+/* ---- the phone on its side (src/sideways.tsx) ----
+   The bars picked in Settings slide away as you read on, so the words fill
+   the screen; only moved and faded, nothing redrawn, so it stays smooth. */
+header.top, .sb-field, .sb-circles, .sb-pray { transition: translate .3s cubic-bezier(.2, .8, .2, 1), opacity .25s; }
+@media (orientation: landscape) and (max-height: 500px) and (hover: none) {
+  :root.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
+  :root.away-search .sb:not(.sb-open) .sb-field,
+  :root.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
+    translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
+  }
+}
+/* Where the top bar was: a tap brings the bars back. A faint line shows where. */
+.away-edge {
+  all: unset; cursor: pointer; position: fixed; z-index: 11; top: 0; left: 0; right: 0;
+  height: calc(30px + env(safe-area-inset-top)); display: flex; justify-content: center; -webkit-tap-highlight-color: transparent;
+}
+.away-edge span { margin-top: calc(4px + env(safe-area-inset-top)); width: 44px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--muted) 35%, transparent); }
+@media (prefers-reduced-motion: reduce) { header.top, .sb-field, .sb-circles, .sb-pray { transition: none; } }
