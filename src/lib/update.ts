@@ -89,12 +89,17 @@ export function holdUpdate(why: string, on: boolean) { on ? holds.add(why) : hol
 
 /** Whether switching now could lose or interrupt something: anything open
  *  over the word (a note, the prayer screen, Settings, search), typing,
- *  verses selected, reading aloud, or a tap or scroll a moment ago. */
+ *  verses selected, reading aloud, a tap or scroll a moment ago, or being
+ *  on any page other than the reader. */
 export function busy(now = Date.now(), d: Pick<Document, 'querySelector' | 'activeElement'> = document) {
   if (holds.size || now - lastTouch < STILL) return true
   const a = d.activeElement as HTMLElement | null
   if (a && (a.matches?.('input, textarea, select') || a.isContentEditable)) return true
-  return !!d.querySelector('dialog[open], [role="dialog"], [aria-modal="true"], .sb-open, .selbar, .listen, .picked')
+  if (d.querySelector('dialog[open], [role="dialog"], [aria-modal="true"], .sb-open, .selbar, .listen, .picked')) return true
+  // Only while reading: the reader comes back on the very verse, but a list
+  // (search results, Saved, a circle, a Settings page) would come back at
+  // its top. Those wait until you're back on the word, or leave the app.
+  return !d.querySelector('.reader > article.chapter')
 }
 
 /** A new version is in. Switching right away could pull the page out from

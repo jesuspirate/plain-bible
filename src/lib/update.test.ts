@@ -2,9 +2,10 @@ import { describe, expect, it } from 'vitest'
 import { busy, holdUpdate } from './update'
 
 // A page with nothing open, or with one thing matching `open`.
+let reading = true
 const page = (open = '', active?: { matches: (s: string) => boolean; isContentEditable?: boolean }) => ({
   activeElement: (active ?? null) as unknown as Element,
-  querySelector: (s: string) => (open && s.split(', ').includes(open) ? {} : null) as Element | null,
+  querySelector: (s: string) => (s === '.reader > article.chapter' ? (reading ? {} : null) : open && s.split(', ').includes(open) ? {} : null) as Element | null,
 })
 const later = Date.now() + 60_000
 
@@ -19,6 +20,11 @@ describe('updating by itself', () => {
     expect(busy(later, page('', { matches: s => s.includes('textarea') }))).toBe(true)
     expect(busy(later, page('', { matches: () => false, isContentEditable: true }))).toBe(true)
     expect(busy(later, page('', { matches: () => false }))).toBe(false)
+  })
+  it('waits on any page other than the reader (a list would come back at its top)', () => {
+    reading = false
+    expect(busy(later, page())).toBe(true)
+    reading = true
   })
   it('waits while a prayer or a sync holds it', () => {
     holdUpdate('prayer', true)
