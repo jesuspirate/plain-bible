@@ -351,6 +351,12 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
       </div>
     </div>
+    {matchMedia('(min-width: 1000px)').matches && <div class="field"><span>{t('Big screen')}</span>
+      <div class="col">
+        {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
+        <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
+      </div>
+    </div>}
     <div class="field"><span>{t('Notes')}</span>
       <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> {t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.')}</label>
     </div>
