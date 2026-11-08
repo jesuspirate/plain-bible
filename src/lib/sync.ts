@@ -50,7 +50,7 @@ export function docKey(d: SyncDoc) {
   const marks = Object.keys(d.marks).sort().map(k => {
     const m = upgrade(d.marks[k])
     const ns = Object.keys(m.ns ?? {}).sort().map(id => { const x = m.ns![id]; return [id, x.n ?? null, x.t, x.c, x.v?.join() ?? ''] })
-    return [k, m.c ?? '', m.b ?? 0, m.t, ns]
+    return [k, m.c ?? '', m.b ?? 0, m.t, ns, m.r ? JSON.stringify(m.r) : '']
   })
   const settings = Object.keys(d.settings ?? {}).sort().map(k => [k, d.settings[k], changedAt(d.settingsT, k)])
   const days = Object.keys(d.days ?? {}).sort().map(k => [k, d.days![k]])

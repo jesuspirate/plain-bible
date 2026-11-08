@@ -56,17 +56,7 @@ export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement,
       const lines = whole ? Math.max(1, Math.round(rects[0].height / (parseFloat(css.lineHeight) || fs * 1.6))) : 1
       for (const r of rects) {
         if (r.width < 2) continue
-        const el = document.createElement('span')
-        el.className = 'hl pen-ink' + (style === 'text' ? ' pen-line' : '')
-        el.setAttribute('aria-hidden', 'true')
-        el.style.setProperty('--hl', verse.style.getPropertyValue('--hl'))
-        // The underline sits a little below the letters.
-        const top = style === 'text' ? r.bottom - .05 * fs : r.top
-        const height = style === 'text' ? .16 * fs : r.height
-        Object.assign(el.style, {
-          left: r.left - box.left - layer.clientLeft + 'px', top: top - box.top - layer.clientTop + 'px',
-          width: r.width + 'px', height: height + 'px', borderRadius: radius,
-        })
+        const el = inkStrip(r, layer, box, verse.style.getPropertyValue('--hl'), style, fs, radius)
         strips.push({ el, ems: r.width * lines / fs, rtl })
       }
     }
@@ -97,6 +87,23 @@ export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement,
   }
   anims[anims.length - 1].onfinish = end
   return () => { for (const a of anims) a.cancel(); end() }
+}
+
+/** A strip of ink over one line's rectangle, placed inside `layer` (whose
+ *  bounding box is `box`), the same look as a highlight of that style. */
+export function inkStrip(r: DOMRect, layer: HTMLElement, box: DOMRect, color: string, style: PenStyle, fs: number, radius = '.3em'): HTMLElement {
+  const el = document.createElement('span')
+  el.className = 'hl pen-ink' + (style === 'text' ? ' pen-line' : '')
+  el.setAttribute('aria-hidden', 'true')
+  el.style.setProperty('--hl', color)
+  // The underline sits a little below the letters.
+  const top = style === 'text' ? r.bottom - .05 * fs : r.top
+  const height = style === 'text' ? .16 * fs : r.height
+  Object.assign(el.style, {
+    left: r.left - box.left - layer.clientLeft + 'px', top: top - box.top - layer.clientTop + 'px',
+    width: r.width + 'px', height: height + 'px', borderRadius: style === 'text' ? '0' : radius,
+  })
+  return el
 }
 
 /** Whether to draw at all: the setting, unless the device asks for less motion. */

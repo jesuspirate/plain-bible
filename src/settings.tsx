@@ -338,7 +338,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
     <div class="field"><span>{t('Highlights')}</span>
       <div class="col">
-        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')}</span>
+        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</span>
         {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
         <HlPreview />
         <label><input type="checkbox" checked={settings.penDraw} onChange={e => update({ penDraw: (e.target as HTMLInputElement).checked })} /> {t('Draw each new highlight slowly, like a marker in your hand.')}</label>

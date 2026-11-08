@@ -539,6 +539,7 @@ export default {
   "Medium": "Mediano",
   "Large": "Grande",
   "Tap a verse twice quickly to highlight it in the last color you used.": "Toca dos veces rápido un versículo para resaltarlo con el último color que usaste.",
+  "With a pen or stylus, draw across words to highlight just those words.": "Con un lápiz o stylus, traza sobre las palabras para resaltar solo esas palabras.",
   "Draw each new highlight slowly, like a marker in your hand.": "Trazar cada nuevo resaltado despacio, como con un marcador en la mano.",
   "Marker": "Marcador fluorescente",
   "Colored text": "Texto en color",
