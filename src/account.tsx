@@ -1,6 +1,7 @@
 // Settings → Account: optional sign-in, by email code or passkey, that keeps
 // highlights, bookmarks and settings the same on every device.
 import { useEffect, useRef, useState } from 'preact/hooks'
+import { holdUpdate } from './lib/update'
 import { Marks, saveMarks } from './lib/marks'
 import {
   Account, accountInfo, changedAt, checkPasskey, stopPasskey, PasskeyInfo, removePasskey, renamePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
@@ -64,7 +65,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     const acct = loadAccount(), local = localDoc()
     if (!SYNC_URL || !acct || !local) return
     if (running.current) { again.current = true; return }
-    running.current = true; setBusy(true)
+    running.current = true; setBusy(true); holdUpdate('sync', true)
     try {
       const { doc, account: next } = await syncNow(acct, local)
       // Merge again with the current state, in case something changed while syncing.
@@ -93,7 +94,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       if (e instanceof SyncError && e.status === 401) { setAccount(null); setError(t('You were signed out. Sign in again to keep syncing.')) }
       else setError((e as Error).message)
     } finally {
-      running.current = false; setBusy(false)
+      running.current = false; setBusy(false); holdUpdate('sync', false)
       if (again.current) { again.current = false; run() }
     }
   }
