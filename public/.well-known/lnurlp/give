@@ -1,0 +1,1 @@
+{"callback":"https://pay.myquietbible.com/BTC/UILNURL/pay/lnaddress/give","metadata":"[[\"text/identifier\",\"give@pay.myquietbible.com\"],[\"text/plain\",\"Gift to My Quiet Bible. Thank you!\"]]","tag":"payRequest","minSendable":1000,"maxSendable":612000000000,"commentAllowed":2000}
