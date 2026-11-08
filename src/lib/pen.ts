@@ -1,5 +1,6 @@
 // A highlight drawn in slowly, the way a hand draws a marker over the words:
-// line by line, at an easy pace, with a short lift of the pen between lines.
+// line by line, at the pace of careful reading, so the mind can follow the
+// words as the color reaches them, with a pause between lines.
 // It's only paint: the mark is saved the moment you pick the color, and the
 // verse looks exactly as it always does once the pen is done.
 //
@@ -18,16 +19,19 @@ export function penDown(keys: string[]) { for (const k of keys) waiting.add(k) }
 /** Whether this verse's highlight is still being drawn (or about to be). */
 export const penOn = (key: string) => waiting.has(key) || busy.has(key)
 /** The verses waiting, taken off the waiting list. */
-export function takeWaiting(): string[] { const out = [...waiting]; waiting.clear(); for (const k of out) busy.add(k); return out }
+export function takeWaiting(): string[] { const out = [...waiting]; waiting.clear(); penHold(out); return out }
+/** Mark these verses as being drawn. */
+export function penHold(keys: string[]) { for (const k of keys) busy.add(k) }
 export function penUp(keys: string[]) { for (const k of keys) { busy.delete(k); waiting.delete(k) } }
 
-/** A comfortable hand: about half a phone line a second… */
-const SPEED = .45 // px per ms
-/** …a short lift of the pen to the next line… */
-const LIFT = 110
-/** …and never so slow that a long passage keeps you waiting. */
-const LONGEST = 6000
-const SHORTEST_LINE = 260
+/** Slow on purpose: about three words a second, the pace of reading aloud
+ *  carefully (a word with its space is about 2.6 letters' height wide)… */
+const PER_EM = 125 // ms for each em of line
+/** …a pause as the eye goes back to the start of the next line… */
+const LIFT = 380
+/** …and a long passage still ends within a minute and a half. */
+const LONGEST = 90000
+const SHORTEST_LINE = 500
 
 export type PenStyle = 'marker' | 'block' | 'text'
 
@@ -37,7 +41,7 @@ export type PenStyle = 'marker' | 'block' | 'text'
  *  until the pen is done. Returns a function that stops it at once. */
 export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement, done: () => void): () => void {
   const box = layer.getBoundingClientRect()
-  const strips: { el: HTMLElement; w: number; rtl: boolean }[] = []  // w: the length of line it covers
+  const strips: { el: HTMLElement; ems: number; rtl: boolean }[] = []  // ems: the length of line it covers
   for (const verse of verses) {
     const parts = style === 'block'
       ? (verse.matches('.pv') ? [verse] : [...verse.querySelectorAll<HTMLElement>('.cell')])
@@ -63,25 +67,25 @@ export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement,
           left: r.left - box.left - layer.clientLeft + 'px', top: top - box.top - layer.clientTop + 'px',
           width: r.width + 'px', height: height + 'px', borderRadius: radius,
         })
-        strips.push({ el, w: r.width * lines, rtl })
+        strips.push({ el, ems: r.width * lines / fs, rtl })
       }
     }
   }
   if (!strips.length || typeof strips[0].el.animate !== 'function') { done(); return () => {} }
 
-  const time = (w: number) => Math.max(SHORTEST_LINE, w / SPEED)
-  const total = strips.reduce((n, s) => n + time(s.w) + LIFT, -LIFT)
+  const time = (ems: number) => Math.max(SHORTEST_LINE, ems * PER_EM)
+  const total = strips.reduce((n, s) => n + time(s.ems) + LIFT, -LIFT)
   const k = Math.min(1, LONGEST / total)
   let at = 0, finished = false
   const anims: Animation[] = []
   for (const s of strips) {
     layer.appendChild(s.el)
-    const d = time(s.w) * k
+    const d = time(s.ems) * k
     // Uncovered from where the line starts to where it ends, with a rounded
     // front edge like the tip of a marker.
     const from = s.rtl ? 'inset(0 0 0 100% round .3em)' : 'inset(0 100% 0 0 round .3em)'
     anims.push(s.el.animate([{ clipPath: from }, { clipPath: 'inset(0 0 0 0 round .3em)' }],
-      { duration: d, delay: at, easing: 'cubic-bezier(.3,.1,.55,1)', fill: 'both' }))
+      { duration: d, delay: at, easing: 'cubic-bezier(.35,0,.65,1)', fill: 'both' }))
     at += d + LIFT * k
   }
   const end = () => {

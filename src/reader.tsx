@@ -19,7 +19,7 @@ import { canListen, startListening } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
-import { draw, penAllowed, penDown, penOn, penUp, takeWaiting } from './lib/pen'
+import { draw, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -215,20 +215,26 @@ export function Reader({ route }: { route: Route }) {
   // A new highlight is drawn in slowly, like a marker in your hand (a
   // setting). The mark is already saved; this is only how it appears.
   const pen = penAllowed(settings.penDraw)
-  const stopPens = useRef<(() => void)[]>([])
+  const pens = useRef<{ keys: string[]; stop: () => void }[]>([])
   useLayoutEffect(() => {
     const keys = takeWaiting()
+    // A highlight taken off or given another color while it's still being
+    // drawn: that pen stops (and a new color starts again from the beginning).
+    for (const p of [...pens.current]) if (p.keys.some(k => !marks[k]?.c || keys.includes(k))) p.stop()
+    penHold(keys)
     if (!keys.length) return
     const here = keys.filter(k => k.startsWith(`${book}.${chapter}.`))
     penUp(keys.filter(k => !here.includes(k)))
-    const els = here.map(k => document.getElementById('v' + k.slice(k.lastIndexOf('.') + 1))).filter((x): x is HTMLElement => !!x && x.classList.contains('hl-draw'))
+    const els = here.map(k => document.getElementById('v' + k.slice(k.lastIndexOf('.') + 1))).filter((x): x is HTMLElement => !!x && !!marks[`${book}.${chapter}.${x.id.slice(1)}`]?.c)
     if (!pen || !els.length || !article.current) { penUp(here); for (const x of els) x.classList.remove('hl-draw'); return }
+    for (const x of els) x.classList.add('hl-draw')
     els.sort((a, z) => a.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
-    const stop = draw(els, settings.highlight, article.current, () => { penUp(here); stopPens.current = stopPens.current.filter(f => f !== stop) })
-    stopPens.current.push(stop)
+    const p = { keys: here, stop: () => {} }
+    pens.current.push(p)
+    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) })
   }, [marks])
   // Turning the page puts the pen down at once.
-  useEffect(() => () => { for (const f of [...stopPens.current]) f() }, [book, chapter])
+  useEffect(() => () => { for (const p of [...pens.current]) p.stop() }, [book, chapter])
   useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
   // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
   const [picking, setPicking] = useState(versePick)
