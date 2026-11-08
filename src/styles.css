@@ -952,3 +952,92 @@ button.link.dc-or { display: block; margin: 4px 0 8px; padding: 6px 0; font-size
    and read as a white ring. A softer light keeps it glass, not outlined. */
 :root[data-theme='dark'] .sb-circles, :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .sb-circles, :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }
+
+/* ---- big screens: bigger words, on a page ----
+   An iPad or a computer has room: the words grow with the screen by
+   themselves (on top of your text size), and sit on a sheet of paper
+   rather than straight on the background. */
+:root { --big: 1; }
+@media (min-width: 760px) and (min-height: 1000px), (min-width: 1000px) and (min-height: 700px) { :root { --big: 1.08; } }
+@media (min-width: 1400px) and (min-height: 850px) { :root { --big: 1.18; } }
+@media (min-width: 1900px) and (min-height: 1050px) { :root { --big: 1.32; } }
+.chapter { font-size: calc(var(--font-size) * var(--big)); }
+@media (min-width: 760px) {
+  .chapter.cols-1:not(.spread) {
+    max-width: 34em; margin-top: 24px; padding: 1em clamp(1.2em, 4vw, 2.4em) 2em;
+    background: var(--surface); border-radius: 8px; box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 12px 40px rgba(60,40,10,.10);
+  }
+  article.chapter.cols-1.turning, .turn-peek article.chapter.cols-1 { background: var(--surface); }
+  .chapter.cols-1:not(.spread) + .pager, .reader > .pager { max-width: 34em; }
+}
+
+/* ---- the open book (an iPad on its side, a computer; see lib/spread) ----
+   Two pages side by side that you turn, not scroll. The pages are the two
+   columns of .spread-flow; the book is a window that shows two at a time. */
+html.spread-on { overflow: hidden; }
+html.spread-on main { max-width: none; padding-bottom: 0; }
+html.spread-on body.selecting main { padding-bottom: 0; }
+html.spread-on .reader > .pager, html.spread-on .reader > .credit { display: none; }
+.spread-box {
+  --pw: min(calc(50vw - 30px), 34em); --pp: 2.2em;
+  /* all the height between the top bar and the search bar */
+  --book-h: calc(100dvh - 168px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+  position: relative; width: calc(2 * var(--pw)); margin: 14px auto 0;
+  font-size: calc(var(--font-size) * var(--big));
+}
+article.chapter.spread {
+  max-width: none; width: 100%; margin: 0; padding: 0; position: relative;
+  height: var(--book-h);
+  overflow: hidden; overflow: clip; border-radius: 8px;
+  /* the fold down the middle, where the two pages meet */
+  background:
+    linear-gradient(to right, transparent calc(50% - 44px), rgba(40,25,5,.05) calc(50% - 4px), rgba(40,25,5,.14) 50%, rgba(40,25,5,.05) calc(50% + 4px), transparent calc(50% + 44px)),
+    var(--surface);
+  box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 14px 44px rgba(60,40,10,.14);
+}
+.spread-flow {
+  box-sizing: border-box; width: 100%; height: 100%; padding: 1.1em var(--pp) .9em;
+  column-count: 2; column-gap: calc(2 * var(--pp)); column-fill: auto;
+  orphans: 2; widows: 2;
+}
+.spread-flow > .chapter-title { margin: .1em 0 .7em; }
+.spread-flow .ct-num { font-size: 1.6em; }
+.spread-flow .verse { scroll-margin: 0; }
+/* the round buttons below the book, at its outer corners */
+.spread-turn {
+  position: absolute; top: calc(100% + 12px); width: 50px; height: 50px; padding: 0; border-radius: 50%;
+  display: grid; place-items: center; font: 400 30px/1 var(--serif); color: var(--text);
+  background: var(--surface); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.10);
+  -webkit-tap-highlight-color: transparent;
+}
+.spread-turn span { margin-top: -4px; }
+.spread-turn.back { left: 0; }
+.spread-turn.on { right: 0; }
+.spread-turn:active { transform: scale(.94); }
+body.selecting .spread-turn { display: none; }
+
+/* The page turning over the spine: a copy of the pages, lying over the book
+   only while it turns (lib/spread leaf). Only transform and opacity move. */
+.leaf-box { position: absolute; left: 0; top: 0; width: 100%; height: var(--book-h); pointer-events: none; perspective: 2600px; z-index: 3; }
+.leaf-layer { position: absolute; inset: 0; }
+.leaf-pane { position: absolute; top: 0; width: 50%; height: 100%; overflow: hidden; background: var(--surface); }
+.leaf-pane.left { left: 0; border-radius: 8px 0 0 8px; box-shadow: inset -40px 0 36px -34px rgba(40,25,5,.22); }
+.leaf-pane.right { left: 50%; border-radius: 0 8px 8px 0; box-shadow: inset 40px 0 36px -34px rgba(40,25,5,.22); }
+.leaf-pane > article.chapter.spread { position: absolute; left: 0; top: 0; width: 200%; height: 100%; background: none; box-shadow: none; border-radius: 0; }
+.leaf { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; will-change: transform; }
+.leaf .leaf-pane { left: 0; width: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+.leaf .leaf-pane.back { transform: rotateY(180deg); border-radius: 8px 0 0 8px; box-shadow: inset -40px 0 36px -34px rgba(40,25,5,.22); }
+.leaf-shade { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: linear-gradient(to right, rgba(40,25,5,.22), rgba(40,25,5,.04) 70%); }
+.leaf .back .leaf-shade { background: linear-gradient(to left, rgba(40,25,5,.22), rgba(40,25,5,.04) 70%); }
+/* In Dark the fold is a deeper shadow, or it would not show. */
+:root[data-theme='dark'] article.chapter.spread { background: linear-gradient(to right, transparent calc(50% - 44px), rgba(0,0,0,.18) calc(50% - 4px), rgba(0,0,0,.45) 50%, rgba(0,0,0,.18) calc(50% + 4px), transparent calc(50% + 44px)), var(--surface); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] article.chapter.spread { background: linear-gradient(to right, transparent calc(50% - 44px), rgba(0,0,0,.18) calc(50% - 4px), rgba(0,0,0,.45) 50%, rgba(0,0,0,.18) calc(50% + 4px), transparent calc(50% + 44px)), var(--surface); } }
+
+/* A big monitor: the top bar, the search bar and the turning buttons grow
+   with the words, so they aren't tiny specks at the edges. */
+@media (min-width: 1900px) and (min-height: 1050px) {
+  header.top, .sb { zoom: 1.25; }
+  .sb.sb-open { top: calc(var(--vv-top) / 1.25); height: calc(var(--vv-h) / 1.25); }
+  .spread-box { --book-h: calc(100dvh - 216px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
+  .spread-turn { width: 62px; height: 62px; font-size: 36px; }
+}
