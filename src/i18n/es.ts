@@ -129,7 +129,7 @@ export default {
   "Joining…": "Uniéndote…",
   "Join {circle}": "Unirme a {circle}",
   "Opening the invite…": "Abriendo la invitación…",
-  "Come read the word and pray with {circle} in My Quiet Bible. This private link is just for you: it works once, for 7 days.": "Ven a leer la Palabra y orar con {circle} en My Quiet Bible. Este enlace privado es solo para ti: sirve una vez, durante 7 días.",
+  "Come read the word and pray with “{circle}” in My Quiet Bible. This private link is just for you: it works once, for 7 days.": "Ven a leer la Palabra y orar con “{circle}” en My Quiet Bible. Este enlace privado es solo para ti: sirve una vez, durante 7 días.",
   "Come read the word and pray with my circle in My Quiet Bible. This private link is just for you: it works once, for 7 days.": "Ven a leer la Palabra y orar con mi círculo en My Quiet Bible. Este enlace privado es solo para ti: sirve una vez, durante 7 días.",
   "Invite link copied. Paste it in a message to the person you’re inviting.": "Enlace de invitación copiado. Pégalo en un mensaje para la persona que invitas.",
   "You": "Tú",

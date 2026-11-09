@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { cleanShared, parseInviteLink } from './circles'
+import { cleanShared, inviteMessage, parseInviteLink } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -46,8 +46,21 @@ describe('parseInviteLink', () => {
     expect(parseInviteLink('Come pray with us https://myquietbible.com/#/join?i=zKpMGqvt-JhAYZhj&k=Ab_cdEFghIJklMNopQRstu thanks'))
       .toEqual({ i: 'zKpMGqvt-JhAYZhj', k: 'Ab_cdEFghIJklMNopQRstu' })
   })
+  it('reads a link whose "&" came back as "&amp;"', () => {
+    expect(parseInviteLink('https://myquietbible.com/#/join?i=zKpMGqvt-JhAYZhj&amp;k=Ab_cdEFghIJklMNopQRstu'))
+      .toEqual({ i: 'zKpMGqvt-JhAYZhj', k: 'Ab_cdEFghIJklMNopQRstu' })
+  })
   it('says no to anything else', () => {
     expect(parseInviteLink('https://myquietbible.com/#/read/KJV/John/3')).toBeUndefined()
     expect(parseInviteLink('#/join?i=short&k=x')).toBeUndefined()
+  })
+})
+
+describe('inviteMessage', () => {
+  it('puts the link alone on the last line, after a blank line', () => {
+    const link = 'https://myquietbible.com/#/join?i=zKpMGqvt-JhAYZhj&k=Ab_cdEFghIJklMNopQRstu'
+    const m = inviteMessage(['Come pray with us.', 'Already have it? Paste this link in Circles.'], link)
+    expect(m).toBe('Come pray with us.\n\nAlready have it? Paste this link in Circles.\n\n' + link)
+    expect(parseInviteLink(m)).toEqual({ i: 'zKpMGqvt-JhAYZhj', k: 'Ab_cdEFghIJklMNopQRstu' })
   })
 })
