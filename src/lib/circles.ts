@@ -188,8 +188,17 @@ export async function inviteLink(circle: string) {
 
 /** The invite in a link someone sent, pasted in: its id and secret. */
 export function parseInviteLink(s: string): { i: string; k: string } | undefined {
-  const m = /[?&]i=([\w-]{8,40})&k=([\w-]{16,40})/.exec(s.trim())
+  // Some notes apps hand the link back with "&" written as "&amp;".
+  const m = /[?&]i=([\w-]{8,40})&(?:amp;)?k=([\w-]{16,40})/.exec(s.trim())
   return m ? { i: m[1], k: m[2] } : undefined
+}
+
+/** The words of an invite, then the link alone on its last line. The link
+ *  goes inside the text (not as a separate share-sheet URL): iOS "Copy"
+ *  puts a separate URL on the clipboard as a second item, and some apps
+ *  paste only the first one, so the link went missing. */
+export function inviteMessage(lines: string[], link: string) {
+  return [...lines, link].join('\n\n')
 }
 
 export interface Invite { circle: string; name: string; by: string; members: number; already: boolean; raw: Uint8Array }

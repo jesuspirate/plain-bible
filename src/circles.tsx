@@ -4,7 +4,7 @@
 import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
-  accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, joinCircle, keptCircles, keptFeed,
+  accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
@@ -556,11 +556,14 @@ function CircleView({ id }: { id: string }) {
   // tap was too long ago (Safari does, after a slow network), the button
   // turns into "Send invite link" and the next tap sends it at once.
   const sendInvite = async (link: string) => {
-    const text = (info?.name ? t('Come read the word and pray with {circle} in My Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
-      : t('Come read the word and pray with my circle in My Quiet Bible. This private link is just for you: it works once, for 7 days.'))
-      + ' ' + t('Already have My Quiet Bible? Copy this link and paste it in Circles there.')
+    const text = inviteMessage([
+      info?.name ? t('Come read the word and pray with {circle} in My Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
+        : t('Come read the word and pray with my circle in My Quiet Bible. This private link is just for you: it works once, for 7 days.'),
+      t('Already have My Quiet Bible? Copy this link and paste it in Circles there.'),
+    ], link)
     if (canShare) {
-      try { await navigator.share({ title: 'My Quiet Bible', text, url: link }); setSent(true) } catch (e) {
+      // The link is in the text, not a separate url: see inviteMessage.
+      try { await navigator.share({ title: 'My Quiet Bible', text }); setSent(true) } catch (e) {
         if ((e as Error).name !== 'AbortError') setInvite(link)
       }
     } else await copyText(link).then(() => { setSent(true); setMsg(t('Invite link copied. Paste it in a message to the person you’re inviting.')) }, () => setInvite(link))
