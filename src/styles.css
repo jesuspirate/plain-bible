@@ -309,7 +309,7 @@ main.with-bar { padding-bottom: 120px; }
 .sb-circles svg * { stroke-width: 2.6; }
 /* Read, beside Circles: the same plain round button, a book with a play mark. */
 .sb-read {
-  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  all: unset; cursor: pointer; flex: none; position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
   color: var(--accent); background: var(--surface); border: 1px solid var(--line); box-sizing: border-box;
   box-shadow: 0 10px 30px rgba(0,0,0,.14); -webkit-tap-highlight-color: transparent;
 }
@@ -711,19 +711,25 @@ html.sb-lock { overflow: hidden; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(62,62,72,.66); } }
 @supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   :root { --glass-open: color-mix(in srgb, var(--surface) 86%, transparent); }
-  .sb-field, .sb-mini .sb-field, .sb-circles, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
+  .sb-field, .sb-mini .sb-field, .sb-circles, .sb-read, .listen, .sb.sb-open .sb-field, .sb.sb-open .sb-panel {
     -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
   }
   .sb-field { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
-  .sb-circles { border-color: transparent; background: var(--glass-tint); }
+  .sb-circles, .sb-read { border-color: transparent; background: var(--glass-tint); }
+  /* The reading-aloud bar is the same glass as the search field it stands in for. */
+  .listen { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
+  .listen.listen-float { position: fixed; }
+  .listen .listen-what { color: var(--text); text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface); }
+  .listen .listen-what .muted { color: color-mix(in srgb, var(--text) 82%, transparent); }
+  .listen .listen-rate { background: color-mix(in srgb, var(--surface) 70%, transparent); }
   /* Whatever shows through, the words on the glass stay readable: full text
      color, not the faded gray, with a soft halo of the glass behind them. */
   .sb-field input::placeholder, .sb-field input { color: var(--text); text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface); }
   .sb-field input::placeholder { color: color-mix(in srgb, var(--text) 82%, transparent); }
   .sb-field .sb-glass { color: var(--text); filter: drop-shadow(0 0 3px var(--surface)); }
   /* The rim: a 1px ring drawn with a gradient, light top and bottom, dark at the sides. */
-  .sb-field::after, .sb-pray::after, .sb-circles::after {
+  .sb-field::after, .sb-pray::after, .sb-circles::after, .sb-read::after, .listen::after {
     content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
     background: linear-gradient(to bottom, var(--rim-light), var(--rim-dark) 34%, var(--rim-dark) 66%, var(--rim-light));
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
@@ -997,8 +1003,8 @@ button.link.dc-or { display: block; margin: 4px 0 8px; padding: 6px 0; font-size
 
 /* Dark: on a small round button the bright top and bottom of the rim meet
    and read as a white ring. A softer light keeps it glass, not outlined. */
-:root[data-theme='dark'] .sb-circles, :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] .sb-circles, :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }
+:root[data-theme='dark'] :is(.sb-circles, .sb-read), :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] :is(.sb-circles, .sb-read), :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }
 
 /* ---- big screens: bigger words, on a page ----
    An iPad or a computer has room: the words grow with the screen by
@@ -1093,10 +1099,10 @@ body.selecting .spread-turn { display: none; }
 /* ---- the phone on its side (src/sideways.tsx) ----
    The bars picked in Settings slide away as you read on, so the words fill
    the screen; only moved and faded, nothing redrawn, so it stays smooth. */
-header.top, .sb-field, .sb-circles, .sb-pray { transition: translate .3s cubic-bezier(.2, .8, .2, 1), opacity .25s; }
+header.top, .sb-field, .listen, .sb-read, .sb-circles, .sb-pray { transition: translate .3s cubic-bezier(.2, .8, .2, 1), opacity .25s; }
 @media (orientation: landscape) and (max-height: 500px) and (hover: none) {
   :root.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
-  :root.away-search .sb:not(.sb-open) .sb-field,
+  :root.away-search .sb:not(.sb-open) :is(.sb-field, .listen, .sb-read),
   :root.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
     translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
   }
@@ -1107,4 +1113,4 @@ header.top, .sb-field, .sb-circles, .sb-pray { transition: translate .3s cubic-b
   height: calc(30px + env(safe-area-inset-top)); display: flex; justify-content: center; -webkit-tap-highlight-color: transparent;
 }
 .away-edge span { margin-top: calc(4px + env(safe-area-inset-top)); width: 44px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--muted) 35%, transparent); }
-@media (prefers-reduced-motion: reduce) { header.top, .sb-field, .sb-circles, .sb-pray { transition: none; } }
+@media (prefers-reduced-motion: reduce) { header.top, .sb-field, .listen, .sb-read, .sb-circles, .sb-pray { transition: none; } }
