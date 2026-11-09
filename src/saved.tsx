@@ -1,5 +1,5 @@
-// Your highlights, notes and bookmarks, each on its own tab, in Bible order
-// and shown in the version you read.
+// Your highlights, notes and bookmarks, each on its own tab, shown in the
+// version you read. Notes and bookmarks open with the most recent first.
 import { ComponentChildren } from 'preact'
 import { useEffect, useMemo, useState } from 'preact/hooks'
 import { Bible } from './lib/data'
@@ -46,7 +46,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const [recolor, setRecolor] = useState<string>()
   const [color, setColor] = useState('all')
   const [find, setFind] = useState('')
-  const [newest, setNewest] = useState(false)
+  const [recent, setRecent] = useState(true)
   // What was just removed, to put back.
   const [undo, setUndo] = useState<{ what: string; before: Marks }>()
   const [askBm, setAskBm] = useState<string>()
@@ -72,10 +72,10 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   })
   const shownTab = tab
   const setTab = (to: Tab) => {
-    setTabState(to); setLimit(PAGE); setRecolor(undefined); setUndo(undefined)
+    setTabState(to); setLimit(PAGE); setRecolor(undefined); setUndo(undefined); setFind('')
     try { localStorage.setItem(TAB, to) } catch { /* private mode */ }
   }
-  useEffect(() => setLimit(PAGE), [color, find, newest])
+  useEffect(() => setLimit(PAGE), [color, find, recent])
 
   const verseText = (book: string, chapter: number, vs: number[]) => vs.map(v => {
     const raw = bible?.books[book]?.[chapter - 1]?.[v - 1]
@@ -138,6 +138,16 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     bookmarks: N_('No bookmarks yet. Tap a verse while reading, then Bookmark.'),
   }[shownTab])
 
+  /** Find box and order, on the notes and bookmarks tabs. */
+  const tools = (placeholder: string) => (
+    <div class="saved-tools">
+      <input type="search" class="saved-find" placeholder={placeholder} value={find} onInput={e => setFind((e.target as HTMLInputElement).value)} />
+      <div class="seg" role="radiogroup" aria-label={t('Order')}>
+        <button role="radio" aria-checked={recent} class={recent ? 'on' : ''} onClick={() => setRecent(true)}>{t('Recent')}</button>
+        <button role="radio" aria-checked={!recent} class={!recent ? 'on' : ''} onClick={() => setRecent(false)}>{t('Bible order')}</button>
+      </div>
+    </div>
+  )
   let body
   if (shownTab === 'highlights') {
     const used = PALETTE.map(p => p.color).filter(c => runs.some(r => r.color === c))
@@ -189,17 +199,9 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   } else if (shownTab === 'notes') {
     const q = fold(find.trim())
     const list = notes.filter(x => !q || fold(x.n).includes(q) || fold(refOf(x.book, x.chapter, x.verses)).includes(q))
-    if (newest) list.sort((a, b) => b.t - a.t)
+    if (recent) list.sort((a, b) => b.t - a.t)
     body = <>
-      {notes.length > 3 && (
-        <div class="saved-tools">
-          <input type="search" class="saved-find" placeholder={t('Find in your notes')} value={find} onInput={e => setFind((e.target as HTMLInputElement).value)} />
-          <div class="seg" role="radiogroup" aria-label={t('Order')}>
-            <button role="radio" aria-checked={!newest} class={!newest ? 'on' : ''} onClick={() => setNewest(false)}>{t('Bible order')}</button>
-            <button role="radio" aria-checked={newest} class={newest ? 'on' : ''} onClick={() => setNewest(true)}>{t('Newest')}</button>
-          </div>
-        </div>
-      )}
+      {notes.length > 3 && tools(t('Find in your notes'))}
       {!list.length && <p class="muted">{t('No note has “{words}” in it.', { words: find.trim() })}</p>}
       <ol class="saved-list">
         {list.slice(0, limit).map(x => {
@@ -220,9 +222,19 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
       {more(list.length)}
     </>
   } else {
+    const q = fold(find.trim())
+    const list = bookmarks.filter(k => {
+      if (!q) return true
+      const r = parseKey(k)
+      return fold(refOf(r.book, r.chapter, [r.verse])).includes(q) || fold(verseText(r.book, r.chapter, [r.verse])).includes(q)
+    })
+    // A bookmark has no time of its own; its verse's last change stands in.
+    if (recent) list.sort((a, b) => marks[b].t - marks[a].t)
     body = <>
+      {bookmarks.length > 3 && tools(t('Find in your bookmarks'))}
+      {!list.length && <p class="muted">{t('No bookmark has “{words}” in it.', { words: find.trim() })}</p>}
       <ol class="saved-list">
-        {bookmarks.slice(0, limit).map(k => {
+        {list.slice(0, limit).map(k => {
           const r = parseKey(k), vs = [r.verse]
           return (
             <li>
@@ -246,7 +258,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
           )
         })}
       </ol>
-      {more(bookmarks.length)}
+      {more(list.length)}
     </>
   }
 
