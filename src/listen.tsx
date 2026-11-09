@@ -7,10 +7,16 @@
 // Follow-along: each word lights up as it's said (word by word, when the
 // phone tells us where it is, or else at the voice's own pace), and with no
 // voice at all the highlight walks through the words at a calm reading pace
-// you can slow down or speed up. The word is lit with the browser's own
-// highlights, so the page itself is never touched.
+// you can slow down or speed up. The word sits on a soft rounded mark that
+// glides from word to word, laid behind the text, so the page itself is
+// never changed.
+//
+// It's a mode: once started it stays until you tap X. Tap any verse to read
+// from there; turn the page or go to another chapter and it starts again at
+// the top of the new page. Leaving the app and coming back (an iPhone Home
+// Screen app reloads) brings it back paused where you were.
 import { useEffect, useState } from 'preact/hooks'
-import { pace, wordAt, words, type Span } from './lib/follow'
+import { pace, sweep, wordAt, words, type Span } from './lib/follow'
 import { useApp } from './state'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import type { Bible } from './lib/data'
@@ -29,7 +35,12 @@ export const canListen = !!synth && typeof SpeechSynthesisUtterance !== 'undefin
 const EVENT = 'qb-listen'
 let now: Now | undefined
 let run = 0 // bumped on every start, pause and stop, so old utterances stand down
-const emit = () => dispatchEvent(new Event(EVENT))
+const PLACE_KEY = 'plain-bible:reading-aloud'
+const emit = () => {
+  dispatchEvent(new Event(EVENT))
+  if (now) put(PLACE_KEY, JSON.stringify({ version: now.version, lang: now.lang, book: now.book, chapter: now.chapter, verse: now.verse }))
+  else try { localStorage.removeItem(PLACE_KEY) } catch { /* private mode */ }
+}
 
 const RATES = [0.6, 0.7, 0.8, 0.9, 1, 1.15, 1.3]
 const RATE_KEY = 'plain-bible:listen-rate', VOICE_KEY = 'plain-bible:listen-voice:', TIP_KEY = 'plain-bible:listen-tip'
@@ -83,6 +94,10 @@ const speechTag = (lang: string) => lang.startsWith('fr') ? 'fr-FR' : lang.start
 // with the phone's voice or silently. With no voices on this device at all,
 // it's always silent.
 let follow = { words: true, silent: false }
+/** Kept in step with Settings by the app, so reading starts the right way. */
+export function followSettings(s: { follow: 'words' | 'verse'; readSilent: boolean }) {
+  follow = { words: s.follow !== 'verse', silent: s.readSilent }
+}
 const silentNow = () => follow.silent || !canListen
 
 // The verse being read: its words, and the word lit now.
@@ -90,8 +105,6 @@ let cur: { text: string; spans: Span[] } | undefined
 let wordNow = 0
 let resumeAt = 0 // where a silent reading picks up after a pause
 
-const HL = 'qb-word'
-const highlights = typeof CSS !== 'undefined' && 'highlights' in CSS && typeof Highlight !== 'undefined' ? CSS.highlights : undefined
 let lit: { el: Element; ranges: Range[] } | undefined
 
 /** The words of the verse being read, as they sit on the page, if its chapter
@@ -130,18 +143,83 @@ function wordsOnPage(): Range[] | undefined {
   }
 }
 
-function showWord(i: number) {
+// Karaoke style: a soft rounded band of color flows through the letters of
+// each line, at the pace of the reading, so the eye glides along with it
+// instead of hopping from word to word. Lines already read stay lightly
+// colored until the verse is done. One band per line, in the chapter's own
+// layer, behind the letters.
+let bands: { el: HTMLElement; top: number; rtl: boolean; edge: number }[] = []
+let bandLayer: HTMLElement | undefined
+export const WORD_EVENT = 'qb-listen-word'
+
+function place(range: Range, ms: number) {
+  const verse = range.startContainer.parentElement?.closest<HTMLElement>('[id^="v"]')
+  // In the open book, the pages' own flow, so the bands turn with the page.
+  const layer = verse?.closest<HTMLElement>('.spread-flow') ?? verse?.closest<HTMLElement>('article')
+  const rects = [...range.getClientRects()].filter(x => x.width > 0)
+  if (!verse || !layer || !rects.length) return clearWord()
+  if (bandLayer !== layer) { clearWord(); bandLayer = layer }
+  document.body.classList.add('following')
+  const box = layer.getBoundingClientRect()
+  const ox = box.left + layer.clientLeft, oy = box.top + layer.clientTop
+  const fs = parseFloat(getComputedStyle(verse).fontSize) || 18
+  const rtl = getComputedStyle(verse).direction === 'rtl'
+  const px = .18 * fs, py = .04 * fs
+  // A word broken over two lines (a hyphen) sweeps one part, then the next.
+  const share = rects.map(r => r.width / rects.reduce((n, x) => n + x.width, 0))
+  let delay = 0
+  rects.forEach((r, i) => {
+    const top = r.top - oy - py, d = Math.max(60, ms * share[i])
+    let b = bands.find(x => Math.abs(x.top - top) < fs * .5)
+    if (!b) {
+      // A new line: the band starts at this word's first letter, empty.
+      const el = document.createElement('span')
+      el.className = 'follow-band'
+      el.setAttribute('aria-hidden', 'true')
+      const start = rtl ? r.right - ox + px : r.left - ox - px
+      Object.assign(el.style, { top: top + 'px', height: r.height + 2 * py + 'px', width: '0px', transition: 'none',
+        ...(rtl ? { right: layer.clientWidth - start + 'px' } : { left: start + 'px' }) })
+      layer.appendChild(el)
+      void el.offsetWidth
+      b = { el, top, rtl, edge: start }
+      bands.push(b)
+    }
+    const width = Math.max(0, b.rtl ? b.edge - (r.left - ox - px) : r.right - ox + px - b.edge)
+    // Only ever forward: a voice that reports a word late never pulls it back.
+    if (width < b.el.getBoundingClientRect().width - 1) return
+    // Linear, so the flow is even; a new word picks up from wherever the band is.
+    b.el.style.transition = `width ${d}ms linear ${delay}ms`
+    b.el.style.width = width + 'px'
+    delay += d
+  })
+}
+
+function showWord(i: number, ms: number) {
   wordNow = i
-  if (!highlights || !follow.words) return
+  if (!follow.words) return
   const range = wordsOnPage()?.[i]
-  if (!range) { highlights.delete(HL); return }
-  highlights.set(HL, new Highlight(range))
-  // A long verse runs on below the player: keep the word in view, but don't
+  if (!range) return clearWord()
+  place(range, ms)
+  // The book on a big screen turns its page when the words run onto the next.
+  dispatchEvent(new CustomEvent(WORD_EVENT, { detail: range }))
+  // A long verse runs on below the bar: keep the word in view, but don't
   // chase someone who has scrolled somewhere else.
   const box = range.getBoundingClientRect()
-  if (box.bottom > innerHeight - 170 && box.top < innerHeight + 120) scrollTo({ top: scrollY + box.top - innerHeight / 3, behavior: 'smooth' })
+  if (box.bottom > innerHeight - 110 && box.top < innerHeight + 120) scrollTo({ top: scrollY + box.top - innerHeight / 3, behavior: 'smooth' })
 }
-const clearWord = () => highlights?.delete(HL)
+/** Paused: the band stops where it is. */
+function holdBands() {
+  for (const b of bands) { const w = b.el.getBoundingClientRect().width; b.el.style.transition = 'none'; b.el.style.width = w + 'px' }
+}
+
+function clearWord() {
+  // Read lines fade away rather than vanish.
+  const old = bands
+  bands = []; bandLayer = undefined
+  for (const b of old) { b.el.style.transition = 'opacity .5s'; b.el.style.opacity = '0'; setTimeout(() => b.el.remove(), 520) }
+  if (!old.length) document.body.classList.remove('following')
+  else setTimeout(() => { if (!bands.length) document.body.classList.remove('following') }, 520)
+}
 
 /** With no voice: on through the words at a reading pace, then on to `then`.
  * The speed is read at every word, so changing it takes effect at once. */
@@ -149,7 +227,7 @@ function walkWords(my: number, i: number, then: () => void) {
   const c = cur
   if (my !== run || !c) return
   if (i >= c.spans.length) return void setTimeout(() => { if (my === run) then() }, Math.round(350 / rate()))
-  showWord(i)
+  showWord(i, sweep(c.spans[i], rate()))
   setTimeout(() => walkWords(my, i + 1, then), pace(c.text, c.spans[i], rate()))
 }
 
@@ -169,19 +247,22 @@ function say(text: string, lang: string, my: number, then: () => void, spans?: S
   let ticker: ReturnType<typeof setTimeout> | undefined, heard = false
   const tick = (i: number) => {
     if (my !== run || heard || !spans) return
-    showWord(i)
+    showWord(i, sweep(spans[i], u.rate, true))
     if (i + 1 < spans.length) ticker = setTimeout(() => tick(i + 1), pace(text, spans[i], u.rate, true))
   }
   u.onstart = () => { clearTimeout(quiet); if (spans?.length) tick(0) }
   u.onboundary = e => {
     if (!spans?.length || my !== run || (e.name && e.name !== 'word')) return
     heard = true; clearTimeout(ticker)
-    showWord(wordAt(spans, e.charIndex))
+    const w = wordAt(spans, e.charIndex)
+    showWord(w, sweep(spans[w], u.rate, true))
   }
   u.onend = () => { clearTimeout(quiet); clearTimeout(ticker); if (my === run) then() }
   u.onerror = e => {
     clearTimeout(quiet); clearTimeout(ticker)
-    if (my !== run || e.error === 'interrupted' || e.error === 'canceled') return
+    if (my !== run) return
+    // Stopped by the phone itself (a call, another app's sound): wait, paused, where it was.
+    if (e.error === 'interrupted' || e.error === 'canceled') return pauseListening()
     // Stay where we were, paused, and say so, rather than vanish.
     pauseListening(e.error === 'not-allowed' ? t('Tap play to start.') : t('This voice couldn’t speak. Pick another voice.'))
   }
@@ -198,7 +279,8 @@ function next(my: number) {
     let book = n.book, chapter = n.chapter + 1
     if (chapter > chapters.length) {
       const after = BOOKS.slice(BOOK_INDEX[n.book] + 1).find(b => n.bible.books[b.id]?.length)
-      if (!after) return stopListening()
+      // The end of the Bible: stay, paused on the last verse, until X.
+      if (!after) { now = { ...n, verse: verses.length }; return pauseListening() }
       book = after.id; chapter = 1
     }
     // The page follows, if you're reading along.
@@ -219,8 +301,9 @@ function next(my: number) {
   resumeAt = 0
   emit()
   const then = () => { if (now) { now = { ...now, verse: now.verse + 1 }; wordNow = 0; next(my) } }
+  // A new verse starts clean; picking up after a pause carries on the band.
+  if (!from) clearWord()
   if (silentNow()) return walkWords(my, from, then)
-  clearWord()
   say(text, n.lang, my, then, follow.words ? spans : undefined)
 }
 
@@ -258,8 +341,46 @@ export function pauseListening(trouble?: string) {
   run++
   resumeAt = wordNow
   synth?.cancel()
+  holdBands()
   now = { ...now, playing: false, trouble }
   emit()
+}
+
+/** Whether reading aloud is on (playing or paused): the mode lasts until X. */
+export const readingAloud = () => !!now
+
+/** Where reading aloud is, if it's on. */
+export const readingAt = () => now && { version: now.version, book: now.book, chapter: now.chapter, verse: now.verse }
+export const LISTEN_EVENT = EVENT
+
+/** A verse tapped while reading aloud: read from there. */
+export function readFrom(spot: Spot, bible: Bible) {
+  startListening(spot, bible)
+}
+
+/** The reader shows a chapter (or turns a page). While reading aloud, a
+ * different place than the one being read is where reading goes on from,
+ * playing or paused as it was; after the app was closed and opened again,
+ * reading aloud comes back, paused. */
+export function followPage(spot: Spot, bible: Bible) {
+  if (!now) {
+    let saved: Spot | undefined
+    try { saved = JSON.parse(get(PLACE_KEY) || 'null') ?? undefined } catch { /* nothing saved */ }
+    if (!saved) return
+    const here = saved.version === spot.version && saved.book === spot.book && saved.chapter === spot.chapter
+    now = { ...(here ? saved : { ...spot, verse: spot.verse || 1 }), bible, playing: false }
+    resumeAt = 0; cur = undefined
+    return emit()
+  }
+  if (now.version === spot.version && now.book === spot.book && now.chapter === spot.chapter && (now.verse === spot.verse || spot.verse === 0)) {
+    if (now.bible !== bible) now = { ...now, bible }
+    return
+  }
+  const playing = now.playing
+  now = { ...spot, verse: spot.verse || 1, bible, playing }
+  resumeAt = 0; cur = undefined; wordNow = 0
+  if (playing) begin()
+  else { run++; synth?.cancel(); clearWord(); emit() }
 }
 
 export function stopListening() {
@@ -269,6 +390,9 @@ export function stopListening() {
   clearWord()
   emit()
 }
+
+/** Whether reading aloud is on, kept up to date. */
+export function useReadingAloud() { return !!useNow() }
 
 function useNow() {
   const [, tick] = useState(0)
@@ -281,11 +405,13 @@ function useNow() {
   return now
 }
 
-/** The small player above the search bar while something is read aloud. */
-export function ListenPlayer() {
+/** The reading-aloud bar. It takes the search field's place in the bottom
+ * bar while reading aloud is on, so there's only ever one bar; `floating`
+ * where there's no search bar (the search page). */
+export function ListenPlayer({ floating = false }: { floating?: boolean }) {
   const n = useNow()
   const { settings, update } = useApp()
-  follow = { words: settings.follow !== 'verse', silent: settings.readSilent }
+  followSettings(settings)
   useEffect(() => { if (!follow.words) clearWord() }, [settings.follow])
   const [voices, setVoices] = useState(false)
   const [, redraw] = useState(0)
@@ -336,16 +462,16 @@ export function ListenPlayer() {
   }
   return (
     <>
-      <div class="listen" role="region" aria-label={t('Reading aloud')}>
+      <div class={'listen' + (floating ? ' listen-float' : '')} role="region" aria-label={t('Reading aloud')}>
         <button class="listen-play" onClick={() => n.playing ? pauseListening() : begin()} aria-label={n.playing ? t('Pause') : t('Play')}>
-          {n.playing ? <PauseIcon size={26} /> : <PlayIcon size={26} />}
+          {n.playing ? <PauseIcon size={24} /> : <PlayIcon size={24} />}
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label={t('Choose the voice')}>
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
           <span class={n.trouble || tip ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : voice && !phoneChoice(n.lang) ? voice.name : t('Phone’s own voice'))} ▾</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={t('Speed {rate} times. Change', { rate: r })}>{r.toLocaleString(locale())}×</button>
-        <button class="listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={22} /></button>
+        <button class="close-btn listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={24} /></button>
       </div>
       {voices && <VoiceSheet lang={n.lang} silent={silent} onClose={() => setVoices(false)} onPick={pick} />}
     </>

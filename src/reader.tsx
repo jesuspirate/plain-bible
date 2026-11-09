@@ -15,7 +15,7 @@ import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
-import { canListen, startListening } from './listen'
+import { canListen, followPage, LISTEN_EVENT, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
@@ -346,12 +346,17 @@ export function Reader({ route }: { route: Route }) {
     document.fonts?.ready.then(() => { if (sheet.current === at && spreadOn.current && el.isConnected) toSheet(sheetOf(f, el, pageWidth(a))) })
   }
   // Turn the page: the next two pages, or the next chapter after the last.
-  const flip = (dir: 1 | -1) => {
+  const flip = (dir: 1 | -1, byReading = false) => {
     const f = flowEl.current, a = article.current, box = leafBox.current
     if (!f || !a || !box || flipping.current) return
     const pw = pageWidth(a), k = sheet.current
     const inside = dir === 1 ? k < sheetsOf(f, pw) - 1 : k > 0
     if (!inside && !dest(dir)) return
+    // Turned by hand while reading aloud: go on from the top of the new pages.
+    if (inside && !byReading && readingAloud() && bibles[version]) {
+      const v = firstVerseOn(f, k + dir, pw)
+      if (v) followPage({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bibles[version])
+    }
     // From here the address leads to where you are, not to a verse you jumped to.
     if (/[?&](v|at)=/.test(location.hash)) history.replaceState(history.state, '', withoutVerse(location.hash))
     if (!animate) {
@@ -435,6 +440,8 @@ export function Reader({ route }: { route: Route }) {
   }, [])
   const tapVerse = (e: MouseEvent, v: number) => {
     if (picking) { pickVerses({ ...picking, verses: toggleVerse(picking.verses, book, chapter, v) }); return }
+    // Reading aloud: a tapped verse is where reading goes on from.
+    if (readingAloud() && bibles[version]) { readFrom({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bibles[version]); return }
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     // Selecting words isn't a tap, and neither is a tap on the selected
     // words (that's for the copy menu). A tap elsewhere while words are still
@@ -924,6 +931,33 @@ export function Reader({ route }: { route: Route }) {
       ))}
     </>
   }
+
+  // Reading aloud: the chapter shown (or the verse you went to) is where
+  // reading goes on from; and the open book turns its page as the reading
+  // runs onto the next one.
+  useEffect(() => {
+    if (loaded && bibles[version]) followPage({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: target }, bibles[version])
+  }, [loaded, version, book, chapter, target])
+  const aloudAt = useRef('')
+  useEffect(() => {
+    const follow = (at: Element | Range | null | undefined) => {
+      const f = flowEl.current, a = article.current
+      if (!spreadOn.current || !f || !a || !at || flipping.current) return
+      const pw = pageWidth(a), k = sheetOf(f, at as HTMLElement, pw)
+      if (k === sheet.current + 1) flip(1, true)
+      else if (k !== sheet.current) toSheet(k)
+    }
+    const onVerse = () => {
+      const at = readingAt(), key = at ? `${at.book}.${at.chapter}.${at.verse}` : ''
+      if (key === aloudAt.current) return
+      aloudAt.current = key
+      if (at && at.book === book && at.chapter === chapter) setTimeout(() => follow(document.getElementById('v' + at.verse)), 150)
+    }
+    const onWord = (e: Event) => follow((e as CustomEvent<Range>).detail)
+    addEventListener(LISTEN_EVENT, onVerse)
+    addEventListener(WORD_EVENT, onWord)
+    return () => { removeEventListener(LISTEN_EVENT, onVerse); removeEventListener(WORD_EVENT, onWord) }
+  })
 
   return (
     <div class="reader">

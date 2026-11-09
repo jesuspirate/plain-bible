@@ -19,6 +19,7 @@ import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
+import { ListenPlayer, useReadingAloud } from './listen'
 import { locale, N_, t, tn } from './i18n'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
@@ -70,6 +71,7 @@ export function rememberSearch(q: string) {
 // tapping it opens the same panel.
 export function SearchBar({ here, mini }: { here?: { version: string; book: string; chapter: number }; mini?: boolean }) {
   const { settings, data, byId } = useApp()
+  const aloud = useReadingAloud()
   // Chapter counts per book in the current version, for the book and chapter browser.
   const [lens, setLens] = useState<Record<string, number>>({})
   const [browse, setBrowse] = useState<string>()
@@ -451,7 +453,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     <>
       {/* A swipe on the dimmed page doesn't turn its chapter behind search. */}
       {open && <div class="sb-scrim" onClick={close} onWheel={e => e.stopPropagation()} />}
-      <div ref={sb} class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '')}>
+      <div ref={sb} class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '') + (aloud && !open ? ' sb-reading' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
@@ -558,7 +560,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           </div>
         )}
         <div class="sb-bar">
-        <form class="sb-field" onSubmit={submit} role="search">
+        {/* Reading aloud: its bar stands in the search field's place until X. */}
+        {aloud && !open ? <ListenPlayer /> : <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Words or John 3:16')}
@@ -571,7 +574,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <MicIcon />
             </button>
           )}
-        </form>
+        </form>}
         {/* Circles, then prayer, always one tap away just right of search.
             🙏 opens the glowing microphone over the page. */}
         {!open && SYNC_URL && <CirclesButton />}

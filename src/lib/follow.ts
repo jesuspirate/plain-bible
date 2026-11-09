@@ -20,14 +20,23 @@ export function wordAt(spans: Span[], charIndex: number): number {
   return spans.length - 1
 }
 
-/** How long to stay on a word, in milliseconds, at a speed (1 is normal):
- * longer words take longer, and the end of a phrase or a sentence gets a
- * breath. `voice` is the pace of a phone reading aloud (a little quicker);
- * otherwise it's a calm reading pace, about 140 words a minute. */
-export function pace(text: string, span: Span, rate: number, voice = false): number {
+/** How long the sweep takes to cross a word, in milliseconds, at a speed (1
+ * is normal): longer words take longer. `voice` is the pace of a phone
+ * reading aloud (a little quicker); otherwise it's a calm reading pace,
+ * about 140 words a minute. */
+export function sweep(span: Span, rate: number, voice = false): number {
   const letters = span[1] - span[0]
+  return Math.round((voice ? 110 + 55 * letters : 150 + 60 * letters) / (rate > 0 ? rate : 1))
+}
+
+/** The breath after a word: at the end of a phrase or a sentence. */
+export function breath(text: string, span: Span, rate: number, voice = false): number {
   const after = text.slice(span[1], span[1] + 3)
-  const breath = /^\s*[.!?;:]/.test(after) ? (voice ? 350 : 450) : /^\s*[,—–)]/.test(after) ? (voice ? 150 : 200) : 0
-  const ms = voice ? 110 + 55 * letters : 150 + 60 * letters
-  return Math.round((ms + breath) / (rate > 0 ? rate : 1))
+  const ms = /^\s*[.!?;:]/.test(after) ? (voice ? 350 : 450) : /^\s*[,—–)]/.test(after) ? (voice ? 150 : 200) : 0
+  return Math.round(ms / (rate > 0 ? rate : 1))
+}
+
+/** How long to stay on a word: the sweep across it, then any breath. */
+export function pace(text: string, span: Span, rate: number, voice = false): number {
+  return sweep(span, rate, voice) + breath(text, span, rate, voice)
 }

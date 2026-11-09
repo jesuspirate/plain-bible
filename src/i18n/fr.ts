@@ -938,8 +938,8 @@ export default {
   "No voice": "Sans voix",
   "Just the highlight, moving through the words at your speed": "Seulement le surlignage, qui avance de mot en mot à votre vitesse",
   "Read aloud": "Lecture à voix haute",
-  "Tap a verse, then Listen. The words light up as they’re read, so you can follow along. The speed button on the player makes it slower or quicker.": "Touchez un verset, puis Écouter. Les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Le bouton de vitesse du lecteur ralentit ou accélère.",
   "Word by word": "Mot à mot",
   "Verse by verse": "Verset par verset",
   "No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.": "Sans voix : le surlignage avance seul de mot en mot, pour lire en silence à votre rythme.",
+  "Tap a verse, then Listen. The words light up as they’re read, so you can follow along. While it’s on, tap any verse to read from there, and use the speed button to go slower or quicker. It stays on until you tap X.": "Touchez un verset, puis Écouter. Les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Pendant la lecture, touchez n’importe quel verset pour lire à partir de là, et le bouton de vitesse pour aller plus lentement ou plus vite. La lecture reste active jusqu’à ce que vous touchiez X.",
 } as Record<string, string>
