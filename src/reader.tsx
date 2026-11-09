@@ -1121,8 +1121,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
           </button>
           <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
-          {canListen && <button onClick={() => { startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }, bibles[version]); onClose() }}>
-            <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
+          <button onClick={() => { startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }, bibles[version]); onClose() }}>
+            <SpeakerIcon size={22} /><span>{canListen && !settings.readSilent ? t('Listen') : t('Read along')}</span></button>
           <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
           {canShare
             ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>{t('Share')}</span></button>

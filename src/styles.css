@@ -952,6 +952,8 @@ body.selecting .listen { display: none; }
 .listen .listen-rate { flex: none; min-width: 48px; height: 44px; display: grid; place-items: center; border-radius: 22px; background: var(--chip); font: 600 15px var(--sans); }
 .listen .listen-stop { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--chip); color: var(--text); }
 .speaking { background: color-mix(in srgb, var(--accent) 14%, transparent); border-radius: 6px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); transition: background .3s; }
+/* Read aloud, word by word: the word being said (a browser highlight, so the page itself is untouched). */
+::highlight(qb-word) { background-color: color-mix(in srgb, var(--accent) 42%, transparent); color: var(--text); }
 .voice-help { margin: 2px 0 4px; }
 .voice-help ol { margin: 0 0 6px; padding-left: 22px; }
 .voice-help li { margin-bottom: 4px; }
