@@ -256,8 +256,11 @@ html:has(dialog[open]) { overflow: hidden; }
 /* ---- floating search bar ---- */
 main.with-bar { padding-bottom: 120px; }
 .sb {
-  position: fixed; z-index: 30; left: 50%; bottom: calc(14px + env(safe-area-inset-bottom));
-  width: min(600px, calc(100vw - 32px)); transform: translateX(-50%);
+  /* Centred with screen widths only, no 50% and no shift: after the phone
+     turns back upright, iOS can keep a fixed bar's 50% from when it was on
+     its side, pushing it half off the screen. */
+  position: fixed; z-index: 30; left: calc(50vw - min(300px, 50vw - 16px)); bottom: calc(14px + env(safe-area-inset-bottom));
+  width: min(600px, calc(100vw - 32px));
   transition: transform .35s cubic-bezier(.2, .8, .2, 1), opacity .25s;
 }
 .sb-field {
@@ -1059,6 +1062,7 @@ body.selecting .spread-turn { display: none; }
    with the words, so they aren't tiny specks at the edges. */
 @media (min-width: 1900px) and (min-height: 1050px) {
   header.top, .sb { zoom: 1.25; }
+  .sb:not(.sb-mini) { left: calc(50vw / 1.25 - 300px); }
   .sb.sb-open { top: calc(var(--vv-top) / 1.25); height: calc(var(--vv-h) / 1.25); }
   .spread-box { --book-h: calc(100dvh - 216px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
   .spread-turn { width: 62px; height: 62px; font-size: 36px; }

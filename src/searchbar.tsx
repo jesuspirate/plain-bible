@@ -342,6 +342,26 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // keyboard. So the tap puts the bar in its open place first, where the
   // keyboard won't cover it, and only then focuses it, without scrolling.
   const sb = useRef<HTMLDivElement>(null)
+  // When the screen turns (or you come back to the app turned), lay the bar
+  // out afresh: iOS can leave it where it was on the old, wider screen.
+  useEffect(() => {
+    let w = innerWidth
+    const fresh = () => requestAnimationFrame(() => {
+      const el = sb.current
+      if (!el || innerWidth === w) return
+      w = innerWidth
+      // Not while typing: hiding it would put the keyboard away.
+      if (el.classList.contains('sb-open')) return
+      el.style.display = 'none'; void el.offsetHeight; el.style.display = ''
+    })
+    const back = () => { if (document.visibilityState === 'visible') fresh() }
+    addEventListener('resize', fresh); addEventListener('orientationchange', fresh); addEventListener('pageshow', fresh)
+    document.addEventListener('visibilitychange', back)
+    return () => {
+      removeEventListener('resize', fresh); removeEventListener('orientationchange', fresh); removeEventListener('pageshow', fresh)
+      document.removeEventListener('visibilitychange', back)
+    }
+  }, [])
   const tap = useRef<{ x: number; y: number }>()
   const onFieldTouchStart = (e: TouchEvent) => {
     if (!open) overlayKeyboard(true) // before the keyboard is asked for
