@@ -32,14 +32,18 @@ const LIFT = 380
 /** …and a long passage still ends within a minute and a half. */
 const LONGEST = 90000
 const SHORTEST_LINE = 500
+/** While reading aloud the eye is following the voice: a highlight is a
+ *  quick swipe instead, the whole verse in under half a second. */
+export const QUICK = 450
 
 export type PenStyle = 'marker' | 'block' | 'text'
 
 /** Draw in the highlight on these verse elements, one after another, inside
  *  `layer` (an element with position: relative that holds them). Each verse
  *  element should carry the class hl-draw, which hides its own highlight
- *  until the pen is done. Returns a function that stops it at once. */
-export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement, done: () => void): () => void {
+ *  until the pen is done. Returns a function that stops it at once.
+ *  `longest` caps the whole drawing, in milliseconds. */
+export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement, done: () => void, longest = LONGEST): () => void {
   const box = layer.getBoundingClientRect()
   const strips: { el: HTMLElement; ems: number; rtl: boolean }[] = []  // ems: the length of line it covers
   for (const verse of verses) {
@@ -65,7 +69,7 @@ export function draw(verses: HTMLElement[], style: PenStyle, layer: HTMLElement,
 
   const time = (ems: number) => Math.max(SHORTEST_LINE, ems * PER_EM)
   const total = strips.reduce((n, s) => n + time(s.ems) + LIFT, -LIFT)
-  const k = Math.min(1, LONGEST / total)
+  const k = Math.min(1, longest / total)
   let at = 0, finished = false
   const anims: Animation[] = []
   for (const s of strips) {
