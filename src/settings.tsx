@@ -345,6 +345,13 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <label><input type="checkbox" checked={settings.penDraw} onChange={e => update({ penDraw: (e.target as HTMLInputElement).checked })} /> {t('Draw each new highlight slowly, like a marker in your hand.')}</label>
       </div>
     </div>
+    <div class="field"><span>{t('Read aloud')}</span>
+      <div class="col">
+        <span class="muted small">{t('Tap a verse, then Listen. The words light up as they’re read, so you can follow along. The speed button on the player makes it slower or quicker.')}</span>
+        {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
+        <label><input type="checkbox" checked={settings.readSilent} onChange={e => update({ readSilent: (e.target as HTMLInputElement).checked })} /> {t('No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.')}</label>
+      </div>
+    </div>
     <div class="field"><span>{t('Chapter turn')}</span>
       <div class="col">
         {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}

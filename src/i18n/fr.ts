@@ -934,4 +934,12 @@ export default {
   "Unblock": "Débloquer",
   "They’re no longer in this circle.": "Cette personne n’est plus dans ce cercle.",
   "Too many reports today. Try again tomorrow.": "Trop de signalements aujourd’hui. Réessayez demain.",
+  "Read along": "Lire en suivant",
+  "No voice": "Sans voix",
+  "Just the highlight, moving through the words at your speed": "Seulement le surlignage, qui avance de mot en mot à votre vitesse",
+  "Read aloud": "Lecture à voix haute",
+  "Tap a verse, then Listen. The words light up as they’re read, so you can follow along. The speed button on the player makes it slower or quicker.": "Touchez un verset, puis Écouter. Les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Le bouton de vitesse du lecteur ralentit ou accélère.",
+  "Word by word": "Mot à mot",
+  "Verse by verse": "Verset par verset",
+  "No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.": "Sans voix : le surlignage avance seul de mot en mot, pour lire en silence à votre rythme.",
 } as Record<string, string>
