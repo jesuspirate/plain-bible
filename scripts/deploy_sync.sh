@@ -37,6 +37,11 @@ fi
 if [ -n "${STATS_KEY:-}" ]; then
   printf '%s' "$STATS_KEY" | npx wrangler secret put STATS_KEY >&2
 fi
+# Where report notices from circles go (default hello@, which the mail
+# forwarder may hold back): on once REPORT_EMAIL is a repository secret.
+if [ -n "${REPORT_EMAIL:-}" ]; then
+  printf '%s' "$REPORT_EMAIL" | npx wrangler secret put REPORT_EMAIL >&2
+fi
 # Notifications for circles: the service's own key (VAPID), made here once
 # and kept only as a Worker secret. Never changed after, or every phone
 # would have to turn its notifications on again.

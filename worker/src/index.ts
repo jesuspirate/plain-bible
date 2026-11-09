@@ -18,6 +18,9 @@ export interface Env {
   RESEND_API_KEY?: string
   EMAIL_SECRET?: string
   EMAIL_FROM: string
+  /** Where report notices go. Unset: hello@myquietbible.com. A secret, so no
+   *  personal address is ever in the code. */
+  REPORT_EMAIL?: string
   /** Notifications are on when set: the service's P-256 key as JWK (made
    *  once by the deploy script, then never changed, or every device would
    *  have to turn notifications on again). */
@@ -236,7 +239,7 @@ async function tellAboutReport(env: Env, what: string) {
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: env.EMAIL_FROM, to: ['hello@myquietbible.com'], subject: 'Something was reported in a circle', text }),
+    body: JSON.stringify({ from: env.EMAIL_FROM, to: [env.REPORT_EMAIL || 'hello@myquietbible.com'], subject: 'Something was reported in a circle', text }),
   }).then(r => { if (!r.ok) console.error('report email', r.status) }, e => console.error('report email', e))
 }
 

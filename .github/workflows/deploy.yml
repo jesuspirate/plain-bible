@@ -52,6 +52,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           STATS_KEY: ${{ secrets.STATS_KEY }}
+          REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
       # Lets the iOS app (ios/) use this site's passkeys and open its links.
