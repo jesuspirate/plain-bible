@@ -19,7 +19,7 @@ import { canListen, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
-import { draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
+import { QUICK, draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
 import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, WIDE } from './lib/spread'
 
@@ -260,7 +260,7 @@ export function Reader({ route }: { route: Route }) {
     els.sort((a, z) => a.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
     const p = { keys: here, stop: () => {} }
     pens.current.push(p)
-    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) })
+    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) }, readingAloud() ? QUICK : undefined)
   }, [marks])
   // Turning the page puts the pen down at once.
   useEffect(() => () => { for (const p of [...pens.current]) p.stop() }, [book, chapter])
