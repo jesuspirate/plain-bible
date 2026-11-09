@@ -941,5 +941,9 @@ export default {
   "Word by word": "Mot à mot",
   "Verse by verse": "Verset par verset",
   "No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.": "Sans voix : le surlignage avance seul de mot en mot, pour lire en silence à votre rythme.",
-  "Tap a verse, then Listen. The words light up as they’re read, so you can follow along. While it’s on, tap any verse to read from there, and use the speed button to go slower or quicker. It stays on until you tap X.": "Touchez un verset, puis Écouter. Les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Pendant la lecture, touchez n’importe quel verset pour lire à partir de là, et le bouton de vitesse pour aller plus lentement ou plus vite. La lecture reste active jusqu’à ce que vous touchiez X.",
+  "Highlighted": "Surligné",
+  "Highlight removed": "Surlignage retiré",
+  "Bookmarked": "Marque-page ajouté",
+  "Bookmark removed": "Marque-page retiré",
+  "Tap Read (the open book beside 🙏), or a verse and then Listen. The words light up as they’re read, so you can follow along. While it’s on: tap a verse to read from there, tap it twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X.": "Touchez Lire (le livre ouvert à côté de 🙏), ou un verset puis Écouter. Les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Pendant la lecture : touchez un verset pour lire à partir de là, touchez-le deux fois rapidement pour le surligner, ou maintenez-le pour ajouter un marque-page. Le bouton de vitesse ralentit ou accélère. La lecture reste active jusqu’à ce que vous touchiez X.",
 } as Record<string, string>

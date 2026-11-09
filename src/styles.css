@@ -980,6 +980,8 @@ body.selecting .listen { display: none; }
   background: color-mix(in srgb, var(--accent) 20%, transparent);
 }
 body.following .chapter .vt, body.following .chapter .vn { position: relative; z-index: 1; }
+/* Reading aloud: a press held on a verse bookmarks it, so no text selection or callout. */
+:root.reading-aloud .chapter { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
 .voice-help { margin: 2px 0 4px; }
 .voice-help ol { margin: 0 0 6px; padding-left: 22px; }
 .voice-help li { margin-bottom: 4px; }
