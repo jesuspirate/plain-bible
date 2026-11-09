@@ -854,6 +854,7 @@ export default {
   "In Chrome or Edge, click the install icon at the right end of the address bar.": "Dans Chrome ou Edge, cliquez sur l’icône d’installation à droite de la barre d’adresse.",
   "In Safari on a Mac: click {share} at the top right, then {dock}.": "Dans Safari sur un Mac : cliquez sur {share} en haut à droite, puis sur {dock}.",
   "Add to Dock": "Ajouter au Dock",
+  "Download on the": "Télécharger dans l’",
   "Apple’s instructions": "Les instructions d’Apple",
   "Google’s instructions": "Les instructions de Google",
   "Put it on your Home Screen": "Mettre sur l’écran d’accueil",

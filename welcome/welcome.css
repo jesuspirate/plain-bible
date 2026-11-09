@@ -249,6 +249,16 @@ blockquote[lang='he'] .vn { margin: 0 0 0 6px; }
 svg.inline { width: 1.2em; height: 1.2em; vertical-align: -.25em; margin: 0 1px 0 3px; color: var(--accent); }
 /* An icon keeps the word or the comma after it on its line. */
 .nb { white-space: nowrap; }
+.store-badge {
+  display: inline-flex; align-items: center; gap: 8px; min-height: 56px; padding: 6px 20px 6px 14px; margin: 0 0 20px;
+  border-radius: 12px; background: #000; color: #fff; border: 1px solid #a6a6a6; text-decoration: none;
+  font: 600 26px/1 -apple-system, BlinkMacSystemFont, 'Helvetica Neue', var(--sans); letter-spacing: -.01em;
+}
+.store-badge svg { width: 34px; height: 34px; flex: none; }
+.store-badge span { display: flex; flex-direction: column; gap: 2px; }
+.store-badge small { font-size: 13px; font-weight: 500; letter-spacing: 0; }
+.store-badge:active { transform: scale(.97); }
+.or { margin: 0 0 18px; font-size: 19px; color: var(--soft); }
 .install-now { margin: 0 0 26px; }
 .installed { font-weight: 700; margin: 0 0 22px; }
 

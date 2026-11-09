@@ -17,7 +17,7 @@ export default {
   computerInstall: 'Instálala en tu computadora',
   installIphone: 'Ponla en tu iPhone',
   installAndroid: 'Ponla en tu teléfono Android',
-  hint: 'Sin registro y sin tienda de apps. Se abre aquí mismo, en tu navegador.',
+  hint: 'Sin registro. Se abre aquí mismo, en tu navegador.',
   psalms: 'Salmos',
   mbar: 'Sal 119 · RV',
   mock: [
@@ -60,6 +60,8 @@ export default {
   iosSteps: '<li><span><a href="../#/read" data-open>Abre la Biblia</a> en Safari.</span></li><li><span>Toca el botón de menú en la barra de direcciones y luego <strong>Compartir</strong> <span class="nb">{svg}.</span> En iPhone más antiguos, Compartir está directamente en la barra de abajo.</span></li><li><span>Toca <strong>Ver más</strong> y luego <strong>Añadir a pantalla</strong> <span class="nb"><strong>de inicio</strong> {svg}.</span></span></li><li><span>Deja <strong>Abrir como app web</strong> activado y toca <strong>Añadir</strong>. La lámpara aparece en tu pantalla de inicio.</span></li>',
   iosNote: 'Hazlo desde la Biblia, no desde esta página, para que la lámpara abra directamente tu lectura. Usa Safari: otros navegadores en iPhone y iPad no siempre pueden añadir una app.',
   install: 'Instalar My Quiet Bible',
+  appStore: '{svg}<span><small>Descárgalo en el</small> App Store</span>',
+  orSafari: 'O, sin la App Store, desde Safari:',
   androidNote: 'Un toque. Nada pasa por una tienda de apps.',
   androidInstalled: 'Instalada. Abre la lámpara con tus otras apps.',
   androidSteps: '<li><span><a href="../#/read" data-open>Abre la Biblia</a> en Chrome, o en el navegador que uses.</span></li><li><span>Abre el menú del navegador, normalmente tres puntos {svg} arriba a la derecha.</span></li><li><span>Toca <strong>Instalar y crear acceso directo</strong> (algunos navegadores dicen <strong>Añadir a pantalla de inicio</strong>).</span></li><li><span>Elige <strong>Instalar</strong>, no <strong>Crear acceso directo</strong>. Luego toca <strong>Instalar</strong> otra vez.</span></li><li><span>La lámpara aparece con tus otras apps.</span></li>',

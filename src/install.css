@@ -21,6 +21,14 @@
 /* Safari's page menu button sits in a little rounded box in the address bar. */
 .hs-boxed { width: 1.5em; height: 1.3em; padding: 1px 3px; border-radius: 8px; background: var(--chip); }
 .hs-note { margin: -2px 0 0; font-size: 16px; line-height: 1.4; color: var(--muted); }
+.hs-store {
+  align-self: flex-start; display: inline-flex; align-items: center; gap: 7px; min-height: 50px; padding: 5px 16px 5px 12px;
+  border-radius: 11px; background: #000; color: #fff; border: 1px solid #a6a6a6; text-decoration: none;
+  font: 600 22px/1 -apple-system, BlinkMacSystemFont, 'Helvetica Neue', var(--sans);
+}
+.hs-store svg { width: 28px; height: 28px; flex: none; }
+.hs-store span { display: flex; flex-direction: column; gap: 2px; }
+.hs-store small { font-size: 11px; font-weight: 500; }
 .hs-help { align-self: flex-start; font-size: 16px; font-weight: 600; padding: 4px 0; }
 .hs-btn { min-height: 54px; border-radius: 14px; font-size: 18px; font-weight: 700; }
 @keyframes hs-fade { from { opacity: 0; } }
