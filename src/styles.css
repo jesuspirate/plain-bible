@@ -934,26 +934,35 @@ body:has(.sb.sb-open) .pick-verse, body:has(.pick-verse) .listen { display: none
 .approve-input { display: block; margin-top: 6px; max-width: 7em; font: 700 28px var(--sans); letter-spacing: 6px; text-align: center; font-variant-numeric: tabular-nums; }
 .approve-input[aria-invalid="true"] { border-color: var(--ribbon); }
 
-/* Read aloud: a small player just above the search bar, and a soft mark on
-   the verse being read. */
+/* Read aloud: the bar takes the search field's place at the bottom (one
+   bar, not two), and a soft rounded mark glides under each word. */
 .listen {
-  position: fixed; z-index: 29; left: 50%; transform: translateX(-50%); bottom: calc(88px + env(safe-area-inset-bottom));
-  width: min(600px, calc(100vw - 32px)); box-sizing: border-box; display: flex; align-items: center; gap: 6px;
-  padding: 6px; border-radius: 30px; background: color-mix(in srgb, var(--surface) 94%, transparent);
-  border: 1px solid var(--line); box-shadow: 0 8px 30px rgba(0,0,0,.18); -webkit-backdrop-filter: blur(14px); backdrop-filter: blur(14px);
+  flex: 1; min-width: 0; height: 52px; box-sizing: border-box; display: flex; align-items: center; gap: 4px;
+  padding: 0 3px; border-radius: 26px; background: var(--surface); border: 1px solid var(--line); box-shadow: 0 10px 30px rgba(0,0,0,.14);
+}
+.listen.listen-float {
+  position: fixed; z-index: 29; left: calc(50vw - min(300px, 50vw - 16px)); bottom: calc(14px + env(safe-area-inset-bottom));
+  width: min(600px, calc(100vw - 32px)); flex: none;
 }
 body.selecting .listen { display: none; }
 .listen button { all: unset; cursor: pointer; -webkit-tap-highlight-color: transparent; }
-.listen .listen-play { flex: none; display: grid; place-items: center; width: 48px; height: 48px; border-radius: 50%; background: var(--accent); color: var(--surface); }
-.listen .listen-what { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 2px 6px; font: 15px var(--sans); }
+.listen .listen-play { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--accent); color: var(--surface); }
+.listen .listen-what { flex: 1; min-width: 0; display: flex; flex-direction: column; padding: 0 4px; font: 15px/1.25 var(--sans); }
 .listen .listen-what strong, .listen .listen-what span { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
-.listen-what span { font-size: 13px; }
-.listen-trouble { color: var(--accent); white-space: normal !important; }
-.listen .listen-rate { flex: none; min-width: 48px; height: 44px; display: grid; place-items: center; border-radius: 22px; background: var(--chip); font: 600 15px var(--sans); }
-.listen .listen-stop { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--chip); color: var(--text); }
-.speaking { background: color-mix(in srgb, var(--accent) 14%, transparent); border-radius: 6px; box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 14%, transparent); transition: background .3s; }
-/* Read aloud, word by word: the word being said (a browser highlight, so the page itself is untouched). */
-::highlight(qb-word) { background-color: color-mix(in srgb, var(--accent) 42%, transparent); color: var(--text); }
+.listen-what span { font-size: 12px; }
+.listen-trouble { color: var(--accent); }
+.listen .listen-rate { flex: none; min-width: 44px; height: 40px; display: grid; place-items: center; border-radius: 20px; background: var(--chip); font: 600 15px var(--sans); }
+/* The way out: the same bold round X as everywhere else. */
+.listen .close-btn.listen-stop { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--text); color: var(--bg); }
+/* While reading aloud, Circles waits (X brings it back) so the bar has room. */
+.sb.sb-reading .sb-circles { display: none; }
+.sb.sb-mini.sb-reading { left: calc(50vw - min(300px, 50vw - 16px)); right: auto; width: min(600px, calc(100vw - 32px)); }
+.speaking { background: color-mix(in srgb, var(--accent) 9%, transparent); border-radius: 14px; box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 9%, transparent); transition: background .4s, box-shadow .4s; }
+.follow-band {
+  position: absolute; z-index: 0; pointer-events: none; border-radius: .55em;
+  background: color-mix(in srgb, var(--accent) 20%, transparent);
+}
+body.following .chapter .vt, body.following .chapter .vn { position: relative; z-index: 1; }
 .voice-help { margin: 2px 0 4px; }
 .voice-help ol { margin: 0 0 6px; padding-left: 22px; }
 .voice-help li { margin-bottom: 4px; }
@@ -1023,7 +1032,7 @@ article.chapter.spread {
   box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 14px 44px rgba(60,40,10,.14);
 }
 .spread-flow {
-  box-sizing: border-box; width: 100%; height: 100%; padding: 1.1em var(--pp) .9em;
+  position: relative; box-sizing: border-box; width: 100%; height: 100%; padding: 1.1em var(--pp) .9em;
   column-count: 2; column-gap: calc(2 * var(--pp)); column-fill: auto;
   orphans: 2; widows: 2;
 }

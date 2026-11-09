@@ -5,7 +5,7 @@ import { Search } from './search'
 import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
-import { ListenPlayer } from './listen'
+import { followSettings, ListenPlayer } from './listen'
 import { Saved } from './saved'
 import { HistoryIcon, RefreshIcon } from './icons'
 import { applyUpdate, COUNTDOWN, readySince, useUpdate } from './lib/update'
@@ -97,6 +97,7 @@ export function App() {
   }, [])
 
   useEffect(() => { if (settings) saveSettings(settings) }, [settings])
+  if (settings) followSettings(settings)
 
   // A new language in Settings (or from another device): its words load,
   // then everything is drawn again in it.
@@ -341,7 +342,7 @@ export function App() {
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: byId.has(route.path[1]) ? route.path[1] : settings.version, book: route.path[2], chapter: +route.path[3] } : undefined} />}
       {sidewaysEdge}
-      <ListenPlayer />
+      {view === 'search' && <ListenPlayer floating />}
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
