@@ -172,7 +172,36 @@ let bands: { el: HTMLElement; top: number; rtl: boolean; edge: number }[] = []
 let bandLayer: HTMLElement | undefined
 export const WORD_EVENT = 'qb-listen-word'
 
-function place(range: Range, ms: number) {
+/** The band for a line, made empty at its first letter if it's new. */
+function bandAt(layer: HTMLElement, top: number, height: number, start: number, rtl: boolean, fs: number) {
+  let b = bands.find(x => Math.abs(x.top - top) < fs * .5)
+  if (b) return b
+  const el = document.createElement('span')
+  el.className = rtl ? 'follow-band rtl' : 'follow-band'
+  el.setAttribute('aria-hidden', 'true')
+  Object.assign(el.style, { top: top + 'px', height: height + 'px', width: '0px', transition: 'none',
+    ...(rtl ? { right: layer.clientWidth - start + 'px' } : { left: start + 'px' }) })
+  layer.appendChild(el)
+  void el.offsetWidth
+  b = { el, top, rtl, edge: start }
+  bands.push(b)
+  return b
+}
+
+/** Sweep a band to `width`, never back: a voice that reports a word late
+ * never pulls it back. Linear, so the flow is even. */
+function grow(b: (typeof bands)[number], width: number, ms: number, delay: number) {
+  if (width < b.el.getBoundingClientRect().width - 1) return false
+  b.el.style.transition = `width ${ms}ms linear ${delay}ms`
+  b.el.style.width = width + 'px'
+  return true
+}
+
+/** The band flows through word `i` of the verse in `ms`. Every line before it
+ * is filled to its last word read, even when a voice skipped some words, so
+ * the lines read always line up as one shape. */
+function place(ranges: Range[], i: number, ms: number) {
+  const range = ranges[i]
   const verse = range.startContainer.parentElement?.closest<HTMLElement>('[id^="v"]')
   // In the open book, the pages' own flow, so the bands turn with the page.
   const layer = verse?.closest<HTMLElement>('.spread-flow') ?? verse?.closest<HTMLElement>('article')
@@ -185,41 +214,41 @@ function place(range: Range, ms: number) {
   const fs = parseFloat(getComputedStyle(verse).fontSize) || 18
   const rtl = getComputedStyle(verse).direction === 'rtl'
   const px = .18 * fs, py = .04 * fs
+  // The lines read so far: where each starts and how far it has been read.
+  const lines: { top: number; h: number; from: number; to: number }[] = []
+  for (let j = 0; j < i; j++) for (const r of ranges[j].getClientRects()) {
+    if (!r.width) continue
+    const top = r.top - oy - py, l = lines.find(x => Math.abs(x.top - top) < fs * .5)
+    if (l) { l.from = Math.min(l.from, r.left); l.to = Math.max(l.to, r.right) }
+    else lines.push({ top, h: r.height + 2 * py, from: r.left, to: r.right })
+  }
+  for (const l of lines) {
+    if (rects.some(r => Math.abs(r.top - oy - py - l.top) < fs * .5)) continue
+    const start = rtl ? l.to - ox + px : l.from - ox - px
+    const b = bandAt(layer, l.top, l.h, start, rtl, fs)
+    grow(b, Math.max(0, rtl ? b.edge - (l.from - ox - px) : l.to - ox + px - b.edge), 160, 0)
+  }
   // A word broken over two lines (a hyphen) sweeps one part, then the next.
   const share = rects.map(r => r.width / rects.reduce((n, x) => n + x.width, 0))
   let delay = 0
-  rects.forEach((r, i) => {
-    const top = r.top - oy - py, d = Math.max(60, ms * share[i])
-    let b = bands.find(x => Math.abs(x.top - top) < fs * .5)
-    if (!b) {
-      // A new line: the band starts at this word's first letter, empty.
-      const el = document.createElement('span')
-      el.className = 'follow-band'
-      el.setAttribute('aria-hidden', 'true')
-      const start = rtl ? r.right - ox + px : r.left - ox - px
-      Object.assign(el.style, { top: top + 'px', height: r.height + 2 * py + 'px', width: '0px', transition: 'none',
-        ...(rtl ? { right: layer.clientWidth - start + 'px' } : { left: start + 'px' }) })
-      layer.appendChild(el)
-      void el.offsetWidth
-      b = { el, top, rtl, edge: start }
-      bands.push(b)
-    }
-    const width = Math.max(0, b.rtl ? b.edge - (r.left - ox - px) : r.right - ox + px - b.edge)
-    // Only ever forward: a voice that reports a word late never pulls it back.
-    if (width < b.el.getBoundingClientRect().width - 1) return
-    // Linear, so the flow is even; a new word picks up from wherever the band is.
-    b.el.style.transition = `width ${d}ms linear ${delay}ms`
-    b.el.style.width = width + 'px'
-    delay += d
+  rects.forEach((r, k) => {
+    const top = r.top - oy - py, d = Math.max(60, ms * share[k])
+    const l = lines.find(x => Math.abs(x.top - top) < fs * .5)
+    const from = Math.min(r.left, l?.from ?? r.left), to = Math.max(r.right, l?.to ?? r.right)
+    const b = bandAt(layer, top, r.height + 2 * py, rtl ? to - ox + px : from - ox - px, rtl, fs)
+    if (grow(b, Math.max(0, b.rtl ? b.edge - (r.left - ox - px) : r.right - ox + px - b.edge), d, delay)) delay += d
   })
+  // The soft leading edge is on the line being read only.
+  const last = bands.find(x => Math.abs(x.top - (rects[rects.length - 1].top - oy - py)) < fs * .5)
+  for (const b of bands) b.el.classList.toggle('lead', b === last)
 }
 
 function showWord(i: number, ms: number) {
   wordNow = i
   if (!follow.words) return
-  const range = wordsOnPage()?.[i]
-  if (!range) return clearWord()
-  place(range, ms)
+  const ranges = wordsOnPage(), range = ranges?.[i]
+  if (!ranges || !range) return clearWord()
+  place(ranges, i, ms)
   // The book on a big screen turns its page when the words run onto the next.
   dispatchEvent(new CustomEvent(WORD_EVENT, { detail: range }))
   // A long verse runs on below the bar: keep the word in view, but don't
