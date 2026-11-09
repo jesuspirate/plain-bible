@@ -557,7 +557,7 @@ function CircleView({ id }: { id: string }) {
   // turns into "Send invite link" and the next tap sends it at once.
   const sendInvite = async (link: string) => {
     const text = inviteMessage([
-      info?.name ? t('Come read the word and pray with {circle} in My Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
+      info?.name ? t('Come read the word and pray with “{circle}” in My Quiet Bible. This private link is just for you: it works once, for 7 days.', { circle: info.name })
         : t('Come read the word and pray with my circle in My Quiet Bible. This private link is just for you: it works once, for 7 days.'),
       t('Already have My Quiet Bible? Copy this link and paste it in Circles there.'),
     ], link)
