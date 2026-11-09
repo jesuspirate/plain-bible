@@ -129,7 +129,7 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .verse { padding: 2px 0; scroll-margin-top: 80px; }
 .chapter:not(.cols-1) .verse { border-bottom: 1px dashed var(--line); padding: 6px 0; }
 .verse .cell { padding: 1px 0; }
-.vn { all: unset; cursor: pointer; font: 600 var(--vn-size, .62em) var(--sans); color: var(--muted); vertical-align: super; margin-right: 4px; padding: 0 2px; }
+.vn { all: unset; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: pointer; font: 600 var(--vn-size, .62em) var(--sans); color: var(--muted); vertical-align: super; margin-right: 4px; padding: 0 2px; }
 @media (hover: hover) { .vn:hover { color: var(--accent); } }
 /* Where a search or link lands: a glow that fades by itself (see Reader) */
 .target { border-radius: 4px; animation: landed 8s ease-in-out forwards; }

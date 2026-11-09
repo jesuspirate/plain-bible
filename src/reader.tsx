@@ -455,16 +455,20 @@ export function Reader({ route }: { route: Route }) {
     })
     return !had
   }
-  // Held still for half a second while reading aloud: bookmark (or unbookmark) the verse.
+  // Held still for half a second: bookmark (or unbookmark) the verse. While
+  // reading aloud anywhere on the verse; otherwise on its number only, so
+  // holding the words still selects them.
   const holdStart = (e: PointerEvent, v: number) => {
-    if (!readingAloud() || e.button > 0) return
+    held.current = false
+    if (e.button > 0 || !(readingAloud() || (e.target as Element).closest?.('.vn'))) return
     clearTimeout(hold.current?.timer)
     hold.current = { x: e.clientX, y: e.clientY, timer: window.setTimeout(() => {
       hold.current = undefined
       held.current = true
       if (aloudTap.current) { clearTimeout(aloudTap.current.timer); aloudTap.current = undefined }
       navigator.vibrate?.(15)
-      listenNote(toggleBookmark(v) ? t('Bookmarked') : t('Bookmark removed'))
+      const on = toggleBookmark(v)
+      if (readingAloud()) listenNote(on ? t('Bookmarked') : t('Bookmark removed'))
     }, 500) }
   }
   const holdMove = (e: PointerEvent) => {
@@ -498,6 +502,7 @@ export function Reader({ route }: { route: Route }) {
       aloudTap.current = { v, t: at, timer: window.setTimeout(() => { aloudTap.current = undefined; readFrom(spot, bible) }, TAP2) }
       return
     }
+    if (held.current) { held.current = false; return }
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     // Selecting words isn't a tap, and neither is a tap on the selected
     // words (that's for the copy menu). A tap elsewhere while words are still
