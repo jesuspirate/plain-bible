@@ -9,7 +9,8 @@ import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, inCircles, openSettings, pickVerses, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
+import { go, inCircles, openSettings, parseHash, pickVerses, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
+import { readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import { holdsVerse, MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
@@ -51,7 +52,17 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // The verses this prayer is prayed using, from anywhere in the Bible.
   // Verses you just selected are offered; Pray on the selection bar (or
   // Done after Add a verse) ties them straight away.
-  const [offer] = useState(verseToPrayOver)
+  // What to offer: verses chosen for this prayer; else, while reading aloud,
+  // the verse being read; else a verse just selected on the chapter still open.
+  const [offer] = useState(() => {
+    const o = verseToPrayOver()
+    if (o?.sure) return o
+    const at = readingAt()
+    if (at) return { verses: [{ book: at.book, chapter: at.chapter, verses: [at.verse] }], sure: false }
+    const r = parseHash().path
+    if (o && r[0] === 'read' && !o.verses.some(v => v.book === r[2] && v.chapter === +r[3])) return undefined
+    return o
+  })
   const [tied, setTiedNow] = useState<PrayerVerse[]>(offer?.sure ? offer.verses : [])
   const tiedRef = useRef(tied)
   const setTied = (v: PrayerVerse[]) => { tiedRef.current = v; setTiedNow(v) }

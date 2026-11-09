@@ -307,6 +307,17 @@ main.with-bar { padding-bottom: 120px; }
   box-shadow: 0 10px 30px rgba(0,0,0,.14); -webkit-tap-highlight-color: transparent;
 }
 .sb-circles svg * { stroke-width: 2.6; }
+/* Read, beside Circles: the same plain round button, a book with a play mark. */
+.sb-read {
+  all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
+  color: var(--accent); background: var(--surface); border: 1px solid var(--line); box-sizing: border-box;
+  box-shadow: 0 10px 30px rgba(0,0,0,.14); -webkit-tap-highlight-color: transparent;
+}
+.sb-read:active { transform: scale(.94); }
+.sb-read:disabled { opacity: .5; }
+.sb-read:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
+@media (max-width: 359px) { .sb-read { width: 48px; height: 48px; } }
+.sb-mini .sb-read { width: 48px; height: 48px; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
 .sb-circles::before { content: ''; position: absolute; inset: -5px; border-radius: 50%; }
 .sb-circles:active { transform: scale(.94); }
 .sb-circles:focus-visible, .sb-pray:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }

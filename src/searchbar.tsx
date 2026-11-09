@@ -6,7 +6,7 @@
 // words as you remember them. It stays pinned while you read, showing where
 // you are.
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
-import { BOOKS, bookAbbr, bookName, bookShort } from './lib/books'
+import { BOOKS, bookAbbr, bookName } from './lib/books'
 import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
@@ -14,12 +14,14 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, inCircles, openCircles, openPrayer, readPath, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
-import { CircleIcon } from './icons'
+import { CircleIcon, ReadIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
-import { ListenPlayer, useReadingAloud } from './listen'
+import { ListenPlayer, startListening, useReadingAloud } from './listen'
+import { loadPlace } from './lib/place'
+import type { Bible } from './lib/data'
 import { locale, N_, t, tn } from './i18n'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
@@ -42,6 +44,23 @@ function PrayButton() {
   )
 }
 
+/** Read: one tap, and the chapter on screen is read aloud (or followed
+ *  silently) from the verse at the top of the screen, as easily as 🙏. */
+function ReadButton({ here, lang, bible }: { here: { version: string; book: string; chapter: number }; lang: string; bible?: Bible }) {
+  const start = () => {
+    if (!bible) return
+    const p = loadPlace()
+    const verse = p && p.book === here.book && p.chapter === here.chapter ? p.verse : 1
+    // Inside the tap itself, so an iPhone lets the voice start.
+    startListening({ ...here, lang, verse }, bible)
+  }
+  return (
+    <button type="button" class="sb-read" onClick={start} disabled={!bible} aria-label={t('Read aloud')} title={t('Read aloud')}>
+      <ReadIcon size={28} />
+    </button>
+  )
+}
+
 /** Circles: the people you read and pray with, one tap away beside 🙏.
  *  A dot when someone shared, replied or prayed with you since you last looked. */
 function CirclesButton() {
@@ -56,9 +75,9 @@ function CirclesButton() {
   )
 }
 
-// On a phone the bar shares its row with Circles and 🙏, so long book names
-// are shortened (1 Thess, Deut) to keep the version in view.
-const shortName = (id: string) => innerWidth < 430 ? bookShort(id) : bookName(id)
+// On a phone the bar shares its row with Read, Circles and 🙏, so book
+// names are abbreviated (Gen, Éphé) to keep the version in view.
+const shortName = (id: string) => innerWidth < 430 ? bookAbbr(id) : bookName(id)
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
@@ -72,6 +91,13 @@ export function rememberSearch(q: string) {
 export function SearchBar({ here, mini }: { here?: { version: string; book: string; chapter: number }; mini?: boolean }) {
   const { settings, data, byId } = useApp()
   const aloud = useReadingAloud()
+  // The Bible on screen, ready before Read is tapped (an iPhone only lets a
+  // voice start inside the tap itself, with nothing to wait for).
+  const [readBible, setReadBible] = useState<Bible>()
+  useEffect(() => {
+    setReadBible(undefined)
+    if (here) data.bible(here.version).then(setReadBible, () => {})
+  }, [here?.version])
   // Chapter counts per book in the current version, for the book and chapter browser.
   const [lens, setLens] = useState<Record<string, number>>({})
   const [browse, setBrowse] = useState<string>()
@@ -577,6 +603,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         </form>}
         {/* Circles, then prayer, always one tap away just right of search.
             🙏 opens the glowing microphone over the page. */}
+        {!open && !aloud && here && <ReadButton here={here} lang={byId.get(here.version)?.lang ?? 'en'} bible={readBible} />}
         {!open && SYNC_URL && <CirclesButton />}
         {!open && <PrayButton />}
         {open && <button type="button" class="sb-cancel" onClick={close}>{t('Cancel')}</button>}
