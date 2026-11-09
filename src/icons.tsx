@@ -177,6 +177,13 @@ export const SpeakerIcon = ({ size, class: c }: P) => (
     <path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.3a8 8 0 0 1 0 11.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
 )
 
+/** An open book with a play mark: read aloud. */
+export const ReadIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M12 6.2C10 4.9 7.2 4.4 3.5 4.6v13.6c3.7-.2 6.5.3 8.5 1.6 2-1.3 4.8-1.8 8.5-1.6V4.6c-3.7-.2-6.5.3-8.5 1.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
+    <path d="M12 6.2v13.6" fill="none" stroke="currentColor" stroke-width="2" />
+    <path d="M6.3 9.3v5.4l4-2.7z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" /></svg>
+)
+
 export const PlayIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M7 4.5v15l13-7.5z" fill="currentColor" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round" /></svg>
 )
