@@ -56,6 +56,8 @@ if (typeof document !== 'undefined') document.addEventListener('visibilitychange
 const emit = () => {
   dispatchEvent(new Event(EVENT))
   stayAwake()
+  // While it's on, a press held on a verse bookmarks it: no text selection or callout in the way.
+  document.documentElement.classList.toggle('reading-aloud', !!now)
   if (now) put(PLACE_KEY, JSON.stringify({ version: now.version, lang: now.lang, book: now.book, chapter: now.chapter, verse: now.verse }))
   else try { localStorage.removeItem(PLACE_KEY) } catch { /* private mode */ }
 }
@@ -367,6 +369,15 @@ export function pauseListening(trouble?: string) {
 /** Whether reading aloud is on (playing or paused): the mode lasts until X. */
 export const readingAloud = () => !!now
 
+/** A word on the reading bar for a moment, where the voice's name is: what a gesture just did. */
+let noteText: string | undefined, noteTimer = 0
+export function listenNote(text: string) {
+  noteText = text
+  clearTimeout(noteTimer)
+  noteTimer = window.setTimeout(() => { noteText = undefined; dispatchEvent(new Event(EVENT)) }, 2200)
+  dispatchEvent(new Event(EVENT))
+}
+
 /** Where reading aloud is, if it's on. */
 export const readingAt = () => now && { version: now.version, book: now.book, chapter: now.chapter, verse: now.verse }
 export const LISTEN_EVENT = EVENT
@@ -486,7 +497,7 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label={t('Choose the voice')}>
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble || tip ? 'listen-trouble' : 'muted'}>{n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : voice && !phoneChoice(n.lang) ? voice.name : t('Phone’s own voice'))} ▾</span>
+          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : voice && !phoneChoice(n.lang) ? voice.name : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={t('Speed {rate} times. Change', { rate: r })}>{r.toLocaleString(locale())}×</button>
         <button class="close-btn listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={24} /></button>

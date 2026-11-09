@@ -15,7 +15,7 @@ import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
-import { canListen, followPage, LISTEN_EVENT, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
+import { canListen, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
@@ -431,6 +431,51 @@ export function Reader({ route }: { route: Route }) {
   // One tap selects a verse; a quick second tap on it instead highlights it
   // in the color you used last, or takes its highlight off.
   const lastTap = useRef<{ v: number; t: number; before: number[] }>()
+  // Reading aloud: a tap waiting to see if a second one follows, and a hold that just bookmarked.
+  const TAP2 = 320
+  const aloudTap = useRef<{ v: number; t: number; timer: number }>()
+  const held = useRef(false), hold = useRef<{ timer: number; x: number; y: number }>()
+  /** The verse highlighted in the last color used, drawn in by hand; or its highlight taken off. Returns whether it's now highlighted. */
+  const toggleHighlight = (v: number) => {
+    const key = markKey(book, chapter, v), had = marks[key]?.c, now = Date.now()
+    setMarks(all => {
+      const next = { ...all[key], t: now } as Record<string, unknown>
+      delete next.r
+      if (had) delete next.c; else { next.c = lastColor(); next.v = version; penDown([key]) }
+      return { ...all, [key]: tidy(next as never) }
+    })
+    return !had
+  }
+  const toggleBookmark = (v: number) => {
+    const key = markKey(book, chapter, v), had = marks[key]?.b, now = Date.now()
+    setMarks(all => {
+      const next = { ...all[key], t: now } as Record<string, unknown>
+      if (had) delete next.b; else next.b = 1
+      return { ...all, [key]: tidy(next as never) }
+    })
+    return !had
+  }
+  // Held still for half a second: bookmark (or unbookmark) the verse. While
+  // reading aloud anywhere on the verse; otherwise on its number only, so
+  // holding the words still selects them.
+  const holdStart = (e: PointerEvent, v: number) => {
+    held.current = false
+    if (e.button > 0 || !(readingAloud() || (e.target as Element).closest?.('.vn'))) return
+    clearTimeout(hold.current?.timer)
+    hold.current = { x: e.clientX, y: e.clientY, timer: window.setTimeout(() => {
+      hold.current = undefined
+      held.current = true
+      if (aloudTap.current) { clearTimeout(aloudTap.current.timer); aloudTap.current = undefined }
+      navigator.vibrate?.(15)
+      const on = toggleBookmark(v)
+      if (readingAloud()) listenNote(on ? t('Bookmarked') : t('Bookmark removed'))
+    }, 500) }
+  }
+  const holdMove = (e: PointerEvent) => {
+    const h = hold.current
+    if (h && Math.hypot(e.clientX - h.x, e.clientY - h.y) > 10) { clearTimeout(h.timer); hold.current = undefined }
+  }
+  const holdEnd = () => { if (hold.current) { clearTimeout(hold.current.timer); hold.current = undefined } }
   // Whether words were already selected when the finger went down.
   const selectedBefore = useRef(false)
   useEffect(() => {
@@ -440,8 +485,24 @@ export function Reader({ route }: { route: Route }) {
   }, [])
   const tapVerse = (e: MouseEvent, v: number) => {
     if (picking) { pickVerses({ ...picking, verses: toggleVerse(picking.verses, book, chapter, v) }); return }
-    // Reading aloud: a tapped verse is where reading goes on from.
-    if (readingAloud() && bibles[version]) { readFrom({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bibles[version]); return }
+    // Reading aloud: a tap is where reading goes on from; a quick second tap
+    // highlights the verse instead (so the reading doesn't jump there); a
+    // press held a moment bookmarks it (below). Nothing to aim at, nothing to open.
+    if (readingAloud() && bibles[version]) {
+      if (held.current) { held.current = false; return }
+      const at = Date.now(), prev = aloudTap.current
+      if (prev && prev.v === v && at - prev.t < TAP2) {
+        clearTimeout(prev.timer); aloudTap.current = undefined
+        const on = toggleHighlight(v)
+        listenNote(on ? t('Highlighted') : t('Highlight removed'))
+        return
+      }
+      if (prev) clearTimeout(prev.timer)
+      const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible = bibles[version]
+      aloudTap.current = { v, t: at, timer: window.setTimeout(() => { aloudTap.current = undefined; readFrom(spot, bible) }, TAP2) }
+      return
+    }
+    if (held.current) { held.current = false; return }
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
     // Selecting words isn't a tap, and neither is a tap on the selected
     // words (that's for the copy menu). A tap elsewhere while words are still
@@ -455,13 +516,7 @@ export function Reader({ route }: { route: Route }) {
     if (prev && prev.v === v && now - prev.t < 350) {
       lastTap.current = undefined
       setSelected(prev.before)
-      const key = markKey(book, chapter, v), had = marks[key]?.c
-      setMarks(all => {
-        const next = { ...all[key], t: now } as Record<string, unknown>
-        delete next.r
-        if (had) delete next.c; else { next.c = lastColor(); next.v = version; penDown([key]) }
-        return { ...all, [key]: tidy(next as never) }
-      })
+      toggleHighlight(v)
       return
     }
     lastTap.current = { v, t: now, before: selected }
@@ -898,7 +953,10 @@ export function Reader({ route }: { route: Route }) {
         onClick={e => { e.stopPropagation(); setSelected(s => s.includes(v) ? s : [...s, v].sort((a, b) => a - b)) }}>
         <BookmarkIcon size={20} filled={false} />
       </button>)}</span>
-    const rest = (v: number) => live ? { onPointerEnter: (e: PointerEvent) => { if (e.pointerType === 'mouse' && fine) setReading(v) } } : {}
+    const rest = (v: number) => live ? {
+      onPointerEnter: (e: PointerEvent) => { if (e.pointerType === 'mouse' && fine) setReading(v) },
+      onPointerDown: (e: PointerEvent) => holdStart(e, v), onPointerMove: holdMove, onPointerUp: holdEnd, onPointerCancel: holdEnd,
+    } : {}
     return <>
       <h1 class="chapter-title"><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
       {live && reminder}
