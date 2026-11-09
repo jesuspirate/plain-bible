@@ -36,8 +36,26 @@ const EVENT = 'qb-listen'
 let now: Now | undefined
 let run = 0 // bumped on every start, pause and stop, so old utterances stand down
 const PLACE_KEY = 'plain-bible:reading-aloud'
+// While reading aloud plays, the screen stays awake: nobody touches it while
+// they follow along, and the phone would otherwise dim and lock. Let go on
+// pause or X. The phone drops it when the app goes to the background, so it's
+// asked for again on return.
+let lock: WakeLockSentinel | undefined, asking = false
+function stayAwake() {
+  const want = !!now?.playing && document.visibilityState === 'visible'
+  if (!want) { lock?.release().catch(() => {}); lock = undefined; return }
+  if ((lock && !lock.released) || asking || !navigator.wakeLock) return
+  asking = true
+  navigator.wakeLock.request('screen').then(l => {
+    asking = false
+    if (now?.playing) lock = l; else l.release().catch(() => {})
+  }, () => { asking = false })
+}
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => stayAwake())
+
 const emit = () => {
   dispatchEvent(new Event(EVENT))
+  stayAwake()
   if (now) put(PLACE_KEY, JSON.stringify({ version: now.version, lang: now.lang, book: now.book, chapter: now.chapter, verse: now.verse }))
   else try { localStorage.removeItem(PLACE_KEY) } catch { /* private mode */ }
 }
