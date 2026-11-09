@@ -411,6 +411,12 @@ export function listenNote(text: string) {
 export const readingAt = () => now && { version: now.version, book: now.book, chapter: now.chapter, verse: now.verse }
 export const LISTEN_EVENT = EVENT
 
+/** The verse being read, tapped: pause, or go on from where it stopped. */
+export function toggleReading() {
+  if (!now) return
+  if (now.playing) pauseListening(); else begin()
+}
+
 /** A verse tapped while reading aloud: read from there. */
 export function readFrom(spot: Spot, bible: Bible) {
   startListening(spot, bible)

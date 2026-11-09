@@ -15,7 +15,7 @@ import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
-import { canListen, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
+import { canListen, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
@@ -499,7 +499,12 @@ export function Reader({ route }: { route: Route }) {
       }
       if (prev) clearTimeout(prev.timer)
       const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible = bibles[version]
-      aloudTap.current = { v, t: at, timer: window.setTimeout(() => { aloudTap.current = undefined; readFrom(spot, bible) }, TAP2) }
+      aloudTap.current = { v, t: at, timer: window.setTimeout(() => {
+        aloudTap.current = undefined
+        // The verse being read: a tap pauses, and another goes on. Any other verse: read from there.
+        const r = readingAt()
+        if (r && r.book === book && r.chapter === chapter && r.verse === v) toggleReading(); else readFrom(spot, bible)
+      }, TAP2) }
       return
     }
     if (held.current) { held.current = false; return }
