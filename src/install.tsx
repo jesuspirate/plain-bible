@@ -18,6 +18,9 @@ const PageMenuGlyph = () => <svg class="hs-glyph hs-boxed" viewBox="0 0 24 24" a
 const ChevronGlyph = () => <svg class="hs-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 9.5l6 6 6-6" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
 const MenuGlyph = () => <svg class="hs-glyph" viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2" fill="currentColor" /><circle cx="12" cy="12" r="2.2" fill="currentColor" /><circle cx="12" cy="19" r="2.2" fill="currentColor" /></svg>
 
+const APP_STORE = 'https://apps.apple.com/app/my-quiet-bible/id6831915876'
+const APPLE_LOGO = 'M16.37 12.6c-.02-2.33 1.9-3.45 1.99-3.5-1.08-1.59-2.77-1.8-3.37-1.83-1.43-.15-2.8.84-3.53.84-.73 0-1.85-.82-3.04-.8-1.57.02-3.01.91-3.82 2.31-1.63 2.82-.42 7 1.17 9.29.78 1.12 1.7 2.38 2.91 2.33 1.17-.05 1.61-.75 3.02-.75 1.41 0 1.81.75 3.04.73 1.26-.02 2.05-1.14 2.82-2.27.89-1.3 1.25-2.56 1.27-2.62-.03-.01-2.44-.94-2.46-3.73zM14.06 5.75c.64-.78 1.08-1.86.96-2.94-.93.04-2.05.62-2.72 1.4-.6.69-1.12 1.79-.98 2.85 1.04.08 2.1-.53 2.74-1.31z'
+
 export function HomeScreen({ onClose }: { onClose: () => void }) {
   const [oneTap, setOneTap] = useState(canInstall)
   const [busy, setBusy] = useState(false)
@@ -73,6 +76,11 @@ export function HomeScreen({ onClose }: { onClose: () => void }) {
           ? <button ref={main} class="primary hs-btn" disabled={busy} onClick={install}>{t('Install My Quiet Bible')}</button>
           : <ol class="hs-steps">{steps.map((s, i) => <li key={i}><span class="hs-n" aria-hidden="true">{i + 1}</span><span>{s}</span></li>)}</ol>}
         {iphone && !oneTap && <p class="hs-note">{tj('On older iPhones, {share} is right in the bar at the bottom.', { share: <strong class="nb">{t('Share')} <ShareGlyph /></strong> })}</p>}
+        {/* The same Bible from the App Store (ios/), for whoever would rather. */}
+        {iphone && !oneTap && <a class="hs-store" href={APP_STORE} target="_blank" rel="noopener">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d={APPLE_LOGO} /></svg>
+          <span><small>{t('Download on the')}</small> App Store</span>
+        </a>}
         <a class="hs-help" href={help.href} target="_blank" rel="noopener">{help.label} ↗</a>
         {oneTap
           ? <button class="hs-btn" onClick={onClose}>{t('Not now')}</button>

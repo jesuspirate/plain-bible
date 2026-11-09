@@ -17,7 +17,7 @@ export default {
   computerInstall: 'L’installer sur votre ordinateur',
   installIphone: 'La mettre sur votre iPhone',
   installAndroid: 'La mettre sur votre téléphone Android',
-  hint: 'Ni inscription ni magasin d’applications. Elle s’ouvre ici même, dans votre navigateur.',
+  hint: 'Aucune inscription. Elle s’ouvre ici même, dans votre navigateur.',
   psalms: 'Psaumes',
   mbar: 'Ps 119 · LSG',
   mock: [
@@ -60,6 +60,8 @@ export default {
   iosSteps: '<li><span><a href="../#/read" data-open>Ouvrez la Bible</a> dans Safari.</span></li><li><span>Touchez le bouton de menu dans la barre d’adresse, puis <strong>Partager</strong> <span class="nb">{svg}.</span> Sur les iPhone plus anciens, Partager est directement dans la barre du bas.</span></li><li><span>Touchez <strong>Afficher plus</strong>, puis <strong>Sur l’écran</strong> <span class="nb"><strong>d’accueil</strong> {svg}.</span></span></li><li><span>Laissez <strong>Ouvrir en tant qu’app web</strong> activé et touchez <strong>Ajouter</strong>. La lampe apparaît sur votre écran d’accueil.</span></li>',
   iosNote: 'Faites-le depuis la Bible, pas depuis cette page, pour que la lampe ouvre directement votre lecture. Utilisez Safari : les autres navigateurs sur iPhone et iPad ne savent pas toujours ajouter une application.',
   install: 'Installer My Quiet Bible',
+  appStore: '{svg}<span><small>Télécharger dans l’</small> App Store</span>',
+  orSafari: 'Ou, sans l’App Store, depuis Safari :',
   androidNote: 'Un seul geste. Rien ne passe par un magasin d’applications.',
   androidInstalled: 'Installée. Ouvrez la lampe avec vos autres applications.',
   androidSteps: '<li><span><a href="../#/read" data-open>Ouvrez la Bible</a> dans Chrome, ou le navigateur que vous utilisez.</span></li><li><span>Ouvrez le menu du navigateur, souvent trois points {svg} en haut à droite.</span></li><li><span>Touchez <strong>Installer et créer un raccourci</strong> (certains navigateurs disent <strong>Ajouter à l’écran d’accueil</strong>).</span></li><li><span>Choisissez <strong>Installer</strong>, pas <strong>Créer un raccourci</strong>. Puis touchez de nouveau <strong>Installer</strong>.</span></li><li><span>La lampe apparaît avec vos autres applications.</span></li>',
