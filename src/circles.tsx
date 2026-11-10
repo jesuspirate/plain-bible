@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, renameCircle, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -23,7 +23,7 @@ import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
-import { BackIcon, BellIcon, BookmarkIcon } from './icons'
+import { BackIcon, BellIcon, BookIcon, BookmarkIcon, NoteIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import { nowPlaying } from './lib/nowplaying'
@@ -523,6 +523,8 @@ function CircleView({ id }: { id: string }) {
   const [joining, setJoining] = useState<{ was: number; until: number }>()
   const [page, setPage] = useState<'shared' | 'people'>()
   const [limit, setLimit] = useState(PAGE)
+  // Days opened or folded by hand; the rest follow the rule (the latest open).
+  const [dayOpen, setDayOpen] = useState<Record<number, boolean>>({})
   // What came in since you last looked shows first, marked, until you next
   // come back. Looking at it clears the dot.
   const [since] = useState(() => seenAt(id))
@@ -636,14 +638,28 @@ function CircleView({ id }: { id: string }) {
       </>}
       {feed && tab === 'shared' && <>
         {!feed.items.length && <p class="muted c-empty">{t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
-        {days.map(d => (
-          <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
-            <h3 class="c-day-name">{d.day === 'new' ? t('New since you last looked') : dayName(d.day)}</h3>
-            <ol class="c-feed">
-              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
-            </ol>
-          </section>
-        ))}
+        {/* Each day is one row, as in Your prayers, and a tap opens or folds
+            it. What's new is always open; with nothing new, the latest day is. */}
+        {days.map((d, i) => {
+          const isOpen = d.day === 'new' || (dayOpen[d.day] ?? (i === 0))
+          const by = [...new Set(d.items.map(x => x.by))].map(nameOf).join(', ')
+          return (
+            <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
+              {d.day === 'new' ? <h3 class="c-day-name">{t('New since you last looked')}</h3> : (
+                <h3 class="c-day-fold"><button aria-expanded={isOpen} onClick={() => setDayOpen({ ...dayOpen, [d.day]: !isOpen })}>
+                  <strong>{dayName(d.day)}</strong>
+                  <span class="c-day-sum"><span class="muted">{by}</span>{d.items.slice(0, 6).map(x => <KindSign k={x.body.k} tone={settings.prayTone} size={16} />)}</span>
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </button></h3>
+              )}
+              {isOpen && (
+                <ol class="c-feed">
+                  {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
+                </ol>
+              )}
+            </section>
+          )
+        })}
         {more
           ? <button class="c-btn c-earlier" onClick={() => setLimit(n => n + PAGE)}>{t('Show earlier days')}</button>
           : feed.items.length > 0 && <p class="c-end">{t('That’s everything shared in {circle}.', { circle: info?.name ?? t('this circle') })}</p>}
@@ -862,18 +878,37 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
     setMarks(all => setNote(all, markKey(verse.book, verse.chapter, verse.verses[0]), newNoteId(), `${b.note}\n— ${nameOf(item.by)}`, Date.now(), verse.verses))
     setKept(t('Added to your notes on this verse.'))
   }
-  const kind = b.k === 'bookmark' ? t('bookmarked') : b.k === 'note' ? t('wrote a note') : b.k === 'prayer' ? t('prayed') : t('shared')
-  // New itself, or something new on it: a reply, or someone praying with you.
-  const fresh = news && !news.item && (news.replies.size ? (news.replies.size === 1 ? t('New reply') : t('New replies'))
-    : news.amens.size ? tn(news.amens.size, '{names} is praying with you', '{names} are praying with you', { names: [...news.amens].map(nameOf).join(', ') })
-    : t('{emoji} from {names}', {
-      names: [...news.reacts].map(nameOf).join(', '),
-      emoji: REACTS.filter(r => [...news.reacts].some(m => reacts[m]?.includes(r))).map(emoji).join(' '),
-    }))
+  // What was shared, in one word and one sign: a prayer, a bookmark, a note
+  // or a verse. Told apart at a glance, before reading anything.
+  const kind = b.k === 'bookmark' ? t('Bookmark') : b.k === 'note' ? t('Note') : b.k === 'prayer' ? t('Prayer') : t('Verse')
+  // One pill for each person: the signs they gave, then their name. Those
+  // new since you last looked come first, and stand out.
+  const isNew = (m: string) => !!(news?.amens.has(m) || news?.reacts.has(m))
+  const givers = [...new Set(who.flatMap(([, ms]) => ms))].sort((x, y) => +isNew(y) - +isNew(x))
+    .map(m => ({ m, gave: who.filter(([, ms]) => ms.includes(m)).map(([r]) => r) }))
   return (
-    <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '')}>
-      {fresh && <p class="c-new-word small">{fresh}</p>}
-      <div class="c-item-head"><span>{news?.item && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(item.by)}</strong> <span class="muted small">{kind}</span></span><span class="muted small">{when(dayAt(item), !!news || dayOf(dayAt(item)) !== dayOf(item.at))}</span></div>
+    <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '') + (who.length ? ' c-reacted' : '')}>
+      {/* What the circle gave back sits on the card's top edge: each sign
+          with who gave it. Never a line of words that reads like the sharer. */}
+      {who.length > 0 && (
+        <ul class="c-on-top" aria-label={t('Reactions')}>
+          {givers.map(({ m, gave }) => (
+            <li class={'c-pill' + (isNew(m) ? ' new' : '')}>
+              {gave.map(r => <span class="c-pill-emoji" role="img" aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span>)}
+              <span class="c-pill-name">{nameOf(m)}</span>
+            </li>
+          ))}
+        </ul>
+      )}
+      <div class="c-item-head">
+        <span class={'c-kind c-kind-' + b.k} aria-hidden="true">
+          <KindSign k={b.k} tone={settings.prayTone} />
+        </span>
+        <div class="c-item-who">
+          <p class="c-item-by"><strong>{nameOf(item.by)}</strong>{news?.item && <span class="c-new-tag">{t('New')}</span>}</p>
+          <p class="c-item-what"><span class="c-item-kind">{kind}</span><span class="muted"> · {when(dayAt(item), !!news || dayOf(dayAt(item)) !== dayOf(item.at))}</span></p>
+        </div>
+      </div>
       {b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
@@ -885,7 +920,6 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
         <Passage shown={shown} small from={nameOf(item.by)} />
         {ref(verse!)}
       </> : <>
-        {b.k === 'bookmark' && <BookmarkIcon size={18} class="c-bm" />}
         <Passage shown={shown} from={nameOf(item.by)} />
         {ref(verse!)}
         {b.note && <p class="c-note">{b.note}</p>}
@@ -893,7 +927,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
       {item.replies.length > 0 && (
         <ul class="c-replies">
           {item.replies.map(r => (
-            <li class={news?.replies.has(r.id) ? 'c-new-reply' : ''}><strong>{nameOf(r.by)}</strong> {r.text}
+            <li class={news?.replies.has(r.id) ? 'c-new-reply' : ''}>{news?.replies.has(r.id) && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(r.by)}</strong> {r.text}
               {r.by === me && <button class="link small" disabled={busy} aria-label={t('Remove your reply')} onClick={act(() => removeReply(circle, item.id, r.id))}>{t('Remove')}</button>}
               {r.by !== me && <button class="link small c-report" onClick={() => { setReporting({ reply: r }); setTray(false) }}>{t('Report')}</button>}</li>
           ))}
@@ -909,14 +943,11 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
           </div>
         </div>
       )}
-      {/* Quiet until asked: who prayed or reacted, in one small line, and a
-          single button that opens the reactions and the rest. */}
+      {/* Two plain buttons: write back, or open the reactions and the rest. */}
       {!writing && (
         <div class="c-respond-row">
-          <p class="c-who small">
-            {who.map(([r, ms]) => <span class="c-who-group"><span aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span> {ms.map(nameOf).join(', ')}</span>)}
-          </p>
-          <button class={'c-respond' + (tray ? ' on' : '')} aria-expanded={tray} onClick={() => { setTray(!tray); setConfirm(false) }}>{tray ? t('Done') : t('Respond')}</button>
+          <button class="c-respond" onClick={() => { setWriting(true); setTray(false) }}>{t('Reply')}</button>
+          <button class={'c-respond' + (tray ? ' on' : '')} aria-expanded={tray} onClick={() => { setTray(!tray); setConfirm(false) }}>{tray ? t('Done') : t('React')}</button>
         </div>
       )}
       {tray && !writing && (
@@ -936,7 +967,6 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
             })}
           </div>
           <div class="c-item-foot">
-            <button class="c-amen" onClick={() => { setWriting(true); setTray(false) }}>{t('Reply')}</button>
             {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
               ? <button class="c-amen" onClick={() => { keepNote(); setTray(false) }}>{t('Keep note')}</button>
               : !bookmarked && <button class="c-amen" onClick={() => { bookmark(); setTray(false) }}>{t('Bookmark')}</button>)}
@@ -1039,6 +1069,12 @@ function Blocking({ circle, feed, onChange }: { circle: string; feed: Feed; onCh
       {err && <p class="note small">{err}</p>}
     </div>
   )
+}
+
+/** The sign of what was shared: a prayer, a bookmark, a note or a verse. */
+function KindSign({ k, tone, size = 22 }: { k: Shared['k']; tone: string; size?: number }) {
+  return k === 'prayer' ? <span class="c-sign" style={{ fontSize: size + 2 }}>{reactEmoji('pray', tone)}</span>
+    : k === 'bookmark' ? <BookmarkIcon size={size - 2} class="c-sign c-sign-bm" /> : k === 'note' ? <NoteIcon size={size} class="c-sign" /> : <BookIcon size={size} class="c-sign" />
 }
 
 /** Love, strength, encouragement. The hands take the skin tone picked for 🙏. */
