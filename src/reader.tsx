@@ -1168,7 +1168,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // Share: outside the app (the phone's share sheet), or with a circle.
   const [askShare, setAskShare] = useState(false)
   const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note } = useVerseActions(book, chapter, verses, versions, bibles)
-  const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }
+  const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: Math.min(...verses) }
   const shareOut = () => canShare ? share({ title: ref, text: quote, url: link }) : copy(link)
 
   useEffect(() => {
@@ -1233,7 +1233,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
             {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
-            {canListen && !settings.readSilent && <button onClick={() => { startListening({ ...spot, last: verses[verses.length - 1] }, bibles[version]); onClose() }}>
+            {canListen && !settings.readSilent && <button onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             {inCircles()
