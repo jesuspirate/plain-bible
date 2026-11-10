@@ -948,5 +948,9 @@ export default {
   "Highlight removed": "Resaltado quitado",
   "Bookmarked": "Marcador añadido",
   "Bookmark removed": "Marcador quitado",
-  "Tap Read (the open book beside 🙏), or a verse and then Listen. The words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X.": "Toca Leer (el libro abierto junto a 🙏), o un versículo y luego Escuchar. Las palabras se iluminan mientras se leen, para que puedas seguirlas. Mientras está activa: toca el versículo que se está leyendo para pausar o seguir, otro versículo para leer desde ahí, toca un versículo dos veces rápido para resaltarlo, o mantenlo pulsado para añadir un marcador. El botón de velocidad va más lento o más rápido. Sigue activa hasta que toques X.",
+  "Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Toca un versículo y luego Leer siguiendo: se lee desde ahí, y las palabras se iluminan mientras se leen, para que puedas seguirlas. Mientras está activa: toca el versículo que se está leyendo para pausar o seguir, otro versículo para leer desde ahí, toca un versículo dos veces rápido para resaltarlo, o mantenlo pulsado para añadir un marcador. El botón de velocidad va más lento o más rápido. Sigue activa hasta que toques X. Escuchar lee solo los versículos que elegiste.",
+  "Share {ref}": "Compartir {ref}",
+  "Outside the app": "Fuera de la app",
+  "With a circle": "Con un círculo",
+  "Copy a link": "Copiar un enlace",
 } as Record<string, string>

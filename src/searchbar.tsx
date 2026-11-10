@@ -14,14 +14,12 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, inCircles, openCircles, openPrayer, readPath, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
-import { CircleIcon, ReadIcon } from './icons'
+import { CircleIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
-import { ListenPlayer, startListening, useReadingAloud } from './listen'
-import { loadPlace } from './lib/place'
-import type { Bible } from './lib/data'
+import { ListenPlayer, useReadingAloud } from './listen'
 import { locale, N_, t, tn } from './i18n'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
@@ -41,23 +39,6 @@ function PrayButton() {
       </button>
       {picker}
     </>
-  )
-}
-
-/** Read: one tap, and the chapter on screen is read aloud (or followed
- *  silently) from the verse at the top of the screen, as easily as 🙏. */
-function ReadButton({ here, lang, bible }: { here: { version: string; book: string; chapter: number }; lang: string; bible?: Bible }) {
-  const start = () => {
-    if (!bible) return
-    const p = loadPlace()
-    const verse = p && p.book === here.book && p.chapter === here.chapter ? p.verse : 1
-    // Inside the tap itself, so an iPhone lets the voice start.
-    startListening({ ...here, lang, verse }, bible)
-  }
-  return (
-    <button type="button" class="sb-read" onClick={start} disabled={!bible} aria-label={t('Read aloud')} title={t('Read aloud')}>
-      <ReadIcon size={28} />
-    </button>
   )
 }
 
@@ -91,13 +72,6 @@ export function rememberSearch(q: string) {
 export function SearchBar({ here, mini }: { here?: { version: string; book: string; chapter: number }; mini?: boolean }) {
   const { settings, data, byId } = useApp()
   const aloud = useReadingAloud()
-  // The Bible on screen, ready before Read is tapped (an iPhone only lets a
-  // voice start inside the tap itself, with nothing to wait for).
-  const [readBible, setReadBible] = useState<Bible>()
-  useEffect(() => {
-    setReadBible(undefined)
-    if (here) data.bible(here.version).then(setReadBible, () => {})
-  }, [here?.version])
   // Chapter counts per book in the current version, for the book and chapter browser.
   const [lens, setLens] = useState<Record<string, number>>({})
   const [browse, setBrowse] = useState<string>()
@@ -603,7 +577,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         </form>}
         {/* Circles, then prayer, always one tap away just right of search.
             🙏 opens the glowing microphone over the page. */}
-        {!open && !aloud && here && <ReadButton here={here} lang={byId.get(here.version)?.lang ?? 'en'} bible={readBible} />}
         {!open && SYNC_URL && <CirclesButton />}
         {!open && <PrayButton />}
         {open && <button type="button" class="sb-cancel" onClick={close}>{t('Cancel')}</button>}

@@ -948,5 +948,9 @@ export default {
   "Highlight removed": "Surlignage retiré",
   "Bookmarked": "Marque-page ajouté",
   "Bookmark removed": "Marque-page retiré",
-  "Tap Read (the open book beside 🙏), or a verse and then Listen. The words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X.": "Touchez Lire (le livre ouvert à côté de 🙏), ou un verset puis Écouter. Les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Pendant la lecture : touchez le verset en cours pour mettre en pause ou reprendre, un autre verset pour lire à partir de là, touchez un verset deux fois rapidement pour le surligner, ou maintenez-le pour ajouter un marque-page. Le bouton de vitesse ralentit ou accélère. La lecture reste active jusqu’à ce que vous touchiez X.",
+  "Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Touchez un verset, puis Lire en suivant : la lecture part de là, et les mots s’éclairent à mesure qu’ils sont lus, pour suivre facilement. Pendant la lecture : touchez le verset en cours pour mettre en pause ou reprendre, un autre verset pour lire à partir de là, touchez un verset deux fois rapidement pour le surligner, ou maintenez-le pour ajouter un marque-page. Le bouton de vitesse ralentit ou accélère. La lecture reste active jusqu’à ce que vous touchiez X. Écouter lit seulement les versets choisis.",
+  "Share {ref}": "Partager {ref}",
+  "Outside the app": "Hors de l’application",
+  "With a circle": "Avec un cercle",
+  "Copy a link": "Copier un lien",
 } as Record<string, string>

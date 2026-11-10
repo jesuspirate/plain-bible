@@ -347,7 +347,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     </div>
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">
-        <span class="muted small">{t('Tap Read (the open book beside 🙏), or a verse and then Listen. The words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X.')}</span>
+        <span class="muted small">{t('Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.')}</span>
         {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
         <label><input type="checkbox" checked={settings.readSilent} onChange={e => update({ readSilent: (e.target as HTMLInputElement).checked })} /> {t('No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.')}</label>
       </div>

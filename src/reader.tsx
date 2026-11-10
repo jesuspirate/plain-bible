@@ -14,7 +14,7 @@ import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canListen, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
@@ -1165,7 +1165,11 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const { settings, byId, data } = useApp()
   const [compare, setCompare] = useState<Bible[]>()
   const [askUnmark, setAskUnmark] = useState(false)
+  // Share: outside the app (the phone's share sheet), or with a circle.
+  const [askShare, setAskShare] = useState(false)
   const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note } = useVerseActions(book, chapter, verses, versions, bibles)
+  const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }
+  const shareOut = () => canShare ? share({ title: ref, text: quote, url: link }) : copy(link)
 
   useEffect(() => {
     document.body.classList.add('selecting')
@@ -1213,21 +1217,36 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             <button class="leave-confirm" onClick={() => { apply({ b: null }); onClose() }}>{t('Remove bookmark')}</button>
             <button onClick={() => setAskUnmark(false)}>{t('Cancel')}</button>
           </div>
-        </div> : <div class="actions">
-          <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { if (allBookmarked) setAskUnmark(true); else { apply({ b: 1 }); onClose() } }}>
-            <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
-          </button>
-          <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
-          <button onClick={() => { startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: verses[0] }, bibles[version]); onClose() }}>
-            <SpeakerIcon size={22} /><span>{canListen && !settings.readSilent ? t('Listen') : t('Read along')}</span></button>
-          <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
-          {canShare
-            ? <button onClick={() => share({ title: ref, text: quote, url: link })}><ShareIcon size={22} /><span>{t('Share')}</span></button>
-            : <button onClick={() => copy(link)}><LinkIcon size={22} /><span>{t('Link')}</span></button>}
-          <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
-          <button onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
-          {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}><CircleIcon size={22} /><span>{t('Circle')}</span></button>}
-        </div>}
+        </div> : askShare ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="share-title">
+          <p id="share-title" class="confirm-title"><strong>{t('Share {ref}', { ref })}</strong></p>
+          <div class="confirm-buttons selbar-share">
+            <button onClick={() => { setAskShare(false); shareOut() }}>
+              {canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Outside the app') : t('Copy a link')}</span></button>
+            <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}>
+              <CircleIcon size={22} /><span>{t('With a circle')}</span></button>
+            <button class="selbar-cancel" onClick={() => setAskShare(false)}>{t('Cancel')}</button>
+          </div>
+        </div> : <>
+          <div class="actions">
+            <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { if (allBookmarked) setAskUnmark(true); else { apply({ b: 1 }); onClose() } }}>
+              <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
+            </button>
+            <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
+            {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
+            {canListen && !settings.readSilent && <button onClick={() => { startListening({ ...spot, last: verses[verses.length - 1] }, bibles[version]); onClose() }}>
+              <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
+            <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
+            {inCircles()
+              ? <button onClick={() => setAskShare(true)}><ShareIcon size={22} /><span>{t('Share')}</span></button>
+              : <button onClick={shareOut}>{canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Share') : t('Link')}</span></button>}
+            <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
+          </div>
+          {/* The two things done from a verse, not to it: read on from here until X, and pray. */}
+          <div class="selbar-big">
+            <button onClick={() => { startListening(spot, bibles[version]); onClose() }}><ReadIcon size={26} /><span>{t('Read along')}</span></button>
+            <button class="selbar-pray-btn" onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
+          </div>
+        </>}
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
       {compare && (
