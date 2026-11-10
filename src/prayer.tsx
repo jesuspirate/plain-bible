@@ -513,6 +513,8 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const [find, setFind] = useState('')
   const [open, setOpen] = useState<string>()
   const [unfolded, setUnfolded] = useState<string[]>([])
+  // Days opened or folded by hand; the rest follow the rule (the latest open).
+  const [dayOpen, setDayOpen] = useState<Record<string, boolean>>({})
   // Naming a prayer, or choosing its topic, inside its open row.
   const [edit, setEdit] = useState<{ id: string; what: 'name' | 'topic'; text: string }>()
   const all = list ?? [], favs = all.filter(isFav)
@@ -651,15 +653,22 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
             {inTurn ? <StopIcon /> : <PlayIcon />} <span>{inTurn ? t('Stop') : `${t('Play all {n}', { n: shown.length })} · ${total(shown)}`}</span>
           </button></li>}
           {flat && shown.map(p => row(p))}
-          {days.map(({ day, list: some }) => <>
-            <li class="pray-day">
-              <h3>{dayName(day)}</h3>
+          {/* Each day is one row too; the latest one starts open, and a tap opens or folds any of them. */}
+          {days.map(({ day, list: some }, i) => {
+            const isOpen = dayOpen[day] ?? i === 0, stars = some.filter(isFav).length
+            return <>
+              <li class="pray-month pray-fold-day"><button aria-expanded={isOpen} onClick={() => { setDayOpen({ ...dayOpen, [day]: !isOpen }); setOpen(undefined); setEdit(undefined) }}>
+                <strong>{dayName(day)}</strong>
+                <span class="muted">{tn(some.length, '{n} prayer', '{n} prayers')} · {total(some)}{stars ? ` · ★ ${stars}` : ''}</span>
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button></li>
               {/* The whole day at once, oldest first: optional, like every share. */}
-              {some.length > 1 && leftToShare(some) && <button class="pray-day-share" onClick={() => shareWithCircle({ prayers: some.map(p => p.id).reverse() })}>
+              {isOpen && some.length > 1 && leftToShare(some) && <li class="pray-day"><button class="pray-day-share" onClick={() => shareWithCircle({ prayers: some.map(p => p.id).reverse() })}>
                 <CircleIcon size={22} /> <span>{t('Share all {n}', { n: some.length })}</span>
-              </button>}
-            </li>
-            {some.map(p => row(p))}</>)}
+              </button></li>}
+              {isOpen && some.map(p => row(p))}
+            </>
+          })}
           {/* Earlier months: one row each, opened with a tap. */}
           {months.map(({ month, list: some }) => {
             const isOpen = unfolded.includes(month), stars = some.filter(isFav).length
@@ -694,7 +703,8 @@ function dayName(day: string) {
   if (day === dayOf()) return t('Today')
   if (day === dayBefore(dayOf())) return t('Yesterday')
   const [y, m, d] = day.split('-').map(Number), date = new Date(y, m - 1, d, 12)
-  return date.toLocaleDateString(locale(), { weekday: 'long', month: 'long', day: 'numeric', ...(y === new Date().getFullYear() ? {} : { year: 'numeric' }) })
+  const s = date.toLocaleDateString(locale(), { weekday: 'long', month: 'long', day: 'numeric', ...(y === new Date().getFullYear() ? {} : { year: 'numeric' }) })
+  return s[0].toUpperCase() + s.slice(1)
 }
 
 const pad = (n: number) => String(n).padStart(2, '0')
