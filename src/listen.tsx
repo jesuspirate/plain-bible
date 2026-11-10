@@ -28,8 +28,9 @@ import { locale, N_, t } from './i18n'
 
 export interface Spot {
   version: string; lang: string; book: string; chapter: number; verse: number
-  /** Listen: the last verse to read, then stop. Read along has none: it goes on until X. */
-  last?: number
+  /** Listen: just these verses (in order, skipping the others), then stop.
+   *  Read along has none: it goes on until X. */
+  only?: number[]
 }
 interface Now extends Spot { playing: boolean; bible: Bible; trouble?: string }
 
@@ -62,7 +63,7 @@ const emit = () => {
   stayAwake()
   // While it's on, a press held on a verse bookmarks it: no text selection or callout in the way.
   document.documentElement.classList.toggle('reading-aloud', !!now)
-  if (now && !now.last) put(PLACE_KEY, JSON.stringify({ version: now.version, lang: now.lang, book: now.book, chapter: now.chapter, verse: now.verse }))
+  if (now && !now.only) put(PLACE_KEY, JSON.stringify({ version: now.version, lang: now.lang, book: now.book, chapter: now.chapter, verse: now.verse }))
   else try { localStorage.removeItem(PLACE_KEY) } catch { /* private mode */ }
 }
 
@@ -325,8 +326,12 @@ function say(text: string, lang: string, my: number, then: () => void, spans?: S
 function next(my: number) {
   const n = now
   if (!n || my !== run) return
-  // Listen: the verses picked, and that's all.
-  if (n.last && n.verse > n.last) return stopListening()
+  // Listen: the verses picked, and that's all; any left out in between are skipped.
+  if (n.only) {
+    const v = n.only.find(x => x >= n.verse)
+    if (v === undefined) return stopListening()
+    if (v !== n.verse) { now = { ...n, verse: v }; return next(my) }
+  }
   const chapters = n.bible.books[n.book] ?? []
   const verses = chapters[n.chapter - 1] ?? []
   if (n.verse > verses.length) {
