@@ -610,8 +610,9 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
         </button>
       </div>}
       {confirm === p.id && <div class="pray-confirm">
-        <button class="pray-btn" onClick={() => setConfirm(undefined)}>{t('Keep')}</button>
-        <button class="pray-btn danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
+        {/* Delete on the far side from the Delete just tapped, and Keep the bold one: a prayer is hard to lose by accident. */}
+        <button class="pray-btn danger-quiet" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
+        <button class="pray-btn primary" onClick={() => setConfirm(undefined)}>{t('Keep')}</button>
       </div>}
     </li>
   )

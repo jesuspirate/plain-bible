@@ -136,6 +136,11 @@ button.pray-list-verse { display: block; margin: 0; padding: 2px 0 0; font-size:
 .pray-act { display: flex; align-items: center; gap: 9px; min-height: 52px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); font: 600 16px/1.2 var(--sans); text-align: left; }
 .pray-act svg { flex: none; }
 .pray-act.pray-bin { color: #b3261e; }
+/* Delete is always on the right, also when it's alone on its line. */
+.pray-act.pray-bin:nth-child(odd) { grid-column: 2; }
+button.pray-btn.danger-quiet { background: var(--surface); border: 1.5px solid #b3261e; color: #b3261e; }
+:root[data-theme='dark'] button.pray-btn.danger-quiet { border-color: #ff8a80; color: #ff8a80; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] button.pray-btn.danger-quiet { border-color: #ff8a80; color: #ff8a80; } }
 :root[data-theme='dark'] .pray-act.pray-bin { color: #ff8a80; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-act.pray-bin { color: #ff8a80; } }
 .pray-act:active { transform: scale(.98); }
