@@ -554,9 +554,11 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
         <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill={isFav(p) ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /></svg>
       </button>
       {/* Everything else you can do with a prayer, one tap away, each with its name. */}
-      <button class="pray-icon pray-more" aria-expanded={open === p.id} aria-label={open === p.id ? t('Close') : t('More')} onClick={() => { setConfirm(undefined); setEdit(undefined); setOpen(open === p.id ? undefined : p.id) }}>
-        {open === p.id ? <CloseIcon size={20} /> : <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor" /><circle cx="12" cy="12" r="2" fill="currentColor" /><circle cx="19" cy="12" r="2" fill="currentColor" /></svg>}
-      </button>
+      {open === p.id
+        ? <button class="close-btn pray-shut" aria-expanded="true" aria-label={t('Close')} onClick={() => { setConfirm(undefined); setEdit(undefined); setOpen(undefined) }}><CloseIcon size={22} /></button>
+        : <button class="pray-icon pray-more" aria-expanded="false" aria-label={t('More')} onClick={() => { setConfirm(undefined); setEdit(undefined); setOpen(p.id) }}>
+          <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor" /><circle cx="12" cy="12" r="2" fill="currentColor" /><circle cx="19" cy="12" r="2" fill="currentColor" /></svg>
+        </button>}
       {open === p.id && edit?.id === p.id && edit.what === 'name' && <form class="pray-edit" onSubmit={e => { e.preventDefault(); note(p, { name: edit.text }) }}>
         <input class="saved-find" value={edit.text} maxLength={80} placeholder={t('Name of this prayer')} aria-label={t('Name of this prayer')} enterkeyhint="done"
           ref={el => { if (el && !el.dataset.on) { el.dataset.on = '1'; el.focus() } }} onInput={e => setEdit({ ...edit, text: (e.target as HTMLInputElement).value })} />

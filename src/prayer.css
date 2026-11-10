@@ -129,11 +129,15 @@ button.pray-list-verse { display: block; margin: 0; padding: 2px 0 0; font-size:
 .pray-star.on { color: #c98a12; }
 :root[data-theme='dark'] .pray-star.on { color: #f0b94a; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-star.on { color: #f0b94a; } }
-.pray-row.open .pray-more { background: none; }
+/* Closing the open row: the same solid round button as every other close. */
+.pray-shut { margin: 0 1px; }
 /* What the three dots open: each action a whole button with its name. */
 .pray-acts { flex-basis: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding-top: 4px; }
 .pray-act { display: flex; align-items: center; gap: 9px; min-height: 52px; padding: 6px 12px; border: 1px solid var(--line); border-radius: 14px; background: var(--surface); color: var(--text); font: 600 16px/1.2 var(--sans); text-align: left; }
 .pray-act svg { flex: none; }
+.pray-act.pray-bin { color: #b3261e; }
+:root[data-theme='dark'] .pray-act.pray-bin { color: #ff8a80; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-act.pray-bin { color: #ff8a80; } }
 .pray-act:active { transform: scale(.98); }
 .pray-list li.pray-month { padding: 5px 4px; }
 .pray-month button { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 10px; width: 100%; min-height: 62px; padding: 9px 12px 9px 14px; border: none; border-radius: 16px; background: var(--chip); color: var(--text); text-align: left; font: 15px var(--sans); }
