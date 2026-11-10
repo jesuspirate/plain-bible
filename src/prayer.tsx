@@ -1,6 +1,7 @@
 // A quiet moment to pray out loud. One glowing microphone over the page you
 // were reading, dimmed just enough that the words are still there. What you
 // say is recorded and kept on this device only; nothing is sent anywhere.
+import { nowPlaying } from './lib/nowplaying'
 import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { holdUpdate } from './lib/update'
@@ -434,6 +435,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     }
     audio.current = { el, urls }
     setPlaying(id); setPos(0)
+    nowPlaying(t('Prayer'))
     if (rest.length || inTurnRef.current) document.getElementById(`pray-${id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     el.src = urls[0]
     el.play().catch(release)

@@ -26,6 +26,7 @@ import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookmarkIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
+import { nowPlaying } from './lib/nowplaying'
 import './circles.css'
 import { locale, t, tj, tn } from './i18n'
 
@@ -1066,6 +1067,7 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
     // One plain file per part: an iPhone stops a fragmented recording early.
     const urls = parts.map(p => URL.createObjectURL(new Blob([playable(p.audio, p.type)], { type: p.type })))
     const el = new Audio()
+    nowPlaying(t('Prayer'))
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
     el.onended = () => {

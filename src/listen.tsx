@@ -21,6 +21,8 @@ import { useApp } from './state'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import type { Bible } from './lib/data'
 import { plain } from './lib/text'
+import { nowPlaying } from './lib/nowplaying'
+import { formatRef } from './lib/refs'
 import { go, parseHash, readPath } from './state'
 import { CloseIcon, PauseIcon, PlayIcon } from './icons'
 import { Sheet } from './ui'
@@ -60,6 +62,8 @@ if (typeof document !== 'undefined') document.addEventListener('visibilitychange
 
 const emit = () => {
   dispatchEvent(new Event(EVENT))
+  // The lock screen: the chapter being read, and the app's own icon.
+  if (now) nowPlaying(formatRef({ book: now.book, chapter: now.chapter }), now.version)
   stayAwake()
   // While it's on, a press held on a verse bookmarks it: no text selection or callout in the way.
   document.documentElement.classList.toggle('reading-aloud', !!now)
