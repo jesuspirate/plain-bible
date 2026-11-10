@@ -953,4 +953,11 @@ export default {
   "Outside the app": "Hors de l’application",
   "With a circle": "Avec un cercle",
   "Copy a link": "Copier un lien",
+  "Favorites": "Favoris",
+  "Find by verse or date": "Chercher par verset ou date",
+  "Play all {n}": "Écouter les {n}",
+  "Add to favorites": "Ajouter aux favoris",
+  "Remove from favorites": "Retirer des favoris",
+  "No prayer has “{words}” in it.": "Aucune prière ne contient « {words} ».",
+  "No favorites yet. Tap the star on a prayer to keep it here.": "Pas encore de favoris. Touchez l’étoile d’une prière pour la garder ici.",
 } as Record<string, string>

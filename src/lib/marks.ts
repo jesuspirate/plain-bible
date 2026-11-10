@@ -261,7 +261,7 @@ export function mergeImport(marks: Marks, items: ImportItem[], now = Date.now())
 /** The backup's name inside a Download everything .zip. */
 export const BACKUP_FILE = 'my-quiet-bible-backup.json'
 /** A prayer in a backup: its audio is in the same .zip, one file per part. */
-export interface BackupPrayer { id: string; at: number; verses?: PrayerVerse[]; parts: { file: string; ms: number; type: string }[] }
+export interface BackupPrayer { id: string; at: number; verses?: PrayerVerse[]; fav?: boolean; name?: string; topic?: string; answered?: number; parts: { file: string; ms: number; type: string }[] }
 /** Our own backup format. `prayers` only in a .zip from Download everything. */
 export interface Backup { app: 'plain-bible'; version: 1; exported: string; marks: Marks; settings?: unknown; prayers?: BackupPrayer[] }
 export function isBackup(x: unknown): x is Backup {

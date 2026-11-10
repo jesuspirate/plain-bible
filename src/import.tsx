@@ -4,6 +4,7 @@ import { unzipSync, strFromU8 } from 'fflate'
 import { useState } from 'preact/hooks'
 import { Backup, BACKUP_FILE, BackupPrayer, htmlToText, ImportItem, isBackup, mergeImport, mergeMark, Marks, notesOf, parseNotes, parseRefList } from './lib/marks'
 import { Part, Prayer, prayers, withPart } from './lib/prayers'
+import { cleanJournal } from './lib/prayerJournal'
 import { cleanVerses } from './lib/prayerVerses'
 import { DownloadEverything } from './exporter'
 import { useApp } from './state'
@@ -73,7 +74,8 @@ async function restorePrayers(list: BackupPrayer[], audio: Record<string, Uint8A
     if (here.has(b.id)) continue
     const parts: Part[] = b.parts.map(x => { const a = audio[x.file]; return { ms: x.ms, type: x.type, audio: a.buffer.slice(a.byteOffset, a.byteOffset + a.byteLength) as ArrayBuffer } })
     const verses = cleanVerses(b.verses ?? [])
-    const p: Prayer = { id: b.id, at: b.at, ...parts[0], ...(verses.length ? { verse: verses[0], verses } : {}) }
+    const journal = cleanJournal(b)
+    const p: Prayer = { id: b.id, at: b.at, ...parts[0], ...(verses.length ? { verse: verses[0], verses } : {}), ...(Object.keys(journal).length ? { ...journal, jrev: 1, jdirty: true } : {}) }
     await prayers.put(parts.slice(1).reduce(withPart, p))
     n++
   }
