@@ -4,6 +4,7 @@
 // Blob in IndexedDB.
 
 import { PrayerVerse, sameVerses } from './prayerVerses'
+import { cleanJournal, Journal, sameJournal } from './prayerJournal'
 
 /** One stretch of recording. */
 export interface Part { ms: number; type: string; audio: ArrayBuffer }
@@ -13,11 +14,15 @@ export interface Part { ms: number; type: string; audio: ArrayBuffer }
  *  `verse` is the first of them, the only one apps from before several
  *  could keep (a prayer from then has only that).
  *  For sync: `vrev` counts changes to the verses, `vdirty` says the last
- *  hasn't been sent yet, and `vsize` is how big they were on the server. */
-export interface Prayer extends Part {
+ *  hasn't been sent yet, and `vsize` is how big they were on the server.
+ *  The journal (starred, and so on) syncs the same way: `jrev`, `jdirty`, `jsize`. */
+export interface Prayer extends Part, Journal {
   id: string; at: number; more?: Part[]; verse?: PrayerVerse
   verses?: PrayerVerse[]; vrev?: number; vdirty?: boolean; vsize?: number
+  jrev?: number; jdirty?: boolean; jsize?: number
 }
+/** The prayer without its journal. */
+const bare = <T extends Journal>({ fav: _f, name: _n, topic: _t, answered: _a, ...p }: T) => p
 /** A prayer without its audio; `parts` counts its parts. */
 export type PrayerInfo = Omit<Prayer, 'audio' | 'more'> & { parts: number }
 
@@ -82,6 +87,24 @@ export const prayers = {
   versesSent: async (id: string, rev: number, size: number) => {
     const p = await prayers.get(id)
     if (p && (p.vrev ?? 0) === rev) await prayers.put({ ...p, vdirty: false, vsize: size })
+  },
+  /** Star a prayer, or change anything else in its journal. */
+  note: async (id: string, change: Journal) => {
+    const p = await prayers.get(id)
+    if (!p) throw new Error('gone')
+    const next = cleanJournal({ ...cleanJournal(p), ...change })
+    if (sameJournal(next, p)) return
+    await prayers.put({ ...bare(p), ...next, jrev: (p.jrev ?? 0) + 1, jdirty: true })
+  },
+  /** The journal as another device left it (`rev` and `size` as sent). */
+  notedElsewhere: async (id: string, journal: Journal, rev: number, size: number) => {
+    const p = await prayers.get(id)
+    if (p && !p.jdirty) await prayers.put({ ...bare(p), ...cleanJournal(journal), jrev: rev, jsize: size })
+  },
+  /** The journal is on the server now, unless it changed again meanwhile. */
+  noteSent: async (id: string, rev: number, size: number) => {
+    const p = await prayers.get(id)
+    if (p && (p.jrev ?? 0) === rev) await prayers.put({ ...p, jdirty: false, jsize: size })
   },
   delete: (id: string) => tx('readwrite', s => s.delete(id)).then(() => {}),
 }

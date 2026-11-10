@@ -953,4 +953,11 @@ export default {
   "Outside the app": "Fuera de la app",
   "With a circle": "Con un círculo",
   "Copy a link": "Copiar un enlace",
+  "Favorites": "Favoritas",
+  "Find by verse or date": "Buscar por versículo o fecha",
+  "Play all {n}": "Escuchar las {n}",
+  "Add to favorites": "Añadir a favoritas",
+  "Remove from favorites": "Quitar de favoritas",
+  "No prayer has “{words}” in it.": "Ninguna oración contiene «{words}».",
+  "No favorites yet. Tap the star on a prayer to keep it here.": "Aún no hay favoritas. Toca la estrella de una oración para guardarla aquí.",
 } as Record<string, string>

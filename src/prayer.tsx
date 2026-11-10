@@ -12,6 +12,7 @@ import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './li
 import { go, inCircles, openSettings, parseHash, pickVerses, PrayAt, readPath, shareWithCircle, useApp, verseToPrayOver } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
+import { byMonth, finds, longDuration } from './lib/prayerJournal'
 import { holdsVerse, MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
 import type { Bible } from './lib/data'
@@ -381,13 +382,19 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   list?: PrayerInfo[]; onChange: () => void; onClose: () => void; onRead: (v: PrayerVerse) => void; onPick: (verses: PrayerVerse[], prayer: string) => void
 }) {
   const [playing, setPlaying] = useState<string>()
+  // Play all: the prayers shown, one after the other.
+  const [inTurn, setInTurn] = useState(false)
   const [pos, setPos] = useState(0)
   const [confirm, setConfirm] = useState<string>()
   const audio = useRef<{ el: HTMLAudioElement; urls: string[] }>()
+  // Counts every start and stop, so a recording still being read when
+  // something else was tapped doesn't start after all.
+  const turn = useRef(0)
   const release = () => {
+    turn.current++
     const a = audio.current
     if (a) { a.el.pause(); a.urls.forEach(u => URL.revokeObjectURL(u)); audio.current = undefined }
-    setPlaying(undefined); setPos(0)
+    setPlaying(undefined); setPos(0); setInTurn(false)
   }
   useEffect(() => release, [])
   // Where each prayer was shared already: a circle that has it isn't offered
@@ -403,26 +410,46 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const sharedWith = (ps: PrayerInfo[]) => where ? where.circles.filter(c => circlesWithAll(where.shared, ps.map(p => p.at)).has(c.id)) : []
   const leftToShare = (ps: PrayerInfo[]) => inCircles() && (!where?.circles.length || sharedWith(ps).length < where.circles.length)
 
-  const play = async (p: PrayerInfo) => {
-    if (playing === p.id) { release(); return }
-    release()
-    const full = await prayers.get(p.id)
-    if (!full) return
+  // Plays `id`, then `rest` in turn, on the one player (an iPhone only lets
+  // the player a tap started carry on by itself).
+  const start = async (id: string, rest: string[], el: HTMLAudioElement) => {
+    const mine = turn.current
+    const full = await prayers.get(id)
+    if (mine !== turn.current) return
+    const next = () => {
+      audio.current?.urls.forEach(u => URL.revokeObjectURL(u))
+      if (rest.length) start(rest[0], rest.slice(1), el); else release()
+    }
+    if (!full) { next(); return }
     // A prayer picked up again after the phone locked plays its parts in turn.
     const parts = partsOf(full)
     const urls = parts.map(x => URL.createObjectURL(new Blob([playable(x.audio, x.type)], { type: x.type })))
-    const el = new Audio()
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
     el.onended = () => {
-      if (++i >= urls.length) { release(); return }
+      if (++i >= urls.length) { next(); return }
       offset += parts[i - 1].ms
       el.src = urls[i]; el.play().catch(release)
     }
     audio.current = { el, urls }
-    setPlaying(p.id)
+    setPlaying(id); setPos(0)
+    if (rest.length || inTurnRef.current) document.getElementById(`pray-${id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
     el.src = urls[0]
     el.play().catch(release)
+  }
+  const inTurnRef = useRef(false)
+  inTurnRef.current = inTurn
+  const play = (p: PrayerInfo) => {
+    const was = playing === p.id && !inTurn
+    release()
+    if (!was) start(p.id, [], new Audio())
+  }
+  const playAll = (ps: PrayerInfo[]) => {
+    const was = inTurn
+    release()
+    if (was || !ps.length) return
+    setInTurn(true)
+    start(ps[0].id, ps.slice(1).map(p => p.id), new Audio())
   }
   // Send it to someone, or keep your own copy: the share sheet on phones
   // (Messages, Files, Voice Memos…), a download elsewhere. Each part is its own file.
@@ -465,14 +492,75 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const done = () => slideAway(box.current, onClose)
   const when = (at: number) => new Date(at).toLocaleString(locale(), { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
   const time = (at: number) => new Date(at).toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' })
-  // By the day each was prayed, newest first, like the circles.
-  const days: { day: string; list: PrayerInfo[] }[] = []
-  for (const p of list ?? []) {
-    const d = dayOf(p.at), last = days[days.length - 1]
-    if (last?.day === d) last.list.push(p); else days.push({ day: d, list: [p] })
+  const date = (at: number) => new Date(at).toLocaleDateString(locale(), { weekday: 'short', month: 'short', day: 'numeric', ...(new Date(at).getFullYear() === new Date().getFullYear() ? {} : { year: 'numeric' }) })
+
+  // Stars show at once; the list itself catches up when it's read again.
+  const [starred, setStarred] = useState<Record<string, boolean>>({})
+  const isFav = (p: PrayerInfo) => starred[p.id] ?? !!p.fav
+  const star = async (p: PrayerInfo) => {
+    const fav = !isFav(p)
+    setStarred(s => ({ ...s, [p.id]: fav }))
+    await prayers.note(p.id, { fav }).catch(() => {})
+    onChange()
+    syncPrayers().catch(() => {})
   }
+  // Recent: this month by day, earlier months folded. Favorites, or anything
+  // typed in the find box: one plain list, each prayer with its date.
+  const [view, setView] = useState<'all' | 'fav'>('all')
+  const [find, setFind] = useState('')
+  const [open, setOpen] = useState<string>()
+  const [unfolded, setUnfolded] = useState<string[]>([])
+  const all = list ?? [], favs = all.filter(isFav)
+  const typed = find.trim()
+  const flat = view === 'fav' || !!typed
+  const shown = (view === 'fav' ? favs : all).filter(p => !typed || finds(typed, [
+    ...versesOf(p).map(verseLabel), p.name ?? '', p.topic ?? '',
+    new Date(p.at).toLocaleDateString(locale(), { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
+  ]))
+  const { days, months } = flat ? { days: [], months: [] } : byMonth(shown)
+  const total = (ps: PrayerInfo[]) => longDuration(ps.reduce((n, p) => n + p.ms, 0))
+  const row = (p: PrayerInfo, dated = flat) => (
+    <li id={`pray-${p.id}`} class={'pray-row' + (playing === p.id ? ' on' : '') + (open === p.id ? ' open' : '')}>
+      <button class="pray-play" aria-label={playing === p.id ? t('Stop') : t('Play prayer from {when}', { when: when(p.at) })} onClick={() => play(p)}>
+        {playing === p.id ? <StopIcon /> : <PlayIcon />}
+      </button>
+      <span class="pray-when">{dated ? date(p.at) : time(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
+        {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
+        {sharedWith([p]).length > 0 && <span class="pray-shared muted">✓ {t('Shared with {circle}', { circle: sharedWith([p]).map(c => c.name).join(', ') })}</span>}</span>
+      <button class={'pray-icon pray-star' + (isFav(p) ? ' on' : '')} aria-pressed={isFav(p)} aria-label={isFav(p) ? t('Remove from favorites') : t('Add to favorites')} onClick={() => star(p)}>
+        <svg viewBox="0 0 24 24" width="28" height="28" aria-hidden="true"><path d="M12 3.6l2.6 5.3 5.8.8-4.2 4.1 1 5.8-5.2-2.7-5.2 2.7 1-5.8-4.2-4.1 5.8-.8z" fill={isFav(p) ? 'currentColor' : 'none'} stroke="currentColor" stroke-width="1.8" stroke-linejoin="round" /></svg>
+      </button>
+      {/* Everything else you can do with a prayer, one tap away, each with its name. */}
+      <button class="pray-icon pray-more" aria-expanded={open === p.id} aria-label={open === p.id ? t('Close') : t('More')} onClick={() => { setConfirm(undefined); setOpen(open === p.id ? undefined : p.id) }}>
+        {open === p.id ? <CloseIcon size={20} /> : <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor" /><circle cx="12" cy="12" r="2" fill="currentColor" /><circle cx="19" cy="12" r="2" fill="currentColor" /></svg>}
+      </button>
+      {open === p.id && confirm !== p.id && <div class="pray-acts">
+        {/* Thought of a verse later, or tapped the wrong one? Tap verses on the page to add or take them off. */}
+        <button class="pray-act" onClick={() => { release(); onPick(versesOf(p), p.id) }}>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 5v14M5 12h14" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+          <span>{versesOf(p).length ? t('Change verses') : t('Add a verse')}</span>
+        </button>
+        <button class="pray-act" aria-label={t('Share or save this prayer')} onClick={() => save(p)}>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span>{again === p.id ? t('Share') : t('Share or save')}</span>
+        </button>
+        {leftToShare([p]) && <button class="pray-act" aria-label={t('Share this prayer with your circle')} onClick={() => shareWithCircle({ prayer: p.id })}>
+          <CircleIcon size={22} /> <span>{t('Share with your circle')}</span>
+        </button>}
+        {/* A bin, not a cross: a cross reads as close. */}
+        <button class="pray-act pray-bin" aria-label={t('Delete this prayer')} onClick={() => setConfirm(p.id)}>
+          <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          <span>{t('Delete')}</span>
+        </button>
+      </div>}
+      {confirm === p.id && <div class="pray-confirm">
+        <button class="pray-btn" onClick={() => setConfirm(undefined)}>{t('Keep')}</button>
+        <button class="pray-btn danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
+      </div>}
+    </li>
+  )
   return (
-    <div class="pray-list" ref={box}>
+    <div class="pray-list pray-journal" ref={box}>
       <div class="pray-head">
         <button type="button" class="settings-grabber" aria-label={t('Close')} onClick={done} />
         <div class="pray-title">
@@ -480,8 +568,22 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           <button class="done-btn" onClick={done}>{t('Done')}</button>
         </div>
       </div>
-      {!list?.length ? <p class="muted">{t('No prayers yet.')}</p> : (
+      {/* Once there are a few: your favorites by themselves, and a box to find one. */}
+      {(all.length >= 4 || favs.length > 0) && <div class="pray-tools">
+        <div class="seg" role="radiogroup" aria-label={t('Your prayers')}>
+          <button role="radio" aria-checked={view === 'all'} class={view === 'all' ? 'on' : ''} onClick={() => { setView('all'); setOpen(undefined) }}>{t('Recent')}</button>
+          <button role="radio" aria-checked={view === 'fav'} class={view === 'fav' ? 'on' : ''} onClick={() => { setView('fav'); setOpen(undefined) }}>★ {t('Favorites')}{favs.length ? ` · ${favs.length}` : ''}</button>
+        </div>
+        {all.length >= 4 && <input type="search" class="saved-find" placeholder={t('Find by verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined) }} />}
+      </div>}
+      {!all.length ? <p class="muted">{t('No prayers yet.')}</p>
+        : !shown.length ? <p class="muted">{typed ? t('No prayer has “{words}” in it.', { words: typed }) : t('No favorites yet. Tap the star on a prayer to keep it here.')}</p> : (
         <ol>
+          {/* Stay in them: the whole list, one prayer after the other. */}
+          {flat && shown.length > 1 && <li class="pray-all"><button class="pray-btn primary" onClick={() => playAll(shown)}>
+            {inTurn ? <StopIcon /> : <PlayIcon />} <span>{inTurn ? t('Stop') : `${t('Play all {n}', { n: shown.length })} · ${total(shown)}`}</span>
+          </button></li>}
+          {flat && shown.map(p => row(p))}
           {days.map(({ day, list: some }) => <>
             <li class="pray-day">
               <h3>{dayName(day)}</h3>
@@ -490,40 +592,34 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
                 <CircleIcon size={22} /> <span>{t('Share all {n}', { n: some.length })}</span>
               </button>}
             </li>
-          {some.map(p => (
-            <li class={playing === p.id ? 'on' : ''}>
-              <button class="pray-play" aria-label={playing === p.id ? t('Stop') : t('Play prayer from {when}', { when: when(p.at) })} onClick={() => play(p)}>
-                {playing === p.id
-                  ? <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>
-                  : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
-              </button>
-              <span class="pray-when">{time(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
-                {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
-                {/* Thought of a verse later, or tapped the wrong one? Tap verses on the page to add or take them off. */}
-                <button class="link pray-list-verse pray-list-add" onClick={() => { release(); onPick(versesOf(p), p.id) }}>{versesOf(p).length ? t('Change verses') : `+ ${t('Add a verse')}`}</button>
-                {sharedWith([p]).length > 0 && <span class="pray-shared muted">✓ {t('Shared with {circle}', { circle: sharedWith([p]).map(c => c.name).join(', ') })}</span>}</span>
-              {confirm !== p.id && <>
-                <button class="pray-icon" aria-label={t('Share or save this prayer')} title={t('Share or save')} onClick={() => save(p)}>
-                  {again === p.id ? t('Share') : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5M5 12v7a2 2 0 0 0 2 2h10a2 2 0 0 0 2-2v-7" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>}
-                </button>
-                {leftToShare([p]) && <button class="pray-icon" aria-label={t('Share this prayer with your circle')} title={t('Share with your circle')} onClick={() => shareWithCircle({ prayer: p.id })}>
-                  <CircleIcon size={24} />
-                </button>}
-                {/* A bin, not a cross: a cross reads as close. */}
-                <button class="pray-icon pray-bin" aria-label={t('Delete this prayer')} title={t('Delete')} onClick={() => setConfirm(p.id)}>
-                  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 7h16M9.5 7V4.5h5V7M6.5 7l1 13h9l1-13M10 11v5.5M14 11v5.5" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </button></>}
-              {confirm === p.id && <div class="pray-confirm">
-                <button class="pray-btn" onClick={() => setConfirm(undefined)}>{t('Keep')}</button>
-                <button class="pray-btn danger" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
-              </div>}
-            </li>
-          ))}</>)}
+            {some.map(p => row(p))}</>)}
+          {/* Earlier months: one row each, opened with a tap. */}
+          {months.map(({ month, list: some }) => {
+            const isOpen = unfolded.includes(month), stars = some.filter(isFav).length
+            return <>
+              <li class="pray-month"><button aria-expanded={isOpen} onClick={() => setUnfolded(isOpen ? unfolded.filter(m => m !== month) : [...unfolded, month])}>
+                <strong>{monthName(month)}</strong>
+                <span class="muted">{tn(some.length, '{n} prayer', '{n} prayers')} · {total(some)}{stars ? ` · ★ ${stars}` : ''}</span>
+                <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+              </button></li>
+              {isOpen && some.map(p => row(p, true))}
+            </>
+          })}
         </ol>
       )}
       <PrayerSync onChange={onChange} onClose={onClose} />
     </div>
   )
+}
+
+const PlayIcon = () => <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
+const StopIcon = () => <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>
+
+/** "October 2026", from 2026-10. */
+function monthName(month: string) {
+  const [y, m] = month.split('-').map(Number)
+  const s = new Date(y, m - 1, 1, 12).toLocaleDateString(locale(), { month: 'long', year: 'numeric' })
+  return s[0].toUpperCase() + s.slice(1)
 }
 
 /** "Today", "Yesterday", or the day itself (2026-10-24 on this device's clock). */

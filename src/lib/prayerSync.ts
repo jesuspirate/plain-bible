@@ -8,6 +8,7 @@ import {
 } from './prayerCrypto'
 import { api, loadAccount, noPasskey, setNoPasskey, SYNC_URL, SyncError } from './sync'
 import { cleanVerse, cleanVerses } from './prayerVerses'
+import { cleanJournal } from './prayerJournal'
 import { t } from '../i18n'
 
 /** Set on a device whose prayers sync: the fingerprint of the key it holds. */
@@ -23,6 +24,8 @@ const VERSE_PART = 999
 // server tells when another device changed it: each change adds a space to
 // the end, so the size never comes back the same.
 const VERSES_PART = 998
+// A prayer's journal (starred, and so on), which changes the same way.
+const JOURNAL_PART = 997
 const enc = new TextEncoder(), dec = new TextDecoder()
 
 interface Remote { keyId: string | null; passkeys?: number; parts: { prayer: string; part: number; chunks: number; size: number }[]; gone: string[] }
@@ -241,7 +244,7 @@ export async function prayerCheck(): Promise<{ here: number; notSent: number; no
     const has = parts.get(p.id)
     if (!has) return false
     for (let i = 0; i < p.parts; i++) if (!has.has(i)) return false
-    return !p.vdirty && (!p.verse || has.has(VERSE_PART))
+    return !p.vdirty && !p.jdirty && (!p.verse || has.has(VERSE_PART))
   }
   const ids = new Set(local.map(p => p.id))
   return {
@@ -285,11 +288,12 @@ async function run(): Promise<boolean> {
 
   // How many parts of each prayer are on the server, in order.
   const chunks = new Map<string, Map<number, number>>()
-  const versesSize = new Map<string, number>()
+  const versesSize = new Map<string, number>(), journalSize = new Map<string, number>()
   for (const r of remote.parts) {
     if (!chunks.has(r.prayer)) chunks.set(r.prayer, new Map())
     chunks.get(r.prayer)!.set(r.part, r.chunks)
     if (r.part === VERSES_PART) versesSize.set(r.prayer, r.size)
+    if (r.part === JOURNAL_PART) journalSize.set(r.prayer, r.size)
   }
   const sent = (id: string) => { let n = 0; while (chunks.get(id)?.has(n)) n++; return n }
 
@@ -320,6 +324,13 @@ async function run(): Promise<boolean> {
       await prayers.versesSent(p.id, rev, sealed.length)
       versesSize.set(p.id, sealed.length)
     }
+    if (p.jdirty) {
+      const rev = p.jrev ?? 0
+      const sealed = await seal(pk.key, enc.encode(JSON.stringify(cleanJournal(p)) + ' '.repeat(rev)), `${p.id}/${JOURNAL_PART}`)
+      if (await put(`/prayers/${p.id}/${JOURNAL_PART}/0?of=1`, token, sealed) === 'gone') { await prayers.delete(p.id); changed = true; continue }
+      await prayers.noteSent(p.id, rev, sealed.length)
+      journalSize.set(p.id, sealed.length)
+    }
   }
 
   // Down: prayers, or later parts of them, recorded elsewhere.
@@ -340,8 +351,18 @@ async function run(): Promise<boolean> {
       else await prayers.append(id, part)
       changed = true
     }
+    // Its journal, changed on another device. One unreadable journal
+    // mustn't stop the rest syncing.
+    const here = versesHere.get(id), jsize = journalSize.get(id)
+    if ((have || total) && jsize !== undefined && !here?.jdirty && here?.jsize !== jsize) {
+      const plain = await get(`/prayers/${id}/${JOURNAL_PART}/0`, token)
+        .then(sealed => open(pk.key, sealed, `${id}/${JOURNAL_PART}`)).then(b => dec.decode(b), () => undefined)
+      let journal
+      try { journal = plain === undefined ? undefined : cleanJournal(JSON.parse(plain)) } catch { /* skip it */ }
+      if (journal && plain !== undefined) { await prayers.notedElsewhere(id, journal, plain.length - plain.trimEnd().length, jsize); changed = true }
+    }
     // The verses it was prayed using, changed on another device.
-    const size = versesSize.get(id), here = versesHere.get(id)
+    const size = versesSize.get(id)
     if ((have || total) && size !== undefined) {
       if (here?.vdirty || here?.vsize === size) continue
       const sealed = await get(`/prayers/${id}/${VERSES_PART}/0`, token)

@@ -3,6 +3,7 @@
 // page anyone can open in a browser, and each prayer as an audio file that
 // plays anywhere. Loaded only when asked for.
 import { strToU8, zipSync, Zippable } from 'fflate'
+import { cleanJournal } from './prayerJournal'
 import { Backup, BACKUP_FILE, BackupPrayer, compareKeys, Marks, notesOf, PALETTE, parseKey } from './marks'
 import { partsOf, prayers } from './prayers'
 import { playable } from './mp4'
@@ -31,7 +32,7 @@ export async function buildExport({ marks, settings, data, version }: { marks: M
       files[file] = [new Uint8Array(playable(part.audio, part.type)), { level: 0 }]
       return { file, ms: part.ms, type: part.type }
     })
-    list.push({ id: p.id, at: p.at, verses: p.verses ?? (p.verse ? [p.verse] : undefined), parts })
+    list.push({ id: p.id, at: p.at, verses: p.verses ?? (p.verse ? [p.verse] : undefined), ...cleanJournal(p), parts })
   }
   const backup: Backup = { app: 'plain-bible', version: 1, exported: new Date().toISOString(), marks, settings, prayers: list }
   files[BACKUP_FILE] = strToU8(JSON.stringify(backup))
@@ -60,7 +61,7 @@ async function page(marks: Marks, list: BackupPrayer[], data?: DataSource, versi
       + notes.map(n => `<div class="note">${n.v && n.v.length > 1 ? `<b>${esc(`${bookName(book)} ${chapter}:${verseRanges(n.v)}`)}</b><br>` : ''}${esc(n.n).replace(/\n/g, '<br>')}</div>`).join('')
       + `</section>`)
   }
-  const said = list.map(p => `<section><h3>🙏 ${esc(when(p.at))}</h3>`
+  const said = list.map(p => `<section><h3>🙏 ${p.fav ? '★ ' : ''}${esc(when(p.at))}</h3>`
     + (p.verses ?? []).map(v => `<p><b>${esc(verseLabel(v))}</b>${text(v.book, v.chapter, v.verses) ? ` ${esc(text(v.book, v.chapter, v.verses))}` : ''}</p>`).join('')
     + p.parts.map(x => `<p><audio controls preload="none" src="${esc(x.file)}"></audio> <a href="${esc(x.file)}">${esc(x.file.split('/').pop()!)}</a></p>`).join('')
     + `</section>`).join('')
