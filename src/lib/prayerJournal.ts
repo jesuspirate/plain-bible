@@ -1,6 +1,7 @@
 // What you keep about a prayer besides its recording and verses, and how
 // the list of prayers is laid out once there are many of them.
 import { dayOf } from './streaks'
+import { N_ } from '../i18n'
 
 /** `fav`: starred. `name`, `topic`, `answered` (when): yours to fill in. */
 export interface Journal { fav?: boolean; name?: string; topic?: string; answered?: number }
@@ -51,4 +52,15 @@ export function finds(typed: string, shown: string[]) {
 export function longDuration(ms: number) {
   const m = Math.max(1, Math.round(ms / 60000))
   return m < 60 ? `${m} min` : `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, '0')}`
+}
+
+/** Topics offered before you make your own. Kept under these English names,
+ *  and shown in the app's language. */
+export const TOPICS = [N_('Thanks'), N_('Family'), N_('Healing'), N_('Guidance'), N_('Church')]
+
+/** The topics to choose from: the ones offered, then your own, in the order
+ *  they were first used (`list` is newest first). */
+export function topicsOf(list: { topic?: string }[]) {
+  const own = [...list].reverse().map(p => p.topic).filter((x): x is string => !!x && !TOPICS.includes(x))
+  return [...TOPICS, ...new Set(own)]
 }
