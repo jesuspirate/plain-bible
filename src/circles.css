@@ -83,9 +83,20 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-tabs { display: flex; margin: 4px 0 6px; border-radius: 12px; }
 .c-tabs button { flex: 1; min-height: 46px; font: 600 16px var(--sans); }
 .c-members { margin: 14px 0 4px; font-weight: 600; }
-.c-day { margin-top: 18px; }
+.c-day { margin-top: 14px; }
 .c-day-name { margin: 0; padding-bottom: 2px; font: 600 14px var(--sans); letter-spacing: .04em; text-transform: uppercase; color: var(--muted); }
 .c-day-new .c-day-name { color: var(--accent); }
+/* A day is one row that opens or folds, like the days in Your prayers. */
+.c-day-fold { margin: 0; }
+.c-day-fold button { display: grid; grid-template-columns: 1fr auto; align-items: center; gap: 2px 10px; width: 100%; min-height: 62px; padding: 9px 12px 9px 14px;
+  border: none; border-radius: 16px; background: var(--chip); color: var(--text); text-align: left; font: 15px var(--sans); -webkit-tap-highlight-color: transparent; }
+.c-day-fold strong { font: 600 18px var(--sans); }
+.c-day-sum { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 7px; min-width: 0; }
+.c-day-sum .c-sign { flex: none; line-height: 1; color: var(--accent); }
+.c-day-sum .c-sign-bm { color: var(--ribbon); }
+.c-day-fold svg:last-child { grid-column: 2; grid-row: 1 / span 2; color: var(--muted); transition: transform .15s; }
+.c-day-fold svg.open { transform: rotate(90deg); }
+@media (prefers-reduced-motion: reduce) { .c-day-fold svg { transition: none; } }
 .c-earlier { display: block; width: 100%; margin: 18px 0 4px; }
 .c-end { margin: 22px 0 6px; text-align: center; color: var(--muted); font-size: 15px; }
 .c-end::before { content: '✦'; display: block; margin-bottom: 6px; color: color-mix(in srgb, var(--accent) 60%, transparent); }

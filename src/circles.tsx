@@ -5,7 +5,7 @@ import { createContext } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
-  leaveCircle, listCircles, renameCircle, type News, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -523,6 +523,8 @@ function CircleView({ id }: { id: string }) {
   const [joining, setJoining] = useState<{ was: number; until: number }>()
   const [page, setPage] = useState<'shared' | 'people'>()
   const [limit, setLimit] = useState(PAGE)
+  // Days opened or folded by hand; the rest follow the rule (the latest open).
+  const [dayOpen, setDayOpen] = useState<Record<number, boolean>>({})
   // What came in since you last looked shows first, marked, until you next
   // come back. Looking at it clears the dot.
   const [since] = useState(() => seenAt(id))
@@ -636,14 +638,28 @@ function CircleView({ id }: { id: string }) {
       </>}
       {feed && tab === 'shared' && <>
         {!feed.items.length && <p class="muted c-empty">{t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
-        {days.map(d => (
-          <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
-            <h3 class="c-day-name">{d.day === 'new' ? t('New since you last looked') : dayName(d.day)}</h3>
-            <ol class="c-feed">
-              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
-            </ol>
-          </section>
-        ))}
+        {/* Each day is one row, as in Your prayers, and a tap opens or folds
+            it. What's new is always open; with nothing new, the latest day is. */}
+        {days.map((d, i) => {
+          const isOpen = d.day === 'new' || (dayOpen[d.day] ?? (i === 0))
+          const by = [...new Set(d.items.map(x => x.by))].map(nameOf).join(', ')
+          return (
+            <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
+              {d.day === 'new' ? <h3 class="c-day-name">{t('New since you last looked')}</h3> : (
+                <h3 class="c-day-fold"><button aria-expanded={isOpen} onClick={() => setDayOpen({ ...dayOpen, [d.day]: !isOpen })}>
+                  <strong>{dayName(d.day)}</strong>
+                  <span class="c-day-sum"><span class="muted">{by}</span>{d.items.slice(0, 6).map(x => <KindSign k={x.body.k} tone={settings.prayTone} size={16} />)}</span>
+                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+                </button></h3>
+              )}
+              {isOpen && (
+                <ol class="c-feed">
+                  {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
+                </ol>
+              )}
+            </section>
+          )
+        })}
         {more
           ? <button class="c-btn c-earlier" onClick={() => setLimit(n => n + PAGE)}>{t('Show earlier days')}</button>
           : feed.items.length > 0 && <p class="c-end">{t('That’s everything shared in {circle}.', { circle: info?.name ?? t('this circle') })}</p>}
@@ -886,7 +902,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
       )}
       <div class="c-item-head">
         <span class={'c-kind c-kind-' + b.k} aria-hidden="true">
-          {b.k === 'prayer' ? emoji('pray') : b.k === 'bookmark' ? <BookmarkIcon size={20} /> : b.k === 'note' ? <NoteIcon size={22} /> : <BookIcon size={22} />}
+          <KindSign k={b.k} tone={settings.prayTone} />
         </span>
         <div class="c-item-who">
           <p class="c-item-by"><strong>{nameOf(item.by)}</strong>{news?.item && <span class="c-new-tag">{t('New')}</span>}</p>
@@ -1053,6 +1069,12 @@ function Blocking({ circle, feed, onChange }: { circle: string; feed: Feed; onCh
       {err && <p class="note small">{err}</p>}
     </div>
   )
+}
+
+/** The sign of what was shared: a prayer, a bookmark, a note or a verse. */
+function KindSign({ k, tone, size = 22 }: { k: Shared['k']; tone: string; size?: number }) {
+  return k === 'prayer' ? <span class="c-sign" style={{ fontSize: size + 2 }}>{reactEmoji('pray', tone)}</span>
+    : k === 'bookmark' ? <BookmarkIcon size={size - 2} class="c-sign c-sign-bm" /> : k === 'note' ? <NoteIcon size={size} class="c-sign" /> : <BookIcon size={size} class="c-sign" />
 }
 
 /** Love, strength, encouragement. The hands take the skin tone picked for 🙏. */
