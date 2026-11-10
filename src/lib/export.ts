@@ -61,7 +61,7 @@ async function page(marks: Marks, list: BackupPrayer[], data?: DataSource, versi
       + notes.map(n => `<div class="note">${n.v && n.v.length > 1 ? `<b>${esc(`${bookName(book)} ${chapter}:${verseRanges(n.v)}`)}</b><br>` : ''}${esc(n.n).replace(/\n/g, '<br>')}</div>`).join('')
       + `</section>`)
   }
-  const said = list.map(p => `<section><h3>🙏 ${p.fav ? '★ ' : ''}${esc(when(p.at))}</h3>`
+  const said = list.map(p => `<section><h3>🙏 ${p.fav ? '★ ' : ''}${p.name ? `${esc(p.name)} · ` : ''}${esc(when(p.at))}${p.topic ? ` · ${esc(p.topic)}` : ''}${p.answered ? ' · ✓' : ''}</h3>`
     + (p.verses ?? []).map(v => `<p><b>${esc(verseLabel(v))}</b>${text(v.book, v.chapter, v.verses) ? ` ${esc(text(v.book, v.chapter, v.verses))}` : ''}</p>`).join('')
     + p.parts.map(x => `<p><audio controls preload="none" src="${esc(x.file)}"></audio> <a href="${esc(x.file)}">${esc(x.file.split('/').pop()!)}</a></p>`).join('')
     + `</section>`).join('')

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { byMonth, cleanJournal, finds, longDuration, sameJournal } from './prayerJournal'
+import { byMonth, cleanJournal, finds, longDuration, sameJournal, topicsOf } from './prayerJournal'
 
 const at = (y: number, m: number, d: number, h = 12) => new Date(y, m - 1, d, h).getTime()
 
@@ -33,5 +33,9 @@ describe('prayer journal', () => {
     expect(longDuration(20_000)).toBe('1 min')
     expect(longDuration(54 * 60_000)).toBe('54 min')
     expect(longDuration(89 * 60_000)).toBe('1 h 29')
+  })
+  it('offers its topics, then yours in the order you made them', () => {
+    expect(topicsOf([])).toEqual(['Thanks', 'Family', 'Healing', 'Guidance', 'Church'])
+    expect(topicsOf([{ topic: 'Work' }, {}, { topic: 'Family' }, { topic: 'Neighbors' }, { topic: 'Work' }]).slice(5)).toEqual(['Work', 'Neighbors'])
   })
 })

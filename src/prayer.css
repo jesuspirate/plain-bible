@@ -143,4 +143,23 @@ button.pray-list-verse { display: block; margin: 0; padding: 2px 0 0; font-size:
 .pray-list li.pray-all { padding: 8px 6px 4px; }
 .pray-all .pray-btn { display: flex; align-items: center; justify-content: center; gap: 8px; margin: 0; min-height: 54px; }
 @media (prefers-reduced-motion: reduce) { .pray-month svg { transition: none; } }
+/* A prayer's name, its topic, and whether it was answered. */
+.pray-name { display: block; font: 600 17px/1.3 var(--sans); overflow-wrap: anywhere; }
+.pray-tags { display: flex; flex-wrap: wrap; gap: 6px; padding-top: 5px; }
+.pray-tag { padding: 2px 10px; border-radius: 99px; background: var(--chip); font: 600 13px/1.5 var(--sans); color: var(--muted); }
+.pray-row.open .pray-tag { background: var(--surface); }
+.pray-tag.answered, .pray-act.answered, .pray-list strong.answered { color: #2f7d4a; }
+:root[data-theme='dark'] .pray-tag.answered, :root[data-theme='dark'] .pray-act.answered, :root[data-theme='dark'] .pray-list strong.answered { color: #7fd39b; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-tag.answered, :root[data-theme='system'] .pray-act.answered, :root[data-theme='system'] .pray-list strong.answered { color: #7fd39b; } }
+.pray-back { display: flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 12px 0 8px; border: none; border-radius: 14px; background: var(--chip); color: var(--text); font: 18px var(--sans); text-align: left; }
+.pray-edit { flex-basis: 100%; min-width: 0; max-width: 100%; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
+.pray-edit .saved-find { flex: none; min-height: 50px; font-size: 17px; border-radius: 14px; }
+.pray-edit > .pray-btn { margin: 0; }
+.pray-edit .pray-btn, .pray-edit .saved-find { box-sizing: border-box; }
+.pray-topics { display: flex; flex-wrap: wrap; gap: 8px; }
+.pray-topic { min-height: 46px; padding: 0 16px; border-radius: 99px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: 600 16px var(--sans); }
+.pray-topic.on { background: var(--accent); border-color: var(--accent); color: var(--accent-ink); }
+.pray-new-topic { display: flex; gap: 8px; }
+.pray-new-topic .saved-find { flex: 1; min-width: 0; }
+.pray-new-topic .pray-btn { width: auto; margin: 0; padding: 10px 20px; }
 .pray-pill .news-dot { display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: #9a5a1c; vertical-align: middle; }
