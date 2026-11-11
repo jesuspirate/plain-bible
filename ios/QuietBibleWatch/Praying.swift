@@ -66,6 +66,10 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate {
         let now = Date()
         let id = Outbox.newID(now)
         do {
+            // A solid buzz, so you know without looking that it's listening.
+            // It comes before the microphone is taken: the watch softens taps
+            // while it records, and the prayer shouldn't start with the buzz.
+            WKInterfaceDevice.current().play(.notification)
             let audio = AVAudioSession.sharedInstance()
             try audio.setCategory(.record, mode: .default)
             try audio.setActive(true)
@@ -77,8 +81,6 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate {
                 AVEncoderBitRateKey: 64_000,
             ])
             r.delegate = self
-            // The tap comes first, so the recording doesn't start with its buzz.
-            WKInterfaceDevice.current().play(.start)
             guard r.record(forDuration: 59 * 60) else { throw CocoaError(.fileWriteUnknown) }
             recorder = r
             self.id = id
