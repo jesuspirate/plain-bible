@@ -1,0 +1,31 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "NSMicrophoneUsageDescription": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Quiet Bible enregistre les prières que vous dites quand vous touchez 🙏. Elles vont dans l’app de votre iPhone et y restent, sauf si vous choisissez de les partager."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Quiet Bible graba las oraciones que dices cuando tocas 🙏. Van a la app de tu iPhone y se quedan allí, salvo que elijas compartirlas."
+          }
+        },
+        "en": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "My Quiet Bible records the prayers you speak, when you tap 🙏. They go to the app on your iPhone and stay there unless you choose to share them."
+          }
+        }
+      }
+    },
+    "CFBundleDisplayName": {
+      "shouldTranslate": false
+    }
+  },
+  "version": "1.0"
+}

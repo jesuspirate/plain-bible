@@ -44,6 +44,14 @@ function setTint(bg: string) {
   const theme = ({ '#faf8f3': 'light', '#f4ecd8': 'sepia', '#16161a': 'dark' } as Record<string, string>)[bg]
   if (theme) document.querySelector('link[rel="manifest"]')?.setAttribute('href', `./manifest-${theme}.webmanifest`)
 }
+// In the iPhone app, prayers recorded on an Apple Watch wait to be taken in:
+// when the app opens, when it comes back, and when one arrives while it's open.
+if (inStoreApp()) {
+  const take = () => { import('./lib/watch').then(m => m.fromWatch()).catch(() => {}) }
+  setTimeout(take, 3000)
+  document.addEventListener('visibilitychange', () => { if (document.visibilityState === 'visible') take() })
+  addEventListener('quietbible:watch', take)
+}
 if (IOS_HOME_SCREEN && !inStoreApp()) {
   document.addEventListener('visibilitychange', () => {
     if (document.visibilityState !== 'hidden') return

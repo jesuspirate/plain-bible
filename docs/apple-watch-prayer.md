@@ -1,6 +1,8 @@
 # Praying with an Apple Watch (draft)
 
-Status: idea, not built. Start only after the iPhone app is live on the App Store.
+Status: phase 1 is built (the watch app, the watch-face 🙏, soft taps, the
+hand-off to the iPhone app) and waits to be tried on a real watch. See
+`ios/README.md`, "Apple Watch". The rest of this page is the original plan.
 
 ## The idea
 

@@ -17,6 +17,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var themeWatch: NSKeyValueObservation?
     private var barStyle: UIStatusBarStyle = .darkContent
     private var downloads: [ObjectIdentifier: URL] = [:]
+    private var watchArrivals: NSObjectProtocol?
 
     override var preferredStatusBarStyle: UIStatusBarStyle { barStyle }
 
@@ -32,6 +33,8 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.userContentController.addUserScript(WKUserScript(
             source: "Object.defineProperty(navigator, 'standalone', { get: () => true })",
             injectionTime: .atDocumentStart, forMainFrameOnly: true))
+        // Prayers from the Apple Watch app (WatchInbox.swift).
+        config.userContentController.addScriptMessageHandler(WatchBridge(), contentWorld: .page, name: "watch")
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.navigationDelegate = self
@@ -70,6 +73,10 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     override func viewDidLoad() {
         super.viewDidLoad()
         web.load(URLRequest(url: start ?? Self.home))
+        // A prayer from the watch arrived while the app is open: the web app takes it.
+        watchArrivals = NotificationCenter.default.addObserver(forName: WatchInbox.arrived, object: nil, queue: .main) { [weak self] _ in
+            self?.web.evaluateJavaScript("dispatchEvent(new Event('quietbible:watch'))")
+        }
     }
 
     /// Open a myquietbible.com link (from a universal link).
