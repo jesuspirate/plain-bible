@@ -105,6 +105,11 @@ export function App() {
   }, [])
 
   useEffect(() => { if (settings) saveSettings(settings) }, [settings])
+  // The Apple Watch app shows the same 🙏 as here.
+  const tone = settings?.prayTone
+  useEffect(() => {
+    if (tone !== undefined && inStoreApp()) import('./lib/watch').then(m => m.tellWatchTone(tone)).catch(() => {})
+  }, [tone])
   if (settings) followSettings(settings)
 
   // A new language in Settings (or from another device): its words load,

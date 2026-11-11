@@ -21,6 +21,8 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate {
     private var id = ""
     private var started = Date()
     private var amenTimer: Timer?
+    /// Between the tap and the microphone, while the watch buzzes.
+    private var starting = false
 
     /// Shorter than this is a slip of the finger, not a prayer.
     private static let shortest: TimeInterval = 0.8
@@ -42,7 +44,7 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate {
 
     /// Start a prayer (the 🙏 button, or the watch face).
     func begin() {
-        guard !isRecording else { return }
+        guard !isRecording, !starting else { return }
         let audio = AVAudioSession.sharedInstance()
         switch audio.recordPermission {
         case .granted:
@@ -54,22 +56,34 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate {
             // the screen is only ours again a moment later.
             audio.requestRecordPermission { [weak self] ok in
                 DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
-                    guard let self, !self.isRecording else { return }
+                    guard let self, !self.isRecording, !self.starting else { return }
                     if ok { self.record() } else { self.phase = .needsMic }
                 }
             }
         }
     }
 
+    /// Two solid buzzes, so you know without looking that it's listening,
+    /// and then the microphone. The buzzes come first: the watch softens
+    /// taps while it records, and the prayer shouldn't start with a buzz.
     private func record() {
         amenTimer?.invalidate()
+        starting = true
+        WKInterfaceDevice.current().play(.notification)
+        DispatchQueue.main.asyncAfter(deadline: .now() + 0.5) {
+            WKInterfaceDevice.current().play(.notification)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.0) { [weak self] in
+            guard let self else { return }
+            self.starting = false
+            self.listen()
+        }
+    }
+
+    private func listen() {
         let now = Date()
         let id = Outbox.newID(now)
         do {
-            // A solid buzz, so you know without looking that it's listening.
-            // It comes before the microphone is taken: the watch softens taps
-            // while it records, and the prayer shouldn't start with the buzz.
-            WKInterfaceDevice.current().play(.notification)
             let audio = AVAudioSession.sharedInstance()
             try audio.setCategory(.record, mode: .default)
             try audio.setActive(true)

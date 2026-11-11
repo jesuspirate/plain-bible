@@ -25,6 +25,25 @@ final class WatchInbox: NSObject, WCSessionDelegate {
         WCSession.default.activate()
     }
 
+    /// The skin tones 🙏 can have: none, or one of the five modifiers.
+    private static let tones: Set<String> = ["", "\u{1F3FB}", "\u{1F3FC}", "\u{1F3FD}", "\u{1F3FE}", "\u{1F3FF}"]
+    private static let toneKey = "WatchPrayTone"
+
+    /// The 🙏 picked in the app: the watch shows the same one. The watch
+    /// gets the latest whenever it is next in reach.
+    func tone(_ tone: String) {
+        guard Self.tones.contains(tone) else { return }
+        UserDefaults.standard.set(tone, forKey: Self.toneKey)
+        sendTone()
+    }
+
+    private func sendTone() {
+        guard WCSession.isSupported(), WCSession.default.activationState == .activated,
+              let tone = UserDefaults.standard.string(forKey: Self.toneKey) else { return }
+        // Fails when there's no watch, or no watch app: nothing to tell then.
+        try? WCSession.default.updateApplicationContext(["tone": tone])
+    }
+
     /// Ids are made on the watch: letters and digits only, so they can't point elsewhere.
     private static func safe(_ id: String) -> Bool {
         !id.isEmpty && id.count <= 40 && id.allSatisfy { $0.isASCII && ($0.isLetter || $0.isNumber) }
@@ -73,7 +92,9 @@ final class WatchInbox: NSObject, WCSessionDelegate {
         DispatchQueue.main.async { NotificationCenter.default.post(name: Self.arrived, object: nil) }
     }
 
-    func session(_ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {}
+    func session(_ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {
+        if state == .activated { sendTone() }
+    }
     func sessionDidBecomeInactive(_ session: WCSession) {}
     func sessionDidDeactivate(_ session: WCSession) {
         // A new watch was paired: listen to it.
@@ -83,7 +104,8 @@ final class WatchInbox: NSObject, WCSessionDelegate {
 
 /// `window.webkit.messageHandlers.watch` in the web app:
 /// `{op: "next"}` answers the oldest waiting prayer (or null),
-/// `{op: "done", id}` deletes the copy here once the web app has kept it.
+/// `{op: "done", id}` deletes the copy here once the web app has kept it,
+/// `{op: "tone", tone}` tells the watch which 🙏 (skin tone) to show.
 final class WatchBridge: NSObject, WKScriptMessageHandlerWithReply {
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage,
                                replyHandler: @escaping (Any?, String?) -> Void) {
@@ -99,6 +121,9 @@ final class WatchBridge: NSObject, WKScriptMessageHandlerWithReply {
             }
         case "done":
             if let id = body["id"] as? String { WatchInbox.shared.done(id) }
+            replyHandler(true, nil)
+        case "tone":
+            if let tone = body["tone"] as? String { WatchInbox.shared.tone(tone) }
             replyHandler(true, nil)
         default:
             replyHandler(nil, "unknown")

@@ -30,7 +30,7 @@ struct PrayView: View {
     private var ready: some View {
         VStack(spacing: 6) {
             Button { praying.begin() } label: {
-                Text("🙏")
+                Text(verbatim: outbox.hands)
                     .font(.system(size: 64))
                     .frame(maxWidth: .infinity, maxHeight: .infinity)
                     .background(Circle().fill(Self.brown.opacity(0.35)))
@@ -60,7 +60,7 @@ struct PrayView: View {
         VStack(spacing: 8) {
             ZStack {
                 Glow()
-                Text("🙏").font(.system(size: 44))
+                Text(verbatim: outbox.hands).font(.system(size: 44))
             }
             .frame(maxHeight: .infinity)
             .accessibilityHidden(true)
@@ -82,7 +82,7 @@ struct PrayView: View {
 
     private var amen: some View {
         VStack(spacing: 10) {
-            Text("🙏").font(.system(size: 44))
+            Text(verbatim: outbox.hands).font(.system(size: 44))
             Text("Amen. He heard you.")
                 .font(.headline)
                 .multilineTextAlignment(.center)

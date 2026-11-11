@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { takeWatchPrayers, watchBridge, WatchPrayer } from './watch'
+import { takeWatchPrayers, tellWatchTone, watchBridge, WatchPrayer } from './watch'
 import type { Prayer } from './prayers'
 
 const b64 = (s: string) => btoa(s)
@@ -13,6 +13,18 @@ function setup(waiting: unknown[], have: Prayer[] = []) {
   return { bridge, store, kept, done }
 }
 const p = (id: string, at: number): WatchPrayer => ({ id, at, ms: 5000, type: 'audio/mp4', audio: b64('abc') })
+
+describe('the 🙏 on the watch', () => {
+  it('is told the skin tone picked here', () => {
+    const sent: unknown[] = []
+    tellWatchTone('\u{1F3FD}', { postMessage: async m => { sent.push(m) } })
+    expect(sent).toEqual([{ op: 'tone', tone: '\u{1F3FD}' }])
+  })
+  it('is quiet where there is no iPhone app, or an older one', () => {
+    expect(() => tellWatchTone('', undefined)).not.toThrow()
+    expect(() => tellWatchTone('', { postMessage: () => Promise.reject(new Error('unknown')) })).not.toThrow()
+  })
+})
 
 describe('prayers from the watch', () => {
   it('keeps each one, then lets the iPhone app delete its copy', async () => {

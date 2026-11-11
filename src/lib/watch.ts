@@ -22,6 +22,11 @@ export function watchBridge(h = handler()): WatchBridge | undefined {
   return h && { next: () => h.postMessage({ op: 'next' }), done: id => h.postMessage({ op: 'done', id }) }
 }
 
+/** Tell the watch which 🙏 was picked here (its skin tone), so it shows the same one. */
+export function tellWatchTone(tone: string, h = handler()): void {
+  try { h?.postMessage({ op: 'tone', tone })?.catch?.(() => {}) } catch { /* an older app */ }
+}
+
 function bytes(base64: string): ArrayBuffer {
   const s = atob(base64), out = new Uint8Array(s.length)
   for (let i = 0; i < s.length; i++) out[i] = s.charCodeAt(i)
