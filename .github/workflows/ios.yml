@@ -26,9 +26,10 @@ jobs:
     steps:
       - uses: actions/checkout@v7
       - name: Test build (simulator, unsigned)
-        # shell: bash adds pipefail, so a failed build fails the step despite `tail`.
-        shell: bash
+        # No -sdk here: it would build the watch app for the iPhone too. The
+        # destination picks the iPhone simulator, and the watch app inside
+        # follows with the watch simulator. -quiet shows only warnings and errors.
         run: |
           xcodebuild -project ios/QuietBible.xcodeproj -scheme QuietBible -configuration Debug \
-            -sdk iphonesimulator -destination 'generic/platform=iOS Simulator' \
-            CODE_SIGNING_ALLOWED=NO build | tail -n 60
+            -destination 'generic/platform=iOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO -quiet build
