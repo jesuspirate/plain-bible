@@ -1,31 +1,61 @@
 // Linking another device: a link that signs it in and unlocks prayers there.
 // See lib/move.ts for how it works.
 import { useEffect, useState } from 'preact/hooks'
-import { applyMove, fetchMove, makeDeviceLink, MOVED_IN, movedIn, parseMoveLink } from './lib/move'
+import { applyMove, fetchMove, linkAccount, makeDeviceLink, MOVED_IN, movedIn, parseMoveLink } from './lib/move'
 import { copyText, isIOS } from './lib/native'
 import { PhoneIcon } from './icons'
 import { ShowDeviceCode } from './devicecode'
-import { locale, t, tj } from './i18n'
+import { t, tj } from './i18n'
 
 const standalone = () => (navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches
 const set = (k: string, v: string | null) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v) } catch { /* ignore */ } }
 
-/** Shown instead of the app while a device link is being taken in. */
+/** Shown instead of the app while a device link is being taken in. It
+ *  asks first: a link signs this device in to someone's account, and what's
+ *  here then syncs to it, so nothing happens until you say so. */
 export function Arriving({ link }: { link: { id: string; key: string } }) {
-  const [step, setStep] = useState(() => t('Bringing your Bible over…'))
+  const [step, setStep] = useState(() => t('Checking the link…'))
   const [error, setError] = useState('')
-  useEffect(() => {
-    fetchMove(link, (done, of) => setStep(t('Bringing your Bible over…') + (of > 1 ? ' ' + (done / of).toLocaleString(locale(), { style: 'percent' }) : '')))
-      .then(({ bundle, prayers }) => applyMove(bundle, prayers))
-      .then(() => { history.replaceState(null, '', location.pathname + '#/read'); location.reload() })
+  const [ask, setAsk] = useState<{ got: Awaited<ReturnType<typeof fetchMove>>; email: string | null; signedIn: boolean }>()
+  const toBible = () => { history.replaceState(null, '', location.pathname + '#/read'); location.reload() }
+  const check = () => {
+    setError(''); setStep(t('Checking the link…'))
+    fetchMove(link)
+      .then(async got => setAsk({ got, ...(await linkAccount(got.bundle)) }))
       .catch(e => setError((e as Error).message || String(e)))
+  }
+  useEffect(() => {
+    // The app isn't running yet, so wear the theme picked here ourselves.
+    try { const th = JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').theme; if (th) document.documentElement.dataset.theme = th } catch { /* default look */ }
+    check()
   }, [])
+  const go = () => {
+    if (!ask) return
+    setAsk(undefined); setStep(t('Bringing your Bible over…'))
+    applyMove(ask.got.bundle, ask.got.prayers).then(toBible).catch(e => setError((e as Error).message || String(e)))
+  }
+  if (ask && !error) return (
+    <div class="move-ask">
+      <div class="confirm-card move-ask-card" role="alertdialog" aria-labelledby="move-ask-title">
+        <p id="move-ask-title" class="confirm-title"><strong>{t('Link this device to an account?')}</strong></p>
+        <p>{ask.signedIn
+          ? t('You’re already signed in on this device, and you stay signed in. The link only adds what it carries.')
+          : t('This link signs this device in to a My Quiet Bible account. From then on, your highlights, notes and prayers here sync to that account.')}</p>
+        {ask.email && <p>{tj('The account: {email}', { email: <strong>{ask.email}</strong> })}</p>}
+        <p>{t('Only continue if you made this link yourself, on your other device. If someone sent it to you, tap Cancel.')}</p>
+        <div class="confirm-buttons">
+          <button class="primary" onClick={go}>{t('Link this device')}</button>
+          <button onClick={toBible}>{t('Cancel')}</button>
+        </div>
+      </div>
+    </div>
+  )
   return (
     <div class="center">
       {error ? <>
         <p class="error">{error}</p>
-        <p><button onClick={() => location.reload()}>{t('Try again')}</button></p>
-        <p><button onClick={() => { history.replaceState(null, '', location.pathname + '#/read'); location.reload() }}>{t('Open the Bible')}</button></p>
+        <p><button onClick={check}>{t('Try again')}</button></p>
+        <p><button onClick={toBible}>{t('Open the Bible')}</button></p>
       </> : <p class="muted">{step}</p>}
     </div>
   )

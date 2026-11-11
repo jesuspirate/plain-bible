@@ -1130,3 +1130,9 @@ header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3
 }
 .away-edge span { margin-top: calc(4px + env(safe-area-inset-top)); width: 44px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--muted) 35%, transparent); }
 @media (prefers-reduced-motion: reduce) { header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: none; } }
+/* Before a device link is taken in: one card, asking first. Same glass rim
+   as the other pop-up panels. */
+.move-ask { position: fixed; inset: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 16px calc(16px + env(safe-area-inset-right)) 16px calc(16px + env(safe-area-inset-left)); box-sizing: border-box; background: var(--bg, transparent); }
+.move-ask-card { width: min(30em, 100%); margin: 0; box-shadow: 0 20px 50px rgba(0,0,0,.18);
+  border: 1.5px solid; border-color: var(--rim-light) var(--rim-dark) color-mix(in srgb, var(--rim-light) 70%, transparent) var(--rim-dark); }
+.move-ask-card p { font-size: 17px; line-height: 1.45; }
