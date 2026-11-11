@@ -1236,10 +1236,11 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             {canListen && !settings.readSilent && <button onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
+            <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
+            {/* Share last: it closes the row like a button of its own. */}
             {inCircles()
               ? <button onClick={() => setAskShare(true)}><ShareIcon size={22} /><span>{t('Share')}</span></button>
               : <button onClick={shareOut}>{canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Share') : t('Link')}</span></button>}
-            <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
           </div>
           {/* The two things done from a verse, not to it: read on from here until X, and pray. */}
           <div class="selbar-big">
