@@ -2,6 +2,7 @@ name: iOS app
 
 # Checks that the iOS app (ios/) still builds. It is a small native shell
 # around myquietbible.com, so it only needs building when ios/ changes.
+# The iPhone app carries the Apple Watch app, so this builds that too.
 # Signing and sending it to the App Store happen in Xcode (see ios/README.md).
 
 on:

@@ -131,8 +131,11 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     const hidden = () => { if (document.visibilityState === 'hidden') stop('lock') }
     addEventListener('keydown', esc)
     document.addEventListener('visibilitychange', hidden)
+    // A prayer from the Apple Watch was just kept (lib/watch.ts).
+    addEventListener('quietbible:watch:kept', refresh)
     return () => {
       alive.current = false
+      removeEventListener('quietbible:watch:kept', refresh)
       stop()
       document.documentElement.classList.remove('praying')
       removeEventListener('keydown', esc)

@@ -1,0 +1,143 @@
+{
+  "sourceLanguage": "en",
+  "strings": {
+    "Allow the microphone for My Quiet Bible in the Settings app on your watch.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Autorisez le micro pour My Quiet Bible dans l’app Réglages de votre montre."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Permite el micrófono para My Quiet Bible en la app Ajustes de tu reloj."
+          }
+        }
+      }
+    },
+    "Amen": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amen"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amén"
+          }
+        }
+      }
+    },
+    "Amen. He heard you.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amen. Il a entendu votre prière."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Amén. Él te escuchó."
+          }
+        }
+      }
+    },
+    "My Quiet Bible": {
+      "shouldTranslate": false
+    },
+    "Pray": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Prier"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Orar"
+          }
+        }
+      }
+    },
+    "Tap to pray": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez pour prier"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para orar"
+          }
+        }
+      }
+    },
+    "Tap to start a prayer.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Touchez pour commencer une prière."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Toca para empezar una oración."
+          }
+        }
+      }
+    },
+    "The prayer couldn’t start. Tap to try again.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La prière n’a pas pu commencer. Touchez pour réessayer."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "La oración no pudo empezar. Toca para intentarlo de nuevo."
+          }
+        }
+      }
+    },
+    "Waiting for your iPhone": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "En attente de votre iPhone"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Esperando tu iPhone"
+          }
+        }
+      }
+    },
+    "🙏": {
+      "shouldTranslate": false
+    },
+    "🙏 ": {
+      "shouldTranslate": false
+    }
+  },
+  "version": "1.0"
+}
