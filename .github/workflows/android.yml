@@ -90,7 +90,9 @@ jobs:
           echo "ANDROID_KEYSTORE_PATH=$RUNNER_TEMP/upload.keystore" >> "$GITHUB_ENV"
       - name: Build
         env:
-          ANDROID_KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+          # Only a build for Google Play is signed; a pull request's test
+          # build never sees the key's password.
+          ANDROID_KEY_PASSWORD: ${{ github.event_name == 'workflow_dispatch' && secrets.ANDROID_KEY_PASSWORD || '' }}
           # Every upload to Google Play needs a higher version number.
           ANDROID_VERSION_CODE: ${{ github.run_number }}
         run: ./gradlew --no-daemon bundleRelease
