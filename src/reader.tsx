@@ -241,9 +241,9 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
   // Verses you select are offered if you go to pray soon after.
-  // A new highlight is drawn in slowly, like a marker in your hand (a
-  // setting). The mark is already saved; this is only how it appears.
-  const pen = penAllowed(settings.penDraw)
+  // A new highlight sweeps in quickly, or slowly like a marker in your hand
+  // (a setting). The mark is already saved; this is only how it appears.
+  const pen = penAllowed()
   const pens = useRef<{ keys: string[]; stop: () => void }[]>([])
   useLayoutEffect(() => {
     const keys = takeWaiting()
@@ -260,7 +260,7 @@ export function Reader({ route }: { route: Route }) {
     els.sort((a, z) => a.compareDocumentPosition(z) & Node.DOCUMENT_POSITION_FOLLOWING ? -1 : 1)
     const p = { keys: here, stop: () => {} }
     pens.current.push(p)
-    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) }, readingAloud() ? QUICK : undefined)
+    p.stop = draw(els, settings.highlight, article.current, () => { penUp(here); pens.current = pens.current.filter(x => x !== p) }, settings.penSlow && !readingAloud() ? undefined : QUICK)
   }, [marks])
   // Turning the page puts the pen down at once.
   useEffect(() => () => { for (const p of [...pens.current]) p.stop() }, [book, chapter])
