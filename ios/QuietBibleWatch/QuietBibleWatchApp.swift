@@ -19,6 +19,12 @@ struct QuietBibleWatchApp: App {
                 .onOpenURL { url in
                     if url.host == "pray" { praying.begin() }
                 }
+                // For ios/watch-smoke.sh, which can't tap: start a prayer on launch.
+                .task {
+                    guard ProcessInfo.processInfo.arguments.contains("-startPraying") else { return }
+                    try? await Task.sleep(nanoseconds: 2_000_000_000)
+                    praying.begin()
+                }
         }
     }
 }
