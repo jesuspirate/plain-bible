@@ -13,6 +13,17 @@ final class Outbox: NSObject, ObservableObject, WCSessionDelegate {
     /// Prayers not yet on the iPhone.
     @Published private(set) var waiting = 0
 
+    /// The 🙏 picked in the iPhone app, with its skin tone.
+    @Published private(set) var hands = "🙏" + (UserDefaults.standard.string(forKey: "tone") ?? "")
+
+    private static let tones: Set<String> = ["", "\u{1F3FB}", "\u{1F3FC}", "\u{1F3FD}", "\u{1F3FE}", "\u{1F3FF}"]
+
+    private func take(_ context: [String: Any]) {
+        guard let tone = context["tone"] as? String, Self.tones.contains(tone) else { return }
+        UserDefaults.standard.set(tone, forKey: "tone")
+        DispatchQueue.main.async { self.hands = "🙏" + tone }
+    }
+
     private let folder: URL = {
         let docs = FileManager.default.urls(for: .documentDirectory, in: .userDomainMask)[0]
         return docs.appendingPathComponent("Prayers", isDirectory: true)
@@ -80,7 +91,14 @@ final class Outbox: NSObject, ObservableObject, WCSessionDelegate {
     // MARK: WCSessionDelegate
 
     func session(_ session: WCSession, activationDidCompleteWith state: WCSessionActivationState, error: Error?) {
-        if state == .activated { send() }
+        if state == .activated {
+            take(session.receivedApplicationContext)
+            send()
+        }
+    }
+
+    func session(_ session: WCSession, didReceiveApplicationContext context: [String: Any]) {
+        take(context)
     }
 
     func session(_ session: WCSession, didFinish transfer: WCSessionFileTransfer, error: Error?) {
