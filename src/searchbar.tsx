@@ -356,12 +356,20 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       if (el.classList.contains('sb-open')) return
       el.style.display = 'none'; void el.offsetHeight; el.style.display = ''
     })
-    const back = () => { if (document.visibilityState === 'visible') fresh() }
+    const leave = () => {
+      // Leaving the app: let go of the field, so iOS can't hand it focus
+      // again on the way back, with search open and no keyboard. Search
+      // with nothing typed closes; typed words and results stay.
+      const field = input.current
+      if (field && document.activeElement === field) field.blur()
+      if (field && !field.value.trim()) setOpen(false)
+    }
+    const back = () => { if (document.visibilityState === 'visible') fresh(); else leave() }
     addEventListener('resize', fresh); addEventListener('orientationchange', fresh); addEventListener('pageshow', fresh)
-    document.addEventListener('visibilitychange', back)
+    document.addEventListener('visibilitychange', back); addEventListener('pagehide', leave)
     return () => {
       removeEventListener('resize', fresh); removeEventListener('orientationchange', fresh); removeEventListener('pageshow', fresh)
-      document.removeEventListener('visibilitychange', back)
+      document.removeEventListener('visibilitychange', back); removeEventListener('pagehide', leave)
     }
   }, [])
   const tap = useRef<{ x: number; y: number }>()
@@ -372,6 +380,16 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const onFieldTouchEnd = (e: TouchEvent) => {
     const start = tap.current, end = e.changedTouches[0], el = sb.current
     tap.current = undefined
+    // Search open but no keyboard (iOS can give the field focus back when
+    // the app returns, without its keyboard). A tap on an already focused
+    // field doesn't raise it on iPhone, so let go and take focus again, now
+    // inside the tap, where iOS always brings the keyboard.
+    if (open && isIOS && !keyboardUp() && input.current) {
+      e.preventDefault()
+      input.current.blur()
+      input.current.focus({ preventScroll: true })
+      return
+    }
     if (!start || !el || open || Math.hypot(end.clientX - start.x, end.clientY - start.y) > 10) return
     e.preventDefault()
     const kb = keyboardHeight(`${innerWidth}x${innerHeight}`)
@@ -618,6 +636,12 @@ function overlayKeyboard(on: boolean): VK | undefined {
   vk.addEventListener('geometrychange', vkDown)
   if (!vk.boundingRect.height) soon()
   else vkRelease = window.setTimeout(off, 2000)
+}
+
+// Whether the on-screen keyboard is up: it takes a good part of the screen.
+function keyboardUp() {
+  const vv = window.visualViewport
+  return !!vv && vv.height < innerHeight - 100
 }
 
 // The keyboard's height on this phone, per screen size and orientation.
