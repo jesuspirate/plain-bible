@@ -1,4 +1,5 @@
-// A highlight drawn in slowly, the way a hand draws a marker over the words:
+// A new highlight swept in quickly, or (a setting) drawn in slowly, the way a
+// hand draws a marker over the words:
 // line by line, at the pace of careful reading, so the mind can follow the
 // words as the color reaches them, with a pause between lines.
 // It's only paint: the mark is saved the moment you pick the color, and the
@@ -32,8 +33,8 @@ const LIFT = 380
 /** …and a long passage still ends within a minute and a half. */
 const LONGEST = 90000
 const SHORTEST_LINE = 500
-/** While reading aloud the eye is following the voice: a highlight is a
- *  quick swipe instead, the whole verse in under half a second. */
+/** Usually (and always while reading aloud) a highlight is a quick swipe
+ *  instead, the whole verse in under half a second. The slow pen is a setting. */
 export const QUICK = 450
 
 export type PenStyle = 'marker' | 'block' | 'text'
@@ -110,5 +111,6 @@ export function inkStrip(r: DOMRect, layer: HTMLElement, box: DOMRect, color: st
   return el
 }
 
-/** Whether to draw at all: the setting, unless the device asks for less motion. */
-export const penAllowed = (on: boolean) => on && !matchMedia('(prefers-reduced-motion: reduce)').matches
+/** Whether to draw at all: not when the device asks for less motion (the
+ *  highlight just appears). */
+export const penAllowed = () => !matchMedia('(prefers-reduced-motion: reduce)').matches

@@ -32,8 +32,10 @@ export interface Settings {
   layout: 'paragraph' | 'verses'
   /** how highlights look: behind the letters like a pen, a full block, or colored letters */
   highlight: 'marker' | 'block' | 'text'
-  /** a new highlight is drawn in slowly, line by line, like a marker in your hand */
-  penDraw: boolean
+  /** a new highlight is drawn in slowly, line by line, like a marker in your
+   *  hand (off: a quick swipe). Was penDraw, on by default; renamed so everyone
+   *  starts with the quick swipe and only those who pick it get the slow pen. */
+  penSlow: boolean
   /** reading aloud lights up each word as it's said, or just the verse */
   follow: 'words' | 'verse'
   /** read along with no voice: the highlight moves through the words by itself */
@@ -80,7 +82,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penDraw: true, follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
