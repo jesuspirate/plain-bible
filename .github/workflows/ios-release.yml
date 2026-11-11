@@ -1,0 +1,137 @@
+# Sends the iPhone app (with its Apple Watch app) to App Store Connect, so
+# Xcode is not needed on anyone's computer.
+#
+# Run it by hand: Actions → "Send to App Store" → Run workflow, and type the
+# version (like 1.2). About 15 minutes later the build is in App Store
+# Connect → TestFlight, ready to be picked for a new version and submitted.
+#
+# Changes to the website never need this. Only changes inside ios/ do.
+#
+# Needs three repository secrets, made once (see ios/README.md):
+#   ASC_KEY_ID      the Key ID of an App Store Connect API key (Admin)
+#   ASC_ISSUER_ID   the Issuer ID shown above the list of keys
+#   ASC_KEY_P8      the whole text of the downloaded AuthKey_….p8 file
+# Apple signs the app with that key ("cloud signing"), so no certificate is
+# kept here.
+name: Send to App Store
+
+on:
+  workflow_dispatch:
+    inputs:
+      version:
+        description: 'Version for the App Store, like 1.2'
+        required: true
+        type: string
+
+permissions:
+  contents: read
+
+concurrency:
+  group: ios-release
+  cancel-in-progress: false
+
+jobs:
+  upload:
+    runs-on: macos-26
+    timeout-minutes: 45
+    steps:
+      - name: Check the request
+        env:
+          VERSION: ${{ inputs.version }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          if [ "$GITHUB_REF" != "refs/heads/main" ]; then
+            echo "::error::Run this from the main branch."; exit 1
+          fi
+          if ! printf '%s' "$VERSION" | grep -Eq '^[0-9]+(\.[0-9]+){1,2}$'; then
+            echo "::error::The version must look like 1.2 or 1.2.1."; exit 1
+          fi
+          if [ -z "$ASC_KEY_ID" ] || [ -z "$ASC_ISSUER_ID" ] || [ -z "$ASC_KEY_P8" ]; then
+            echo "::error::Add the secrets ASC_KEY_ID, ASC_ISSUER_ID and ASC_KEY_P8 first (see ios/README.md)."; exit 1
+          fi
+          if ! printf '%s' "$ASC_KEY_P8" | grep -q 'BEGIN PRIVATE KEY'; then
+            echo "::error::ASC_KEY_P8 must be the whole text of the .p8 file, from -----BEGIN PRIVATE KEY----- to -----END PRIVATE KEY-----."; exit 1
+          fi
+
+      - uses: actions/checkout@v7
+
+      - name: Use the newest Xcode
+        run: |
+          xcode=$(ls -d /Applications/Xcode_*.app | grep -vi beta | sort -V | tail -1)
+          sudo xcode-select -s "$xcode"
+          xcodebuild -version
+
+      - name: Put the Apple key in place
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_KEY_P8: ${{ secrets.ASC_KEY_P8 }}
+        run: |
+          mkdir -p "$RUNNER_TEMP/asc"
+          printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+          chmod 600 "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
+
+      - name: Build and sign
+        # Every upload needs a build number higher than the last. This run's
+        # number plus one does that (1.1 went up from Xcode as build 1).
+        # Given here, the two numbers apply to the iPhone app, the watch app
+        # and the watch-face button alike, which Apple requires.
+        env:
+          VERSION: ${{ inputs.version }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          build=$((GITHUB_RUN_NUMBER + 1))
+          echo "BUILD=$build" >> "$GITHUB_ENV"
+          xcodebuild archive \
+            -project ios/QuietBible.xcodeproj -scheme QuietBible -configuration Release \
+            -destination 'generic/platform=iOS' \
+            -archivePath "$RUNNER_TEMP/QuietBible.xcarchive" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID" \
+            MARKETING_VERSION="$VERSION" CURRENT_PROJECT_VERSION="$build" \
+            -quiet
+
+      - name: Send to App Store Connect
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          cat > "$RUNNER_TEMP/export.plist" <<'PLIST'
+          <?xml version="1.0" encoding="UTF-8"?>
+          <!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+          <plist version="1.0">
+          <dict>
+            <key>method</key><string>app-store-connect</string>
+            <key>destination</key><string>upload</string>
+            <key>signingStyle</key><string>automatic</string>
+            <key>manageAppVersionAndBuildNumber</key><false/>
+            <key>uploadSymbols</key><true/>
+          </dict>
+          </plist>
+          PLIST
+          xcodebuild -exportArchive \
+            -archivePath "$RUNNER_TEMP/QuietBible.xcarchive" \
+            -exportOptionsPlist "$RUNNER_TEMP/export.plist" \
+            -exportPath "$RUNNER_TEMP/export" \
+            -allowProvisioningUpdates \
+            -authenticationKeyPath "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8" \
+            -authenticationKeyID "$ASC_KEY_ID" \
+            -authenticationKeyIssuerID "$ASC_ISSUER_ID"
+
+      - name: Say what to do next
+        env:
+          VERSION: ${{ inputs.version }}
+        run: |
+          {
+            echo "## Sent to App Store Connect: $VERSION (build $BUILD)"
+            echo "It shows up under TestFlight in 5 to 30 minutes."
+            echo "Then, in App Store Connect: **+** next to iOS App → $VERSION → Add Build → What's New → Add for Review."
+          } >> "$GITHUB_STEP_SUMMARY"
+
+      - name: Remove the Apple key
+        if: always()
+        run: rm -rf "$RUNNER_TEMP/asc"
