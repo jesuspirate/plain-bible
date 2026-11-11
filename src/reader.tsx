@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, inCircles, PICK_EVENT, pickVerses, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, inCircles, openSearch, PICK_EVENT, pickVerses, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -855,6 +855,89 @@ export function Reader({ route }: { route: Route }) {
     return () => window.removeEventListener('touchstart', start)
   }, [])
 
+  // Pull down from the top of the chapter to open search, as a tap on the
+  // chapter's title does. Only once the page is at its very top, where a
+  // pull down would only stretch the page (or reload it, on Android): that
+  // pull is taken for search instead. A round search button comes down with
+  // the finger, and fills in once letting go will open search. A press held
+  // before moving (a bookmark, a selection, a pen) is left alone.
+  const readerEl = useRef<HTMLDivElement>(null)
+  useEffect(() => {
+    const el = readerEl.current
+    if (!el) return
+    const PULL = 80
+    let s: { x: number; y: number; t: number; dy: number; on: boolean } | undefined
+    let ball: HTMLDivElement | undefined
+    const show = (dy: number) => {
+      if (!ball) {
+        ball = document.createElement('div')
+        ball.className = 'pull-search'
+        ball.setAttribute('aria-hidden', 'true')
+        ball.innerHTML = '<svg viewBox="0 0 24 24" width="24" height="24"><circle cx="10.5" cy="10.5" r="6.5" stroke="currentColor" stroke-width="2.4" fill="none"/><path d="M15.5 15.5 20 20" stroke="currentColor" stroke-width="2.4" stroke-linecap="round"/></svg>'
+        const head = document.querySelector('header.top')
+        ball.style.top = (head ? head.getBoundingClientRect().bottom : 0) + 'px'
+        document.body.appendChild(ball)
+      }
+      const d = Math.min(dy, PULL * 1.6)
+      ball.style.transform = `translate(-50%, ${d * .7 - 52}px)`
+      ball.style.opacity = String(Math.min(1, dy / 40))
+      ball.classList.toggle('ready', dy >= PULL)
+      if (article.current) article.current.style.transform = `translateY(${d * .35}px)`
+    }
+    const hide = () => {
+      const b = ball, a = article.current
+      ball = undefined
+      if (a && !peekDir.current) {
+        a.style.transition = 'transform .2s ease-out'; a.style.transform = ''
+        setTimeout(() => { a.style.transition = '' }, 220)
+      }
+      if (b) { b.classList.add('gone'); setTimeout(() => b.remove(), 220) }
+    }
+    const start = (e: TouchEvent) => {
+      s = undefined
+      const p = e.touches[0]
+      if (e.touches.length !== 1 || scrollY > 0 || overlayOpen() || busy.current || peekDir.current) return
+      if ((p as Touch & { touchType?: string }).touchType === 'stylus' || document.body.classList.contains('selecting')) return
+      if ((e.target as Element).closest?.('button, a, input, textarea, .pager, .spread-turn')) return
+      s = { x: p.clientX, y: p.clientY, t: Date.now(), dy: 0, on: false }
+    }
+    const move = (e: TouchEvent) => {
+      if (!s) return
+      const p = e.touches[0], dx = p.clientX - s.x, dy = p.clientY - s.y
+      if (e.touches.length > 1 || (!s.on && dy < 0)) { if (s.on) hide(); s = undefined; return }
+      // Held still first: a hold, not a pull. Sideways: a chapter turn.
+      if (!s.on && (Date.now() - s.t > 450 || Math.abs(dx) >= dy)) { if (dy || dx) s = undefined; return }
+      // Pulling down at the top: keep the page still (no stretch, no reload).
+      e.preventDefault()
+      if (!s.on) {
+        if (Math.hypot(dx, dy) < 10) return
+        s.on = true
+      }
+      s.dy = Math.max(0, dy)
+      show(s.dy)
+    }
+    const end = () => {
+      const p = s
+      s = undefined
+      if (!p?.on) return
+      hide()
+      // Still inside the touch, so iPhone brings the keyboard up.
+      if (p.dy >= PULL) openSearch()
+    }
+    const cancel = () => { if (s?.on) hide(); s = undefined }
+    el.addEventListener('touchstart', start, { passive: true })
+    el.addEventListener('touchmove', move, { passive: false })
+    el.addEventListener('touchend', end)
+    el.addEventListener('touchcancel', cancel)
+    return () => {
+      cancel()
+      el.removeEventListener('touchstart', start)
+      el.removeEventListener('touchmove', move)
+      el.removeEventListener('touchend', end)
+      el.removeEventListener('touchcancel', cancel)
+    }
+  }, [])
+
   // Two-finger swipe on a trackpad (or a swipe on a Magic Mouse) does the
   // same as a touch swipe.
   const wheel = useRef({ dx: 0, done: false, timer: 0, at: 0, low: 0, peak: 0, axis: '' as '' | 'x' | 'y', sx: 0, sy: 0, px: 0, last: 0 })
@@ -963,7 +1046,7 @@ export function Reader({ route }: { route: Route }) {
       onPointerDown: (e: PointerEvent) => holdStart(e, v), onPointerMove: holdMove, onPointerUp: holdEnd, onPointerCancel: holdEnd,
     } : {}
     return <>
-      <h1 class="chapter-title"><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
+      <h1 class="chapter-title" onClick={live ? openSearch : undefined}><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
       {live && reminder}
       {versions.length > 1 && (
         <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
@@ -1023,7 +1106,7 @@ export function Reader({ route }: { route: Route }) {
   })
 
   return (
-    <div class="reader">
+    <div class="reader" ref={readerEl}>
       {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>{t('Try again')}</button></p></div>}
       {!loaded && !error && <p class="muted center">{t('Loading…')}</p>}
       {loaded && rows === 0 && <p class="muted center">{t('{version} does not include {book} {chapter}.', { version: info?.name ?? version, book: bookName(book), chapter: String(chapter) })}</p>}

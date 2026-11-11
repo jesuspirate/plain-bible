@@ -11,7 +11,7 @@ import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, inCircles, openCircles, openPrayer, readPath, TONES, useApp } from './state'
+import { go, inCircles, openCircles, openPrayer, readPath, SEARCH_EVENT, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
 import { CircleIcon } from './icons'
@@ -392,7 +392,14 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     }
     if (!start || !el || open || Math.hypot(end.clientX - start.x, end.clientY - start.y) > 10) return
     e.preventDefault()
-    const kb = keyboardHeight(`${innerWidth}x${innerHeight}`)
+    openHere()
+  }
+  // Put the bar in its open place, then focus the field without scrolling.
+  // Always inside a tap or touch, so iPhone brings the keyboard up.
+  const openHere = () => {
+    const el = sb.current
+    if (!el || !input.current) return
+    const kb = isIOS ? keyboardHeight(`${innerWidth}x${innerHeight}`) : 0
     if (kb) {
       const root = document.documentElement
       root.style.setProperty('--vv-top', '0px')
@@ -400,9 +407,24 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       el.classList.remove('sb-mini'); el.classList.add('sb-open')
       void el.offsetHeight
     }
-    input.current?.focus({ preventScroll: true })
+    input.current.focus({ preventScroll: true })
     setOpen(true)
   }
+  // A tap on the chapter's title, or a pull down from the top of the
+  // chapter, opens search just as a tap on the bar (or the round button)
+  // does. Not while reading aloud (its bar stands in the field's place) or
+  // with verses picked (the bar for them is up instead).
+  const opener = useRef(openHere)
+  opener.current = () => {
+    if (open || aloud || !input.current || document.body.classList.contains('selecting')) return
+    overlayKeyboard(true)
+    openHere()
+  }
+  useEffect(() => {
+    const on = () => opener.current()
+    addEventListener(SEARCH_EVENT, on)
+    return () => removeEventListener(SEARCH_EVENT, on)
+  }, [])
 
   const close = () => { setOpen(false); input.current?.blur() }
 

@@ -124,6 +124,19 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .chapter-title { margin: 20px 0 22px; text-align: center; font-family: var(--reading); font-weight: 400; line-height: 1.1; }
 .ct-book { display: block; font: 600 .72em var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
 .ct-num { display: block; font-size: 1.9em; font-weight: 500; margin-top: 4px; }
+/* A tap anywhere on the title row opens search: the whole row, with a
+   little more room above and below than it looks. */
+.reader .chapter-title { cursor: pointer; -webkit-tap-highlight-color: transparent; padding: 10px 0; margin-top: 10px; margin-bottom: 12px; -webkit-user-select: none; user-select: none; }
+/* Pull down from the top of the chapter: a round search button follows the
+   finger down and fills in once letting go opens search. */
+.pull-search {
+  position: fixed; left: 50%; z-index: 20; width: 52px; height: 52px; border-radius: 50%;
+  display: grid; place-items: center; pointer-events: none;
+  background: var(--surface); color: var(--text); border: 1.5px solid var(--line);
+  box-shadow: 0 4px 14px rgba(0,0,0,.14); transition: background .15s, color .15s, opacity .2s;
+}
+.pull-search.ready { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
+.pull-search.gone { opacity: 0 !important; }
 .vrow-head, .chapter:not(.cols-1) .verse { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 0 28px; }
 .colhead { font: 600 13px var(--sans); color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-bottom: 8px; }
 .verse { padding: 2px 0; scroll-margin-top: 80px; }
@@ -1069,7 +1082,7 @@ article.chapter.spread {
   column-count: 2; column-gap: calc(2 * var(--pp)); column-fill: auto;
   orphans: 2; widows: 2;
 }
-.spread-flow > .chapter-title { margin: .1em 0 .7em; }
+.spread-flow > .chapter-title { margin: .1em 0 .7em; padding: 0; }
 .spread-flow .ct-num { font-size: 1.6em; }
 .spread-flow .verse { scroll-margin: 0; }
 /* the round buttons below the book, at its outer corners */

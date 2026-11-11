@@ -145,6 +145,13 @@ export const openCircles = (circle?: { id: string; name: string }) => openPrayer
 export const SETTINGS_EVENT = 'plain-bible:settings'
 export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
 
+/** Open search (the bar at the bottom, or the round button in its place)
+ *  with the keyboard up, as a tap on it does: from a tap on the chapter's
+ *  title, or a pull down from the top of the chapter. Call it inside the
+ *  tap or touch itself, so iPhone brings the keyboard up. */
+export const SEARCH_EVENT = 'plain-bible:search'
+export const openSearch = () => window.dispatchEvent(new Event(SEARCH_EVENT))
+
 /** The guided tour: a few calm steps over the reader, shown once to someone
  *  new, and again from Settings whenever asked. */
 export const TOUR_EVENT = 'plain-bible:tour'
