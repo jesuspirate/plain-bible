@@ -28,7 +28,9 @@ final class Outbox: NSObject, ObservableObject, WCSessionDelegate {
 
     /// The same kind of id the app gives a prayer: its start time, and a little chance.
     static func newID(_ at: Date) -> String {
-        let ms = Int(at.timeIntervalSince1970 * 1000)
+        // Int64, not Int: older watches (up to Series 8 and SE 2) are 32-bit,
+        // where a time in milliseconds doesn't fit in an Int and stops the app.
+        let ms = Int64(at.timeIntervalSince1970 * 1000)
         let chance = String(Int.random(in: 0..<1_679_616), radix: 36)
         return String(ms, radix: 36) + String(repeating: "0", count: 4 - chance.count) + chance
     }
@@ -38,7 +40,7 @@ final class Outbox: NSObject, ObservableObject, WCSessionDelegate {
 
     /// A prayer just finished: keep it, and send it.
     func keep(id: String, at: Date, ms: Int) {
-        let info: [String: Any] = ["id": id, "at": Int(at.timeIntervalSince1970 * 1000), "ms": ms, "type": "audio/mp4"]
+        let info: [String: Any] = ["id": id, "at": Int64(at.timeIntervalSince1970 * 1000), "ms": ms, "type": "audio/mp4"]
         if let data = try? JSONSerialization.data(withJSONObject: info) {
             try? data.write(to: infoURL(id), options: .atomic)
         }
