@@ -3,10 +3,10 @@ import WatchKit
 
 /// Records one prayer at a time.
 ///
-/// While recording, a mindfulness session keeps the app running when the
-/// wrist goes down (hands folded), for up to an hour. Without it the watch
-/// would stop the microphone as soon as the screen sleeps.
-final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExtendedRuntimeSessionDelegate {
+/// The recording carries on when the wrist goes down (hands folded): the
+/// watch app is allowed to keep its microphone going in the background
+/// (UIBackgroundModes: audio in Info.plist), as voice memo apps are.
+final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate {
     enum Phase: Equatable {
         case idle
         case recording(since: Date)
@@ -20,7 +20,6 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExte
     private var recorder: AVAudioRecorder?
     private var id = ""
     private var started = Date()
-    private var runtime: WKExtendedRuntimeSession?
     private var amenTimer: Timer?
 
     /// Shorter than this is a slip of the finger, not a prayer.
@@ -44,17 +43,21 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExte
     /// Start a prayer (the 🙏 button, or the watch face).
     func begin() {
         guard !isRecording else { return }
-        switch AVAudioApplication.shared.recordPermission {
+        let audio = AVAudioSession.sharedInstance()
+        switch audio.recordPermission {
         case .granted:
             record()
-        case .undetermined:
-            AVAudioApplication.requestRecordPermission { ok in
-                DispatchQueue.main.async {
+        case .denied:
+            phase = .needsMic
+        default:
+            // The watch asks once. The answer comes back on any thread, and
+            // the screen is only ours again a moment later.
+            audio.requestRecordPermission { [weak self] ok in
+                DispatchQueue.main.asyncAfter(deadline: .now() + 0.4) {
+                    guard let self, !self.isRecording else { return }
                     if ok { self.record() } else { self.phase = .needsMic }
                 }
             }
-        default:
-            phase = .needsMic
         }
     }
 
@@ -81,7 +84,6 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExte
             self.id = id
             started = now
             phase = .recording(since: now)
-            keepRunning()
         } catch {
             try? FileManager.default.removeItem(at: Outbox.shared.audioURL(id))
             try? AVAudioSession.sharedInstance().setActive(false)
@@ -101,8 +103,6 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExte
 
     private func finished(length: TimeInterval) {
         try? AVAudioSession.sharedInstance().setActive(false, options: .notifyOthersOnDeactivation)
-        runtime?.invalidate()
-        runtime = nil
         guard length >= Self.shortest else {
             try? FileManager.default.removeItem(at: Outbox.shared.audioURL(id))
             phase = .idle
@@ -114,11 +114,6 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExte
         amenTimer = Timer.scheduledTimer(withTimeInterval: 4, repeats: false) { [weak self] _ in
             if self?.phase == .amen { self?.phase = .idle }
         }
-    }
-
-    /// The screen went dark and nothing keeps the app running: keep what was said.
-    func wentAway() {
-        if runtime?.state != .running { amen() }
     }
 
     // MARK: Recording
@@ -134,28 +129,5 @@ final class Praying: NSObject, ObservableObject, AVAudioRecorderDelegate, WKExte
 
     func audioRecorderEncodeErrorDidOccur(_ r: AVAudioRecorder, error: Error?) {
         DispatchQueue.main.async { self.amen() }
-    }
-
-    // MARK: Staying awake with the wrist down
-
-    private func keepRunning() {
-        let s = WKExtendedRuntimeSession()
-        s.delegate = self
-        s.start()
-        runtime = s
-    }
-
-    func extendedRuntimeSessionDidStart(_ s: WKExtendedRuntimeSession) {}
-
-    func extendedRuntimeSessionWillExpire(_ s: WKExtendedRuntimeSession) {
-        DispatchQueue.main.async { self.amen() }
-    }
-
-    func extendedRuntimeSession(_ s: WKExtendedRuntimeSession,
-                                didInvalidateWith reason: WKExtendedRuntimeSessionInvalidationReason,
-                                error: Error?) {
-        DispatchQueue.main.async {
-            if self.runtime === s { self.runtime = nil }
-        }
     }
 }

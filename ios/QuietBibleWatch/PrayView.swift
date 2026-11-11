@@ -23,7 +23,6 @@ struct PrayView: View {
             }
         }
         .onChange(of: scenePhase) { _, now in
-            if now == .background { praying.wentAway() }
             if now == .active { outbox.send() }
         }
     }
