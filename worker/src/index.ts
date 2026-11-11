@@ -37,12 +37,16 @@ const MAX_BODY = 2_000_000
 const CHUNK_MAX = 1_100_000
 const MAX_CHUNKS = 64
 const PRAYER_QUOTA = 300_000_000
-// Moves to a new address: a packed, encrypted copy of one device's data.
+// Device links: a sign-in (and the prayer key) for another device, packed
+// and encrypted there. The whole-device moves from the old address ended,
+// so a link is a few kilobytes and lives an hour.
 const MOVE_ID = /^[A-Za-z0-9_-]{22}$/
-const MOVE_MAX_CHUNKS = 400
-const MOVE_DAYS = 7
-// A link that signs another device in lives an hour.
+const MOVE_MAX_CHUNKS = 8
 const LINK_HOURS = 1
+// Anyone may leave one, so keep that small: per network address, and in all.
+const MOVE_CHUNKS_PER_IP = 30
+const MOVE_BYTES_PER_IP = 5_000_000
+const MOVE_BYTES_TOTAL = 200_000_000
 
 class HttpError extends Error {
   constructor(public status: number, message: string, public extra?: object) { super(message) }
@@ -66,6 +70,9 @@ const random = (n: number) => b64url.encode(crypto.getRandomValues(new Uint8Arra
 async function sha256(s: string) {
   return b64url.encode(new Uint8Array(await crypto.subtle.digest('SHA-256', new TextEncoder().encode(s))))
 }
+/** Who's asking, for limits only: a fingerprint of the network address,
+ *  never the address itself. */
+const ipKey = (req: Request) => sha256('ip:' + (req.headers.get('CF-Connecting-IP') ?? 'unknown')).then(h => h.slice(0, 22))
 
 // ---------------------------------------------------------------------------
 // HTTP plumbing
@@ -181,6 +188,10 @@ const EMAIL = /^[^\s@]{1,64}@[^\s@]+\.[^\s@]{2,}$/
 const CODE_MINUTES = 15
 const CODE_TRIES = 5
 const SENDS_PER_HOUR = 5
+// From one network address, so a few people can't use up the day's sends
+// below and switch email sign-in off for everyone.
+const IP_SENDS_PER_HOUR = 6
+const IP_SENDS_PER_DAY = 12
 // Resend's free plan sends up to 100 a day.
 const SENDS_PER_DAY = 90
 
@@ -248,18 +259,20 @@ async function emailStart(req: Request, env: Env) {
   const adding = req.headers.has('Authorization') ? await session(req, env) : null
   const body = await readJson<{ email: string; lang?: string }>(req)
   const email = cleanEmail(body.email)
-  const hash = await emailHash(env, email), now = Date.now(), db = env.DB
-  const [mine, all] = await Promise.all([
+  const hash = await emailHash(env, email), now = Date.now(), db = env.DB, ip = await ipKey(req)
+  const [mine, all, here] = await Promise.all([
     db.prepare('SELECT COUNT(*) AS n FROM email_sends WHERE hash = ? AND at > ?').bind(hash, now - 3_600_000).first<{ n: number }>(),
     db.prepare('SELECT COUNT(*) AS n FROM email_sends WHERE at > ?').bind(now - DAY).first<{ n: number }>(),
+    db.prepare('SELECT COUNT(*) AS n, COUNT(CASE WHEN at > ? THEN 1 END) AS h FROM email_sends WHERE ip = ? AND at > ?').bind(now - 3_600_000, ip, now - DAY).first<{ n: number; h: number }>(),
   ])
   if ((mine?.n ?? 0) >= SENDS_PER_HOUR) throw new HttpError(429, 'Several codes were already sent to this address. Use the newest one, or try again in an hour.')
+  if ((here?.h ?? 0) >= IP_SENDS_PER_HOUR || (here?.n ?? 0) >= IP_SENDS_PER_DAY) throw new HttpError(429, 'Too many sign-in emails from here. Try again later, or use a passkey.')
   if ((all?.n ?? 0) >= SENDS_PER_DAY) throw new HttpError(429, 'Too many sign-in emails today. Please try again tomorrow, or use a passkey.')
   const code = String(crypto.getRandomValues(new Uint32Array(1))[0] % 1_000_000).padStart(6, '0')
   await db.batch([
     db.prepare('DELETE FROM email_sends WHERE at < ?').bind(now - DAY),
     db.prepare('DELETE FROM email_codes WHERE expires < ?').bind(now),
-    db.prepare('INSERT INTO email_sends (hash, at) VALUES (?, ?)').bind(hash, now),
+    db.prepare('INSERT INTO email_sends (hash, at, ip) VALUES (?, ?, ?)').bind(hash, now, ip),
     db.prepare(`INSERT INTO email_codes (hash, code_hash, user_id, tries, expires) VALUES (?, ?, ?, 0, ?)
       ON CONFLICT(hash) DO UPDATE SET code_hash = excluded.code_hash, user_id = excluded.user_id, tries = 0, expires = excluded.expires`)
       .bind(hash, await sha256(`${hash}:${code}`), adding, now + CODE_MINUTES * 60_000),
@@ -411,9 +424,9 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
   throw new HttpError(404, 'Not found')
 }
 
-// A move to a new address. Anyone may leave one (the app works without an
-// account); it is encrypted on the device, kept a few days, and found only
-// by its random id, which travels in the move link with the key.
+// A device link. Anyone may leave one; it is encrypted on the device, kept
+// an hour, and found only by its random id, which travels in the link with
+// the key. Limits keep strangers from filling the database with it.
 async function moveRoute(req: Request, env: Env, parts: string[]): Promise<Response> {
   const db = env.DB
   const [id, n0] = parts
@@ -443,9 +456,16 @@ async function moveRoute(req: Request, env: Env, parts: string[]): Promise<Respo
     if (!Number.isInteger(of) || of < 1 || of > MOVE_MAX_CHUNKS || n >= of) throw new HttpError(400, 'Bad chunk')
     const data = await req.arrayBuffer()
     if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
-    const life = new URL(req.url).searchParams.get('life') === 'link' ? LINK_HOURS * 3_600_000 : MOVE_DAYS * DAY
-    await db.prepare('INSERT INTO moves (id, n, of, data, expires) VALUES (?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data')
-      .bind(id, n, of, data, Date.now() + life).run()
+    const now = Date.now(), ip = await ipKey(req)
+    await db.prepare('DELETE FROM moves WHERE expires < ?').bind(now).run()
+    const [mine, all] = await Promise.all([
+      db.prepare('SELECT COUNT(*) AS c, COALESCE(SUM(size), 0) AS b FROM moves WHERE ip = ? AND expires > ?').bind(ip, now).first<{ c: number; b: number }>(),
+      db.prepare('SELECT COALESCE(SUM(size), 0) AS b FROM moves WHERE expires > ?').bind(now).first<{ b: number }>(),
+    ])
+    if ((mine?.c ?? 0) >= MOVE_CHUNKS_PER_IP || (mine?.b ?? 0) + data.byteLength > MOVE_BYTES_PER_IP) throw new HttpError(429, 'Too many links from here. Try again in an hour.')
+    if ((all?.b ?? 0) + data.byteLength > MOVE_BYTES_TOTAL) throw new HttpError(503, 'Links are busy right now. Try again in an hour.')
+    await db.prepare('INSERT INTO moves (id, n, of, data, expires, ip, size) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data, size = excluded.size')
+      .bind(id, n, of, data, now + LINK_HOURS * 3_600_000, ip, data.byteLength).run()
     return json({ ok: true })
   }
   throw new HttpError(404, 'Not found')
@@ -528,7 +548,10 @@ async function notifyCircle(env: Env, circle: string, from: string, to?: string)
   ]))
 }
 
-const PUSH_HOSTS = /^https:\/\/[\w.-]+(:\d+)?\//
+// Only the browsers' own push services: Chrome and Android (Google),
+// Firefox (Mozilla), Safari (Apple), Edge (Windows). Nothing else is ever
+// sent a request by this server.
+const PUSH_HOSTS = /^https:\/\/([\w-]+\.)*(googleapis\.com|push\.services\.mozilla\.com|push\.apple\.com|notify\.windows\.com)(:443)?\//
 const cleanSub = (v: unknown): Subscription => {
   const s = v as { endpoint?: unknown; keys?: { p256dh?: unknown; auth?: unknown } } | null
   const endpoint = s?.endpoint, p256dh = s?.keys?.p256dh, auth = s?.keys?.auth

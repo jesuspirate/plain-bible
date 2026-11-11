@@ -247,6 +247,14 @@ async function whose(token: string) {
   return a && `${a.created}|${a.email ?? ''}`
 }
 
+/** Before a link is taken in: which account it signs in to (its email
+ *  hint, where it has one), and whether this device is signed in already. */
+export async function linkAccount(bundle: Bundle): Promise<{ email: string | null; signedIn: boolean }> {
+  const cameToken = parse<{ token?: string }>(bundle.local[ACCOUNT], {}).token
+  const a = cameToken ? await api<{ email: string | null }>('/account', { token: cameToken }).catch(() => undefined) : undefined
+  return { email: a?.email ?? null, signedIn: !!loadAccount() }
+}
+
 /** Put a move on this device, joining what's here (see mergeLocal). A
  *  sign-in here stays, and so do the prayer key and circles here. */
 export async function applyMove(bundle: Bundle, list: Prayer[]): Promise<MovedIn> {
