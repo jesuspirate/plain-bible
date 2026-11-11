@@ -322,6 +322,9 @@ main.with-bar { padding-bottom: 120px; }
 .sb-circles svg * { stroke-width: 2.6; }
 .sb-circles::before { content: ''; position: absolute; inset: -5px; border-radius: 50%; }
 .sb-circles:active { transform: scale(.94); }
+/* The page-wide button hover (a darker border) would draw a ring on its hidden
+   border that 🙏 doesn't have: keep it as it is at rest. */
+@media (hover: hover) { .sb-circles:hover { border-color: var(--line); } }
 .sb-circles:focus-visible, .sb-pray:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
 .sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
@@ -718,7 +721,7 @@ html.sb-lock { overflow: hidden; }
   }
   .sb-field { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
-  .sb-circles { border-color: transparent; background: var(--glass-tint); }
+  .sb-circles, .sb-circles:hover { border-color: transparent; background: var(--glass-tint); }
   /* The reading-aloud bar is the same glass as the search field it stands in for. */
   .listen { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .listen.listen-float { position: fixed; }
