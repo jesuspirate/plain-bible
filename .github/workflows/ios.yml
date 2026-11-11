@@ -33,3 +33,8 @@ jobs:
           xcodebuild -project ios/QuietBible.xcodeproj -scheme QuietBible -configuration Debug \
             -destination 'generic/platform=iOS Simulator' \
             CODE_SIGNING_ALLOWED=NO -quiet build
+      - name: Test build of the watch app by itself
+        run: |
+          xcodebuild -project ios/QuietBible.xcodeproj -scheme QuietBibleWatch -configuration Debug \
+            -destination 'generic/platform=watchOS Simulator' \
+            CODE_SIGNING_ALLOWED=NO -quiet build

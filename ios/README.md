@@ -60,8 +60,8 @@ native. It needs watchOS 10 or later.
 How a prayer travels:
 
 1. The watch records it (AAC, like the iPhone) and keeps it on the watch.
-   A soft tap marks the start, another the end. While recording, the app
-   keeps running with the wrist down (a mindfulness session, up to an hour).
+   A soft tap marks the start, another the end. The recording carries on
+   with the wrist down (the audio background mode), for up to an hour.
 2. The watch sends the file to the iPhone app (WatchConnectivity), now or
    whenever the iPhone is next in reach, and then deletes its copy.
 3. The iPhone app holds it (`QuietBible/WatchInbox.swift`) until the web app
@@ -71,13 +71,22 @@ How a prayer travels:
 From there it is a prayer like any other: it can be shared with a circle, and
 it syncs encrypted if "Sync my prayers" is on. The watch never has the prayer key.
 
-To try it: pick the **QuietBible** scheme and your iPhone, then Run. The watch
-app installs on the paired watch by itself (or from the Watch app on the
-iPhone → My Quiet Bible → Install). The first time, Xcode asks to register
-the watch (and needs Developer Mode on it: watch Settings → Privacy & Security).
-With automatic signing, Xcode registers the two extra bundle IDs
-(`com.myquietbible.ios.watchkitapp` and `.watchkitapp.widgets`) by itself:
-pick the same team on both targets.
+To try it on a watch:
+
+1. Keep the iPhone plugged in and unlocked, the watch unlocked on the wrist,
+   and all three (with the Mac) on the same Wi-Fi, without a VPN.
+2. **Window → Devices and Simulators** must show the watch as connected. The
+   first time, turn on Developer Mode on the watch (Settings → Privacy &
+   Security) and, on the QuietBibleWatch target's Signing page, click
+   **Register Device** if Xcode asks.
+3. At the top of Xcode pick **QuietBibleWatch** and the watch, then Run.
+   This entry runs without the debugger, which would first copy several GB
+   of files from the watch.
+
+Running **QuietBible** on the iPhone alone does not put a test build on the
+watch. The team is preset in the project for all three targets, and Xcode
+registers the two extra bundle IDs (`com.myquietbible.ios.watchkitapp` and
+`.watchkitapp.widgets`) by itself.
 
 For the App Store, a version with a watch app also needs at least one Apple
 Watch screenshot in App Store Connect.

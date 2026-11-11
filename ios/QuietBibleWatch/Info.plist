@@ -33,10 +33,10 @@
 	<string>com.myquietbible.ios</string>
 	<key>WKRunsIndependentlyOfCompanionApp</key>
 	<false/>
-	<!-- Keeps a prayer recording with the wrist down (WKExtendedRuntimeSession). -->
-	<key>WKBackgroundModes</key>
+	<!-- Keeps a prayer recording with the wrist down. -->
+	<key>UIBackgroundModes</key>
 	<array>
-		<string>mindfulness</string>
+		<string>audio</string>
 	</array>
 	<!-- The 🙏 on the watch face opens quietbible://pray. -->
 	<key>CFBundleURLTypes</key>
