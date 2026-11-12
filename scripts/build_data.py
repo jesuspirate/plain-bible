@@ -255,8 +255,39 @@ def build_oshb():
 # version -> (book, chapter, verse, wrong words, right words). The build stops
 # if the wrong words are no longer there, so a fix made upstream is noticed.
 CORRECTIONS = {
-    # "crainte" is feminine (also fixes EthFr, which is built on this text).
-    "FreCrampon": [("Eph", 5, 21, "dans le crainte du Christ", "dans la crainte du Christ")],
+    # Crampon 1923, checked against the Wikisource transcription of the 1923
+    # edition. EthFr is built on this text, so these fix EthFr too.
+    "FreCrampon": [
+        ("Eph", 5, 21, "dans le crainte du Christ", "dans la crainte du Christ"),  # "crainte" is feminine
+        ("Isa", 28, 25, "jetter la nigelle", "jeter la nigelle"),
+        ("Isa", 31, 8, "il fuiera devant", "il fuira devant"),
+        ("Lam", 3, 21, "je me rappelerai", "je me rappellerai"),
+        # The heading of chapter 51 ended up at the end of the last verse of 50.
+        ("Sir", 50, 29, " <DEUX APPENDICES >", ""),
+        # A missing space after a comma.
+        ("Deut", 33, 7, "Ecoute,ô", "Ecoute, ô"),
+        ("Judg", 2, 14, "d'alentour,et", "d'alentour, et"),
+        ("1Kgs", 18, 32, "puis,ayant", "puis, ayant"),
+        ("Jer", 32, 44, "Benjamin,et", "Benjamin, et"),
+        ("Ezek", 38, 17, "dont,j'ai", "dont, j'ai"),
+        ("Zech", 11, 17, "dessèche,et", "dessèche, et"),
+    ],
+    # Louis Segond 1910, checked against eBible.org's fraLSG and Wikisource.
+    "LSG": [
+        # Eight verses lost their first letter, an "é", in the Beblia file.
+        ("2Sam", 3, 18, "tablissez-le maintenant", "établissez-le maintenant"),
+        ("1Kgs", 8, 32, "coute-le des cieux", "écoute-le des cieux"),
+        ("2Chr", 6, 23, "coute-le des cieux", "écoute-le des cieux"),
+        ("Jer", 44, 26, "coutez la parole", "écoutez la parole"),
+        ("Rom", 1, 29, "tant remplis", "étant remplis"),
+        ("Col", 2, 7, "tant enracinés", "étant enracinés"),
+        ("Heb", 11, 34, "teignirent la puissance", "éteignirent la puissance"),
+        ("1Pet", 2, 16, "tant libres", "étant libres"),
+        ("Titus", 2, 5, "tre retenues", "à être retenues"),
+        ("Ps", 138, 2, "l'accomplissemen de", "l'accomplissement de"),
+        ("Job", 19, 12, "Elles ont campées", "Elles ont campé"),
+        ("1Chr", 12, 21, "Amalécites ,", "Amalécites,"),
+    ],
 }
 
 
@@ -473,6 +504,7 @@ def main():
             continue
         print("•", tid, file=sys.stderr)
         books = build_beblia(fname)
+        apply_corrections(tid, books)
         write_json(os.path.join(OUT, "bibles", tid + ".json"), {"id": tid, "books": books})
         catalog.append({"id": tid, "name": name, "lang": lang, "license": "Public Domain",
                         "strongs": False, "rtl": False, "books": list(books.keys()),
