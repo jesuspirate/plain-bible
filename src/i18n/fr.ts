@@ -823,6 +823,8 @@ export default {
   "Tap a verse": "Toucher un verset",
   "Tap any verse to highlight it, write a note, save a bookmark or hear it read aloud.": "Touchez un verset pour le surligner, écrire une note, ajouter un signet ou l’écouter à voix haute.",
   "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Tapez les mots dont vous vous souvenez, ou un passage comme Jean 3:16. Touchez ici aussi pour choisir un livre et un chapitre.",
+  "Open search": "Ouvrir la recherche",
+  "Tap the chapter title. Or, at the top of a chapter, pull down until the round button fills with color, then let go.": "Touchez le titre du chapitre. Ou, en haut d’un chapitre, tirez vers le bas jusqu’à ce que le bouton rond se colore, puis relâchez.",
   "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Partagez des versets et des prières avec quelques personnes de confiance, comme votre famille ou un petit groupe de prière.",
   "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Touchez 🙏 pour prier à voix haute et garder votre prière. Elle reste privée.",
   "After you jump somewhere else, tap here to go back to where you were reading.": "Après être allé ailleurs, touchez ici pour revenir là où vous lisiez.",
