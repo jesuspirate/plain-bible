@@ -996,6 +996,16 @@ body.selecting .listen { display: none; }
 .listen .close-btn.listen-stop { flex: none; display: grid; place-items: center; width: 44px; height: 44px; border-radius: 50%; background: var(--text); color: var(--bg); }
 /* While reading aloud, Circles waits (X brings it back) so the bar has room. */
 .sb.sb-reading .sb-circles { display: none; }
+/* Stepping through search results: big ‹ and › either side of the words,
+   whose middle opens the list again where you left it. */
+.sb-follow .sb-step { flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; background: var(--accent); color: var(--surface); }
+.sb-follow .sb-step:active { transform: scale(.94); }
+.sb-follow .sb-step:disabled { background: var(--chip); color: var(--muted); cursor: default; }
+.sb-follow .listen-what { align-items: center; text-align: center; }
+.sb-follow .listen-what strong { font-size: 17px; max-width: 100%; }
+.sb-follow .listen-what span { font-size: 14px; }
+/* The result you opened last, in the list. */
+.sb-item.sb-here { background: var(--chip); box-shadow: inset 4px 0 0 var(--accent); }
 .sb.sb-mini.sb-reading { left: calc(50vw - min(300px, 50vw - 16px)); right: auto; width: min(600px, calc(100vw - 32px)); }
 .speaking { background: color-mix(in srgb, var(--accent) 9%, transparent); border-radius: 14px; box-shadow: 0 0 0 5px color-mix(in srgb, var(--accent) 9%, transparent); transition: background .4s, box-shadow .4s; }
 .follow-band {

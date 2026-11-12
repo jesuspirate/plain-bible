@@ -14,7 +14,7 @@ import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
 import { go, inCircles, openCircles, openPrayer, readPath, SEARCH_EVENT, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
-import { CircleIcon } from './icons'
+import { CircleIcon, CloseIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
@@ -62,6 +62,15 @@ const shortName = (id: string) => innerWidth < 430 ? bookAbbr(id) : bookName(id)
 
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
+// The search you're stepping through, kept so it is all still there when you
+// come back from a verse you opened, even after the phone reloads the app:
+// the words, the versions, which result you're on, and where the list was
+// scrolled. Small, so nothing is slowed down.
+type Trail = { q: string; base: string; picked?: string[]; at: number; scroll: number; scrollAt: number; shown: number }
+const TRAIL = 'plain-bible:search-trail'
+const loadTrail = (): Trail | undefined => {
+  try { const x = JSON.parse(localStorage.getItem(TRAIL) || 'null'); return x && typeof x.q === 'string' && typeof x.at === 'number' ? x : undefined } catch { return undefined }
+}
 export function rememberSearch(q: string) {
   const list = [q, ...loadRecent().filter(x => x !== q)].slice(0, 8)
   try { localStorage.setItem(RECENT, JSON.stringify(list)) } catch { /* ignore */ }
@@ -75,20 +84,30 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // Chapter counts per book in the current version, for the book and chapter browser.
   const [lens, setLens] = useState<Record<string, number>>({})
   const [browse, setBrowse] = useState<string>()
-  const [q, setQ] = useState('')
+  // Results you are stepping through: the strip with ‹ › stands in the
+  // bar's place while you read them, and its middle opens the list again
+  // just as you left it.
+  const [trail, setTrail] = useState<Trail | undefined>(loadTrail)
+  const [q, setQ] = useState(() => trail?.q ?? '')
   const [open, setOpen] = useState(false)
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [live, setLive] = useState<{ q: string; key: string; total: number; hits: number[]; verses: PageVerse[]; also?: string[] }>()
   // Versions to search: the one you're reading, unless you picked others.
-  const [picked, setPicked] = useState<string[]>()
+  const [picked, setPicked] = useState<string[] | undefined>(() => trail?.picked)
   const [pickIn, setPickIn] = useState(false)
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
   const version = here?.version ?? settings.version
   const info = byId.get(version)
-  const inV = picked?.some(id => byId.has(id)) ? picked.filter(id => byId.has(id)) : [version]
+  // The Bible searched stays the one you searched in while you step through
+  // its results, even when one of them opens in another version.
+  const sv = trail?.base && byId.has(trail.base) ? trail.base : version
+  const sInfo = byId.get(sv)
+  const inV = picked?.some(id => byId.has(id)) ? picked.filter(id => byId.has(id)) : [sv]
   const langs = inV.map(id => byId.get(id)?.lang ?? '')
 
+  // Set when the list is opened again from the strip, until it's scrolled back.
+  const restoring = useRef(false)
   const chapterRow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLDivElement>(null)
 
@@ -115,7 +134,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     const full = innerHeight, kb = phone ? keyboardHeight(key) : 0
     if (vk && vk.boundingRect.height > 100) set(0, full - vk.boundingRect.height) // keyboard already up
     else if (vv && vv.height < full - 100) set(vv.offsetTop, vv.height)
-    else if (kb) set(0, full - kb)
+    // Back to the results from the strip: no keyboard is coming, so the
+    // list gets the whole screen, as it had once the keyboard was put away.
+    else if (kb && !restoring.current) set(0, full - kb)
     else if (vv) set(vv.offsetTop, vv.height)
     let seen = false, last = 0
     const fit = () => {
@@ -252,13 +273,13 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         if (stale) return
         // Nothing in your Bible: look in the other Bibles of its language
         // (wordings differ), the ones this phone already has or can fetch.
-        if (!r.hits.length && !picked && info) {
-          const others = await sameLanguage([...byId.values()], (path: string) => data.url(path), info, version, settings.version)
+        if (!r.hits.length && !picked && sInfo) {
+          const others = await sameLanguage([...byId.values()], (path: string) => data.url(path), sInfo, sv, settings.version)
           if (stale) return
           if (others.length) {
-            const r2 = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: others, langs: others.map(() => info.lang), options })
+            const r2 = await call<SearchResponse>({ type: 'search', base, query: trimmed, versions: others, langs: others.map(() => sInfo.lang), options })
             if (stale) return
-            if (r2.hits.length) { r = r2; vs = others; ls = others.map(() => info.lang); also = others }
+            if (r2.hits.length) { r = r2; vs = others; ls = others.map(() => sInfo.lang); also = others }
           }
         }
         const refs = pageOf(r.hits, 0, FIRST)
@@ -269,13 +290,14 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     return () => { stale = true; clearTimeout(timer) }
   }, [trimmed, key])
   const [loadingMore, setLoadingMore] = useState(false)
-  const more = async () => {
+  // Load the next results, or (coming back to the list) at least `upTo` of them.
+  const more = async (upTo = 0) => {
     if (!live || loadingMore) return
     setLoadingMore(true)
-    const refs = pageOf(live.hits, live.verses.length, live.verses.length + MORE)
+    const refs = pageOf(live.hits, live.verses.length, Math.max(upTo, live.verses.length + MORE))
     try {
       const vs = live.also ?? inV
-      const page = await call<PageResponse>({ type: 'page', base: data.url(''), query: live.q, versions: vs, langs: live.also ? vs.map(() => info?.lang ?? '') : langs, options: settings.searchOptions, refs })
+      const page = await call<PageResponse>({ type: 'page', base: data.url(''), query: live.q, versions: vs, langs: live.also ? vs.map(() => sInfo?.lang ?? '') : langs, options: settings.searchOptions, refs })
       setLive(l => l && l.q === live.q && l.key === live.key ? { ...l, verses: [...l.verses, ...page.verses] } : l)
     } finally { setLoadingMore(false) }
   }
@@ -416,7 +438,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // with verses picked (the bar for them is up instead).
   const opener = useRef(openHere)
   opener.current = () => {
-    if (open || aloud || !input.current || document.body.classList.contains('selecting')) return
+    if (open || aloud || document.body.classList.contains('selecting')) return
+    if (following) return backToList()
+    if (!input.current) return
     overlayKeyboard(true)
     openHere()
   }
@@ -426,7 +450,12 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     return () => removeEventListener(SEARCH_EVENT, on)
   }, [])
 
-  const close = () => { setOpen(false); input.current?.blur() }
+  const close = () => {
+    // Leaving the list: remember where it was scrolled, to come back to.
+    const el = panel.current, shown = live?.verses.length
+    if (el) setTrail(f => f && f.q === trimmed ? { ...f, scroll: el.scrollTop, scrollAt: f.at, shown: shown ?? f.shown } : f)
+    setOpen(false); input.current?.blur()
+  }
 
   // A tap only counts in the panel if the finger went down on that same
   // button and stayed put. The tap that opens search lands on the bar, but on
@@ -482,18 +511,61 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     rememberSearch(trimmed); setRecent(loadRecent())
     input.current?.blur()
   }
+  const liveOk = !!live && live.q === trimmed && live.key === key
   const openHit = (v: PageVerse) => {
     if (trimmed) rememberSearch(trimmed)
     const shown = v.texts.find(x => x.matched) ?? v.texts[0]
-    const id = v.texts.some(x => x.matched && x.version === version) ? version : shown?.version ?? version
+    const id = v.texts.some(x => x.matched && x.version === sv) ? sv : shown?.version ?? sv
+    // Keep the words, the results and the place in them: close, don't clear.
+    if (live && liveOk) {
+      const bi = BOOKS.findIndex(b => b.id === v.book)
+      let at = 0
+      for (let i = 0; i < live.total; i++) if (live.hits[i * 4] === bi && live.hits[i * 4 + 1] === v.chapter && live.hits[i * 4 + 2] === v.verse) { at = i; break }
+      const scroll = panel.current?.scrollTop ?? 0
+      setTrail({ q: trimmed, base: sv, picked, at, scroll, scrollAt: at, shown: live.verses.length })
+      setOpen(false); input.current?.blur()
+      go(readPath(id, v.book, v.chapter, v.verse))
+      return
+    }
     finish(readPath(id, v.book, v.chapter, v.verse))
   }
+
+  // Typing other words (or clearing them) ends the trail.
+  useEffect(() => { if (trail && trimmed !== trail.q) setTrail(undefined) }, [trimmed])
+  useEffect(() => {
+    try { if (trail) localStorage.setItem(TRAIL, JSON.stringify(trail)); else localStorage.removeItem(TRAIL) } catch { /* ignore */ }
+  }, [trail])
+  const following = !!trail && trail.q === trimmed && !open && !aloud
+  // ‹ and ›: the result before or after, read in the Bible it was found in.
+  const step = (d: number) => {
+    if (!trail || !live || !liveOk) return
+    const i = trail.at + d
+    if (i < 0 || i >= live.total) return
+    const vs = live.also ?? inV, mask = live.hits[i * 4 + 3]
+    const mine = vs.indexOf(sv)
+    const vi = mine >= 0 && mask & (1 << mine) ? mine : 31 - Math.clz32(mask & -mask)
+    setTrail({ ...trail, at: i })
+    go(readPath(vs[vi] ?? sv, BOOKS[live.hits[i * 4]].id, live.hits[i * 4 + 1], live.hits[i * 4 + 2]))
+  }
+  // The middle of the strip: the list again, as you left it, keyboard down.
+  const backToList = () => { restoring.current = true; setOpen(true) }
+  const endTrail = () => { setTrail(undefined); setQ('') }
+  useLayoutEffect(() => {
+    const el = panel.current
+    if (!open || !restoring.current || !trail || !live || !liveOk || !el) return
+    // Load as many results as were showing (and the one you're on) first.
+    const need = Math.max(trail.shown, trail.at + 1)
+    if (live.verses.length < Math.min(need, live.total)) { more(need); return }
+    restoring.current = false
+    if (trail.scrollAt === trail.at) el.scrollTop = trail.scroll
+    else el.querySelector('.sb-here')?.scrollIntoView({ block: 'center' })
+  }, [open, live, liveOk])
 
   return (
     <>
       {/* A swipe on the dimmed page doesn't turn its chapter behind search. */}
       {open && <div class="sb-scrim" onClick={close} onWheel={e => e.stopPropagation()} />}
-      <div ref={sb} class={'sb' + (open ? ' sb-open' : mini ? ' sb-mini' : '') + (aloud && !open ? ' sb-reading' : '')}>
+      <div ref={sb} class={'sb' + (open ? ' sb-open' : mini && !following ? ' sb-mini' : '') + ((aloud || following) && !open ? ' sb-reading' : '')}>
         {open && (
           <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
@@ -524,25 +596,25 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <div class="sb-live">
                 <div class="sb-kicker">
                   <span>{live && live.q === trimmed && live.key === key
-                    ? live.also ? t('Not worded so in {version}. Found in {others}:', { version, others: live.also.filter(id => live.verses.some(v => v.texts.some(x => x.matched && x.version === id))).join(', ') || live.also.join(', ') })
+                    ? live.also ? t('Not worded so in {version}. Found in {others}:', { version: sv, others: live.also.filter(id => live.verses.some(v => v.texts.some(x => x.matched && x.version === id))).join(', ') || live.also.join(', ') })
                     : live.total ? tn(live.total, '{n} verse', '{n} verses') + (live.total > 1 && trimmed.includes(' ') ? t(', best first') : '') : t('No verses found')
                     : listening ? t('Listening…') : t('Searching…')}</span>
                   <button type="button" class="sb-in" onClick={() => setPickIn(true)} aria-label={t('Search in {versions}. Change', { versions: inV.join(', ') })}>
                     {t('in {versions}', { versions: inV.length > 2 ? tn(inV.length, '{n} version', '{n} versions') : inV.join(', ') })} ▾
                   </button>
                 </div>
-                {live && live.q === trimmed && live.key === key && live.verses.map(v => {
+                {live && liveOk && live.verses.map((v, i) => {
                   const shown = v.texts.find(x => x.matched) ?? v.texts[0]
-                  const tv = byId.get(shown?.version ?? version)
+                  const tv = byId.get(shown?.version ?? sv)
                   return (
-                    <button class="sb-item" onClick={() => openHit(v)}>
+                    <button class={'sb-item' + (trail?.q === trimmed && trail.at === i ? ' sb-here' : '')} onClick={() => openHit(v)}>
                       <span class="sb-title">{formatRef(v)}{(inV.length > 1 || live.also) && shown && <span class="sb-vtag">{shown.version}</span>}</span>
                       <span class="sb-verse" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}><VerseText raw={shown?.text ?? ''} ranges={shown?.ranges} /></span>
                     </button>
                   )
                 })}
                 {live && live.q === trimmed && live.key === key && live.total > live.verses.length && (
-                  <button class="sb-more" onClick={more}>{loadingMore ? t('Loading…') : t('Show more ({n} more)', { n: live.total - live.verses.length })}</button>
+                  <button class="sb-more" onClick={() => more()}>{loadingMore ? t('Loading…') : t('Show more ({n} more)', { n: live.total - live.verses.length })}</button>
                 )}
               </div>
             )}
@@ -601,7 +673,17 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         )}
         <div class="sb-bar">
         {/* Reading aloud: its bar stands in the search field's place until X. */}
-        {aloud && !open ? <ListenPlayer /> : <form class="sb-field" onSubmit={submit} role="search">
+        {aloud && !open ? <ListenPlayer /> : following && trail ? (
+          <div class="listen sb-follow" role="region" aria-label={t('Search results')}>
+            <button class="sb-step" onClick={() => step(-1)} disabled={trail.at <= 0} aria-label={t('Previous result')}><Chevron back /></button>
+            <button class="listen-what" onClick={backToList} aria-label={t('Back to the results')}>
+              <strong>{trail.q}</strong>
+              <span class="muted">{liveOk && live ? t('{n} of {total}', { n: (trail.at + 1).toLocaleString(locale()), total: live.total.toLocaleString(locale()) }) : t('Searching…')} ▴</span>
+            </button>
+            <button class="sb-step" onClick={() => step(1)} disabled={!liveOk || !live || trail.at >= live.total - 1} aria-label={t('Next result')}><Chevron /></button>
+            <button class="close-btn listen-stop" onClick={endTrail} aria-label={t('End this search')}><CloseIcon size={24} /></button>
+          </div>
+        ) : <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Words or John 3:16')}
@@ -709,6 +791,14 @@ const voiceOff = () => { try { return localStorage.getItem(VOICE_OFF) === '1' } 
 const speechRecognition = (): any => voiceOff() ? undefined : (window as any).SpeechRecognition ?? (window as any).webkitSpeechRecognition
 
 const speechLang = (code = '') => ({ en: 'en-US', fr: 'fr-FR', es: 'es-ES', de: 'de-DE', pt: 'pt-BR', it: 'it-IT', ru: 'ru-RU', he: 'he-IL', el: 'el-GR', zh: 'zh-CN', ar: 'ar-SA' } as Record<string, string>)[code] ?? (navigator.language || 'en-US')
+
+function Chevron({ back }: { back?: boolean }) {
+  return (
+    <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true">
+      <path d={back ? 'M15 5l-7 7 7 7' : 'M9 5l7 7-7 7'} fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round" />
+    </svg>
+  )
+}
 
 function MicIcon() {
   return (
