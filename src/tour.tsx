@@ -34,6 +34,8 @@ function steps(): Step[] {
     { title: t('Turn the page'), body: t('Swipe left or right to go to the next or the previous chapter.'), find: onScreen('.reader > article.chapter .chapter-title') },
     { title: t('Tap a verse'), body: t('Tap any verse to highlight it, write a note, save a bookmark or hear it read aloud.'), find: verseInView },
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field') },
+    // The two shortcuts to search (#236), lit on the chapter title they start from.
+    { title: t('Open search'), body: t('Tap the chapter title. Or, at the top of a chapter, pull down until the round button fills with color, then let go.'), find: onScreen('.reader > article.chapter .chapter-title') },
     !!document.querySelector('.sb-circles') && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles') },
     { title: t('Pray'), body: t('Tap 🙏 to pray out loud and keep your prayer. It stays private.'), find: onScreen('.sb-pray') },
     { title: t('Go back'), body: t('After you jump somewhere else, tap here to go back to where you were reading.'), find: onScreen('.history-btn') },
