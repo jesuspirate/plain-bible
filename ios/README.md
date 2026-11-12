@@ -114,6 +114,26 @@ registers the two extra bundle IDs (`com.myquietbible.ios.watchkitapp` and
 For the App Store, a version with a watch app also needs at least one Apple
 Watch screenshot in App Store Connect.
 
+## Home Screen widgets
+
+`QuietBibleHome/` is the iPhone's widget extension (bundle ID
+`com.myquietbible.ios.widgets`, iOS 17 and later; on iOS 16 the app works
+as before, only without widgets). It ships inside the app, so there is
+nothing to switch on in App Store Connect: the next version uploaded carries it.
+
+- **Pray**: small, and on the Lock Screen. Opens the app on the prayer screen.
+- **Circles**: small, and on the Lock Screen. Opens Circles.
+- **Pray and Circles**: medium and large, both buttons.
+
+The buttons open `quietbible://pray` and `quietbible://circles`
+(`CFBundleURLTypes` in `QuietBible/Info.plist`). The app turns them into the
+site's `#/pray` and `#/circles`, over the page being read, without a reload
+(`openWidgetLink` in `BibleViewController.swift`). The 🙏 is the plain yellow
+one; following the skin tone picked in the app would need an App Group.
+
+To add one on an iPhone: hold an empty spot on the Home Screen, tap **Edit**
+→ **Add Widget**, search "Quiet Bible", pick a size.
+
 Changes to the website reach the app by themselves. Only changes inside `ios/`
 need a new upload.
 

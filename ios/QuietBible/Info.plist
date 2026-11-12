@@ -26,6 +26,19 @@
 		<string>fr</string>
 		<string>es</string>
 	</array>
+	<!-- The Home Screen widget's buttons open the app with quietbible://pray
+	     and quietbible://circles (SceneDelegate.swift). -->
+	<key>CFBundleURLTypes</key>
+	<array>
+		<dict>
+			<key>CFBundleURLName</key>
+			<string>com.myquietbible.ios</string>
+			<key>CFBundleURLSchemes</key>
+			<array>
+				<string>quietbible</string>
+			</array>
+		</dict>
+	</array>
 	<key>ITSAppUsesNonExemptEncryption</key>
 	<false/>
 	<key>LSRequiresIPhoneOS</key>
