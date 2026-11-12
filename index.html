@@ -29,10 +29,12 @@
       // there. Never for an app on a Home Screen, which keeps its own storage
       // and so looks new; never for a link into the Bible (a verse someone
       // shared, a circle invite, a move link); and never again once the
-      // Bible has been opened here.
+      // Bible has been opened here. Nor for the Google Play app, which opens
+      // in a browser tab on phones whose browser can't run it full screen.
       try {
         if (!location.hash && !location.search && !localStorage.getItem('plain-bible:settings') && !localStorage.getItem('plain-bible:welcomed')
-          && matchMedia('(display-mode: browser)').matches && navigator.standalone !== true) {
+          && matchMedia('(display-mode: browser)').matches && navigator.standalone !== true
+          && document.referrer.indexOf('android-app://com.myquietbible.app') !== 0) {
           // On its way: hide the page, and don't start the Bible behind it (src/main.tsx).
           window.plainBibleWelcome = true
           document.documentElement.style.visibility = 'hidden'
