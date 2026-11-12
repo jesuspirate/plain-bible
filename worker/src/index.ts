@@ -1024,7 +1024,7 @@ async function deviceCodeRoute(req: Request, env: Env, parts: string[]): Promise
   if (req.method === 'POST' && step === 'ask') {
     const { pub, label } = await readJson<{ pub: string; label: string }>(req)
     if (!sealedText(pub, 200) || typeof label !== 'string' || label.length > 60) throw new HttpError(400, 'Bad request')
-    const ip = req.headers.get('CF-Connecting-IP') ?? 'unknown'
+    const ip = await ipKey(req)
     const misses = await db.prepare('SELECT COUNT(*) AS n FROM device_code_misses WHERE ip = ? AND at > ?').bind(ip, now - HOUR).first<{ n: number }>()
     if ((misses?.n ?? 0) >= CODE_MISSES) throw new HttpError(429, 'Too many wrong codes. Try again in an hour.')
     // The same ask again (a second tap, a retry) finds its own request.
