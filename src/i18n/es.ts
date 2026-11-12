@@ -978,4 +978,9 @@ export default {
   "Too many sign-in emails from here. Try again later, or use a passkey.": "Demasiados correos de inicio de sesión desde esta red. Inténtalo más tarde, o usa una llave de acceso.",
   "Too many links from here. Try again in an hour.": "Demasiados enlaces desde esta red. Inténtalo de nuevo en una hora.",
   "Links are busy right now. Try again in an hour.": "Los enlaces están muy ocupados ahora. Inténtalo de nuevo en una hora.",
+  "Search results": "Resultados de la búsqueda",
+  "Previous result": "Resultado anterior",
+  "Next result": "Resultado siguiente",
+  "Back to the results": "Volver a los resultados",
+  "End this search": "Terminar esta búsqueda",
 } as Record<string, string>
