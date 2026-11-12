@@ -140,6 +140,12 @@ export const PRAY_EVENT = 'plain-bible:pray'
 export type PrayAt = { circles: true; circle?: { id: string; name: string } }
 export const openPrayer = (at?: PrayAt) => window.dispatchEvent(new CustomEvent(PRAY_EVENT, { detail: at }))
 export const openCircles = (circle?: { id: string; name: string }) => openPrayer({ circles: true, circle })
+/** The 🙏 on the iPhone Home Screen widget (#/pray): the prayer screen opens
+ *  already listening, with no second tap. */
+let listenNow = false
+export const prayNow = () => { listenNow = true; openPrayer() }
+/** Asked once by the prayer screen as it opens. */
+export const takePrayNow = () => { const n = listenNow; listenNow = false; return n }
 
 /** Open Settings (the sheet behind the button in the top right corner). */
 export const SETTINGS_EVENT = 'plain-bible:settings'
