@@ -95,6 +95,7 @@ a.pray-btn { box-sizing: border-box; background: var(--surface); border: 1px sol
 button.pray-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 @media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after { animation: none; } }
 .pray-amen-btn { margin: 4px 0 6px; }
+.pray-share-now { display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 4px; }
 .pray-sync { margin: 10px 4px 2px; padding: 12px 8px 4px; border-top: 1px solid var(--line); }
 .pray-sync p { margin: 0 0 12px; font-size: 16px; line-height: 1.45; }
 .pray-sync p.small { font-size: 14px; }

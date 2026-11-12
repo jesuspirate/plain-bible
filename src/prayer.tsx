@@ -341,6 +341,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
                   {(comfortKept || others.length > 0) && (others.length === 1
                     ? <button class="pray-kept" onClick={() => read(others[0])}>✓ {keptLine(<strong>{verseLabel(others[0])}</strong>)} ›</button>
                     : <p class="pray-kept">✓ {keptLine(others.map((v, i) => <>{i ? ', ' : ''}<button class="pray-kept-ref" onClick={() => read(v)}>{verseLabel(v)}</button></>))}</p>)}
+                  {/* Prayed for a friend: send it to them now, one tap, never by itself. */}
+                  {kept && inCircles() && <button class="pray-pill pray-share-now" onClick={() => shareWithCircle({ prayer: kept.id })}>
+                    <CircleIcon size={22} /> <span>{t('Share with your circle')}</span>
+                  </button>}
                 </>
               : <p>{t('Tap and speak to God. Only you will hear this again.')}</p>}
           </div>
