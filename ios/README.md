@@ -37,7 +37,30 @@ The web app spots the app by `QuietBibleApp/` in its user agent
    **Signing & Capabilities** → pick the team. The bundle ID is
    `com.myquietbible.ios`; Xcode registers it.
 
-## Sending a version to the App Store
+## Sending a version to the App Store (without Xcode)
+
+GitHub can build, sign and send the app, so Xcode is not needed:
+**Actions → Send to App Store → Run workflow**, type the version (like 1.2),
+and about 15 minutes later the build is in App Store Connect → TestFlight.
+The build number is set by itself. Then make the version in App Store
+Connect, pick the build and submit it, as before.
+
+One-time setup, in App Store Connect with the account holder's sign-in:
+
+1. **Users and Access → Integrations → App Store Connect API → Team Keys →
+   +**. Name it "GitHub", access **Admin** (Apple only lets an Admin key
+   sign for the App Store), **Generate**.
+2. Note the **Issuer ID** (above the list) and the key's **Key ID**, and
+   **Download** the `.p8` file. Apple offers that download only once.
+3. In the GitHub repository: **Settings → Secrets and variables → Actions →
+   New repository secret**, three times: `ASC_KEY_ID`, `ASC_ISSUER_ID`, and
+   `ASC_KEY_P8` (open the `.p8` file in TextEdit and paste all of it).
+
+The key can do anything in the Apple account, so it belongs only in those
+secrets. If it is ever exposed, revoke it on the same Apple page and make a
+new one. `.github/workflows/ios-release.yml` has the details.
+
+## Sending a version from Xcode instead
 
 1. In Xcode, pick **Any iOS Device (arm64)** at the top.
 2. Raise the build number by one for every upload, and the version only for
@@ -95,4 +118,4 @@ Changes to the website reach the app by themselves. Only changes inside `ios/`
 need a new upload.
 
 `.github/workflows/ios.yml` checks that the app still builds whenever `ios/`
-changes.
+changes. `ios-release.yml` sends it to the App Store when asked.
