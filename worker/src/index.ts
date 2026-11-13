@@ -8,6 +8,7 @@ import {
 } from '@simplewebauthn/server'
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server'
 import { send, vapidPublic, type Subscription, type Vapid } from './push'
+import { APNS_PREFIX, APNS_TOKEN, isApnsEnv, sendApns, type Apns } from './apns'
 
 export interface Env {
   DB: D1Database
@@ -25,6 +26,10 @@ export interface Env {
    *  once by the deploy script, then never changed, or every device would
    *  have to turn notifications on again). */
   VAPID_KEY?: string
+  /** Notifications in the App Store iPhone app are on when both are set:
+   *  an APNs key from developer.apple.com (the whole .p8 text) and its Key ID. */
+  APNS_KEY_P8?: string
+  APNS_KEY_ID?: string
   /** The private numbers page (/stats?key=…) is on when this is set. */
   STATS_KEY?: string
 }
@@ -528,14 +533,18 @@ const vapid = (env: Env): Vapid | undefined => {
   if (!env.VAPID_KEY) return undefined
   try { return { jwk: JSON.parse(env.VAPID_KEY), subject: 'mailto:hello@myquietbible.com' } } catch { return undefined }
 }
+// The iPhone app: com.myquietbible.ios, in the developer team that publishes it.
+const apns = (env: Env): Apns | undefined =>
+  env.APNS_KEY_P8 && env.APNS_KEY_ID ? { p8: env.APNS_KEY_P8, keyId: env.APNS_KEY_ID, teamId: 'VBV7MKN8BZ', topic: 'com.myquietbible.ios' } : undefined
+const isApns = (endpoint: string) => endpoint.startsWith(APNS_PREFIX)
 
 /** Tell the other members' devices (or only `to`, whose prayer was prayed
  *  with) that something is new in this circle. At most once every two
  *  minutes per device and circle; the notification on the phone stays one
  *  per circle either way. */
 async function notifyCircle(env: Env, circle: string, from: string, to?: string) {
-  const v = vapid(env)
-  if (!v) return
+  const v = vapid(env), a = apns(env)
+  if (!v && !a) return
   const now = Date.now()
   const rows = (await env.DB.prepare(`SELECT s.endpoint, s.p256dh, s.auth FROM push_circles p JOIN push_subs s ON s.endpoint = p.endpoint
     JOIN circle_members m ON m.circle_id = p.circle_id AND m.user_id = s.user_id
@@ -543,10 +552,14 @@ async function notifyCircle(env: Env, circle: string, from: string, to?: string)
       AND NOT EXISTS (SELECT 1 FROM circle_blocks bl JOIN circle_members bm ON bm.circle_id = bl.circle_id AND bm.mid = bl.mid
         WHERE bl.circle_id = ?1 AND bl.user_id = s.user_id AND bm.user_id = ?2)`)
     .bind(circle, from, to ?? null, now - PUSH_GAP).all<Subscription>()).results
+    .filter(r => isApns(r.endpoint) ? !!a : !!v)
   if (!rows.length) return
   await env.DB.batch(rows.map(r => env.DB.prepare('UPDATE push_circles SET sent = ? WHERE endpoint = ? AND circle_id = ?').bind(now, r.endpoint, circle)))
   const gone: string[] = []
-  await Promise.all(rows.map(r => send(r, { c: circle }, v, circle).then(ok => { if (!ok) gone.push(r.endpoint) }, e => console.error('push', e))))
+  const one = (r: Subscription) => isApns(r.endpoint)
+    ? sendApns(r.endpoint.slice(APNS_PREFIX.length), isApnsEnv(r.p256dh) ? r.p256dh : 'production', circle, a!)
+    : send(r, { c: circle }, v!, circle)
+  await Promise.all(rows.map(r => one(r).then(ok => { if (!ok) gone.push(r.endpoint) }, e => console.error('push', e))))
   if (gone.length) await env.DB.batch(gone.flatMap(e => [
     env.DB.prepare('DELETE FROM push_circles WHERE endpoint = ?').bind(e),
     env.DB.prepare('DELETE FROM push_subs WHERE endpoint = ?').bind(e),
@@ -555,10 +568,17 @@ async function notifyCircle(env: Env, circle: string, from: string, to?: string)
 
 // Only the browsers' own push services: Chrome and Android (Google),
 // Firefox (Mozilla), Safari (Apple), Edge (Windows). Nothing else is ever
-// sent a request by this server.
+// sent a request by this server. The iPhone app's devices are only a token
+// (stored as apns:<token>); they're sent to Apple's two fixed addresses
+// (worker/src/apns.ts), which are under push.apple.com too.
 const PUSH_HOSTS = /^https:\/\/([\w-]+\.)*(googleapis\.com|push\.services\.mozilla\.com|push\.apple\.com|notify\.windows\.com)(:443)?\//
 const cleanSub = (v: unknown): Subscription => {
-  const s = v as { endpoint?: unknown; keys?: { p256dh?: unknown; auth?: unknown } } | null
+  const s = v as { endpoint?: unknown; keys?: { p256dh?: unknown; auth?: unknown }; apns?: unknown; env?: unknown } | null
+  // The App Store iPhone app: its Apple push token, and which Apple server.
+  if (s && 'apns' in s) {
+    if (typeof s.apns !== 'string' || !APNS_TOKEN.test(s.apns) || !isApnsEnv(s.env)) throw new HttpError(400, 'Bad request')
+    return { endpoint: APNS_PREFIX + s.apns, p256dh: s.env, auth: 'apns' }
+  }
   const endpoint = s?.endpoint, p256dh = s?.keys?.p256dh, auth = s?.keys?.auth
   if (typeof endpoint !== 'string' || endpoint.length > 1000 || !PUSH_HOSTS.test(endpoint) || !sealedText(p256dh, 200) || !sealedText(auth, 100)) throw new HttpError(400, 'Bad request')
   return { endpoint, p256dh: p256dh as string, auth: auth as string }
@@ -570,7 +590,7 @@ async function pushRoute(req: Request, env: Env, parts: string[]): Promise<Respo
   // The key browsers subscribe with. null: notifications aren't set up.
   if (a === 'key' && !b && req.method === 'GET') {
     const v = vapid(env)
-    return json({ key: v ? vapidPublic(v.jwk) : null })
+    return json({ key: v ? vapidPublic(v.jwk) : null, apns: !!apns(env) })
   }
   const userId = await session(req, env)
   // This device stops hearing about anything (signing out).
@@ -588,7 +608,7 @@ async function pushRoute(req: Request, env: Env, parts: string[]): Promise<Respo
     const s = cleanSub(sub)
     if (req.method === 'PUT') {
       await membership(db, b, userId)
-      if (!vapid(env)) throw new HttpError(503, 'Notifications aren’t set up yet. Try again later.')
+      if (isApns(s.endpoint) ? !apns(env) : !vapid(env)) throw new HttpError(503, 'Notifications aren’t set up yet. Try again later.')
       const n = await db.prepare('SELECT COUNT(*) AS n FROM push_subs WHERE user_id = ?').bind(userId).first<{ n: number }>()
       if ((n?.n ?? 0) >= 20 && !(await db.prepare('SELECT 1 FROM push_subs WHERE endpoint = ?').bind(s.endpoint).first())) throw new HttpError(413, 'Too many devices have notifications on')
       await db.batch([
@@ -1271,7 +1291,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
   switch (key) {
     case 'GET /hello': return helloRoute(req, env)
     case 'GET /stats': case 'POST /stats': return statsRoute(req, env)
-    case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env) })
+    case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env), apns: !!apns(env) })
 
     // Sign in (or sign up) with a code sent by email, or add an email to
     // the signed-in account.

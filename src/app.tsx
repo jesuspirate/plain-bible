@@ -305,7 +305,10 @@ export function App() {
       else if (m?.t === 'circle-news') checkCircleNews(true)
     }
     sw.addEventListener('message', on)
-    return () => sw.removeEventListener('message', on)
+    // The same from the iPhone app (ios/QuietBible/Notify.swift).
+    const native = () => checkCircleNews(true)
+    addEventListener('quietbible:circle-news', native)
+    return () => { sw.removeEventListener('message', on); removeEventListener('quietbible:circle-news', native) }
   }, [])
   useEffect(() => {
     let on = false

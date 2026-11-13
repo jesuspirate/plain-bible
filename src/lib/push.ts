@@ -7,6 +7,7 @@ import { api, loadAccount, SYNC_URL, SyncError } from './sync'
 import type { CircleInfo } from './circles'
 import { t } from '../i18n'
 import { inStoreApp } from './install'
+import { askNative, nativeNotify, tellNative } from './nativeNotify'
 
 const ON = 'plain-bible:push-circles'
 const NAMES_CACHE = 'quiet-bible-push', NAMES_URL = 'push/circles.json'
@@ -22,8 +23,9 @@ const standalone = () => (navigator as { standalone?: boolean }).standalone === 
  *  16.4. blocked: said no before (the phone's settings can undo that).
  *  no: this browser can't. */
 export function pushSupport(): 'ok' | 'install' | 'old' | 'blocked' | 'no' {
-  // The App Store app has no web notifications (they'd come through Apple's own).
-  if (inStoreApp()) return 'no'
+  // The App Store app has no web notifications: they come through Apple's
+  // own push, in versions of the app that can (1.2.1 and later).
+  if (inStoreApp()) return !nativeNotify() ? 'no' : nativeDenied ? 'blocked' : 'ok'
   const can = 'serviceWorker' in navigator && 'PushManager' in window && 'Notification' in window
   if (!can) return !isIOS() ? 'no' : standalone() ? 'old' : 'install'
   return Notification.permission === 'denied' ? 'blocked' : 'ok'
@@ -32,8 +34,21 @@ export const blockedHelp = () => isIOS()
   ? t('Notifications are turned off for My Quiet Bible. To allow them: iPhone Settings → Notifications → My Quiet Bible.')
   : t('Notifications are blocked for My Quiet Bible. To allow them: tap the lock or ⋮ by the address, then Notifications. On an installed app: hold its icon → App info → Notifications.')
 
+/** The iPhone app said notifications are turned off in the iPhone's settings. */
+let nativeDenied = false
+const granted = () => inStoreApp() ? !!nativeNotify() && !nativeDenied : typeof Notification !== 'undefined' && Notification.permission === 'granted'
+
 /** Whether this device hears about this circle. */
-export const pushOn = (circle: string) => readOn().includes(circle) && typeof Notification !== 'undefined' && Notification.permission === 'granted'
+export const pushOn = (circle: string) => readOn().includes(circle) && granted()
+
+/** The iPhone app's push address: its Apple token, and which Apple server.
+ *  `ask`: may show "Allow notifications?". 'denied' when they're off. */
+type NativeSub = { apns: string; env: string }
+async function nativeSub(ask: boolean): Promise<NativeSub | null> {
+  const r = await askNative<NativeSub | 'denied' | null>({ op: 'register', ask })
+  nativeDenied = r === 'denied'
+  return r && r !== 'denied' && typeof r.apns === 'string' ? r : null
+}
 
 let key: Promise<string | null> | undefined
 /** The server's key, asked for ahead of the tap, so the tap goes straight to the question. */
@@ -59,6 +74,13 @@ async function subscription(ask: boolean) {
 /** Turn this circle's notifications on. Called straight from the tap: the
  *  phone asks "Allow notifications?" first, which iPhones only allow in a tap. */
 export async function turnOn(circle: string) {
+  if (inStoreApp()) {
+    const sub = await nativeSub(true)
+    if (!sub) throw new SyncError(nativeDenied ? blockedHelp() : t('This phone couldn’t turn notifications on. Try again in a moment.'))
+    await api(`/push/circles/${circle}`, { method: 'PUT', token: token(), body: { sub } })
+    writeOn([...readOn().filter(x => x !== circle), circle])
+    return
+  }
   const asked = Notification.requestPermission()
   if (await asked !== 'granted') throw new SyncError(Notification.permission === 'denied' ? blockedHelp() : t('Notifications weren’t allowed. Tap again to be asked once more.'))
   const sub = await subscription(true)
@@ -68,6 +90,12 @@ export async function turnOn(circle: string) {
 }
 
 export async function turnOff(circle: string) {
+  if (inStoreApp()) {
+    const sub = await nativeSub(false)
+    if (sub) await api(`/push/circles/${circle}`, { method: 'DELETE', token: token(), body: { sub } })
+    writeOn(readOn().filter(x => x !== circle))
+    return
+  }
   const sub = await subscription(false)
   if (sub) await api(`/push/circles/${circle}`, { method: 'DELETE', token: token(), body: { sub: subJson(sub) } })
   const left = readOn().filter(x => x !== circle)
@@ -80,12 +108,12 @@ export async function turnOff(circle: string) {
  *  (once a day at most) so notifications keep arriving. */
 export async function refreshPush() {
   const on = readOn()
-  if (!on.length || pushSupport() !== 'ok' || Notification.permission !== 'granted' || !loadAccount() || navigator.onLine === false) return
+  if (!on.length || pushSupport() !== 'ok' || !granted() || !loadAccount() || navigator.onLine === false) return
   const last = 'plain-bible:push-checked'
   try { if (Date.now() - +(localStorage.getItem(last) || 0) < 86_400_000) return; localStorage.setItem(last, String(Date.now())) } catch { /* ignore */ }
-  const sub = await subscription(true).catch(() => null)
+  const sub = inStoreApp() ? await nativeSub(false) : await subscription(true).then(s => s && subJson(s), () => null)
   if (!sub) return
-  for (const c of on) await api(`/push/circles/${c}`, { method: 'PUT', token: token(), body: { sub: subJson(sub) } }).catch((e: SyncError) => {
+  for (const c of on) await api(`/push/circles/${c}`, { method: 'PUT', token: token(), body: { sub } }).catch((e: SyncError) => {
     // Not in that circle any more.
     if (e.status === 404) writeOn(readOn().filter(x => x !== c))
   })
@@ -93,9 +121,12 @@ export async function refreshPush() {
 
 /** The circles' names, for the service worker to put in the notification. */
 export async function keepNames(circles: CircleInfo[]) {
-  if (typeof caches === 'undefined') return
   // With the notification's words in the app's language.
-  const names = { ...Object.fromEntries(circles.map(c => [c.id, c.name])), '': { title: t('Something new in {circle}'), other: t('Something new in your circle') } }
+  const words = { title: t('Something new in {circle}'), other: t('Something new in your circle') }
+  // The iPhone app keeps them too, for its notifications and its widget.
+  tellNative({ op: 'names', names: Object.fromEntries(circles.map(c => [c.id, c.name])), words })
+  if (typeof caches === 'undefined') return
+  const names = { ...Object.fromEntries(circles.map(c => [c.id, c.name])), '': words }
   const c = await caches.open(NAMES_CACHE)
   await c.put(new URL(NAMES_URL, location.href).href, new Response(JSON.stringify(names), { headers: { 'Content-Type': 'application/json' } }))
 }
@@ -105,6 +136,7 @@ export const forget = (circle: string) => writeOn(readOn().filter(x => x !== cir
 
 /** Looking at the circle: its notification has been read. */
 export async function clearNotifications(circle: string) {
+  if (inStoreApp()) return tellNative({ op: 'clear', c: circle })
   if (!('serviceWorker' in navigator) || !navigator.serviceWorker.controller) return
   const reg = await navigator.serviceWorker.ready
   for (const n of await reg.getNotifications({ tag: `circle-${circle}` })) n.close()

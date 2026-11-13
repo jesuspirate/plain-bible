@@ -31,5 +31,7 @@ export async function forgetAccount({ personal = false, prayers: dropPrayers = f
   }
   // The circles' names, kept for notifications.
   if (typeof caches !== 'undefined') await caches.delete('quiet-bible-push').catch(() => {})
+  // And the iPhone app's copy of them, which its widget shows.
+  ;(await import('./nativeNotify')).tellNative({ op: 'forget' })
 }
 

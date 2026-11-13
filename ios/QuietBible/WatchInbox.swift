@@ -34,6 +34,11 @@ final class WatchInbox: NSObject, WCSessionDelegate {
     func tone(_ tone: String) {
         guard Self.tones.contains(tone) else { return }
         UserDefaults.standard.set(tone, forKey: Self.toneKey)
+        // The Home Screen widget shows the same 🙏.
+        if SharedCircles.tone != tone {
+            SharedCircles.tone = tone
+            SharedCircles.refreshWidgets()
+        }
         sendTone()
     }
 

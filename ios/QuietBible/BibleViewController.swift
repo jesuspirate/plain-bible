@@ -18,6 +18,8 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var barStyle: UIStatusBarStyle = .darkContent
     private var downloads: [ObjectIdentifier: URL] = [:]
     private var watchArrivals: NSObjectProtocol?
+    private var circleTaps: NSObjectProtocol?
+    private var circleNews: NSObjectProtocol?
 
     override var preferredStatusBarStyle: UIStatusBarStyle { barStyle }
 
@@ -35,6 +37,8 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             injectionTime: .atDocumentStart, forMainFrameOnly: true))
         // Prayers from the Apple Watch app (WatchInbox.swift).
         config.userContentController.addScriptMessageHandler(WatchBridge(), contentWorld: .page, name: "watch")
+        // Circle notifications and the widget's circle news (Notify.swift).
+        config.userContentController.addScriptMessageHandler(NotifyBridge(), contentWorld: .page, name: "notify")
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.navigationDelegate = self
@@ -77,6 +81,15 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         watchArrivals = NotificationCenter.default.addObserver(forName: WatchInbox.arrived, object: nil, queue: .main) { [weak self] _ in
             self?.web.evaluateJavaScript("dispatchEvent(new Event('quietbible:watch'))")
         }
+        // A circle's notification was tapped: open that circle.
+        circleTaps = NotificationCenter.default.addObserver(forName: Notify.opened, object: nil, queue: .main) { [weak self] _ in
+            self?.openTappedCircle()
+        }
+        // One arrived while the app is open: the page lights its dot.
+        circleNews = NotificationCenter.default.addObserver(forName: Notify.arrived, object: nil, queue: .main) { [weak self] _ in
+            self?.web.evaluateJavaScript("dispatchEvent(new Event('quietbible:circle-news'))")
+        }
+        openTappedCircle()
     }
 
     /// Open a myquietbible.com link (from a universal link).
@@ -90,7 +103,19 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     /// reading. When the page is already up, only its address changes, so
     /// nothing reloads.
     func openWidgetLink(_ url: URL) {
-        guard url.scheme == "quietbible", let page = url.host, page == "pray" || page == "circles" else { return }
+        guard url.scheme == "quietbible", var page = url.host, page == "pray" || page == "circles" else { return }
+        // quietbible://circles/<id>: the one circle with something new.
+        if page == "circles", let id = url.pathComponents.dropFirst().first, SharedCircles.safe(id) { page += "/" + id }
+        show(page)
+    }
+
+    /// A tapped notification: its circle (or the list, if it named none).
+    private func openTappedCircle() {
+        guard let c = Notify.shared.takePending() else { return }
+        show(c.isEmpty ? "circles" : "circles/" + c)
+    }
+
+    private func show(_ page: String) {
         if web != nil && loaded {
             web.evaluateJavaScript("location.hash = '#/\(page)'")
             return

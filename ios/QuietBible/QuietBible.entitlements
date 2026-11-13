@@ -10,5 +10,15 @@
 		<string>webcredentials:myquietbible.com</string>
 		<string>applinks:myquietbible.com</string>
 	</array>
+	<!-- Circle notifications, through Apple's push. Xcode builds use
+	     "development"; the App Store build is switched to "production" when
+	     it is signed. -->
+	<key>aps-environment</key>
+	<string>development</string>
+	<!-- Shared with the widget and the notification extension (Shared/SharedCircles.swift). -->
+	<key>com.apple.security.application-groups</key>
+	<array>
+		<string>group.com.myquietbible.ios</string>
+	</array>
 </dict>
 </plist>
