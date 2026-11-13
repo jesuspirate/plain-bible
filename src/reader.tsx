@@ -1028,12 +1028,29 @@ export function Reader({ route }: { route: Route }) {
     // With a mouse, a quiet ribbon sits at the end of the verse you're on,
     // just where you finish reading it: a sign that a verse has things you
     // can do. It stays there until the mouse comes to another verse, and it
-    // opens the same bar as clicking the verse.
+    // opens the same bar as clicking the verse. A double click on it instead
+    // highlights the verse in the color you used last (or takes it off), as
+    // a double tap does on a phone: on a computer a double click on the words
+    // selects one, so the ribbon is the place for it.
     // In a paragraph each verse keeps a little room for it, so it never sits
     // on the next verse's number and nothing moves as it goes from verse to verse.
     const tab = (v: number) => live && (fine || undefined) && <span class="tab-end">{!picking && reading === v && (
       <button class="verse-tab" tabIndex={-1} title={t('Verse {v} options', { v })} aria-hidden="true"
-        onClick={e => { e.stopPropagation(); setSelected(s => s.includes(v) ? s : [...s, v].sort((a, b) => a - b)) }}>
+        onMouseDown={e => { if (e.detail > 1) e.preventDefault() }}
+        onClick={e => {
+          e.stopPropagation()
+          // The bar opens at the first click and may come up under the mouse:
+          // a second click at the same spot counts wherever it lands.
+          const x = e.clientX, y = e.clientY, before = selected
+          const again = (e2: MouseEvent) => {
+            if (Math.hypot(e2.clientX - x, e2.clientY - y) > 12) return
+            e2.stopPropagation(); e2.preventDefault()
+            setSelected(before); toggleHighlight(v)
+          }
+          document.addEventListener('click', again, { capture: true, once: true })
+          setTimeout(() => document.removeEventListener('click', again, true), 350)
+          setSelected(s => s.includes(v) ? s : [...s, v].sort((a, b) => a - b))
+        }}>
         <BookmarkIcon size={20} filled={false} />
       </button>)}</span>
     const rest = (v: number) => live ? {
