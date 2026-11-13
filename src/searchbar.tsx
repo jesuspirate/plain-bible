@@ -21,6 +21,7 @@ import { useHoldPick } from './hold'
 import { isIOS } from './lib/native'
 import { ListenPlayer, useReadingAloud } from './listen'
 import { locale, N_, t, tn } from './i18n'
+import { SEARCH_TRAIL, SEARCH_TRAIL_EVENT } from './lib/place'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
@@ -67,7 +68,7 @@ const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getIte
 // the words, the versions, which result you're on, and where the list was
 // scrolled. Small, so nothing is slowed down.
 type Trail = { q: string; base: string; picked?: string[]; at: number; scroll: number; scrollAt: number; shown: number }
-const TRAIL = 'plain-bible:search-trail'
+const TRAIL = SEARCH_TRAIL
 const loadTrail = (): Trail | undefined => {
   try { const x = JSON.parse(localStorage.getItem(TRAIL) || 'null'); return x && typeof x.q === 'string' && typeof x.at === 'number' ? x : undefined } catch { return undefined }
 }
@@ -530,6 +531,12 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     finish(readPath(id, v.book, v.chapter, v.verse))
   }
 
+  // "Continue" from another device brings its search along (lib/place).
+  useEffect(() => {
+    const on = () => { const x = loadTrail(); if (!x) return; setOpen(false); setPicked(x.picked); setQ(x.q); setTrail(x) }
+    addEventListener(SEARCH_TRAIL_EVENT, on)
+    return () => removeEventListener(SEARCH_TRAIL_EVENT, on)
+  }, [])
   // Typing other words (or clearing them) ends the trail.
   useEffect(() => { if (trail && trimmed !== trail.q) setTrail(undefined) }, [trimmed])
   useEffect(() => {

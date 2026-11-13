@@ -6,6 +6,7 @@ import { mergeMark, Marks, upgrade } from './marks'
 import { Days, mergeDays } from './streaks'
 import { PRF_SALT } from './prayerCrypto'
 import { currentLang, t } from '../i18n'
+import { newerPlace, parseSynced, type SyncedPlace } from './place'
 
 export const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
 
@@ -18,6 +19,8 @@ export interface SyncDoc {
   settingsT: SettingsT
   /** the days you read and prayed, for streaks (see streaks.ts) */
   days?: Days
+  /** where you last read, on whichever device read last (see place.ts) */
+  place?: SyncedPlace
 }
 export type SettingsT = Record<string, number> | number
 
@@ -42,7 +45,8 @@ export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
     settings[k] = useB ? b.settings[k] : a.settings[k]
     settingsT[k] = useB ? tb : ta
   }
-  return { v: 1, marks, settings, settingsT, days: mergeDays(a.days, b.days) }
+  const place = newerPlace(parseSynced(a.place), parseSynced(b.place))
+  return { v: 1, marks, settings, settingsT, days: mergeDays(a.days, b.days), ...(place ? { place } : {}) }
 }
 
 /** Stable text for comparing documents without caring about key order. */
@@ -54,7 +58,8 @@ export function docKey(d: SyncDoc) {
   })
   const settings = Object.keys(d.settings ?? {}).sort().map(k => [k, d.settings[k], changedAt(d.settingsT, k)])
   const days = Object.keys(d.days ?? {}).sort().map(k => [k, d.days![k]])
-  return JSON.stringify([marks, settings, days])
+  const p = parseSynced(d.place)
+  return JSON.stringify(p ? [marks, settings, days, [p.book, p.chapter, p.verse, p.version ?? '', p.t, p.dev, p.on, p.s ? [p.s.q, p.s.base, p.s.picked?.join() ?? '', p.s.at] : '']] : [marks, settings, days])
 }
 
 // ---------------------------------------------------------------------------
