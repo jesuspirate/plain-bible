@@ -1089,10 +1089,7 @@ article.chapter.spread {
   max-width: none; width: 100%; margin: 0; padding: 0; position: relative;
   height: var(--book-h);
   overflow: hidden; overflow: clip; border-radius: 8px;
-  /* the fold down the middle, where the two pages meet */
-  background:
-    linear-gradient(to right, transparent calc(50% - 44px), var(--fold-soft) calc(50% - 4px), var(--fold) 50%, var(--fold-soft) calc(50% + 4px), transparent calc(50% + 44px)),
-    var(--surface);
+  background: var(--surface);
   box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 14px 44px rgba(60,40,10,.14);
 }
 .spread-flow {
@@ -1129,11 +1126,14 @@ body.selecting .spread-turn { display: none; }
 /* The shadows on the turning page are layers of their own, and each one has to be told it has a hidden side too. */
 .leaf .leaf-pane > .leaf-shade, .leaf .leaf-pane > .leaf-deep { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .leaf .leaf-pane.back { transform: rotateY(180deg); border-radius: 8px 0 0 8px; }
-/* Each copied page carries the same fold the book has lying still, so the
-   book doesn't change when the copy is laid over it or taken away. */
-.leaf-pane::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
-.leaf-pane.right::after { background: linear-gradient(to right, var(--fold), var(--fold-soft) 4px, transparent 44px); }
-.leaf-pane.left::after, .leaf .leaf-pane.back::after { background: linear-gradient(to left, var(--fold), var(--fold-soft) 4px, transparent 44px); }
+/* The fold down the middle, where the two pages meet: one strip lying over
+   the book and over a page as it turns, which is never redrawn. (Drawn on
+   the pages themselves, and again on the copies that turn, it shifted and
+   flickered as a turn began and ended.) */
+.spread-fold {
+  position: absolute; z-index: 4; top: 0; left: calc(50% - 44px); width: 88px; height: var(--book-h); pointer-events: none;
+  background: linear-gradient(to right, transparent, var(--fold-soft) 40px, var(--fold) 44px, var(--fold-soft) 48px, transparent);
+}
 /* The shadows of the turn. All start unseen and only their opacity moves
    (lib/spread leaf): the fold deepening, the shade of the page in the air,
    and the shadow it throws on the page under it. */
