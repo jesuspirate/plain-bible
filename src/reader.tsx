@@ -30,6 +30,8 @@ export function Reader({ route }: { route: Route }) {
   const book = bookParam && BOOK_INDEX[bookParam] !== undefined ? bookParam : 'Gen'
   const chapter = Math.max(1, +chParam || 1)
   const target = +(route.params.get('v') || 0)
+  // The last verse when you went to several (John 3:16-18).
+  const targetEnd = Math.max(target, +(route.params.get('e') || 0) || 0)
   // Back to a place in your history: that verse at the top, not marked.
   const resumeAt = +(route.params.get('at') || 0)
   const parallel = (route.params.get('p')?.split(',') ?? settings.parallel).filter(id => byId.has(id) && id !== version)
@@ -1017,7 +1019,7 @@ export function Reader({ route }: { route: Route }) {
     // drawn in; in other versions the whole verse is highlighted.
     const partial = (v: number) => { const m = mark(v); return !!(m?.c && m.r?.length && versions.includes(m.v!)) }
     const part = (v: number, ver: string) => { const m = mark(v); return partial(v) && m!.v === ver ? m!.r : undefined }
-    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow === v && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
+    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow && v >= glow && v <= targetEnd && !mark(v)?.c && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (live && target && v >= target && v <= targetEnd ? ' vmark' : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
       : { id: undefined, onClick: undefined }

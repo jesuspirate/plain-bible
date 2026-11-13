@@ -151,6 +151,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
   100% { background: color-mix(in srgb, var(--mark) 0%, transparent); }
 }
 .target.leaving { animation: let-go .5s ease-out forwards; }
+/* The verse (or verses) you went to keep their number marked after the glow
+   has faded, until you turn the page: easy to find again, nothing more. */
+.vmark .vn { background: var(--accent); color: var(--surface); border-radius: .5em; padding: 0 .4em; }
 @keyframes let-go {
   from { background: color-mix(in srgb, var(--mark) 40%, transparent); }
   to { background: color-mix(in srgb, var(--mark) 0%, transparent); }

@@ -510,7 +510,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // Search (the keyboard's button) puts the keyboard away to show the results.
   const submit = (e: Event) => {
     e.preventDefault()
-    if (ref) return finish(readPath(version, ref.book, ref.chapter, ref.verse))
+    if (ref) return finish(readPath(version, ref.book, ref.chapter, ref.verse, [], ref.verseEnd))
     if (!trimmed) return
     rememberSearch(trimmed); setRecent(loadRecent())
     input.current?.blur()
@@ -600,7 +600,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <span class="sb-head-side end" />
             </div>
             {preview && (
-              <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
+              <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse, [], preview.ref.verseEnd))}>
                 <span class="sb-kicker">{t('Go to')} · {version}</span>
                 <span class="sb-title">{formatRef(preview.ref)}</span>
                 <span class="sb-verse" dir={info?.rtl ? 'rtl' : undefined}>
