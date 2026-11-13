@@ -70,9 +70,14 @@ function pane(copy: HTMLElement, page: number, pw: number, side: 'left' | 'right
   const flow = c.querySelector<HTMLElement>('.spread-flow') ?? c
   if (page) flow.style.transform = `translateX(${-page * pw}px)`
   p.append(c)
-  const shade = document.createElement('div')
-  shade.className = 'leaf-shade'
-  p.append(shade)
+  // Two shadows over the page, both still until the page turns: the one
+  // the turning page throws (leaf-shade), and the fold deepening as the
+  // book bends at the spine (leaf-deep).
+  for (const name of ['leaf-shade', 'leaf-deep']) {
+    const d = document.createElement('div')
+    d.className = name
+    p.append(d)
+  }
   return p
 }
 
@@ -97,7 +102,12 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
   layer.className = 'leaf-layer'
   layer.setAttribute('aria-hidden', 'true')
   // The page that stays still: the left one going on, the right one going back.
-  layer.append(pane(from, dir === 1 ? 2 * k : 2 * k + 1, pw, dir === 1 ? 'left' : 'right'))
+  const still = pane(from, dir === 1 ? 2 * k : 2 * k + 1, pw, dir === 1 ? 'left' : 'right')
+  layer.append(still)
+  // The shadow the page throws on the one it uncovers, lying on the book itself.
+  const under = document.createElement('div')
+  under.className = `leaf-under ${dir === 1 ? 'right' : 'left'}`
+  layer.append(under)
   const sheet = document.createElement('div')
   sheet.className = 'leaf'
   // Going on, the side you see first is today's right page; going back,
@@ -125,17 +135,26 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
     },
     turn() {
       if (gone) return Promise.resolve()
-      const ease = 'cubic-bezier(.45, .05, .25, 1)'
+      const ease = 'cubic-bezier(.42, 0, .22, 1)'
       const [a, b] = dir === 1 ? ['rotateY(0deg)', 'rotateY(-180deg)'] : ['rotateY(-180deg)', 'rotateY(0deg)']
       const opts = { duration: ms, easing: ease, fill: 'forwards' as FillMode }
-      // The page in the air darkens as it rises from the paper, and the one
-      // it uncovers comes out of its shadow.
-      const rising = shown.querySelector('.leaf-shade') as HTMLElement
-      const landing = hidden.querySelector('.leaf-shade') as HTMLElement
+      // Every shadow follows the page's own movement (the same easing), so
+      // nothing appears or goes at once: the page in the air darkens until
+      // it stands on its edge, and its other side comes out of the shadow
+      // from there; the page it comes down on darkens under it, and the one
+      // it uncovers comes into the light; the fold deepens as the page
+      // lifts and eases back as it lands. All of them start and end at
+      // nothing, or hidden under the page, so the book looks the same just
+      // before the turn, and just after, as it does lying still.
+      const part = (pane: Element, name: string) => pane.querySelector<HTMLElement>('.' + name)
+      const fade = (el: HTMLElement | null, frames: Keyframe[]) => el ? [el.animate(frames, opts)] : []
       runs = [
         sheet.animate([{ transform: a }, { transform: b }], opts),
-        rising.animate([{ opacity: 0 }, { opacity: 1 }], { ...opts, easing: 'ease-in' }),
-        landing.animate([{ opacity: 1 }, { opacity: 0 }], { ...opts, easing: 'ease-out' }),
+        ...fade(part(shown, 'leaf-shade'), [{ opacity: 0 }, { opacity: 1, offset: .5 }, { opacity: 1 }]),
+        ...fade(part(hidden, 'leaf-shade'), [{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0 }]),
+        ...fade(part(still, 'leaf-shade'), [{ opacity: 0 }, { opacity: 0, offset: .5 }, { opacity: .9 }]),
+        ...fade(under, [{ opacity: .9 }, { opacity: 0, offset: .7 }, { opacity: 0 }]),
+        ...[still, shown, hidden].flatMap(p => fade(part(p, 'leaf-deep'), [{ opacity: 0 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .7 }, { opacity: 0 }])),
       ]
       return new Promise<void>(done => {
         // iPhone and iPad can leave an animation frozen (Low Power Mode, the
