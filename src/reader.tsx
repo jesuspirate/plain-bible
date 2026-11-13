@@ -315,13 +315,13 @@ export function Reader({ route }: { route: Route }) {
   // A turn asked for while a page is still in the air: that page lands
   // quickly and this one follows, so flipping through never skips a swipe.
   const waiting = useRef<0 | 1 | -1>(0)
-  const flipRef = useRef<(dir: 1 | -1) => void>(() => {})
+  const flipRef = useRef<(dir: 1 | -1, byReading?: boolean, swiped?: boolean) => void>(() => {})
   const leafDown = (l: Leaf) => {
     if (flipping.current !== l) return
     flipping.current = undefined
     const next = waiting.current
     waiting.current = 0
-    if (next) flipRef.current(next)
+    if (next) flipRef.current(next, false, true)
   }
   // Arriving from the chapter after (-1, open at its end) or before (1).
   const arriving = useRef<0 | 1 | -1>(0)
@@ -352,7 +352,8 @@ export function Reader({ route }: { route: Route }) {
     document.fonts?.ready.then(() => { if (sheet.current === at && spreadOn.current && el.isConnected) toSheet(sheetOf(f, el, pageWidth(a))) })
   }
   // Turn the page: the next two pages, or the next chapter after the last.
-  const flip = (dir: 1 | -1, byReading = false) => {
+  // A swipe turns it quicker than a button, a key or reading aloud does.
+  const flip = (dir: 1 | -1, byReading = false, swiped = false) => {
     const f = flowEl.current, a = article.current, box = leafBox.current
     if (!f || !a || !box) return
     if (flipping.current) {
@@ -374,7 +375,7 @@ export function Reader({ route }: { route: Route }) {
       arriving.current = dir
       return step(dir)
     }
-    const l = leaf(box, copyOf(a), k, dir, pw, 700)
+    const l = leaf(box, copyOf(a), k, dir, pw, swiped ? 460 : 700)
     flipping.current = l
     if (inside) {
       toSheet(k + dir)
@@ -655,7 +656,7 @@ export function Reader({ route }: { route: Route }) {
       el.removeEventListener('touchmove', touch)
     }
   }, [book, chapter, loaded, version, versions.join(), settings.highlight, !!picking])
-  const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number; x0: number; tx: number; late: boolean }>()
+  const touch = useRef<{ x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number; x0: number; tx: number; late: boolean; turned?: boolean }>()
   const mode = matchMedia('(prefers-reduced-motion: reduce)').matches ? 'off' : settings.turn
   const animate = mode !== 'off'
   const [peek, setPeek] = useState<{ dir: 1 | -1; from: string; b: string; c: number; top: number; left: number; width: number }>()
@@ -783,7 +784,7 @@ export function Reader({ route }: { route: Route }) {
   // Let go: turn to the next (1) or previous (-1) chapter, or put the page back (0).
   // A swipe while a page is still turning is kept for when it lands.
   const release = (dir: 1 | -1 | 0) => {
-    if (spread) { if (dir) flip(dir); return }
+    if (spread) { if (dir) flip(dir, false, true); return }
     if (!animate) { if (dir) step(dir); return }
     if (busy.current) { if (dir) queue(dir); return }
     if (dir && dest(dir)) {
@@ -843,6 +844,9 @@ export function Reader({ route }: { route: Route }) {
     if (!s.axis && Math.hypot(tx, dy) > 10) s.axis = Math.abs(tx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
     if (s.axis !== 'x') return
     s.tx = tx
+    // The open book turns as soon as the swipe is plain, without waiting
+    // for the finger to lift.
+    if (spread) { if (!s.turned && Math.abs(tx) > 36) { s.turned = true; release(tx < 0 ? 1 : -1) } return }
     // Started while the page before was landing: the new page follows from
     // where the finger is once it's there, without a jump.
     if (busy.current) { s.late = true; return }
@@ -853,7 +857,7 @@ export function Reader({ route }: { route: Route }) {
   const onTouchEnd = () => {
     const s = touch.current
     touch.current = undefined
-    if (!s || s.axis !== 'x') return
+    if (!s || s.axis !== 'x' || s.turned) return
     const fast = Date.now() - s.t < 300 && Math.abs(s.tx) > 40
     const d = Math.abs(s.dx) > innerWidth * .25 ? s.dx : fast || Math.abs(s.tx) > innerWidth * .25 ? s.tx : 0
     release(d ? d < 0 ? 1 : -1 : 0)
@@ -993,7 +997,7 @@ export function Reader({ route }: { route: Route }) {
       if (w.done) return
       w.dx -= e.deltaX; w.peak = Math.max(w.peak, ax)
       follow(w.dx)
-      if (Math.abs(w.dx) > Math.min(innerWidth * .25, 160)) {
+      if (Math.abs(w.dx) > (spread ? 50 : Math.min(innerWidth * .25, 160))) {
         w.done = true; w.at = Date.now(); w.low = w.peak
         release(w.dx < 0 ? 1 : -1)
       }
