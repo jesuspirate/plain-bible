@@ -63,6 +63,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             web.scrollView.bottomEdgeEffect.isHidden = true
         }
         #endif
+        Self.hideKeyboardBar(in: web)
         web.isOpaque = false
         let paper = UIColor(named: "LaunchBackground")
         web.backgroundColor = paper
@@ -296,5 +297,37 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
 
     func download(_ download: WKDownload, didFailWithError error: Error, resumeData: Data?) {
         downloads.removeValue(forKey: ObjectIdentifier(download))
+    }
+}
+
+// MARK: - No bar above the keyboard
+
+/// A web view puts a bar with two arrows and a checkmark above the keyboard.
+/// The app has one field at a time and its own Cancel and Done buttons, so
+/// the bar only takes room. The bar belongs to the view inside the web view
+/// that holds the page; this gives that one view a variant of its class
+/// that answers "no bar". If iOS ever changes its insides, nothing is found
+/// and the bar simply stays.
+private final class NoKeyboardBar: NSObject {
+    @objc var inputAccessoryView: UIView? { nil }
+}
+
+extension BibleViewController {
+    fileprivate static func hideKeyboardBar(in web: WKWebView) {
+        guard let page = web.scrollView.subviews.first(where: {
+                  NSStringFromClass(type(of: $0)).hasPrefix("WKContent") }),
+              let base: AnyClass = object_getClass(page) else { return }
+        let name = NSStringFromClass(base) + "_NoKeyboardBar"
+        var quiet: AnyClass? = NSClassFromString(name)
+        if quiet == nil,
+           let made: AnyClass = objc_allocateClassPair(base, name, 0),
+           let none = class_getInstanceMethod(NoKeyboardBar.self,
+                                              #selector(getter: NoKeyboardBar.inputAccessoryView)) {
+            class_addMethod(made, #selector(getter: UIResponder.inputAccessoryView),
+                            method_getImplementation(none), method_getTypeEncoding(none))
+            objc_registerClassPair(made)
+            quiet = made
+        }
+        if let quiet { object_setClass(page, quiet) }
     }
 }
