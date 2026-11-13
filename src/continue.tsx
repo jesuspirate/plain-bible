@@ -5,7 +5,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { answerOffer, continueSearch, type Device, loadPlace, PLACE_EVENT, placeOffer, type SyncedPlace } from './lib/place'
 import { formatRef } from './lib/refs'
-import { go, readPath, resumePath, useApp } from './state'
+import { go, resumePath, useApp } from './state'
 import { useReadingAloud } from './listen'
 import { CloseIcon } from './icons'
 import { N_, t } from './i18n'
@@ -39,10 +39,10 @@ export function ContinueOffer({ mini }: { mini: boolean }) {
     answerOffer(offer); setOffer(undefined)
     // In the Bible it was read in, if this device has it; else in yours.
     const version = offer.version && byId.has(offer.version) && (navigator.onLine !== false || offer.version === settings.version) ? offer.version : settings.version
-    if (offer.s) {
-      continueSearch(offer.s)
-      go(readPath(version, offer.book, offer.chapter, offer.verse))
-    } else go(resumePath(version, offer.book, offer.chapter, offer.verse))
+    // The verse that was at the top there, not marked: with a search, the
+    // strip lights the result's own verse, and only that one.
+    if (offer.s) continueSearch(offer.s)
+    go(resumePath(version, offer.book, offer.chapter, offer.verse))
   }
   const place = formatRef({ book: offer.book, chapter: offer.chapter, verse: offer.s ? offer.verse : undefined })
   return (

@@ -149,7 +149,9 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .target.leaving { animation: let-go .5s ease-out forwards; }
 /* The verse (or verses) you went to keep their number marked, also after a
    tap has let the yellow go, until you turn the page. */
-.vmark .vn { background: var(--accent); color: var(--surface); border-radius: .5em; padding: 0 .4em; }
+/* :root so the number stays readable over the rules that tint it (large
+   verse numbers, a selected verse). */
+:root .vmark .vn { background: var(--accent); color: var(--surface); border-radius: .5em; padding: 0 .4em; }
 @keyframes let-go {
   from { background: color-mix(in srgb, var(--mark) 55%, transparent); }
   to { background: color-mix(in srgb, var(--mark) 0%, transparent); }
