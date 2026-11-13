@@ -197,7 +197,7 @@ export function Reader({ route }: { route: Route }) {
       if (l && !same) {
         const a = article.current
         if (a && spreadOn.current) l.fill(copyOf(a), into === -1 ? 2 * sheet.current + 1 : 0)
-        l.turn().then(() => { if (flipping.current === l) flipping.current = undefined })
+        l.turn().then(() => leafDown(l))
       }
     })
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font, spread])
@@ -312,6 +312,17 @@ export function Reader({ route }: { route: Route }) {
   const sheet = useRef(0)
   // The page turning over, and one waiting for the next chapter to be drawn.
   const flipping = useRef<Leaf>(), landing = useRef<Leaf>()
+  // A turn asked for while a page is still in the air: that page lands
+  // quickly and this one follows, so flipping through never skips a swipe.
+  const waiting = useRef<0 | 1 | -1>(0)
+  const flipRef = useRef<(dir: 1 | -1) => void>(() => {})
+  const leafDown = (l: Leaf) => {
+    if (flipping.current !== l) return
+    flipping.current = undefined
+    const next = waiting.current
+    waiting.current = 0
+    if (next) flipRef.current(next)
+  }
   // Arriving from the chapter after (-1, open at its end) or before (1).
   const arriving = useRef<0 | 1 | -1>(0)
   /** Opens spread k (Infinity: the last), and remembers its first verse as where you are. */
@@ -343,7 +354,11 @@ export function Reader({ route }: { route: Route }) {
   // Turn the page: the next two pages, or the next chapter after the last.
   const flip = (dir: 1 | -1, byReading = false) => {
     const f = flowEl.current, a = article.current, box = leafBox.current
-    if (!f || !a || !box || flipping.current) return
+    if (!f || !a || !box) return
+    if (flipping.current) {
+      if (!byReading && animate) { waiting.current = dir; flipping.current.hurry() }
+      return
+    }
     const pw = pageWidth(a), k = sheet.current
     const inside = dir === 1 ? k < sheetsOf(f, pw) - 1 : k > 0
     if (!inside && !dest(dir)) return
@@ -364,16 +379,17 @@ export function Reader({ route }: { route: Route }) {
     if (inside) {
       toSheet(k + dir)
       l.fill(copyOf(a), dir === 1 ? 2 * sheet.current : 2 * sheet.current + 1)
-      l.turn().then(() => { if (flipping.current === l) flipping.current = undefined })
+      l.turn().then(() => leafDown(l))
       return
     }
     // The page lifts once the next chapter is drawn beneath it (above).
     // Should that never come, it goes away by itself.
     arriving.current = dir
     landing.current = l
-    setTimeout(() => { if (landing.current === l) { landing.current = undefined; l.drop(); if (flipping.current === l) flipping.current = undefined } }, 2000)
+    setTimeout(() => { if (landing.current === l) { landing.current = undefined; l.drop(); waiting.current = 0; if (flipping.current === l) flipping.current = undefined } }, 2000)
     step(dir)
   }
+  flipRef.current = flip
   // With a mouse wheel (or two fingers up and down on a trackpad) the book
   // turns a page each time you scroll; one long scroll turns just one.
   const wy = useRef({ acc: 0, done: false, timer: 0 })
@@ -784,7 +800,7 @@ export function Reader({ route }: { route: Route }) {
   // swiped page back, so nothing is left part way when you come back.
   const drop = () => {
     touch.current = undefined
-    flipping.current?.drop(); flipping.current = undefined; landing.current = undefined
+    flipping.current?.drop(); flipping.current = undefined; landing.current = undefined; waiting.current = 0
     if (landNow.current) landNow.current()
     else if (peekDir.current && !busy.current) { close(); settle() }
   }

@@ -62,11 +62,12 @@ export function copyOf(win: HTMLElement) {
   return c
 }
 
-/** One page of a copy, `page` pages along, in a pane the size of a page. */
-function pane(copy: HTMLElement, page: number, pw: number, side: 'left' | 'right', face = '') {
+/** One page of a copy, `page` pages along, in a pane the size of a page.
+ *  The copy is copied again unless it is `mine` to keep (nobody else uses it). */
+function pane(copy: HTMLElement, page: number, pw: number, side: 'left' | 'right', face = '', mine = false) {
   const p = document.createElement('div')
   p.className = `leaf-pane ${side} ${face}`.trim()
-  const c = copy.cloneNode(true) as HTMLElement
+  const c = mine ? copy : copy.cloneNode(true) as HTMLElement
   const flow = c.querySelector<HTMLElement>('.spread-flow') ?? c
   if (page) flow.style.transform = `translateX(${-page * pw}px)`
   p.append(c)
@@ -86,6 +87,8 @@ export interface Leaf {
   fill(copy: HTMLElement, page: number): void
   /** Turn it over; resolves once it has landed and is gone. */
   turn(): Promise<void>
+  /** Land quickly from wherever it is: another turn is waiting behind it. */
+  hurry(): void
   /** Take it away at once, wherever it is. */
   drop(): void
 }
@@ -112,7 +115,7 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
   sheet.className = 'leaf'
   // Going on, the side you see first is today's right page; going back,
   // the leaf starts over on the left showing today's left page.
-  const shown = pane(from, dir === 1 ? 2 * k + 1 : 2 * k, pw, 'right', dir === 1 ? 'front' : 'back')
+  const shown = pane(from, dir === 1 ? 2 * k + 1 : 2 * k, pw, 'right', dir === 1 ? 'front' : 'back', true)
   let hidden = document.createElement('div')
   hidden.className = `leaf-pane right ${dir === 1 ? 'back' : 'front'}`
   sheet.append(shown, hidden)
@@ -129,13 +132,14 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
   }
   return {
     fill(copy, page) {
-      const p = pane(copy, page, pw, 'right', dir === 1 ? 'back' : 'front')
+      const p = pane(copy, page, pw, 'right', dir === 1 ? 'back' : 'front', true)
       hidden.replaceWith(p)
       hidden = p
     },
     turn() {
       if (gone) return Promise.resolve()
-      const ease = 'cubic-bezier(.42, 0, .22, 1)'
+      // It moves from the first moment, as a page let go of does, and settles gently.
+      const ease = 'cubic-bezier(.3, .2, .2, 1)'
       const [a, b] = dir === 1 ? ['rotateY(0deg)', 'rotateY(-180deg)'] : ['rotateY(-180deg)', 'rotateY(0deg)']
       const opts = { duration: ms, easing: ease, fill: 'forwards' as FillMode }
       // Every shadow follows the page's own movement (the same easing), so
@@ -163,6 +167,13 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
         function end() { clearTimeout(late); drop(); done() }
         Promise.all(runs.map(r => r.finished)).then(end, end)
       })
+    },
+    hurry() {
+      const sheetRun = runs[0]
+      if (gone || !sheetRun) return
+      const left = ms - Number(sheetRun.currentTime ?? 0)
+      const rate = Math.max(1, left / 130)
+      for (const r of runs) { try { r.updatePlaybackRate(rate) } catch { r.playbackRate = rate } }
     },
     drop,
   }
