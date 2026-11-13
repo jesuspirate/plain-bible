@@ -408,10 +408,15 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
     const data = await req.arrayBuffer()
     if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
     if (await db.prepare('SELECT 1 FROM prayer_gone WHERE user_id = ? AND prayer = ?').bind(userId, a).first()) throw new HttpError(410, 'Deleted')
-    const used = await db.prepare('SELECT COALESCE(SUM(size), 0) AS n FROM prayer_parts WHERE user_id = ?').bind(userId).first<{ n: number }>()
-    if ((used?.n ?? 0) + data.byteLength > PRAYER_QUOTA) throw new HttpError(413, 'Your synced prayers have reached the storage limit')
-    await db.prepare('INSERT INTO prayer_chunks (user_id, prayer, part, n, of, data) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data')
-      .bind(userId, a, part, n, of, data).run()
+    // The limit counts the bytes actually stored, finished parts or not (a
+    // part that is never finished would otherwise take room for free). The
+    // check and the write are one statement, so uploads sent side by side
+    // can't all slip under it, and a chunk being replaced isn't counted twice.
+    const stored = await db.prepare(`INSERT INTO prayer_chunks (user_id, prayer, part, n, of, data) SELECT ?1, ?2, ?3, ?4, ?5, ?6
+      WHERE (SELECT COALESCE(SUM(LENGTH(data)), 0) FROM prayer_chunks WHERE user_id = ?1 AND NOT (prayer = ?2 AND part = ?3 AND n = ?4)) + ?7 <= ?8
+      ON CONFLICT DO UPDATE SET of = excluded.of, data = excluded.data`)
+      .bind(userId, a, part, n, of, data, data.byteLength, PRAYER_QUOTA).run()
+    if (!stored.meta.changes) throw new HttpError(413, 'Your synced prayers have reached the storage limit')
     // The part is listed once all its chunks are in.
     const have = await db.prepare('SELECT COUNT(*) AS c, SUM(LENGTH(data)) AS size FROM prayer_chunks WHERE user_id = ? AND prayer = ? AND part = ? AND of = ?')
       .bind(userId, a, part, of).first<{ c: number; size: number }>()
@@ -854,7 +859,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   }
   if (b !== 'items' || !c || !CIRCLE_ID.test(c)) throw new HttpError(404, 'Not found')
   const item = c
-  const own = () => db.prepare('SELECT chunks FROM circle_items WHERE circle_id = ? AND id = ? AND user_id = ?').bind(circle, item, userId).first<{ chunks: number }>()
+  const own = () => db.prepare('SELECT chunks, size FROM circle_items WHERE circle_id = ? AND id = ? AND user_id = ?').bind(circle, item, userId).first<{ chunks: number; size: number }>()
 
   if (!d) {
     if (req.method === 'PUT') {
@@ -862,8 +867,10 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       if (!sealedText(body) || !Number.isInteger(chunks) || chunks < 0 || chunks > MAX_CHUNKS || !Number.isInteger(size) || size < 0 || size > MAX_CHUNKS * CHUNK_MAX) throw new HttpError(400, 'Bad request')
       const used = await db.prepare('SELECT COALESCE(SUM(size), 0) AS n FROM circle_items WHERE circle_id = ?').bind(circle).first<{ n: number }>()
       if ((used?.n ?? 0) + size > CIRCLE_QUOTA) throw new HttpError(413, 'This circle is full. Delete some older prayers to make room.')
-      const res = await db.prepare('INSERT INTO circle_items (circle_id, id, user_id, at, body, chunks, size) VALUES (?, ?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING')
-        .bind(circle, item, userId, now, body, chunks, size).run()
+      // Checked again inside the write, so items sent side by side can't all slip under the limit.
+      const res = await db.prepare(`INSERT INTO circle_items (circle_id, id, user_id, at, body, chunks, size) SELECT ?1, ?2, ?3, ?4, ?5, ?6, ?7
+        WHERE (SELECT COALESCE(SUM(size), 0) FROM circle_items WHERE circle_id = ?1) + ?7 <= ?8 ON CONFLICT DO NOTHING`)
+        .bind(circle, item, userId, now, body, chunks, size, CIRCLE_QUOTA).run()
       if (!res.meta.changes && !(await own())) throw new HttpError(409, 'Try again')
       // A prayer is news once its audio is all there (see the chunks below).
       if (res.meta.changes && !chunks) ctx.waitUntil(notifyCircle(env, circle, userId))
@@ -938,8 +945,17 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     if (!it || n >= it.chunks) throw new HttpError(404, 'Not found')
     const data = await req.arrayBuffer()
     if (!data.byteLength || data.byteLength > CHUNK_MAX) throw new HttpError(413, 'Chunk too large')
-    const res = await db.prepare('INSERT INTO circle_chunks (circle_id, item, n, data) VALUES (?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, item, n, data).run()
-    if (!res.meta.changes) await db.prepare('UPDATE circle_chunks SET data = ? WHERE circle_id = ? AND item = ? AND n = ?').bind(data, circle, item, n).run()
+    // The circle's limit counts each item at the size it declared, so its
+    // audio may not grow past that: the chunks stored, with this one in
+    // place of any it replaces, must fit. Checked inside each write.
+    const fits = '(SELECT COALESCE(SUM(LENGTH(data)), 0) FROM circle_chunks WHERE circle_id = ?1 AND item = ?2 AND n != ?3) + ?5 <= ?6'
+    const res = await db.prepare(`INSERT INTO circle_chunks (circle_id, item, n, data) SELECT ?1, ?2, ?3, ?4 WHERE ${fits} ON CONFLICT DO NOTHING`)
+      .bind(circle, item, n, data, data.byteLength, it.size).run()
+    if (!res.meta.changes) {
+      const replaced = await db.prepare(`UPDATE circle_chunks SET data = ?4 WHERE circle_id = ?1 AND item = ?2 AND n = ?3 AND ${fits}`)
+        .bind(circle, item, n, data, data.byteLength, it.size).run()
+      if (!replaced.meta.changes) throw new HttpError(413, 'This prayer is larger than it said it would be')
+    }
     // The last piece of a prayer's audio: now the others can hear it.
     else if ((await db.prepare('SELECT COUNT(*) AS n FROM circle_chunks WHERE circle_id = ? AND item = ?').bind(circle, item).first<{ n: number }>())?.n === it.chunks) {
       ctx.waitUntil(notifyCircle(env, circle, userId))

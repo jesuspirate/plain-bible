@@ -692,6 +692,7 @@ export default {
   "Not found": "Introuvable",
   "Bad chunk": "Fragment invalide",
   "Chunk too large": "Fragment trop volumineux",
+  "This prayer is larger than it said it would be": "Cette prière est plus volumineuse qu’annoncé",
   "Deleted": "Supprimé",
   "Your synced prayers have reached the storage limit": "Vos prières synchronisées ont atteint la limite de stockage",
   "This link has expired or was never finished. Make a new one on the other device.": "Ce lien a expiré ou n’a jamais été terminé. Créez-en un nouveau sur l’autre appareil.",

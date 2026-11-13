@@ -692,6 +692,7 @@ export default {
   "Not found": "No encontrado",
   "Bad chunk": "Fragmento no válido",
   "Chunk too large": "Fragmento demasiado grande",
+  "This prayer is larger than it said it would be": "Esta oración es más grande de lo indicado",
   "Deleted": "Eliminado",
   "Your synced prayers have reached the storage limit": "Tus oraciones sincronizadas llegaron al límite de almacenamiento",
   "This link has expired or was never finished. Make a new one on the other device.": "Este enlace caducó o nunca se terminó. Crea uno nuevo en el otro dispositivo.",
