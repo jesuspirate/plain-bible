@@ -36,7 +36,7 @@ export function Reader({ route }: { route: Route }) {
   const resumeAt = +(route.params.get('at') || 0)
   const parallel = (route.params.get('p')?.split(',') ?? settings.parallel).filter(id => byId.has(id) && id !== version)
   const versions = [version, ...parallel]
-  // On an iPad on its side or a computer, the chapter is an open book of two
+  // On an iPad on its side, a computer or an unfolded phone, the chapter is an open book of two
   // pages that you turn, unless you chose one page (Settings, Reading). Side
   // by side versions keep their columns, which scroll.
   const [wide, setWide] = useState(() => matchMedia(WIDE).matches)

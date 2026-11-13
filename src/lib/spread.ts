@@ -4,8 +4,14 @@
 // at a time and slides along to show the next two. Nothing here loads or
 // stores anything, so the book opens as quickly as the phone page does.
 
-/** Where the open book is used: an iPad on its side and computers, not phones or an iPad held upright. */
-export const WIDE = '(min-width: 1000px) and (min-aspect-ratio: 5/4) and (min-height: 600px)'
+/** A phone that unfolds, lying open (and a small tablet on its side): a touch
+ *  screen too wide for a phone, about as wide as it is tall or wider. The
+ *  fold runs down the middle of it, which is where the book's spine is. An
+ *  iPad held upright is much taller than wide, and stays one page. */
+export const UNFOLDED = '(hover: none) and (min-width: 600px) and (max-width: 999.98px) and (min-aspect-ratio: 4/5) and (min-height: 520px)'
+
+/** Where the open book is used: an iPad on its side, computers and unfolded phones, not phones or an iPad held upright. */
+export const WIDE = `(min-width: 1000px) and (min-aspect-ratio: 5/4) and (min-height: 600px), ${UNFOLDED}`
 
 /** The width of one page in pixels. */
 export const pageWidth = (win: HTMLElement) => win.clientWidth / 2

@@ -1131,6 +1131,19 @@ body.selecting .spread-turn { display: none; }
 :root[data-theme='dark'] article.chapter.spread { background: linear-gradient(to right, transparent calc(50% - 44px), rgba(0,0,0,.18) calc(50% - 4px), rgba(0,0,0,.45) 50%, rgba(0,0,0,.18) calc(50% + 4px), transparent calc(50% + 44px)), var(--surface); }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] article.chapter.spread { background: linear-gradient(to right, transparent calc(50% - 44px), rgba(0,0,0,.18) calc(50% - 4px), rgba(0,0,0,.45) 50%, rgba(0,0,0,.18) calc(50% + 4px), transparent calc(50% + 44px)), var(--surface); } }
 
+/* A phone that unfolds, lying open (lib/spread UNFOLDED): the book fills the
+   screen from edge to edge, so each page is as wide as it can be and the
+   spine lies on the fold. The pages turn with a swipe, as on any phone, so
+   the round buttons give their room to the words. */
+@media (hover: none) and (min-width: 600px) and (max-width: 999.98px) and (min-aspect-ratio: 4/5) and (min-height: 520px) {
+  .spread-box {
+    --pw: calc(50vw - 16px - max(env(safe-area-inset-left), env(safe-area-inset-right))); --pp: 1.15em;
+    --book-h: calc(100dvh - 158px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
+    margin-top: 8px;
+  }
+  .spread-turn { display: none; }
+}
+
 /* A big monitor: the top bar, the search bar and the turning buttons grow
    with the words, so they aren't tiny specks at the edges. */
 @media (min-width: 1900px) and (min-height: 1050px) {
