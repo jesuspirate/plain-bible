@@ -984,4 +984,10 @@ export default {
   "Next result": "Resultado siguiente",
   "Back to the results": "Volver a los resultados",
   "End this search": "Terminar esta búsqueda",
+  "Continue on {place}": "Continuar en {place}",
+  "From your iPhone": "Desde tu iPhone",
+  "From your iPad": "Desde tu iPad",
+  "From your Mac": "Desde tu Mac",
+  "From your Android phone": "Desde tu teléfono Android",
+  "From your computer": "Desde tu computadora",
 } as Record<string, string>

@@ -17,6 +17,7 @@ import { LeftNote, touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveWelcome } from './move'
+import { ContinueOffer } from './continue'
 import { DAYS_EVENT } from './lib/streaks'
 import { checkCircleNews } from './lib/circleNews'
 import { ApproveCard } from './approve'
@@ -365,6 +366,7 @@ export function App() {
           and opens the same panel. */}
       {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
         ? { version: byId.has(route.path[1]) ? route.path[1] : settings.version, book: route.path[2], chapter: +route.path[3] } : undefined} />}
+      {view === 'read' && sync.account && !praying && !settingsOpen && <ContinueOffer mini={!settings.searchBar} />}
       {sidewaysEdge}
       {view === 'search' && <ListenPlayer floating />}
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
@@ -403,7 +405,12 @@ function ReaderRoute({ route }: { route: Route }) {
       // reader keeps the verse up to date as you scroll.
       const last = loadPlace(), book = route.path[2], chapter = +route.path[3]
       const verse = +(route.params.get('v') || route.params.get('at') || 0) || 1
-      if (last?.book !== book || last.chapter !== chapter) savePlace({ book, chapter, verse })
+      // The version read goes along for "Continue" on another device;
+      // here, opening always uses your Bible.
+      const version = byId.has(route.path[1]) ? route.path[1] : undefined
+      if (last?.book !== book || last.chapter !== chapter || (version && last.version !== version)) {
+        savePlace(last?.book === book && last.chapter === chapter ? { ...last, version } : { book, chapter, verse, version })
+      }
       visit({ book, chapter, verse })
     }
   }, [route.path.join('/'), shared])

@@ -10,6 +10,7 @@ import {
 } from './lib/sync'
 import { Settings, useApp } from './state'
 import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
+import { latestPlace, ownPlace, PLACE_EVENT, takePlace } from './lib/place'
 import { DeviceLink, PasteMove } from './move'
 import { EnterDeviceCode } from './devicecode'
 import { KeyBackup } from './approve'
@@ -58,9 +59,11 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
   const running = useRef(false), again = useRef(false)
   const setAccount = (a: Account | null) => { saveAccount(a); setAccountState(a) }
   const localDoc = (): SyncDoc | null => latest.current.settings
-    ? { v: 1, marks: latest.current.marks, settings: latest.current.settings as unknown as Record<string, unknown>, settingsT: loadSettingsT(), days: loadDays() }
+    ? { v: 1, marks: latest.current.marks, settings: latest.current.settings as unknown as Record<string, unknown>, settingsT: loadSettingsT(), days: loadDays(), ...(latestPlace() ? { place: latestPlace() } : {}) }
     : null
 
+  /** Signed in, with something here the account hasn't got yet. */
+  const unsent = () => { const a = loadAccount(), local = localDoc(); return !!a && !!local && docKey(local) !== a.synced }
   const run = async () => {
     const acct = loadAccount(), local = localDoc()
     if (!SYNC_URL || !acct || !local) return
@@ -71,6 +74,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
       // Merge again with the current state, in case something changed while syncing.
       setMarksState(cur => { const m = mergeDocs({ ...doc, marks: cur }, doc).marks; saveMarks(m); return m })
       addDays(doc.days)
+      takePlace(doc.place)
       // A setting changed here while the sync was on its way (say, the theme
       // tapped) is newer than what came back: keep it, and send it next time.
       const nowT = loadSettingsT(), startT = local.settingsT
@@ -105,7 +109,9 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
   // foreground, and when the connection comes back.
   useEffect(() => { if (settings) auto() }, [!!settings])
   useEffect(() => {
-    const on = () => { if (document.visibilityState === 'visible') auto() }
+    // Coming back: sync. Leaving: send where you read, if it moved, so the
+    // next device you pick up can offer to continue there.
+    const on = () => { if (document.visibilityState === 'visible' || unsent()) auto() }
     document.addEventListener('visibilitychange', on)
     addEventListener('online', auto)
     return () => { document.removeEventListener('visibilitychange', on); removeEventListener('online', auto) }
@@ -126,6 +132,22 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     }
     addEventListener(DAYS_EVENT, on)
     return () => { clearTimeout(timer); removeEventListener(DAYS_EVENT, on) }
+  }, [])
+
+  // And when the place you read moves: soon after a new chapter, and once a
+  // minute at most while you scroll down one. Never on every verse.
+  useEffect(() => {
+    let timer = 0, chapter = ''
+    const on = () => {
+      const p = ownPlace(), now = p ? p.book + p.chapter : ''
+      const turned = now !== chapter
+      chapter = now
+      if (timer && !turned) return
+      clearTimeout(timer)
+      timer = window.setTimeout(() => { timer = 0; if (unsent()) auto() }, turned ? 8000 : 60_000)
+    }
+    addEventListener(PLACE_EVENT, on)
+    return () => { clearTimeout(timer); removeEventListener(PLACE_EVENT, on) }
   }, [])
 
   useEffect(() => { if (account) noteOwner(account.token) }, [account?.token])
