@@ -374,6 +374,10 @@ main.with-bar { padding-bottom: 120px; }
 .sb-item:focus-visible { background: var(--chip); }
 @media (hover: hover) { .sb-item:hover { background: var(--chip); } }
 .sb-ref { background: var(--chip); margin-bottom: 4px; }
+/* The way back to the search result you left with the X: one big button. */
+.sb-back { min-height: 56px; justify-content: center; box-shadow: inset 4px 0 0 var(--accent); }
+.sb-back .sb-title { font-size: 17px; }
+.sb-back-sub { font: 14px var(--sans); overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sb-title { font: 600 15px var(--sans); }
 .sb-verse { font-family: var(--reading); font-size: 16px; line-height: 1.5; color: var(--text); display: -webkit-box; -webkit-line-clamp: 3; -webkit-box-orient: vertical; overflow: hidden; }
 .sb-verse sup { font: 600 10px var(--sans); color: var(--muted); margin-right: 3px; }
