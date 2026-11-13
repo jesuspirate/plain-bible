@@ -3,3 +3,5 @@ dist
 sources
 public/data
 .wrangler
+__pycache__
+*.pyc
