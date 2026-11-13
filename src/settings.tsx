@@ -20,6 +20,7 @@ import { Search } from './search'
 import { Versions } from './versions'
 import { StreakRow } from './streaks'
 import { AWAY } from './sideways'
+import { UNFOLDED } from './lib/spread'
 import { deviceLang, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
@@ -358,7 +359,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
       </div>
     </div>
-    {matchMedia('(min-width: 1000px)').matches && <div class="field"><span>{t('Big screen')}</span>
+    {matchMedia(`(min-width: 1000px), ${UNFOLDED}`).matches && <div class="field"><span>{t('Big screen')}</span>
       <div class="col">
         {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
         <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
