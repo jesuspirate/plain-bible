@@ -71,9 +71,11 @@ me" is turned on (`QuietBible/Notify.swift`, `src/lib/nativeNotify.ts`) and
 gives it to the sync service, which sends "something new in this circle"
 through Apple (`worker/src/apns.ts`). The message carries only the circle's
 id. A small extension (`QuietBibleNotify/`) puts the circle's name in on the
-phone, from a copy the app keeps in its App Group
-(`group.com.myquietbible.ios`, `Shared/SharedCircles.swift`). The Home Screen
-widget reads the same copy to show a dot when a circle has something new.
+phone, from a copy the app keeps in a keychain group the three share
+(`Shared/SharedCircles.swift`). The Home Screen widget reads the same copy to
+show a dot when a circle has something new. (Not an App Group: Apple's
+signing key can't create one, so the App Store build would stop with
+"Authentication failed".)
 
 One-time setup, at developer.apple.com with the account holder's sign-in:
 
@@ -89,12 +91,8 @@ The next deploy hands both to the sync service. Until then the switch says
 notifications aren't set up yet. This key can only send notifications; it
 is not the App Store Connect key above.
 
-The push and App Group capabilities are added to the app's identifiers by
-the "Send to App Store" build itself (automatic signing). If that build ever
-stops with a message about App Groups, add them by hand: **Identifiers → +
-→ App Groups** → `group.com.myquietbible.ios`, then tick **App Groups** (and
-pick that group) on `com.myquietbible.ios`, `com.myquietbible.ios.widgets`
-and `com.myquietbible.ios.notify`, and run the build again.
+The push capability and the extension's identifier are added by the "Send
+to App Store" build itself (automatic signing).
 
 ## Sending a version from Xcode instead
 
