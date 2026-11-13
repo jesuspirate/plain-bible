@@ -746,6 +746,9 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
   const [needCode, setNeedCode] = useState(false)
+  // Another device just allowed this one: the key is here, no passkey is
+  // asked, and what takes time is fetching the prayers.
+  const [allowed, setAllowed] = useState(false)
   const [code, setCode] = useState('')
   const [shown, setShown] = useState('')
   if (!SYNC_URL) return null
@@ -756,7 +759,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
     try { await fn() } catch (e) {
       const m = (e as Error).message
       setMsg(m === 'Cancelled' ? t('The passkey request was canceled. Tap to try again.') : m)
-    } finally { setBusy(false); setOn(prayerSyncOn()); onChange() }
+    } finally { setBusy(false); setAllowed(false); setOn(prayerSyncOn()); onChange() }
   }
   const start = act(async () => {
     const r = await turnOnPrayerSync(needCode ? code : undefined)
@@ -791,7 +794,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
         <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>{t('Go to Settings → Account')}</button>
       </> : needCode ? <>
         <p class="muted">{t('This device can’t unlock your prayers by itself yet. Let one where they already sync allow it:')}</p>
-        <AskApproval btn="pray-btn" onDone={() => { setNeedCode(false); act(async () => { if (await turnOnPrayerSync() === 'on') setMsg(t('Your prayers now sync with your other devices.')) })() }} />
+        <AskApproval btn="pray-btn" onDone={() => { setNeedCode(false); setAllowed(true); act(async () => { if (await turnOnPrayerSync() === 'on') setMsg(t('Your prayers now sync with your other devices.')) })() }} />
         <p class="muted small">{t('Or paste the prayer key from there (Your prayers → More → Show prayer key):')}</p>
         <input class="pray-code" value={code} onInput={e => setCode((e.target as HTMLInputElement).value)} placeholder={t('Prayer key')}
           autoComplete="off" autoCorrect="off" autoCapitalize="characters" spellcheck={false} />
@@ -799,7 +802,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
         <button class="pray-btn" onClick={() => { setNeedCode(false); setMsg('') }}>{t('Cancel')}</button>
       </> : <>
         <p class="muted">{t('Keep your prayers on all your devices. Each one is encrypted on this device before it leaves it, so no one else, not even the server, can hear it.')}</p>
-        <button class="pray-btn primary" disabled={busy} onClick={start}>{busy ? t('Waiting for passkey…') : t('Sync my prayers')}</button>
+        <button class="pray-btn primary" disabled={busy} onClick={start}>{busy ? (allowed ? t('Syncing…') : t('Waiting for passkey…')) : t('Sync my prayers')}</button>
         <p class="muted small">{t(LOCAL_ONLY)}</p>
       </>}
       {msg && <p class="note small">{msg}</p>}
