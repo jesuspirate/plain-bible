@@ -1089,7 +1089,7 @@ article.chapter.spread {
   overflow: hidden; overflow: clip; border-radius: 8px;
   /* the fold down the middle, where the two pages meet */
   background:
-    linear-gradient(to right, transparent calc(50% - 44px), rgba(40,25,5,.05) calc(50% - 4px), rgba(40,25,5,.14) 50%, rgba(40,25,5,.05) calc(50% + 4px), transparent calc(50% + 44px)),
+    linear-gradient(to right, transparent calc(50% - 44px), var(--fold-soft) calc(50% - 4px), var(--fold) 50%, var(--fold-soft) calc(50% + 4px), transparent calc(50% + 44px)),
     var(--surface);
   box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 14px 44px rgba(60,40,10,.14);
 }
@@ -1119,17 +1119,31 @@ body.selecting .spread-turn { display: none; }
 .leaf-box { position: absolute; left: 0; top: 0; width: 100%; height: var(--book-h); pointer-events: none; perspective: 2600px; z-index: 3; }
 .leaf-layer { position: absolute; inset: 0; }
 .leaf-pane { position: absolute; top: 0; width: 50%; height: 100%; overflow: hidden; background: var(--surface); }
-.leaf-pane.left { left: 0; border-radius: 8px 0 0 8px; box-shadow: inset -40px 0 36px -34px rgba(40,25,5,.22); }
-.leaf-pane.right { left: 50%; border-radius: 0 8px 8px 0; box-shadow: inset 40px 0 36px -34px rgba(40,25,5,.22); }
+.leaf-pane.left { left: 0; border-radius: 8px 0 0 8px; }
+.leaf-pane.right { left: 50%; border-radius: 0 8px 8px 0; }
 .leaf-pane > article.chapter.spread { position: absolute; left: 0; top: 0; width: 200%; height: 100%; background: none; box-shadow: none; border-radius: 0; }
 .leaf { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; will-change: transform; }
 .leaf .leaf-pane { left: 0; width: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
-.leaf .leaf-pane.back { transform: rotateY(180deg); border-radius: 8px 0 0 8px; box-shadow: inset -40px 0 36px -34px rgba(40,25,5,.22); }
-.leaf-shade { position: absolute; inset: 0; opacity: 0; pointer-events: none; background: linear-gradient(to right, rgba(40,25,5,.22), rgba(40,25,5,.04) 70%); }
-.leaf .back .leaf-shade { background: linear-gradient(to left, rgba(40,25,5,.22), rgba(40,25,5,.04) 70%); }
-/* In Dark the fold is a deeper shadow, or it would not show. */
-:root[data-theme='dark'] article.chapter.spread { background: linear-gradient(to right, transparent calc(50% - 44px), rgba(0,0,0,.18) calc(50% - 4px), rgba(0,0,0,.45) 50%, rgba(0,0,0,.18) calc(50% + 4px), transparent calc(50% + 44px)), var(--surface); }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] article.chapter.spread { background: linear-gradient(to right, transparent calc(50% - 44px), rgba(0,0,0,.18) calc(50% - 4px), rgba(0,0,0,.45) 50%, rgba(0,0,0,.18) calc(50% + 4px), transparent calc(50% + 44px)), var(--surface); } }
+.leaf .leaf-pane.back { transform: rotateY(180deg); border-radius: 8px 0 0 8px; }
+/* Each copied page carries the same fold the book has lying still, so the
+   book doesn't change when the copy is laid over it or taken away. */
+.leaf-pane::after { content: ''; position: absolute; inset: 0; pointer-events: none; }
+.leaf-pane.right::after { background: linear-gradient(to right, var(--fold), var(--fold-soft) 4px, transparent 44px); }
+.leaf-pane.left::after, .leaf .leaf-pane.back::after { background: linear-gradient(to left, var(--fold), var(--fold-soft) 4px, transparent 44px); }
+/* The shadows of the turn. All start unseen and only their opacity moves
+   (lib/spread leaf): the fold deepening, the shade of the page in the air,
+   and the shadow it throws on the page under it. */
+.leaf-shade, .leaf-deep, .leaf-under { position: absolute; inset: 0; opacity: 0; pointer-events: none; }
+.leaf-deep { background: linear-gradient(to right, var(--fold-deep), transparent 64px); }
+.leaf-pane.left > .leaf-deep, .leaf .leaf-pane.back > .leaf-deep { background: linear-gradient(to left, var(--fold-deep), transparent 64px); }
+.leaf-shade { background: linear-gradient(to right, var(--fold-deep), var(--fold-soft) 70%); }
+.leaf-pane.left > .leaf-shade, .leaf .leaf-pane.back > .leaf-shade { background: linear-gradient(to left, var(--fold-deep), var(--fold-soft) 70%); }
+.leaf-under { width: 50%; inset: 0 auto 0 50%; border-radius: 0 8px 8px 0; background: linear-gradient(to right, var(--fold-deep), var(--fold-soft) 80%); }
+.leaf-under.left { left: 0; border-radius: 8px 0 0 8px; background: linear-gradient(to left, var(--fold-deep), var(--fold-soft) 80%); }
+/* The fold, where the two pages meet. In Dark it is a deeper shadow, or it would not show. */
+:root { --fold: rgba(40,25,5,.14); --fold-soft: rgba(40,25,5,.05); --fold-deep: rgba(40,25,5,.24); }
+:root[data-theme='dark'] { --fold: rgba(0,0,0,.45); --fold-soft: rgba(0,0,0,.18); --fold-deep: rgba(0,0,0,.5); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] { --fold: rgba(0,0,0,.45); --fold-soft: rgba(0,0,0,.18); --fold-deep: rgba(0,0,0,.5); } }
 
 /* A phone that unfolds, lying open (lib/spread UNFOLDED): the book fills the
    screen from edge to edge, so each page is as wide as it can be and the

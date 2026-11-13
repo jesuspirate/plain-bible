@@ -359,7 +359,7 @@ export function Reader({ route }: { route: Route }) {
       arriving.current = dir
       return step(dir)
     }
-    const l = leaf(box, copyOf(a), k, dir, pw, 620)
+    const l = leaf(box, copyOf(a), k, dir, pw, 700)
     flipping.current = l
     if (inside) {
       toSheet(k + dir)
