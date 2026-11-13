@@ -98,7 +98,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
   const submit = (e: Event) => {
     e.preventDefault()
     const r = /\d/.test(input) ? parseRef(input) : undefined
-    if (r) return go(readPath(versions[0] ?? settings.version, r.book, r.chapter, r.verse))
+    if (r) return go(readPath(versions[0] ?? settings.version, r.book, r.chapter, r.verse, [], r.verseEnd))
     setParams({ q: input.trim(), b: undefined })
   }
   const setOpt = (k: keyof SearchOptions, v: boolean) => update({ searchOptions: { ...opts, [k]: v } })
@@ -133,7 +133,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
       {help && <SearchHelp onPick={onGo && (x => setParams({ q: x, b: undefined }))} />}
 
       {ref && (
-        <button class="goto" onClick={() => go(readPath(versions[0] ?? settings.version, ref.book, ref.chapter, ref.verse))}>
+        <button class="goto" onClick={() => go(readPath(versions[0] ?? settings.version, ref.book, ref.chapter, ref.verse, [], ref.verseEnd))}>
           {t('Go to {ref}', { ref: formatRef(ref) })} →
         </button>
       )}

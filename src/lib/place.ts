@@ -162,7 +162,10 @@ export function answerOffer(p: SyncedPlace) {
 /** A reader address without its "?v=" verse, e.g. before a reload, so the page
  *  comes back where you scrolled to rather than on the verse you jumped to. */
 export function withoutVerse(hash: string) {
-  return hash.replace(/([?&])(?:v|at)=\d+(?=&|$)&?/g, '$1').replace(/[?&]$/, '')
+  const i = hash.indexOf('?')
+  if (i < 0) return hash
+  const keep = hash.slice(i + 1).split('&').filter(x => x && !/^(?:v|at|e)=\d+$/.test(x))
+  return hash.slice(0, i) + (keep.length ? '?' + keep.join('&') : '')
 }
 
 /** Pick up the search that came with a place: the strip with ‹ › shows on

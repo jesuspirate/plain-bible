@@ -144,15 +144,14 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 .verse .cell { padding: 1px 0; }
 .vn { all: unset; -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: pointer; font: 600 var(--vn-size, .62em) var(--sans); color: var(--muted); vertical-align: super; margin-right: 4px; padding: 0 2px; }
 @media (hover: hover) { .vn:hover { color: var(--accent); } }
-/* Where a search or link lands: a glow that fades by itself (see Reader) */
-.target { border-radius: 4px; animation: landed 8s ease-in-out forwards; }
-@keyframes landed {
-  0%, 75% { background: color-mix(in srgb, var(--mark) 55%, transparent); }
-  100% { background: color-mix(in srgb, var(--mark) 0%, transparent); }
-}
+/* Where a passage, search or link lands: lit, steady, until a tap (see Reader) */
+.target { border-radius: 4px; background: color-mix(in srgb, var(--mark) 55%, transparent); }
 .target.leaving { animation: let-go .5s ease-out forwards; }
+/* The verse (or verses) you went to keep their number marked, also after a
+   tap has let the yellow go, until you turn the page. */
+.vmark .vn { background: var(--accent); color: var(--surface); border-radius: .5em; padding: 0 .4em; }
 @keyframes let-go {
-  from { background: color-mix(in srgb, var(--mark) 40%, transparent); }
+  from { background: color-mix(in srgb, var(--mark) 55%, transparent); }
   to { background: color-mix(in srgb, var(--mark) 0%, transparent); }
 }
 @media (prefers-reduced-motion: reduce) { .target.leaving { animation: none; } }
@@ -1004,6 +1003,10 @@ body.selecting .listen { display: none; }
 .sb-follow .listen-what { align-items: center; text-align: center; }
 .sb-follow .listen-what strong { font-size: 17px; max-width: 100%; }
 .sb-follow .listen-what span { font-size: 14px; }
+/* Under the book and chapter: the words (cut short if long) and "7 of 84", always whole. */
+.sb-follow .sb-follow-sub { display: flex; justify-content: center; max-width: 100%; }
+.sb-follow .sb-follow-sub span { flex: none; }
+.sb-follow .sb-follow-sub .sb-follow-q { flex: 0 1 auto; min-width: 0; }
 /* The result you opened last, in the list. */
 .sb-item.sb-here { background: var(--chip); box-shadow: inset 4px 0 0 var(--accent); }
 .sb.sb-mini.sb-reading { left: calc(50vw - min(300px, 50vw - 16px)); right: auto; width: min(600px, calc(100vw - 32px)); }

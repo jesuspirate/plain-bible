@@ -67,7 +67,10 @@ const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getIte
 // come back from a verse you opened, even after the phone reloads the app:
 // the words, the versions, which result you're on, and where the list was
 // scrolled. Small, so nothing is slowed down.
-type Trail = { q: string; base: string; picked?: string[]; at: number; scroll: number; scrollAt: number; shown: number }
+// `ref` is the verse of the result you're on (book, chapter, verse): the
+// strip names it and the page keeps it marked, so you know where you are
+// when you come back to it.
+type Trail = { q: string; base: string; picked?: string[]; at: number; scroll: number; scrollAt: number; shown: number; ref?: [string, number, number] }
 const TRAIL = SEARCH_TRAIL
 const loadTrail = (): Trail | undefined => {
   try { const x = JSON.parse(localStorage.getItem(TRAIL) || 'null'); return x && typeof x.q === 'string' && typeof x.at === 'number' ? x : undefined } catch { return undefined }
@@ -507,7 +510,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // Search (the keyboard's button) puts the keyboard away to show the results.
   const submit = (e: Event) => {
     e.preventDefault()
-    if (ref) return finish(readPath(version, ref.book, ref.chapter, ref.verse))
+    if (ref) return finish(readPath(version, ref.book, ref.chapter, ref.verse, [], ref.verseEnd))
     if (!trimmed) return
     rememberSearch(trimmed); setRecent(loadRecent())
     input.current?.blur()
@@ -523,7 +526,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       let at = 0
       for (let i = 0; i < live.total; i++) if (live.hits[i * 4] === bi && live.hits[i * 4 + 1] === v.chapter && live.hits[i * 4 + 2] === v.verse) { at = i; break }
       const scroll = panel.current?.scrollTop ?? 0
-      setTrail({ q: trimmed, base: sv, picked, at, scroll, scrollAt: at, shown: live.verses.length })
+      setTrail({ q: trimmed, base: sv, picked, at, scroll, scrollAt: at, shown: live.verses.length, ref: [v.book, v.chapter, v.verse] })
       setOpen(false); input.current?.blur()
       go(readPath(id, v.book, v.chapter, v.verse))
       return
@@ -551,9 +554,20 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     const vs = live.also ?? inV, mask = live.hits[i * 4 + 3]
     const mine = vs.indexOf(sv)
     const vi = mine >= 0 && mask & (1 << mine) ? mine : 31 - Math.clz32(mask & -mask)
-    setTrail({ ...trail, at: i })
+    setTrail({ ...trail, at: i, ref: [BOOKS[live.hits[i * 4]].id, live.hits[i * 4 + 1], live.hits[i * 4 + 2]] })
     go(readPath(vs[vi] ?? sv, BOOKS[live.hits[i * 4]].id, live.hits[i * 4 + 1], live.hits[i * 4 + 2]))
   }
+  // A search picked up from another device (or kept from before the verse was
+  // remembered) learns its verse once the results are in.
+  useEffect(() => {
+    if (!trail || !live || !liveOk || trail.at >= live.total) return
+    const i = trail.at * 4, b = BOOKS[live.hits[i]]?.id, r = trail.ref
+    if (b && !(r && r[0] === b && r[1] === live.hits[i + 1] && r[2] === live.hits[i + 2])) setTrail({ ...trail, ref: [b, live.hits[i + 1], live.hits[i + 2]] })
+  }, [trail, live, liveOk])
+  // Where you are, said in the strip: the book and chapter on the page, with
+  // the verse while the page is still the result's own chapter.
+  const onHit = following && !!here && !!trail?.ref && trail.ref[0] === here.book && trail.ref[1] === here.chapter
+  const whereNow = here ? `${shortName(here.book)} ${here.chapter}${onHit ? ':' + trail!.ref![2] : ''}` : ''
   // The middle of the strip: the list again, as you left it, keyboard down.
   const backToList = () => { restoring.current = true; setOpen(true) }
   const endTrail = () => { setTrail(undefined); setQ('') }
@@ -586,7 +600,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <span class="sb-head-side end" />
             </div>
             {preview && (
-              <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse))}>
+              <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse, [], preview.ref.verseEnd))}>
                 <span class="sb-kicker">{t('Go to')} · {version}</span>
                 <span class="sb-title">{formatRef(preview.ref)}</span>
                 <span class="sb-verse" dir={info?.rtl ? 'rtl' : undefined}>
@@ -684,8 +698,8 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
           <div class="listen sb-follow" role="region" aria-label={t('Search results')}>
             <button class="sb-step" onClick={() => step(-1)} disabled={trail.at <= 0} aria-label={t('Previous result')}><Chevron back /></button>
             <button class="listen-what" onClick={backToList} aria-label={t('Back to the results')}>
-              <strong>{trail.q}</strong>
-              <span class="muted">{liveOk && live ? t('{n} of {total}', { n: (trail.at + 1).toLocaleString(locale()), total: live.total.toLocaleString(locale()) }) : t('Searching…')} ▴</span>
+              <strong>{whereNow || trail.q}</strong>
+              <span class="muted sb-follow-sub">{whereNow && <><span class="sb-follow-q">{trail.q}</span><span>&nbsp;·&nbsp;</span></>}<span class="sb-follow-n">{liveOk && live ? t('{n} of {total}', { n: (trail.at + 1).toLocaleString(locale()), total: live.total.toLocaleString(locale()) }) : t('Searching…')} ▴</span></span>
             </button>
             <button class="sb-step" onClick={() => step(1)} disabled={!liveOk || !live || trail.at >= live.total - 1} aria-label={t('Next result')}><Chevron /></button>
             <button class="close-btn listen-stop" onClick={endTrail} aria-label={t('End this search')}><CloseIcon size={24} /></button>
@@ -712,6 +726,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         </div>
         {open && voiceNote && <div class="sb-voice-note" role="status">{voiceNote}</div>}
       </div>
+      {/* The result's verse stays lit on its page, steady, until you step to
+          another result, turn the page or end the search (elsewhere the
+          landing glow fades after a few seconds). Your own highlight keeps
+          its colour; the verse number is marked either way. */}
+      {onHit && <style>{`#v${trail!.ref![2]}:not(.hl):not(.hlp) { animation: none; border-radius: 4px; background: color-mix(in srgb, var(--mark) 55%, transparent); } #v${trail!.ref![2]} .vn { background: var(--accent); color: var(--surface); border-radius: .5em; padding: 0 .4em; }`}</style>}
       {pickIn && <VersionPicker title={t('Search in')} multi selected={inV} onClose={() => setPickIn(false)}
         onChange={ids => ids.length && setPicked(ids)} />}
     </>

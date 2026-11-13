@@ -232,9 +232,11 @@ export function useRoute(): Route {
   return r
 }
 
-export function readPath(version: string, book: string, chapter: number, verse?: number, parallel: string[] = []) {
+/** `end` is the last verse when you go to several (John 3:16-18). */
+export function readPath(version: string, book: string, chapter: number, verse?: number, parallel: string[] = [], end?: number) {
   const q = new URLSearchParams()
   if (verse) q.set('v', String(verse))
+  if (verse && end && end > verse) q.set('e', String(end))
   if (parallel.length) q.set('p', parallel.join(','))
   const qs = q.toString()
   return `read/${version}/${book}/${chapter}${qs ? '?' + qs : ''}`
