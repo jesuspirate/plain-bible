@@ -75,6 +75,17 @@ const TRAIL = SEARCH_TRAIL
 const loadTrail = (): Trail | undefined => {
   try { const x = JSON.parse(localStorage.getItem(TRAIL) || 'null'); return x && typeof x.q === 'string' && typeof x.at === 'number' ? x : undefined } catch { return undefined }
 }
+// The search you ended with the round X, kept a week so one tap brings back
+// the same result: offered at the top of search while the field is empty or
+// holds the same words. `ver` is the Bible that result was read in.
+type Left = Trail & { ver: string; t: number }
+const LEFT = 'plain-bible:search-left', LEFT_DAYS = 7
+const loadLeft = (): Left | undefined => {
+  try {
+    const x = JSON.parse(localStorage.getItem(LEFT) || 'null')
+    return x && typeof x.q === 'string' && typeof x.at === 'number' && Array.isArray(x.ref) && typeof x.ver === 'string' && Date.now() - x.t < LEFT_DAYS * 864e5 ? x : undefined
+  } catch { return undefined }
+}
 export function rememberSearch(q: string) {
   const list = [q, ...loadRecent().filter(x => x !== q)].slice(0, 8)
   try { localStorage.setItem(RECENT, JSON.stringify(list)) } catch { /* ignore */ }
@@ -93,6 +104,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // just as you left it.
   const [trail, setTrail] = useState<Trail | undefined>(loadTrail)
   const [q, setQ] = useState(() => trail?.q ?? '')
+  const [left, setLeft] = useState<Left | undefined>(loadLeft)
   const [open, setOpen] = useState(false)
   const [recent, setRecent] = useState<string[]>(loadRecent)
   const [live, setLive] = useState<{ q: string; key: string; total: number; hits: number[]; verses: PageVerse[]; also?: string[] }>()
@@ -570,7 +582,24 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const whereNow = here ? `${shortName(here.book)} ${here.chapter}${onHit ? ':' + trail!.ref![2] : ''}` : ''
   // The middle of the strip: the list again, as you left it, keyboard down.
   const backToList = () => { restoring.current = true; setOpen(true) }
-  const endTrail = () => { setTrail(undefined); setQ('') }
+  const endTrail = () => {
+    // Keep the place, so search can offer the way back to this same result.
+    if (trail?.ref) {
+      const x: Left = { ...trail, ver: onHit && here && byId.has(here.version) ? here.version : sv, t: Date.now() }
+      setLeft(x)
+      try { localStorage.setItem(LEFT, JSON.stringify(x)) } catch { /* ignore */ }
+    }
+    setTrail(undefined); setQ('')
+  }
+  // Back on the result you left: its verse, the strip, the list as it was.
+  const resume = () => {
+    if (!left) return
+    const { ver, t: _t, ...x } = left
+    setOpen(false); input.current?.blur()
+    setPicked(x.picked); setQ(x.q); setTrail(x)
+    go(readPath(byId.has(ver) ? ver : version, x.ref![0], x.ref![1], x.ref![2]))
+  }
+  const offerBack = !!left && !trail && (!trimmed || trimmed === left.q)
   useLayoutEffect(() => {
     const el = panel.current
     if (!open || !restoring.current || !trail || !live || !liveOk || !el) return
@@ -599,6 +628,12 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <button type="button" class="sb-grabber" aria-label={t('Close search')} onClick={close} />
               <span class="sb-head-side end" />
             </div>
+            {offerBack && left && (
+              <button class="sb-item sb-ref sb-back" onClick={resume}>
+                <span class="sb-title">{t('Back to result {n}', { n: (left.at + 1).toLocaleString(locale()) })}</span>
+                <span class="muted sb-back-sub">{left.q}&nbsp;·&nbsp;{formatRef({ book: left.ref![0], chapter: left.ref![1], verse: left.ref![2] })}</span>
+              </button>
+            )}
             {preview && (
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse, [], preview.ref.verseEnd))}>
                 <span class="sb-kicker">{t('Go to')} · {version}</span>
