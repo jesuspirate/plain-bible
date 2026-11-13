@@ -5,3 +5,4 @@ public/data
 .wrangler
 __pycache__
 *.pyc
+public/audio-times/*.report.json

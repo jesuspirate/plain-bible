@@ -1,6 +1,9 @@
-// Read aloud with the phone's own voices (the browser's speech synthesis).
-// Nothing is downloaded or bundled, so the app stays as light and as quick
-// to open as before; most voices work offline. Reading goes verse by verse:
+// Read aloud. A Bible that has a recorded reading (lib/recordings.ts) is read
+// by its narrator: the chapter's recording plays from where its publisher
+// keeps it, and the highlight follows the narrator's words. Every other Bible,
+// and a recorded one with no connection, is read by the phone's own voice (the
+// browser's speech synthesis). Either way nothing is bundled, so the app
+// stays as light and as quick to open as before. Reading goes verse by verse:
 // the verse being read is marked and kept in view, the reader follows into
 // the next chapter, and pausing or stopping is instant.
 //
@@ -21,6 +24,7 @@ import { useApp } from './state'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import type { Bible } from './lib/data'
 import { plain } from './lib/text'
+import { chapterUrl, loadTimes, locate, nextTimed, recordingsFor, type ChapterTimes, type Recording } from './lib/recordings'
 import { nowPlaying } from './lib/nowplaying'
 import { formatRef } from './lib/refs'
 import { go, parseHash, readPath } from './state'
@@ -72,45 +76,23 @@ const emit = () => {
 }
 
 const RATES = [0.6, 0.7, 0.8, 0.9, 1, 1.15, 1.3]
-const RATE_KEY = 'plain-bible:listen-rate', VOICE_KEY = 'plain-bible:listen-voice:', TIP_KEY = 'plain-bible:listen-tip'
+const RATE_KEY = 'plain-bible:listen-rate', REC_KEY = 'plain-bible:listen-recording:', TIP_KEY = 'plain-bible:listen-tip'
 const IPHONE = typeof navigator !== 'undefined' && (/iPhone|iPad|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
 const get = (k: string) => { try { return localStorage.getItem(k) } catch { return null } }
 const put = (k: string, v: string) => { try { localStorage.setItem(k, v) } catch { /* private mode */ } }
 const rate = () => { const r = Number(get(RATE_KEY)); return RATES.includes(r) ? r : 1 }
 
-/** How natural a voice is: iPhones name the better downloads "Enhanced" or
- * "Premium", sometimes only in the voice's id. */
-export function quality(v: SpeechSynthesisVoice): '' | 'Enhanced' | 'Premium' {
-  const s = v.name + ' ' + v.voiceURI
-  return /premium/i.test(s) ? 'Premium' : /enhanced|améliorée|mejorada|natural|neural|wavenet/i.test(s) ? 'Enhanced' : ''
+/** The narrator reading a Bible, if it has a recorded reading: the one picked,
+ * or its first. */
+function recordingFor(version: string): Recording | undefined {
+  const all = recordingsFor(version)
+  return all.find(r => r.id === get(REC_KEY + version)) ?? all[0]
 }
-
-/** The phone's voices for a language, the most natural first, each once. */
-export function voicesFor(lang: string): SpeechSynthesisVoice[] {
-  const code = lang.split('-')[0].toLowerCase()
-  const region = ({ en: 'en-us', fr: 'fr-fr' } as Record<string, string>)[code]
-  const score = (v: SpeechSynthesisVoice) =>
-    ({ Premium: 5, Enhanced: 4, '': 0 })[quality(v)] + (v.lang.toLowerCase().replace('_', '-') === region ? 2 : 0)
-    + (v.localService ? 1 : 0) + (v.default ? 0.5 : 0) - (/compact/i.test(v.voiceURI) ? 0.25 : 0)
-    - (/eloquence|novelty|bad news|bells|bubbles|jester|organ|whisper|zarvox|trinoids|cellos|bahh|boing|wobble|superstar|grandma|grandpa|rocko|shelley|flo|reed|sandy/i.test(v.name) ? 5 : 0)
-  // iPhones often list the same voice twice (two copies of one download):
-  // keep only the best copy of each name.
-  const seen = new Set<string>()
-  return (synth?.getVoices() ?? []).filter(v => v.lang.toLowerCase().startsWith(code)).sort((a, b) => score(b) - score(a))
-    .filter(v => { const k = `${v.name.replace(/\s*\((enhanced|premium|compact)\)/i, '')}|${v.lang}|${quality(v)}`; return !seen.has(k) && !!seen.add(k) })
-}
-
-const PHONE = 'phone' // no voice named: the phone speaks with the one picked in its own settings
-
-/** The voice someone picked for a language, if they did and it can speak now.
- * Otherwise none: the phone's own voice, so nobody is surprised by an odd one. */
-function voiceFor(lang: string): SpeechSynthesisVoice | undefined {
-  const chosen = get(VOICE_KEY + lang.split('-')[0])
-  if (!chosen || chosen === PHONE) return undefined
-  // Offline, only a voice on the phone itself can speak.
-  return voicesFor(lang).find(v => v.voiceURI === chosen && (navigator.onLine || v.localService))
-}
-const phoneChoice = (lang: string) => !voiceFor(lang)
+/** Whether a Bible can be heard here: by a recording, or by the phone. */
+export const canHear = (version: string) => canListen || recordingsFor(version).length > 0
+// A recording that can't be reached (no connection): the phone's own voice
+// reads instead, until reading is next started.
+let unreachable = false
 
 // Book names and the chapter heading in the language of the Bible being read
 // (they're spoken with its words), not the app's.
@@ -127,7 +109,9 @@ let follow = { words: true, silent: false }
 export function followSettings(s: { follow: 'words' | 'verse'; readSilent: boolean }) {
   follow = { words: s.follow !== 'verse', silent: s.readSilent }
 }
-const silentNow = () => follow.silent || !canListen
+/** The narrator reading now, if a recording is. */
+const recorded = () => now && !follow.silent && !unreachable ? recordingFor(now.version) : undefined
+const silentNow = () => follow.silent || (!canListen && !recorded())
 
 // The verse being read: its words, and the word lit now.
 let cur: { text: string; spans: Span[] } | undefined
@@ -294,9 +278,8 @@ const NO_SOUND = N_('No sound? Flip the side switch off Silent, then tap play.')
 function say(text: string, lang: string, my: number, then: () => void, spans?: Span[]) {
   if (!synth || my !== run) return
   const u = new SpeechSynthesisUtterance(text)
-  const v = voiceFor(lang)
-  if (v) try { u.voice = v } catch { /* not a voice this browser accepts */ }
-  u.lang = v?.lang ?? speechTag(lang)
+  // No voice is named: the phone speaks with the one picked in its own settings.
+  u.lang = speechTag(lang)
   u.rate = rate()
   // If the phone never starts talking, say so instead of looking busy.
   const quiet = setTimeout(() => { if (my === run) pauseListening(t(NO_SOUND)) }, 5000)
@@ -322,9 +305,178 @@ function say(text: string, lang: string, my: number, then: () => void, spans?: S
     // Stopped by the phone itself (a call, another app's sound): wait, paused, where it was.
     if (e.error === 'interrupted' || e.error === 'canceled') return pauseListening()
     // Stay where we were, paused, and say so, rather than vanish.
-    pauseListening(e.error === 'not-allowed' ? t('Tap play to start.') : t('This voice couldn’t speak. Pick another voice.'))
+    pauseListening(e.error === 'not-allowed' ? t('Tap play to start.') : t('The phone’s voice couldn’t speak.'))
   }
   synth.speak(u)
+}
+
+/** On into the next chapter, or the next book; the page follows, if you're
+ * reading along. At the end of the Bible: stay, paused on the last verse,
+ * until X, and say so by returning false. */
+function onward(): boolean {
+  const n = now
+  if (!n) return false
+  const chapters = n.bible.books[n.book] ?? []
+  let book = n.book, chapter = n.chapter + 1
+  if (chapter > chapters.length) {
+    const after = BOOKS.slice(BOOK_INDEX[n.book] + 1).find(b => n.bible.books[b.id]?.length)
+    if (!after) { now = { ...n, verse: (chapters[n.chapter - 1] ?? []).length }; pauseListening(); keep = false; return false }
+    book = after.id; chapter = 1
+  }
+  const r = parseHash().path
+  const following = r[0] === 'read' && r[2] === n.book && +r[3] === n.chapter
+  now = { ...n, book, chapter, verse: 1 }
+  emit()
+  if (following) go(readPath(n.version, book, chapter))
+  cur = undefined; wordNow = 0; clearWord()
+  return true
+}
+
+/** The words of a verse, as they're read and followed. */
+function verseWords(n: Now, verse: number) {
+  const text = plain((n.bible.books[n.book]?.[n.chapter - 1] ?? [])[verse - 1] ?? '').replace(/[[\]¶*]/g, '').trim()
+  return { text, spans: words(text) }
+}
+
+// ── A recorded reading ────────────────────────────────────────────────────
+// One player for the app. It holds a chapter's recording and, once they've
+// come, the times of its words.
+let player: HTMLAudioElement | undefined
+let held: { rec: Recording; url: string; times?: ChapterTimes; from?: number; tries?: number } | undefined
+let keep = false // paused in the middle of a recording: play goes on from that very moment
+let frame = 0
+
+function audio(): HTMLAudioElement {
+  if (player) return player
+  const a = player = new Audio()
+  a.preload = 'auto'
+  a.addEventListener('timeupdate', track) // also keeps the verse right while the screen is off
+  a.addEventListener('ended', () => { if (now?.playing && held) chapterDone() })
+  // Stopped by the phone itself (a call, another app's sound): wait, paused, where it was.
+  a.addEventListener('pause', () => { if (a.paused && !a.ended && now?.playing && held && recorded()) pauseListening() })
+  a.addEventListener('error', () => { if (now?.playing && held) lost(run) })
+  return a
+}
+
+function hush() {
+  cancelAnimationFrame(frame)
+  if (player && !player.paused) player.pause()
+}
+
+/** The lock screen's own play and pause buttons. */
+function lockButtons(on: boolean) {
+  try {
+    navigator.mediaSession.setActionHandler('play', on ? () => { if (now && !now.playing) begin() } : null)
+    navigator.mediaSession.setActionHandler('pause', on ? () => pauseListening() : null)
+  } catch { /* an older phone */ }
+}
+
+/** The recording can't be had (no connection, or a book it hasn't got): the
+ * phone's own voice goes on from the same verse, or the highlight alone. */
+function lost(my: number) {
+  if (my !== run || !now) return
+  unreachable = true
+  hush(); held = undefined; keep = false; lockButtons(false)
+  cur = undefined; resumeAt = 0
+  if (typeof navigator !== 'undefined' && navigator.onLine === false) listenNote(t('No connection: the phone’s own voice'))
+  emit()
+  next(my)
+}
+
+/** Play the recording of the chapter from the verse we're at. */
+function hear(my: number) {
+  const n = now, rec = recorded()
+  if (!n || !rec || my !== run) return
+  const url = chapterUrl(rec, n.book, n.chapter)
+  if (!url) return lost(my)
+  const a = audio()
+  // Paused a moment ago, nothing changed: go on from that very moment.
+  const resume = keep && held?.url === url && held.rec === rec && !!held.times
+  keep = false
+  if (!resume) {
+    if (a.src !== url) a.src = url
+    held = { rec, url }
+    // Start inside the tap (iPhones ask for that), silently, until the verse's place is known.
+    a.muted = true
+  }
+  a.playbackRate = rate()
+  lockButtons(true)
+  a.play()?.catch((e: { name?: string }) => {
+    if (my !== run) return
+    if (e?.name === 'NotAllowedError') pauseListening(t('Tap play to start.'))
+    else if (e?.name !== 'AbortError') lost(my)
+  })
+  const loop = () => { if (!now?.playing || !held) return; track(); frame = requestAnimationFrame(loop) }
+  cancelAnimationFrame(frame)
+  if (resume) { frame = requestAnimationFrame(loop); return }
+  loadTimes(rec, n.book).then(all => {
+    if (my !== run || held?.url !== url || !now) return
+    const times = all?.[n.chapter - 1]
+    if (!times) return lost(my)
+    // Listen: the first of the verses picked; otherwise the verse asked for.
+    const verse = n.only ? n.only.find(x => x >= n.verse && times[x - 1]) : nextTimed(times, n.verse)
+    if (verse === undefined) return chapterDone()
+    held = { rec, url, times }
+    // From the top of a chapter, its name is said first, as when one chapter runs into the next.
+    const at = verse === 1 && !n.only ? 0 : jump(verse)
+    const go = () => { if (my === run && held?.url === url) { a.currentTime = at; a.muted = false } }
+    if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true })
+    now = { ...now, verse }
+    cur = verseWords(now, verse); wordNow = -1
+    clearWord()
+    emit()
+    frame = requestAnimationFrame(loop)
+  })
+}
+
+/** Where to put the player for a verse: a breath before its first word. Until
+ * that word, the tail of the verse before isn't taken for where we are. */
+function jump(verse: number): number {
+  const start = held!.times![verse - 1]!.starts[0]
+  held!.from = start
+  return Math.max(0, start - 0.08)
+}
+
+/** The recording moved on: which verse and word it's at, shown on the page. */
+function track() {
+  const n = now, a = player, h = held
+  if (!n?.playing || !a || !h?.times || a.muted || a.seeking) return
+  if (h.from !== undefined) {
+    // A jump the player didn't take (asked before it could move): ask again, a few times at most.
+    if (a.currentTime < h.from - 1 && a.readyState >= 3 && (h.tries = (h.tries ?? 0) + 1) <= 3) a.currentTime = Math.max(0, h.from - 0.08)
+    if (a.currentTime < h.from - 0.01) return
+    h.from = undefined; h.tries = 0
+  }
+  const at = locate(h.times, a.currentTime + 0.03)
+  if (!at) return // the chapter's name is being said
+  if (n.only && !n.only.includes(at.verse)) {
+    // Listen: past a verse picked into one that wasn't. On to the next one picked, or that's all.
+    const more = n.only.find(x => x > at.verse && h.times![x - 1])
+    if (more === undefined) return stopListening()
+    a.currentTime = jump(more)
+    return
+  }
+  if (at.verse !== n.verse || !cur) {
+    now = { ...n, verse: at.verse }
+    cur = verseWords(now, at.verse); wordNow = -1
+    clearWord()
+    emit()
+  }
+  if (at.word === wordNow || !cur) return
+  wordNow = at.word
+  // Word by word only where the recording's words are the page's words.
+  const starts = h.times[at.verse - 1]!.starts
+  if (starts.length !== cur.spans.length) return
+  const gap = at.word + 1 < starts.length ? (starts[at.word + 1] - starts[at.word]) * 1000 : Infinity
+  showWord(at.word, Math.round(Math.min(gap, sweep(cur.spans[at.word], 1, true) * 1.5) / a.playbackRate))
+}
+
+/** The chapter's recording ran out: on into the next chapter. */
+function chapterDone() {
+  const n = now
+  if (!n) return
+  if (n.only) return stopListening()
+  if (onward()) hear(run)
 }
 
 function next(my: number) {
@@ -339,26 +491,11 @@ function next(my: number) {
   const chapters = n.bible.books[n.book] ?? []
   const verses = chapters[n.chapter - 1] ?? []
   if (n.verse > verses.length) {
-    // On into the next chapter, or the next book.
-    let book = n.book, chapter = n.chapter + 1
-    if (chapter > chapters.length) {
-      const after = BOOKS.slice(BOOK_INDEX[n.book] + 1).find(b => n.bible.books[b.id]?.length)
-      // The end of the Bible: stay, paused on the last verse, until X.
-      if (!after) { now = { ...n, verse: verses.length }; return pauseListening() }
-      book = after.id; chapter = 1
-    }
-    // The page follows, if you're reading along.
-    const r = parseHash().path
-    const following = r[0] === 'read' && r[2] === n.book && +r[3] === n.chapter
-    now = { ...n, book, chapter, verse: 1 }
-    emit()
-    if (following) go(readPath(n.version, book, chapter))
-    cur = undefined; wordNow = 0; clearWord()
+    if (!onward()) return
     if (silentNow()) return void setTimeout(() => next(my), Math.round(1200 / rate()))
-    return say(heading(now), n.lang, my, () => next(my))
+    return say(heading(now!), n.lang, my, () => next(my))
   }
-  const text = plain(verses[n.verse - 1] ?? '').replace(/[[\]¶*]/g, '').trim()
-  const spans = words(text)
+  const { text, spans } = verseWords(n, n.verse)
   if (!spans.length) { now = { ...n, verse: n.verse + 1 }; return next(my) }
   cur = { text, spans }
   const from = Math.min(resumeAt, spans.length - 1)
@@ -375,6 +512,9 @@ function begin() {
   if (!now) return
   const my = ++run
   now = { ...now, playing: true, trouble: undefined }
+  unreachable = typeof navigator !== 'undefined' && navigator.onLine === false
+  if (recorded()) { synth?.cancel(); emit(); return hear(my) }
+  hush(); held = undefined; lockButtons(false)
   if (silentNow() || !synth) {
     // Silently, pick up at the word where it was paused.
     synth?.cancel()
@@ -396,15 +536,17 @@ function begin() {
 /** Starts reading aloud at a verse. */
 export function startListening(spot: Spot, bible: Bible) {
   now = { ...spot, bible, playing: true }
-  resumeAt = 0; cur = undefined
+  resumeAt = 0; cur = undefined; keep = false
   begin()
 }
 
 export function pauseListening(trouble?: string) {
   if (!now) return
   run++
-  resumeAt = wordNow
+  resumeAt = Math.max(0, wordNow)
   synth?.cancel()
+  keep = !!held?.times && !!player && !player.ended
+  hush()
   holdBands()
   now = { ...now, playing: false, trouble }
   emit()
@@ -457,7 +599,7 @@ export function followPage(spot: Spot, bible: Bible) {
   }
   const playing = now.playing
   now = { ...spot, verse: spot.verse || 1, bible, playing }
-  resumeAt = 0; cur = undefined; wordNow = 0
+  resumeAt = 0; cur = undefined; wordNow = 0; keep = false
   if (playing) begin()
   else { run++; synth?.cancel(); clearWord(); emit() }
 }
@@ -465,6 +607,7 @@ export function followPage(spot: Spot, bible: Bible) {
 export function stopListening() {
   run++
   synth?.cancel()
+  hush(); held = undefined; keep = false; lockButtons(false)
   now = undefined; cur = undefined; lit = undefined
   clearWord()
   emit()
@@ -516,7 +659,7 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
   // times reading starts there.
   const [tip, setTip] = useState(false)
   useEffect(() => {
-    if (!n || !IPHONE || silentNow()) return
+    if (!n || !IPHONE || silentNow() || recorded()) return
     const seen = Number(get(TIP_KEY)) || 0
     if (seen >= 5) return
     put(TIP_KEY, String(seen + 1))
@@ -527,9 +670,13 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
 
   if (!n) return null
   const r = rate()
-  const voice = voiceFor(n.lang)
-  // Silently, the new speed takes effect at the next word; a voice has to start the verse again.
-  const cycle = () => { put(RATE_KEY, String(RATES[(RATES.indexOf(r) + 1) % RATES.length])); redraw(x => x + 1); if (n.playing && !silentNow()) begin() }
+  const rec = recorded()
+  // Silently, the new speed takes effect at the next word, and a recording changes pace at once; the phone's voice has to start the verse again.
+  const cycle = () => {
+    const to = RATES[(RATES.indexOf(r) + 1) % RATES.length]
+    put(RATE_KEY, String(to)); redraw(x => x + 1)
+    if (rec) { if (player) player.playbackRate = to } else if (n.playing && !silentNow()) begin()
+  }
   const silent = silentNow()
   // Picked in the voice sheet, inside the tap, so an iPhone lets the voice start.
   const pick = (quiet: boolean) => {
@@ -547,12 +694,12 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label={t('Choose the voice')}>
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : voice && !phoneChoice(n.lang) ? voice.name : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
+          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : rec ? rec.name : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={t('Speed {rate} times. Change', { rate: r })}>{r.toLocaleString(locale())}×</button>
         <button class="close-btn listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={24} /></button>
       </div>
-      {voices && <VoiceSheet lang={n.lang} silent={silent} onClose={() => setVoices(false)} onPick={pick} />}
+      {voices && <VoiceSheet version={n.version} lang={n.lang} silent={silent} onClose={() => setVoices(false)} onPick={pick} />}
     </>
   )
 }
@@ -563,8 +710,8 @@ const SAMPLE: Record<string, string> = {
   es: 'Jehová es mi pastor; nada me faltará.',
 }
 
-// How to get more natural voices, step by step, for each kind of phone. The
-// one in your hand comes first.
+// How to get a more natural phone voice, step by step, for each kind of
+// phone. The one in your hand comes first.
 const iphoneHelp = () => (
   <details class="account-more voice-help">
     <summary>{t('Add better voices on iPhone or iPad')}</summary>
@@ -573,7 +720,7 @@ const iphoneHelp = () => (
       <li>{t('Pick your language, download a voice marked “Enhanced” or “Premium”, and tap it so it’s checked.')}</li>
       <li>{t('Come back here and use “Phone’s own voice”. Tap ▶ to hear it.')}</li>
     </ol>
-    <p class="muted small">{t('Downloaded voices don’t show up in this list on iPhone, but “Phone’s own voice” speaks with the one you checked. Siri voices are kept for Apple’s own apps and can’t be used here.')}</p>
+    <p class="muted small">{t('Siri voices are kept for Apple’s own apps and can’t be used here.')}</p>
   </details>
 )
 const androidHelp = () => (
@@ -584,71 +731,55 @@ const androidHelp = () => (
       <li>{t('Choose “Speech Services by Google” as the engine, tap its ⚙, then “Install voice data”, and pick your language.')}</li>
       <li>{t('Tap the voice you like best, then come back and pick “Phone’s own voice” here.')}</li>
     </ol>
-    <p class="muted small">{t('Android shows one voice per language here; it speaks with the one you chose in step 3.')}</p>
   </details>
 )
 
-function VoiceSheet({ lang, silent, onClose, onPick }: { lang: string; silent: boolean; onClose: () => void; onPick: (silent: boolean) => void }) {
+/** Who reads: for a Bible with a recorded reading, its narrators; for any
+ * other, the phone's own voice. And always, no voice at all. */
+function VoiceSheet({ version, lang, silent, onClose, onPick }: { version: string; lang: string; silent: boolean; onClose: () => void; onPick: (silent: boolean) => void }) {
   const code = lang.split('-')[0]
-  // Ask the phone again each time the sheet opens: a voice downloaded a
-  // moment ago can take a while to show.
-  const [, fresh] = useState(0)
-  useEffect(() => {
-    const on = () => fresh(x => x + 1)
-    synth?.getVoices()
-    synth?.addEventListener?.('voiceschanged', on)
-    const timer = setTimeout(on, 400)
-    return () => { clearTimeout(timer); synth?.removeEventListener?.('voiceschanged', on) }
-  }, [])
-  const list = voicesFor(lang)
-  const current = voiceFor(lang)
-  const mine = phoneChoice(lang) && !silent
-  const sample = (v?: SpeechSynthesisVoice) => {
+  const readers = recordingsFor(version)
+  const reader = recordingFor(version)
+  const sample = () => {
     pauseListening()
     const u = new SpeechSynthesisUtterance(SAMPLE[code] ?? SAMPLE.en)
-    if (v) u.voice = v
-    u.lang = v?.lang ?? speechTag(lang); u.rate = rate()
+    u.lang = speechTag(lang); u.rate = rate()
     synth?.speak(u)
   }
-  const named = list.map(v => (
-    <div class={'voice-row' + (!mine && !silent && v.voiceURI === current?.voiceURI ? ' on' : '')}>
-      <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, v.voiceURI); onPick(false) }}>
-        <strong>{v.name.replace(/\s*\((enhanced|premium|améliorée|mejorada)\)/i, '')}{quality(v) && <span class="voice-tag">{quality(v)}</span>}</strong>
-        <span class="muted small">{v.lang}{v.localService ? '' : ' · ' + t('needs a connection')}</span>
-      </button>
-      <button class="voice-try" onClick={() => sample(v)} aria-label={t('Hear {voice}', { voice: v.name })}><PlayIcon size={20} /></button>
-    </div>
-  ))
   return (
     <Sheet title={t('Voice')} onClose={onClose}>
-      <p class="muted small">{IPHONE
-        ? t('On iPhone, “Phone’s own voice” is the one you pick in the iPhone’s settings. Voices you download there don’t show up in this list.')
-        : t('These are the voices on this phone. Every phone has its own list, so yours may not match someone else’s. Tap ▶ to hear one, then tap its name to use it.')}</p>
-      {IPHONE ? <>{iphoneHelp()}{androidHelp()}</> : <>{androidHelp()}{iphoneHelp()}</>}
+      {readers.length > 0
+        ? <p class="muted small">{t('This Bible has a recorded reading. It plays over the internet; with no connection, the phone’s own voice reads instead.')}</p>
+        : <>
+          <p class="muted small">{t('This Bible is read by your phone’s own voice: the one picked in the phone’s settings.')}</p>
+          {IPHONE ? <>{iphoneHelp()}{androidHelp()}</> : <>{androidHelp()}{iphoneHelp()}</>}
+        </>}
       <div class="voice-list">
-        <div class={'voice-row' + (mine ? ' on' : '')}>
-          <button class="voice-pick" onClick={() => { put(VOICE_KEY + code, PHONE); onPick(false) }}>
-            <strong>{t('Phone’s own voice')}</strong>
-            <span class="muted small">{t('The voice picked in your phone’s settings')}</span>
-          </button>
-          <button class="voice-try" onClick={() => sample()} aria-label={t('Hear the phone’s own voice')}><PlayIcon size={20} /></button>
-        </div>
+        {readers.map(r => (
+          <div class={'voice-row' + (!silent && r === reader ? ' on' : '')}>
+            <button class="voice-pick" onClick={() => { put(REC_KEY + version, r.id); onPick(false) }}>
+              <strong>{r.name}</strong>
+              <span class="muted small">{t('A recorded reading')}</span>
+            </button>
+          </div>
+        ))}
+        {!readers.length && canListen && (
+          <div class={'voice-row' + (!silent ? ' on' : '')}>
+            <button class="voice-pick" onClick={() => onPick(false)}>
+              <strong>{t('Phone’s own voice')}</strong>
+              <span class="muted small">{t('The voice picked in your phone’s settings')}</span>
+            </button>
+            <button class="voice-try" onClick={sample} aria-label={t('Hear the phone’s own voice')}><PlayIcon size={20} /></button>
+          </div>
+        )}
         <div class={'voice-row' + (silent ? ' on' : '')}>
           <button class="voice-pick" onClick={() => onPick(true)}>
             <strong>{t('No voice')}</strong>
             <span class="muted small">{t('Just the highlight, moving through the words at your speed')}</span>
           </button>
         </div>
-        {!IPHONE && named}
       </div>
-      {IPHONE && list.length > 0 && (
-        // iPhones list only their basic built-in voices here, which can look
-        // like a download failed: keep them out of the way.
-        <details class="account-more voice-help" open={!mine}>
-          <summary>{t('Other voices on this phone')}</summary>
-          <div class="voice-list">{named}</div>
-        </details>
-      )}
+      {readers.length > 0 && <p class="muted small">{t('The recordings come from openbible.com, the home of the Berean Bible.')}</p>}
     </Sheet>
   )
 }
