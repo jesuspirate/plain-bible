@@ -68,6 +68,38 @@
         }
       }
     },
+    "Something new": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du nouveau"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo nuevo"
+          }
+        }
+      }
+    },
+    "Something new in %@": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du nouveau dans %@"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo nuevo en %@"
+          }
+        }
+      }
+    },
     "Tap to share with your circles.": {
       "localizations": {
         "fr": {

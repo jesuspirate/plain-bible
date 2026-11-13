@@ -3,8 +3,11 @@ import WidgetKit
 
 // The Home Screen (and Lock Screen) widgets of the iPhone app. Each one is
 // only a button or two: 🙏 opens the app straight on the prayer screen, the
-// three people open Circles. Nothing to read, nothing that changes, so they
-// never ask iOS for updates. The app handles the links in SceneDelegate.swift.
+// three people open Circles. The Circles button also says, quietly, when a
+// circle has something new: a gold dot and a few words, never a count and
+// never what was shared. The widgets never ask iOS for updates on a clock;
+// the app and its notification extension redraw them when the news changes
+// (Shared/SharedCircles.swift). The app handles the links in SceneDelegate.swift.
 
 enum WidgetLink {
     static let pray = URL(string: "quietbible://pray")!
@@ -13,17 +16,54 @@ enum WidgetLink {
 
 struct StillEntry: TimelineEntry {
     let date: Date
+    /// The 🙏 picked in the app (its skin tone).
+    var pray = "🙏"
+    /// Whether a circle has something new, and which, when it's only one.
+    var news = false
+    var circle: String?
+    var circleName: String?
+
+    /// Circles, or straight to the one circle with something new.
+    var circlesLink: URL {
+        circle.flatMap { URL(string: "quietbible://circles/\($0)") } ?? WidgetLink.circles
+    }
+
+    static var now: StillEntry {
+        let news = SharedCircles.news
+        let one = news.count == 1 ? news[0] : nil
+        return StillEntry(date: .now, pray: "🙏" + SharedCircles.tone, news: !news.isEmpty,
+                          circle: one, circleName: one.flatMap { SharedCircles.names[$0] })
+    }
 }
 
 struct StillProvider: TimelineProvider {
     func placeholder(in context: Context) -> StillEntry { StillEntry(date: .now) }
 
     func getSnapshot(in context: Context, completion: @escaping (StillEntry) -> Void) {
-        completion(StillEntry(date: .now))
+        // The widget gallery shows the plain button.
+        completion(context.isPreview ? StillEntry(date: .now) : .now)
     }
 
     func getTimeline(in context: Context, completion: @escaping (Timeline<StillEntry>) -> Void) {
-        completion(Timeline(entries: [StillEntry(date: .now)], policy: .never))
+        completion(Timeline(entries: [.now], policy: .never))
+    }
+}
+
+/// "Something new", or "Something new in Family" when it's one circle.
+private func newsWords(_ entry: StillEntry, named: Bool) -> Text {
+    if named, let name = entry.circleName, !name.isEmpty { return Text("Something new in \(name)") }
+    return Text("Something new")
+}
+
+/// The app's quiet "something new" dot.
+struct NewsDot: View {
+    let size: CGFloat
+    @Environment(\.colorScheme) private var scheme
+
+    var body: some View {
+        Circle().fill(rgb(0xe0a030))
+            .overlay(Circle().stroke(Palette(scheme).paper, lineWidth: size * 0.16))
+            .frame(width: size, height: size)
     }
 }
 
@@ -55,6 +95,7 @@ struct Paper: View {
 /// 🙏 on its glowing gold disc.
 struct PrayDisc: View {
     let size: CGFloat
+    var pray = "🙏"
 
     var body: some View {
         ZStack {
@@ -63,7 +104,7 @@ struct PrayDisc: View {
                                      center: UnitPoint(x: 0.5, y: 0.4), startRadius: 0, endRadius: size * 0.6))
                 .overlay(Circle().stroke(rgb(0xf0b95a).opacity(0.6), lineWidth: 1))
                 .shadow(color: rgb(0xf5be5f).opacity(0.55), radius: size * 0.1)
-            Text(verbatim: "🙏").font(.system(size: size * 0.5))
+            Text(verbatim: pray).font(.system(size: size * 0.5))
         }
         .frame(width: size, height: size)
     }
@@ -92,6 +133,7 @@ struct CirclesMark: Shape {
 /// The three people on a plain round button.
 struct CirclesDisc: View {
     let size: CGFloat
+    var news = false
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
@@ -103,19 +145,20 @@ struct CirclesDisc: View {
                 .frame(width: size * 0.6, height: size * 0.6)
         }
         .frame(width: size, height: size)
+        .overlay(alignment: .topTrailing) { if news { NewsDot(size: size * 0.26) } }
     }
 }
 
 /// A button with its name under it.
 struct Labeled<Disc: View>: View {
-    let name: LocalizedStringKey
+    let name: Text
     let disc: Disc
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
         VStack(spacing: 8) {
             disc
-            Text(name)
+            name
                 .font(.system(size: 17, weight: .semibold))
                 .foregroundStyle(Palette(scheme).ink)
                 .lineLimit(1)
@@ -127,15 +170,16 @@ struct Labeled<Disc: View>: View {
 // MARK: Pray (small Home Screen, and the Lock Screen)
 
 struct PrayFace: View {
+    let entry: StillEntry
     @Environment(\.widgetFamily) private var family
 
     var body: some View {
         switch family {
         case .accessoryInline:
-            Text(verbatim: "🙏 ") + Text("Pray")
+            Text(verbatim: entry.pray + " ") + Text("Pray")
         case .accessoryRectangular:
             HStack(spacing: 8) {
-                Text(verbatim: "🙏").font(.title)
+                Text(verbatim: entry.pray).font(.title)
                 VStack(alignment: .leading) {
                     Text("Pray").font(.headline)
                     Text("My Quiet Bible").font(.caption2).foregroundStyle(.secondary)
@@ -145,18 +189,18 @@ struct PrayFace: View {
         case .accessoryCircular:
             ZStack {
                 AccessoryWidgetBackground()
-                Text(verbatim: "🙏").font(.title2)
+                Text(verbatim: entry.pray).font(.title2)
             }
         default:
-            Labeled(name: "Pray", disc: PrayDisc(size: 78))
+            Labeled(name: Text("Pray"), disc: PrayDisc(size: 78, pray: entry.pray))
         }
     }
 }
 
 struct PrayWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "pray", provider: StillProvider()) { _ in
-            PrayFace()
+        StaticConfiguration(kind: "pray", provider: StillProvider()) { entry in
+            PrayFace(entry: entry)
                 .containerBackground(for: .widget) { Paper() }
                 .widgetURL(WidgetLink.pray)
         }
@@ -169,6 +213,7 @@ struct PrayWidget: Widget {
 // MARK: Circles (small Home Screen, and the Lock Screen)
 
 struct CirclesFace: View {
+    let entry: StillEntry
     @Environment(\.widgetFamily) private var family
 
     var body: some View {
@@ -180,18 +225,21 @@ struct CirclesFace: View {
                     .stroke(style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
                     .padding(9)
             }
+            .overlay(alignment: .topTrailing) {
+                if entry.news { Circle().frame(width: 10, height: 10).padding(4) }
+            }
         default:
-            Labeled(name: "Circles", disc: CirclesDisc(size: 74))
+            Labeled(name: entry.news ? newsWords(entry, named: false) : Text("Circles"), disc: CirclesDisc(size: 74, news: entry.news))
         }
     }
 }
 
 struct CirclesWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "circles", provider: StillProvider()) { _ in
-            CirclesFace()
+        StaticConfiguration(kind: "circles", provider: StillProvider()) { entry in
+            CirclesFace(entry: entry)
                 .containerBackground(for: .widget) { Paper() }
-                .widgetURL(WidgetLink.circles)
+                .widgetURL(entry.circlesLink)
         }
         .configurationDisplayName("Circles")
         .description("Tap to share with your circles.")
@@ -202,6 +250,7 @@ struct CirclesWidget: Widget {
 // MARK: Pray and Circles (medium and large Home Screen)
 
 struct BothFace: View {
+    let entry: StillEntry
     @Environment(\.widgetFamily) private var family
     @Environment(\.colorScheme) private var scheme
 
@@ -212,18 +261,19 @@ struct BothFace: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Palette(scheme).ink.opacity(0.7))
                 Spacer(minLength: 0)
-                Link(destination: WidgetLink.pray) { Labeled(name: "Pray", disc: PrayDisc(size: 150)) }
+                Link(destination: WidgetLink.pray) { Labeled(name: Text("Pray"), disc: PrayDisc(size: 150, pray: entry.pray)) }
                 Spacer(minLength: 0)
-                Link(destination: WidgetLink.circles) { CirclesBar() }
+                Link(destination: entry.circlesLink) { CirclesBar(entry: entry) }
             }
         } else {
             // The app's order: Circles on the left, 🙏 on the right.
             HStack(spacing: 0) {
-                Link(destination: WidgetLink.circles) {
-                    Labeled(name: "Circles", disc: CirclesDisc(size: 70)).frame(maxWidth: .infinity, maxHeight: .infinity)
+                Link(destination: entry.circlesLink) {
+                    Labeled(name: entry.news ? newsWords(entry, named: false) : Text("Circles"), disc: CirclesDisc(size: 70, news: entry.news))
+                        .frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
                 Link(destination: WidgetLink.pray) {
-                    Labeled(name: "Pray", disc: PrayDisc(size: 78)).frame(maxWidth: .infinity, maxHeight: .infinity)
+                    Labeled(name: Text("Pray"), disc: PrayDisc(size: 78, pray: entry.pray)).frame(maxWidth: .infinity, maxHeight: .infinity)
                 }
             }
         }
@@ -232,6 +282,7 @@ struct BothFace: View {
 
 /// Circles as one wide button, under the big 🙏.
 struct CirclesBar: View {
+    let entry: StillEntry
     @Environment(\.colorScheme) private var scheme
 
     var body: some View {
@@ -240,8 +291,12 @@ struct CirclesBar: View {
             CirclesMark()
                 .stroke(c.ink, style: StrokeStyle(lineWidth: 2.6 * 30 / 24, lineCap: .round))
                 .frame(width: 30, height: 30)
-            Text("Circles").font(.system(size: 20, weight: .semibold)).foregroundStyle(c.ink)
+                .overlay(alignment: .topTrailing) { if entry.news { NewsDot(size: 11).offset(x: 4, y: -3) } }
+            (entry.news ? newsWords(entry, named: true) : Text("Circles"))
+                .font(.system(size: 20, weight: .semibold)).foregroundStyle(c.ink)
+                .lineLimit(1).minimumScaleFactor(0.7)
         }
+        .padding(.horizontal, 14)
         .frame(maxWidth: .infinity, minHeight: 64)
         .background(Capsule().fill(c.surface).overlay(Capsule().stroke(c.line, lineWidth: 1)))
     }
@@ -249,8 +304,8 @@ struct CirclesBar: View {
 
 struct BothWidget: Widget {
     var body: some WidgetConfiguration {
-        StaticConfiguration(kind: "pray-circles", provider: StillProvider()) { _ in
-            BothFace()
+        StaticConfiguration(kind: "pray-circles", provider: StillProvider()) { entry in
+            BothFace(entry: entry)
                 .containerBackground(for: .widget) { Paper() }
         }
         .configurationDisplayName("Pray and Circles")

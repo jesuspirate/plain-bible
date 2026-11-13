@@ -42,6 +42,12 @@ fi
 if [ -n "${REPORT_EMAIL:-}" ]; then
   printf '%s' "$REPORT_EMAIL" | npx wrangler secret put REPORT_EMAIL >&2
 fi
+# Notifications in the App Store iPhone app: Apple's push key, on once
+# APNS_KEY_ID and APNS_KEY_P8 are repository secrets (see ios/README.md).
+if [ -n "${APNS_KEY_ID:-}" ] && [ -n "${APNS_KEY_P8:-}" ]; then
+  printf '%s' "$APNS_KEY_ID" | npx wrangler secret put APNS_KEY_ID >&2
+  printf '%s' "$APNS_KEY_P8" | npx wrangler secret put APNS_KEY_P8 >&2
+fi
 # Notifications for circles: the service's own key (VAPID), made here once
 # and kept only as a Worker secret. Never changed after, or every phone
 # would have to turn its notifications on again.

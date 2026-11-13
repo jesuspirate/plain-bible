@@ -1,0 +1,23 @@
+{
+  "sourceLanguage": "en",
+  "version": "1.0",
+  "strings": {
+    "Something new in your circle": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Du nouveau dans votre cercle"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Algo nuevo en tu círculo"
+          }
+        }
+      },
+      "extractionState": "manual"
+    }
+  }
+}

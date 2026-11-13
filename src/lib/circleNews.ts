@@ -5,6 +5,7 @@
 // button can show the dot without loading circles.
 import { useEffect, useState } from 'preact/hooks'
 import { api, loadAccount, SYNC_URL } from './sync'
+import { nativeNotify, tellNative } from './nativeNotify'
 
 const SEEN = 'plain-bible:circle-seen'
 const LATEST = 'plain-bible:circle-latest'
@@ -13,7 +14,11 @@ export const NEWS_EVENT = 'plain-bible:circle-news'
 type Times = Record<string, number>
 const read = (k: string): Times => { try { return JSON.parse(localStorage.getItem(k) || '{}') || {} } catch { return {} } }
 const write = (k: string, v: Times) => { try { localStorage.setItem(k, JSON.stringify(v)) } catch { /* ignore */ } }
-const changed = () => dispatchEvent(new Event(NEWS_EVENT))
+const changed = () => {
+  dispatchEvent(new Event(NEWS_EVENT))
+  // The iPhone app's Home Screen widget shows which circles have something new.
+  if (nativeNotify()) tellNative({ op: 'news', ids: Object.keys(read(LATEST)).filter(hasNews) })
+}
 
 /** When this circle was last looked at here. Never heard of: as if just now,
  *  so nothing that came before shows as new. */

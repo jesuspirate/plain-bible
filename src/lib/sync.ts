@@ -206,6 +206,9 @@ export async function signOut(token: string) {
       const sub = await (await navigator.serviceWorker.ready).pushManager?.getSubscription()
       if (sub) await api('/push', { method: 'DELETE', token, body: { endpoint: sub.endpoint } }).then(() => sub.unsubscribe())
     }
+    // The iPhone app: its Apple push address.
+    const native = localStorage.getItem('plain-bible:push-circles') && await (await import('./nativeNotify')).askNative<{ apns?: string } | 'denied' | null>({ op: 'register', ask: false })
+    if (native && native !== 'denied' && native.apns) await api('/push', { method: 'DELETE', token, body: { endpoint: 'apns:' + native.apns } })
     localStorage.removeItem('plain-bible:push-circles')
   } catch { /* ignore */ }
   return api('/auth/logout', { method: 'POST', token }).catch(() => {})

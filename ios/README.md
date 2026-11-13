@@ -20,9 +20,10 @@ web app carries no extra weight for it.
   which has Save to Files.
 - **Apple Watch:** a 🙏 button on the wrist records a prayer and hands it to
   the app (see below).
+- **Circle notifications** ("Notify me" in a circle) come through Apple's
+  own push, because web notifications don't exist inside apps (see below).
 - **Left out in the app:** the "help keep the lamp lit" link (Apple doesn't
-  allow asking for gifts outside In-App Purchase) and circle notifications
-  (web notifications don't exist in apps; they would need Apple's own push).
+  allow asking for gifts outside In-App Purchase).
 
 The web app spots the app by `QuietBibleApp/` in its user agent
 (`inStoreApp()` in `src/lib/install.ts`), and the app sets
@@ -62,6 +63,38 @@ One-time setup, in App Store Connect with the account holder's sign-in:
 The key can do anything in the Apple account, so it belongs only in those
 secrets. If it is ever exposed, revoke it on the same Apple page and make a
 new one. `.github/workflows/ios-release.yml` has the details.
+
+## Circle notifications (Apple push)
+
+The web app asks the iPhone app for this phone's push address when "Notify
+me" is turned on (`QuietBible/Notify.swift`, `src/lib/nativeNotify.ts`) and
+gives it to the sync service, which sends "something new in this circle"
+through Apple (`worker/src/apns.ts`). The message carries only the circle's
+id. A small extension (`QuietBibleNotify/`) puts the circle's name in on the
+phone, from a copy the app keeps in its App Group
+(`group.com.myquietbible.ios`, `Shared/SharedCircles.swift`). The Home Screen
+widget reads the same copy to show a dot when a circle has something new.
+
+One-time setup, at developer.apple.com with the account holder's sign-in:
+
+1. **Certificates, Identifiers & Profiles → Keys → +**. Name it "Circle
+   notifications", tick **Apple Push Notifications service (APNs)**,
+   **Continue → Register**.
+2. Note the **Key ID** and **Download** the `.p8` file (offered only once).
+3. In the GitHub repository: **Settings → Secrets and variables → Actions →
+   New repository secret**, twice: `APNS_KEY_ID`, and `APNS_KEY_P8` (open
+   the `.p8` file in TextEdit and paste all of it).
+
+The next deploy hands both to the sync service. Until then the switch says
+notifications aren't set up yet. This key can only send notifications; it
+is not the App Store Connect key above.
+
+The push and App Group capabilities are added to the app's identifiers by
+the "Send to App Store" build itself (automatic signing). If that build ever
+stops with a message about App Groups, add them by hand: **Identifiers → +
+→ App Groups** → `group.com.myquietbible.ios`, then tick **App Groups** (and
+pick that group) on `com.myquietbible.ios`, `com.myquietbible.ios.widgets`
+and `com.myquietbible.ios.notify`, and run the build again.
 
 ## Sending a version from Xcode instead
 
