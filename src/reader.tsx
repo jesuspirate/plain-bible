@@ -207,17 +207,15 @@ export function Reader({ route }: { route: Route }) {
   const [reading, setReading] = useState<number>()
   useEffect(() => setReading(undefined), [book, chapter, version])
 
-  // The verse a search, link or reminder lands on glows long enough to find
-  // and read it, then fades so you are just reading. A small scroll to read
-  // keeps it; scrolling it off the screen lets it go sooner, and highlighting
-  // or selecting it ends it for good. Back (the clock) still takes you to
-  // where you were, so it needn't stay as a marker.
+  // The verse (or verses) a passage, search, link or reminder lands on stays
+  // lit, steady, so you needn't find it again with your eyes ("let's turn to
+  // John 3:16"): until you tap the page, turn it, or select or highlight the
+  // verse. Scrolling to read around it keeps it.
   const [glow, setGlow] = useState(0)
   const [leaving, setLeaving] = useState(false)
   const landed = useRef('')
   useEffect(() => {
-    // The clock starts once the verse is on screen, and only once per landing
-    // (a version that loads later doesn't light it up again).
+    // Once per landing (a version that loads later doesn't light it up again).
     const at = `${book}/${chapter}/${target}`
     if (!target) { landed.current = ''; return setGlow(0) }
     if (landed.current === at) return setGlow(0)
@@ -225,20 +223,15 @@ export function Reader({ route }: { route: Route }) {
     landed.current = at
     setGlow(target); setLeaving(false)
     let gone = 0
-    const letGo = () => {
-      if (gone) return
+    // A tap anywhere on the page lets it go (a drag to scroll isn't a click).
+    const letGo = (e: Event) => {
+      if (gone || !(e.target as Element).closest?.('.reader')) return
       setLeaving(true)
       gone = window.setTimeout(() => setGlow(0), 600)
     }
-    let seen = false
-    const watch = new IntersectionObserver(([e]) => {
-      if (e.isIntersecting) seen = true
-      else if (seen) letGo()
-    })
-    // After the scroll that brings it into view.
-    const arm = setTimeout(() => { const el = document.getElementById('v' + target); if (el) watch.observe(el) }, 400)
-    const done = setTimeout(() => setGlow(0), 8200)
-    return () => { clearTimeout(arm); clearTimeout(done); clearTimeout(gone); watch.disconnect() }
+    // Not the tap that brought you here.
+    const arm = setTimeout(() => addEventListener('click', letGo), 400)
+    return () => { clearTimeout(arm); clearTimeout(gone); removeEventListener('click', letGo) }
   }, [book, chapter, target, loaded])
   useEffect(() => { if (glow && selected.includes(glow)) setGlow(0) }, [selected])
   useEffect(() => { if (glow && marks[markKey(book, chapter, glow)]?.c) setGlow(0) }, [marks])
