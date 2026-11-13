@@ -1,18 +1,61 @@
 import Foundation
+import Security
 #if canImport(WidgetKit)
 import WidgetKit
 #endif
 
 /// What the iPhone app, its notification extension (QuietBibleNotify) and
-/// its Home Screen widget (QuietBibleHome) share, in their App Group:
-/// the circles' names (sealed on the server, so only this phone knows
-/// them), the notification's words in the app's language, which circles
-/// have something new, and the 🙏 picked in the app. Nothing else.
+/// its Home Screen widget (QuietBibleHome) share: the circles' names (sealed
+/// on the server, so only this phone knows them), the notification's words
+/// in the app's language, which circles have something new, and the 🙏
+/// picked in the app. Nothing else.
+///
+/// Kept as one small item in the keychain, in a group the three share
+/// (keychain-access-groups in their entitlements). An App Group would be the
+/// usual place, but Apple's signing key can't create one, so the App Store
+/// build would need someone to sign in at developer.apple.com. The keychain
+/// group needs nothing set up, and the item can be read while the phone is
+/// locked (after its first unlock), which a notification needs.
 enum SharedCircles {
-    static let group = "group.com.myquietbible.ios"
-    private static var store: UserDefaults? { UserDefaults(suiteName: group) }
+    /// The team's prefix and the shared group, as in the entitlements.
+    private static let group = "VBV7MKN8BZ.com.myquietbible.ios.shared"
+    private static let service = "com.myquietbible.ios.circles"
 
     private static let namesKey = "circleNames", wordsKey = "circleWords", newsKey = "circleNews", toneKey = "prayTone"
+
+    private static var query: [String: Any] {
+        [kSecClass as String: kSecClassGenericPassword,
+         kSecAttrService as String: service,
+         kSecAttrAccount as String: "shared",
+         kSecAttrAccessGroup as String: group]
+    }
+
+    private static func load() -> [String: Any] {
+        var q = query
+        q[kSecReturnData as String] = true
+        q[kSecMatchLimit as String] = kSecMatchLimitOne
+        var out: AnyObject?
+        guard SecItemCopyMatching(q as CFDictionary, &out) == errSecSuccess, let data = out as? Data,
+              let all = try? JSONSerialization.jsonObject(with: data) as? [String: Any] else { return [:] }
+        return all
+    }
+
+    private static func save(_ all: [String: Any]) {
+        guard let data = try? JSONSerialization.data(withJSONObject: all) else { return }
+        let status = SecItemUpdate(query as CFDictionary, [kSecValueData as String: data] as CFDictionary)
+        if status == errSecItemNotFound {
+            var q = query
+            q[kSecValueData as String] = data
+            q[kSecAttrAccessible as String] = kSecAttrAccessibleAfterFirstUnlockThisDeviceOnly
+            SecItemAdd(q as CFDictionary, nil)
+        }
+    }
+
+    private static func set(_ key: String, _ value: Any?) {
+        var all = load()
+        all[key] = value
+        save(all)
+    }
 
     /// Circle ids are letters, digits, - and _ (as on the server).
     static func safe(_ id: String) -> Bool {
@@ -20,26 +63,26 @@ enum SharedCircles {
     }
 
     static var names: [String: String] {
-        get { store?.dictionary(forKey: namesKey) as? [String: String] ?? [:] }
-        set { store?.set(newValue, forKey: namesKey) }
+        get { load()[namesKey] as? [String: String] ?? [:] }
+        set { set(namesKey, newValue) }
     }
 
     /// "title": "Something new in {circle}", "other": "Something new in your circle".
     static var words: [String: String] {
-        get { store?.dictionary(forKey: wordsKey) as? [String: String] ?? [:] }
-        set { store?.set(newValue, forKey: wordsKey) }
+        get { load()[wordsKey] as? [String: String] ?? [:] }
+        set { set(wordsKey, newValue) }
     }
 
     /// The circles with something new, newest first.
     static var news: [String] {
-        get { store?.stringArray(forKey: newsKey) ?? [] }
-        set { store?.set(Array(newValue.prefix(20)), forKey: newsKey) }
+        get { load()[newsKey] as? [String] ?? [] }
+        set { set(newsKey, Array(newValue.prefix(20))) }
     }
 
     /// The 🙏 with its skin tone ("" for the plain yellow one).
     static var tone: String {
-        get { store?.string(forKey: toneKey) ?? "" }
-        set { store?.set(newValue, forKey: toneKey) }
+        get { load()[toneKey] as? String ?? "" }
+        set { set(toneKey, newValue) }
     }
 
     /// A notification's title: "Something new in Family".
@@ -60,7 +103,9 @@ enum SharedCircles {
 
     /// Signed out: nothing of the account stays.
     static func forget() {
-        for k in [namesKey, wordsKey, newsKey] { store?.removeObject(forKey: k) }
+        var all = load()
+        for k in [namesKey, wordsKey, newsKey] { all[k] = nil }
+        save(all)
         refreshWidgets()
     }
 
