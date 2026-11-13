@@ -1004,6 +1004,10 @@ body.selecting .listen { display: none; }
 .sb-follow .listen-what { align-items: center; text-align: center; }
 .sb-follow .listen-what strong { font-size: 17px; max-width: 100%; }
 .sb-follow .listen-what span { font-size: 14px; }
+/* Under the book and chapter: the words (cut short if long) and "7 of 84", always whole. */
+.sb-follow .sb-follow-sub { display: flex; justify-content: center; max-width: 100%; }
+.sb-follow .sb-follow-sub span { flex: none; }
+.sb-follow .sb-follow-sub .sb-follow-q { flex: 0 1 auto; min-width: 0; }
 /* The result you opened last, in the list. */
 .sb-item.sb-here { background: var(--chip); box-shadow: inset 4px 0 0 var(--accent); }
 .sb.sb-mini.sb-reading { left: calc(50vw - min(300px, 50vw - 16px)); right: auto; width: min(600px, calc(100vw - 32px)); }
