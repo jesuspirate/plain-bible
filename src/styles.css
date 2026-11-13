@@ -1126,6 +1126,8 @@ body.selecting .spread-turn { display: none; }
 .leaf-pane > article.chapter.spread { position: absolute; left: 0; top: 0; width: 200%; height: 100%; background: none; box-shadow: none; border-radius: 0; }
 .leaf { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; will-change: transform; }
 .leaf .leaf-pane { left: 0; width: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
+/* The shadows on the turning page are layers of their own, and each one has to be told it has a hidden side too. */
+.leaf .leaf-pane > .leaf-shade, .leaf .leaf-pane > .leaf-deep { -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 .leaf .leaf-pane.back { transform: rotateY(180deg); border-radius: 8px 0 0 8px; }
 /* Each copied page carries the same fold the book has lying still, so the
    book doesn't change when the copy is laid over it or taken away. */

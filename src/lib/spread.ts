@@ -154,16 +154,21 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
       const fade = (el: HTMLElement | null, frames: Keyframe[]) => el ? [el.animate(frames, opts)] : []
       runs = [
         sheet.animate([{ transform: a }, { transform: b }], opts),
-        ...fade(part(shown, 'leaf-shade'), [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: 1, offset: .5 }, { opacity: 1 }]),
-        ...fade(part(hidden, 'leaf-shade'), [{ opacity: 1 }, { opacity: 1, offset: .5 }, { opacity: 0, offset: .9 }, { opacity: 0 }]),
-        // Every shadow is at nothing while the page in the air is level, or
-        // nearly, with the pages lying flat (the first and last tenth of
-        // the way). Lying level, a browser may draw either one on top, frame
-        // by frame, so whatever differs between them flickers: a dark page
-        // flashing as the turn lands.
+        // A shadow on a side of the page that is turned away is at nothing.
+        // Safari, and so the iPhone, iPad and Mac apps, can draw a layer on
+        // the hidden side straight through the page: the shade left on the
+        // side that went down showed over the page as it landed, in flashes.
+        ...fade(part(shown, 'leaf-shade'), [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: 1, offset: .47 }, { opacity: 0, offset: .5 }, { opacity: 0 }]),
+        ...fade(part(hidden, 'leaf-shade'), [{ opacity: 0 }, { opacity: 0, offset: .5 }, { opacity: 1, offset: .53 }, { opacity: 0, offset: .9 }, { opacity: 0 }]),
+        ...fade(part(shown, 'leaf-deep'), [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .47 }, { opacity: 0, offset: .5 }, { opacity: 0 }]),
+        ...fade(part(hidden, 'leaf-deep'), [{ opacity: 0 }, { opacity: 0, offset: .5 }, { opacity: 1, offset: .53 }, { opacity: 1, offset: .7 }, { opacity: 0, offset: .92 }, { opacity: 0 }]),
+        // Every shadow is also at nothing while the page in the air is
+        // level, or nearly, with the pages lying flat (the first and last
+        // tenth of the way). Lying level, a browser may draw either one on
+        // top, frame by frame, so whatever differs between them flickers.
         ...fade(part(still, 'leaf-shade'), [{ opacity: 0 }, { opacity: 0, offset: .5 }, { opacity: .9, offset: .72 }, { opacity: 0, offset: .9 }, { opacity: 0 }]),
+        ...fade(part(still, 'leaf-deep'), [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .7 }, { opacity: 0, offset: .92 }, { opacity: 0 }]),
         ...fade(under, [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: .9, offset: .2 }, { opacity: 0, offset: .7 }, { opacity: 0 }]),
-        ...[still, shown, hidden].flatMap(p => fade(part(p, 'leaf-deep'), [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .7 }, { opacity: 0, offset: .92 }, { opacity: 0 }])),
       ]
       return new Promise<void>(done => {
         // iPhone and iPad can leave an animation frozen (Low Power Mode, the
