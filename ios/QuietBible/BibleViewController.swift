@@ -28,6 +28,10 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.mediaTypesRequiringUserActionForPlayback = []
         // The web app reads this to leave out what only fits a website.
         config.applicationNameForUserAgent = "Mobile/15E148 QuietBibleApp/1"
+        // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
+        config.userContentController.addUserScript(PasskeyBridge.script)
+        config.userContentController.addScriptMessageHandlerWithReply(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
+
         // Behave exactly like the app on an iPhone Home Screen (no "Add to
         // Home Screen" tips, the keyboard's mic for voice search).
         config.userContentController.addUserScript(WKUserScript(
