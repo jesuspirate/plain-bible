@@ -1151,6 +1151,7 @@ export function Reader({ route }: { route: Route }) {
             <div class="spread-flow" ref={flowEl}>{page(book, chapter, true)}</div>
           </article>
           <div class="leaf-box" ref={leafBox} />
+          <div class="spread-fold" aria-hidden="true" />
           <button class="spread-turn back" aria-label={t('Previous')} onClick={() => flip(-1)}><span aria-hidden="true">‹</span></button>
           <button class="spread-turn on" aria-label={t('Next')} onClick={() => flip(1)}><span aria-hidden="true">›</span></button>
         </div>

@@ -136,8 +136,13 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
       hidden.replaceWith(p)
       hidden = p
     },
-    turn() {
-      if (gone) return Promise.resolve()
+    async turn() {
+      if (gone) return
+      // Let the copy be drawn once, lying still, before it moves: started
+      // in the same moment it is made, the turn's first frames are lost
+      // while the browser is still drawing it, and it seems to jump in.
+      await new Promise<void>(go => { requestAnimationFrame(() => requestAnimationFrame(() => go())); setTimeout(go, 150) })
+      if (gone) return
       // It moves from the first moment, as a page let go of does, and settles gently.
       const ease = 'cubic-bezier(.3, .2, .2, 1)'
       const [a, b] = dir === 1 ? ['rotateY(0deg)', 'rotateY(-180deg)'] : ['rotateY(-180deg)', 'rotateY(0deg)']
@@ -170,6 +175,12 @@ export function leaf(box: HTMLElement, from: HTMLElement, k: number, dir: 1 | -1
         ...fade(part(still, 'leaf-deep'), [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: 1, offset: .3 }, { opacity: 1, offset: .7 }, { opacity: 0, offset: .92 }, { opacity: 0 }]),
         ...fade(under, [{ opacity: 0 }, { opacity: 0, offset: .05 }, { opacity: .9, offset: .2 }, { opacity: 0, offset: .7 }, { opacity: 0 }]),
       ]
+      // The copy of the page being landed on goes away just before the
+      // turning page lies on it (by then all but its outer margin is
+      // covered, and under it is the real page, the same). Two layers
+      // lying level are drawn either one on top, frame by frame, in
+      // Safari's engine, which flickered through the turn's last moments.
+      runs.push(still.animate([{ opacity: 1 }, { opacity: 1, offset: .9 }, { opacity: 0, offset: .92 }, { opacity: 0 }], opts))
       return new Promise<void>(done => {
         // iPhone and iPad can leave an animation frozen (Low Power Mode, the
         // app put away); it lands anyway a little after it should have.
