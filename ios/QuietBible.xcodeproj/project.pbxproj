@@ -7,6 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		A10000000000000000000007 /* QuietBibleHome.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D20000000000000000000004 /* QuietBibleHome.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
+		D10000000000000000000001 /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000001 /* HomeWidgets.swift */; };
+		D10000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000002 /* Localizable.xcstrings */; };
 		A10000000000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* AppDelegate.swift */; };
 		A10000000000000000000002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* SceneDelegate.swift */; };
 		A10000000000000000000003 /* BibleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* BibleViewController.swift */; };
@@ -26,6 +29,13 @@
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
+		A90000000000000000000004 /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = A00000000000000000000001 /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = D50000000000000000000001;
+			remoteInfo = QuietBibleHome;
+		};
 		A90000000000000000000002 /* PBXContainerItemProxy */ = {
 			isa = PBXContainerItemProxy;
 			containerPortal = A00000000000000000000001 /* Project object */;
@@ -43,6 +53,17 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXCopyFilesBuildPhase section */
+		A60000000000000000000004 /* Embed Foundation Extensions */ = {
+			isa = PBXCopyFilesBuildPhase;
+			buildActionMask = 2147483647;
+			dstPath = "";
+			dstSubfolderSpec = 13;
+			files = (
+				A10000000000000000000007 /* QuietBibleHome.appex in Embed Foundation Extensions */,
+			);
+			name = "Embed Foundation Extensions";
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		A60000000000000000000003 /* Embed Watch Content */ = {
 			isa = PBXCopyFilesBuildPhase;
 			buildActionMask = 2147483647;
@@ -68,6 +89,10 @@
 /* End PBXCopyFilesBuildPhase section */
 
 /* Begin PBXFileReference section */
+		D20000000000000000000001 /* HomeWidgets.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HomeWidgets.swift; sourceTree = "<group>"; };
+		D20000000000000000000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
+		D20000000000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		D20000000000000000000004 /* QuietBibleHome.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuietBibleHome.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		A20000000000000000000001 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A20000000000000000000002 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A20000000000000000000003 /* BibleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleViewController.swift; sourceTree = "<group>"; };
@@ -91,6 +116,13 @@
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
+		D30000000000000000000001 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B30000000000000000000001 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
@@ -115,6 +147,16 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		D40000000000000000000001 /* QuietBibleHome */ = {
+			isa = PBXGroup;
+			children = (
+				D20000000000000000000001 /* HomeWidgets.swift */,
+				D20000000000000000000002 /* Localizable.xcstrings */,
+				D20000000000000000000003 /* Info.plist */,
+			);
+			path = QuietBibleHome;
+			sourceTree = "<group>";
+		};
 		B40000000000000000000001 /* QuietBibleWatch */ = {
 			isa = PBXGroup;
 			children = (
@@ -145,6 +187,7 @@
 				A40000000000000000000002 /* QuietBible */,
 				B40000000000000000000001 /* QuietBibleWatch */,
 				C40000000000000000000001 /* QuietBibleWidgets */,
+				D40000000000000000000001 /* QuietBibleHome */,
 				A40000000000000000000003 /* Products */,
 			);
 			sourceTree = "<group>";
@@ -169,6 +212,7 @@
 				A20000000000000000000007 /* QuietBible.app */,
 				B20000000000000000000009 /* QuietBibleWatch.app */,
 				C20000000000000000000003 /* QuietBibleWidgets.appex */,
+				D20000000000000000000004 /* QuietBibleHome.appex */,
 			);
 			name = Products;
 			sourceTree = "<group>";
@@ -176,6 +220,23 @@
 /* End PBXGroup section */
 
 /* Begin PBXNativeTarget section */
+		D50000000000000000000001 /* QuietBibleHome */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = D80000000000000000000001 /* Build configuration list for PBXNativeTarget "QuietBibleHome" */;
+			buildPhases = (
+				D60000000000000000000001 /* Sources */,
+				D30000000000000000000001 /* Frameworks */,
+				D60000000000000000000002 /* Resources */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = QuietBibleHome;
+			productName = QuietBibleHome;
+			productReference = D20000000000000000000004 /* QuietBibleHome.appex */;
+			productType = "com.apple.product-type.app-extension";
+		};
 		B50000000000000000000001 /* QuietBibleWatch */ = {
 			isa = PBXNativeTarget;
 			buildConfigurationList = B80000000000000000000001 /* Build configuration list for PBXNativeTarget "QuietBibleWatch" */;
@@ -220,11 +281,13 @@
 				A30000000000000000000001 /* Frameworks */,
 				A60000000000000000000002 /* Resources */,
 				A60000000000000000000003 /* Embed Watch Content */,
+				A60000000000000000000004 /* Embed Foundation Extensions */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 				A90000000000000000000001 /* PBXTargetDependency */,
+				A90000000000000000000003 /* PBXTargetDependency */,
 			);
 			name = QuietBible;
 			productName = QuietBible;
@@ -250,6 +313,9 @@
 					C50000000000000000000001 = {
 						CreatedOnToolsVersion = 16.0;
 					};
+					D50000000000000000000001 = {
+						CreatedOnToolsVersion = 16.0;
+					};
 				};
 			};
 			buildConfigurationList = A80000000000000000000001 /* Build configuration list for PBXProject "QuietBible" */;
@@ -270,11 +336,20 @@
 				A50000000000000000000001 /* QuietBible */,
 				B50000000000000000000001 /* QuietBibleWatch */,
 				C50000000000000000000001 /* QuietBibleWidgets */,
+				D50000000000000000000001 /* QuietBibleHome */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXResourcesBuildPhase section */
+		D60000000000000000000002 /* Resources */ = {
+			isa = PBXResourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D10000000000000000000002 /* Localizable.xcstrings in Resources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B60000000000000000000002 /* Resources */ = {
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -304,6 +379,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXSourcesBuildPhase section */
+		D60000000000000000000001 /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				D10000000000000000000001 /* HomeWidgets.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
 		B60000000000000000000001 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
@@ -337,6 +420,11 @@
 /* End PBXSourcesBuildPhase section */
 
 /* Begin PBXTargetDependency section */
+		A90000000000000000000003 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			target = D50000000000000000000001 /* QuietBibleHome */;
+			targetProxy = A90000000000000000000004 /* PBXContainerItemProxy */;
+		};
 		A90000000000000000000001 /* PBXTargetDependency */ = {
 			isa = PBXTargetDependency;
 			target = B50000000000000000000001 /* QuietBibleWatch */;
@@ -350,6 +438,48 @@
 /* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
+		D70000000000000000000001 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = QuietBibleHome/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.myquietbible.ios.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Debug;
+		};
+		D70000000000000000000002 /* Release */ = {
+			isa = XCBuildConfiguration;
+			buildSettings = {
+				APPLICATION_EXTENSION_API_ONLY = YES;
+				CODE_SIGN_STYLE = Automatic;
+				INFOPLIST_FILE = QuietBibleHome/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 17.0;
+				LD_RUNPATH_SEARCH_PATHS = (
+					"$(inherited)",
+					"@executable_path/Frameworks",
+					"@executable_path/../../Frameworks",
+				);
+				PRODUCT_BUNDLE_IDENTIFIER = com.myquietbible.ios.widgets;
+				PRODUCT_NAME = "$(TARGET_NAME)";
+				SKIP_INSTALL = YES;
+				SWIFT_EMIT_LOC_STRINGS = YES;
+				SWIFT_VERSION = 5.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+			};
+			name = Release;
+		};
 		B70000000000000000000001 /* Debug */ = {
 			isa = XCBuildConfiguration;
 			buildSettings = {
@@ -518,6 +648,15 @@
 /* End XCBuildConfiguration section */
 
 /* Begin XCConfigurationList section */
+		D80000000000000000000001 /* Build configuration list for PBXNativeTarget "QuietBibleHome" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D70000000000000000000001 /* Debug */,
+				D70000000000000000000002 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
 		B80000000000000000000001 /* Build configuration list for PBXNativeTarget "QuietBibleWatch" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (

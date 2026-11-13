@@ -85,6 +85,21 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         if web == nil { start = url } else { web.load(URLRequest(url: url)) }
     }
 
+    /// The Home Screen widget's buttons: quietbible://pray opens the prayer
+    /// screen and quietbible://circles opens Circles, over the page you were
+    /// reading. When the page is already up, only its address changes, so
+    /// nothing reloads.
+    func openWidgetLink(_ url: URL) {
+        guard url.scheme == "quietbible", let page = url.host, page == "pray" || page == "circles" else { return }
+        if web != nil && loaded {
+            web.evaluateJavaScript("location.hash = '#/\(page)'")
+            return
+        }
+        guard let link = URL(string: "https://\(Self.host)/#/\(page)") else { return }
+        start = link
+        if web != nil { web.load(URLRequest(url: link)) }
+    }
+
     /// Pages for the website's visitors (the welcome page, the privacy
     /// page): they open in Safari, like any other site.
     private static func websiteOnly(_ url: URL) -> Bool {

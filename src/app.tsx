@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource, refreshSaved } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, parseHash } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { followSettings, ListenPlayer } from './listen'
@@ -178,6 +178,14 @@ export function App() {
     addEventListener(PRAY_EVENT, on)
     return () => removeEventListener(PRAY_EVENT, on)
   }, [])
+  // #/pray (the 🙏 on the iPhone Home Screen widget): back to the page you
+  // were reading, with the prayer screen open over it, already listening.
+  // (#/circles, the widget's other button, already opens Circles: circles.tsx.)
+  useEffect(() => {
+    if (page !== 'pray') return
+    if (parseHash().path[0] === 'pray') go('read', true)
+    prayNow()
+  }, [page])
 
   // Settings rise as a sheet from the button in the top right corner.
   const [settingsOpen, setSettingsOpen] = useState(false)
