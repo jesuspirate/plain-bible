@@ -984,7 +984,7 @@ export default {
   "Next result": "Resultado siguiente",
   "Back to the results": "Volver a los resultados",
   "End this search": "Terminar esta búsqueda",
-  "Continue at {place}": "Continuar en {place}",
+  "Continue on {place}": "Continuar en {place}",
   "From your iPhone": "Desde tu iPhone",
   "From your iPad": "Desde tu iPad",
   "From your Mac": "Desde tu Mac",

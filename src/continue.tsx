@@ -48,7 +48,7 @@ export function ContinueOffer({ mini }: { mini: boolean }) {
   return (
     <div class={'continue' + (mini ? ' continue-mini' : '')} role="status">
       <button type="button" class="continue-go" onClick={take}>
-        <strong>{t('Continue at {place}', { place })}</strong>
+        <strong>{t('Continue on {place}', { place })}</strong>
         <span>{t(FROM[offer.on])}{offer.s && <> · {t('Search')} “{offer.s.q}”</>}</span>
       </button>
       <button type="button" class="close-btn" aria-label={t('Close')} title={t('Close')} onClick={() => { answerOffer(offer); setOffer(undefined) }}><CloseIcon size={22} /></button>
