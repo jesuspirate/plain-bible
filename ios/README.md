@@ -10,6 +10,9 @@ web app carries no extra weight for it.
   start it opens without a connection, like the Home Screen app.
 - **Passkeys:** the app and the site vouch for each other through
   `webcredentials:myquietbible.com`, so the same passkeys sign in.
+  On a Mac (the app runs there as "Designed for iPad") the web view has no
+  passkeys of its own, so `PasskeyBridge.swift` hands the page's passkey
+  calls to the system's passkey sheet.
 - **Links:** myquietbible.com links (verses, circle invites) open the app
   (`applinks:`). Other sites, the welcome page and the privacy page open in Safari.
 - **Prayers:** the microphone is asked for once, by iOS.

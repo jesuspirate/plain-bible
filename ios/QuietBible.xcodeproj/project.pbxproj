@@ -10,6 +10,7 @@
 		A10000000000000000000007 /* QuietBibleHome.appex in Embed Foundation Extensions */ = {isa = PBXBuildFile; fileRef = D20000000000000000000004 /* QuietBibleHome.appex */; settings = {ATTRIBUTES = (RemoveHeadersOnCopy, ); }; };
 		D10000000000000000000001 /* HomeWidgets.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000001 /* HomeWidgets.swift */; };
 		D10000000000000000000002 /* Localizable.xcstrings in Resources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000002 /* Localizable.xcstrings */; };
+		A100000000000000000000B1 /* PasskeyBridge.swift in Sources */ = {isa = PBXBuildFile; fileRef = A200000000000000000000B1 /* PasskeyBridge.swift */; };
 		A10000000000000000000001 /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000001 /* AppDelegate.swift */; };
 		A10000000000000000000002 /* SceneDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000002 /* SceneDelegate.swift */; };
 		A10000000000000000000003 /* BibleViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = A20000000000000000000003 /* BibleViewController.swift */; };
@@ -93,6 +94,7 @@
 		D20000000000000000000002 /* Localizable.xcstrings */ = {isa = PBXFileReference; lastKnownFileType = text.json.xcstrings; path = Localizable.xcstrings; sourceTree = "<group>"; };
 		D20000000000000000000003 /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		D20000000000000000000004 /* QuietBibleHome.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuietBibleHome.appex; sourceTree = BUILT_PRODUCTS_DIR; };
+		A200000000000000000000B1 /* PasskeyBridge.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = PasskeyBridge.swift; sourceTree = "<group>"; };
 		A20000000000000000000001 /* AppDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = AppDelegate.swift; sourceTree = "<group>"; };
 		A20000000000000000000002 /* SceneDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SceneDelegate.swift; sourceTree = "<group>"; };
 		A20000000000000000000003 /* BibleViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BibleViewController.swift; sourceTree = "<group>"; };
@@ -195,6 +197,7 @@
 		A40000000000000000000002 /* QuietBible */ = {
 			isa = PBXGroup;
 			children = (
+				A200000000000000000000B1 /* PasskeyBridge.swift */,
 				A20000000000000000000001 /* AppDelegate.swift */,
 				A20000000000000000000002 /* SceneDelegate.swift */,
 				A20000000000000000000003 /* BibleViewController.swift */,
@@ -410,6 +413,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				A100000000000000000000B1 /* PasskeyBridge.swift in Sources */,
 				A10000000000000000000001 /* AppDelegate.swift in Sources */,
 				A10000000000000000000002 /* SceneDelegate.swift in Sources */,
 				A10000000000000000000003 /* BibleViewController.swift in Sources */,
