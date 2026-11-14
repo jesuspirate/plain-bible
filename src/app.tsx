@@ -521,13 +521,27 @@ function HistoryButton({ route }: { route: Route }) {
 function UpdateButton() {
   const state = useUpdate()
   const [busy, setBusy] = useState(false)
+  const ring = useRef<SVGCircleElement>(null)
+  // The ring is drawn from the clock on every screen frame. As a CSS
+  // animation, an iPhone ran it slower than the clock and every redraw of
+  // the button snapped it forward: it shrank in little jumps.
+  useEffect(() => {
+    if (state !== 'ready' || busy) return
+    let frame = 0
+    const draw = () => {
+      const left = 1 - Math.min(1, (Date.now() - readySince()) / COUNTDOWN)
+      ring.current?.style.setProperty('stroke-dashoffset', String(100 * (1 - left)))
+      if (left > 0) frame = requestAnimationFrame(draw)
+    }
+    draw()
+    return () => cancelAnimationFrame(frame)
+  }, [state, busy])
   if (state !== 'ready') return null
-  const gone = Math.min(COUNTDOWN, Date.now() - readySince())
   return (
     <button class={'update-btn' + (busy ? ' busy' : '')} aria-label={t('New version ready. Tap to update now, or it updates by itself in a minute')} title={t('New version ready: tap to update now, or it updates by itself in a minute')}
       onClick={() => { setBusy(true); applyUpdate() }}>
       <svg class="update-ring" viewBox="0 0 46 46" aria-hidden="true">
-        <circle cx="23" cy="23" r="19" pathLength="100" style={{ animationDuration: `${COUNTDOWN}ms`, animationDelay: `-${gone}ms` }} />
+        <circle ref={ring} cx="23" cy="23" r="19" pathLength="100" />
       </svg>
       {busy ? <SpinnerIcon size={24} class="spin" /> : <RefreshIcon size={24} />}
     </button>

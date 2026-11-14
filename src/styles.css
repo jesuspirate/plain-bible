@@ -859,8 +859,7 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 /* The minute before it updates by itself, running down around the button. */
 .update-btn { position: relative; }
 .update-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); pointer-events: none; }
-.update-ring circle { fill: none; stroke: var(--accent-ink); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 0; opacity: .85; animation: update-count linear forwards; }
-@keyframes update-count { to { stroke-dashoffset: 100; } }
+.update-ring circle { fill: none; stroke: var(--accent-ink); stroke-width: 3; stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 0; opacity: .85; }
 .update-btn.busy .update-ring { display: none; }
 /* Updating by itself: the page fades to its own color instead of blinking. */
 html.updating body { opacity: 0; transition: opacity .35s ease; }
