@@ -230,6 +230,25 @@ def align(raw, verses, extra):
     return out, hit / len(ref)
 
 
+def past_the_name(times):
+    """A chapter's recording opens with its name ("John 3"), which the app
+    skips. Now and then a word of the name is taken for the first word of the
+    first verse ("the" in "the book of…"), so the verse seems to start within
+    the first seconds, before a long gap. Put such early words right before
+    the first word after that gap."""
+    row = next((r for r in times if r), None)
+    if not row or len(row) < 3 or row[0] >= 250:
+        return
+    gaps = row[1:-1][:6]
+    k = max(range(len(gaps)), key=lambda i: gaps[i])
+    if gaps[k] < 80:
+        return
+    start = row[0] + sum(gaps[: k + 1])  # where the word after the gap starts
+    for i in range(k + 1):
+        row[1 + i] = 25
+    row[0] = max(0, start - 25 * (k + 1))
+
+
 def chapter(job):
     voice, url, verses, extra = job
     for attempt in range(4):
@@ -243,6 +262,7 @@ def chapter(job):
     raw = subprocess.run(["ffmpeg", "-v", "error", "-i", "pipe:0", "-ac", "1", "-ar", "16000", "-f", "s16le", "pipe:1"],
                          input=mp3, capture_output=True, check=True).stdout
     times, share = align(raw, verses, extra)
+    past_the_name(times)
     return times, share, None
 
 

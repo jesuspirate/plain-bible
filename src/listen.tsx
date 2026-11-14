@@ -417,8 +417,9 @@ function hear(my: number) {
     const verse = n.only ? n.only.find(x => x >= n.verse && times[x - 1]) : nextTimed(times, n.verse)
     if (verse === undefined) return chapterDone()
     held = { rec, url, times }
-    // From the top of a chapter, its name is said first, as when one chapter runs into the next.
-    const at = verse === 1 && !n.only ? 0 : jump(verse)
+    // Always from the verse's own first word: a recording opens each chapter by
+    // naming the Bible, the book and the chapter, which nobody needs to hear again.
+    const at = jump(verse)
     const go = () => { if (my === run && held?.url === url) { a.currentTime = at; a.muted = false } }
     if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true })
     now = { ...now, verse }
