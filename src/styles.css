@@ -1229,3 +1229,40 @@ body.selecting .continue { display: none; }
     mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
   }
 }
+
+/* ---- Define: the meaning of a word you hold (or double click) ---- */
+.define-pill {
+  position: fixed; z-index: 31; left: 50%; transform: translateX(-50%); bottom: calc(80px + env(safe-area-inset-bottom));
+  display: flex; align-items: center; gap: 10px; max-width: calc(100vw - 32px); min-height: 52px; box-sizing: border-box;
+  padding: 0 22px; border-radius: 26px; border: 1px solid var(--line);
+  background: var(--surface); color: var(--text); font-size: 18px; font-weight: 600; line-height: 1.2;
+  box-shadow: 0 10px 30px rgba(0,0,0,.18); cursor: pointer; -webkit-tap-highlight-color: transparent;
+  animation: define-in .2s ease-out;
+}
+.define-pill span { min-width: 0; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.define-pill svg { color: var(--accent); flex: none; }
+.define-pill:active { transform: translateX(-50%) scale(.96); }
+@keyframes define-in { from { opacity: 0; transform: translateX(-50%) translateY(8px); } }
+@supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
+  /* More frost than the search bar: it sits over the words, which mustn't show through its own. */
+  .define-pill { border-color: transparent; background: var(--glass-open); -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%); }
+  .define-pill span { text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface); }
+  .define-pill::after {
+    content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
+    background: linear-gradient(to bottom, var(--rim-light), var(--rim-dark) 34%, var(--rim-dark) 66%, var(--rim-light));
+    -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
+    mask: linear-gradient(#000 0 0) content-box exclude, linear-gradient(#000 0 0);
+  }
+}
+.define { font-size: 19px; line-height: 1.5; }
+.define section + section { margin-top: 18px; padding-top: 14px; border-top: 1px solid var(--line); }
+.define-how { margin: 0 0 2px; color: var(--muted); font-size: 16px; }
+.sheet-body h3.define-word { margin: 0 0 4px; font: 600 26px/1.25 var(--reading); color: var(--text); text-transform: none; letter-spacing: 0; }
+.define-kind { margin: 10px 0 2px; color: var(--accent); font-size: 15px; font-weight: 600; font-style: italic; }
+.define-list { margin: 0; padding-left: 1.4em; }
+.define-list li + li { margin-top: 6px; }
+.define-big {
+  display: flex; align-items: center; justify-content: center; width: 100%; min-height: 52px; margin-top: 20px;
+  border: 1px solid var(--line); border-radius: 26px; background: var(--chip); color: var(--text); font-size: 18px; font-weight: 600;
+}
+.define-credit { margin: 14px 0 0; text-align: center; }

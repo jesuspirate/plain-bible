@@ -422,6 +422,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       scrollmapper: <a href="https://github.com/scrollmapper/bible_databases" target="_blank" rel="noopener">{t('Scrollmapper Bible databases')}</a>,
       oshb: <a href="https://github.com/openscriptures/morphhb" target="_blank" rel="noopener">Open Scriptures Hebrew Bible</a> })}{' '}
       {tj('Strong’s dictionary from {source} (CC BY-SA).', { source: <a href="https://github.com/openscriptures/strongs" target="_blank" rel="noopener">Open Scriptures</a> })}{' '}
+      {tj('Word definitions from {source} (CC BY-SA), through {kaikki}.', { source: <a href="https://www.wiktionary.org" target="_blank" rel="noopener">Wiktionary</a>, kaikki: <a href="https://kaikki.org" target="_blank" rel="noopener">kaikki.org</a> })}{' '}
       {t('Each version’s license is listed on the Versions page.')}</p>
   </>
 

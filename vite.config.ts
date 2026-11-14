@@ -95,8 +95,9 @@ export default defineConfig({
         navigateFallbackDenylist: [/\/welcome$/, /\/support$/],
         runtimeCaching: [
           {
-            // Bibles you open, or save from the Versions page, stay available offline.
-            urlPattern: ({ url }) => /\/data\/(bibles\/|strongs-)/.test(url.pathname),
+            // Bibles you open, or save from the Versions page, stay available offline,
+            // and so does a word dictionary once you've looked up a word (src/define.tsx).
+            urlPattern: ({ url }) => /\/data\/(bibles\/|strongs-)|\/dict\/\w+\.json$/.test(url.pathname),
             handler: 'CacheFirst',
             options: { cacheName: 'bible-data', cacheableResponse: { statuses: [0, 200] } },
           },

@@ -12,7 +12,7 @@ const CATALOG_KEY = 'plain-bible:catalog'
 const CHECKED_KEY = 'plain-bible:saved-checked'
 const DAY = 24 * 3600 * 1000
 
-/** Bibles saved on this device are read from the saved copy first, so a fix
+/** Bibles (and word dictionaries) saved on this device are read from the saved copy first, so a fix
  *  to a text (say a typo) would never reach them. Once a day, online, each
  *  saved Bible asks the site whether it changed: an unchanged one costs a tiny
  *  "not modified" answer, a changed one is downloaded again. */
@@ -23,9 +23,10 @@ export async function refreshSaved(base: string, now = Date.now()) {
     localStorage.setItem(CHECKED_KEY, String(now))
   } catch { return }
   const c = await caches.open('bible-data')
-  const prefix = new URL('bibles/', base).href
+  // The word dictionaries (src/lib/dict.ts) sit beside the data folder.
+  const prefixes = [new URL('bibles/', base).href, new URL('../dict/', base).href]
   for (const req of await c.keys()) {
-    if (!req.url.startsWith(prefix)) continue
+    if (!prefixes.some(p => req.url.startsWith(p))) continue
     const old = await c.match(req)
     const tag = old?.headers.get('etag')
     if (!old || !tag) continue
