@@ -24,7 +24,7 @@ const BASE = 'https://openbible.com/audio/'
  * one, make its word times with scripts/align_audio.py and list it here. */
 export const RECORDINGS: Recording[] = [
   { id: 'hays', version: 'BSB', name: 'Barry Hays', file: (n, code, c) => `${BASE}hays/BSB_${n}_${code}_${c}_H.mp3` },
-  { id: 'david', version: 'KJV', name: 'David', file: (n, code, c) => `${BASE}kjv/KJV_${n}_${code}_${c}.mp3` },
+  // The King James (kjv/KJV_01_Gen_001.mp3, read by “David”) joins once its word times are made.
 ]
 
 // The publisher's code for each of the 66 books, in the Bible's order.

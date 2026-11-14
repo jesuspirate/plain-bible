@@ -4,16 +4,14 @@ import { chapterUrl, locate, nextTimed, recordingsFor, verseTimes, RECORDINGS } 
 describe('recorded readings', () => {
   it('knows which Bibles have one', () => {
     expect(recordingsFor('BSB').map(r => r.id)).toEqual(['hays'])
-    expect(recordingsFor('KJV').map(r => r.id)).toEqual(['david'])
     expect(recordingsFor('LSG')).toEqual([])
   })
 
   it('finds a chapter’s file as its publisher names it', () => {
-    const [hays] = recordingsFor('BSB'), [david] = recordingsFor('KJV')
+    const [hays] = recordingsFor('BSB')
     expect(chapterUrl(hays, 'Gen', 1)).toBe('https://openbible.com/audio/hays/BSB_01_Gen_001_H.mp3')
     expect(chapterUrl(hays, 'Ps', 119)).toBe('https://openbible.com/audio/hays/BSB_19_Psa_119_H.mp3')
-    expect(chapterUrl(david, 'John', 3)).toBe('https://openbible.com/audio/kjv/KJV_43_Jhn_003.mp3')
-    expect(chapterUrl(david, 'Rev', 22)).toBe('https://openbible.com/audio/kjv/KJV_66_Rev_022.mp3')
+    expect(chapterUrl(hays, 'Rev', 22)).toBe('https://openbible.com/audio/hays/BSB_66_Rev_022_H.mp3')
   })
 
   it('has no file for a book outside the 66', () => {
