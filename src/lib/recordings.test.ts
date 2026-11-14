@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { chapterUrl, locate, nextTimed, recordingsFor, verseTimes, RECORDINGS } from './recordings'
+import { chapterUrl, locate, nextTimed, recordingsFor, verseTimes, RECORDINGS, type ChapterTimes } from './recordings'
 
 describe('recorded readings', () => {
   it('knows which Bibles have one', () => {
@@ -30,7 +30,7 @@ describe('recorded readings', () => {
     expect(verseTimes(undefined)).toBeUndefined()
   })
 
-  const chapter = [verseTimes([400, 50, 50, 30]), undefined, verseTimes([1000, 100, 40])]
+  const chapter: ChapterTimes = [verseTimes([400, 50, 50, 30]), undefined, verseTimes([1000, 100, 40])]
 
   it('tells which verse and word a moment is in', () => {
     expect(locate(chapter, 1)).toBeUndefined() // the chapter's name
