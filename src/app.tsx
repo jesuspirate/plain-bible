@@ -7,7 +7,7 @@ import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { followSettings, ListenPlayer } from './listen'
 import { Saved } from './saved'
-import { HistoryIcon, RefreshIcon } from './icons'
+import { HistoryIcon, RefreshIcon, SpinnerIcon } from './icons'
 import { applyUpdate, COUNTDOWN, readySince, useUpdate } from './lib/update'
 import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
 import { formatRef } from './lib/refs'
@@ -529,7 +529,7 @@ function UpdateButton() {
       <svg class="update-ring" viewBox="0 0 46 46" aria-hidden="true">
         <circle cx="23" cy="23" r="19" pathLength="100" style={{ animationDuration: `${COUNTDOWN}ms`, animationDelay: `-${gone}ms` }} />
       </svg>
-      <RefreshIcon size={24} />
+      {busy ? <SpinnerIcon size={24} class="spin" /> : <RefreshIcon size={24} />}
     </button>
   )
 }

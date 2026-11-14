@@ -49,6 +49,13 @@ export const RefreshIcon = ({ size, class: c }: P) => (
 )
 
 
+/** A loading spinner: a faint full ring with a quarter of it drawn bold.
+ *  A true circle centred in its box, so it turns without wobbling. */
+export const SpinnerIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4" opacity=".25" />
+    <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" pathLength="100" stroke-dasharray="28 72" /></svg>
+)
+
 /** Three people around a circle: share with your circle. */
 export const CircleIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" />
