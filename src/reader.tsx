@@ -15,7 +15,7 @@ import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
-import { canListen, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
+import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
@@ -1349,7 +1349,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
             {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
-            {canListen && !settings.readSilent && <button onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
+            {canHear(version) && !settings.readSilent && <button onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
