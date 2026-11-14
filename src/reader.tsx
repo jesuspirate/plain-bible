@@ -13,6 +13,7 @@ import { go, inCircles, openSearch, PICK_EVENT, pickVerses, prayOver, versePick,
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
+import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
@@ -1008,6 +1009,9 @@ export function Reader({ route }: { route: Route }) {
 
   const rows = loaded ? Math.max(...versions.map(v => bibles[v].books[book]?.[chapter - 1]?.length ?? 0)) : 0
   const showStrongs = settings.strongs
+  // Hold a word (or double click it) and "Define" offers its meaning.
+  const picked = useSelectedWord(() => article.current)
+  const [defining, setDefining] = useState<{ word: string; lang: string | undefined }>()
   const info = byId.get(version)
 
   // Your notes on this chapter: a quiet line under the title, there only
@@ -1177,6 +1181,12 @@ export function Reader({ route }: { route: Route }) {
       </nav>
       {info && <p class="credit muted small">{info.name}. {info.license}.</p>}
 
+      {picked && !defining && !selected.length && !picking && <DefinePill word={picked.word} onDefine={() => {
+        setDefining({ word: picked.word, lang: picked.lang ?? byId.get(version)?.lang })
+        getSelection()?.removeAllRanges()
+      }} />}
+      {defining && <DefineSheet word={defining.word} lang={dictLangFor(defining.lang)}
+        version={versions.find(v => byId.get(v)?.lang === defining.lang) ?? version} onClose={() => setDefining(undefined)} />}
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}

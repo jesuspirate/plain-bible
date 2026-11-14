@@ -995,4 +995,13 @@ export default {
   "From your Mac": "Depuis votre Mac",
   "From your Android phone": "Depuis votre téléphone Android",
   "From your computer": "Depuis votre ordinateur",
+  // Define (src/define.tsx)
+  "Define “{word}”": "Définir « {word} »",
+  "Getting the dictionary, just this once. After that it works offline.": "Téléchargement du dictionnaire, une seule fois. Ensuite, il fonctionne hors ligne.",
+  "The dictionary downloads the first time you use it. Connect to the internet, then try again.": "Le dictionnaire se télécharge la première fois que vous l’utilisez. Connectez-vous à Internet, puis réessayez.",
+  "No definition found for “{word}”.": "Aucune définition trouvée pour « {word} ».",
+  "Find “{word}” in the Bible": "Chercher « {word} » dans la Bible",
+  "Definitions from Wiktionary (CC BY-SA).": "Définitions tirées du Wiktionnaire (CC BY-SA).",
+  "A form of “{word}”": "Une forme de « {word} »",
+  "Word definitions from {source} (CC BY-SA), through {kaikki}.": "Définitions des mots tirées du {source} (CC BY-SA), par {kaikki}.",
 } as Record<string, string>
