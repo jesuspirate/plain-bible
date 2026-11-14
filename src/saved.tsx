@@ -1,7 +1,7 @@
 // Your highlights, notes and bookmarks, each on its own tab, shown in the
 // version you read. Notes and bookmarks open with the most recent first.
 import { ComponentChildren } from 'preact'
-import { useEffect, useMemo, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { Bible } from './lib/data'
 import { compareKeys, hasContent, Mark, Marks, notesOf, PALETTE, parseKey, tidy } from './lib/marks'
 import { NotesSheet, NotesTarget, verseRanges } from './reader'
@@ -10,10 +10,12 @@ import { bookName } from './lib/books'
 import { plain } from './lib/text'
 import { readPath, useApp } from './state'
 import { N_, t } from './i18n'
+import { NO_SWIPE, swipeAxis, swipeCounts, swipeTo } from './lib/tabswipe'
 
 const PAGE = 60
 const TAB = 'plain-bible:saved-tab'
 type Tab = 'highlights' | 'notes' | 'bookmarks'
+const TABS: readonly Tab[] = ['highlights', 'notes', 'bookmarks']
 
 /** Verses next to each other in one color read as one highlight. */
 interface Run { keys: string[]; book: string; chapter: number; verses: number[]; color: string }
@@ -75,6 +77,136 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     setTabState(to); setLimit(PAGE); setRecolor(undefined); setUndo(undefined); setFind('')
     try { localStorage.setItem(TAB, to) } catch { /* private mode */ }
   }
+
+  // The three lists lie side by side like pages: a swipe left or right (or a
+  // two-finger swipe on a trackpad) slides the list away with the finger and
+  // brings the next one in, and the tabs above follow. Tapping a tab slides
+  // too, from the side it's on. Up and down stays a scroll.
+  const root = useRef<HTMLDivElement>(null), page = useRef<HTMLDivElement>(null), tabBar = useRef<HTMLDivElement>(null)
+  // Where the next list comes in from, in pixels (negative = from the left).
+  const enter = useRef(0)
+  const swiped = useRef(false)
+  const now = useRef({ tab, setTab, busy: !!editing || !!askBm })
+  now.current = { tab, setTab, busy: !!editing || !!askBm }
+  const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches
+  const isRtl = () => !!root.current && getComputedStyle(root.current).direction === 'rtl'
+  /** Go to a tab, sliding: `dx` is where the list being left already is. */
+  const slideTo = (to: Tab, dx: number) => {
+    const pg = page.current
+    if (!pg || still()) { now.current.setTab(to); return }
+    const w = pg.offsetWidth || innerWidth
+    const way = dx ? Math.sign(dx) : (TABS.indexOf(to) > TABS.indexOf(now.current.tab) ? -1 : 1) * (isRtl() ? -1 : 1)
+    pg.getAnimations().forEach(a => a.cancel())
+    pg.style.transform = ''
+    const out = pg.animate([{ transform: `translate3d(${dx}px,0,0)` }, { transform: `translate3d(${way * w}px,0,0)`, opacity: dx ? 1 : 0 }],
+      { duration: dx ? 170 : 120, easing: 'ease-in', fill: 'forwards' })
+    out.onfinish = () => { enter.current = -way * (dx ? w : w * .35); now.current.setTab(to) }
+  }
+  const springBack = (dx: number) => {
+    const pg = page.current
+    if (!pg) return
+    pg.style.transform = ''
+    if (dx && !still()) pg.animate([{ transform: `translate3d(${dx}px,0,0)` }, { transform: 'none' }], { duration: 200, easing: 'ease-out' })
+  }
+  const pick = (to: Tab) => { if (to !== tab) slideTo(to, 0) }
+  useLayoutEffect(() => {
+    const pg = page.current, from = enter.current
+    enter.current = 0
+    if (!pg) return
+    pg.getAnimations().forEach(a => a.cancel())
+    pg.style.transform = ''
+    // Swiped from far down a long list: show the top of the new one, tabs and all.
+    if (swiped.current && tabBar.current && tabBar.current.getBoundingClientRect().top < 0) tabBar.current.scrollIntoView({ block: 'start' })
+    swiped.current = false
+    if (from) pg.animate([{ transform: `translate3d(${from}px,0,0)`, opacity: .4 }, { transform: 'none', opacity: 1 }], { duration: 220, easing: 'ease-out' })
+  }, [tab])
+  useEffect(() => {
+    const el = root.current
+    if (!el) return
+    /** Not for us: typing, buttons that need a still finger, or a sheet
+     *  (like editing a note) opened from inside the list. */
+    const mine = (target: EventTarget | null) => {
+      const x = target as Element | null
+      if (!x?.closest || now.current.busy || x.closest(NO_SWIPE)) return false
+      const sheet = x.closest('dialog, [role="dialog"], [role="alertdialog"], [aria-modal="true"]')
+      return !(sheet && el.contains(sheet))
+    }
+    let s: { x: number; y: number; t: number; axis?: 'x' | 'y'; dx: number } | undefined
+    const stop = () => {
+      s = undefined
+      removeEventListener('touchmove', move); removeEventListener('touchend', end); removeEventListener('touchcancel', cancel)
+    }
+    const move = (e: TouchEvent) => {
+      if (!s) return
+      if (e.touches.length > 1) return cancel()
+      const p = e.touches[0], dx = p.clientX - s.x
+      if (!s.axis) {
+        s.axis = swipeAxis(dx, p.clientY - s.y)
+        if (s.axis === 'y') return stop()
+        if (!s.axis) return
+      }
+      // Sideways: the list follows the finger and the page doesn't scroll.
+      if (e.cancelable) e.preventDefault()
+      s.dx = dx
+      const pg = page.current
+      // Past the first or last list it only gives a little.
+      if (pg) pg.style.transform = `translate3d(${swipeTo(TABS, now.current.tab, dx, isRtl()) ? dx : dx * .3}px,0,0)`
+    }
+    const end = () => {
+      const was = s
+      stop()
+      if (was?.axis !== 'x') return
+      const to = swipeCounts(was.dx, Date.now() - was.t, el.offsetWidth) ? swipeTo(TABS, now.current.tab, was.dx, isRtl()) : undefined
+      if (to) { swiped.current = true; slideTo(to, was.dx) } else springBack(was.dx * (swipeTo(TABS, now.current.tab, was.dx, isRtl()) ? 1 : .3))
+    }
+    // Taken away (a call, a system swipe): the list goes back.
+    const cancel = () => { const was = s; stop(); if (was?.axis === 'x') springBack(was.dx) }
+    const down = (e: TouchEvent) => {
+      stop()
+      if (e.touches.length !== 1 || !mine(e.target)) return
+      const p = e.touches[0]
+      s = { x: p.clientX, y: p.clientY, t: Date.now(), dx: 0 }
+      addEventListener('touchmove', move, { passive: false })
+      addEventListener('touchend', end)
+      addEventListener('touchcancel', cancel)
+    }
+
+    // Trackpad: a gesture is a scroll or a swipe, decided from its first few
+    // pixels. After a slide the Mac keeps sending the swipe's fading glide;
+    // that's ignored until it stops, or a new, stronger swipe begins.
+    let w = { sx: 0, sy: 0, px: 0, axis: '', last: 0, done: false, low: 0, peak: 0, timer: 0 }
+    const wheel = (e: WheelEvent) => {
+      const t = Date.now(), ax = Math.abs(e.deltaX), ay = Math.abs(e.deltaY)
+      if (t - w.last > 200) { clearTimeout(w.timer); w = { sx: 0, sy: 0, px: 0, axis: '', last: t, done: false, low: 0, peak: 0, timer: 0 } }
+      w.last = t
+      if (w.done) {
+        if (ax > Math.max(w.low * 2, w.low + 6) && w.low <= w.peak / 2) { w.done = false; w.px = 0; w.peak = 0 }
+        else { w.low = Math.min(w.low, ax); if (w.axis === 'x') e.preventDefault(); return }
+      }
+      if (!w.axis) {
+        if (!mine(e.target)) return
+        w.sx += ax; w.sy += ay
+        if (w.sx + w.sy < 12) { w.px += e.deltaX; return }
+        w.axis = w.sx > w.sy * 2 ? 'x' : 'y'
+      }
+      if (w.axis !== 'x') return
+      e.preventDefault()
+      w.px += e.deltaX; w.peak = Math.max(w.peak, ax)
+      const dx = -w.px, to = swipeTo(TABS, now.current.tab, dx, isRtl())
+      const pg = page.current
+      if (pg) pg.style.transform = `translate3d(${to ? dx : dx * .3}px,0,0)`
+      clearTimeout(w.timer)
+      // The fingers lifted without going far enough: the list goes back.
+      w.timer = window.setTimeout(() => { if (!w.done) springBack(to ? dx : dx * .3); w.axis = ''; w.px = 0 }, 160)
+      if (to && Math.abs(dx) > Math.min(el.offsetWidth * .22, 100)) {
+        w.done = true; w.low = w.peak; clearTimeout(w.timer)
+        swiped.current = true; slideTo(to, dx)
+      }
+    }
+    el.addEventListener('touchstart', down, { passive: true })
+    el.addEventListener('wheel', wheel, { passive: false })
+    return () => { el.removeEventListener('touchstart', down); el.removeEventListener('wheel', wheel); clearTimeout(w.timer); stop() }
+  }, [!keys.length])
   useEffect(() => setLimit(PAGE), [color, find, recent])
 
   const verseText = (book: string, chapter: number, vs: number[]) => vs.map(v => {
@@ -270,18 +402,18 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   }
 
   return (
-    <div class="saved">
+    <div class="saved saved-swipe" ref={root}>
       {!onImport && <h1>{t('Saved')}</h1>}
-      <div class="saved-tabs" role="tablist">
+      <div class="saved-tabs" role="tablist" ref={tabBar}>
         {tabs.map(([id, label, icon]) => (
-          <button role="tab" aria-selected={shownTab === id} class={shownTab === id ? 'on' : ''} onClick={() => setTab(id)}>
+          <button role="tab" aria-selected={shownTab === id} class={shownTab === id ? 'on' : ''} onClick={() => pick(id)}>
             {icon}<span class="st-label">{label}</span><span class="st-count">{counts[id]}</span>
           </button>
         ))}
       </div>
       {missing && <p class="note">{t('{version} isn’t saved on this device yet, so the verses can’t be shown. Connect to the internet once and they will be.', { version })}</p>}
       {undo && <div class="saved-undo" role="status"><span>{undo.what}</span><button onClick={putBack}>{t('Undo')}</button></div>}
-      {counts[shownTab] ? body : <p class="muted">{empty}</p>}
+      <div class="saved-page" ref={page}>{counts[shownTab] ? body : <p class="muted">{empty}</p>}</div>
       {editing && (() => {
         const r = parseKey(editing.key)
         return <NotesSheet book={r.book} chapter={r.chapter} verses={editing.verses} start={editing.start} dir={rtl}

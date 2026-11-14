@@ -497,6 +497,10 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 
 /* ---- saved ---- */
 .saved { max-width: 46rem; margin: 0 auto; }
+/* The lists slide sideways between tabs; up and down (and pinching to zoom)
+   stay the browser's. Nothing sliding reaches past the edge. */
+.saved-swipe { touch-action: pan-y pinch-zoom; overflow-x: clip; }
+.saved-tabs { scroll-margin-top: 72px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 16px; }
 .chip.on { background: var(--accent); color: var(--accent-ink); }
 .swatch-chip { display: inline-flex; align-items: center; gap: 6px; }
