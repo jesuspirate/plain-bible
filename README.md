@@ -27,9 +27,9 @@ no reading plans, devotionals, accounts, or feeds.
   to change chapters. Highlights belong to the verse, so they show in every version. Highlights can look like a
   marker pen (default), colored text, or a full block (Settings). Double-tap a verse to highlight it in the last color
   you used (or take the highlight off). Select several verses to write one note on all of them.
-- **Recorded readings**: the Berean Standard Bible is read aloud by a recorded
+- **Recorded readings**: the Berean Standard Bible and the King James Version are read aloud by a recorded
   narrator, a chapter at a time, played straight from openbible.com (the Berean Bible's publisher), and the
-  highlight follows the narrator word by word. Every other Bible, and this one with no connection, is read by
+  highlight follows the narrator word by word. Every other Bible, and these two with no connection, is read by
   the phone's own voice. The word times are in `public/audio-times/`, made by `scripts/align_audio.py`.
 - **History button** (top right): one tap goes back to the previous chapter and verse, a second tap brings you back,
   so you can bounce between two passages. Hold it to see your last 3 places. Kept on the device only.
