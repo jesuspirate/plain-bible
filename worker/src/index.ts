@@ -1159,9 +1159,16 @@ table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right
 td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
 input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #d9cdb8;width:100%;box-sizing:border-box;margin-top:10px}
 button{background:#8a5a2b;color:#fff;border-color:#8a5a2b;font-weight:bold;min-height:56px}p.error{color:#b3261e;font-weight:bold}
-.report{border:2px solid #b3261e;border-radius:14px;padding:14px 16px;background:#fff;margin-bottom:16px}.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}
-.report .when{color:#6b6255;font-size:.85em;margin:0}button.quiet{background:transparent;color:inherit;border-color:#d9cdb8}
-@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card,input{background:#202026;color:#e6e3dc;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}}`
+.report{--red:#b3261e;border:2px solid var(--red);border-radius:14px;padding:14px 16px;background:#fff;color:#22211f;margin-bottom:16px;scroll-margin-top:16px}
+.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}.report .when{color:#6b6255;font-size:.85em;margin:0}
+.report .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;margin-top:6px}
+.report .acts .bad{display:flex;flex-direction:column;gap:10px}.report .acts button{margin:0;height:100%}.report .acts .bad button{height:auto;flex:1 0 auto}
+.report button.del{background:transparent;color:var(--red);border-color:var(--red);font-weight:normal;font-size:1em}
+.report button.keep{font-size:1.2em}
+.report .ask{border:2px solid var(--red);border-radius:12px;padding:12px 14px;margin-top:6px}.report .ask p{margin:0 0 4px;font-weight:bold;font-size:1.1em}
+.report .ask small{display:block;color:#6b6255;margin-bottom:10px}
+@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card,input{background:#202026;color:#e6e3dc;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}
+.report{--red:#ff8a80;background:#202026;color:#e6e3dc}.report .when,.report .ask small{color:#a8a092}}`
 const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>${STATS_STYLE}</style></head><body><h1>My Quiet Bible in numbers</h1>${body}</body></html>`,
   { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer' } })
@@ -1196,13 +1203,25 @@ async function statsRoute(req: Request, env: Env) {
     return form('That word isn’t right.')
   }
   const act = String(sent?.get('act') ?? ''), which = String(sent?.get('report') ?? '')
-  if (act && which) await moderate(env, act, which)
+  // Removing and taking someone out are two steps: the first press only asks.
+  const asking = act === 'ask-remove' || act === 'ask-out' ? act : ''
+  if (act && which && !asking) await moderate(env, act, which)
   const reports = (await env.DB.prepare('SELECT id, what, at, item, reply FROM circle_reports WHERE done IS NULL ORDER BY at LIMIT 50')
     .all<{ id: string; what: string; at: number; item: string | null; reply: string | null }>()).results
+  const reportForm = (id: string, inner: string) => `<form method="post" action="/stats#r-${esc(id)}"><input type="hidden" name="key" value="${esc(key)}"><input type="hidden" name="report" value="${esc(id)}">${inner}</form>`
+  const reportActs = (r: { id: string; item: string | null; reply: string | null }) => {
+    if (asking && r.id === which) {
+      const out = asking === 'ask-out'
+      return reportForm(r.id, `<div class="ask"><p>${out ? 'Take this person out of the circle?' : 'Remove this from the circle?'}</p>
+<small>${out ? 'Everything they shared in that circle goes too. This can’t be undone.' : 'It’s gone for everyone in the circle. This can’t be undone.'}</small>
+<div class="acts"><button name="act" value="${out ? 'out' : 'remove'}" class="del">${out ? 'Take them out' : 'Remove it'}</button><button name="act" value="" class="keep">Cancel</button></div></div>`)
+    }
+    return reportForm(r.id, `<div class="acts"><div class="bad">${r.item || r.reply ? '<button name="act" value="ask-remove" class="del">Remove it</button>' : ''}<button name="act" value="ask-out" class="del">Take the person out of the circle</button></div>
+<button name="act" value="keep" class="keep">Keep it, it’s fine</button></div>`)
+  }
   const reportList = reports.length ? `<h2>Reported, waiting for you</h2>
-${reports.map(r => `<div class="report"><p class="when">${new Date(r.at).toISOString().slice(0, 16).replace('T', ' ')} UTC</p><pre>${esc(r.what)}</pre>
-<form method="post" action="/stats"><input type="hidden" name="key" value="${esc(key)}"><input type="hidden" name="report" value="${esc(r.id)}">
-${r.item || r.reply ? '<button name="act" value="remove">Remove it</button>' : ''}<button name="act" value="out">Take the person out of the circle</button><button name="act" value="keep" class="quiet">Keep it, it’s fine</button></form></div>`).join('')}` : ''
+${reports.map(r => `<div class="report" id="r-${esc(r.id)}"><p class="when">${new Date(r.at).toISOString().slice(0, 16).replace('T', ' ')} UTC</p><pre>${esc(r.what)}</pre>
+${reportActs(r)}</div>`).join('')}` : ''
   const now = new Date(), day = now.toISOString().slice(0, 10)
   const week = Date.now() - 7 * DAY
   const count = (sql: string, ...args: unknown[]) => env.DB.prepare(sql).bind(...args).first<{ n: number }>().then(r => r?.n ?? 0)
