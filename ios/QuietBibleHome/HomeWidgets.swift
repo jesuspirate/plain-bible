@@ -104,7 +104,9 @@ struct PrayDisc: View {
                                      center: UnitPoint(x: 0.5, y: 0.4), startRadius: 0, endRadius: size * 0.6))
                 .overlay(Circle().stroke(rgb(0xf0b95a).opacity(0.6), lineWidth: 1))
                 .shadow(color: rgb(0xf5be5f).opacity(0.55), radius: size * 0.1)
-            Text(verbatim: pray).font(.system(size: size * 0.5))
+            // Apple's emoji is a picture, 160 pixels at its largest: bigger than
+            // 53 points on an iPhone and it is stretched, and looks soft.
+            Text(verbatim: pray).font(.system(size: min(size * 0.5, 53)))
         }
         .frame(width: size, height: size)
     }
@@ -261,7 +263,7 @@ struct BothFace: View {
                     .font(.system(size: 15, weight: .semibold))
                     .foregroundStyle(Palette(scheme).ink.opacity(0.7))
                 Spacer(minLength: 0)
-                Link(destination: WidgetLink.pray) { Labeled(name: Text("Pray"), disc: PrayDisc(size: 150, pray: entry.pray)) }
+                Link(destination: WidgetLink.pray) { Labeled(name: Text("Pray"), disc: PrayDisc(size: 120, pray: entry.pray)) }
                 Spacer(minLength: 0)
                 Link(destination: entry.circlesLink) { CirclesBar(entry: entry) }
             }
