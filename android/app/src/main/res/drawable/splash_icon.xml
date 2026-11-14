@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The lamp on the Android 12+ launch screen. Android shows it 288dp wide and
+     crops it to a 192dp circle, so the lamp sits inside that circle. Colours
+     change with dark mode (values-night/colors.xml). -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="288dp"
+    android:height="288dp"
+    android:viewportWidth="600"
+    android:viewportHeight="600">
+    <group android:translateX="44" android:translateY="46">
+        <path android:fillType="evenOdd" android:fillColor="@color/lamp_flame"
+            android:pathData="M272.1 72C264.9 115.2 303.8 144 321 180C336.9 213.1 332.6 256.3 306.6 280.8C292.2 295.2 276.4 302.4 257.7 302.4C217.4 302.4 191.4 272.2 191.4 236.2C191.4 201.6 213 177.1 231.8 157C251.9 135.4 269.2 110.9 272.1 72Z M264.9 185.8C270.6 210.2 290.8 223.2 290.8 249.1C290.8 269.3 276.4 283.7 257.7 283.7C239 283.7 224.6 269.3 224.6 250.6C224.6 226.1 249 213.1 264.9 185.8Z" />
+        <path android:fillColor="@color/lamp_bowl" android:pathData="M104 326H408C408 390 340 436 256 436C172 436 104 390 104 326Z" />
+    </group>
+</vector>
