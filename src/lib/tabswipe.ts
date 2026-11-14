@@ -13,10 +13,13 @@ export function swipeTo<T>(order: readonly T[], current: T, dx: number, rtl = fa
   return order[i + step]
 }
 
-/** Whether a swipe that ended went far enough, or fast enough, to count. */
-export function swipeCounts(dx: number, ms: number, width: number): boolean {
-  const d = Math.abs(dx)
-  return d > Math.min(width * .22, 120) || (ms < 300 && d > 40)
+/** Whether a swipe that ended goes on to the next list: it went past half
+ *  way, or it was flicked that way (`v` is the finger's speed as it let go,
+ *  in px/ms; a flick back the other way stays). */
+export function swipeGoes(dx: number, v: number, width: number): boolean {
+  if (!dx) return false
+  if (Math.abs(v) > .25) return Math.sign(v) === Math.sign(dx) && Math.abs(dx) > 16
+  return Math.abs(dx + v * 120) > width / 2
 }
 
 /** Whether a touch that moved this far is going sideways (a swipe) rather

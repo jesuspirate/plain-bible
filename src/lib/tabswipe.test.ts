@@ -1,6 +1,6 @@
 import { describe, expect, it } from 'vitest'
 import { readFileSync } from 'node:fs'
-import { swipeAxis, swipeCounts, swipeTo } from './tabswipe'
+import { swipeAxis, swipeGoes, swipeTo } from './tabswipe'
 
 const TABS = ['highlights', 'notes', 'bookmarks'] as const
 
@@ -19,13 +19,16 @@ describe('swiping between saved tabs', () => {
     expect(swipeTo(TABS, 'highlights', 80, true)).toBe('notes')
     expect(swipeTo(TABS, 'notes', -80, true)).toBe('highlights')
   })
-  it('counts a long drag or a quick flick, not a nudge', () => {
-    expect(swipeCounts(30, 500, 390)).toBe(false)
-    expect(swipeCounts(100, 500, 390)).toBe(true)
-    expect(swipeCounts(-50, 150, 390)).toBe(true)
-    expect(swipeCounts(-50, 600, 390)).toBe(false)
-    // On a wide screen a drag doesn't have to cross a quarter of it.
-    expect(swipeCounts(130, 800, 1400)).toBe(true)
+  it('goes on past half way, or with a flick that way', () => {
+    // Slow drags: only past half the width.
+    expect(swipeGoes(-150, 0, 414)).toBe(false)
+    expect(swipeGoes(-220, 0, 414)).toBe(true)
+    // A quick flick goes even when short.
+    expect(swipeGoes(-60, -.8, 414)).toBe(true)
+    // Dragged far, then flicked back: stays.
+    expect(swipeGoes(-260, .6, 414)).toBe(false)
+    // A tiny twitch isn't a flick.
+    expect(swipeGoes(-8, -1, 414)).toBe(false)
   })
   it('tells a scroll from a swipe', () => {
     expect(swipeAxis(4, 5)).toBeUndefined()
@@ -37,5 +40,7 @@ describe('swiping between saved tabs', () => {
   it('keeps the list scrolling up and down while sliding sideways', () => {
     const css = readFileSync(new URL('../styles.css', import.meta.url), 'utf8')
     expect(css).toMatch(/\.saved-swipe\s*\{[^}]*touch-action:\s*pan-y pinch-zoom/)
+    // The lists beside sit off to the side, not under the one you're on.
+    expect(css).toMatch(/\.saved-page\.beside\s*\{[^}]*position:\s*absolute/)
   })
 })
