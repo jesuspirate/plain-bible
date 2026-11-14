@@ -581,6 +581,8 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .size-row { gap: 8px; }
 .size-row .set-icon { margin-right: 4px; }
 .size-row .set-label { white-space: normal; line-height: 1.2; }
+.size-reset-row { padding-top: 0; justify-content: flex-end; }
+.size-reset { min-height: 46px; padding: 0 18px; border-radius: 12px; font: 600 17px var(--sans); }
 .size-num { min-width: 1.6em; text-align: center; font: 700 22px var(--sans); font-variant-numeric: tabular-nums; flex: none; }
 .set-theme { padding: 10px 12px 10px 16px; }
 .set-theme .seg { display: flex; flex: 1; border-radius: 12px; }

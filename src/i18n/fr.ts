@@ -1004,4 +1004,5 @@ export default {
   "Definitions from Wiktionary (CC BY-SA).": "Définitions tirées du Wiktionnaire (CC BY-SA).",
   "A form of “{word}”": "Une forme de « {word} »",
   "Word definitions from {source} (CC BY-SA), through {kaikki}.": "Définitions des mots tirées du {source} (CC BY-SA), par {kaikki}.",
+  "Back to default size ({n})": "Revenir à la taille par défaut ({n})",
 } as Record<string, string>

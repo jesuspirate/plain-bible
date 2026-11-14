@@ -66,6 +66,9 @@ export interface Settings {
 }
 
 /** The skin tones of 🙏, plain first. */
+/** The text size everyone starts on, and the one "Back to default size" returns to. */
+export const DEFAULT_FONT_SIZE = 22
+
 export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}']
 
 const KEY = 'plain-bible:settings'
@@ -82,7 +85,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: 22, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },

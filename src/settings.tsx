@@ -4,7 +4,7 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute, openTour } from './state'
+import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
@@ -453,6 +453,9 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
             <output class="size-num" aria-live="polite" aria-label={t('Text size') + ' ' + settings.fontSize}>{settings.fontSize}</output>
             <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label={t('Larger text')}>A+</button>
           </div>
+          {settings.fontSize !== DEFAULT_FONT_SIZE && <div class="set-row set-static size-reset-row">
+            <button class="size-reset" onClick={() => update({ fontSize: DEFAULT_FONT_SIZE })}>{t('Back to default size ({n})', { n: DEFAULT_FONT_SIZE })}</button>
+          </div>}
           <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', t('Light')], ['sepia', t('Sepia')], ['dark', t('Dark')], ['system', t('Auto')]])}</div>
           <Row icon={<LayoutIcon size={24} />} label={t('Font and layout')} value={fontName && t(fontName)} onClick={() => setPage('reading')} />
         </div>
