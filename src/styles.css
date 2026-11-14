@@ -841,9 +841,11 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 /* A round button in the top bar, only while a new version is waiting. */
 .update-btn { display: grid; place-items: center; width: 46px; height: 46px; padding: 0; border-radius: 50%; border: none; background: var(--accent); color: var(--accent-ink); -webkit-tap-highlight-color: transparent; animation: update-in .25s ease-out; }
 .update-btn:active { transform: scale(.94); }
-.update-btn.busy svg, .spin { animation: update-spin .8s linear infinite; }
+/* The spinner turns on the graphics chip, round its own centre, at an even
+   speed: a true circle (SpinnerIcon), so nothing wobbles as it goes round. */
+.spin { display: block; flex: none; transform-origin: 50% 50%; will-change: transform; backface-visibility: hidden; animation: update-spin .9s linear infinite; }
 @keyframes update-in { from { transform: scale(.6); opacity: 0; } }
-@keyframes update-spin { to { transform: rotate(360deg); } }
+@keyframes update-spin { from { transform: rotate(0deg) translateZ(0); } to { transform: rotate(360deg) translateZ(0); } }
 /* The minute before it updates by itself, running down around the button. */
 .update-btn { position: relative; }
 .update-ring { position: absolute; inset: 0; width: 100%; height: 100%; transform: rotate(-90deg); pointer-events: none; }
@@ -852,7 +854,13 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .update-btn.busy .update-ring { display: none; }
 /* Updating by itself: the page fades to its own color instead of blinking. */
 html.updating body { opacity: 0; transition: opacity .35s ease; }
-@media (prefers-reduced-motion: reduce) { .update-btn, .update-btn.busy svg, .spin { animation: none; } .update-ring { display: none; } }
+/* …and back on the new version, it fades in once the chapter is in place. */
+html.arriving body { opacity: 0; }
+body { transition: opacity .35s ease; }
+/* "Loading…" only if it takes a while: a quick start shows nothing. */
+.wait { animation: wait-in .3s .8s ease both; }
+@keyframes wait-in { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .update-btn, .spin { animation: none; } .update-ring { display: none; } }
 /* The version: one quiet line at the foot of Settings, tap to update. */
 .version-line { display: flex; flex-direction: column; align-items: center; margin: 28px 0 0; color: var(--muted); font-size: 13px; }
 .version-line button { display: inline-flex; align-items: center; justify-content: center; gap: 5px; min-height: 40px; min-width: 200px; padding: 0 12px; border: none; background: none; color: inherit; font: inherit; -webkit-tap-highlight-color: transparent; }

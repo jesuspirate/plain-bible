@@ -203,6 +203,12 @@ export function Reader({ route }: { route: Route }) {
     })
   }, [book, chapter, version, target, resumeAt, loaded, versions.join(), settings.layout, settings.fontSize, settings.font, spread])
 
+  // Back from an update: the page faded out before the reload; it fades in
+  // again once the chapter is in its place (index.html hid it).
+  useEffect(() => {
+    if (loaded) requestAnimationFrame(() => requestAnimationFrame(() => document.documentElement.classList.remove('arriving')))
+  }, [loaded])
+
   useEffect(() => setSelected([]), [book, chapter, version])
   // The verse the mouse last came to rest on (computers only): it keeps the ribbon.
   const [reading, setReading] = useState<number>()
@@ -1144,7 +1150,7 @@ export function Reader({ route }: { route: Route }) {
   return (
     <div class="reader" ref={readerEl}>
       {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>{t('Try again')}</button></p></div>}
-      {!loaded && !error && <p class="muted center">{t('Loading…')}</p>}
+      {!loaded && !error && <p class="muted center wait">{t('Loading…')}</p>}
       {loaded && rows === 0 && <p class="muted center">{t('{version} does not include {book} {chapter}.', { version: info?.name ?? version, book: bookName(book), chapter: String(chapter) })}</p>}
 
       {loaded && rows > 0 && !spread && (
@@ -1175,11 +1181,15 @@ export function Reader({ route }: { route: Route }) {
         </div>
       )}
 
-      <nav class="pager">
-        <button onClick={() => turn(-1)}><span aria-hidden="true">‹</span> {t('Previous')}</button>
-        <button onClick={() => turn(1)}>{t('Next')} <span aria-hidden="true">›</span></button>
-      </nav>
-      {info && <p class="credit muted small">{info.name}. {info.license}.</p>}
+      {/* Only once the chapter is in: on its own, right under the top bar, the
+          row of buttons flashed up as a stray bar while the app was starting. */}
+      {(loaded || error) && <>
+        <nav class="pager">
+          <button onClick={() => turn(-1)}><span aria-hidden="true">‹</span> {t('Previous')}</button>
+          <button onClick={() => turn(1)}>{t('Next')} <span aria-hidden="true">›</span></button>
+        </nav>
+        {info && <p class="credit muted small">{info.name}. {info.license}.</p>}
+      </>}
 
       {picked && !defining && !selected.length && !picking && <DefinePill word={picked.word} onDefine={() => {
         setDefining({ word: picked.word, lang: picked.lang ?? byId.get(version)?.lang })

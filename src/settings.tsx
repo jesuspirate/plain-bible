@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, FONTS, go, readPath, Settings, useApp, useRoute, openTour } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -39,7 +39,7 @@ function VersionLine() {
     <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
       <button class="version-copy" onClick={copy} aria-label={t('Version {build}. Tap to copy', { build: __BUILD__ })}>{copied ? t('Copied ✓') : t('Version {build}', { build: __BUILD__ })}</button>
       <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
-        <RefreshIcon size={14} class={state === 'checking' ? 'spin' : undefined} /> {note}
+        {state === 'checking' ? <SpinnerIcon size={14} class="spin" /> : <RefreshIcon size={14} />} {note}
       </button>
     </div>
   )
