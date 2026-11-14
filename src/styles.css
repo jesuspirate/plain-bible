@@ -850,6 +850,12 @@ button, a.brand, header.top nav a, .sb-chip, .vm-row { -webkit-user-select: none
 .update-btn.busy .update-ring { display: none; }
 /* Updating by itself: the page fades to its own color instead of blinking. */
 html.updating body { opacity: 0; transition: opacity .35s ease; }
+/* …and back on the new version, it fades in once the chapter is in place. */
+html.arriving body { opacity: 0; }
+body { transition: opacity .35s ease; }
+/* "Loading…" only if it takes a while: a quick start shows nothing. */
+.wait { animation: wait-in .3s .8s ease both; }
+@keyframes wait-in { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .update-btn, .spin { animation: none; } .update-ring { display: none; } }
 /* The version: one quiet line at the foot of Settings, tap to update. */
 .version-line { display: flex; flex-direction: column; align-items: center; margin: 28px 0 0; color: var(--muted); font-size: 13px; }

@@ -52,6 +52,17 @@
         document.querySelector('meta[name="theme-color"]').content = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' }[t]
       } catch (e) {}
 
+      // Back from an update: the old page faded out, so start hidden and let
+      // the reader fade the new one in once the chapter is in place (never
+      // more than a moment, even if something goes wrong).
+      try {
+        if (sessionStorage.getItem('plain-bible:arriving')) {
+          sessionStorage.removeItem('plain-bible:arriving')
+          document.documentElement.classList.add('arriving')
+          setTimeout(function () { document.documentElement.classList.remove('arriving') }, 1200)
+        }
+      } catch (e) {}
+
       // If the app's code can't load (say a half-finished update left the
       // saved copy pointing at files the site no longer has), the page would
       // stay blank. Repair clears the saved app files (not your highlights,

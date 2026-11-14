@@ -328,7 +328,7 @@ export function App() {
       <p><button onClick={() => location.reload()}>{t('Try again')}</button></p>
     </div>
   )
-  if (!catalog || !settings) return <p class="muted center">{t('Loading…')}</p>
+  if (!catalog || !settings) return <p class="muted center wait">{t('Loading…')}</p>
 
   const update = (patch: Partial<Settings>) => {
     setSettings(s => {

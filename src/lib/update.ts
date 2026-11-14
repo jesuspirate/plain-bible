@@ -121,7 +121,7 @@ export function newVersionReady() {
     if (applying) return clearInterval(tick)
     if (document.visibilityState !== 'visible' || Date.now() - readyAt < COUNTDOWN || busy()) return
     clearInterval(tick)
-    applyUpdate(true)
+    applyUpdate()
   }, 2000)
   away()
 }
@@ -130,17 +130,20 @@ export function newVersionReady() {
 export const readySince = () => readyAt
 
 let applying = false
-/** Switch to the new version now (you come back on the same verse).
- *  `quietly`: the app does it by itself, so the page fades out gently
- *  rather than blinking. */
-export function applyUpdate(quietly = false) {
+/** Switch to the new version now (you come back on the same verse). The
+ *  page fades out, and fades in again on the new version (index.html and
+ *  the reader), so it doesn't blink. */
+export function applyUpdate() {
   if (applying) return
   applying = true
   // The address leads to the verse on top of the screen (the reader keeps
   // it saved), not to a verse you jumped to earlier.
   const hash = withoutVerse(location.hash)
   if (hash !== location.hash) history.replaceState(history.state, '', hash)
-  if (quietly && !matchMedia('(prefers-reduced-motion: reduce)').matches) document.documentElement.classList.add('updating')
+  if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+    document.documentElement.classList.add('updating')
+    try { sessionStorage.setItem('plain-bible:arriving', '1') } catch { /* fades out only */ }
+  }
   const waiting = reg?.waiting
   if (waiting && navigator.serviceWorker) {
     // The waiting version takes over, then the page reloads onto it.
