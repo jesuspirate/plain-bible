@@ -577,7 +577,11 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .set-value { color: var(--muted); font-weight: 400; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .set-static { cursor: default; }
 @media (hover: hover) { .set-static:hover { background: none !important; } }
-.set-static .size-btn { width: 52px; height: 40px; border-radius: 12px; }
+.set-static .size-btn { width: 52px; height: 46px; border-radius: 12px; }
+.size-row { gap: 8px; }
+.size-row .set-icon { margin-right: 4px; }
+.size-row .set-label { white-space: normal; line-height: 1.2; }
+.size-num { min-width: 1.6em; text-align: center; font: 700 22px var(--sans); font-variant-numeric: tabular-nums; flex: none; }
 .set-theme { padding: 10px 12px 10px 16px; }
 .set-theme .seg { display: flex; flex: 1; border-radius: 12px; }
 .set-theme .seg button { flex: 1; padding: 10px 4px; font-size: 16px; }

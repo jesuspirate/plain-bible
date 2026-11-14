@@ -446,10 +446,11 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       <section class="set-group">
         <h2 class="set-kicker">{t('Reading')}</h2>
         <div class="set-list">
-          <div class="set-row set-static">
+          <div class="set-row set-static size-row">
             <span class="set-icon" aria-hidden="true"><TextSizeIcon size={24} /></span>
             <span class="set-label">{t('Text size')}</span>
             <button class="size-btn" onClick={() => update({ fontSize: Math.max(13, settings.fontSize - 1) })} aria-label={t('Smaller text')}>A−</button>
+            <output class="size-num" aria-live="polite" aria-label={t('Text size') + ' ' + settings.fontSize}>{settings.fontSize}</output>
             <button class="size-btn big" onClick={() => update({ fontSize: Math.min(36, settings.fontSize + 1) })} aria-label={t('Larger text')}>A+</button>
           </div>
           <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', t('Light')], ['sepia', t('Sepia')], ['dark', t('Dark')], ['system', t('Auto')]])}</div>
