@@ -41,3 +41,20 @@ key if you like), and put them in the repository variable
 `twa-manifest.json` holds the settings. After editing it, run
 `npx @bubblewrap/cli update --skipVersionUpgrade` here to regenerate the
 project (then put back the signing and version lines in `app/build.gradle`).
+
+## Icon and launch screen
+
+The home screen icon and the launch screen are drawn by hand, not by
+Bubblewrap: the lamp with no square tile, on leather brown (ink in dark mode).
+
+- `res/mipmap-anydpi-v26/ic_launcher.xml` + `res/drawable/ic_launcher_foreground.xml`:
+  the icon (lamp inside the safe circle, ink background, themed-icon layer).
+- `res/values-v31/styles.xml` + `res/drawable/splash_icon.xml`: Android 12+'s
+  own launch screen.
+- `res/drawable-*/splash.png` (light) and `res/drawable-night-*/splash.png`
+  (dark): the splash Chrome shows next, the same lamp at the same size.
+- Colours: `res/values/colors.xml`, `res/values-night/colors.xml`, and
+  `backgroundColor` in `app/build.gradle`.
+
+`bubblewrap update` overwrites the icon and splash files, so put these back
+after running it.

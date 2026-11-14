@@ -15,4 +15,10 @@
 -->
 <resources>
     <color name="shortcut_background">#F5F5F5</color>
+    <!-- Home screen icon background (the app's ink). -->
+    <color name="icon_background">#22211F</color>
+    <!-- The lamp on the launch screen, which is leather brown in light mode
+         (backgroundColor in app/build.gradle). Dark mode: values-night. -->
+    <color name="lamp_flame">#F2C46D</color>
+    <color name="lamp_bowl">#FAF3E3</color>
 </resources>

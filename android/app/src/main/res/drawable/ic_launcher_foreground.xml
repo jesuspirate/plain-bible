@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- The lamp for the home screen icon, at the same size as on the website and
+     iPhone icon, well inside the 72dp circle that every
+     icon shape (circle, squircle, teardrop) leaves visible. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="108dp"
+    android:height="108dp"
+    android:viewportWidth="768"
+    android:viewportHeight="768">
+    <group android:translateX="128" android:translateY="130">
+        <path android:fillType="evenOdd" android:fillColor="#E0A96D"
+            android:pathData="M272.1 72C264.9 115.2 303.8 144 321 180C336.9 213.1 332.6 256.3 306.6 280.8C292.2 295.2 276.4 302.4 257.7 302.4C217.4 302.4 191.4 272.2 191.4 236.2C191.4 201.6 213 177.1 231.8 157C251.9 135.4 269.2 110.9 272.1 72Z M264.9 185.8C270.6 210.2 290.8 223.2 290.8 249.1C290.8 269.3 276.4 283.7 257.7 283.7C239 283.7 224.6 269.3 224.6 250.6C224.6 226.1 249 213.1 264.9 185.8Z" />
+        <path android:fillColor="#F4ECD8" android:pathData="M104 326H408C408 390 340 436 256 436C172 436 104 390 104 326Z" />
+    </group>
+</vector>

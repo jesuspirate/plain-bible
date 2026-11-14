@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Dark mode launch screen: the lamp on the app's ink, like the icon. -->
+<resources>
+    <color name="backgroundColor">#22211F</color>
+    <color name="lamp_flame">#E0A96D</color>
+    <color name="lamp_bowl">#F4ECD8</color>
+</resources>
