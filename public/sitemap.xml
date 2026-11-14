@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- The site's real pages, so Google indexes these and not the http, www or
+     no-slash addresses that GitHub Pages redirects here. -->
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+  <url><loc>https://myquietbible.com/</loc></url>
+  <url><loc>https://myquietbible.com/welcome/</loc></url>
+  <url><loc>https://myquietbible.com/support/</loc></url>
+  <url><loc>https://myquietbible.com/privacy.html</loc></url>
+</urlset>
