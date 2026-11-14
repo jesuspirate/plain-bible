@@ -16,7 +16,8 @@ neighbours.
 
   pip install pocketsphinx regex        (and ffmpeg on the PATH)
   npm run data                          (the app's own Bible texts)
-  python3 scripts/align_audio.py hays   (or souer, gilbert, david; hours each)
+  python3 scripts/align_audio.py hays   (or souer, gilbert, david; an hour or two each)
+  python3 scripts/align_audio.py openings hays   (then this; a few minutes)
 
 Words are split exactly as src/lib/follow.ts does, on the text exactly as
 src/listen.tsx reads it, so word N here is word N in the app. If a Bible's
@@ -266,7 +267,84 @@ def chapter(job):
     return times, share, None
 
 
+# What each recording says before a chapter's own announcement ("John chapter
+# 3"), which the app leaves out: for the King James reading, "KJV audio Bible",
+# always within the first two seconds.
+PREAMBLE = {"david": 1.5}
+
+
+def opening(job):
+    """The first half minute of a chapter's recording: where its announcement
+    starts (after any preamble), and every moment sound starts after a pause."""
+    voice, url = job
+    for attempt in range(4):
+        try:
+            req = urllib.request.Request(url, headers={"User-Agent": "plain-bible-align", "Range": "bytes=0-899999"})
+            with urllib.request.urlopen(req, timeout=120) as r:
+                mp3 = r.read()
+            break
+        except Exception as e:  # noqa: BLE001
+            if attempt == 3:
+                return None, str(e)
+    err = subprocess.run(["ffmpeg", "-i", "pipe:0", "-af", "silencedetect=noise=-38dB:d=0.2", "-f", "null", "-"],
+                         input=mp3, capture_output=True).stderr.decode("utf8", "replace")
+    quiet = list(zip([float(x) for x in regex.findall(r"silence_start: ([\d.]+)", err)],
+                     [float(x) for x in regex.findall(r"silence_end: ([\d.]+)", err)]))
+    after = PREAMBLE.get(voice)
+    if after is None:
+        # No preamble: the announcement starts when the first sound does.
+        start = quiet[0][1] if quiet and quiet[0][0] < 0.1 else 0.0
+    else:
+        start = next((b for a, b in quiet if a >= after), None)
+    return (start, quiet), None
+
+
+def openings(voice):
+    """Add to each book's times where each chapter's announcement starts ("a",
+    in centiseconds), and put the first word of a chapter on the sound's own
+    start where the recogniser missed it (a chapter opening on a word it can't
+    say, "Verily", is otherwise guessed, and clipped)."""
+    _, pattern = VOICES[voice]
+    out = os.path.join(ROOT, "public", "audio-times", voice)
+    moved = odd = 0
+    with concurrent.futures.ThreadPoolExecutor(max_workers=12) as pool:
+        for n, (book, code) in enumerate(BOOKS, 1):
+            path = os.path.join(out, book + ".json")
+            data = json.load(open(path))
+            found = list(pool.map(opening, [(voice, pattern.format(n=n, code=code, c=c)) for c in range(1, len(data["c"]) + 1)]))
+            starts = []
+            for c, ((got, err), times) in enumerate(zip(found, data["c"]), 1):
+                row = next((r for r in times if r), None)
+                if err or not got or row is None:
+                    print(book, c, "FAILED", err, flush=True)
+                    starts.append(0)
+                    continue
+                start, quiet = got
+                first = row[0] / 100
+                # The first word starts where sound starts after a pause. If the time we have is not such a
+                # moment, take the last one before it (after a pause of a third of a second or more).
+                if not any(abs(b - first) <= 0.15 for _, b in quiet):
+                    before = [b for a, b in quiet if b <= first + 0.15 and b - a >= 0.35 and b > (start or 0) + 0.5]
+                    if before and first - before[-1] < 4:
+                        new = round(before[-1] * 100)
+                        row[1] += row[0] - new
+                        row[0] = new
+                        moved += 1
+                        first = new / 100
+                pre = PREAMBLE.get(voice)
+                if start is None or start > first - 0.6 or (pre is not None and start > pre + 1.7):
+                    # The pause after the preamble was too short to find: the preamble always ends about here.
+                    odd += 1
+                    start = 0.0 if pre is None else pre + 0.5
+                starts.append(max(0, round(start * 100) - 5))
+            data["a"] = starts
+            json.dump(data, open(path, "w"), separators=(",", ":"))
+    print(voice, "first words moved:", moved, "announcements not found:", odd)
+
+
 def main():
+    if sys.argv[1] == "openings":
+        return openings(sys.argv[2])
     voice = sys.argv[1]
     only = sys.argv[2:]  # book ids, to do just those
     version, pattern = VOICES[voice]

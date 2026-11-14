@@ -54,8 +54,10 @@ export function verseTimes(row: number[] | undefined): VerseTimes | undefined {
   return { starts, end: starts[starts.length - 1] + row[row.length - 1] / 100 }
 }
 
-/** A chapter's verses (verse 1 first), each with its times or none. */
-export type ChapterTimes = (VerseTimes | undefined)[]
+/** A chapter's verses (verse 1 first), each with its times or none; and
+ * where the recording starts announcing the chapter ("John chapter 3"),
+ * past anything said before that (the King James reading names itself first). */
+export type ChapterTimes = (VerseTimes | undefined)[] & { opening?: number }
 
 /** Where a recording is at a time: the verse (from 1) and its word (from 0).
  * Before the first verse (the chapter's name being said) there's no verse;
@@ -96,8 +98,8 @@ export function loadTimes(rec: Recording, book: string): Promise<ChapterTimes[] 
   if (have) return Promise.resolve(have)
   const p = fetch(new URL(`audio-times/${rec.id}/${book}.json`, document.baseURI).href)
     .then(r => r.ok ? r.json() : Promise.reject(new Error(String(r.status))))
-    .then((d: { c: number[][][] }) => {
-      const out = d.c.map(ch => ch.map(verseTimes))
+    .then((d: { c: number[][][]; a?: number[] }) => {
+      const out = d.c.map((ch, i) => Object.assign(ch.map(verseTimes), { opening: (d.a?.[i] ?? 0) / 100 }))
       books.set(key, out)
       return out
     })
