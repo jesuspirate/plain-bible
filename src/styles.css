@@ -497,9 +497,16 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 
 /* ---- saved ---- */
 .saved { max-width: 46rem; margin: 0 auto; }
-/* The lists slide sideways between tabs; up and down (and pinching to zoom)
-   stay the browser's. Nothing sliding reaches past the edge. */
-.saved-swipe { touch-action: pan-y pinch-zoom; overflow-x: clip; }
+/* The lists lie side by side and slide between tabs; up and down (and
+   pinching to zoom) stay the browser's. On a phone they slide in from the
+   screen's edge; on a wide screen, from the column's. */
+.saved-swipe { touch-action: pan-y pinch-zoom; }
+main:has(.saved-swipe) { overflow-x: clip; }
+.settings-sheet:has(.saved-swipe) { overflow-x: hidden; }
+@media (min-width: 720px) { .saved-swipe { overflow-x: clip; } }
+.saved-track { position: relative; will-change: transform; }
+.saved-page.beside { position: absolute; top: 0; left: 0; right: 0; pointer-events: none;
+  transform: translate3d(calc(var(--side) * (100% + 24px)), var(--peek-y, 0px), 0); }
 .saved-tabs { scroll-margin-top: 72px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 16px; }
 .chip.on { background: var(--accent); color: var(--accent-ink); }
