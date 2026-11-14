@@ -79,14 +79,21 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
 
   const verseText = (book: string, chapter: number, vs: number[]) => vs.map(v => {
     const raw = bible?.books[book]?.[chapter - 1]?.[v - 1]
-    return raw ? (vs.length > 1 ? `${v} ` : '') + plain(raw) : ''
+    return raw ? plain(raw) : ''
   }).filter(Boolean).join(' ')
   const refOf = (book: string, chapter: number, vs: number[]) => `${bookName(book)} ${chapter}:${verseRanges(vs)}`
   const Ref = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) =>
     <a class="ref" href={'#/' + readPath(version, book, chapter, verses[0])}>{refOf(book, chapter, verses)}</a>
+  /** The verses as the reader shows them: each on its own line, with its
+   *  number in the same thick style, so a passage reads like the Bible. */
   const Text = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) => {
-    const words = verseText(book, chapter, verses)
-    return <p class="saved-text" dir={rtl}>{words || (bible && <span class="muted">{t('Not in {version}', { version })}</span>)}</p>
+    const lines = verses.map(v => [v, bible?.books[book]?.[chapter - 1]?.[v - 1]] as const).filter(([, raw]) => raw)
+    if (!lines.length) return <p class="saved-text" dir={rtl}>{bible && <span class="muted">{t('Not in {version}', { version })}</span>}</p>
+    return (
+      <div class="saved-text" dir={rtl}>
+        {lines.map(([v, raw]) => <p class="sv"><span class="vn" aria-hidden="true">{v}</span>{plain(raw!)}</p>)}
+      </div>
+    )
   }
 
   /** Change some verses' marks, keeping what they were so it can be undone. */
