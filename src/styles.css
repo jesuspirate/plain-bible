@@ -497,16 +497,20 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 
 /* ---- saved ---- */
 .saved { max-width: 46rem; margin: 0 auto; }
-/* The lists lie side by side and slide between tabs; up and down (and
-   pinching to zoom) stay the browser's. On a phone they slide in from the
-   screen's edge; on a wide screen, from the column's. */
-.saved-swipe { touch-action: pan-y pinch-zoom; }
-main:has(.saved-swipe) { overflow-x: clip; }
-.settings-sheet:has(.saved-swipe) { overflow-x: hidden; }
-@media (min-width: 720px) { .saved-swipe { overflow-x: clip; } }
-.saved-track { position: relative; will-change: transform; }
-.saved-page.beside { position: absolute; top: 0; left: 0; right: 0; pointer-events: none;
-  transform: translate3d(calc(var(--side) * (100% + 24px)), var(--peek-y, 0px), 0); }
+/* The lists lie side by side in a row that scrolls sideways and snaps to
+   one list at a time; the phone moves it, so it follows the finger and
+   always settles. The row reaches the screen's edges, so the next list
+   slides in from there. Lists beside yours are only as tall as the screen
+   while the row moves, and fold away when it rests, so a short list has no
+   empty space under it. */
+.saved-pages { display: flex; align-items: flex-start; gap: 32px; overflow-x: auto; overflow-y: hidden;
+  scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
+  margin: 0 -16px; padding: 0 16px; scroll-padding: 0 16px; scrollbar-width: none; }
+.saved-pages::-webkit-scrollbar { display: none; }
+.saved-page { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
+.saved-page.beside { max-height: 0; overflow: hidden; }
+.saved-pages.moving .saved-page.beside { max-height: none; height: var(--room, 100vh); }
+.saved-pages.moving .saved-page.beside > * { transform: translateY(var(--peek-y, 0px)); }
 .saved-tabs { scroll-margin-top: 72px; }
 .chips { display: flex; flex-wrap: wrap; gap: 6px; margin: 4px 0 16px; }
 .chip.on { background: var(--accent); color: var(--accent-ink); }
