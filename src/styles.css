@@ -505,7 +505,11 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .saved-list li { padding: 10px 12px; margin-bottom: 8px; border-radius: 12px; border: 1px solid var(--line); }
 .saved-list li.hl { background: color-mix(in srgb, var(--hl) 28%, var(--surface)); border-color: color-mix(in srgb, var(--hl) 60%, var(--line)); }
 .saved-head { display: flex; align-items: center; gap: 8px; }
-.saved-text { margin: 4px 0 0; font-family: var(--reading); font-size: calc(var(--font-size) * .9); line-height: 1.55; }
+/* Saved verses read like the page: reading size, one verse per line, the
+   reader's verse numbers (which follow the verse number size setting). */
+.saved-text { margin: 6px 0 0; font-family: var(--reading); font-size: var(--font-size); line-height: 1.7; }
+.saved-text .sv { margin: 0; padding: 2px 0; }
+.saved-text .vn { cursor: inherit; }
 .saved-note { margin: 8px 0 0; padding: 8px 10px; border-left: 3px solid var(--accent); background: var(--surface); border-radius: 0 8px 8px 0; white-space: pre-wrap; font-size: 15px; cursor: pointer; }
 .saved-head button.small { padding: 3px 8px; font-size: 13px; }
 .saved-tabs { display: grid; grid-template-columns: repeat(3, 1fr); gap: 6px; margin: 4px 0 14px; padding: 4px; border-radius: 16px; background: var(--chip); }
