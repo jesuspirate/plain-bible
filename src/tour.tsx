@@ -5,7 +5,10 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
 import { t } from './i18n'
 import { CloseIcon } from './icons'
-import { markTourSeen as markSeen } from './state'
+import { defaultSettings, loadSettings, markTourSeen as markSeen } from './state'
+import { recordingsFor } from './lib/recordings'
+import { inStoreApp, isIPhone } from './lib/install'
+import { nativeNotify } from './lib/nativeNotify'
 import './tour.css'
 
 
@@ -28,18 +31,32 @@ const onScreen = (sel: string) => () => {
   return r && r.width > 0 && r.bottom > 0 && r.top < innerHeight ? el : null
 }
 
+/** The iPhone app with the Home Screen widget in it: an app new enough (its
+ *  notify bridge came with the widget's release train), on iOS 17 or later
+ *  (URL.canParse arrived with it; an iPad's name hides its version), and
+ *  not the same app running on a Mac, which has no widgets for it. */
+const hasWidget = () => inStoreApp() && isIPhone() && !!nativeNotify() && typeof URL.canParse === 'function'
+
+// Newer features ride along as one more sentence on the step they belong to,
+// only where they apply, so the tour never grows a step for them.
 function steps(): Step[] {
+  // A Bible with a recorded reading is read by its narrator.
+  const narrated = recordingsFor(loadSettings().version ?? defaultSettings().version).length > 0
+  // Signed in or not, sync is on wherever the Circles button is.
+  const sync = !!document.querySelector('.sb-circles')
   const all: (Step | false)[] = [
     { title: t('Welcome to My Quiet Bible'), body: t('Just the Bible, quiet and simple. Here is a short look around. It takes about a minute.') },
     { title: t('Turn the page'), body: t('Swipe left or right to go to the next or the previous chapter.'), find: onScreen('.reader > article.chapter .chapter-title') },
-    { title: t('Tap a verse'), body: t('Tap any verse to highlight it, write a note, save a bookmark or hear it read aloud.'), find: verseInView },
+    { title: t('Tap a verse'), body: narrated
+      ? t('Tap any verse to highlight it, write a note, save a bookmark or hear a narrator read the Bible from there.')
+      : t('Tap any verse to highlight it, write a note, save a bookmark or hear the Bible read aloud from there.'), find: verseInView },
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field') },
     // The two shortcuts to search (#236), lit on the chapter title they start from.
-    { title: t('Open search'), body: t('Tap the chapter title. Or, at the top of a chapter, pull down until the round button fills with color, then let go.'), find: onScreen('.reader > article.chapter .chapter-title') },
-    !!document.querySelector('.sb-circles') && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles') },
-    { title: t('Pray'), body: t('Tap 🙏 to pray out loud and keep your prayer. It stays private.'), find: onScreen('.sb-pray') },
+    { title: t('Open search'), body: t('Tap the chapter title. Or, at the top of a chapter, pull down until the round button fills with color, then let go.') + ' ' + t('After a search, open it again to go back to your last result.'), find: onScreen('.reader > article.chapter .chapter-title') },
+    sync && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles') },
+    { title: t('Pray'), body: t('Tap 🙏 to pray out loud and keep your prayer. It stays private.') + (hasWidget() ? ' ' + t('A 🙏 widget for your Home Screen comes with the app.') : ''), find: onScreen('.sb-pray') },
     { title: t('Go back'), body: t('After you jump somewhere else, tap here to go back to where you were reading.'), find: onScreen('.history-btn') },
-    { title: t('Settings'), body: t('Your Bible, text size, theme, language and account are all here. You can take this tour again from Settings.'), find: onScreen('.profile-btn') },
+    { title: t('Settings'), body: t('Your Bible, text size, theme, language and account are all here.') + ' ' + (sync ? t('Once signed in, your other devices offer to continue where you stopped reading.') + ' ' : '') + t('You can take this tour again from Settings.'), find: onScreen('.profile-btn') },
   ]
   return all.filter((s): s is Step => !!s)
 }
