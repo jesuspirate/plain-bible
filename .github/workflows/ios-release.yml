@@ -1,7 +1,8 @@
 # Sends the iPhone app (with its Apple Watch app) to App Store Connect, so
 # Xcode is not needed on anyone's computer.
 #
-# Run it by hand: Actions → "Send to App Store" → Run workflow, and type the
+# Run it by hand: Actions → "Release to App Store (iPhone, iPad, Mac)" → Run
+# workflow, and type the
 # version (like 1.2). About 15 minutes later the build is in App Store
 # Connect → TestFlight, ready to be picked for a new version and submitted.
 #
@@ -13,7 +14,7 @@
 #   ASC_KEY_P8      the whole text of the downloaded AuthKey_….p8 file
 # Apple signs the app with that key ("cloud signing"), so no certificate is
 # kept here.
-name: Send to App Store
+name: Release to App Store (iPhone, iPad, Mac)
 
 on:
   workflow_dispatch:

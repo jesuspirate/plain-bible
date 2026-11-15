@@ -44,7 +44,7 @@ The web app spots the app by `QuietBibleApp/` in its user agent
 ## Sending a version to the App Store (without Xcode)
 
 GitHub can build, sign and send the app, so Xcode is not needed:
-**Actions → Send to App Store → Run workflow**, type the version (like 1.2),
+**Actions → Release to App Store (iPhone, iPad, Mac) → Run workflow**, type the version (like 1.2),
 and about 15 minutes later the build is in App Store Connect → TestFlight.
 The build number is set by itself. Then make the version in App Store
 Connect, pick the build and submit it, as before.
