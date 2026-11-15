@@ -125,7 +125,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // Set when the list is opened again from the strip, until it's scrolled back.
   const restoring = useRef(false)
   const chapterRow = useRef<HTMLDivElement>(null)
-  const panel = useRef<HTMLDivElement>(null)
+  const panel = useRef<HTMLDivElement>(null), sheet = useRef<HTMLDivElement>(null)
 
   // While open, pin the bar and panel to the visible part of the screen,
   // above the keyboard. Opening is one step: the panel appears at once in
@@ -505,14 +505,14 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     pull.current = panel.current && panel.current.scrollTop <= 0 ? { y: e.touches[0].clientY, dy: 0 } : undefined
   }
   const onPanelTouchMove = (e: TouchEvent) => {
-    const p = pull.current, el = panel.current
+    const p = pull.current, el = sheet.current
     if (!p || !el) return
     p.dy = Math.max(0, e.touches[0].clientY - p.y)
     if (p.dy > 10 && press.current) press.current.moved = true
-    if (p.dy > 0 && el.scrollTop <= 0) { el.style.transition = 'none'; el.style.transform = `translateY(${p.dy * .6}px)`; el.style.opacity = String(1 - Math.min(p.dy / 400, .5)) }
+    if (p.dy > 0 && (panel.current?.scrollTop ?? 0) <= 0) { el.style.transition = 'none'; el.style.transform = `translateY(${p.dy * .6}px)`; el.style.opacity = String(1 - Math.min(p.dy / 400, .5)) }
   }
   const onPanelTouchEnd = () => {
-    const p = pull.current, el = panel.current
+    const p = pull.current, el = sheet.current
     pull.current = undefined
     if (!p || !el) return
     el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''
@@ -617,7 +617,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       {open && <div class="sb-scrim" onClick={close} onWheel={e => e.stopPropagation()} />}
       <div ref={sb} class={'sb' + (open ? ' sb-open' : mini && !following ? ' sb-mini' : '') + ((aloud || following) && !open ? ' sb-reading' : '')}>
         {open && (
-          <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}
+          // The sheet is the glass, with its rim drawn all the way round; only
+          // the list inside it scrolls, so nothing slides under the rim or
+          // past the rounded corners.
+          <div class="sb-sheet" ref={sheet}
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
@@ -628,6 +631,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <button type="button" class="sb-grabber" aria-label={t('Close search')} onClick={close} />
               <span class="sb-head-side end" />
             </div>
+          <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}>
             {offerBack && left && (
               <button class="sb-item sb-ref sb-back" onClick={resume}>
                 <span class="sb-title">{t('Back to result {n}', { n: (left.at + 1).toLocaleString(locale()) })}</span>
@@ -725,6 +729,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 </div>
               </>
             )}
+          </div>
           </div>
         )}
         <div class="sb-bar">
