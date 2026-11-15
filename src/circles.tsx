@@ -229,6 +229,10 @@ function CircleList() {
   const [lead, setLead] = useState<Lead>(null)
   const [door, setDoor] = useState(false)
   useEffect(() => { keptLead().then(setLead) }, [list])
+  // One Open door circle each: once you lead one, it's never offered again.
+  const leadsOne = !!list?.some(c => c.door === 'lead')
+  const canLead = lead === 'yes' && !leadsOne
+  useEffect(() => { if (leadsOne) leadSeen() }, [leadsOne])
   // "Start your own circle", from inside an Open door circle.
   useEffect(() => { if (startMaking) { startMaking = false; setMaking(true) } }, [])
   // Opening the form brings it into view with the circle's name ready to
@@ -270,7 +274,7 @@ function CircleList() {
     setBusy(true); setMsg('')
     try {
       keepName(me.trim())
-      const id = await createCircle(name.trim(), me.trim(), code, door && lead === 'yes')
+      const id = await createCircle(name.trim(), me.trim(), code, door && canLead)
       if (id === 'needCode') { setNeedCode('create'); return }
       nav.open({ id, name: name.trim() })
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
@@ -295,7 +299,7 @@ function CircleList() {
               <p class="small">{tn(stale, 'One circle can’t be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.', '{n} circles can’t be opened with your new key yet. Ask someone in them to send you a new invite link, then open it here.')}</p>
             </div>
           )}
-          {leadNews() && !making && (
+          {leadNews() && !leadsOne && !making && (
             <div class="c-card c-door open c-lead-yes">
               <p class="c-card-title">{t('You can lead an Open door circle now')}</p>
               <p class="muted small">{t('My Quiet Bible said yes. Make your circle, then open the door to get the link you share.')}</p>
@@ -317,7 +321,7 @@ function CircleList() {
             <div class="c-card">
               <label class="c-label">{t('Name of the circle')}<input ref={nameField} value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
-              {lead === 'yes' && <>
+              {canLead && <>
                 <div class="seg c-pick c-kind-pick" role="radiogroup" aria-label={t('Kind of circle')}>
                   <button role="radio" aria-checked={!door} class={!door ? 'on' : ''} onClick={() => setDoor(false)}>{t('Small circle')}</button>
                   <button role="radio" aria-checked={door} class={door ? 'on' : ''} onClick={() => setDoor(true)}>{t('Open door')}</button>
@@ -326,7 +330,7 @@ function CircleList() {
               </>}
               <p class="muted small c-rules">{t('Circles are for kind words. Anything hateful, abusive or sexual can be reported, and it’s removed along with whoever shared it.')}</p>
               <div class="c-row">
-                <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? t('Making…') : door && lead === 'yes' ? t('Make Open door circle') : t('Make circle')}</button>
+                <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? t('Making…') : door && canLead ? t('Make Open door circle') : t('Make circle')}</button>
                 <button class="c-btn" onClick={() => setMaking(false)}>{t('Cancel')}</button>
               </div>
               {lead !== 'yes' && <AskToLead lead={lead} onAsked={setLead} />}

@@ -674,6 +674,8 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     if (typeof id !== 'string' || !CIRCLE_ID.test(id) || !sealedText(name, 2000) || !sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
     if (door && (!sealedText(door.pub, 200) || !sealedText(door.priv, 1000))) throw new HttpError(400, 'Bad request')
     if (door && !(await db.prepare('SELECT 1 FROM door_leaders WHERE user_id = ? AND allowed IS NOT NULL').bind(userId).first())) throw new HttpError(403, 'Open door circles need a yes from My Quiet Bible first.')
+    // One Open door circle each: the one link you share.
+    if (door && await db.prepare('SELECT 1 FROM circles WHERE leader = ?').bind(userId).first()) throw new HttpError(409, 'You already lead an Open door circle.')
     const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
     if ((n?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
     if (await db.prepare('SELECT 1 FROM circles WHERE id = ?').bind(id).first()) throw new HttpError(409, 'Try again')

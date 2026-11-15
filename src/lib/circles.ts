@@ -128,7 +128,7 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
   const { circles, lead } = await api<{ circles: { id: string; name: string; wrapped: string; members: number; latest?: number | null; door?: 'lead' | 'member' | null }[]; lead?: Lead }>('/circles', { token: token() })
   noteLatest(circles)
   await meta.set('door-lead', lead ?? null)
-  noteLead(lead)
+  noteLead(lead, circles.some(c => c.door === 'lead'))
   const raws = await rawKeys()
   let lock: CryptoKey | undefined
   const out: CircleInfo[] = []
