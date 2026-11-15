@@ -6,6 +6,7 @@ import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
+  askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -127,7 +128,10 @@ export function CirclesPage({ route }: { route: Route }) {
   if (!SYNC_URL) return <div class="circles"><h1>{t('Circles')}</h1><p class="muted">{t('Circles aren’t available in this copy of the app.')}</p></div>
   // An invite opens even before you have an account: it says who it's
   // from, then makes the account right there, without leaving the page.
-  if (route.path[0] === 'join') return <Join id={route.params.get('i') ?? ''} secret={route.params.get('k') ?? ''} />
+  if (route.path[0] === 'join') {
+    const door = route.params.get('d')
+    return <Join id={door ?? route.params.get('i') ?? ''} secret={route.params.get('k') ?? ''} door={!!door} />
+  }
   if (!loadAccount()) return <SignedOut />
   return route.path[1] ? <CircleView id={route.path[1]} /> : <CircleList />
 }
@@ -221,6 +225,12 @@ function CircleList() {
   const [locked, setLocked] = useState(0)
   const [stale, setStale] = useState(0)
   const [joining, setJoining] = useState(false)
+  // Open door: whether this account may lead one, and whether this one will be.
+  const [lead, setLead] = useState<Lead>(null)
+  const [door, setDoor] = useState(false)
+  useEffect(() => { keptLead().then(setLead) }, [list])
+  // "Start your own circle", from inside an Open door circle.
+  useEffect(() => { if (startMaking) { startMaking = false; setMaking(true) } }, [])
 
   const load = async (unlock = false, code?: string) => {
     setBusy(true); setMsg('')
@@ -240,7 +250,7 @@ function CircleList() {
     setBusy(true); setMsg('')
     try {
       keepName(me.trim())
-      const id = await createCircle(name.trim(), me.trim(), code)
+      const id = await createCircle(name.trim(), me.trim(), code, door && lead === 'yes')
       if (id === 'needCode') { setNeedCode('create'); return }
       nav.open({ id, name: name.trim() })
     } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
@@ -270,7 +280,7 @@ function CircleList() {
               {list.map(c => (
                 <li><button class="c-open" onClick={() => nav.open(c)}>
                   <strong>{c.name}{hasNews(c.id) && <span class="news-dot" aria-label={t(', something new')} />}</strong>
-                  <span class="muted">{hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
+                  <span class="muted">{hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.door ? `${t('Open door')} · ${tn(c.members, '{n} person', '{n} people')}` : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
                 </button></li>
               ))}
             </ul>
@@ -279,11 +289,19 @@ function CircleList() {
             <div class="c-card">
               <label class="c-label">{t('Name of the circle')}<input value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+              {lead === 'yes' && <>
+                <div class="seg c-pick" role="radiogroup" aria-label={t('Kind of circle')}>
+                  <button role="radio" aria-checked={!door} class={!door ? 'on' : ''} onClick={() => setDoor(false)}>{t('Small circle')}</button>
+                  <button role="radio" aria-checked={door} class={door ? 'on' : ''} onClick={() => setDoor(true)}>{t('Open door')}</button>
+                </div>
+                {door && <p class="muted small">{t('Only you share. People join with one link you post, until you close it. They can pray with what you share and send you prayer requests only you can read. They never see each other.')}</p>}
+              </>}
               <p class="muted small c-rules">{t('Circles are for kind words. Anything hateful, abusive or sexual can be reported, and it’s removed along with whoever shared it.')}</p>
               <div class="c-row">
-                <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? t('Making…') : t('Make circle')}</button>
+                <button class="c-btn primary" disabled={busy || !name.trim() || !me.trim()} onClick={() => create()}>{busy ? t('Making…') : door && lead === 'yes' ? t('Make Open door circle') : t('Make circle')}</button>
                 <button class="c-btn" onClick={() => setMaking(false)}>{t('Cancel')}</button>
               </div>
+              {lead !== 'yes' && <AskToLead lead={lead} onAsked={setLead} />}
             </div>
           ) : joining ? <JoinCode onCancel={() => setJoining(false)} /> : (
             <div class="c-row c-two">
@@ -420,7 +438,7 @@ function PasteInvite() {
   const [msg, setMsg] = useState('')
   const use = (s: string) => {
     const l = parseInviteLink(s)
-    if (l) { nav.away(); go(`join?i=${l.i}&k=${l.k}`) }
+    if (l) { nav.away(); go(`join?${l.door ? 'd' : 'i'}=${l.i}&k=${l.k}`) }
     else setMsg(t('That isn’t a whole invite link. Copy it again from the message.'))
   }
   const paste = async () => {
@@ -455,7 +473,7 @@ function OpenInApp() {
   )
 }
 
-function Join({ id, secret }: { id: string; secret: string }) {
+function Join({ id, secret, door = false }: { id: string; secret: string; door?: boolean }) {
   const [invite, setInvite] = useState<Invite>()
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
@@ -463,12 +481,12 @@ function Join({ id, secret }: { id: string; secret: string }) {
   const [me, setMe] = useState(lastName)
   useEffect(() => {
     if (!id || !secret) { setMsg(t('This invite link is incomplete. Ask for it to be sent again.')); return }
-    readInvite(id, secret).then(async i => {
+    readInvite(id, secret, door).then(async i => {
       if (!i.already) { setInvite(i); return }
       await openInvited(id, i, lastName() || t('Me'))
       toSheet({ id: i.circle, name: i.name })
     }, e => setMsg(message(e)))
-  }, [id, secret])
+  }, [id, secret, door])
   const join = async (code?: string) => {
     if (!invite || !me.trim()) return
     setBusy(true); setMsg('')
@@ -481,16 +499,18 @@ function Join({ id, secret }: { id: string; secret: string }) {
   }
   return (
     <div class="circles">
-      <h1>{t('Join a circle')}</h1>
+      <h1>{door ? t('Come in') : t('Join a circle')}</h1>
       {inBrowser() && invite && !needCode && <OpenInApp />}
       {invite && (needCode ? <CodeEntry busy={busy} onCode={join} onCancel={() => setNeedCode(false)} onApproved={() => join()} /> : (
         <div class="c-card">
           <p>{invite.by ? tj('{name} invited you to {circle}', { name: <strong>{invite.by}</strong>, circle: <strong>{invite.name}</strong> }) : tj('You’re invited to {circle}', { circle: <strong>{invite.name}</strong> })}
-            <span class="muted"> · {tn(invite.members, '{n} person', '{n} people')}</span></p>
-          <p class="muted small">{t('A private circle to read the word and pray together. You’ll see what they share, and they’ll see only what you choose to share, one tap at a time. Everything is encrypted: not even the server can read it.')}</p>
+            <span class="muted"> · {invite.door ? t('Open door') : tn(invite.members, '{n} person', '{n} people')}</span></p>
+          {invite.door
+            ? <p class="muted small">{t('{name} shares verses and prayers here. You can pray along with 🙏 and send {name} a prayer request that only {name} can read. Nobody else in the circle sees you or what you send.', { name: invite.by || t('The leader') })}</p>
+            : <p class="muted small">{t('A private circle to read the word and pray together. You’ll see what they share, and they’ll see only what you choose to share, one tap at a time. Everything is encrypted: not even the server can read it.')}</p>}
           <p class="muted small c-rules">{t('Circles are for kind words. Anything hateful, abusive or sexual can be reported, and it’s removed along with whoever shared it.')}</p>
           {!loadAccount() ? <SignIn joining /> : <>
-            <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
+            <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={invite.door && invite.by ? t('How {name} will see you', { name: invite.by }) : t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
             <button class="c-btn primary" disabled={busy || !me.trim()} onClick={() => join()}>{busy ? t('Joining…') : t('Join {circle}', { circle: invite.name })}</button>
           </>}
         </div>
@@ -521,7 +541,7 @@ function CircleView({ id }: { id: string }) {
   // Let in with a code: look every few seconds (for two minutes at most)
   // until their phone finishes joining, so they show up here on their own.
   const [joining, setJoining] = useState<{ was: number; until: number }>()
-  const [page, setPage] = useState<'shared' | 'people'>()
+  const [page, setPage] = useState<'shared' | 'requests' | 'people'>()
   const [limit, setLimit] = useState(PAGE)
   // Days opened or folded by hand; the rest follow the rule (the latest open).
   const [dayOpen, setDayOpen] = useState<Record<number, boolean>>({})
@@ -592,8 +612,65 @@ function CircleView({ id }: { id: string }) {
   const news = feed ? newsIn(feed, since).items : undefined
   // A few days at a time, then a clear end: never an endless stack.
   const { days, more } = feed ? byDay(feed.items, news!, limit, dayAt) : { days: [], more: false }
+  // Open door: you lead it, or you're one of the many who came in.
+  const door = feed?.door
+  const leading = !!door && door.lead === feed?.me
+  const guest = !!door && !leading
+  const leader = door ? nameOf(door.lead) : ''
   // A circle with only you in it starts on People, where the invite is.
   const tab = page ?? (feed && feed.members.length < 2 && !feed.items.length ? 'people' : 'shared')
+
+  const sharedList = feed && <>
+    {!feed.items.length && <p class="muted c-empty">{guest ? t('Nothing shared yet. When {name} shares a verse or a prayer, it shows here.', { name: leader })
+      : t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
+    {/* Each day is one row, as in Your prayers, and a tap opens or folds
+        it. What's new is always open; with nothing new, the latest day is. */}
+    {days.map((d, i) => {
+      const isOpen = d.day === 'new' || (dayOpen[d.day] ?? (i === 0))
+      const by = [...new Set(d.items.map(x => x.by))].map(nameOf).join(', ')
+      return (
+        <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
+          {d.day === 'new' ? <h3 class="c-day-name">{t('New since you last looked')}</h3> : (
+            <h3 class="c-day-fold"><button aria-expanded={isOpen} onClick={() => setDayOpen({ ...dayOpen, [d.day]: !isOpen })}>
+              <strong>{dayName(d.day)}</strong>
+              <span class="c-day-sum"><span class="muted">{by}</span>{d.items.slice(0, 6).map(x => <KindSign k={x.body.k} tone={settings.prayTone} size={16} />)}</span>
+              <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+            </button></h3>
+          )}
+          {isOpen && (
+            <ol class="c-feed">
+              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} door={door} />)}
+            </ol>
+          )}
+        </section>
+      )
+    })}
+    {more
+      ? <button class="c-btn c-earlier" onClick={() => setLimit(n => n + PAGE)}>{t('Show earlier days')}</button>
+      : feed.items.length > 0 && <p class="c-end">{t('That’s everything shared in {circle}.', { circle: info?.name ?? t('this circle') })}</p>}
+  </>
+
+  // Leaving: an Open door circle's leader closes it for everyone; the
+  // others just go (and can come back while the door is open).
+  const leaveDoor = door && (leaving
+    ? <SureCard title={leading ? t('Close {circle} for everyone?', { circle: info?.name ?? t('this circle') }) : t('Leave {circle}?', { circle: info?.name ?? t('this circle') })}
+      said={leading ? t('Everything shared here and every prayer request is removed, and everyone in it is let go. This can’t be undone.')
+        : t('Your prayer requests here are removed. You can come back with the Open door link while it’s open.')}
+      del={busy ? t('Leaving…') : leading ? t('Close it for everyone') : t('Leave')} keep={t('Stay')} busy={busy} onDelete={leave} onKeep={() => setLeaving(false)} />
+    : <button class="link small" onClick={() => setLeaving(true)}>{leading ? t('Close this circle') : t('Leave this circle')}</button>)
+
+  if (feed && guest) return (
+    <div class="circles c-door-guest">
+      {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? t('Circle')}</button></h1>}
+      <p class="muted small c-door-line">{t('An Open door circle led by {name}', { name: leader })}</p>
+      {msg && <p class="note small">{msg}</p>}
+      <AskPrayer circle={id} door={door!} leader={leader} feed={feed} />
+      {sharedList}
+      <StartOwn />
+      <Notify circle={id} name={info?.name} />
+      <div class="c-foot" ref={leaveCard}>{leaveDoor}</div>
+    </div>
+  )
 
   return (
     <div class="circles">
@@ -601,11 +678,20 @@ function CircleView({ id }: { id: string }) {
       {feed && (
         <div class="seg c-tabs" role="tablist">
           <button role="tab" aria-selected={tab === 'shared'} class={tab === 'shared' ? 'on' : ''} onClick={() => setPage('shared')}>{t('Shared')}</button>
+          {leading && <button role="tab" aria-selected={tab === 'requests'} class={tab === 'requests' ? 'on' : ''} onClick={() => setPage('requests')}>{t('Requests')}</button>}
           <button role="tab" aria-selected={tab === 'people'} class={tab === 'people' ? 'on' : ''} onClick={() => setPage('people')}>{t('People')}</button>
         </div>
       )}
       {msg && <p class="note small">{msg}</p>}
-      {feed && tab === 'people' && <>
+      {feed && leading && tab === 'requests' && <LeaderRequests circle={id} door={door!} nameOf={nameOf} />}
+      {feed && leading && tab === 'people' && <>
+        <DoorLink circle={id} door={door!} name={info?.name ?? ''} onChange={load} />
+        <Notify circle={id} name={info?.name} />
+        <DoorPeople circle={id} feed={feed} onChange={load} />
+        <Rename circle={id} name={info?.name ?? ''} onDone={named} />
+        <div class="c-foot" ref={leaveCard}>{leaveDoor}</div>
+      </>}
+      {feed && !door && tab === 'people' && <>
         <p class="c-members">{feed.members.map(m => m.mid === feed.me ? t('You') : m.name).join(', ')}</p>
         <Notify circle={id} name={info?.name} />
         <StreakBoard circle={id} name={info?.name} feed={feed} onChange={load} />
@@ -636,34 +722,7 @@ function CircleView({ id }: { id: string }) {
             : <button class="link small" onClick={() => setLeaving(true)}>{t('Leave this circle')}</button>}
         </div>
       </>}
-      {feed && tab === 'shared' && <>
-        {!feed.items.length && <p class="muted c-empty">{t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
-        {/* Each day is one row, as in Your prayers, and a tap opens or folds
-            it. What's new is always open; with nothing new, the latest day is. */}
-        {days.map((d, i) => {
-          const isOpen = d.day === 'new' || (dayOpen[d.day] ?? (i === 0))
-          const by = [...new Set(d.items.map(x => x.by))].map(nameOf).join(', ')
-          return (
-            <section class={'c-day' + (d.day === 'new' ? ' c-day-new' : '')}>
-              {d.day === 'new' ? <h3 class="c-day-name">{t('New since you last looked')}</h3> : (
-                <h3 class="c-day-fold"><button aria-expanded={isOpen} onClick={() => setDayOpen({ ...dayOpen, [d.day]: !isOpen })}>
-                  <strong>{dayName(d.day)}</strong>
-                  <span class="c-day-sum"><span class="muted">{by}</span>{d.items.slice(0, 6).map(x => <KindSign k={x.body.k} tone={settings.prayTone} size={16} />)}</span>
-                  <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
-                </button></h3>
-              )}
-              {isOpen && (
-                <ol class="c-feed">
-                  {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} />)}
-                </ol>
-              )}
-            </section>
-          )
-        })}
-        {more
-          ? <button class="c-btn c-earlier" onClick={() => setLimit(n => n + PAGE)}>{t('Show earlier days')}</button>
-          : feed.items.length > 0 && <p class="c-end">{t('That’s everything shared in {circle}.', { circle: info?.name ?? t('this circle') })}</p>}
-      </>}
+      {feed && tab === 'shared' && sharedList}
     </div>
   )
 }
@@ -811,10 +870,12 @@ function StreakBoard({ circle, name, feed, onChange }: { circle: string; name?: 
   )
 }
 
-function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
+function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
   circle: string; item: FeedItem; mine: boolean; me: string; nameOf: (mid: string) => string; fav: string; onChange: () => void
   /** what's new on it since you last looked */
   news?: News
+  /** an Open door circle: 🙏 shows as a count, and only its leader writes back */
+  door?: Door
 }) {
   const { marks, setMarks, settings } = useApp()
   const b = item.body
@@ -886,11 +947,21 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
   const isNew = (m: string) => !!(news?.amens.has(m) || news?.reacts.has(m))
   const givers = [...new Set(who.flatMap(([, ms]) => ms))].sort((x, y) => +isNew(y) - +isNew(x))
     .map(m => ({ m, gave: who.filter(([, ms]) => ms.includes(m)).map(([r]) => r) }))
+  // Open door: how many pray with it, never who (the leader sees who on People).
+  const praying = door ? (door.prayed[item.id] ?? 0) - +item.amens.includes(me) + +prayed : 0
+  const guest = !!door && door.lead !== me
   return (
-    <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '') + (who.length ? ' c-reacted' : '')}>
+    <li class={'c-item c-kind-' + b.k + (news ? ' c-new' : '') + ((door ? praying : who.length) ? ' c-reacted' : '')}>
+      {door && praying > 0 && (
+        <ul class="c-on-top" aria-label={t('Reactions')}>
+          <li class={'c-pill' + (news?.amens.size ? ' new' : '')} aria-label={tn(praying, '{n} praying', '{n} praying')}>
+            <span class="c-pill-emoji" aria-hidden="true">{emoji('pray')}</span><span class="c-pill-name" aria-hidden="true">{praying}</span>
+          </li>
+        </ul>
+      )}
       {/* What the circle gave back sits on the card's top edge: each sign
           with who gave it. Never a line of words that reads like the sharer. */}
-      {who.length > 0 && (
+      {!door && who.length > 0 && (
         <ul class="c-on-top" aria-label={t('Reactions')}>
           {givers.map(({ m, gave }) => (
             <li class={'c-pill' + (isNew(m) ? ' new' : '')}>
@@ -943,14 +1014,27 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news }: {
           </div>
         </div>
       )}
+      {/* Open door, for everyone but its leader: pray with it, keep it, or
+          report it. No writing back, so nobody here hears from strangers. */}
+      {guest && <>
+        <div class="c-respond-row">
+          {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
+            ? <button class="c-respond" onClick={keepNote}>{t('Keep note')}</button>
+            : !bookmarked && <button class="c-respond" onClick={bookmark}>{t('Bookmark')}</button>)}
+          <button class={'c-respond c-pray-with' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={pray}>
+            <span aria-hidden="true">{emoji('pray')}</span> {prayed ? t('Praying') : t('Pray with')}
+          </button>
+        </div>
+        <p class="c-guest-foot"><button class="link small c-report" onClick={() => setReporting({})}>{t('Report')}</button></p>
+      </>}
       {/* Two plain buttons: write back, or open the reactions and the rest. */}
-      {!writing && (
+      {!guest && !writing && (
         <div class="c-respond-row">
           <button class="c-respond" onClick={() => { setWriting(true); setTray(false) }}>{t('Reply')}</button>
           <button class={'c-respond' + (tray ? ' on' : '')} aria-expanded={tray} onClick={() => { setTray(!tray); setConfirm(false) }}>{tray ? t('Done') : t('React')}</button>
         </div>
       )}
-      {tray && !writing && (
+      {tray && !writing && !guest && (
         <div class="c-tray">
           <div class="c-reacts" role="group" aria-label={t('Reactions')}>
             <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={() => { pray(); setTray(false) }}
@@ -1162,9 +1246,12 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
       keptCircles(),
       Promise.all(ids.map(id => prayers.get(id).catch(() => undefined))),
       ids.length ? loadShared().then(x => x.shared).catch(() => undefined) : undefined,
-    ]).then(([cs, ps, sh]) => {
+    ]).then(([all, ps, sh]) => {
+      let cs = all
       const kept = ps.filter((p): p is Prayer => !!p)
       const full = sh ? circlesWithAll(sh, kept.map(p => p.at)) : new Set<string>()
+      // An Open door circle someone else leads takes no shares.
+      cs = cs.filter(c => c.door !== 'member')
       const first = cs.find(c => !full.has(c.id))
       setList(cs); setShared(sh); setHad(full); setPicks(first ? [first.id] : [])
       if ('prayers' in request) setWhat(`${tn(kept.length, '{n} prayer', '{n} prayers')} · ${duration(kept.reduce((n, p) => n + p.ms, 0))}`)
@@ -1262,5 +1349,231 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         {list && !list.length && <p class="muted">{t('You’re not in a circle on this device yet. Open Circles, beside 🙏.')}</p>}
       </div>
     </Sheet>
+  )
+}
+
+// ---- Open door circles -------------------------------------------------------
+// A circle someone leads (a podcast, a ministry) that people join through one
+// link. Only the leader shares; the others pray along (🙏) and can send the
+// leader a prayer request only the leader reads. They never see each other.
+
+/** Set by "Start a circle" inside an Open door circle: the list opens on New circle. */
+let startMaking = false
+
+/** "Are you sure?", in place, never a browser pop-up: the quiet red one on
+ *  the left, the big bold Keep on the right. */
+function SureCard({ title, said, del, keep, busy, onDelete, onKeep }: {
+  title: string; said?: string; del: string; keep: string; busy?: boolean; onDelete: () => void; onKeep: () => void
+}) {
+  return (
+    <div class="confirm-card danger c-sure" role="alertdialog" aria-label={title}>
+      <p class="confirm-title"><strong>{title}</strong></p>
+      {said && <p class="small">{said}</p>}
+      <div class="c-sure-row">
+        <button class="c-btn c-del-quiet" disabled={busy} onClick={onDelete}>{del}</button>
+        <button class="c-btn primary c-keep" disabled={busy} onClick={onKeep}>{keep}</button>
+      </div>
+    </div>
+  )
+}
+
+/** Asking My Quiet Bible to lead an Open door circle, from New circle. */
+function AskToLead({ lead, onAsked }: { lead: Lead; onAsked: (l: Lead) => void }) {
+  const [open, setOpen] = useState(false)
+  const [note, setNote] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  if (lead === 'asked') return <p class="muted small c-lead-ask">{t('You asked to lead an Open door circle. You can make one here as soon as My Quiet Bible says yes.')}</p>
+  if (!open) return <p class="c-paste c-lead-ask"><button class="link small" onClick={() => setOpen(true)}>{t('Leading a podcast or a ministry? Ask for an Open door circle')}</button></p>
+  const ask = async () => {
+    setBusy(true); setMsg('')
+    try { onAsked(await askToLead(note.trim())); setOpen(false) } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-lead-ask">
+      <p class="small">{t('In an Open door circle, only you share. People join with one link you post, and they can send you prayer requests. They never see each other.')}</p>
+      <label class="c-label">{t('What do you lead?')}<textarea rows={2} maxLength={300} value={note} placeholder={t('A podcast, a church group…')} onInput={e => setNote((e.target as HTMLTextAreaElement).value)} /></label>
+      <div class="c-row c-two">
+        <button class="c-btn" onClick={() => setOpen(false)}>{t('Cancel')}</button>
+        <button class="c-btn primary" disabled={busy || !note.trim()} onClick={ask}>{busy ? t('Sending…') : t('Ask')}</button>
+      </div>
+      {msg && <p class="note small">{msg}</p>}
+    </div>
+  )
+}
+
+/** The leader's link: share it while the door is open, or close it. */
+function DoorLink({ circle, door, name, onChange }: { circle: string; door: Door; name: string; onChange: () => void }) {
+  const [link, setLink] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [closing, setClosing] = useState(false)
+  useEffect(() => { doorLink(circle, door).then(setLink, () => setLink('')) }, [circle, door.link, door.open])
+  const share = async (l: string) => {
+    const text = inviteMessage([t('Come pray with “{circle}” in My Quiet Bible. Open this link to come in.', { circle: name })], l)
+    if (canShare) { try { await navigator.share({ title: 'My Quiet Bible', text }) } catch { /* closed */ } }
+    else await copyText(l).then(() => setMsg(t('Link copied. Post it with your podcast, videos or messages.')), () => {})
+  }
+  const act = (fn: () => Promise<unknown>) => async () => {
+    setBusy(true); setMsg('')
+    try { await fn(); onChange() } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class={'c-card c-door' + (door.open ? ' open' : '')}>
+      <p class="c-card-title">{door.open ? t('The door is open') : t('The door is closed')}</p>
+      {door.open ? <>
+        <p class="muted small">{t('Anyone with this link can come in. Post it with your podcast, videos or messages.')}</p>
+        {link && <p class="c-door-link"><code>{link}</code></p>}
+        {closing
+          ? <SureCard title={t('Close the door?')} said={t('This link stops working, so nobody new can come in. People already here stay. Opening the door again makes a new link.')}
+            del={busy ? t('Closing…') : t('Close the door')} keep={t('Keep it open')} busy={busy} onDelete={act(async () => { await closeDoor(circle); setClosing(false) })} onKeep={() => setClosing(false)} />
+          : <>
+            <div class="c-row c-two">
+              <button class="c-btn" disabled={!link} onClick={() => copyText(link).then(() => setMsg(t('Link copied. Post it with your podcast, videos or messages.')), () => {})}>{t('Copy the link')}</button>
+              {canShare && <button class="c-btn primary" disabled={!link} onClick={() => share(link)}>{t('Share the link')}</button>}
+            </div>
+            <p class="c-paste"><button class="link small" onClick={() => setClosing(true)}>{t('Close the door')}</button></p>
+          </>}
+      </> : <>
+        <p class="muted small">{t('Nobody new can come in. People already here stay. Open it to get a link anyone can use to join, until you close it.')}</p>
+        <button class="c-btn primary" disabled={busy} onClick={act(async () => { const l = await openDoor(circle); setLink(l); await share(l) })}>{busy ? t('Opening…') : t('Open the door')}</button>
+      </>}
+      {msg && <p class="note small">{msg}</p>}
+    </div>
+  )
+}
+
+/** Who came in, for the leader, who can take anyone out. */
+function DoorPeople({ circle, feed, onChange }: { circle: string; feed: Feed; onChange: () => void }) {
+  const [asking, setAsking] = useState<string>()
+  const [busy, setBusy] = useState(false)
+  const [err, setErr] = useState('')
+  const others = feed.members.filter(m => m.mid !== feed.me)
+  const who = others.find(m => m.mid === asking)
+  const out = async () => {
+    setBusy(true); setErr('')
+    try { await removeMember(circle, asking!); setAsking(undefined); onChange() } catch (e) { setErr(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card c-blocking">
+      <p class="c-card-title">{others.length ? tn(others.length, '{n} person came in', '{n} people came in') : t('Nobody has come in yet')}</p>
+      <p class="muted small">{t('They see only you and what you share. They never see each other.')}</p>
+      {who ? <SureCard title={t('Take {name} out?', { name: who.name })} said={t('They leave the circle with their prayer requests, and the link won’t let them back in.')}
+        del={busy ? t('Taking out…') : t('Take out')} keep={t('Keep')} busy={busy} onDelete={out} onKeep={() => setAsking(undefined)} /> : others.length > 0 && (
+        <ul class="c-block-list">
+          {others.map(m => <li><span>{m.name}</span><button class="c-btn small" disabled={busy} onClick={() => setAsking(m.mid)}>{t('Take out')}</button></li>)}
+        </ul>
+      )}
+      {err && <p class="note small">{err}</p>}
+    </div>
+  )
+}
+
+/** The prayer requests sent to the leader, opened with the leader's own key. */
+function LeaderRequests({ circle, door, nameOf }: { circle: string; door: Door; nameOf: (mid: string) => string }) {
+  const [list, setList] = useState<DoorRequest[]>()
+  const [needCode, setNeedCode] = useState(false)
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [asking, setAsking] = useState<string>()
+  const load = async (code?: string) => {
+    setBusy(true); setMsg('')
+    try {
+      const r = await leaderRequests(circle, door, code)
+      if (r === 'needCode') setNeedCode(true)
+      else { setList(r); setNeedCode(false) }
+    } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  useEffect(() => { load() }, [circle])
+  const act = (fn: () => Promise<unknown>) => async () => {
+    setBusy(true); setMsg('')
+    try { await fn(); setAsking(undefined); await load() } catch (e) { setMsg(message(e)); setBusy(false) }
+  }
+  if (needCode) return <CodeEntry busy={busy} onCode={c => load(c)} onCancel={() => setNeedCode(false)} onApproved={() => load()} />
+  return (
+    <div class="c-requests">
+      <p class="muted small">{t('Only you can read these. When you tap I prayed, they’re told.')}</p>
+      {list && !list.length && <p class="muted c-empty">{t('No prayer requests yet. When someone here sends you one, it shows here.')}</p>}
+      {!list && !msg && <p class="muted">{t('Opening…')}</p>}
+      <ol class="c-feed">
+        {list?.map(r => (
+          <li class="c-item c-request">
+            <p class="c-item-by"><strong>{nameOf(r.by ?? '')}</strong> <span class="muted small">· {when(r.at, true)}</span></p>
+            <p class="c-note c-note-main">{r.text}</p>
+            {asking === r.id
+              ? <SureCard title={t('Remove this prayer request?')} said={t('It’s gone for good, for you and for them.')} del={t('Remove')} keep={t('Keep')} busy={busy}
+                onDelete={act(() => removeRequest(circle, r.id))} onKeep={() => setAsking(undefined)} />
+              : <div class="c-sure-row">
+                <button class="c-btn c-del-quiet" disabled={busy} onClick={() => setAsking(r.id)}>{t('Remove')}</button>
+                {r.prayed
+                  ? <span class="c-prayed">✓ {t('You prayed')}</span>
+                  : <button class="c-btn primary c-keep" disabled={busy} onClick={act(() => markPrayed(circle, r.id))}>🙏 {t('I prayed')}</button>}
+              </div>}
+          </li>
+        ))}
+      </ol>
+      {msg && <p class="note small">{msg}</p>}
+    </div>
+  )
+}
+
+/** Everyone but the leader: a prayer request, sealed so only the leader can read it. */
+function AskPrayer({ circle, door, leader, feed }: { circle: string; door: Door; leader: string; feed: Feed }) {
+  const [open, setOpen] = useState(false)
+  const [said, setSaid] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const [mine, setMine] = useState<DoorRequest[]>([])
+  const [asking, setAsking] = useState<string>()
+  const load = () => myRequests(circle).then(setMine, () => {})
+  // Again each time the circle is fetched (coming back to it, say), so "prayed for this" shows.
+  useEffect(() => { load() }, [circle, feed])
+  const send = async () => {
+    setBusy(true); setMsg('')
+    try { await sendRequest(circle, door.pub, said.trim()); setSaid(''); setOpen(false); setMsg(t('Sent. Only {name} can read it.', { name: leader })); load() }
+    catch (e) { setMsg(navigator.onLine === false ? t('You’re offline. Try again once you’re connected.') : message(e)) } finally { setBusy(false) }
+  }
+  const remove = async (id: string) => {
+    setBusy(true)
+    try { await removeRequest(circle, id); setAsking(undefined); load() } catch (e) { setMsg(message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class="c-card c-ask">
+      {open ? <>
+        <label class="c-label">{t('What can {name} pray for?', { name: leader })}
+          <textarea rows={3} maxLength={1000} value={said} autoFocus onInput={e => setSaid((e.target as HTMLTextAreaElement).value)} /></label>
+        <p class="muted small">{t('Only {name} can read this. Nobody else in the circle sees it.', { name: leader })}</p>
+        <div class="c-row c-two">
+          <button class="c-btn" onClick={() => { setOpen(false); setSaid('') }}>{t('Cancel')}</button>
+          <button class="c-btn primary" disabled={busy || !said.trim()} onClick={send}>{busy ? t('Sending…') : t('Send to {name}', { name: leader })}</button>
+        </div>
+      </> : <button class="c-btn primary c-ask-btn" onClick={() => { setOpen(true); setMsg('') }}>{t('Ask {name} to pray for you', { name: leader })}</button>}
+      {msg && <p class="muted small">{msg}</p>}
+      {mine.length > 0 && (
+        <ul class="c-my-asks" aria-label={t('Your prayer requests')}>
+          {mine.map(r => (
+            <li>
+              {r.text ? <p class="c-note">{r.text}</p> : <p class="muted small">{t('A prayer request')}</p>}
+              <p class="small">{r.prayed ? <strong>🙏 {t('{name} prayed for this', { name: leader })}</strong> : <span class="muted">{t('Sent {when}', { when: when(r.at, true) })}</span>}
+                {asking !== r.id && <button class="link small" onClick={() => setAsking(r.id)}>{t('Remove')}</button>}</p>
+              {asking === r.id && <SureCard title={t('Remove this prayer request?')} said={t('It’s gone for good, for you and for {name}.', { name: leader })}
+                del={t('Remove')} keep={t('Keep')} busy={busy} onDelete={() => remove(r.id)} onKeep={() => setAsking(undefined)} />}
+            </li>
+          ))}
+        </ul>
+      )}
+    </div>
+  )
+}
+
+/** The gentle nudge: the circles that matter most are small. */
+function StartOwn() {
+  const nav = useNav()
+  return (
+    <div class="c-card c-start-own">
+      <p class="c-card-title">{t('Pray with the people closest to you')}</p>
+      <p class="muted small">{t('Start your own small circle with family or friends from church. Only the people you invite see what you share.')}</p>
+      <button class="c-btn" onClick={() => { startMaking = true; nav.open() }}>{t('Start a circle')}</button>
+    </div>
   )
 }

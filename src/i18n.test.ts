@@ -48,4 +48,4 @@ describe.each([['fr', fr], ['es', es]] as const)('%s', (_, dict) => {
 })
 
 // Sentences the service builds with a number in them.
-const EXTRA = new Set(['You can be in up to 20 circles', 'A circle can have up to 50 people', 'Something went wrong'])
+const EXTRA = new Set(['You can be in up to 20 circles', 'A circle can have up to 50 people', 'A circle can have up to 300 people', 'Something went wrong'])

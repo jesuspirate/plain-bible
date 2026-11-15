@@ -50,6 +50,10 @@ describe('parseInviteLink', () => {
     expect(parseInviteLink('https://myquietbible.com/#/join?i=zKpMGqvt-JhAYZhj&amp;k=Ab_cdEFghIJklMNopQRstu'))
       .toEqual({ i: 'zKpMGqvt-JhAYZhj', k: 'Ab_cdEFghIJklMNopQRstu' })
   })
+  it('tells an Open door link (d=) from a one-time invite', () => {
+    expect(parseInviteLink('Come pray with us: https://myquietbible.com/#/join?d=qsvoN6x6TfLVy6Bb&k=kz2hMh_AlL1cpKl4ovSdlg'))
+      .toEqual({ i: 'qsvoN6x6TfLVy6Bb', k: 'kz2hMh_AlL1cpKl4ovSdlg', door: true })
+  })
   it('says no to anything else', () => {
     expect(parseInviteLink('https://myquietbible.com/#/read/KJV/John/3')).toBeUndefined()
     expect(parseInviteLink('#/join?i=short&k=x')).toBeUndefined()

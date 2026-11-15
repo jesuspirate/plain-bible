@@ -10,7 +10,7 @@ import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, inCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver } from './state'
+import { go, canShareInCircles as inCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'

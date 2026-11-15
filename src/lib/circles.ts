@@ -41,7 +41,8 @@ export type Shared =
   /** `prayed`: when it was prayed, which can be long before it was shared */
   | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; verses?: PrayerVerse[]; note?: string; prayed?: number }
 
-export interface CircleInfo { id: string; name: string; members: number }
+/** `door`: an Open door circle, which you lead or are a member of. */
+export interface CircleInfo { id: string; name: string; members: number; door?: 'lead' | 'member' }
 /** `streak`: the days they read and prayed, if they show their streaks here. */
 export interface Member { mid: string; name: string; streak?: Days }
 export interface Reply { id: string; by: string; at: number; text: string }
@@ -60,7 +61,12 @@ export interface FeedItem {
 export const dayAt = (i: FeedItem) => i.body.k === 'prayer' && i.body.prayed ? Math.min(i.body.prayed, i.at) : i.at
 /** `name`: the circle's name as it is now, if someone renamed it.
  *  `blocked`: the members you blocked here; nothing of theirs is in `items`. */
-export interface Feed { me: string; name?: string; members: Member[]; items: FeedItem[]; blocked?: string[] }
+export interface Feed { me: string; name?: string; members: Member[]; items: FeedItem[]; blocked?: string[]; door?: Door }
+/** An Open door circle, as the feed tells it. `lead`: the leader's place in
+ *  it. `prayed`: how many prayed with each thing shared. `pub`: the leader's
+ *  key, which prayer requests are sealed to. Only the leader gets `id` and
+ *  `link` (the open link, sealed) and `priv` (their key, locked). */
+export interface Door { lead: string; open: boolean; pub: string; prayed: Record<string, number>; id?: string | null; link?: string | null; priv?: string }
 
 function token() {
   const a = loadAccount()
@@ -119,8 +125,9 @@ export const keptCircles = async () => (await meta.get<CircleInfo[]>('circles'))
 export async function listCircles(unlock = false, code?: string): Promise<{ circles: CircleInfo[]; locked: number; stale: number } | 'needCode'> {
   // The passkey goes first, in the same tap (see unlockKey).
   const locking = unlock ? lockKey(code).then(k => ({ k }), (e: Error) => ({ e })) : undefined
-  const { circles } = await api<{ circles: { id: string; name: string; wrapped: string; members: number; latest?: number | null }[] }>('/circles', { token: token() })
+  const { circles, lead } = await api<{ circles: { id: string; name: string; wrapped: string; members: number; latest?: number | null; door?: 'lead' | 'member' | null }[]; lead?: Lead }>('/circles', { token: token() })
   noteLatest(circles)
+  await meta.set('door-lead', lead ?? null)
   const raws = await rawKeys()
   let lock: CryptoKey | undefined
   const out: CircleInfo[] = []
@@ -141,11 +148,11 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
       unlocked++
     }
     const name = await openJson(await circleKey(c.id, raws[c.id]), c.name, `${c.id}/name`).catch(() => 'Circle')
-    out.push({ id: c.id, name: text(name, 80) || 'Circle', members: c.members })
+    out.push({ id: c.id, name: text(name, 80) || 'Circle', members: c.members, ...(c.door ? { door: c.door } : {}) })
   }
   await meta.set('circle-keys', raws)
   await meta.set('circles', out)
-  setInCircles(out.length)
+  setInCircles(out.length, out.filter(c => c.door !== 'member').length)
   keepNames(out).catch(() => {})
   // None would open: either this device holds some other account's key, or
   // the account started over with a new key and those need a new invite.
@@ -160,15 +167,28 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
   return { circles: out, locked, stale: failed }
 }
 
-export async function createCircle(name: string, me: string, code?: string): Promise<string | 'needCode'> {
+/** `door`: an Open door circle, led by you (see openDoor). */
+export async function createCircle(name: string, me: string, code?: string, door = false): Promise<string | 'needCode'> {
   const lock = await lockKey(code)
   if (lock === 'needCode') return lock
   const id = newId(), raw = crypto.getRandomValues(new Uint8Array(32))
   const key = await circleKey(id, raw)
+  let doorKeys: { pub: string; priv: string } | undefined
+  if (door) {
+    // The leader's own key pair: prayer requests are sealed to it, so only
+    // the leader can read them. Its private half goes up locked with the
+    // account key, for the leader's other devices.
+    const { EC } = await import('./approve')
+    const pair = await crypto.subtle.generateKey(EC, true, ['deriveBits']) as CryptoKeyPair
+    doorKeys = {
+      pub: b64url.encode(new Uint8Array(await crypto.subtle.exportKey('raw', pair.publicKey))),
+      priv: b64url.encode(await seal(lock, new Uint8Array(await crypto.subtle.exportKey('pkcs8', pair.privateKey)), `door/${id}`)),
+    }
+  }
   await api('/circles', {
     method: 'POST', token: token(), body: {
       id, name: await sealJson(key, name, `${id}/name`), me: await sealJson(key, me, `${id}/me`),
-      wrapped: b64url.encode(await seal(lock, raw, `circle/${id}`)),
+      wrapped: b64url.encode(await seal(lock, raw, `circle/${id}`)), ...(doorKeys ? { door: doorKeys } : {}),
     },
   })
   await meta.set('circle-keys', { ...(await rawKeys()), [id]: raw })
@@ -186,11 +206,12 @@ export async function inviteLink(circle: string) {
   return shareLink(`#/join?i=${id}&k=${b64url.encode(secret)}`)
 }
 
-/** The invite in a link someone sent, pasted in: its id and secret. */
-export function parseInviteLink(s: string): { i: string; k: string } | undefined {
+/** The invite in a link someone sent, pasted in: its id and secret.
+ *  `door`: an Open door link (d=), which many can use. */
+export function parseInviteLink(s: string): { i: string; k: string; door?: boolean } | undefined {
   // Some notes apps hand the link back with "&" written as "&amp;".
-  const m = /[?&]i=([\w-]{8,40})&(?:amp;)?k=([\w-]{16,40})/.exec(s.trim())
-  return m ? { i: m[1], k: m[2] } : undefined
+  const m = /[?&](i|d)=([\w-]{8,40})&(?:amp;)?k=([\w-]{16,40})/.exec(s.trim())
+  return m ? { i: m[2], k: m[3], ...(m[1] === 'd' ? { door: true } : {}) } : undefined
 }
 
 /** The words of an invite, then the link alone on its last line. The link
@@ -201,23 +222,23 @@ export function inviteMessage(lines: string[], link: string) {
   return [...lines, link].join('\n\n')
 }
 
-export interface Invite { circle: string; name: string; by: string; members: number; already: boolean; raw: Uint8Array }
-/** What an invite link opens, before you join. */
-export async function readInvite(id: string, secret: string): Promise<Invite> {
-  const r = await api<{ circle: string; wrapped: string; name: string; by: string | null; members: number; already: boolean }>(`/circles/invite/${encodeURIComponent(id)}`, { token: loadAccount()?.token })
-  const raw = await open(await aesKey(b64url.decode(secret), 'circle invite v1'), b64url.decode(r.wrapped), `invite/${id}`)
+export interface Invite { circle: string; name: string; by: string; members: number; already: boolean; raw: Uint8Array; door?: boolean }
+/** What an invite link (or an Open door link) opens, before you join. */
+export async function readInvite(id: string, secret: string, door = false): Promise<Invite> {
+  const r = await api<{ circle: string; wrapped: string; name: string; by: string | null; members: number; already: boolean }>(`/circles/${door ? 'door' : 'invite'}/${encodeURIComponent(id)}`, { token: loadAccount()?.token })
+  const raw = await open(await aesKey(b64url.decode(secret), 'circle invite v1'), b64url.decode(r.wrapped), `${door ? 'door' : 'invite'}/${id}`)
     .catch(() => { throw new SyncError('This invite link is incomplete. Ask for it to be sent again.') })
   const key = await circleKey(r.circle, raw)
   const name = await openJson(key, r.name, `${r.circle}/name`).catch(() => 'Circle')
   const by = r.by ? await openJson(key, r.by, `${r.circle}/me`).catch(() => '') : ''
-  return { circle: r.circle, name: text(name, 80) || 'Circle', by: text(by, 60), members: r.members, already: r.already, raw }
+  return { circle: r.circle, name: text(name, 80) || 'Circle', by: text(by, 60), members: r.members, already: r.already, raw, ...(door ? { door } : {}) }
 }
 
 export async function joinCircle(id: string, invite: Invite, me: string, code?: string): Promise<'joined' | 'needCode'> {
   const lock = await lockKey(code)
   if (lock === 'needCode') return lock
   const key = await circleKey(invite.circle, invite.raw)
-  await api(`/circles/invite/${encodeURIComponent(id)}`, {
+  await api(`/circles/${invite.door ? 'door' : 'invite'}/${encodeURIComponent(id)}`, {
     method: 'POST', token: token(), body: {
       wrapped: b64url.encode(await seal(lock, invite.raw, `circle/${invite.circle}`)), me: await sealJson(key, me, `${invite.circle}/me`),
     },
@@ -237,7 +258,7 @@ export async function openInvited(id: string, invite: Invite, me: string) {
     const lock = await lockKey()
     const key = await circleKey(invite.circle, invite.raw)
     if (lock !== 'needCode') {
-      await api(`/circles/invite/${encodeURIComponent(id)}`, {
+      await api(`/circles/${invite.door ? 'door' : 'invite'}/${encodeURIComponent(id)}`, {
         method: 'POST', token: token(), body: {
           wrapped: b64url.encode(await seal(lock, invite.raw, `circle/${invite.circle}`)), me: await sealJson(key, me, `${invite.circle}/me`),
         },
@@ -380,7 +401,8 @@ export async function leaveCircle(circle: string) {
   const left = (await keptCircles()).filter(c => c.id !== circle)
   await meta.set('circles', left)
   forget(circle)
-  setInCircles(left.length)
+  setInCircles(left.length, left.filter(c => c.door !== 'member').length)
+  await meta.set(`door-asks:${circle}`, undefined)
 }
 
 // ---- what's shared ---------------------------------------------------------------
@@ -417,7 +439,7 @@ export async function loadFeed(circle: string): Promise<Feed> {
   const r = await api<{
     me: string; name?: string | null; members: { mid: string; name: string; streak?: string | null }[]; items: { id: string; mid: string; at: number; body: string; chunks: number }[]
     amens: { item: string; mid: string; at?: number }[]; replies?: { item: string; id: string; mid: string; at: number; body: string }[]
-    reacts?: { item: string; mid: string; at: number; body: string }[]; blocked?: string[]
+    reacts?: { item: string; mid: string; at: number; body: string }[]; blocked?: string[]; door?: Door
   }>(`/circles/${circle}`, { token: token() })
   // Someone you blocked: nothing they share, write, or react with shows here.
   const blocked = new Set(r.blocked ?? [])
@@ -450,7 +472,7 @@ export async function loadFeed(circle: string): Promise<Feed> {
   // Someone may have renamed it since the list was last fetched.
   const name = r.name ? text(await openJson(key, r.name, `${circle}/name`).catch(() => ''), 80) : ''
   if (name) await keepCircleName(circle, name)
-  const feed: Feed = { me: r.me, ...(name ? { name } : {}), members, items, ...(blocked.size ? { blocked: [...blocked] } : {}) }
+  const feed: Feed = { me: r.me, ...(name ? { name } : {}), members, items, ...(blocked.size ? { blocked: [...blocked] } : {}), ...(r.door ? { door: r.door } : {}) }
   await meta.set(`circle:${circle}`, feed)
   return feed
 }
@@ -621,4 +643,93 @@ export async function removeShared(circle: string, item: string) {
 export async function accountKeyCode() {
   const raw = (await meta.get<Uint8Array>('acct')) ?? (await meta.get<Uint8Array>('key'))
   return raw ? keyCode(raw) : ''
+}
+
+// ---- Open door circles ---------------------------------------------------------
+// A circle someone leads (a podcast, a ministry) that people join through one
+// link, for as long as the leader leaves it open. Only the leader shares. The
+// others pray with what's shared and can send the leader a prayer request,
+// sealed so only the leader reads it. They never see each other.
+
+/** Whether this account may lead one: 'yes', 'asked' (waiting for a yes), or null. */
+export type Lead = 'yes' | 'asked' | null
+export const keptLead = async () => (await meta.get<Lead>('door-lead')) ?? null
+/** Ask My Quiet Bible to let you lead an Open door circle, saying what you lead. */
+export async function askToLead(note: string) {
+  const { lead } = await api<{ lead: Lead }>('/circles/lead', { method: 'POST', token: token(), body: { note } })
+  await meta.set('door-lead', lead)
+  return lead
+}
+
+const doorLinkOf = (id: string, secret: Uint8Array) => shareLink(`#/join?d=${id}&k=${b64url.encode(secret)}`)
+
+/** Open the door: one link anyone can use to join, until it's closed. A new
+ *  one replaces the old, which stops working. */
+export async function openDoor(circle: string) {
+  const raw = (await rawKeys())[circle]
+  if (!raw) throw new SyncError('This circle isn’t unlocked on this device yet.')
+  const id = newId(), secret = crypto.getRandomValues(new Uint8Array(16))
+  const wrapped = b64url.encode(await seal(await aesKey(secret, 'circle invite v1'), raw, `door/${id}`))
+  const link = await sealJson(await keyOf(circle), { id, k: b64url.encode(secret) }, `${circle}/door`)
+  await api(`/circles/${circle}/door`, { method: 'PUT', token: token(), body: { id, wrapped, link } })
+  return doorLinkOf(id, secret)
+}
+export const closeDoor = (circle: string) => api(`/circles/${circle}/door`, { method: 'DELETE', token: token() })
+/** The open link again, for the leader (from any of their devices). */
+export async function doorLink(circle: string, door: Door) {
+  if (!door.open || !door.link) return ''
+  const v = await openJson(await keyOf(circle), door.link, `${circle}/door`) as { id?: string; k?: string }
+  return v?.id && v.k ? doorLinkOf(v.id, b64url.decode(v.k)) : ''
+}
+
+/** The leader takes someone out. The open link won't let them back in. */
+export const removeMember = (circle: string, mid: string) => api(`/circles/${circle}/members/${mid}`, { method: 'DELETE', token: token() })
+
+export interface DoorRequest { id: string; at: number; prayed?: number | null; text: string; by?: string }
+const askAad = (circle: string, id: string) => `${circle}/request/${id}`
+const ASKED = (circle: string) => `door-asks:${circle}`
+
+/** A prayer request to the leader, sealed to the leader's key: nobody else
+ *  can read it, not even others in the circle. A copy stays on this device. */
+export async function sendRequest(circle: string, pub: string, said: string) {
+  const { EC, shared } = await import('./approve')
+  const id = newId()
+  const pair = await crypto.subtle.generateKey(EC, false, ['deriveBits']) as CryptoKeyPair
+  const epk = b64url.encode(new Uint8Array(await crypto.subtle.exportKey('raw', pair.publicKey)))
+  const body = await sealJson(await shared(pair.privateKey, pub, `door ${circle}`), { text: said }, askAad(circle, id))
+  await api(`/circles/${circle}/requests/${id}`, { method: 'PUT', token: token(), body: { epk, body } })
+  const kept = (await meta.get<Record<string, { text: string; at: number }>>(ASKED(circle))) ?? {}
+  await meta.set(ASKED(circle), { ...kept, [id]: { text: said, at: Date.now() } })
+}
+
+/** Your own requests here, newest first, and whether the leader prayed. */
+export async function myRequests(circle: string): Promise<DoorRequest[]> {
+  const kept = (await meta.get<Record<string, { text: string; at: number }>>(ASKED(circle))) ?? {}
+  const { requests } = await api<{ requests: { id: string; at: number; prayed: number | null }[] }>(`/circles/${circle}/requests`, { token: token() })
+  return requests.map(r => ({ id: r.id, at: r.at, prayed: r.prayed, text: kept[r.id]?.text ?? '' }))
+}
+
+/** All the requests, for the leader, opened with the leader's key. */
+export async function leaderRequests(circle: string, door: Door, code?: string): Promise<DoorRequest[] | 'needCode'> {
+  if (!door.priv) return []
+  const lock = await lockKey(code)
+  if (lock === 'needCode') return lock
+  const { EC, shared } = await import('./approve')
+  const pkcs8 = await open(lock, b64url.decode(door.priv), `door/${circle}`)
+  const priv = await crypto.subtle.importKey('pkcs8', pkcs8 as BufferSource, EC, false, ['deriveBits'])
+  const { requests } = await api<{ requests: { id: string; mid: string; at: number; epk: string; body: string; prayed: number | null }[] }>(`/circles/${circle}/requests`, { token: token() })
+  const out: DoorRequest[] = []
+  for (const r of requests) {
+    const v = await openJson(await shared(priv, r.epk, `door ${circle}`), r.body, askAad(circle, r.id)).catch(() => undefined) as { text?: unknown } | undefined
+    const said = text(v?.text, 2000)
+    if (said) out.push({ id: r.id, at: r.at, prayed: r.prayed, text: said, by: r.mid })
+  }
+  return out
+}
+/** The leader prayed for it: the one who asked is told. */
+export const markPrayed = (circle: string, id: string) => api(`/circles/${circle}/requests/${id}/prayed`, { method: 'PUT', token: token() })
+export async function removeRequest(circle: string, id: string) {
+  await api(`/circles/${circle}/requests/${id}`, { method: 'DELETE', token: token() })
+  const kept = await meta.get<Record<string, { text: string; at: number }>>(ASKED(circle))
+  if (kept?.[id]) { delete kept[id]; await meta.set(ASKED(circle), kept) }
 }

@@ -250,13 +250,16 @@ async function sendCode(env: Env, to: string, code: string, lang?: string) {
 /** A note to the app's maker that something in a circle was reported.
  *  Never blocks the report: it's kept either way, on the /stats page. */
 async function tellAboutReport(env: Env, what: string) {
-  if (!emailOn(env)) return
   const text = `Someone reported this in a circle:\n\n${what}\n\nOpen the private stats page (/stats on the sync service) to remove it, take the person out of the circle, or keep it. Apple asks for an answer within 24 hours.\n\n— My Quiet Bible`
+  await tellMaker(env, 'Something was reported in a circle', text)
+}
+async function tellMaker(env: Env, subject: string, text: string) {
+  if (!emailOn(env)) return
   await fetch('https://api.resend.com/emails', {
     method: 'POST',
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
-    body: JSON.stringify({ from: env.EMAIL_FROM, to: [env.REPORT_EMAIL || 'hello@myquietbible.com'], subject: 'Something was reported in a circle', text }),
-  }).then(r => { if (!r.ok) console.error('report email', r.status) }, e => console.error('report email', e))
+    body: JSON.stringify({ from: env.EMAIL_FROM, to: [env.REPORT_EMAIL || 'hello@myquietbible.com'], subject, text }),
+  }).then(r => { if (!r.ok) console.error('maker email', r.status) }, e => console.error('maker email', e))
 }
 
 async function emailStart(req: Request, env: Env) {
@@ -492,6 +495,10 @@ const CODE_MS = 15 * 60_000
 const CODE_MISSES = 10
 const HOUR = 3_600_000
 const INVITE_DAYS = 7
+/** Open door circles: how many people one holds, and how many prayer
+ *  requests one person may send its leader in a day. */
+const DOOR_MAX = 300
+const ASKS_PER_DAY = 5
 const sealedText = (v: unknown, max = SEALED_MAX) => typeof v === 'string' && v.length > 0 && v.length <= max && /^[\w-]+$/.test(v)
 
 /** The member's row in the circle, or 404 (not 403: a stranger can't tell
@@ -506,6 +513,13 @@ async function membership(db: D1Database, circle: string, userId: string) {
 const BLOCKED = 'SELECT bm.user_id FROM circle_blocks bl JOIN circle_members bm ON bm.circle_id = bl.circle_id AND bm.mid = bl.mid WHERE bl.user_id = m.user_id AND bl.circle_id = c.id'
 const REPORTS_PER_DAY = 30
 
+/** How many people the circle can hold: more for an Open door one. */
+const capOf = async (db: D1Database, circle: string) =>
+  (await db.prepare('SELECT leader FROM circles WHERE id = ?').bind(circle).first<{ leader: string | null }>())?.leader ? DOOR_MAX : MAX_MEMBERS
+/** One more of an anonymous daily count (on the /stats page). */
+const countUp = (db: D1Database, kind: string) =>
+  db.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, 1) ON CONFLICT (period, kind) DO UPDATE SET n = n + 1').bind(new Date().toISOString().slice(0, 10), kind).run()
+
 /** Take a member out, with what they shared. The last one out closes the circle. */
 function leaveCircle(db: D1Database, circle: string, userId: string) {
   const mine = 'SELECT id FROM circle_items WHERE circle_id = ?1 AND user_id = ?2'
@@ -516,10 +530,13 @@ function leaveCircle(db: D1Database, circle: string, userId: string) {
     db.prepare(`DELETE FROM circle_replies WHERE circle_id = ?1 AND (user_id = ?2 OR item IN (${mine}))`).bind(circle, userId),
     db.prepare('DELETE FROM circle_items WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM circle_invites WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
+    db.prepare('DELETE FROM circle_requests WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare(`DELETE FROM circle_blocks WHERE circle_id = ?1 AND (user_id = ?2 OR mid IN (SELECT mid FROM circle_members WHERE circle_id = ?1 AND user_id = ?2))`).bind(circle, userId),
     db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND user_id = ?2').bind(circle, userId),
     db.prepare('DELETE FROM push_circles WHERE circle_id = ?1 AND endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?2)').bind(circle, userId),
-    ...['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies', 'circle_items', 'circle_invites', 'circle_blocks'].map(t =>
+    // The leader of an Open door circle leaving closes it, for everyone.
+    db.prepare('DELETE FROM circle_members WHERE circle_id = ?1 AND EXISTS (SELECT 1 FROM circles WHERE id = ?1 AND leader = ?2)').bind(circle, userId),
+    ...['circle_chunks', 'circle_amens', 'circle_reacts', 'circle_replies', 'circle_items', 'circle_invites', 'circle_blocks', 'circle_requests', 'circle_door_bans', 'circle_codes', 'push_circles'].map(t =>
       db.prepare(`DELETE FROM ${t} WHERE circle_id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)`).bind(circle)),
     db.prepare('DELETE FROM circles WHERE id = ?1 AND NOT EXISTS (SELECT 1 FROM circle_members WHERE circle_id = ?1)').bind(circle),
   ]
@@ -631,7 +648,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   const [a, b, c, d, e] = parts
   // Looking at an invite needs no account yet, so the link can say who it's
   // from before asking you to make one. It's sealed: the link's secret opens it.
-  const looking = a === 'invite' && b && !c && req.method === 'GET'
+  const looking = (a === 'invite' || a === 'door') && b && !c && req.method === 'GET'
   const userId = looking ? await session(req, env).catch(() => '') : await session(req, env)
 
   // The circles you're in, with your locked copy of each key, and when
@@ -644,18 +661,24 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
         COALESCE((SELECT MAX(a.at) FROM circle_amens a JOIN circle_items i ON i.circle_id = a.circle_id AND i.id = a.item
           WHERE a.circle_id = c.id AND a.user_id != m.user_id AND i.user_id = m.user_id AND a.user_id NOT IN (${BLOCKED})), 0),
         COALESCE((SELECT MAX(x.at) FROM circle_reacts x JOIN circle_items i ON i.circle_id = x.circle_id AND i.id = x.item
-          WHERE x.circle_id = c.id AND x.user_id != m.user_id AND i.user_id = m.user_id AND x.user_id NOT IN (${BLOCKED})), 0)) AS latest
+          WHERE x.circle_id = c.id AND x.user_id != m.user_id AND i.user_id = m.user_id AND x.user_id NOT IN (${BLOCKED})), 0),
+        COALESCE((SELECT MAX(q.at) FROM circle_requests q WHERE q.circle_id = c.id AND c.leader = m.user_id), 0),
+        COALESCE((SELECT MAX(q.prayed) FROM circle_requests q WHERE q.circle_id = c.id AND q.user_id = m.user_id), 0)) AS latest,
+      CASE WHEN c.leader IS NULL THEN NULL WHEN c.leader = m.user_id THEN 'lead' ELSE 'member' END AS door
       FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE m.user_id = ? ORDER BY m.joined`).bind(userId).all()
-    return json({ circles: rows.results })
+    const lead = await db.prepare('SELECT allowed, asked FROM door_leaders WHERE user_id = ?').bind(userId).first<{ allowed: number | null; asked: number }>()
+    return json({ circles: rows.results, lead: lead ? (lead.allowed ? 'yes' : 'asked') : null })
   }
   if (req.method === 'POST' && !a) {
-    const { id, name, wrapped, me } = await readJson<{ id: string; name: string; wrapped: string; me: string }>(req)
+    const { id, name, wrapped, me, door } = await readJson<{ id: string; name: string; wrapped: string; me: string; door?: { pub: string; priv: string } }>(req)
     if (typeof id !== 'string' || !CIRCLE_ID.test(id) || !sealedText(name, 2000) || !sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
+    if (door && (!sealedText(door.pub, 200) || !sealedText(door.priv, 1000))) throw new HttpError(400, 'Bad request')
+    if (door && !(await db.prepare('SELECT 1 FROM door_leaders WHERE user_id = ? AND allowed IS NOT NULL').bind(userId).first())) throw new HttpError(403, 'Open door circles need a yes from My Quiet Bible first.')
     const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
     if ((n?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
     if (await db.prepare('SELECT 1 FROM circles WHERE id = ?').bind(id).first()) throw new HttpError(409, 'Try again')
     await db.batch([
-      db.prepare('INSERT INTO circles (id, name, created) VALUES (?, ?, ?)').bind(id, name, now),
+      db.prepare('INSERT INTO circles (id, name, created, leader, door_pub, door_priv) VALUES (?, ?, ?, ?, ?, ?)').bind(id, name, now, door ? userId : null, door?.pub ?? null, door?.priv ?? null),
       db.prepare('INSERT INTO circle_members (circle_id, user_id, mid, wrapped, name, joined) VALUES (?, ?, ?, ?, ?, ?)').bind(id, userId, random(9), wrapped, me, now),
     ])
     return json({ ok: true })
@@ -702,7 +725,8 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
           db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE circle_id = ?').bind(circle).first<{ n: number }>(),
           db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>(),
         ])
-        if ((members?.n ?? 0) >= MAX_MEMBERS) throw new HttpError(413, `A circle can have up to ${MAX_MEMBERS} people`)
+        const most = await capOf(db, circle)
+        if ((members?.n ?? 0) >= most) throw new HttpError(413, `A circle can have up to ${most} people`)
         if ((mine?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
       }
       await db.batch([
@@ -737,7 +761,8 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
         return json({ ok: true, circle: inv.circle_id })
       }
       if (!sealedText(wrapped, 500) || !sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
-      if (inv.members >= MAX_MEMBERS) throw new HttpError(413, `A circle can have up to ${MAX_MEMBERS} people`)
+      const most = await capOf(db, inv.circle_id)
+      if (inv.members >= most) throw new HttpError(413, `A circle can have up to ${most} people`)
       const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
       if ((n?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
       // Used up in the same step as joining, so one link can't let in two people.
@@ -749,9 +774,55 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     }
   }
 
+  // An Open door link: anyone who has it may look, and join, as many times
+  // as the leader leaves it open. Nobody taken out comes back in through it.
+  if (a === 'door' && b && !c) {
+    if (!CIRCLE_ID.test(b)) throw new HttpError(404, 'Not found')
+    const door = await db.prepare(`SELECT c.id, c.name, c.leader, c.door_wrapped, m.name AS by_name, (SELECT COUNT(*) FROM circle_members x WHERE x.circle_id = c.id) AS members
+      FROM circles c LEFT JOIN circle_members m ON m.circle_id = c.id AND m.user_id = c.leader WHERE c.door_id = ?`).bind(b)
+      .first<{ id: string; name: string; leader: string; door_wrapped: string; by_name: string | null; members: number }>()
+    if (!door) throw new HttpError(404, 'This Open door link has been closed. Ask for the new one.')
+    const already = !!userId && !!(await db.prepare('SELECT 1 FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(door.id, userId).first())
+    if (req.method === 'GET') return json({ circle: door.id, wrapped: door.door_wrapped, name: door.name, by: door.by_name, members: door.members, already, door: true })
+    if (req.method === 'POST' && userId) {
+      const { wrapped, me } = await readJson<{ wrapped: string; me: string }>(req)
+      if (!sealedText(wrapped, 500)) throw new HttpError(400, 'Bad request')
+      if (already) {
+        await db.prepare('UPDATE circle_members SET wrapped = ? WHERE circle_id = ? AND user_id = ?').bind(wrapped, door.id, userId).run()
+        return json({ ok: true, circle: door.id })
+      }
+      if (!sealedText(me, 2000)) throw new HttpError(400, 'Bad request')
+      if (await db.prepare('SELECT 1 FROM circle_door_bans WHERE circle_id = ? AND user_id = ?').bind(door.id, userId).first()) throw new HttpError(403, 'This circle’s leader took you out of it.')
+      if (door.members >= DOOR_MAX) throw new HttpError(413, `A circle can have up to ${DOOR_MAX} people`)
+      const n = await db.prepare('SELECT COUNT(*) AS n FROM circle_members WHERE user_id = ?').bind(userId).first<{ n: number }>()
+      if ((n?.n ?? 0) >= MAX_CIRCLES) throw new HttpError(413, `You can be in up to ${MAX_CIRCLES} circles`)
+      const res = await db.prepare('INSERT INTO circle_members (circle_id, user_id, mid, wrapped, name, joined) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING')
+        .bind(door.id, userId, random(9), wrapped, me, now).run()
+      if (res.meta.changes) ctx.waitUntil(countUp(db, 'door:join'))
+      return json({ ok: true, circle: door.id })
+    }
+  }
+
+  // Asking to lead an Open door circle. The app's maker says yes on /stats.
+  if (a === 'lead' && !b && req.method === 'POST') {
+    const { note } = await readJson<{ note: string }>(req)
+    const said = typeof note === 'string' ? note.trim().slice(0, 300) : ''
+    if (!said) throw new HttpError(400, 'Bad request')
+    const was = await db.prepare('SELECT allowed FROM door_leaders WHERE user_id = ?').bind(userId).first<{ allowed: number | null }>()
+    if (was?.allowed) return json({ lead: 'yes' })
+    await db.prepare('INSERT INTO door_leaders (user_id, asked, note) VALUES (?, ?, ?) ON CONFLICT DO UPDATE SET note = excluded.note').bind(userId, now, said).run()
+    if (!was) ctx.waitUntil(tellMaker(env, 'Someone asked to lead an Open door circle', `Someone asked to lead an Open door circle. In their words:\n\n${said}\n\nOpen the private stats page (/stats on the sync service) to say yes, or not now.\n\n— My Quiet Bible`))
+    return json({ lead: 'asked' })
+  }
+
   if (!a || !CIRCLE_ID.test(a)) throw new HttpError(404, 'Not found')
   const circle = a
   const mid = await membership(db, circle, userId)
+  // An Open door circle: only its leader shares, invites, or renames it.
+  const room = await db.prepare('SELECT leader, door_id, door_pub, door_priv, door_link FROM circles WHERE id = ?').bind(circle)
+    .first<{ leader: string | null; door_id: string | null; door_pub: string | null; door_priv: string | null; door_link: string | null }>()
+  const door = !!room?.leader, leading = door && room!.leader === userId
+  const leaderOnly = () => { if (door && !leading) throw new HttpError(403, 'Only the circle’s leader can do that here.') }
 
   // Who's in it and what's been shared, newest first.
   if (req.method === 'GET' && !b) {
@@ -769,12 +840,78 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
         WHERE x.circle_id = ? ORDER BY x.at`).bind(circle).all(),
       db.prepare('SELECT mid FROM circle_blocks WHERE circle_id = ? AND user_id = ?').bind(circle, userId).all<{ mid: string }>(),
     ])
-    return json({ me: mid, name: named?.name, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results,
+    if (!door) return json({ me: mid, name: named?.name, members: members.results, items: items.results, amens: amens.results, replies: replies.results, reacts: reacts.results,
       blocked: blocked.results.map(r => r.mid) })
+    // Open door: everyone sees how many prayed with each thing, and nobody
+    // but the leader sees who. The others see only the leader and themselves.
+    const lead = (await db.prepare('SELECT mid FROM circle_members WHERE circle_id = ? AND user_id = ?').bind(circle, room!.leader).first<{ mid: string }>())?.mid ?? ''
+    const prayed: Record<string, number> = {}
+    for (const x of amens.results) prayed[x.item] = (prayed[x.item] ?? 0) + 1
+    const seen = <T>(rows: T[]) => leading ? rows : rows.filter(r => { const m = (r as { mid: string }).mid; return m === lead || m === mid })
+    return json({ me: mid, name: named?.name, members: seen(members.results), items: seen(items.results), amens: seen(amens.results), replies: seen(replies.results),
+      reacts: seen(reacts.results), blocked: blocked.results.map(r => r.mid),
+      door: { lead, open: !!room!.door_id, pub: room!.door_pub, prayed, ...(leading ? { id: room!.door_id, link: room!.door_link, priv: room!.door_priv } : {}) } })
+  }
+  // Open door, the leader's side: open the link (or a new one in its place), or close it.
+  if (b === 'door' && !c) {
+    if (!leading) throw new HttpError(403, 'Only the circle’s leader can do that here.')
+    if (req.method === 'PUT') {
+      const { id, wrapped, link } = await readJson<{ id: string; wrapped: string; link: string }>(req)
+      if (typeof id !== 'string' || !CIRCLE_ID.test(id) || !sealedText(wrapped, 500) || !sealedText(link, 500)) throw new HttpError(400, 'Bad request')
+      await db.prepare('UPDATE circles SET door_id = ?, door_wrapped = ?, door_link = ? WHERE id = ?').bind(id, wrapped, link, circle).run()
+      return json({ ok: true })
+    }
+    if (req.method === 'DELETE') {
+      await db.prepare('UPDATE circles SET door_id = NULL, door_wrapped = NULL, door_link = NULL WHERE id = ?').bind(circle).run()
+      return json({ ok: true })
+    }
+  }
+  // Open door, the leader takes someone out: the link won't let them back.
+  if (b === 'members' && c && /^[\w-]{4,20}$/.test(c) && !d && req.method === 'DELETE') {
+    if (!leading) throw new HttpError(403, 'Only the circle’s leader can do that here.')
+    const who = await db.prepare('SELECT user_id FROM circle_members WHERE circle_id = ? AND mid = ?').bind(circle, c).first<{ user_id: string }>()
+    if (!who || who.user_id === userId) throw new HttpError(404, 'They’re no longer in this circle.')
+    await db.batch([...leaveCircle(db, circle, who.user_id),
+      db.prepare('INSERT INTO circle_door_bans (circle_id, user_id, at) VALUES (?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, who.user_id, now)])
+    return json({ ok: true })
+  }
+  // Open door prayer requests: sealed to the leader's key, so only the
+  // leader reads them. Each person sees only their own (and whether the
+  // leader prayed); the leader sees them all.
+  if (b === 'requests' && door) {
+    if (!c && req.method === 'GET') {
+      const rows = leading
+        ? await db.prepare(`SELECT q.id, m.mid, q.at, q.epk, q.body, q.prayed FROM circle_requests q JOIN circle_members m ON m.circle_id = q.circle_id AND m.user_id = q.user_id
+            WHERE q.circle_id = ? ORDER BY q.at DESC LIMIT 300`).bind(circle).all()
+        : await db.prepare('SELECT id, at, prayed FROM circle_requests WHERE circle_id = ? AND user_id = ? ORDER BY at DESC LIMIT 50').bind(circle, userId).all()
+      return json({ requests: rows.results })
+    }
+    if (!c || !CIRCLE_ID.test(c)) throw new HttpError(404, 'Not found')
+    if (!d && req.method === 'PUT') {
+      if (leading) throw new HttpError(400, 'Bad request')
+      const { epk, body } = await readJson<{ epk: string; body: string }>(req)
+      if (!sealedText(epk, 200) || !sealedText(body, 6000)) throw new HttpError(400, 'Bad request')
+      const sent = await db.prepare('SELECT COUNT(*) AS n FROM circle_requests WHERE circle_id = ? AND user_id = ? AND at > ?').bind(circle, userId, now - DAY).first<{ n: number }>()
+      if ((sent?.n ?? 0) >= ASKS_PER_DAY) throw new HttpError(429, 'That’s all the prayer requests for today. Try again tomorrow.')
+      const res = await db.prepare('INSERT INTO circle_requests (circle_id, id, user_id, at, epk, body) VALUES (?, ?, ?, ?, ?, ?) ON CONFLICT DO NOTHING').bind(circle, c, userId, now, epk, body).run()
+      if (res.meta.changes) ctx.waitUntil(Promise.all([countUp(db, 'door:ask'), notifyCircle(env, circle, userId, room!.leader!)]))
+      return json({ ok: true })
+    }
+    if (d === 'prayed' && !e && req.method === 'PUT') {
+      if (!leading) throw new HttpError(403, 'Only the circle’s leader can do that here.')
+      const row = await db.prepare('UPDATE circle_requests SET prayed = ? WHERE circle_id = ? AND id = ? AND prayed IS NULL RETURNING user_id').bind(now, circle, c).first<{ user_id: string }>()
+      if (row) ctx.waitUntil(Promise.all([countUp(db, 'door:prayed'), notifyCircle(env, circle, userId, row.user_id)]))
+      return json({ ok: true })
+    }
+    if (!d && req.method === 'DELETE') {
+      await db.prepare('DELETE FROM circle_requests WHERE circle_id = ? AND id = ? AND (user_id = ? OR ?)').bind(circle, c, userId, leading ? 1 : 0).run()
+      return json({ ok: true })
+    }
   }
   // Joining with a code, on the member's side: make one, see who typed it,
   // and allow them by sealing the circle key to their public key.
   if (b === 'code') {
+    leaderOnly()
     if (!c && req.method === 'POST') {
       const open = await db.prepare('SELECT COUNT(*) AS n FROM circle_codes WHERE circle_id = ? AND expires > ?').bind(circle, now).first<{ n: number }>()
       if ((open?.n ?? 0) >= 5) throw new HttpError(429, 'Several codes are already waiting. Try again in a few minutes.')
@@ -808,6 +945,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   // The circle's own name: anyone in it may change it. It's sealed with
   // the circle's key, so this side never knows what it says.
   if (b === 'name' && !c && req.method === 'PUT') {
+    leaderOnly()
     const { name } = await readJson<{ name: string }>(req)
     if (!sealedText(name, 2000)) throw new HttpError(400, 'Bad request')
     await db.prepare('UPDATE circles SET name = ? WHERE id = ?').bind(name, circle).run()
@@ -867,6 +1005,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
     return json({ ok: true })
   }
   if (b === 'invites' && !c && req.method === 'POST') {
+    leaderOnly()
     const { id, wrapped } = await readJson<{ id: string; wrapped: string }>(req)
     if (typeof id !== 'string' || !CIRCLE_ID.test(id) || !sealedText(wrapped, 500)) throw new HttpError(400, 'Bad request')
     const open = await db.prepare('SELECT COUNT(*) AS n FROM circle_invites WHERE circle_id = ? AND expires > ?').bind(circle, now).first<{ n: number }>()
@@ -883,6 +1022,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
 
   if (!d) {
     if (req.method === 'PUT') {
+      leaderOnly()
       const { body, chunks, size } = await readJson<{ body: string; chunks: number; size: number }>(req)
       if (!sealedText(body) || !Number.isInteger(chunks) || chunks < 0 || chunks > MAX_CHUNKS || !Number.isInteger(size) || size < 0 || size > MAX_CHUNKS * CHUNK_MAX) throw new HttpError(400, 'Bad request')
       const used = await db.prepare('SELECT COALESCE(SUM(size), 0) AS n FROM circle_items WHERE circle_id = ?').bind(circle).first<{ n: number }>()
@@ -906,6 +1046,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   // Replies: anyone in the circle may write one; only its writer removes it.
   if (d === 'replies' && e && CIRCLE_ID.test(e)) {
     if (req.method === 'PUT') {
+      leaderOnly()
       const { body } = await readJson<{ body: string }>(req)
       if (!sealedText(body, 6000)) throw new HttpError(400, 'Bad request')
       if (!(await db.prepare('SELECT 1 FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first())) throw new HttpError(404, 'Not found')
@@ -938,6 +1079,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   // which makes it news to whoever shared it; taking one back isn't.
   if (d === 'react' && !e) {
     if (req.method === 'PUT') {
+      leaderOnly()
       const { body, added } = await readJson<{ body: string; added?: boolean }>(req)
       if (!sealedText(body, 500)) throw new HttpError(400, 'Bad request')
       const it = await db.prepare('SELECT user_id FROM circle_items WHERE circle_id = ? AND id = ?').bind(circle, item).first<{ user_id: string }>()
@@ -1206,6 +1348,16 @@ async function statsRoute(req: Request, env: Env) {
   // Removing and taking someone out are two steps: the first press only asks.
   const asking = act === 'ask-remove' || act === 'ask-out' ? act : ''
   if (act && which && !asking) await moderate(env, act, which)
+  // Asking to lead an Open door circle: yes, or not now (they can ask again).
+  const who = String(sent?.get('who') ?? '')
+  if (who && act === 'lead-yes') await env.DB.prepare('UPDATE door_leaders SET allowed = ? WHERE user_id = ?').bind(Date.now(), who).run()
+  if (who && act === 'lead-no') await env.DB.prepare('DELETE FROM door_leaders WHERE user_id = ? AND allowed IS NULL').bind(who).run()
+  const leadAsks = (await env.DB.prepare('SELECT user_id, note, asked FROM door_leaders WHERE allowed IS NULL ORDER BY asked LIMIT 20')
+    .all<{ user_id: string; note: string | null; asked: number }>()).results
+  const leadList = leadAsks.length ? `<h2>Asking to lead an Open door circle</h2>
+${leadAsks.map(l => `<div class="report"><p class="when">${new Date(l.asked).toISOString().slice(0, 16).replace('T', ' ')} UTC</p><pre>${esc(l.note ?? '')}</pre>
+<form method="post" action="/stats"><input type="hidden" name="key" value="${esc(key)}"><input type="hidden" name="who" value="${esc(l.user_id)}">
+<div class="acts"><button name="act" value="lead-no" class="del">Not now</button><button name="act" value="lead-yes" class="keep">Say yes</button></div></form></div>`).join('')}` : ''
   const reports = (await env.DB.prepare('SELECT id, what, at, item, reply FROM circle_reports WHERE done IS NULL ORDER BY at LIMIT 50')
     .all<{ id: string; what: string; at: number; item: string | null; reply: string | null }>()).results
   const reportForm = (id: string, inner: string) => `<form method="post" action="/stats#r-${esc(id)}"><input type="hidden" name="key" value="${esc(key)}"><input type="hidden" name="report" value="${esc(id)}">${inner}</form>`
@@ -1225,7 +1377,7 @@ ${reportActs(r)}</div>`).join('')}` : ''
   const now = new Date(), day = now.toISOString().slice(0, 10)
   const week = Date.now() - 7 * DAY
   const count = (sql: string, ...args: unknown[]) => env.DB.prepare(sql).bind(...args).first<{ n: number }>().then(r => r?.n ?? 0)
-  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified] = await Promise.all([
+  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified, doors, doorsOpen, doorPeople] = await Promise.all([
     env.DB.prepare('SELECT period, kind, n FROM hello').all<{ period: string; kind: string; n: number }>(),
     count('SELECT COUNT(*) AS n FROM users'),
     count('SELECT COUNT(*) AS n FROM circles'),
@@ -1234,6 +1386,9 @@ ${reportActs(r)}</div>`).join('')}` : ''
     count('SELECT COUNT(*) AS n FROM circle_items WHERE at > ?', week),
     count('SELECT COUNT(*) AS n FROM circle_amens WHERE at > ?', week),
     count('SELECT COUNT(DISTINCT user_id) AS n FROM push_subs'),
+    count('SELECT COUNT(*) AS n FROM circles WHERE leader IS NOT NULL'),
+    count('SELECT COUNT(*) AS n FROM circles WHERE leader IS NOT NULL AND door_id IS NOT NULL'),
+    count('SELECT COUNT(*) AS n FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE c.leader IS NOT NULL AND m.user_id != c.leader'),
   ])
   const get = (period: string, kind: string) => rows.results.find(r => r.period === period && r.kind === kind)?.n ?? 0
   const sum = (kind: string, from = '') => rows.results.filter(r => r.kind === kind && r.period >= from).reduce((a, r) => a + r.n, 0)
@@ -1253,11 +1408,22 @@ ${reportActs(r)}</div>`).join('')}` : ''
     ['Prayed with', prayedWith, '🙏 on something shared, last 7 days'],
     ['Notifications on', notified, 'accounts hearing from their circles'],
   ]
+  const since7 = new Date(now.getTime() - 6 * DAY).toISOString().slice(0, 10)
+  const door: [string, number, string][] = [
+    ['Open door circles', doors, `${doorsOpen} with the door open now`],
+    ['People in them', doorPeople, 'not counting the leaders'],
+    ['Came in', sum('door:join', since7), 'through an Open door link, last 7 days'],
+    ['Prayer requests', sum('door:ask', since7), 'sent to leaders, last 7 days'],
+    ['Prayed for', sum('door:prayed', since7), 'requests a leader prayed for, last 7 days'],
+  ]
   const langs = LANGS.map(l => [LANG_NAMES[l], sum(`lang:${l}`, since30)] as [string, number])
   const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
-  return statsPage(`${reportList}<div class="grid">
-${big.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')}
+  const cards = (list: [string, number, string][]) => list.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')
+  return statsPage(`${reportList}${leadList}<div class="grid">
+${cards(big)}
+</div><h2>Open door circles</h2><div class="grid">
+${cards(door)}
 </div><h2>Languages, last 30 days</h2><div class="grid">
 ${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round(100 * n / langTotal) : 0}%</b><span>${n.toLocaleString('en')} daily hellos</span></div>`).join('')}
 </div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
@@ -1452,7 +1618,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
       await env.DB.prepare('DELETE FROM push_circles WHERE endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?)').bind(userId).run()
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'circle_blocks', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'circle_blocks', 'circle_requests', 'door_leaders', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })
