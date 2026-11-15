@@ -149,6 +149,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     const set = (top: number, h: number) => {
       root.style.setProperty('--vv-top', top + 'px')
       root.style.setProperty('--vv-h', h + 'px')
+      // Nothing below the bar (no keyboard): keep it clear of the home bar,
+      // and of the strip a Mac draws there in full screen.
+      root.classList.toggle('sb-floor', top + h >= innerHeight - 2)
     }
     const vk = overlayKeyboard(true)
     // The screen's full height, keyboard down; the keyboard counts as up once
@@ -192,7 +195,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       clearTimeout(noKeyboard)
       vk?.removeEventListener('geometrychange', fit); overlayKeyboard(false)
       if (location.hash === at && Math.abs(scrollY - y) > 1) scrollTo(0, y)
-      root.classList.remove('sb-lock')
+      root.classList.remove('sb-lock', 'sb-floor')
       root.style.removeProperty('--vv-top'); root.style.removeProperty('--vv-h')
       vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit)
     }
