@@ -4,7 +4,7 @@ import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, PALETTE, rememberColor, setNote, tidy } from './lib/marks'
+import { afterUsing, colorsByUse, FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
@@ -466,7 +466,7 @@ export function Reader({ route }: { route: Route }) {
     setMarks(all => {
       const next = { ...all[key], t: now } as Record<string, unknown>
       delete next.r
-      if (had) delete next.c; else { next.c = lastColor(); next.v = version; penDown([key]) }
+      if (had) delete next.c; else { next.c = lastColor(settings.recentColors); next.v = version; penDown([key]) }
       return { ...all, [key]: tidy(next as never) }
     })
     return !had
@@ -562,6 +562,8 @@ export function Reader({ route }: { route: Route }) {
   // With a pen, the color follows the pen across the words, as slowly as you
   // draw, and stays on just the words you crossed (src/lib/stroke.ts).
   // A tap with the pen still selects the verse, like a finger.
+  const recentColors = useRef(settings.recentColors)
+  recentColors.current = settings.recentColors
   useEffect(() => {
     const el = article.current
     if (!el || picking) return
@@ -605,7 +607,7 @@ export function Reader({ route }: { route: Route }) {
       if (e.pointerType !== 'pen' || e.button !== 0) return
       const s = at(e.clientX, e.clientY)
       if (!s) return
-      start = last = s; x0 = e.clientX; y0 = e.clientY; moved = false; color = lastColor()
+      start = last = s; x0 = e.clientX; y0 = e.clientY; moved = false; color = lastColor(recentColors.current)
       el.classList.add('penning')
       el.setPointerCapture(e.pointerId)
       e.preventDefault()
@@ -1305,7 +1307,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   book: string; chapter: number; verses: number[]; versions: string[]; bibles: Record<string, Bible>; onClose: () => void; onNote: (vs: number[]) => void
   onPray: (vs: number[]) => void
 }) {
-  const { settings, byId, data } = useApp()
+  const { settings, update, byId, data } = useApp()
   const [compare, setCompare] = useState<Bible[]>()
   const [askUnmark, setAskUnmark] = useState(false)
   // Share: outside the app (the phone's share sheet), or with a circle.
@@ -1346,9 +1348,9 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           <button class="close-btn" aria-label={t('Clear selection')} onClick={onClose}><CloseIcon size={22} /></button>
         </div>
         <div class="swatches" role="radiogroup" aria-label={t('Highlight color')}>
-          {PALETTE.map(p => (
+          {colorsByUse(settings.recentColors).map(p => (
             <button role="radio" aria-checked={current === p.color} aria-label={t(p.name)} class={'swatch' + (current === p.color ? ' on' : '')}
-              style={{ background: p.color }} onClick={() => { if (current !== p.color) rememberColor(p.color); apply({ c: current === p.color ? null : p.color }); onClose() }}>
+              style={{ background: p.color }} onClick={() => { if (current !== p.color) update({ recentColors: afterUsing(settings.recentColors, p.color) }); apply({ c: current === p.color ? null : p.color }); onClose() }}>
               {current === p.color && <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>}
             </button>
           ))}

@@ -55,14 +55,22 @@ export const PALETTE: { color: string; name: string }[] = [
   { color: '#ffadaf', name: N_('Red') },
 ]
 
-/** The color last picked, for double-tap highlighting. */
+/** The color last picked on this device, from before the order synced. */
 const LAST_COLOR = 'plain-bible:last-color'
-export function lastColor() {
-  try { return localStorage.getItem(LAST_COLOR) || PALETTE[0].color } catch { return PALETTE[0].color }
+function oldLast() {
+  try { return localStorage.getItem(LAST_COLOR) || undefined } catch { return undefined }
 }
-export function rememberColor(c: string) {
-  try { localStorage.setItem(LAST_COLOR, c) } catch { /* private mode */ }
+/** The palette with the colors you used most recently first, newest on the
+ *  left; colors never used keep their usual order after them. */
+export function colorsByUse(recent: string[] | undefined) {
+  const order = recent?.length ? recent : [oldLast() ?? '']
+  const used = order.map(c => PALETTE.find(p => p.color === c)).filter(p => !!p) as typeof PALETTE
+  return [...used, ...PALETTE.filter(p => !used.includes(p))]
 }
+/** The color last used, for double-tap highlighting. */
+export const lastColor = (recent: string[] | undefined) => colorsByUse(recent)[0].color
+/** The order after using `c`: it moves to the front. */
+export const afterUsing = (recent: string[] | undefined, c: string) => [c, ...colorsByUse(recent).map(p => p.color).filter(x => x !== c)]
 
 export const markKey = (book: string, chapter: number, verse: number) => `${book}.${chapter}.${verse}`
 export function parseKey(key: string) {

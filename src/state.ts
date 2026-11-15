@@ -36,6 +36,8 @@ export interface Settings {
    *  hand (off: a quick swipe). Was penDraw, on by default; renamed so everyone
    *  starts with the quick swipe and only those who pick it get the slow pen. */
   penSlow: boolean
+  /** highlight colors, the one used last first, so the pickers show them in that order */
+  recentColors: string[]
   /** reading aloud lights up each word as it's said, or just the verse */
   follow: 'words' | 'verse'
   /** read along with no voice: the highlight moves through the words by itself */
@@ -85,7 +87,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
