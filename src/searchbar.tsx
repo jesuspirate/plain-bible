@@ -62,6 +62,8 @@ function CirclesButton() {
 // names are abbreviated (Gen, Éphé) to keep the version in view.
 const shortName = (id: string) => innerWidth < 430 ? bookAbbr(id) : bookName(id)
 
+// This page came from a reload (an update, a sign-in), not from opening the app.
+const reloaded = () => { try { return (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload' } catch { return false } }
 const RECENT = 'plain-bible:recent'
 const loadRecent = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT) || '[]') } catch { return [] } }
 // The search you're stepping through, kept so it is all still there when you
@@ -399,8 +401,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // Set when the page lost focus (the share sheet, another app, the phone
   // locked). Back in the app, iPhone raises the keyboard only for its own tap
   // on the field, not for one the page makes: the first tap after that is
-  // left to iOS, so the keyboard always comes.
-  const away = useRef(false)
+  // left to iOS, so the keyboard always comes. The same goes for a page the
+  // app reloaded by itself (an update, often while you were away): iPhone
+  // hasn't had a tap on it yet, so it starts out as away too.
+  const away = useRef(isIOS && (reloaded() || !document.hasFocus()))
   // When the screen turns (or you come back to the app turned), lay the bar
   // out afresh: iOS can leave it where it was on the old, wider screen.
   useEffect(() => {
