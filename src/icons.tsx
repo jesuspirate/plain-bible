@@ -205,3 +205,9 @@ export const BellIcon = ({ size, class: c }: P) => (
     <path d="M9.8 20.6a2.4 2.4 0 0 0 4.4 0" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
 )
 
+
+/** A video camera: recording mode, for filming the screen. */
+export const VideoIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><rect x="2.5" y="6" width="13" height="12" rx="2.2" fill="currentColor" />
+    <path d="M16.5 10.2l5-3v9.6l-5-3z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /></svg>
+)

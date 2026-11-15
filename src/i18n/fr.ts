@@ -1005,4 +1005,10 @@ export default {
   "A form of “{word}”": "Une forme de « {word} »",
   "Word definitions from {source} (CC BY-SA), through {kaikki}.": "Définitions des mots tirées du {source} (CC BY-SA), par {kaikki}.",
   "Back to default size ({n})": "Revenir à la taille par défaut ({n})",
+  "Recording mode": "Mode enregistrement",
+  "For filming your screen. The version you pick shows large. Your Bible ({version}) shows small under each verse, so you can follow along. The bars slide away as you read: scroll up a little to bring them back.": "Pour filmer votre écran. La version choisie s’affiche en grand. Votre Bible ({version}) s’affiche en petit sous chaque verset, pour suivre. Les barres s’effacent pendant la lecture : remontez un peu pour les faire revenir.",
+  "Large on screen": "En grand à l’écran",
+  "Turn on recording mode": "Activer le mode enregistrement",
+  "Turn off recording mode": "Désactiver le mode enregistrement",
+  "Only on this device. Your Bible doesn’t change.": "Seulement sur cet appareil. Votre Bible ne change pas.",
 } as Record<string, string>
