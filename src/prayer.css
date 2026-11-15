@@ -86,6 +86,7 @@ button.pray-kept { cursor: pointer; }
 :root[data-theme='dark'] .pray-bin { color: #ff8a80; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-bin { color: #ff8a80; } }
 .pray-confirm { flex-basis: 100%; display: flex; gap: 8px; }
+.pray-confirm-note { flex-basis: 100%; margin: 4px 2px 0; font-weight: 600; line-height: 1.35; }
 .pray-confirm .pray-btn { flex: 1; margin: 0; }
 /* The sheet's buttons: full width, tall and plain, easy to read and to hit. */
 .pray-btn { display: block; width: 100%; min-height: 50px; margin: 0 0 10px; padding: 10px 16px; border-radius: 14px; font: 600 17px var(--sans); -webkit-tap-highlight-color: transparent; }

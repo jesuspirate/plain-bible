@@ -501,13 +501,16 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
       setTimeout(() => URL.revokeObjectURL(a.href), 10_000)
     }
   }
-  const remove = async (id: string) => {
-    if (playing === id) release()
+  const remove = async (p: PrayerInfo) => {
+    if (playing === p.id) release()
     setConfirm(undefined)
-    await prayers.delete(id).catch(() => {})
-    await deletedHere(id).catch(() => {})
+    await prayers.delete(p.id).catch(() => {})
+    await deletedHere(p.id).catch(() => {})
     onChange()
     syncPrayers().catch(() => {})
+    // Shared with a circle (from this device or another)? It comes out of
+    // there too, for everyone; if offline, as soon as each circle loads again.
+    if (inCircles()) import('./lib/circles').then(m => m.unsharePrayer(p.at)).then(() => dispatchEvent(new Event(SHARED_EVENT))).catch(() => {})
   }
 
   // One way out: Done, or pull the card down, like Settings.
@@ -634,9 +637,11 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           <span>{t('Delete')}</span>
         </button>
       </div>}
+      {/* Say plainly that it leaves the circles too. */}
+      {confirm === p.id && sharedWith([p]).length > 0 && <p class="pray-confirm-note">{t('It will also be taken out of {circle}, for everyone.', { circle: sharedWith([p]).map(c => c.name).join(', ') })}</p>}
       {confirm === p.id && <div class="pray-confirm">
         {/* Delete on the far side from the Delete just tapped, and Keep the bold one: a prayer is hard to lose by accident. */}
-        <button class="pray-btn danger-quiet" onClick={() => remove(p.id)}>{prayerSyncOn() ? t('Delete everywhere') : t('Delete')}</button>
+        <button class="pray-btn danger-quiet" onClick={() => remove(p)}>{prayerSyncOn() || sharedWith([p]).length > 0 ? t('Delete everywhere') : t('Delete')}</button>
         <button class="pray-btn primary" onClick={() => setConfirm(undefined)}>{t('Keep')}</button>
       </div>}
     </li>
