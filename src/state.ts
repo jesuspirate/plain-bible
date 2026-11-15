@@ -189,7 +189,16 @@ export function verseToPrayOver() {
 // known without loading anything (the count is kept from the last look).
 const CIRCLES = 'plain-bible:circles'
 export const inCircles = () => { try { return +(localStorage.getItem(CIRCLES) || 0) > 0 } catch { return false } }
-export const setInCircles = (n: number) => { try { n ? localStorage.setItem(CIRCLES, String(n)) : localStorage.removeItem(CIRCLES) } catch { /* ignore */ } }
+// Circles you can share into: not an Open door circle someone else leads.
+const SHARE_TO = 'plain-bible:circles-share'
+export const setInCircles = (n: number, shareable = n) => {
+  try {
+    n ? localStorage.setItem(CIRCLES, String(n)) : localStorage.removeItem(CIRCLES)
+    shareable ? localStorage.setItem(SHARE_TO, String(shareable)) : localStorage.setItem(SHARE_TO, '0')
+  } catch { /* ignore */ }
+}
+/** Whether the share-with-circle buttons show. Before this was kept, any circle counted. */
+export const canShareInCircles = () => { try { const s = localStorage.getItem(SHARE_TO); return s === null ? inCircles() : +s > 0 } catch { return false } }
 /** Something to share with a circle: verses with their words (and maybe
  *  the note being written on them), a prayer, or all of one day's prayers. */
 export type ShareRequest = { verse: PrayerVerse; version: string; text: string; note?: string } | { prayer: string } | { prayers: string[] }

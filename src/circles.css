@@ -166,3 +166,28 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
 .c-block-list { list-style: none; margin: 8px 0 0; padding: 0; }
 .c-block-list li { display: flex; align-items: center; justify-content: space-between; gap: 12px; min-height: 52px; border-top: 1px solid var(--line); }
 .c-block-list .c-btn { min-height: 46px; }
+/* Open door circles */
+.c-sure { margin: 10px 0 4px; }
+.c-sure-row { display: flex; gap: 10px; align-items: stretch; margin-top: 10px; }
+.c-sure-row > * { flex: 1 1 0; }
+.c-sure-row .c-btn { min-height: 46px; }
+button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b3261e; color: #b3261e; font-weight: 500; }
+:root[data-theme='dark'] button.c-btn.c-del-quiet { border-color: #ff8a80; color: #ff8a80; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] button.c-btn.c-del-quiet { border-color: #ff8a80; color: #ff8a80; } }
+.c-sure-row .c-keep { font-weight: 700; font-size: 17px; }
+.c-prayed { display: flex; align-items: center; justify-content: center; font-weight: 600; color: var(--muted); }
+.c-door-line { margin: 0 0 12px; }
+.c-door.open { border-color: var(--accent); }
+.c-door-link { margin: 8px 0; padding: 8px 10px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); overflow-wrap: anywhere; font-size: 13px; }
+.c-ask-btn { width: 100%; }
+.c-ask textarea, .c-lead-ask textarea { width: 100%; box-sizing: border-box; font: 400 17px/1.4 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
+.c-my-asks { list-style: none; margin: 14px 0 0; padding: 0; }
+.c-my-asks > li { border-top: 1px solid var(--line); padding: 10px 0 4px; }
+.c-my-asks p { margin: 0 0 4px; }
+.c-my-asks .link { margin-left: 10px; }
+.c-pray-with { font-size: 17px; }
+.c-guest-foot { text-align: right; margin: 6px 0 0; }
+.c-request .c-item-by { margin: 0 0 6px; }
+.c-lead-ask { margin-top: 12px; }
+.c-start-own { margin-top: 20px; }
+.c-start-own .c-btn { width: 100%; }

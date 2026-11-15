@@ -29,7 +29,8 @@ export function sharedIn(circles: Circle[], feeds: Record<string, Kept | undefin
 
 /** The circles you're in, and your prayers in each. */
 export async function loadShared(): Promise<{ circles: Circle[]; shared: SharedIn }> {
-  const circles = (await meta.get<Circle[]>('circles').catch(() => undefined)) ?? []
+  // An Open door circle someone else leads takes no shares.
+  const circles = ((await meta.get<(Circle & { door?: string })[]>('circles').catch(() => undefined)) ?? []).filter(c => c.door !== 'member')
   const feeds: Record<string, Kept | undefined> = {}
   await Promise.all(circles.map(async c => { feeds[c.id] = await meta.get<Kept>(`circle:${c.id}`).catch(() => undefined) }))
   return { circles, shared: sharedIn(circles, feeds, (await meta.get<Record<string, number[]>>(SENT).catch(() => undefined)) ?? {}) }
