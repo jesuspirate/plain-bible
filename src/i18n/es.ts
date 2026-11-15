@@ -330,6 +330,7 @@ export default {
   "Delete this prayer": "Eliminar esta oración",
   "Delete": "Eliminar",
   "Delete everywhere": "Eliminar en todas partes",
+  "It will also be taken out of {circle}, for everyone.": "También se quitará de {circle}, para todos.",
   "Until then, your prayers live only in this copy of the app. Removing it from your Home Screen, or clearing website data, deletes them.": "Hasta entonces, tus oraciones viven solo en esta copia de la app. Quitarla de tu pantalla de inicio, o borrar los datos del sitio web, las elimina.",
   "Your prayers now sync with your other devices.": "Tus oraciones ahora se sincronizan con tus otros dispositivos.",
   "Prayers stay on this device and stop syncing here.": "Las oraciones se quedan en este dispositivo y dejan de sincronizarse aquí.",

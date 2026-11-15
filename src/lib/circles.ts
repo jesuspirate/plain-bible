@@ -469,6 +469,8 @@ export async function loadFeed(circle: string): Promise<Feed> {
     const body = cleanShared(await openJson(key, i.body, `${circle}/${i.id}`).catch(() => undefined))
     if (body) items.push({ id: i.id, by: i.mid, at: i.at, body, chunks: i.chunks, amens: amens.get(i.id) ?? [], amenAt: amenAt.get(i.id) ?? {}, replies: replies.get(i.id) ?? [], reacts: reacts.get(i.id) ?? {} })
   }
+  // Prayers you deleted from Your prayers: out of this circle too, for everyone.
+  await takeOutDeleted(circle, r.me, items)
   // Someone may have renamed it since the list was last fetched.
   const name = r.name ? text(await openJson(key, r.name, `${circle}/name`).catch(() => ''), 80) : ''
   if (name) await keepCircleName(circle, name)
@@ -630,6 +632,37 @@ export async function block(circle: string, mid: string, on: boolean) {
  *  you saw are sent along with it, by you, on purpose. */
 export async function report(circle: string, about: { mid: string; item?: string; reply?: string; what: string }) {
   await api(`/circles/${circle}/report`, { method: 'POST', token: token(), body: about })
+}
+
+// Prayers deleted from Your prayers, known by when they were prayed. Each
+// circle takes out your copies the next time it loads, so a delete made
+// offline still reaches every circle once you're back online.
+const UNSHARE = 'prayers-unshare'
+
+/** A prayer deleted from Your prayers: take it out of every circle you
+ *  shared it in (from any of your devices), with its replies and reactions. */
+export async function unsharePrayer(prayed: number) {
+  const left = (await meta.get<number[]>(UNSHARE).catch(() => undefined)) ?? []
+  if (!left.includes(prayed)) await meta.set(UNSHARE, [...left, prayed].slice(-500))
+  for (const c of await keptCircles().catch(() => [])) await loadFeed(c.id).catch(() => {})
+}
+
+/** Exported for tests. */
+export async function takeOutDeleted(circle: string, me: string, items: FeedItem[]) {
+  const gone = new Set((await meta.get<number[]>(UNSHARE).catch(() => undefined)) ?? [])
+  if (!gone.size) return
+  for (const i of [...items]) {
+    if (i.by !== me || i.body.k !== 'prayer' || !i.body.prayed || !gone.has(i.body.prayed)) continue
+    try {
+      await api(`/circles/${circle}/items/${i.id}`, { method: 'DELETE', token: token() })
+    } catch (e) {
+      // Already gone (another of your devices took it out) is just as good.
+      if (!(e instanceof SyncError && e.status === 404)) continue
+    }
+    items.splice(items.indexOf(i), 1)
+    await forgetSent(circle, i.body.prayed).catch(() => {})
+    await meta.set(`circle-audio:${circle}/${i.id}`, undefined).catch(() => {})
+  }
 }
 
 export async function removeShared(circle: string, item: string) {
