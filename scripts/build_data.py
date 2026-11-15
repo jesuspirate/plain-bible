@@ -359,7 +359,7 @@ EBIBLE = {
     "mar": ("mar", "mr", "इंडियन रीवाइज्ड वर्जन (Marathi Indian Revised Version)", _IRV % "2017, 2019"),
     "tel2017": ("tel2017", "te", "ఇండియన్ రివైజ్డ్ వెర్షన్ (Telugu Indian Revised Version, 2019)", _IRV % "2017, 2019"),
     "tam2017": ("tam2017", "ta", "இண்டியன் ரிவைஸ்டு வெர்ஸன் (Tamil Indian Revised Version)", _IRV % "2017, 2019"),
-    "kan2017": ("kan2017", "kn", "ಇಂಡಿಯನ್ ರಿವೈಜ್ಡ್ ವರ್ಸನ್ (Kannada Indian Revised Version, 2019)", _IRV % "2017, 2019"),
+    "kanokcv": ("kanokcv", "kn", "ಕನ್ನಡ ಸಮಕಾಲಿಕ ಭಾಷಾಂತರ (Kannada Contemporary Version)", _BIBLICA % "1999, 2020, 2022"),
     "ory": ("ory", "or", "ଇଣ୍ଡିୟାନ ରିୱାଇସ୍ଡ୍ ୱରସନ୍ (Odia Indian Revised Version)", _IRV % "2017, 2019, 2021"),
     "asmfb": ("asmfb", "as", "ইণ্ডিয়ান ৰিভাইচ ভাৰচন (Assamese Indian Revised Version, 2019)", _IRV % "2017, 2018"),
     "npiulb": ("npiulb", "ne", "पवित्र बाइबल (Nepali Unlocked Literal Bible)", _DOOR43),
@@ -519,7 +519,7 @@ def build_ebible(ebid, numbering):
         if not chapters:
             continue
         n = sum(len(c) for c in chapters)
-        if sum(1 for c in chapters for v in c if v) < 0.8 * n:
+        if sum(1 for c in chapters for v in c if v) < 0.5 * n:
             print("  skipping", code, "(not translated yet)", file=sys.stderr)
             continue
         out[code] = chapters
