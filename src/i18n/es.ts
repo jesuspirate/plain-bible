@@ -1065,8 +1065,6 @@ export default {
   "{name} prayed for this": "{name} oró por esto",
   "Sent {when}": "Enviada {when}",
   "It’s gone for good, for you and for {name}.": "Desaparece para siempre, para ti y para {name}.",
-  "Pray with the people closest to you": "Ora con los más cercanos",
-  "Start your own small circle with family or friends from church. Only the people you invite see what you share.": "Crea tu propio círculo pequeño con tu familia o amigos de la iglesia. Solo las personas que invitas ven lo que compartes.",
   "Start a circle": "Crear un círculo",
   "{n} praying": "{n} orando",
   "{n} person came in": "{n} persona ha entrado",

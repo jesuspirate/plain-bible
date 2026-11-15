@@ -189,8 +189,8 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-guest-foot { text-align: right; margin: 6px 0 0; }
 .c-request .c-item-by { margin: 0 0 6px; }
 .c-lead-ask { margin-top: 12px; }
-.c-start-own { margin-top: 20px; }
-.c-start-own .c-btn { width: 100%; }
+.c-guest-end { display: flex; justify-content: space-between; align-items: center; gap: 12px; flex-wrap: wrap; }
+.c-guest-end > .c-sure, .c-guest-end > .confirm-card { flex: 1 1 100%; }
 /* Small circle | Open door: the two halves fill the row, nothing left over. */
 .c-kind-pick { border-radius: 12px; margin: 0 0 10px; }
 .c-kind-pick button { flex: 1; min-height: 46px; font: 600 16px var(--sans); }
