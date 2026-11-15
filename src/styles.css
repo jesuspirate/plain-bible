@@ -717,6 +717,8 @@ body.selecting main { padding-bottom: 200px; }
    scroller, and the sticky top bar then jumps to the top of the chapter,
    out of sight, for as long as search is open. */
 html.sb-lock { overflow: hidden; }
+/* No keyboard below: the bar sits above the home bar (and a Mac's full-screen strip). */
+html.sb-floor .sb.sb-open { padding-bottom: max(10px, env(safe-area-inset-bottom)); }
 /* Open: everything solid, so the results above and the keyboard below never blend into the page. */
 .sb.sb-open .sb-sheet, .sb.sb-open .sb-field {
   background: var(--surface); -webkit-backdrop-filter: none; backdrop-filter: none;
