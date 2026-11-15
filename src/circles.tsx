@@ -231,6 +231,26 @@ function CircleList() {
   useEffect(() => { keptLead().then(setLead) }, [list])
   // "Start your own circle", from inside an Open door circle.
   useEffect(() => { if (startMaking) { startMaking = false; setMaking(true) } }, [])
+  // Opening the form brings it into view with the circle's name ready to
+  // type. iPhones only show the keyboard for a focus made during the tap, so
+  // the tap focuses a stand-in field at once, and the name field takes over.
+  const nameField = useRef<HTMLInputElement>(null)
+  const stand = useRef<HTMLInputElement | null>(null)
+  const startForm = () => {
+    const s = document.createElement('input')
+    s.setAttribute('aria-hidden', 'true')
+    s.style.cssText = 'position:fixed;top:40%;left:0;width:1px;height:1px;opacity:0;font-size:16px;border:0;padding:0'
+    document.body.appendChild(s); s.focus({ preventScroll: true })
+    stand.current = s
+    setJoining(false); setMaking(true)
+  }
+  useEffect(() => {
+    const s = stand.current; stand.current = null
+    if (!making || !s) return
+    const f = nameField.current
+    if (f) { f.parentElement?.scrollIntoView({ block: 'center', behavior: 'smooth' }); f.focus({ preventScroll: true }) }
+    s.remove()
+  }, [making])
 
   const load = async (unlock = false, code?: string) => {
     setBusy(true); setMsg('')
@@ -279,7 +299,7 @@ function CircleList() {
             <div class="c-card c-door open c-lead-yes">
               <p class="c-card-title">{t('You can lead an Open door circle now')}</p>
               <p class="muted small">{t('My Quiet Bible said yes. Make your circle, then open the door to get the link you share.')}</p>
-              <button class="c-btn primary c-ask-btn" onClick={() => { leadSeen(); setLead('yes'); setDoor(true); setJoining(false); setMaking(true) }}>{t('Make my Open door circle')}</button>
+              <button class="c-btn primary c-ask-btn" onClick={() => { leadSeen(); setLead('yes'); setDoor(true); startForm() }}>{t('Make my Open door circle')}</button>
               <p class="c-paste"><button class="link small" onClick={leadSeen}>{t('Later')}</button></p>
             </div>
           )}
@@ -295,7 +315,7 @@ function CircleList() {
           ) : list && !busy && !locked && <p>{t('You’re not in a circle yet. Join one with a code, or make your own.')}</p>}
           {making ? (
             <div class="c-card">
-              <label class="c-label">{t('Name of the circle')}<input value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
+              <label class="c-label">{t('Name of the circle')}<input ref={nameField} value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
               {lead === 'yes' && <>
                 <div class="seg c-pick c-kind-pick" role="radiogroup" aria-label={t('Kind of circle')}>
@@ -314,7 +334,7 @@ function CircleList() {
           ) : joining ? <JoinCode onCancel={() => setJoining(false)} /> : (
             <div class="c-row c-two">
               <button class="c-btn primary" onClick={() => setJoining(true)}>{t('Enter a code')}</button>
-              <button class="c-btn" onClick={() => setMaking(true)}>{t('New circle')}</button>
+              <button class="c-btn" onClick={startForm}>{t('New circle')}</button>
             </div>
           )}
           {!joining && !making && <PasteInvite />}
