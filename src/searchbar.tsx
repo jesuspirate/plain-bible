@@ -420,14 +420,26 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       document.removeEventListener('visibilitychange', back); removeEventListener('pagehide', leave)
     }
   }, [])
-  const tap = useRef<{ x: number; y: number }>()
+  // When the page last moved. A tap while it is still gliding from a swipe
+  // only stops the glide on iPhone: it isn't a tap to iOS, so a field focused
+  // then gets no keyboard, and search would open with an empty space below.
+  const scrolledAt = useRef(0)
+  useEffect(() => {
+    const on = () => { scrolledAt.current = Date.now() }
+    addEventListener('scroll', on, { passive: true })
+    return () => removeEventListener('scroll', on)
+  }, [])
+  const tap = useRef<{ x: number; y: number; gliding: boolean }>()
   const onFieldTouchStart = (e: TouchEvent) => {
-    if (!open) overlayKeyboard(true) // before the keyboard is asked for
-    tap.current = !open && isIOS ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : undefined
+    const gliding = Date.now() - scrolledAt.current < 150
+    if (!open && !gliding) overlayKeyboard(true) // before the keyboard is asked for
+    tap.current = !open && isIOS ? { x: e.touches[0].clientX, y: e.touches[0].clientY, gliding } : undefined
   }
   const onFieldTouchEnd = (e: TouchEvent) => {
     const start = tap.current, end = e.changedTouches[0], el = sb.current
     tap.current = undefined
+    // That tap just stopped the page, as everywhere on iPhone; the next one opens search.
+    if (start?.gliding) { e.preventDefault(); return }
     // Search open but no keyboard (iOS can give the field focus back when
     // the app returns, without its keyboard). A tap on an already focused
     // field doesn't raise it on iPhone, so let go and take focus again, now
