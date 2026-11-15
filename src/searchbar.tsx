@@ -167,6 +167,15 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       if (phone && up && h !== last) { last = h; rememberKeyboard(key, full - h) }
       set(vv.offsetTop, h)
     }
+    // The keyboard didn't come up after all (iPhone only raises it for some
+    // touches, and can hand the field focus back without it): don't leave an
+    // empty gap where it would be. The panel and bar go down to the bottom of
+    // the screen; a tap on the field still brings the keyboard, and the panel
+    // follows it up.
+    const noKeyboard = phone ? setTimeout(() => {
+      if (seen || (vk && vk.boundingRect.height > 100) || !vv || vv.height < full - 100) return
+      set(vv.offsetTop, vv.height)
+    }, 900) : undefined
     // iOS can scroll the page under the panel while the keyboard comes up;
     // closing puts you back where you were reading.
     const y = scrollY, at = location.hash
@@ -174,6 +183,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
     vk?.addEventListener('geometrychange', fit)
     return () => {
+      clearTimeout(noKeyboard)
       vk?.removeEventListener('geometrychange', fit); overlayKeyboard(false)
       if (location.hash === at && Math.abs(scrollY - y) > 1) scrollTo(0, y)
       root.classList.remove('sb-lock')
