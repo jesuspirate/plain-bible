@@ -1,0 +1,24 @@
+name: Widget pictures
+
+# Draws the iPhone verse-of-the-day widget (ios/widget-pictures) so a change
+# to it can be seen without a phone. The picture is kept with the run.
+
+on:
+  pull_request:
+    paths: ['ios/QuietBibleHome/**', 'ios/Shared/**', 'ios/widget-pictures/**', '.github/workflows/widget-pictures.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  draw:
+    runs-on: macos-15
+    steps:
+      - uses: actions/checkout@v7
+      - name: Draw
+        run: bash ios/widget-pictures/draw.sh pictures
+      - uses: actions/upload-artifact@v7
+        with:
+          name: widget-pictures
+          path: pictures/

@@ -153,6 +153,10 @@ final class NotifyBridge: NSObject, WKScriptMessageHandlerWithReply {
                 }
             }
             replyHandler(true, nil)
+        case "verses":
+            // The verse of the day and your saved verses, for the widget (SharedVerses.swift).
+            SharedVerses.save(SharedVerses.from(body))
+            replyHandler(true, nil)
         case "forget":
             SharedCircles.forget()
             replyHandler(true, nil)

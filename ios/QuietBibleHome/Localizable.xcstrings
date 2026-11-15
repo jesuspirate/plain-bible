@@ -1,6 +1,22 @@
 {
   "sourceLanguage": "en",
   "strings": {
+    "A verse each day, read in your Bible.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un verset chaque jour, lu dans votre Bible."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Un versículo cada día, leído en tu Biblia."
+          }
+        }
+      }
+    },
     "Circles": {
       "localizations": {
         "fr": {
@@ -19,6 +35,38 @@
     },
     "My Quiet Bible": {
       "shouldTranslate": false
+    },
+    "My saved verses": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mes versets enregistrés"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Mis versículos guardados"
+          }
+        }
+      }
+    },
+    "Open My Quiet Bible once to see today’s verse.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ouvrez My Quiet Bible une fois pour voir le verset du jour."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Abre My Quiet Bible una vez para ver el versículo del día."
+          }
+        }
+      }
     },
     "Pray": {
       "localizations": {
@@ -64,6 +112,22 @@
           "stringUnit": {
             "state": "translated",
             "value": "Ora, o comparte con tus círculos."
+          }
+        }
+      }
+    },
+    "Psalm 119:105": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Psaume 119:105"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Salmo 119:105"
           }
         }
       }
@@ -128,6 +192,70 @@
           "stringUnit": {
             "state": "translated",
             "value": "Toca para empezar una oración."
+          }
+        }
+      }
+    },
+    "Thy word is a lamp unto my feet, and a light unto my path.": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Ta parole est une lampe à mes pieds, Et une lumière sur mon sentier."
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Lámpara es á mis pies tu palabra, Y lumbre á mi camino."
+          }
+        }
+      }
+    },
+    "Verse of the day": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Verset du jour"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versículo del día"
+          }
+        }
+      }
+    },
+    "Verses": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versets"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versículos"
+          }
+        }
+      }
+    },
+    "Well-loved verses": {
+      "localizations": {
+        "fr": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versets connus et aimés"
+          }
+        },
+        "es": {
+          "stringUnit": {
+            "state": "translated",
+            "value": "Versículos conocidos y amados"
           }
         }
       }
