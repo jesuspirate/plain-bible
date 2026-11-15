@@ -298,7 +298,7 @@ function CircleList() {
               <label class="c-label">{t('Name of the circle')}<input value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
               {lead === 'yes' && <>
-                <div class="seg c-pick" role="radiogroup" aria-label={t('Kind of circle')}>
+                <div class="seg c-pick c-kind-pick" role="radiogroup" aria-label={t('Kind of circle')}>
                   <button role="radio" aria-checked={!door} class={!door ? 'on' : ''} onClick={() => setDoor(false)}>{t('Small circle')}</button>
                   <button role="radio" aria-checked={door} class={door ? 'on' : ''} onClick={() => setDoor(true)}>{t('Open door')}</button>
                 </div>
