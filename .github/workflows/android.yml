@@ -4,12 +4,12 @@
 # android/README.md.
 #
 # Pull requests that touch android/ build it, to check it still compiles.
-# Run it by hand (Actions → Android app → Run workflow) to:
+# Run it by hand (Actions → "Release to Google Play (Android)" → Run workflow) to:
 #   - "Make upload key": once, before the first upload. Needs the secret
 #     ANDROID_KEY_PASSWORD (a long password you choose and keep).
 #   - "Build for Google Play": a signed .aab to upload to Play Console. Needs
 #     ANDROID_KEY_PASSWORD and ANDROID_KEYSTORE_BASE64.
-name: Android app
+name: Release to Google Play (Android)
 
 on:
   pull_request:
@@ -103,3 +103,15 @@ jobs:
         with:
           name: my-quiet-bible-${{ github.run_number }}
           path: android/app/build/outputs/bundle/release/*.aab
+      # GitHub can't send it to Google by itself: say plainly what to do next.
+      - if: github.event_name == 'workflow_dispatch'
+        env:
+          RUN: ${{ github.run_number }}
+        run: |
+          {
+            echo "## Ready for Google Play (version 1.0.$RUN)"
+            echo "1. Scroll down to **Artifacts** and download **my-quiet-bible-$RUN** (a .zip)."
+            echo "2. Unzip it: inside is the .aab file."
+            echo "3. In Play Console, open the release track, **Create new release**, and upload the .aab."
+            echo "4. Write the release notes (What's new), then **Next** and **Save and publish**."
+          } >> "$GITHUB_STEP_SUMMARY"

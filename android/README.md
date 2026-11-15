@@ -13,7 +13,7 @@ this folder changes.
 ## Building
 
 `.github/workflows/android.yml` does it on GitHub, no Android Studio needed.
-Actions → Android app → Run workflow:
+Actions → **Release to Google Play (Android)** → Run workflow:
 
 1. Add the repository secret `ANDROID_KEY_PASSWORD`: a long password you
    choose. Keep it in your password manager.
@@ -21,7 +21,8 @@ Actions → Android app → Run workflow:
    day). Keep `upload.keystore` with the password. Paste the text of
    `upload.keystore.base64.txt` into a new secret `ANDROID_KEYSTORE_BASE64`.
 3. Run **Build for Google Play**. Download the `.aab` from the run and upload
-   it in Play Console. Each run gets a higher version number by itself.
+   it in Play Console (the run's summary page lists the steps). Each run gets a
+   higher version number by itself (1.0 plus the run number).
 
 With Play App Signing (the default), Google keeps the key that signs the app
 for phones. The upload key only proves an upload came from you; if it is ever
