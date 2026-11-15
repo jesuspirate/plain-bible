@@ -34,7 +34,7 @@ function catalogCounts() {
   try {
     const { translations } = JSON.parse(readFileSync(new URL('./public/data/catalog.json', import.meta.url), 'utf8')) as { translations: { lang: string }[] }
     return { versions: translations.length, languages: new Set(translations.map(t => t.lang)).size }
-  } catch { return { versions: 120, languages: 49 } }
+  } catch { return { versions: 162, languages: 85 } }
 }
 const counts = catalogCounts()
 

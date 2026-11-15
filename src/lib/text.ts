@@ -31,10 +31,19 @@ export function strongsOf(verse: string): string[] {
 export interface NormOptions { caseSensitive: boolean; accentSensitive: boolean }
 
 const MARKS = /\p{M}/gu
+// In the scripts of India and South-East Asia a vowel is written as a mark
+// on its consonant: taking it off would make another word, not the same word
+// without an accent ("राम" is not "रम"). Those marks stay.
+const VOWEL_SIGN_SCRIPT = /[\p{Script=Devanagari}\p{Script=Bengali}\p{Script=Gurmukhi}\p{Script=Gujarati}\p{Script=Oriya}\p{Script=Tamil}\p{Script=Telugu}\p{Script=Kannada}\p{Script=Malayalam}\p{Script=Sinhala}\p{Script=Thai}\p{Script=Lao}\p{Script=Khmer}\p{Script=Myanmar}\p{Script=Tibetan}]/u
+
+/** Accents taken off, as for a search that ignores them. */
+export function stripAccents(s: string): string {
+  return s.normalize('NFD').replace(MARKS, m => VOWEL_SIGN_SCRIPT.test(m) ? m : '').normalize('NFC')
+}
 
 export function normalize(s: string, o: NormOptions): string {
   if (!o.caseSensitive) s = s.toLowerCase().replace(/ς/g, 'σ')
-  if (!o.accentSensitive) s = s.normalize('NFD').replace(MARKS, '').normalize('NFC')
+  if (!o.accentSensitive) s = stripAccents(s)
   return s
 }
 

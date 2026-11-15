@@ -27,3 +27,20 @@ mkdir -p beblia
 for f in FrenchBible; do
   [ -f beblia/$f.xml ] || curl -fsSL -o beblia/$f.xml https://raw.githubusercontent.com/Beblia/Holy-Bible-XML-Format/master/$f.xml
 done
+
+# Openly licensed Bibles from eBible.org (their own USFM downloads), and the
+# Paratext verse-numbering files that line them up with the KJV's numbering
+# (from github.com/BibleNLP/ebible, pinned so a rebuild reads the same).
+mkdir -p ebible
+VRS=https://raw.githubusercontent.com/BibleNLP/ebible/2bde52b4c2cfd7056cf4ed07c48969647df79744/metadata
+for f in eng.vrs org.vrs; do
+  [ -f ebible/$f ] || curl -fsSL -o ebible/$f $VRS/$f
+done
+for id in swhonen swhulb arbnav arb-vd cmn-cu89s hincv hin2017 benirv pan guj2017 mar tel2017 \
+  tam2017 kanokcv ory asmfb npiulb pesopcb pesOPV heb ita1927 ita1885 ind hausa yor ibo gaz nya \
+  sna lin lug kik luo twi twiasante ewe nde ckb uigara haw1868 ton iloulb; do
+  # One Bible that can't be had today must not stop the others: it is left
+  # out of this build (build_data.py says so) and tried again next time.
+  [ -f ebible/${id}_usfm.zip ] || curl -fsSL --retry 3 -o ebible/${id}_usfm.zip https://ebible.org/Scriptures/${id}_usfm.zip \
+    || { echo "could not download $id from eBible.org" >&2; rm -f ebible/${id}_usfm.zip; }
+done
