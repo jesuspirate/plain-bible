@@ -39,5 +39,8 @@ done
 for id in swhonen swhulb arbnav arb-vd cmn-cu89s hincv hin2017 benirv pan guj2017 mar tel2017 \
   tam2017 kan2017 ory asmfb npiulb pesopcb pesOPV heb ita1927 ita1885 ind hausa yor ibo gaz nya \
   sna lin lug kik luo twi twiasante ewe nde ckb uigara haw1868 ton iloulb; do
-  [ -f ebible/${id}_usfm.zip ] || curl -fsSL --retry 3 -o ebible/${id}_usfm.zip https://ebible.org/Scriptures/${id}_usfm.zip
+  # One Bible that can't be had today must not stop the others: it is left
+  # out of this build (build_data.py says so) and tried again next time.
+  [ -f ebible/${id}_usfm.zip ] || curl -fsSL --retry 3 -o ebible/${id}_usfm.zip https://ebible.org/Scriptures/${id}_usfm.zip \
+    || { echo "could not download $id from eBible.org" >&2; rm -f ebible/${id}_usfm.zip; }
 done

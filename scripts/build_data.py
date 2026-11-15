@@ -725,6 +725,9 @@ def main():
     for tid, (ebid, lang, name, lic) in EBIBLE.items():
         if only and tid not in only:
             continue
+        if not os.path.exists(os.path.join(SRC, "ebible", ebid + "_usfm.zip")):
+            print("  skipping", tid, "(not downloaded)", file=sys.stderr)
+            continue
         print("•", tid, file=sys.stderr)
         numbering = numbering or ebible_numbering()
         books = build_ebible(ebid, numbering)
