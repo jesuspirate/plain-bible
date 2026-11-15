@@ -3,7 +3,7 @@
 import { ComponentChildren } from 'preact'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { Bible } from './lib/data'
-import { compareKeys, hasContent, Mark, Marks, notesOf, PALETTE, parseKey, tidy } from './lib/marks'
+import { afterUsing, colorsByUse, compareKeys, hasContent, Mark, Marks, notesOf, PALETTE, parseKey, tidy } from './lib/marks'
 import { NotesSheet, NotesTarget, verseRanges } from './reader'
 import { BookmarkIcon, EditIcon, HighlightIcon, NoteIcon, TrashIcon } from './icons'
 import { bookName } from './lib/books'
@@ -39,7 +39,7 @@ const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, 
 /** With `onImport`, it's a page of Settings: no title of its own, and the
  *  import link opens Your data there. */
 export function Saved({ onImport }: { onImport?: () => void } = {}) {
-  const { marks, setMarks, settings, data, byId } = useApp()
+  const { marks, setMarks, settings, update, data, byId } = useApp()
   const [bible, setBible] = useState<Bible>()
   // The version isn't on the device and there's no connection to fetch it.
   const [missing, setMissing] = useState(false)
@@ -266,7 +266,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   const f = active ? find : '', lim = active ? limit : PEEK
   let body
   if (which === 'highlights') {
-    const used = PALETTE.map(p => p.color).filter(c => runs.some(r => r.color === c))
+    const used = colorsByUse(settings.recentColors).map(p => p.color).filter(c => runs.some(r => r.color === c))
     const colors = [...used, ...[...new Set(runs.map(r => r.color))].filter(c => !used.includes(c))]
     const shown = runs.filter(r => color === 'all' || r.color === color)
     body = <>
@@ -296,9 +296,9 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
               {active && recolor === id && (
                 <div class="saved-palette">
                   <div class="swatches">
-                    {PALETTE.map(p => (
+                    {colorsByUse(settings.recentColors).map(p => (
                       <button class={'swatch' + (p.color === r.color ? ' on' : '')} style={{ background: p.color }} aria-label={t(p.name)}
-                        onClick={() => { change(r.keys, { c: p.color }); setRecolor(undefined) }} />
+                        onClick={() => { if (p.color !== r.color) update({ recentColors: afterUsing(settings.recentColors, p.color) }); change(r.keys, { c: p.color }); setRecolor(undefined) }} />
                     ))}
                   </div>
                   <button class="saved-remove" onClick={() => { change(r.keys, { c: undefined }, t('Highlight on {ref} removed.', { ref })); setRecolor(undefined) }}>

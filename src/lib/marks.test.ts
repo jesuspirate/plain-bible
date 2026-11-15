@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { htmlToText, loadMarks, Mark, mergeImport, mergeMark, notesCovering, notesOf, parseNotes, parseRefList, setNote, upgrade } from './marks'
+import { afterUsing, colorsByUse, htmlToText, lastColor, PALETTE, loadMarks, Mark, mergeImport, mergeMark, notesCovering, notesOf, parseNotes, parseRefList, setNote, upgrade } from './marks'
 
 // Same shape as a typical Bible app export.
 const HIGHLIGHTS = `<!DOCTYPE html><html><head><style>body {margin: 2em;}</style></head>
@@ -137,5 +137,20 @@ describe('passage notes', () => {
     expect(notesCovering(m, 'John', 3, 17).map(x => x.id)).toEqual(['a', 'b', 'c'])
     expect(notesCovering(m, 'John', 3, 16).map(x => x.id)).toEqual(['a', 'c'])
     expect(notesCovering(m, 'John', 3, 19)).toEqual([])
+  })
+})
+
+describe('colors by use', () => {
+  it('puts the color used last first, then the rest in their usual order', () => {
+    const all = PALETTE.map(p => p.color)
+    expect(colorsByUse([]).map(p => p.color)).toEqual(all)
+    let recent = afterUsing([], all[3])
+    recent = afterUsing(recent, all[5])
+    expect(colorsByUse(recent).map(p => p.color).slice(0, 3)).toEqual([all[5], all[3], all[0]])
+    expect(lastColor(recent)).toBe(all[5])
+    recent = afterUsing(recent, all[3])
+    expect(colorsByUse(recent).map(p => p.color).slice(0, 2)).toEqual([all[3], all[5]])
+    expect(colorsByUse(['#123456', all[2]])[0].color).toBe(all[2])
+    expect(colorsByUse(recent)).toHaveLength(PALETTE.length)
   })
 })
