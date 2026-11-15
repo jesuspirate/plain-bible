@@ -28,6 +28,7 @@ import { overlayOpen } from './lib/overlay'
 import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
 import { hello } from './lib/hello'
 import { AWAY, useSideways } from './sideways'
+import { useRecording } from './lib/recordMode'
 
 // The status bar color the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -320,7 +321,11 @@ export function App() {
   }, [sync.account?.token])
 
   // The phone on its side: the bars slide away as you read on.
-  const sidewaysEdge = useSideways(page === 'read' && !!settings, (Array.isArray(settings?.sideways) ? settings!.sideways : []).filter(a => AWAY.includes(a)))
+  // In recording mode, upright too, and all the bars go, so the video shows
+  // the word; scrolling back up a little brings them back.
+  const recording = useRecording().on
+  useLayoutEffect(() => { document.documentElement.classList.toggle('recording', recording) }, [recording])
+  const sidewaysEdge = useSideways(page === 'read' && !!settings, recording ? AWAY : (Array.isArray(settings?.sideways) ? settings!.sideways : []).filter(a => AWAY.includes(a)), recording)
 
   if (error) return (
     <div class="center">

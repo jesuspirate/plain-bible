@@ -22,6 +22,7 @@ import { isIOS } from './lib/native'
 import { ListenPlayer, useReadingAloud } from './listen'
 import { locale, N_, t, tn } from './i18n'
 import { SEARCH_TRAIL, SEARCH_TRAIL_EVENT } from './lib/place'
+import { useRecording } from './lib/recordMode'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
@@ -114,6 +115,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
   const version = here?.version ?? settings.version
+  // In recording mode the bar names the version on screen, large.
+  const recording = useRecording()
+  const shown = recording.on && byId.has(recording.version) ? recording.version : version
   const info = byId.get(version)
   // The Bible searched stays the one you searched in while you step through
   // its results, even when one of them opens in another version.
@@ -742,7 +746,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         ) : <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
-            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Words or John 3:16')}
+            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${shown}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}

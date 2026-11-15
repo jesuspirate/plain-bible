@@ -1219,6 +1219,24 @@ header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3
     translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
   }
 }
+/* Recording mode does the same whichever way the phone is held. */
+:root.recording.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
+:root.recording.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
+:root.recording.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
+  translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
+}
+
+/* ---- recording mode (src/lib/recordMode.ts) ----
+   The version picked for the video large; your Bible small and quiet under
+   each verse, for you to follow. One column on every screen, no lines
+   between verses, nothing else on the page. */
+.rec-version { margin: -.4em 0 1.2em; text-align: center; font-size: .62em; letter-spacing: .04em; color: var(--muted); }
+.chapter.rec:not(.cols-1) { max-width: 44rem; }
+.chapter.rec:not(.cols-1) .verse { grid-template-columns: 1fr; border-bottom: 0; padding: 10px 0 14px; }
+.chapter.rec:not(.cols-1) .cell { padding: 0; }
+.chapter.rec:not(.cols-1) .cell + .cell { font-size: .6em; line-height: 1.45; color: var(--muted); margin-top: .35em; }
+.chapter.rec:not(.cols-1) .cell + .cell .vn { display: none; }
+.chapter.rec .chapter-notes { display: none; }
 /* Where the top bar was: a tap brings the bars back. A faint line shows where. */
 .away-edge {
   all: unset; cursor: pointer; position: fixed; z-index: 11; top: 0; left: 0; right: 0;
@@ -1298,3 +1316,6 @@ body.selecting .continue { display: none; }
   border: 1px solid var(--line); border-radius: 26px; background: var(--chip); color: var(--text); font-size: 18px; font-weight: 600;
 }
 .define-credit { margin: 14px 0 0; text-align: center; }
+/* Settings, Recording mode: one big button to turn it on or off. */
+.rec-about { margin: 4px 4px 14px; line-height: 1.5; }
+.rec-go { display: block; width: 100%; min-height: 52px; margin: 18px 0 10px; border-radius: 26px; font-size: 18px; font-weight: 600; }

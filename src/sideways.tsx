@@ -31,8 +31,8 @@ export function step(away: boolean, y: number, dy: number, moved: number, view: 
 /** On the reader with the phone on its side, the bars you picked in Settings
  *  slide away as you read on, so the words fill the screen. Scrolling back
  *  up, or a tap on the top edge (or on the top bar, if it stays), brings
- *  them back. */
-export function useSideways(reading: boolean, hide: Away[]) {
+ *  them back. `always`: whichever way the phone is held. */
+export function useSideways(reading: boolean, hide: Away[], always = false) {
   const [sideways, setSideways] = useState(() => matchMedia(SIDEWAYS).matches)
   const [away, setAwayState] = useState(false)
   const now = useRef(false)
@@ -43,7 +43,8 @@ export function useSideways(reading: boolean, hide: Away[]) {
     mq.addEventListener('change', on)
     return () => mq.removeEventListener('change', on)
   }, [])
-  const active = reading && sideways && hide.length > 0
+  // Recording mode (src/lib/recordMode.ts) does this upright too.
+  const active = reading && (sideways || always) && hide.length > 0
 
   useEffect(() => {
     if (!active) { setAway(false); return }

@@ -7,7 +7,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour } from './state'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, TextSizeIcon, ThemeIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -18,6 +18,7 @@ import { AccountSection } from './account'
 import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
+import { saveRecording, useRecording } from './lib/recordMode'
 import { StreakRow } from './streaks'
 import { AWAY } from './sideways'
 import { UNFOLDED } from './lib/spread'
@@ -120,10 +121,10 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language'
+type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), saved: N_('Saved'), search: N_('Advanced search'),
-  versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'),
+  versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Recording mode'),
 }
 
 /** Where you are in Settings: the first page, or one page in. */
@@ -249,6 +250,7 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
   const { settings, update, byId } = useApp()
   const route = useRoute()
   const [open, setOpen] = useState<'' | 'version' | 'compare'>('')
+  const recording = useRecording()
   const reading = route.path[0] === 'read' && route.path.length >= 4
   const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.version
   const parallel = ((reading && route.params.get('p')?.split(',')) || settings.parallel).filter(id => byId.has(id) && id !== version)
@@ -277,6 +279,7 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
           <Row icon={<ReturnIcon size={24} />} label={t('Back to {version}', { version: settings.version })} sub={t('Your Bible')} onClick={() => goTo(settings.version, parallel)} />}
         <Row icon={<CompareIcon size={24} />} label={t('Compare side by side')} value={parallel.length ? parallel.join(', ') : t('Off')} onClick={() => setOpen('compare')} />
         <Row icon={<BooksIcon size={24} />} label={t('Manage versions')} onClick={() => setPage('versions')} />
+        <Row icon={<VideoIcon size={24} />} label={t('Recording mode')} value={recording.on ? recording.version : t('Off')} onClick={() => setPage('recording')} />
       </div>
       {open === 'version' && <VersionPicker title={t('Version')} selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
       {open === 'compare' && (
@@ -307,6 +310,27 @@ function LanguagePage() {
     <p class="muted small lang-note">{t('This changes the words of the app. The Bible you read is chosen under Bible, in Settings.')}</p>
     </>
   )
+}
+
+// For filming the screen: one version large for the people watching, your
+// Bible small under each verse for you. On this device only; it never
+// changes your Bible (src/lib/recordMode.ts).
+function RecordingPage() {
+  const { settings, byId } = useApp()
+  const rec = useRecording()
+  const [picking, setPicking] = useState(false)
+  return <>
+    <p class="muted rec-about">{t('For filming your screen. The version you pick shows large. Your Bible ({version}) shows small under each verse, so you can follow along. The bars slide away as you read: scroll up a little to bring them back.', { version: settings.version })}</p>
+    <div class="set-list">
+      <Row icon={<BookIcon size={24} />} label={t('Large on screen')} sub={byId.get(rec.version)?.name} value={rec.version} onClick={() => setPicking(true)} />
+    </div>
+    <button class={'rec-go' + (rec.on ? '' : ' primary')} onClick={() => saveRecording({ ...rec, on: !rec.on })}>
+      {rec.on ? t('Turn off recording mode') : t('Turn on recording mode')}
+    </button>
+    <p class="muted small rec-about">{t('Only on this device. Your Bible doesn’t change.')}</p>
+    {picking && <VersionPicker title={t('Large on screen')} selected={[rec.version]} onClose={() => setPicking(false)}
+      onChange={([id]) => { if (id) saveRecording({ ...rec, version: id }); setPicking(false) }} />}
+  </>
 }
 
 function SettingsBody({ nav }: { nav: SettingsNav }) {
@@ -396,6 +420,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'versions') return <Versions inSheet />
   if (page === 'sync') return <AccountSection />
   if (page === 'language') return <LanguagePage />
+  if (page === 'recording') return <RecordingPage />
 
   if (page === 'data') return <>
     <DataTools />
