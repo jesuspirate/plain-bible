@@ -34,6 +34,9 @@
 		D10000000000000000000003 /* SharedCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000001 /* SharedCircles.swift */; };
 		E10000000000000000000001 /* NotificationService.swift in Sources */ = {isa = PBXBuildFile; fileRef = E20000000000000000000001 /* NotificationService.swift */; };
 		E10000000000000000000002 /* SharedCircles.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000001 /* SharedCircles.swift */; };
+		D10000000000000000000004 /* DailyVerse.swift in Sources */ = {isa = PBXBuildFile; fileRef = D20000000000000000000006 /* DailyVerse.swift */; };
+		D10000000000000000000005 /* SharedVerses.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000002 /* SharedVerses.swift */; };
+		A10000000000000000000012 /* SharedVerses.swift in Sources */ = {isa = PBXBuildFile; fileRef = F20000000000000000000002 /* SharedVerses.swift */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -138,6 +141,8 @@
 		E20000000000000000000003 /* QuietBibleNotify.entitlements */ = {isa = PBXFileReference; lastKnownFileType = text.plist.entitlements; path = QuietBibleNotify.entitlements; sourceTree = "<group>"; };
 		E20000000000000000000004 /* QuietBibleNotify.appex */ = {isa = PBXFileReference; explicitFileType = "wrapper.app-extension"; includeInIndex = 0; path = QuietBibleNotify.appex; sourceTree = BUILT_PRODUCTS_DIR; };
 		F20000000000000000000001 /* SharedCircles.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedCircles.swift; sourceTree = "<group>"; };
+		D20000000000000000000006 /* DailyVerse.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = DailyVerse.swift; sourceTree = "<group>"; };
+		F20000000000000000000002 /* SharedVerses.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SharedVerses.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -183,6 +188,7 @@
 			isa = PBXGroup;
 			children = (
 				D20000000000000000000001 /* HomeWidgets.swift */,
+				D20000000000000000000006 /* DailyVerse.swift */,
 				D20000000000000000000002 /* Localizable.xcstrings */,
 				D20000000000000000000003 /* Info.plist */,
 				D20000000000000000000005 /* QuietBibleHome.entitlements */,
@@ -270,6 +276,7 @@
 			isa = PBXGroup;
 			children = (
 				F20000000000000000000001 /* SharedCircles.swift */,
+				F20000000000000000000002 /* SharedVerses.swift */,
 			);
 			path = Shared;
 			sourceTree = "<group>";
@@ -464,6 +471,8 @@
 			files = (
 				D10000000000000000000001 /* HomeWidgets.swift in Sources */,
 				D10000000000000000000003 /* SharedCircles.swift in Sources */,
+				D10000000000000000000004 /* DailyVerse.swift in Sources */,
+				D10000000000000000000005 /* SharedVerses.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -497,6 +506,7 @@
 				A10000000000000000000005 /* WatchInbox.swift in Sources */,
 				A10000000000000000000008 /* Notify.swift in Sources */,
 				A10000000000000000000009 /* SharedCircles.swift in Sources */,
+				A10000000000000000000012 /* SharedVerses.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

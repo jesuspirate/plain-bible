@@ -26,6 +26,7 @@ import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
 import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
+import { nativeNotify } from './lib/nativeNotify'
 import { hello } from './lib/hello'
 import { AWAY, useSideways } from './sideways'
 import { useRecording } from './lib/recordMode'
@@ -116,11 +117,25 @@ export function App() {
 
   // A new language in Settings (or from another device): its words load,
   // then everything is drawn again in it.
-  const [, setWords] = useState(0)
+  const [words, setWords] = useState(0)
   const language = settings && pickLang(settings.language)
   useEffect(() => {
     if (language && language !== currentLang()) setLang(language).then(() => setWords(n => n + 1)).catch(() => {})
   }, [language])
+
+  // The iPhone widget's verse of the day: read in your Bible, named in the
+  // app's language, from a month of days and your saved verses. Handed over
+  // a while after the page is up, and again when any of those change or the
+  // app comes back on a new day. Only in an App Store app that has the widget.
+  const ownBible = settings?.version
+  useEffect(() => {
+    if (!ownBible || !inStoreApp() || !nativeNotify()) return
+    const send = () => { import('./lib/dailyVerse').then(m => m.sendDaily(data.bible(ownBible), ownBible, marks)).catch(() => {}) }
+    const timer = setTimeout(send, 4000)
+    const back = () => { if (document.visibilityState === 'visible') send() }
+    document.addEventListener('visibilitychange', back)
+    return () => { clearTimeout(timer); document.removeEventListener('visibilitychange', back) }
+  }, [ownBible, marks, language, words])
 
   // Before the paint, so a theme tap shows in the very next frame.
   useLayoutEffect(() => {

@@ -105,9 +105,15 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
 
     /// The Home Screen widget's buttons: quietbible://pray opens the prayer
     /// screen and quietbible://circles opens Circles, over the page you were
-    /// reading. When the page is already up, only its address changes, so
+    /// reading; the verse of the day opens that verse. When the page is already up, only its address changes, so
     /// nothing reloads.
     func openWidgetLink(_ url: URL) {
+        // quietbible://read/KJV/Ps/119?v=105: the verse of the day, in the reader.
+        if url.scheme == "quietbible", url.host == "read" {
+            let place = "read" + url.path + (url.query.map { "?" + $0 } ?? "")
+            if SharedVerses.safePlace(place) { show(place) }
+            return
+        }
         guard url.scheme == "quietbible", var page = url.host, page == "pray" || page == "circles" else { return }
         // quietbible://circles/<id>: the one circle with something new.
         if page == "circles", let id = url.pathComponents.dropFirst().first, SharedCircles.safe(id) { page += "/" + id }

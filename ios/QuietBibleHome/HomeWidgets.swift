@@ -320,6 +320,7 @@ struct BothWidget: Widget {
 struct HomeWidgets: WidgetBundle {
     var body: some Widget {
         PrayWidget()
+        DailyVerseWidget()
         BothWidget()
         CirclesWidget()
     }
