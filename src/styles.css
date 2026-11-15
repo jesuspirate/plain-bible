@@ -204,6 +204,8 @@ html:has(dialog[open]) { overflow: hidden; }
 @media (hover: hover) { .vrow:hover { background: var(--chip); } }
 .vid { font-weight: 600; min-width: 92px; }
 .vname { color: var(--muted); }
+/* "Reads like NIV, ESV, CSB": for readers who know a Bible we can't include. */
+.vlike { display: block; font-size: .88em; font-weight: 600; color: var(--accent); }
 .lex-lemma { font-size: 32px; margin: 0; font-family: var(--reading); }
 .compare dt { font-weight: 600; margin-top: 12px; }
 .compare dd { margin: 2px 0 0; font-family: var(--reading); }
