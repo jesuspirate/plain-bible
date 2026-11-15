@@ -20,6 +20,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var watchArrivals: NSObjectProtocol?
     private var circleTaps: NSObjectProtocol?
     private var circleNews: NSObjectProtocol?
+    private var macKeyboard: [NSObjectProtocol] = []
 
     override var preferredStatusBarStyle: UIStatusBarStyle { barStyle }
 
@@ -95,6 +96,30 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             self?.web.evaluateJavaScript("dispatchEvent(new Event('quietbible:circle-news'))")
         }
         openTappedCircle()
+        watchMacKeyboardStrip()
+    }
+
+    /// On a Mac, while a field is being typed in, the system lays a dark
+    /// strip over the bottom of the window (most visible in full screen),
+    /// and the page isn't told: the search bar and Cancel ended up under it.
+    /// Count the strip as safe area, so the page keeps its bars above it the
+    /// way it keeps them above an iPhone's home bar. iPhone and iPad are left
+    /// as they are: there the keyboard is handled by the page.
+    private func watchMacKeyboardStrip() {
+        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
+        let center = NotificationCenter.default
+        let fit: (Notification) -> Void = { [weak self] note in
+            guard let self, let view = self.view, let screen = view.window?.screen,
+                  let end = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
+            let frame = view.convert(end, from: screen.coordinateSpace)
+            // The window's own safe area already counts; add only the rest.
+            let own = view.safeAreaInsets.bottom - self.additionalSafeAreaInsets.bottom
+            let covered = note.name == UIResponder.keyboardWillHideNotification ? 0
+                : max(0, min(view.bounds.maxY - frame.minY, view.bounds.height / 3) - own)
+            if self.additionalSafeAreaInsets.bottom != covered { self.additionalSafeAreaInsets.bottom = covered }
+        }
+        macKeyboard = [UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardWillHideNotification]
+            .map { center.addObserver(forName: $0, object: nil, queue: .main, using: fit) }
     }
 
     /// Open a myquietbible.com link (from a universal link).
