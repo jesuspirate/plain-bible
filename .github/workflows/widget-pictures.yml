@@ -1,7 +1,9 @@
 name: Widget pictures
 
 # Draws the iPhone verse-of-the-day widget (ios/widget-pictures) so a change
-# to it can be seen without a phone. The picture is kept with the run.
+# to it can be seen without a phone. The picture is kept with the run, and
+# also as a lone commit at refs/widget-pictures/pr-<number> (not a branch),
+# so it can be fetched with git alone.
 
 on:
   pull_request:
@@ -9,7 +11,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
 
 jobs:
   draw:
@@ -22,3 +24,11 @@ jobs:
         with:
           name: widget-pictures
           path: pictures/
+      - name: Keep as a git ref
+        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          tree=$(for f in pictures/*.png; do printf '100644 blob %s\t%s\n' "$(git hash-object -w "$f")" "$(basename "$f")"; done | git mktree)
+          commit=$(git -c user.name=pictures -c user.email=pictures@localhost commit-tree "$tree" -m "Widget pictures for #$PR")
+          git push -f origin "$commit:refs/widget-pictures/pr-$PR"
