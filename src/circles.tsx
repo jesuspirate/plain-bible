@@ -646,7 +646,7 @@ function CircleView({ id }: { id: string }) {
   const guest = !!door && !leading
   const leader = door ? nameOf(door.lead) : ''
   // A circle with only you in it starts on People, where the invite is.
-  const tab = page ?? (feed && feed.members.length < 2 && !feed.items.length ? 'people' : 'shared')
+  const tab = page ?? (feed && !guest && feed.members.length < 2 && !feed.items.length ? 'people' : 'shared')
 
   const sharedList = feed && <>
     {!feed.items.length && <p class="muted c-empty">{guest ? t('Nothing shared yet. When {name} shares a verse or a prayer, it shows here.', { name: leader })
@@ -687,16 +687,22 @@ function CircleView({ id }: { id: string }) {
       del={busy ? t('Leaving…') : leading ? t('Close it for everyone') : t('Leave')} keep={t('Stay')} busy={busy} onDelete={leave} onKeep={() => setLeaving(false)} />
     : <button class="link small" onClick={() => setLeaving(true)}>{leading ? t('Close this circle') : t('Leave this circle')}</button>)
 
+  // Open door, for everyone but its leader: the same Shared tab the leader
+  // has, and a Requests tab with their own prayer requests and the rest.
   if (feed && guest) return (
     <div class="circles c-door-guest">
       {!nav.sheet && <h1><button class="settings-back" onClick={() => nav.open()}><BackIcon class="back-ico" /> {info?.name ?? t('Circle')}</button></h1>}
-      <p class="muted small c-door-line">{t('An Open door circle led by {name}', { name: leader })}</p>
+      <div class="seg c-tabs" role="tablist">
+        <button role="tab" aria-selected={tab !== 'requests'} class={tab !== 'requests' ? 'on' : ''} onClick={() => setPage('shared')}>{t('Shared')}</button>
+        <button role="tab" aria-selected={tab === 'requests'} class={tab === 'requests' ? 'on' : ''} onClick={() => setPage('requests')}>{t('Requests')}</button>
+      </div>
       {msg && <p class="note small">{msg}</p>}
-      <AskPrayer circle={id} door={door!} leader={leader} feed={feed} />
-      {sharedList}
-      <StartOwn />
-      <Notify circle={id} name={info?.name} />
-      <div class="c-foot" ref={leaveCard}>{leaveDoor}</div>
+      {tab === 'requests' ? <>
+        <p class="muted small c-door-line">{t('An Open door circle led by {name}', { name: leader })}</p>
+        <AskPrayer circle={id} door={door!} leader={leader} feed={feed} />
+        <Notify circle={id} name={info?.name} />
+        <div class="c-foot c-guest-end" ref={leaveCard}>{leaveDoor}{!leaving && <StartOwn />}</div>
+      </> : sharedList}
     </div>
   )
 
@@ -1594,14 +1600,8 @@ function AskPrayer({ circle, door, leader, feed }: { circle: string; door: Door;
   )
 }
 
-/** The gentle nudge: the circles that matter most are small. */
+/** The gentle nudge, kept quiet: the circles that matter most are small. */
 function StartOwn() {
   const nav = useNav()
-  return (
-    <div class="c-card c-start-own">
-      <p class="c-card-title">{t('Pray with the people closest to you')}</p>
-      <p class="muted small">{t('Start your own small circle with family or friends from church. Only the people you invite see what you share.')}</p>
-      <button class="c-btn" onClick={() => { startMaking = true; nav.open() }}>{t('Start a circle')}</button>
-    </div>
-  )
+  return <button class="link small c-start-own" onClick={() => { startMaking = true; nav.open() }}>{t('Start a circle')}</button>
 }
