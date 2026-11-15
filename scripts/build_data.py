@@ -108,8 +108,21 @@ LANGS = {
     "sr": ("Serbian", "Српски"), "sv": ("Swedish", "Svenska"), "syr": ("Syriac", "ܣܘܪܝܝܐ"),
     "tl": ("Tagalog", "Tagalog"), "uk": ("Ukrainian", "Українська"), "vi": ("Vietnamese", "Tiếng Việt"),
     "vls": ("West Flemish", "West-Vlams"), "zh-hant": ("Chinese (Traditional)", "繁體中文"),
+    # Added with the eBible.org texts.
+    "ar": ("Arabic", "العربية"), "as": ("Assamese", "অসমীয়া"), "bn": ("Bengali", "বাংলা"),
+    "ckb": ("Kurdish (Sorani)", "کوردی"), "ee": ("Ewe", "Eʋegbe"), "fa": ("Persian", "فارسی"),
+    "gu": ("Gujarati", "ગુજરાતી"), "ha": ("Hausa", "Hausa"), "haw": ("Hawaiian", "ʻŌlelo Hawaiʻi"),
+    "he": ("Hebrew (Modern)", "עברית"), "hi": ("Hindi", "हिन्दी"), "id": ("Indonesian", "Bahasa Indonesia"),
+    "ig": ("Igbo", "Igbo"), "ilo": ("Ilocano", "Ilokano"), "it": ("Italian", "Italiano"),
+    "ki": ("Kikuyu", "Gĩkũyũ"), "kn": ("Kannada", "ಕನ್ನಡ"), "lg": ("Luganda", "Luganda"),
+    "ln": ("Lingala", "Lingála"), "luo": ("Dholuo", "Dholuo"), "mr": ("Marathi", "मराठी"),
+    "nd": ("Ndebele", "isiNdebele"), "ne": ("Nepali", "नेपाली"), "ny": ("Chichewa", "Chichewa"),
+    "om": ("Oromo", "Afaan Oromoo"), "or": ("Odia", "ଓଡ଼ିଆ"), "pa": ("Punjabi", "ਪੰਜਾਬੀ"),
+    "sn": ("Shona", "chiShona"), "sw": ("Swahili", "Kiswahili"), "ta": ("Tamil", "தமிழ்"),
+    "te": ("Telugu", "తెలుగు"), "to": ("Tongan", "Lea faka-Tonga"), "tw": ("Twi", "Twi"),
+    "ug": ("Uyghur", "ئۇيغۇرچە"), "yo": ("Yoruba", "Yorùbá"), "zh-hans": ("Chinese (Simplified)", "简体中文"),
 }
-RTL = {"hbo", "he", "syr", "ar"}
+RTL = {"hbo", "he", "syr", "ar", "fa", "ckb", "ug"}
 
 
 def license_ok(lic):
@@ -320,6 +333,199 @@ def build_beblia(fname):
     return books
 
 
+# ---------- Open texts from eBible.org ----------
+
+# eBible.org gathers Bibles that their owners let anyone share. Each comes
+# here as eBible.org's own USFM download (sources/ebible/<id>_usfm.zip);
+# only the verse text is kept: notes, cross references and section headings
+# are left out, a psalm's title opens its first verse. Every one was checked
+# against its copyright page on eBible.org: public domain, or Creative
+# Commons BY-SA 4.0 (share alike, with the credit given below).
+# id -> (eBible.org id, language, name, license)
+_BIBLICA = "Creative Commons: BY-SA 4.0 · © %s Biblica, Inc."
+_IRV = "Creative Commons: BY-SA 4.0 · © %s Bridge Connectivity Solutions"
+_DOOR43 = "Creative Commons: BY-SA 4.0 · © 2019 Door43 World Missions Community"
+EBIBLE = {
+    "swhonen": ("swhonen", "sw", "Neno: Bibilia Takatifu (Kiswahili Contemporary Version)", _BIBLICA % "2018"),
+    "swhulb": ("swhulb", "sw", "Biblia Takatifu (Swahili Unlocked Literal Bible)", _DOOR43),
+    "arbnav": ("arbnav", "ar", "كتاب الحياة (New Arabic Version, Book of Life)", _BIBLICA % "1988, 1997, 2012"),
+    "arb_vd": ("arb-vd", "ar", "الكتاب المقدس، ترجمة فان دايك (Van Dyck, 1865)", "Public Domain"),
+    "cmn_cu89s": ("cmn-cu89s", "zh-hans", "和合本 (Chinese Union Version, simplified)", "Public Domain"),
+    "hincv": ("hincv", "hi", "हिंदी समकालीन संस्करण (Hindi Contemporary Version)", _BIBLICA % "1978, 2009, 2016, 2019"),
+    "hin2017": ("hin2017", "hi", "इंडियन रिवाइज्ड वर्जन (Hindi Indian Revised Version, 2019)", _IRV % "2017, 2018, 2019"),
+    "benirv": ("benirv", "bn", "ইন্ডিয়ান রিভাইজড ভার্সন (Bengali Indian Revised Version)", _IRV % "2018"),
+    "pan": ("pan", "pa", "ਇੰਡਿਅਨ ਰਿਵਾਇਜ਼ਡ ਵਰਜ਼ਨ (Punjabi Indian Revised Version)", _IRV % "2017, 2019"),
+    "guj2017": ("guj2017", "gu", "ઇન્ડિયન રીવાઇઝ્ડ વર્ઝન (Gujarati Indian Revised Version, 2019)", _IRV % "2019"),
+    "mar": ("mar", "mr", "इंडियन रीवाइज्ड वर्जन (Marathi Indian Revised Version)", _IRV % "2017, 2019"),
+    "tel2017": ("tel2017", "te", "ఇండియన్ రివైజ్డ్ వెర్షన్ (Telugu Indian Revised Version, 2019)", _IRV % "2017, 2019"),
+    "tam2017": ("tam2017", "ta", "இண்டியன் ரிவைஸ்டு வெர்ஸன் (Tamil Indian Revised Version)", _IRV % "2017, 2019"),
+    "kan2017": ("kan2017", "kn", "ಇಂಡಿಯನ್ ರಿವೈಜ್ಡ್ ವರ್ಸನ್ (Kannada Indian Revised Version, 2019)", _IRV % "2017, 2019"),
+    "ory": ("ory", "or", "ଇଣ୍ଡିୟାନ ରିୱାଇସ୍ଡ୍ ୱରସନ୍ (Odia Indian Revised Version)", _IRV % "2017, 2019, 2021"),
+    "asmfb": ("asmfb", "as", "ইণ্ডিয়ান ৰিভাইচ ভাৰচন (Assamese Indian Revised Version, 2019)", _IRV % "2017, 2018"),
+    "npiulb": ("npiulb", "ne", "पवित्र बाइबल (Nepali Unlocked Literal Bible)", _DOOR43),
+    "pesopcb": ("pesopcb", "fa", "ترجمه معاصر (Open Persian Contemporary Bible)", _BIBLICA % "2022"),
+    "pesOPV": ("pesOPV", "fa", "ترجمه قدیم (Old Persian Version, 1895)", "Public Domain"),
+    "heb": ("heb", "he", "תנ״ך וברית חדשה (Modern Hebrew Bible)", "Public Domain"),
+    "ita1927": ("ita1927", "it", "La Sacra Bibbia, Riveduta (Luzzi, 1927)", "Public Domain"),
+    "ita1885": ("ita1885", "it", "La Sacra Bibbia, Diodati (1885)", "Public Domain"),
+    "ind": ("ind", "id", "Terjemahan Sederhana Indonesia (14 books of the Old Testament, and the New)",
+            "Creative Commons: BY-SA 4.0 · © 2021 Yayasan Alkitab BahasaKita (Albata) and Pioneer Bible Translators"),
+    "hausa": ("hausa", "ha", "Littafi Mai Tsarki, Sabon Rai Don Kowa (Hausa Contemporary Bible)", _BIBLICA % "2020"),
+    "yor": ("yor", "yo", "Bíbélì Mímọ́ ní Èdè Yorùbá Òde-Òní (Yoruba Contemporary Bible)", _BIBLICA % "2017"),
+    "ibo": ("ibo", "ig", "Baịbụlụ Nsọ nʼIgbo Ndị Ugbu a (Igbo Contemporary Bible)", _BIBLICA % "2020"),
+    "gaz": ("gaz", "om", "Kitaaba Qulqulluu, Hiikkaa Ammayyaa (Oromo Contemporary Version)", _BIBLICA % "2022"),
+    "nya": ("nya", "ny", "Mawu a Mulungu mu Chichewa Chalero (Chichewa Contemporary Bible)", _BIBLICA % "2016"),
+    "sna": ("sna", "sn", "Bhaibheri Dzvene MuChiShona Chanhasi (Shona Contemporary Bible)", _BIBLICA % "2017"),
+    "lin": ("lin", "ln", "Mokanda na Bomoi (Lingala Contemporary Bible)", _BIBLICA % "2020"),
+    "lug": ("lug", "lg", "Bayibuli Entukuvu (Luganda Contemporary Bible)", _BIBLICA % "2017"),
+    "kik": ("kik", "ki", "Kiugo Gĩtheru Kĩa Ngai (Kikuyu Contemporary Bible)", _BIBLICA % "2013"),
+    "luo": ("luo", "luo", "Muma Maler, Loko Manyien (Dholuo Contemporary Bible)", _BIBLICA % "2020"),
+    "twi": ("twi", "tw", "Nkwa Asɛm (Akuapem Twi Contemporary Bible)", _BIBLICA % "2020"),
+    "twiasante": ("twiasante", "tw", "Nkwa Asɛm (Asante Twi Contemporary Bible)", _BIBLICA % "2020"),
+    "ewe": ("ewe", "ee", "Agbenya La (Ewe Contemporary Bible)", _BIBLICA % "2020"),
+    "nde": ("nde", "nd", "IBhayibhili Elingcwele (Ndebele Contemporary Bible)", _BIBLICA % "2022"),
+    "ckb": ("ckb", "ckb", "کتێبی پیرۆز (Kurdish Sorani Standard Version)", "Creative Commons: BY-SA 4.0 · © 2020 Biblica, Inc."),
+    "uigara": ("uigara", "ug", "مۇقەددەس كالام (Uyghur Bible)",
+               "Creative Commons: BY-SA 4.0 · © 2010 Mukeddes Kalam, Uyghur Bible Translation Committee"),
+    "haw1868": ("haw1868", "haw", "Baibala Hemolele (Hawaiian Bible, 1868)", "Public Domain"),
+    "ton": ("ton", "to", "Ko e Tohi Tapu Kātoa (Tongan, Revised West Version)", "Public Domain"),
+    "iloulb": ("iloulb", "ilo", "Ti Biblia (Ilocano Unlocked Literal Bible)", _DOOR43),
+}
+EBIBLE_BOOKS = dict(zip(
+    "GEN EXO LEV NUM DEU JOS JDG RUT 1SA 2SA 1KI 2KI 1CH 2CH EZR NEH EST JOB PSA PRO ECC SNG ISA JER LAM "
+    "EZK DAN HOS JOL AMO OBA JON MIC NAM HAB ZEP HAG ZEC MAL MAT MRK LUK JHN ACT ROM 1CO 2CO GAL EPH PHP "
+    "COL 1TH 2TH 1TI 2TI TIT PHM HEB JAS 1PE 2PE 1JN 2JN 3JN JUD REV".split(),
+    [code for code, _, _ in BOOKS[:66]]))
+
+
+def read_vrs(name):
+    """Verses in each chapter, from a Paratext versification file."""
+    counts = {}
+    for line in open(os.path.join(SRC, "ebible", name), encoding="utf-8"):
+        parts = line.split("#", 1)[0].split()
+        if parts and parts[0] in EBIBLE_BOOKS and "=" not in line:
+            counts[parts[0]] = [int(p.split(":")[1]) for p in parts[1:] if ":" in p]
+    return counts
+
+
+def ebible_numbering():
+    """Where each verse of the Hebrew-style numbering (org.vrs) goes in the
+    English one (eng.vrs, the KJV's, which every other Bible here follows),
+    from the mappings in eng.vrs: "GEN 31:55 = GEN 32:1" means English 31:55
+    is 32:1 in the other. A psalm's title is verse 0 in the English one."""
+    moves = {}
+    for line in open(os.path.join(SRC, "ebible", "eng.vrs"), encoding="utf-8"):
+        line = line.split("#", 1)[0].strip()
+        if "=" not in line:
+            continue
+        found = [re.match(r"(\w+) (\d+):([\d-]+)$", p.strip()) for p in line.split("=")]
+        if len(found) != 2 or not all(found):
+            continue
+        (eb, ec, ev), (ob, oc, ov) = (f.groups() for f in found)
+        e0, e1 = (int(x) for x in (ev + "-" + ev).split("-")[:2])
+        o0, o1 = (int(x) for x in (ov + "-" + ov).split("-")[:2])
+        if e1 - e0 != o1 - o0:
+            continue
+        for k in range(e1 - e0 + 1):
+            moves[(ob, int(oc), o0 + k)] = (eb, int(ec), e0 + k)
+    return moves, read_vrs("eng.vrs"), read_vrs("org.vrs")
+
+
+# Markers whose whole line is not verse text (titles, headings, introductions).
+USFM_SKIP_LINE = re.compile(r"\\(id|ide|h\d?|toc\d?|toca\d?|rem|sts|usfm|mt\d?|mte\d?|imt\d?|is\d?|ip|ipi|im|imi|ipq|imq|ipr|iq\d?|ib|ili\d?|iot|io\d?|iex|imte\d?|ie|ms\d?|mr|s\d?|sr|r|sp|sd\d?|cl|cd|cp|qa|periph)\b")
+# Character spans to drop with what they hold: notes, cross references,
+# alternate and published verse numbers, figures.
+USFM_DROP = re.compile(r"\\(f|fe|ef|x|ex|va|vp|ca|fig|rq|ior|cat)\b.*?\\\1\*", re.S)
+
+
+def usfm_verses(text):
+    """(chapter, verse, text) for each verse of one USFM book. A psalm's
+    title goes with the verse after it."""
+    lines = [l for l in text.split("\n") if not USFM_SKIP_LINE.match(l.strip())]
+    text = USFM_DROP.sub("", "\n".join(lines))
+    text = re.sub(r"\|[^\\]*?(\\\+?\w+\*)", r"\1", text)  # \w word|lemma="…"\w*
+    out, chapter, verse, buf, title = [], 0, 0, [], []
+
+    def flush():
+        if chapter and verse:
+            out.append((chapter, verse, re.sub(r"\s+", " ", "".join(title + buf)).strip()))
+            title.clear()
+
+    for m in re.finditer(r"\\c\s+(\d+)|\\v\s+(\d+)[^\s\\]*|(\\d)\s|\\\+?[a-z]+\d*\*?|([^\\]+)", text):
+        c, v, d, words = m.groups()
+        if c:
+            flush()
+            chapter, verse, buf = int(c), 0, []
+            title.clear()
+        elif v:
+            flush()
+            verse, buf = int(v), []
+        elif d:
+            flush()
+            verse, buf = 0, []
+        elif words and chapter:
+            (buf if verse else title).append(words)
+    flush()
+    return out
+
+
+def build_ebible(ebid, numbering):
+    import zipfile
+    moves, eng, org = numbering
+    books = {}
+    with zipfile.ZipFile(os.path.join(SRC, "ebible", ebid + "_usfm.zip")) as z:
+        for name in z.namelist():
+            if not name.lower().endswith((".usfm", ".sfm")):
+                continue
+            text = z.read(name).decode("utf-8-sig")
+            m = re.search(r"\\id\s+(\w+)", text)
+            if not m or m.group(1) not in EBIBLE_BOOKS:
+                continue
+            usfm = m.group(1)
+            verses = usfm_verses(text)
+            # Most of these number verses as the KJV does; a few (the
+            # Van Dyck Arabic, the Hebrew) as the Hebrew Bible does, which
+            # moves a verse or a chapter's end here and there (Malachi 4 is
+            # Malachi 3:19-24). Whichever the book's chapters match better
+            # wins, and Hebrew numbering is turned into the KJV's.
+            have = {}
+            for c, v, _ in verses:
+                have[c] = max(have.get(c, 0), v)
+
+            def off(counts):
+                ref = counts.get(usfm, [])
+                return sum(abs(have.get(i + 1, 0) - n) for i, n in enumerate(ref)) + \
+                    sum(n for c, n in have.items() if c > len(ref))
+            hebrew = off(org) < off(eng)
+            chapters = []
+            for c, v, t in verses:
+                if not t:
+                    continue
+                if hebrew:
+                    _, c, v = moves.get((usfm, c, v), (usfm, c, v))
+                v = max(v, 1)  # a psalm's title goes with its first verse
+                while len(chapters) < c:
+                    chapters.append([])
+                ch = chapters[c - 1]
+                while len(ch) < v:
+                    ch.append("")
+                ch[v - 1] = (ch[v - 1] + " " + t).strip()
+            books[EBIBLE_BOOKS[usfm]] = chapters
+    # Some of these are still being translated: a book with only a few
+    # verses so far is left out.
+    out = {}
+    for code, _, _ in BOOKS[:66]:
+        chapters = books.get(code)
+        if not chapters:
+            continue
+        n = sum(len(c) for c in chapters)
+        if sum(1 for c in chapters for v in c if v) < 0.8 * n:
+            print("  skipping", code, "(not translated yet)", file=sys.stderr)
+            continue
+        out[code] = chapters
+    return out
+
+
 # ---------- Books of the Ethiopian canon in English ----------
 
 # github.com/scrollmapper/bible_databases_deuterocanonical, public domain:
@@ -437,6 +643,11 @@ EASIEST_FIRST = {
     "de": ["GerMenge", "GerAlbrecht", "GerGruenewald", "GerZurcher", "GerTextbibel",
            "GerElb1905", "GerElb1871", "GerTafel", "GerOffBiSt", "GerBoLut"],
     "nl": ["NlCanisius1939", "DutSVV", "DutSVVA"],
+    "sw": ["swhonen", "swhulb"],
+    "ar": ["arbnav", "arb_vd"],
+    "hi": ["hincv", "hin2017"],
+    "fa": ["pesopcb", "pesOPV"],
+    "it": ["ita1927", "ita1885"],
 }
 
 
@@ -509,6 +720,20 @@ def main():
         catalog.append({"id": tid, "name": name, "lang": lang, "license": "Public Domain",
                         "strongs": False, "rtl": False, "books": list(books.keys()),
                         "source": "https://github.com/Beblia/Holy-Bible-XML-Format"})
+
+    numbering = None
+    for tid, (ebid, lang, name, lic) in EBIBLE.items():
+        if only and tid not in only:
+            continue
+        print("•", tid, file=sys.stderr)
+        numbering = numbering or ebible_numbering()
+        books = build_ebible(ebid, numbering)
+        n = sum(1 for chs in books.values() for ch in chs for v in ch if v)
+        print("  %d books, %d verses" % (len(books), n), file=sys.stderr)
+        write_json(os.path.join(OUT, "bibles", tid + ".json"), {"id": tid, "books": books})
+        catalog.append({"id": tid, "name": name, "lang": lang, "license": lic,
+                        "strongs": False, "rtl": lang in RTL, "books": list(books.keys()),
+                        "source": "https://ebible.org/details.php?id=" + ebid})
 
     if not only or "OSHB" in only:
         print("• OSHB", file=sys.stderr)

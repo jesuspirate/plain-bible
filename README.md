@@ -5,10 +5,14 @@ Live at https://myquietbible.com (formerly Plain Bible, at bible.chama.community
 Just the Bible. Many versions and languages, thorough search, and nothing else:
 no reading plans, devotionals, accounts, or feeds.
 
-- **120 versions in 49 languages**, all public domain or openly licensed
+- **162 versions in 85 languages**, all public domain or openly licensed
   (KJV, Berean Standard Bible, ASV, YLT, Douay-Rheims, Reina-Valera 1909, Luther 1545,
   French (Louis Segond 1910, Martin 1744, Darby, Crampon), Russian Synodal, Chinese Union, Korean, Japanese, Latin Vulgate,
-  the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more).
+  the Hebrew Westminster Leningrad Codex, Greek New Testaments, and many more). From eBible.org:
+  Swahili, Arabic (Van Dyck), Hindi, Bengali and nine more languages of India and Nepal, Persian,
+  Modern Hebrew, Italian, Indonesian, Simplified Chinese, Kurdish, Uyghur, and thirteen more African
+  languages (Hausa, Yoruba, Igbo, Oromo, Chichewa, Shona, Lingala, Luganda, Kikuyu, Dholuo,
+  Twi, Ewe, Ndebele), most in Biblica's open (CC BY-SA 4.0) contemporary versions.
 - **The Ethiopian Orthodox Tewahedo canon**, the widest canon in use, in three languages:
   `EthEn` in English (the King James with the Apocrypha, plus 1 Enoch and Jubilees in
   R. H. Charles' translations), `EthFr` in French (Crampon 1923, Giguet's Septante, and Hénoch),

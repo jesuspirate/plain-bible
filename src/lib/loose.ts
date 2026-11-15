@@ -9,6 +9,7 @@
 // close together, comes first. "Quotes" or any operator gives the exact
 // search instead.
 import { lex } from './query'
+import { stripAccents } from './text'
 
 export interface LooseWord { word: string; key: string; content: boolean }
 export interface LooseQuery { words: LooseWord[]; stems: string[]; need: number }
@@ -29,7 +30,7 @@ export function looseWords(q: string): string[] | undefined {
 // Words. Everything here is lower case with accents removed.
 
 export function fold(s: string): string {
-  return s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').normalize('NFC')
+  return stripAccents(s.toLowerCase())
 }
 
 const set = (s: string) => new Set(s.split(' '))
