@@ -1,4 +1,4 @@
-import AppKit
+import UIKit
 import SwiftUI
 import WidgetKit
 
@@ -83,11 +83,9 @@ struct Sheet: View {
 @MainActor func save(_ view: some View, _ name: String) {
     let r = ImageRenderer(content: view)
     r.scale = 2
-    guard let cg = r.cgImage else { fatalError("nothing drawn") }
-    let rep = NSBitmapImageRep(cgImage: cg)
-    let data = rep.representation(using: .png, properties: [:])!
+    guard let image = r.uiImage, let data = image.pngData() else { fatalError("nothing drawn") }
     try! data.write(to: URL(fileURLWithPath: CommandLine.arguments[1]).appendingPathComponent(name))
-    print("drew", name, cg.width, "x", cg.height)
+    print("drew", name, image.size.width * image.scale, "x", image.size.height * image.scale)
 }
 
 @main
