@@ -392,6 +392,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // keyboard. So the tap puts the bar in its open place first, where the
   // keyboard won't cover it, and only then focuses it, without scrolling.
   const sb = useRef<HTMLDivElement>(null)
+  // Set when the page lost focus (the share sheet, another app, the phone
+  // locked). Back in the app, iPhone raises the keyboard only for its own tap
+  // on the field, not for one the page makes: the first tap after that is
+  // left to iOS, so the keyboard always comes.
+  const away = useRef(false)
   // When the screen turns (or you come back to the app turned), lay the bar
   // out afresh: iOS can leave it where it was on the old, wider screen.
   useEffect(() => {
@@ -412,12 +417,16 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       if (field && document.activeElement === field) field.blur()
       if (field && !field.value.trim()) setOpen(false)
     }
-    const back = () => { if (document.visibilityState === 'visible') fresh(); else leave() }
+    const back = () => { if (document.visibilityState === 'visible') fresh(); else { away.current = true; leave() } }
+    // The share sheet, another app, the lock screen: the page loses focus.
+    const lost = () => { away.current = true }
+    addEventListener('blur', lost)
     addEventListener('resize', fresh); addEventListener('orientationchange', fresh); addEventListener('pageshow', fresh)
     document.addEventListener('visibilitychange', back); addEventListener('pagehide', leave)
     return () => {
       removeEventListener('resize', fresh); removeEventListener('orientationchange', fresh); removeEventListener('pageshow', fresh)
       document.removeEventListener('visibilitychange', back); removeEventListener('pagehide', leave)
+      removeEventListener('blur', lost)
     }
   }, [])
   // When the page last moved. A tap while it is still gliding from a swipe
@@ -440,14 +449,18 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     tap.current = undefined
     // That tap just stopped the page, as everywhere on iPhone; the next one opens search.
     if (start?.gliding) { e.preventDefault(); return }
-    // Search open but no keyboard (iOS can give the field focus back when
-    // the app returns, without its keyboard). A tap on an already focused
-    // field doesn't raise it on iPhone, so let go and take focus again, now
-    // inside the tap, where iOS always brings the keyboard.
+    // First tap since coming back: iOS focuses the field itself (and search
+    // opens from that), with its keyboard.
+    if (isIOS && away.current) {
+      away.current = false
+      if (input.current && document.activeElement === input.current) input.current.blur()
+      return
+    }
+    // Search open but no keyboard. A tap on an already focused field doesn't
+    // raise it on iPhone, so let go of the field and leave the tap to iOS,
+    // which focuses it again with its keyboard.
     if (open && isIOS && !keyboardUp() && input.current) {
-      e.preventDefault()
-      input.current.blur()
-      input.current.focus({ preventScroll: true })
+      if (document.activeElement === input.current) input.current.blur()
       return
     }
     if (!start || !el || open || Math.hypot(end.clientX - start.x, end.clientY - start.y) > 10) return
