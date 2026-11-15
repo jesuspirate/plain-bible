@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { LexEntry, Translation } from './lib/data'
 import type { Range } from './lib/query'
 import { segments } from './lib/text'
+import { LIKE, likeMatches } from './lib/like'
 import { useApp } from './state'
 import { CloseIcon } from './icons'
 import { languageName, t } from './i18n'
@@ -144,7 +145,7 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
   const [all, setAll] = useState(false)
   const f = filter.toLowerCase()
   const list = useMemo(() => catalog.translations.filter(v =>
-    !f || [v.id, v.name, v.langName, v.langNative, v.lang, languageName(v.lang, v.langName)].some(x => x.toLowerCase().includes(f))), [f])
+    !f || likeMatches(v.id, f) || [v.id, v.name, v.langName, v.langNative, v.lang, languageName(v.lang, v.langName)].some(x => x.toLowerCase().includes(f))), [f])
   const byId = useMemo(() => new Map(catalog.translations.map(v => [v.id, v])), [catalog])
   const top = useMemo(() => [...new Set([...selected, ...recentVersions(), ...settings.myVersions])]
     .map(id => byId.get(id)).filter((v): v is Translation => !!v).slice(0, Math.max(5, selected.length)), [])
@@ -162,7 +163,7 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
     <label class={'vrow' + (sel.includes(v.id) ? ' on' : '')}>
       <input type={multi ? 'checkbox' : 'radio'} checked={sel.includes(v.id)} onChange={() => toggle(v.id)} />
       <span class="vid">{v.id}</span>
-      <span class="vname">{v.name}</span>
+      <span class="vname">{v.name}{LIKE[v.id] && <span class="vlike">{t('Reads like {names}', { names: LIKE[v.id] })}</span>}</span>
     </label>
   )
   return (

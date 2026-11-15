@@ -3,6 +3,7 @@ import { Translation } from './lib/data'
 import { loadPlace } from './lib/place'
 import { go, readPath, useApp } from './state'
 import { BackIcon } from './icons'
+import { LIKE, likeMatches } from './lib/like'
 import { languageName, t, tn } from './i18n'
 
 const CACHE = 'bible-data'
@@ -28,7 +29,7 @@ export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
     const m = new Map<string, Translation[]>()
     for (const v of catalog.translations) {
       const name = languageName(v.lang, v.langName)
-      if (f && ![v.id, v.name, v.langName, v.langNative, v.lang, name].some(x => x.toLowerCase().includes(f))) continue
+      if (f && !likeMatches(v.id, f) && ![v.id, v.name, v.langName, v.langNative, v.lang, name].some(x => x.toLowerCase().includes(f))) continue
       m.set(name, [...(m.get(name) ?? []), v])
     }
     return [...m.entries()]
@@ -68,6 +69,7 @@ export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
                   aria-label={t('Add {version} to my versions', { version: v.id })} onClick={() => toggleMine(v.id)}>★</button>
                 <div class="vinfo">
                   <a onClick={() => update({ version: v.id })} href={'#/' + (v.books.includes(here) ? 'read/' + v.id : readPath(v.id, v.books.includes('John') ? 'John' : v.books[0], 1))}><strong>{v.id}</strong> {v.name}</a>
+                  {LIKE[v.id] && <div class="vlike">{t('Reads like {names}', { names: LIKE[v.id] })}</div>}
                   <div class="muted small">
                     {v.strongs && <span class="badge">Strong's</span>}
                     {tn(v.books.length, '{n} book', '{n} books')} · <a href={v.source} target="_blank" rel="noopener">{v.license}</a>

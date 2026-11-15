@@ -619,6 +619,7 @@ export default {
   "Add {version} to my versions": "Ajouter {version} à mes versions",
   "Remove offline copy": "Retirer la copie hors ligne",
   "Saved ✓": "Enregistrée ✓",
+  "Reads like {names}": "Proche de {names}",
   "Saving…": "Enregistrement…",
   "Save offline": "Enregistrer hors ligne",
   "Back to reading": "Retour à la lecture",

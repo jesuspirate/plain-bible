@@ -619,6 +619,7 @@ export default {
   "Add {version} to my versions": "Añadir {version} a mis versiones",
   "Remove offline copy": "Quitar copia sin conexión",
   "Saved ✓": "Guardada ✓",
+  "Reads like {names}": "Parecida a {names}",
   "Saving…": "Guardando…",
   "Save offline": "Guardar sin conexión",
   "Back to reading": "Volver a la lectura",
