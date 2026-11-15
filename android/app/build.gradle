@@ -26,12 +26,14 @@ def twaManifest = [
     launchUrl: '/', // The start path for the TWA. Must be relative to the domain.
     name: 'My Quiet Bible', // The application name.
     launcherName: 'Quiet Bible', // The name shown on the Android Launcher.
-    themeColor: '#2B2A28', // The color used for the status bar.
-    themeColorDark: '#2B2A28', // The color used for the dark status bar.
-    navigationColor: '#2B2A28', // The color used for the navigation bar.
-    navigationColorDark: '#2B2A28', // The color used for the dark navbar.
-    navigationDividerColor: '#2B2A28', // The navbar divider color.
-    navigationDividerColorDark: '#2B2A28', // The dark navbar divider color.
+    // Bars match the page: sepia (the default reading colour), dark in dark mode.
+    // Once the page loads, Chrome takes the top bar colour from the page itself.
+    themeColor: '#F4ECD8', // The color used for the status bar.
+    themeColorDark: '#16161A', // The color used for the dark status bar.
+    navigationColor: '#F4ECD8', // The color used for the navigation bar.
+    navigationColorDark: '#16161A', // The color used for the dark navbar.
+    navigationDividerColor: '#F4ECD8', // The navbar divider color.
+    navigationDividerColorDark: '#16161A', // The dark navbar divider color.
     backgroundColor: '#6E4219', // The color used for the splash screen background (dark mode: res/values-night).
     enableNotifications: true, // Set to true to enable notification delegation.
     // Every shortcut must include the following fields:
