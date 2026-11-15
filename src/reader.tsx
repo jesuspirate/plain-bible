@@ -15,6 +15,7 @@ import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
+import { useRecording } from './lib/recordMode'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
@@ -36,7 +37,12 @@ export function Reader({ route }: { route: Route }) {
   // Back to a place in your history: that verse at the top, not marked.
   const resumeAt = +(route.params.get('at') || 0)
   const parallel = (route.params.get('p')?.split(',') ?? settings.parallel).filter(id => byId.has(id) && id !== version)
-  const versions = [version, ...parallel]
+  // Recording mode (this device only): the version picked for it large, and
+  // your Bible small under each verse to follow along. It never changes
+  // your Bible or the versions you compare.
+  const recording = useRecording()
+  const big = recording.on && byId.has(recording.version) ? recording.version : ''
+  const versions = big ? [...new Set([big, version])] : [version, ...parallel]
   // On an iPad on its side, a computer or an unfolded phone, the chapter is an open book of two
   // pages that you turn, unless you chose one page (Settings, Reading). Side
   // by side versions keep their columns, which scroll.
@@ -1090,7 +1096,8 @@ export function Reader({ route }: { route: Route }) {
     return <>
       <h1 class="chapter-title" onClick={live ? openSearch : undefined}><span class="ct-book">{bookName(b)}</span> <span class="ct-num">{c}</span></h1>
       {live && reminder}
-      {versions.length > 1 && (
+      {big && <p class="rec-version">{byId.get(big)?.name ?? big}</p>}
+      {versions.length > 1 && !big && (
         <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
       )}
       {versions.length === 1 && settings.layout === 'paragraph' ? (
@@ -1155,7 +1162,7 @@ export function Reader({ route }: { route: Route }) {
 
       {loaded && rows > 0 && !spread && (
         <article key={`${book}.${chapter}`} ref={article}
-          class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
+          class={`chapter ${settings.layout} cols-${versions.length}${big ? ' rec' : ''}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
           {page(book, chapter, true)}
         </article>
       )}
@@ -1174,7 +1181,7 @@ export function Reader({ route }: { route: Route }) {
       {peek && (
         <div class={'turn-peek' + (mode === 'stack' && peek.dir === 1 ? ' under' : '')} aria-hidden="true">
           <div class="turn-dim" ref={dimEl} style={{ opacity: mode === 'stack' && peek.dir === 1 ? .3 : 0 }} />
-          <article ref={peekEl} class={`chapter ${settings.layout} cols-${versions.length}${mode === 'stack' && peek.dir === -1 ? ' turning' : ''}`}
+          <article ref={peekEl} class={`chapter ${settings.layout} cols-${versions.length}${big ? ' rec' : ''}${mode === 'stack' && peek.dir === -1 ? ' turning' : ''}`}
             style={{ '--cols': versions.length, top: peek.top + 'px', left: peek.left + 'px', width: peek.width + 'px', transform: looks(x.current).peek }}>
             {page(peek.b, peek.c, false)}
           </article>

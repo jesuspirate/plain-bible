@@ -22,6 +22,7 @@ import { isIOS } from './lib/native'
 import { ListenPlayer, useReadingAloud } from './listen'
 import { locale, N_, t, tn } from './i18n'
 import { SEARCH_TRAIL, SEARCH_TRAIL_EVENT } from './lib/place'
+import { useRecording } from './lib/recordMode'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
@@ -114,6 +115,9 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
   const version = here?.version ?? settings.version
+  // In recording mode the bar names the version on screen, large.
+  const recording = useRecording()
+  const shown = recording.on && byId.has(recording.version) ? recording.version : version
   const info = byId.get(version)
   // The Bible searched stays the one you searched in while you step through
   // its results, even when one of them opens in another version.
@@ -125,7 +129,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // Set when the list is opened again from the strip, until it's scrolled back.
   const restoring = useRef(false)
   const chapterRow = useRef<HTMLDivElement>(null)
-  const panel = useRef<HTMLDivElement>(null)
+  const panel = useRef<HTMLDivElement>(null), sheet = useRef<HTMLDivElement>(null)
 
   // While open, pin the bar and panel to the visible part of the screen,
   // above the keyboard. Opening is one step: the panel appears at once in
@@ -167,6 +171,15 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       if (phone && up && h !== last) { last = h; rememberKeyboard(key, full - h) }
       set(vv.offsetTop, h)
     }
+    // The keyboard didn't come up after all (iPhone only raises it for some
+    // touches, and can hand the field focus back without it): don't leave an
+    // empty gap where it would be. The panel and bar go down to the bottom of
+    // the screen; a tap on the field still brings the keyboard, and the panel
+    // follows it up.
+    const noKeyboard = phone ? setTimeout(() => {
+      if (seen || (vk && vk.boundingRect.height > 100) || !vv || vv.height < full - 100) return
+      set(vv.offsetTop, vv.height)
+    }, 900) : undefined
     // iOS can scroll the page under the panel while the keyboard comes up;
     // closing puts you back where you were reading.
     const y = scrollY, at = location.hash
@@ -174,6 +187,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
     vk?.addEventListener('geometrychange', fit)
     return () => {
+      clearTimeout(noKeyboard)
       vk?.removeEventListener('geometrychange', fit); overlayKeyboard(false)
       if (location.hash === at && Math.abs(scrollY - y) > 1) scrollTo(0, y)
       root.classList.remove('sb-lock')
@@ -382,6 +396,11 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   // keyboard. So the tap puts the bar in its open place first, where the
   // keyboard won't cover it, and only then focuses it, without scrolling.
   const sb = useRef<HTMLDivElement>(null)
+  // Set when the page lost focus (the share sheet, another app, the phone
+  // locked). Back in the app, iPhone raises the keyboard only for its own tap
+  // on the field, not for one the page makes: the first tap after that is
+  // left to iOS, so the keyboard always comes.
+  const away = useRef(false)
   // When the screen turns (or you come back to the app turned), lay the bar
   // out afresh: iOS can leave it where it was on the old, wider screen.
   useEffect(() => {
@@ -402,30 +421,50 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       if (field && document.activeElement === field) field.blur()
       if (field && !field.value.trim()) setOpen(false)
     }
-    const back = () => { if (document.visibilityState === 'visible') fresh(); else leave() }
+    const back = () => { if (document.visibilityState === 'visible') fresh(); else { away.current = true; leave() } }
+    // The share sheet, another app, the lock screen: the page loses focus.
+    const lost = () => { away.current = true }
+    addEventListener('blur', lost)
     addEventListener('resize', fresh); addEventListener('orientationchange', fresh); addEventListener('pageshow', fresh)
     document.addEventListener('visibilitychange', back); addEventListener('pagehide', leave)
     return () => {
       removeEventListener('resize', fresh); removeEventListener('orientationchange', fresh); removeEventListener('pageshow', fresh)
       document.removeEventListener('visibilitychange', back); removeEventListener('pagehide', leave)
+      removeEventListener('blur', lost)
     }
   }, [])
-  const tap = useRef<{ x: number; y: number }>()
+  // When the page last moved. A tap while it is still gliding from a swipe
+  // only stops the glide on iPhone: it isn't a tap to iOS, so a field focused
+  // then gets no keyboard, and search would open with an empty space below.
+  const scrolledAt = useRef(0)
+  useEffect(() => {
+    const on = () => { scrolledAt.current = Date.now() }
+    addEventListener('scroll', on, { passive: true })
+    return () => removeEventListener('scroll', on)
+  }, [])
+  const tap = useRef<{ x: number; y: number; gliding: boolean }>()
   const onFieldTouchStart = (e: TouchEvent) => {
-    if (!open) overlayKeyboard(true) // before the keyboard is asked for
-    tap.current = !open && isIOS ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : undefined
+    const gliding = Date.now() - scrolledAt.current < 150
+    if (!open && !gliding) overlayKeyboard(true) // before the keyboard is asked for
+    tap.current = !open && isIOS ? { x: e.touches[0].clientX, y: e.touches[0].clientY, gliding } : undefined
   }
   const onFieldTouchEnd = (e: TouchEvent) => {
     const start = tap.current, end = e.changedTouches[0], el = sb.current
     tap.current = undefined
-    // Search open but no keyboard (iOS can give the field focus back when
-    // the app returns, without its keyboard). A tap on an already focused
-    // field doesn't raise it on iPhone, so let go and take focus again, now
-    // inside the tap, where iOS always brings the keyboard.
+    // That tap just stopped the page, as everywhere on iPhone; the next one opens search.
+    if (start?.gliding) { e.preventDefault(); return }
+    // First tap since coming back: iOS focuses the field itself (and search
+    // opens from that), with its keyboard.
+    if (isIOS && away.current) {
+      away.current = false
+      if (input.current && document.activeElement === input.current) input.current.blur()
+      return
+    }
+    // Search open but no keyboard. A tap on an already focused field doesn't
+    // raise it on iPhone, so let go of the field and leave the tap to iOS,
+    // which focuses it again with its keyboard.
     if (open && isIOS && !keyboardUp() && input.current) {
-      e.preventDefault()
-      input.current.blur()
-      input.current.focus({ preventScroll: true })
+      if (document.activeElement === input.current) input.current.blur()
       return
     }
     if (!start || !el || open || Math.hypot(end.clientX - start.x, end.clientY - start.y) > 10) return
@@ -505,14 +544,14 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     pull.current = panel.current && panel.current.scrollTop <= 0 ? { y: e.touches[0].clientY, dy: 0 } : undefined
   }
   const onPanelTouchMove = (e: TouchEvent) => {
-    const p = pull.current, el = panel.current
+    const p = pull.current, el = sheet.current
     if (!p || !el) return
     p.dy = Math.max(0, e.touches[0].clientY - p.y)
     if (p.dy > 10 && press.current) press.current.moved = true
-    if (p.dy > 0 && el.scrollTop <= 0) { el.style.transition = 'none'; el.style.transform = `translateY(${p.dy * .6}px)`; el.style.opacity = String(1 - Math.min(p.dy / 400, .5)) }
+    if (p.dy > 0 && (panel.current?.scrollTop ?? 0) <= 0) { el.style.transition = 'none'; el.style.transform = `translateY(${p.dy * .6}px)`; el.style.opacity = String(1 - Math.min(p.dy / 400, .5)) }
   }
   const onPanelTouchEnd = () => {
-    const p = pull.current, el = panel.current
+    const p = pull.current, el = sheet.current
     pull.current = undefined
     if (!p || !el) return
     el.style.transition = ''; el.style.transform = ''; el.style.opacity = ''
@@ -617,7 +656,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       {open && <div class="sb-scrim" onClick={close} onWheel={e => e.stopPropagation()} />}
       <div ref={sb} class={'sb' + (open ? ' sb-open' : mini && !following ? ' sb-mini' : '') + ((aloud || following) && !open ? ' sb-reading' : '')}>
         {open && (
-          <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}
+          // The sheet is the glass, with its rim drawn all the way round; only
+          // the list inside it scrolls, so nothing slides under the rim or
+          // past the rounded corners.
+          <div class="sb-sheet" ref={sheet}
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
             onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
@@ -628,6 +670,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <button type="button" class="sb-grabber" aria-label={t('Close search')} onClick={close} />
               <span class="sb-head-side end" />
             </div>
+          <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}>
             {offerBack && left && (
               <button class="sb-item sb-ref sb-back" onClick={resume}>
                 <span class="sb-title">{t('Back to result {n}', { n: (left.at + 1).toLocaleString(locale()) })}</span>
@@ -726,6 +769,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               </>
             )}
           </div>
+          </div>
         )}
         <div class="sb-bar">
         {/* Reading aloud: its bar stands in the search field's place until X. */}
@@ -742,7 +786,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
         ) : <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
-            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${version}` : t('Words or John 3:16')}
+            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${shown}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}

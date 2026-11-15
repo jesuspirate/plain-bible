@@ -1076,4 +1076,10 @@ export default {
   "Only the circle’s leader can do that here.": "Ici, seul le responsable du cercle peut faire cela.",
   "That’s all the prayer requests for today. Try again tomorrow.": "C’est tout pour les demandes de prière aujourd’hui. Réessayez demain.",
   "A circle can have up to 300 people": "Un cercle peut compter 300 personnes au plus",
+  "Recording mode": "Mode enregistrement",
+  "For filming your screen. The version you pick shows large. Your Bible ({version}) shows small under each verse, so you can follow along. The bars slide away as you read: scroll up a little to bring them back.": "Pour filmer votre écran. La version choisie s’affiche en grand. Votre Bible ({version}) s’affiche en petit sous chaque verset, pour suivre. Les barres s’effacent pendant la lecture : remontez un peu pour les faire revenir.",
+  "Large on screen": "En grand à l’écran",
+  "Turn on recording mode": "Activer le mode enregistrement",
+  "Turn off recording mode": "Désactiver le mode enregistrement",
+  "Only on this device. Your Bible doesn’t change.": "Seulement sur cet appareil. Votre Bible ne change pas.",
 } as Record<string, string>
