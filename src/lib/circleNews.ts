@@ -31,8 +31,10 @@ export const circlesWithNews = () => Object.keys(read(LATEST)).filter(hasNews).l
 // "You can lead an Open door circle now": news once, until it's seen in Circles.
 const LEAD = 'plain-bible:lead-news'
 export const leadNews = () => { try { return localStorage.getItem(LEAD) === 'new' } catch { return false } }
-/** What the server said about leading: a yes not seen here yet is news. */
-export function noteLead(lead: unknown) {
+/** What the server said about leading: a yes not seen here yet is news,
+ *  unless you already lead one (made on another device, say). */
+export function noteLead(lead: unknown, leading = false) {
+  if (leading) return leadSeen()
   if (lead !== 'yes') return
   try { if (!localStorage.getItem(LEAD)) { localStorage.setItem(LEAD, 'new'); changed() } } catch { /* ignore */ }
 }
@@ -76,9 +78,9 @@ export async function checkCircleNews(force = false) {
   if (!force && Date.now() - last < 60_000) return
   last = Date.now()
   try {
-    const { circles, lead } = await api<{ circles: { id: string; latest?: number | null }[]; lead?: string | null }>('/circles', { token: a.token })
+    const { circles, lead } = await api<{ circles: { id: string; latest?: number | null; door?: string | null }[]; lead?: string | null }>('/circles', { token: a.token })
     noteLatest(circles)
-    noteLead(lead)
+    noteLead(lead, circles.some(c => c.door === 'lead'))
   } catch { last = 0 }
 }
 

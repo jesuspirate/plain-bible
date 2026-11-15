@@ -1069,6 +1069,7 @@ export default {
   "{n} praying": "{n} orando",
   "{n} person came in": "{n} persona ha entrado",
   "{n} people came in": "{n} personas han entrado",
+  "You already lead an Open door circle.": "Ya diriges un círculo Puerta abierta.",
   "Open door circles need a yes from My Quiet Bible first.": "Los círculos Puerta abierta necesitan primero un sí de My Quiet Bible.",
   "This Open door link has been closed. Ask for the new one.": "Este enlace de Puerta abierta se cerró. Pide el nuevo.",
   "This circle’s leader took you out of it.": "El líder de este círculo te sacó de él.",
