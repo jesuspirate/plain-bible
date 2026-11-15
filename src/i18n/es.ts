@@ -1083,4 +1083,8 @@ export default {
   "Turn on recording mode": "Activar el modo grabación",
   "Turn off recording mode": "Desactivar el modo grabación",
   "Only on this device. Your Bible doesn’t change.": "Solo en este dispositivo. Tu Biblia no cambia.",
+  "You can lead an Open door circle now": "Ya puedes dirigir un círculo Puerta abierta",
+  "My Quiet Bible said yes. Make your circle, then open the door to get the link you share.": "My Quiet Bible dijo que sí. Crea tu círculo y luego abre la puerta para obtener el enlace que compartes.",
+  "Make my Open door circle": "Crear mi círculo Puerta abierta",
+  "Later": "Más tarde",
 } as Record<string, string>

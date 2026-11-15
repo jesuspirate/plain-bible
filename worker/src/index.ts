@@ -805,12 +805,13 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
 
   // Asking to lead an Open door circle. The app's maker says yes on /stats.
   if (a === 'lead' && !b && req.method === 'POST') {
-    const { note } = await readJson<{ note: string }>(req)
+    const { note, lang } = await readJson<{ note: string; lang?: string }>(req)
+    const words = typeof lang === 'string' && LANGS.includes(lang) ? lang : 'en'
     const said = typeof note === 'string' ? note.trim().slice(0, 300) : ''
     if (!said) throw new HttpError(400, 'Bad request')
     const was = await db.prepare('SELECT allowed FROM door_leaders WHERE user_id = ?').bind(userId).first<{ allowed: number | null }>()
     if (was?.allowed) return json({ lead: 'yes' })
-    await db.prepare('INSERT INTO door_leaders (user_id, asked, note) VALUES (?, ?, ?) ON CONFLICT DO UPDATE SET note = excluded.note').bind(userId, now, said).run()
+    await db.prepare('INSERT INTO door_leaders (user_id, asked, note, lang) VALUES (?, ?, ?, ?) ON CONFLICT DO UPDATE SET note = excluded.note, lang = excluded.lang').bind(userId, now, said, words).run()
     if (!was) ctx.waitUntil(tellMaker(env, 'Someone asked to lead an Open door circle', `Someone asked to lead an Open door circle. In their words:\n\n${said}\n\nOpen the private stats page (/stats on the sync service) to say yes, or not now.\n\n— My Quiet Bible`))
     return json({ lead: 'asked' })
   }
@@ -1350,7 +1351,10 @@ async function statsRoute(req: Request, env: Env) {
   if (act && which && !asking) await moderate(env, act, which)
   // Asking to lead an Open door circle: yes, or not now (they can ask again).
   const who = String(sent?.get('who') ?? '')
-  if (who && act === 'lead-yes') await env.DB.prepare('UPDATE door_leaders SET allowed = ? WHERE user_id = ?').bind(Date.now(), who).run()
+  if (who && act === 'lead-yes') {
+    const res = await env.DB.prepare('UPDATE door_leaders SET allowed = ? WHERE user_id = ? AND allowed IS NULL').bind(Date.now(), who).run()
+    if (res.meta.changes) await tellLeader(env, who)
+  }
   if (who && act === 'lead-no') await env.DB.prepare('DELETE FROM door_leaders WHERE user_id = ? AND allowed IS NULL').bind(who).run()
   const leadAsks = (await env.DB.prepare('SELECT user_id, note, asked FROM door_leaders WHERE allowed IS NULL ORDER BY asked LIMIT 20')
     .all<{ user_id: string; note: string | null; asked: number }>()).results
@@ -1430,6 +1434,25 @@ ${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
 </table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
 On the first day, every device already using the app counts as new. Days are in UTC.</p>`)
+}
+
+/** "You can lead an Open door circle now", on each device of theirs that
+ *  hears from circles, in the language they asked in. The app also shows it
+ *  as a card in Circles, for a device without notifications. */
+const LEAD_WORDS: Record<string, string> = {
+  en: 'You can lead an Open door circle now. Open Circles to make it.',
+  fr: 'Vous pouvez maintenant animer un cercle Porte ouverte. Ouvrez Cercles pour le créer.',
+  es: 'Ya puedes dirigir un círculo Puerta abierta. Abre Círculos para crearlo.',
+}
+async function tellLeader(env: Env, userId: string) {
+  const v = vapid(env), a = apns(env)
+  if (!v && !a) return
+  const lang = (await env.DB.prepare('SELECT lang FROM door_leaders WHERE user_id = ?').bind(userId).first<{ lang: string | null }>())?.lang ?? 'en'
+  const text = LEAD_WORDS[lang] ?? LEAD_WORDS.en
+  const subs = (await env.DB.prepare('SELECT endpoint, p256dh, auth FROM push_subs WHERE user_id = ?').bind(userId).all<Subscription>()).results
+  await Promise.all(subs.map(r => (isApns(r.endpoint)
+    ? a ? sendApns(r.endpoint.slice(APNS_PREFIX.length), isApnsEnv(r.p256dh) ? r.p256dh : 'production', 'lead', a, { aps: { alert: { body: text } } }) : Promise.resolve(true)
+    : v ? send(r, { t: 'lead', text }, v, 'lead') : Promise.resolve(true)).catch(e => console.error('lead push', e))))
 }
 
 /** What the maker decided about a report: remove what was reported, take

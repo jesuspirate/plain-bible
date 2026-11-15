@@ -60,7 +60,9 @@ export const apnsBody = (circle: string) => ({
 
 /** Send one. False when the device has gone (app removed, notifications
  *  turned off for good), so it can be forgotten. */
-export async function sendApns(token: string, env: ApnsEnv, circle: string, a: Apns): Promise<boolean> {
+/** `circle`: what it's about (a circle, or another kind of notice), which a
+ *  newer one replaces. `body`: what the phone gets, a circle's by default. */
+export async function sendApns(token: string, env: ApnsEnv, circle: string, a: Apns, body: unknown = apnsBody(circle)): Promise<boolean> {
   if (!APNS_TOKEN.test(token)) return false
   const res = await fetch(`${HOSTS[env]}/3/device/${token}`, {
     method: 'POST',
@@ -74,7 +76,7 @@ export async function sendApns(token: string, env: ApnsEnv, circle: string, a: A
       'apns-collapse-id': circle.slice(0, 64),
       'content-type': 'application/json',
     },
-    body: JSON.stringify(apnsBody(circle)),
+    body: JSON.stringify(body),
   })
   if (res.ok) return true
   const reason = await res.text().then(t => { try { return String(JSON.parse(t).reason) } catch { return t.slice(0, 100) } }, () => '')

@@ -22,7 +22,7 @@ import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
-import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
+import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookIcon, BookmarkIcon, NoteIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
@@ -273,6 +273,14 @@ function CircleList() {
           {stale > 0 && (
             <div class="c-card">
               <p class="small">{tn(stale, 'One circle can’t be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.', '{n} circles can’t be opened with your new key yet. Ask someone in them to send you a new invite link, then open it here.')}</p>
+            </div>
+          )}
+          {leadNews() && !making && (
+            <div class="c-card c-door open c-lead-yes">
+              <p class="c-card-title">{t('You can lead an Open door circle now')}</p>
+              <p class="muted small">{t('My Quiet Bible said yes. Make your circle, then open the door to get the link you share.')}</p>
+              <button class="c-btn primary c-ask-btn" onClick={() => { leadSeen(); setLead('yes'); setDoor(true); setJoining(false); setMaking(true) }}>{t('Make my Open door circle')}</button>
+              <p class="c-paste"><button class="link small" onClick={leadSeen}>{t('Later')}</button></p>
             </div>
           )}
           {list?.length ? (
