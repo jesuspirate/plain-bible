@@ -22,7 +22,7 @@ import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
 import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
-import { hasNews, markSeen, seenAt, useCircleNews } from './lib/circleNews'
+import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookIcon, BookmarkIcon, NoteIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
@@ -275,6 +275,14 @@ function CircleList() {
               <p class="small">{tn(stale, 'One circle can’t be opened with your new key yet. Ask someone in it to send you a new invite link, then open it here.', '{n} circles can’t be opened with your new key yet. Ask someone in them to send you a new invite link, then open it here.')}</p>
             </div>
           )}
+          {leadNews() && !making && (
+            <div class="c-card c-door open c-lead-yes">
+              <p class="c-card-title">{t('You can lead an Open door circle now')}</p>
+              <p class="muted small">{t('My Quiet Bible said yes. Make your circle, then open the door to get the link you share.')}</p>
+              <button class="c-btn primary c-ask-btn" onClick={() => { leadSeen(); setLead('yes'); setDoor(true); setJoining(false); setMaking(true) }}>{t('Make my Open door circle')}</button>
+              <p class="c-paste"><button class="link small" onClick={leadSeen}>{t('Later')}</button></p>
+            </div>
+          )}
           {list?.length ? (
             <ul class="c-list">
               {list.map(c => (
@@ -290,7 +298,7 @@ function CircleList() {
               <label class="c-label">{t('Name of the circle')}<input value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
               {lead === 'yes' && <>
-                <div class="seg c-pick" role="radiogroup" aria-label={t('Kind of circle')}>
+                <div class="seg c-pick c-kind-pick" role="radiogroup" aria-label={t('Kind of circle')}>
                   <button role="radio" aria-checked={!door} class={!door ? 'on' : ''} onClick={() => setDoor(false)}>{t('Small circle')}</button>
                   <button role="radio" aria-checked={door} class={door ? 'on' : ''} onClick={() => setDoor(true)}>{t('Open door')}</button>
                 </div>

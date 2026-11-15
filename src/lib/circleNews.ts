@@ -26,7 +26,19 @@ export const seenAt = (id: string) => read(SEEN)[id] ?? Infinity
 /** Whether someone else did something in this circle since you last looked. */
 export const hasNews = (id: string) => { const l = read(LATEST)[id]; return !!l && l > (read(SEEN)[id] ?? l) }
 /** How many of your circles have something new. */
-export const circlesWithNews = () => Object.keys(read(LATEST)).filter(hasNews).length
+export const circlesWithNews = () => Object.keys(read(LATEST)).filter(hasNews).length + (leadNews() ? 1 : 0)
+
+// "You can lead an Open door circle now": news once, until it's seen in Circles.
+const LEAD = 'plain-bible:lead-news'
+export const leadNews = () => { try { return localStorage.getItem(LEAD) === 'new' } catch { return false } }
+/** What the server said about leading: a yes not seen here yet is news. */
+export function noteLead(lead: unknown) {
+  if (lead !== 'yes') return
+  try { if (!localStorage.getItem(LEAD)) { localStorage.setItem(LEAD, 'new'); changed() } } catch { /* ignore */ }
+}
+export function leadSeen() {
+  try { if (localStorage.getItem(LEAD) !== 'seen') { localStorage.setItem(LEAD, 'seen'); changed() } } catch { /* ignore */ }
+}
 
 /** What the server said about each circle. A circle seen here for the first
  *  time starts as read, so joining (or a new device) doesn't light up
@@ -64,8 +76,9 @@ export async function checkCircleNews(force = false) {
   if (!force && Date.now() - last < 60_000) return
   last = Date.now()
   try {
-    const { circles } = await api<{ circles: { id: string; latest?: number | null }[] }>('/circles', { token: a.token })
+    const { circles, lead } = await api<{ circles: { id: string; latest?: number | null }[]; lead?: string | null }>('/circles', { token: a.token })
     noteLatest(circles)
+    noteLead(lead)
   } catch { last = 0 }
 }
 

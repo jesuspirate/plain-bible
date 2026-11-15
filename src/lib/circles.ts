@@ -17,9 +17,9 @@ import { cleanVerse, cleanVerses, PrayerVerse, versesOf } from './prayerVerses'
 import { shareLink } from './native'
 import { setInCircles } from '../state'
 import { Days, fromShared, loadDays, shareable } from './streaks'
-import { noteLatest } from './circleNews'
+import { noteLatest, noteLead } from './circleNews'
 import { forget, keepNames } from './push'
-import { t } from '../i18n'
+import { currentLang, t } from '../i18n'
 
 const enc = new TextEncoder(), dec = new TextDecoder()
 const CHUNK = 1_000_000
@@ -128,6 +128,7 @@ export async function listCircles(unlock = false, code?: string): Promise<{ circ
   const { circles, lead } = await api<{ circles: { id: string; name: string; wrapped: string; members: number; latest?: number | null; door?: 'lead' | 'member' | null }[]; lead?: Lead }>('/circles', { token: token() })
   noteLatest(circles)
   await meta.set('door-lead', lead ?? null)
+  noteLead(lead)
   const raws = await rawKeys()
   let lock: CryptoKey | undefined
   const out: CircleInfo[] = []
@@ -689,7 +690,7 @@ export type Lead = 'yes' | 'asked' | null
 export const keptLead = async () => (await meta.get<Lead>('door-lead')) ?? null
 /** Ask My Quiet Bible to let you lead an Open door circle, saying what you lead. */
 export async function askToLead(note: string) {
-  const { lead } = await api<{ lead: Lead }>('/circles/lead', { method: 'POST', token: token(), body: { note } })
+  const { lead } = await api<{ lead: Lead }>('/circles/lead', { method: 'POST', token: token(), body: { note, lang: currentLang() } })
   await meta.set('door-lead', lead)
   return lead
 }

@@ -17,6 +17,11 @@ self.addEventListener('push', event => {
   let data = {}
   try { data = event.data ? event.data.json() : {} } catch { /* not ours */ }
   const id = typeof data.c === 'string' ? data.c : ''
+  // Not about a circle: "You can lead an Open door circle now", already in their words.
+  if (data.t === 'lead' && typeof data.text === 'string') {
+    event.waitUntil(self.registration.showNotification(data.text.slice(0, 200), { tag: 'lead', icon: 'icon-192.png', silent: true, data: { c: '' } }))
+    return
+  }
   event.waitUntil((async () => {
     const all = await kept()
     const name = id && typeof all[id] === 'string' ? all[id] : ''
