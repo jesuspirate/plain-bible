@@ -358,6 +358,7 @@ export function App() {
     })
   }
   const view = route.path[0] || 'read'
+  const continueOffer = view === 'read' && sync.account && !praying && !settingsOpen && <ContinueOffer mini={!settings.searchBar} />
 
   return (
     <AppContext.Provider value={{ data, catalog, byId, settings, update, marks, setMarks, sync }}>
@@ -384,9 +385,11 @@ export function App() {
       </main>
       {/* With the full bar hidden, a small round search button takes its place,
           and opens the same panel. */}
-      {view !== 'search' && <SearchBar mini={!settings.searchBar} here={view === 'read' && route.path.length >= 4
+      {/* "Continue on Romans 12" sits on the full bar itself, so it always
+          clears it, wherever the bar is lifted to (above a Mac's strip too). */}
+      {view !== 'search' && <SearchBar mini={!settings.searchBar} above={settings.searchBar && continueOffer} here={view === 'read' && route.path.length >= 4
         ? { version: byId.has(route.path[1]) ? route.path[1] : settings.version, book: route.path[2], chapter: +route.path[3] } : undefined} />}
-      {view === 'read' && sync.account && !praying && !settingsOpen && <ContinueOffer mini={!settings.searchBar} />}
+      {!settings.searchBar && continueOffer}
       {sidewaysEdge}
       {view === 'search' && <ListenPlayer floating />}
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}

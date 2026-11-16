@@ -5,6 +5,7 @@
 // you are reading. It is the whole search: no query language to learn, just
 // words as you remember them. It stays pinned while you read, showing where
 // you are.
+import type { ComponentChildren } from 'preact'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { BOOKS, bookAbbr, bookName } from './lib/books'
 import { parseRef, formatRef, Ref, spoken } from './lib/refs'
@@ -96,7 +97,11 @@ export function rememberSearch(q: string) {
 
 // With `mini`, the closed bar shrinks to a small round button in the corner;
 // tapping it opens the same panel.
-export function SearchBar({ here, mini }: { here?: { version: string; book: string; chapter: number }; mini?: boolean }) {
+export function SearchBar({ here, mini, above }: {
+  here?: { version: string; book: string; chapter: number }; mini?: boolean
+  /** Shown just above the bar and moved with it (the "Continue on" card). */
+  above?: ComponentChildren
+}) {
   const { settings, data, byId } = useApp()
   const aloud = useReadingAloud()
   // Chapter counts per book in the current version, for the book and chapter browser.
@@ -667,6 +672,7 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
       {/* A swipe on the dimmed page doesn't turn its chapter behind search. */}
       {open && <div class="sb-scrim" onClick={close} onWheel={e => e.stopPropagation()} />}
       <div ref={sb} class={'sb' + (open ? ' sb-open' : mini && !following ? ' sb-mini' : '') + ((aloud || following) && !open ? ' sb-reading' : '')}>
+        {!open && above}
         {open && (
           // The sheet is the glass, with its rim drawn all the way round; only
           // the list inside it scrolls, so nothing slides under the rim or
