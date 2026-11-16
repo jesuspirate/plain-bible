@@ -124,7 +124,7 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), saved: N_('Saved'), search: N_('Advanced search'),
-  versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Recording mode'),
+  versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
 }
 
 /** Where you are in Settings: the first page, or one page in. */
@@ -279,7 +279,7 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
           <Row icon={<ReturnIcon size={24} />} label={t('Back to {version}', { version: settings.version })} sub={t('Your Bible')} onClick={() => goTo(settings.version, parallel)} />}
         <Row icon={<CompareIcon size={24} />} label={t('Compare side by side')} value={parallel.length ? parallel.join(', ') : t('Off')} onClick={() => setOpen('compare')} />
         <Row icon={<BooksIcon size={24} />} label={t('Manage versions')} onClick={() => setPage('versions')} />
-        <Row icon={<VideoIcon size={24} />} label={t('Recording mode')} value={recording.on ? recording.version : t('Off')} onClick={() => setPage('recording')} />
+        <Row icon={<VideoIcon size={24} />} label={t('Teaching mode')} value={recording.on ? recording.version : t('Off')} onClick={() => setPage('recording')} />
       </div>
       {open === 'version' && <VersionPicker title={t('Version')} selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
       {open === 'compare' && (
@@ -312,7 +312,7 @@ function LanguagePage() {
   )
 }
 
-// For filming the screen: one version large for the people watching, your
+// Teaching mode (stored as recording mode), for filming the screen: one version large for the people watching, your
 // Bible small under each verse for you. On this device only; it never
 // changes your Bible (src/lib/recordMode.ts).
 function RecordingPage() {
@@ -320,12 +320,12 @@ function RecordingPage() {
   const rec = useRecording()
   const [picking, setPicking] = useState(false)
   return <>
-    <p class="muted rec-about">{t('For filming your screen. The version you pick shows large. Your Bible ({version}) shows small under each verse, so you can follow along. The bars slide away as you read: scroll up a little to bring them back.', { version: settings.version })}</p>
+    <p class="muted rec-about">{t('For teaching or sharing the Word on video or a big screen. The version you pick shows large for the people watching. Your Bible ({version}) shows small under each verse, so you can follow along. The bars slide away as you read: scroll up a little to bring them back.', { version: settings.version })}</p>
     <div class="set-list">
       <Row icon={<BookIcon size={24} />} label={t('Large on screen')} sub={byId.get(rec.version)?.name} value={rec.version} onClick={() => setPicking(true)} />
     </div>
     <button class={'rec-go' + (rec.on ? '' : ' primary')} onClick={() => saveRecording({ ...rec, on: !rec.on })}>
-      {rec.on ? t('Turn off recording mode') : t('Turn on recording mode')}
+      {rec.on ? t('Turn off teaching mode') : t('Turn on teaching mode')}
     </button>
     <p class="muted small rec-about">{t('Only on this device. Your Bible doesn’t change.')}</p>
     {picking && <VersionPicker title={t('Large on screen')} selected={[rec.version]} onClose={() => setPicking(false)}

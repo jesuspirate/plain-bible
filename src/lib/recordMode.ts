@@ -1,6 +1,8 @@
 import { useEffect, useState } from 'preact/hooks'
 
-// Recording mode: for filming the screen (a short daily video). The version
+// Teaching mode (called recording mode in the code; the stored key stays the
+// same so nobody loses their setting): for teaching or sharing the Word on
+// video or a big screen. The version
 // picked here shows large, and the Bible you read shows small under each
 // verse so you can follow along. It lives on this device only: it is not a
 // setting that syncs, and it never changes your Bible.
