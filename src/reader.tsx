@@ -1004,7 +1004,7 @@ export function Reader({ route }: { route: Route }) {
         if (w.axis === 'x') w.dx = -(w.px - e.deltaX)
       }
       if (w.axis === 'y') return spread ? scrollTurn(e) : undefined
-      if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar, .sb-chapter-row')) return
+      if ((e.target as HTMLElement).closest?.('.sb, dialog, .selbar')) return
       e.preventDefault()
       clearTimeout(w.timer)
       // A gesture ends when the events (including the trackpad's glide) stop.
