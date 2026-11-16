@@ -420,6 +420,17 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
 /// and the bar simply stays.
 private final class NoKeyboardBar: NSObject {
     @objc var inputAccessoryView: UIView? { nil }
+    /// On a Mac only: a Mac has no keyboard on screen, but while a field is
+    /// typed in it still lays the iPad's folded-away keyboard along the
+    /// bottom of the window (a grey strip with a handle). An empty keyboard
+    /// of no height takes its place, so nothing is drawn there. Typing on
+    /// the Mac's own keyboard goes on as before.
+    @objc var inputView: UIView? { NoKeyboardBar.nothing }
+    static let nothing: UIView = {
+        let v = UIView(frame: CGRect(x: 0, y: 0, width: 1, height: 0))
+        v.autoresizingMask = []
+        return v
+    }()
 }
 
 extension BibleViewController {
@@ -435,6 +446,12 @@ extension BibleViewController {
                                               #selector(getter: NoKeyboardBar.inputAccessoryView)) {
             class_addMethod(made, #selector(getter: UIResponder.inputAccessoryView),
                             method_getImplementation(none), method_getTypeEncoding(none))
+            // Never on iPhone or iPad: there it would take the keyboard away.
+            if ProcessInfo.processInfo.isiOSAppOnMac,
+               let empty = class_getInstanceMethod(NoKeyboardBar.self, #selector(getter: NoKeyboardBar.inputView)) {
+                class_addMethod(made, #selector(getter: UIResponder.inputView),
+                                method_getImplementation(empty), method_getTypeEncoding(empty))
+            }
             objc_registerClassPair(made)
             quiet = made
         }
