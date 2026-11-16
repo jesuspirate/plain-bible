@@ -415,10 +415,14 @@ function ReaderRoute({ route }: { route: Route }) {
   useEffect(() => {
     if (shared) {
       const book = route.path[2], chapter = +route.path[3] || 1, verse = +(route.params.get('v') || 0)
+      const end = +(route.params.get('e') || 0)
       const own = readerVersions(settings, id => byId.get(id)?.lang).find(id => byId.get(id)?.books.includes(book)) ?? route.path[1]
       data.bible(own).catch(() => undefined).then(b => {
         const at = fromStandard(b, { book, chapter, verses: [verse || 1] })
-        go(readPath(own, at.book, at.chapter, verse ? at.verses[0] : undefined), true)
+        // Several verses sent: mark them all, if they stay in one chapter here.
+        const last = end > verse ? fromStandard(b, { book, chapter, verses: [end] }) : undefined
+        const upTo = last && last.book === at.book && last.chapter === at.chapter ? last.verses[0] : undefined
+        go(readPath(own, at.book, at.chapter, verse ? at.verses[0] : undefined, [], upTo), true)
       })
     } else if (route.path.length < 4) {
       const last = loadPlace()
