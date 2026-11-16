@@ -101,7 +101,10 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
   const aloud = useReadingAloud()
   // Chapter counts per book in the current version, for the book and chapter browser.
   const [lens, setLens] = useState<Record<string, number>>({})
+  // The book whose chapters show under it ('' = none open), and the
+  // testament tab picked (by default the one holding that book).
   const [browse, setBrowse] = useState<string>()
+  const [tab, setTab] = useState<number>()
   // Results you are stepping through: the strip with ‹ › stands in the
   // bar's place while you read them, and its middle opens the list again
   // just as you left it.
@@ -130,7 +133,6 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
 
   // Set when the list is opened again from the strip, until it's scrolled back.
   const restoring = useRef(false)
-  const chapterRow = useRef<HTMLDivElement>(null)
   const panel = useRef<HTMLDivElement>(null), sheet = useRef<HTMLDivElement>(null)
 
   // While open, pin the bar and panel to the visible part of the screen,
@@ -201,43 +203,40 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     }
   }, [open])
 
-  // Chapter strip: a mouse wheel or a drag scrolls it sideways on desktop.
-  const drag = useRef<{ x: number; left: number; moved: boolean }>()
-  const onWheel = (e: WheelEvent) => {
-    const row = chapterRow.current
-    if (!row || Math.abs(e.deltaX) >= Math.abs(e.deltaY)) return
-    row.scrollBy({ left: e.deltaY, behavior: 'smooth' }); e.preventDefault()
-  }
-  const onPointerDown = (e: PointerEvent) => {
-    if (e.pointerType !== 'mouse' || !chapterRow.current) return
-    drag.current = { x: e.clientX, left: chapterRow.current.scrollLeft, moved: false }
-  }
-  const onPointerMove = (e: PointerEvent) => {
-    const d = drag.current, row = chapterRow.current
-    if (!d || !row) return
-    const dx = e.clientX - d.x
-    if (Math.abs(dx) > 4) { d.moved = true; row.scrollLeft = d.left - dx }
-  }
-  const endDrag = () => { setTimeout(() => { drag.current = undefined }, 0) }
-  // Picking a book brings its chapters into view at the top, every time:
-  // even the same book twice, and even while the list is still gliding from
-  // a flick (iOS lets momentum override a smooth scroll, so the glide is
-  // stopped first and the jump is instant).
-  const pickBook = (id: string) => {
-    setBrowse(id)
-    const el = panel.current
-    if (!el) return
-    el.style.overflowY = 'hidden'
-    el.scrollTop = 0
-    requestAnimationFrame(() => { el.scrollTop = 0; el.style.overflowY = '' })
-  }
+  // Brings the open book's row up under the tabs, with its chapters in view
+  // (and your chapter, in a long book like the Psalms). It's an instant jump:
+  // iOS lets a flick's momentum override a smooth scroll, so the glide is
+  // stopped first.
+  const showBook = useRef(false)
   const [showRecent, setShowRecent] = useState(false)
-  // Your chapter is already in the middle of the strip when the panel first
-  // shows, rather than the strip gliding there from chapter 1 as it opens.
   useLayoutEffect(() => {
-    const row = chapterRow.current, on = row?.querySelector<HTMLElement>('.on')
-    if (row && on) row.scrollLeft = on.offsetLeft - row.clientWidth / 2 + on.clientWidth / 2
-  }, [open, browse, lens])
+    const el = panel.current
+    if (!open || !el || !showBook.current) return
+    showBook.current = false
+    const book = el.querySelector<HTMLElement>('.sb-book.on'), chs = el.querySelector<HTMLElement>('.sb-chs')
+    let to = 0
+    if (book && chs) {
+      const top = el.scrollTop, box = el.getBoundingClientRect()
+      const at = (n: HTMLElement) => n.getBoundingClientRect().top - box.top + top
+      const under = 6
+      const fits = (y: number) => y >= top + under && y <= top + el.clientHeight
+      const cur = chs.querySelector<HTMLElement>('.on')
+      const last = cur ? at(cur) + cur.offsetHeight : at(chs) + chs.offsetHeight
+      // Leave it be when the book and its chapters are already in sight.
+      if (fits(at(book)) && fits(last + 6)) return
+      // The book's row at the top, unless your chapter would then be out of sight.
+      to = cur ? Math.max(at(book) - under, last + 12 - el.clientHeight) : at(book) - under
+    }
+    el.style.overflowY = 'hidden'
+    el.scrollTop = to
+    requestAnimationFrame(() => { el.scrollTop = to; el.style.overflowY = '' })
+  })
+  // Tapping a book opens its chapters right under it; tapping it again folds them.
+  const pickBook = (id: string) => {
+    setBrowse(id === browseBook ? '' : id)
+    showBook.current = true
+  }
+  const pickTab = (i: number) => { setTab(i); showBook.current = true }
 
   // The chapter counts are ready before search opens (the Bible you're
   // reading is already loaded), so the books never pop in after the panel.
@@ -248,9 +247,15 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
     data.bible(v).then(b => { if (lensOf.current === v) setLens(Object.fromEntries(Object.entries(b.books).map(([k, ch]) => [k, ch.length]))) },
       () => { if (lensOf.current === v) lensOf.current = '' })
   }, [open, version, !here])
-  useEffect(() => { if (!open) setBrowse(undefined) }, [open])
+  useEffect(() => { if (!open) { setBrowse(undefined); setTab(undefined) } else showBook.current = true }, [open])
   const browseBook = browse ?? here?.book ?? 'Gen'
-  const chapters = lens[browseBook] ?? 0
+  // Old Testament, New Testament, and the Deuterocanon (with the Ethiopian
+  // books) when this Bible has them. Empty groups get no tab.
+  const groups = ([[t('Old Testament'), 0, 39], [t('New Testament'), 39, 66], [t('Deuterocanon'), 66, Infinity]] as const)
+    .map(([label, from, to]) => ({ label, list: BOOKS.filter((b, i) => i >= from && i < to && lens[b.id]) }))
+    .filter(g => g.list.length > 0)
+  const homeTab = Math.max(0, groups.findIndex(g => g.list.some(b => b.id === browseBook)))
+  const shownTab = tab !== undefined && tab < groups.length ? tab : homeTab
 
   // "/" or Cmd/Ctrl+K focuses the bar.
   useEffect(() => {
@@ -677,6 +682,15 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
               <button type="button" class="sb-grabber" aria-label={t('Close search')} onClick={close} />
               <span class="sb-head-side end" />
             </div>
+            {/* The testament tabs stay put above the list while it scrolls. */}
+            {!trimmed && groups.length > 1 && (
+              <div class="sb-tabs" role="tablist">
+                {groups.map((g, i) => (
+                  <button type="button" role="tab" aria-selected={i === shownTab} class={'sb-tab' + (i === shownTab ? ' on' : '')}
+                    onClick={() => pickTab(i)}>{g.label.replace(/^(deut[eé]ro)/i, '$1\u00AD')}</button>
+                ))}
+              </div>
+            )}
           <div class="sb-panel" ref={panel} role="listbox" aria-label={t('Suggestions')}>
             {offerBack && left && (
               <button class="sb-item sb-ref sb-back" onClick={resume}>
@@ -724,37 +738,33 @@ export function SearchBar({ here, mini }: { here?: { version: string; book: stri
                 )}
               </div>
             )}
-            {!trimmed && chapters > 0 && (
-              <div class="sb-chapters">
-                <div class="sb-kicker">{bookName(browseBook)}</div>
-                <div class="sb-chapter-row" ref={chapterRow} onWheel={onWheel} onPointerDown={onPointerDown}
-                  onPointerMove={onPointerMove} onPointerUp={endDrag} onPointerLeave={endDrag}
-                  onClickCapture={e => { if (drag.current?.moved) { e.stopPropagation(); e.preventDefault() } }}>
-                  {Array.from({ length: chapters }, (_, i) => (
-                    <button class={'sb-ch' + (here?.book === browseBook && i + 1 === here.chapter ? ' on' : '')}
-                      onClick={() => finish(readPath(version, browseBook, i + 1))}>{i + 1}</button>
-                  ))}
-                </div>
-              </div>
-            )}
             {!trimmed && (
               <>
-                <div class="sb-allbooks">
-                  {([[t('Old Testament'), (i: number) => i < 39], [t('New Testament'), (i: number) => i >= 39 && i < 66], [t('Deuterocanon'), (i: number) => i >= 66]] as const).map(([label, inGroup]) => {
-                    const list = BOOKS.filter((b, i) => inGroup(i) && lens[b.id])
-                    return list.length > 0 && (
-                      <>
-                        <div class="sb-kicker">{label}</div>
-                        <div class="sb-bookgrid">
-                          {list.map(b => (
-                            <button class={'sb-book' + (b.id === browseBook ? ' on' : '')} title={bookName(b.id)}
-                              onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : pickBook(b.id)}>{bookAbbr(b.id)}</button>
-                          ))}
-                        </div>
-                      </>
-                    )
-                  })}
-                </div>
+                {groups.length > 0 && (
+                  <div class="sb-allbooks">
+                    {/* The chapters come right after their book; the grid's dense
+                        flow lets the rest of that row fill in before them. */}
+                    <div class="sb-bookgrid" role={groups.length > 1 ? 'tabpanel' : undefined} aria-label={groups[shownTab].label}>
+                      {groups[shownTab].list.map(b => (
+                        <>
+                          <button class={'sb-book' + (b.id === browseBook ? ' on' : '')} title={bookName(b.id)} aria-expanded={lens[b.id] > 1 ? b.id === browseBook : undefined}
+                            onClick={() => lens[b.id] === 1 ? finish(readPath(version, b.id, 1)) : pickBook(b.id)}>{bookAbbr(b.id)}</button>
+                          {b.id === browseBook && lens[b.id] > 1 && (
+                            <div class="sb-chs" role="group" aria-label={bookName(b.id)}>
+                              <div class="sb-kicker">{bookName(b.id)}</div>
+                              <div class="sb-chgrid">
+                                {Array.from({ length: lens[b.id] }, (_, i) => (
+                                  <button class={'sb-ch' + (here?.book === b.id && i + 1 === here.chapter ? ' on' : '')}
+                                    onClick={() => finish(readPath(version, b.id, i + 1))}>{i + 1}</button>
+                                ))}
+                              </div>
+                            </div>
+                          )}
+                        </>
+                      ))}
+                    </div>
+                  </div>
+                )}
                 {/* Recent searches stay folded away under the books. */}
                 {recent.length > 0 && (
                   <div class="sb-recent">

@@ -418,15 +418,20 @@ main.with-mini { padding-bottom: 144px; }
 @media (max-width: 359px) { .sb-bar { gap: 8px; } .sb-circles { width: 48px; height: 48px; } }
 .sb-mini .sb-circles { width: 48px; height: 48px; box-shadow: 0 4px 14px rgba(0,0,0,.12); }
 
-.sb-chapters { padding-bottom: 6px; }
 .sb-fold { all: unset; cursor: pointer; display: inline-flex; gap: 6px; align-items: center; min-height: 36px; font: inherit; color: inherit; text-transform: inherit; letter-spacing: inherit; }
-.sb-chapter-row { display: flex; gap: 6px; overflow-x: auto; padding: 4px 6px 6px; scrollbar-width: none; }
-.sb-chapter-row::-webkit-scrollbar { display: none; }
-.sb-ch { flex: none; min-width: 40px; height: 40px; border-radius: 12px; border: none; background: var(--chip); font-variant-numeric: tabular-nums; }
-.sb-ch.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
-.sb-bookgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); gap: 6px; padding: 4px 6px 10px; }
-.sb-book { height: 38px; border-radius: 10px; border: none; background: var(--chip); font-size: 14px; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+.sb-tabs { flex: none; display: flex; gap: 4px; margin: 0 14px 6px; padding: 4px; border-radius: 16px; background: var(--chip); }
+.sb-tab { flex: 1 1 0; min-width: 0; min-height: 46px; padding: 4px 3px; border: none; border-radius: 12px; background: none; color: var(--muted); font: 600 15px/1.15 var(--sans); -webkit-hyphens: manual; hyphens: manual; overflow-wrap: break-word; }
+@media (max-width: 374px) { .sb-tab { font-size: 13px; padding: 4px 2px; } }
+.sb-tab.on { background: var(--surface); color: var(--text); box-shadow: 0 1px 4px rgba(0,0,0,.14); }
+.sb-bookgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(64px, 1fr)); grid-auto-flow: row dense; gap: 6px; padding: 4px 6px 10px; }
+.sb-book { height: 46px; border-radius: 12px; border: none; background: var(--chip); font-size: 15px; padding: 0 4px; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .sb-book.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
+/* A book's chapters, right under its row. */
+.sb-chs { grid-column: 1 / -1; padding: 0 6px 8px; border-radius: 14px; border: 2px solid color-mix(in srgb, var(--accent) 45%, transparent); }
+.sb-chs .sb-kicker { padding: 8px 4px 6px; }
+.sb-chgrid { display: grid; grid-template-columns: repeat(auto-fill, minmax(46px, 1fr)); gap: 6px; }
+.sb-ch { height: 46px; border-radius: 12px; border: none; background: var(--chip); font-size: 16px; font-variant-numeric: tabular-nums; }
+.sb-ch.on { background: var(--accent); color: var(--accent-ink); font-weight: 600; }
 
 /* ---- highlights & bookmarks ---- */
 .verse, .pv { cursor: pointer; -webkit-tap-highlight-color: transparent; }
@@ -732,12 +737,6 @@ html.sb-floor .sb.sb-open { padding-bottom: max(10px, env(safe-area-inset-bottom
    while the keyboard rises below. Nothing slides or grows. */
 .sb.sb-open .sb-sheet, .sb.sb-open .sb-cancel { animation: sb-fade .2s; }
 @media (min-width: 700px) { .sb.sb-open .sb-sheet { max-height: min(70vh, 640px); } }
-/* Desktop: show a slim scrollbar on the chapter strip and a grab cursor. */
-@media (pointer: fine) {
-  .sb-chapter-row { scrollbar-width: thin; cursor: grab; }
-  .sb-chapter-row::-webkit-scrollbar { display: block; height: 6px; }
-  .sb-chapter-row::-webkit-scrollbar-thumb { background: color-mix(in srgb, var(--muted) 40%, transparent); border-radius: 3px; }
-}
 
 /* ---- glass: the search bar, its picker, the round search button and 🙏 ----
    Frosted like iPhone: the page shows through, softly blurred. The rim is
