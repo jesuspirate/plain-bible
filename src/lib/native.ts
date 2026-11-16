@@ -10,7 +10,7 @@ export const canShare = 'share' in navigator
 export const isIOS = typeof navigator !== 'undefined' &&
   (/iPad|iPhone|iPod/.test(navigator.userAgent) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1))
 
-export async function share(o: { title: string; text: string; url?: string }) {
+export async function share(o: { title?: string; text: string; url?: string }) {
   await navigator.share(o).catch(() => {})
 }
 

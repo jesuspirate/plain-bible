@@ -257,8 +257,8 @@ export function readPath(version: string, book: string, chapter: number, verse?:
 }
 /** A link to verses for someone else. It names your version, but opens in
  *  the version they read (see ReaderRoute), never in yours. */
-export function sharedPath(version: string, book: string, chapter: number, verse?: number) {
-  const p = readPath(version, book, chapter, verse)
+export function sharedPath(version: string, book: string, chapter: number, verse?: number, end?: number) {
+  const p = readPath(version, book, chapter, verse, [], end)
   return `${p}${p.includes('?') ? '&' : '?'}shared=1`
 }
 

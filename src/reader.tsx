@@ -1295,7 +1295,7 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const quote = `${textOf(bibles[version])}\n${ref} (${version})`
   // For someone else: numbered as everyone numbers it, to open in their Bible.
   const std = toStandard(bibles[version], { book, chapter, verses })
-  const link = shareLink(`#/${sharedPath(version, std.book, std.chapter, std.verses[0])}`)
+  const link = shareLink(`#/${sharedPath(version, std.book, std.chapter, Math.min(...std.verses), Math.max(...std.verses))}`)
   const copy = async (s: string) => {
     try { await copyText(s); setNote(t('Copied')) } catch { setNote(t('Copy failed')) }
   }
@@ -1315,11 +1315,25 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const [askShare, setAskShare] = useState(false)
   const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note } = useVerseActions(book, chapter, verses, versions, bibles)
   const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: Math.min(...verses) }
-  const shareOut = () => canShare ? share({ title: ref, text: quote, url: link }) : copy(link)
+  // One plain text with the link at its end, no separate title or url: the
+  // Mac share sheet's Copy pasted the text and the link as two pieces, and
+  // showed only the reference and the site, as if one verse went out.
+  const shareOut = () => canShare ? share({ text: `${quote}\n${link}` }) : copy(link)
 
+  // Cmd+C / Ctrl+C copies the picked verses, like the Copy button, unless
+  // you're typing somewhere or have dragged over some words to copy them.
+  const copyNow = useRef(() => {}); copyNow.current = () => copy(quote)
   useEffect(() => {
     document.body.classList.add('selecting')
-    const onKey = (e: KeyboardEvent) => { if (e.key === 'Escape') onClose() }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === 'Escape') onClose()
+      else if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'c') {
+        const el = e.target as HTMLElement | null
+        if (el?.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return
+        if (getSelection()?.toString().trim()) return
+        e.preventDefault(); copyNow.current()
+      }
+    }
     addEventListener('keydown', onKey)
     return () => { document.body.classList.remove('selecting'); removeEventListener('keydown', onKey) }
   }, [])
