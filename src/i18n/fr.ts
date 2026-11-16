@@ -547,6 +547,7 @@ export default {
   "Big screen": "Grand écran",
   "Two pages": "Deux pages",
   "One page": "Une page",
+  "On now: an open book, two pages side by side, and you turn the page like a book. Chapter turn is only for one page.": "Activé maintenant : un livre ouvert, deux pages côte à côte, et vous tournez la page comme dans un livre. Le changement de chapitre ne sert qu’avec une page.",
   "One long page that scrolls, as on a phone.": "Une longue page qui défile, comme sur un téléphone.",
   "An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.": "Un livre ouvert : deux pages côte à côte, et vous tournez la page. Utilisé quand l’écran est plus large que haut.",
   "The chapter changes with no movement.": "Le chapitre change sans mouvement.",

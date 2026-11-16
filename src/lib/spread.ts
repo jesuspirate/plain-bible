@@ -4,6 +4,8 @@
 // at a time and slides along to show the next two. Nothing here loads or
 // stores anything, so the book opens as quickly as the phone page does.
 
+import { useEffect, useState } from 'preact/hooks'
+
 /** A phone that unfolds, lying open (and a small tablet on its side): a touch
  *  screen too wide for a phone, about as wide as it is tall or wider. The
  *  fold runs down the middle of it, which is where the book's spine is. An
@@ -12,6 +14,17 @@ export const UNFOLDED = '(hover: none) and (min-width: 600px) and (max-width: 99
 
 /** Where the open book is used: an iPad on its side, computers and unfolded phones, not phones or an iPad held upright. */
 export const WIDE = `(min-width: 1000px) and (min-aspect-ratio: 5/4) and (min-height: 600px), ${UNFOLDED}`
+
+/** Whether the screen is one the open book is used on now; follows the iPad turning and the window being resized. */
+export function useWide() {
+  const [wide, setWide] = useState(() => matchMedia(WIDE).matches)
+  useEffect(() => {
+    const m = matchMedia(WIDE), on = () => setWide(m.matches)
+    m.addEventListener?.('change', on)
+    return () => m.removeEventListener?.('change', on)
+  }, [])
+  return wide
+}
 
 /** The width of one page in pixels. */
 export const pageWidth = (win: HTMLElement) => win.clientWidth / 2

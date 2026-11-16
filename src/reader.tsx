@@ -23,7 +23,7 @@ import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
 import { QUICK, draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
 import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
-import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, WIDE } from './lib/spread'
+import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, useWide } from './lib/spread'
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -46,12 +46,7 @@ export function Reader({ route }: { route: Route }) {
   // On an iPad on its side, a computer or an unfolded phone, the chapter is an open book of two
   // pages that you turn, unless you chose one page (Settings, Reading). Side
   // by side versions keep their columns, which scroll.
-  const [wide, setWide] = useState(() => matchMedia(WIDE).matches)
-  useEffect(() => {
-    const m = matchMedia(WIDE), on = () => setWide(m.matches)
-    m.addEventListener?.('change', on)
-    return () => m.removeEventListener?.('change', on)
-  }, [])
+  const wide = useWide()
   const spread = wide && settings.spread !== 'single' && versions.length === 1
   useEffect(() => {
     document.documentElement.classList.toggle('spread-on', spread)
