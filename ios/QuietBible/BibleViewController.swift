@@ -439,5 +439,12 @@ extension BibleViewController {
             quiet = made
         }
         if let quiet { object_setClass(page, quiet) }
+        // With a keyboard attached (always so on a Mac), iPad and Mac lay a
+        // shortcuts strip (undo, paste...) along the bottom of the window
+        // while a field is typed in, and it could stay after the field was
+        // closed: a grey bar with a handle under the page. With no shortcuts
+        // in it, the system doesn't show it at all.
+        page.inputAssistantItem.leadingBarButtonGroups = []
+        page.inputAssistantItem.trailingBarButtonGroups = []
     }
 }
