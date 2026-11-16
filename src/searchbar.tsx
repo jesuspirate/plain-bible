@@ -824,7 +824,10 @@ export function SearchBar({ here, mini, above }: {
             🙏 opens the glowing microphone over the page. */}
         {!open && SYNC_URL && <CirclesButton />}
         {!open && <PrayButton />}
-        {open && <button type="button" class="sb-cancel" onClick={close}>{t('Cancel')}</button>}
+        {/* Pressing Cancel mustn't take the focus from the field first: on a
+            Mac that hides the strip at the bottom, the bar drops under the
+            pointer, and the click misses Cancel. */}
+        {open && <button type="button" class="sb-cancel" onMouseDown={e => e.preventDefault()} onClick={close}>{t('Cancel')}</button>}
         </div>
         {open && voiceNote && <div class="sb-voice-note" role="status">{voiceNote}</div>}
       </div>
