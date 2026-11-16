@@ -842,7 +842,8 @@ export function Reader({ route }: { route: Route }) {
     const end = () => { off(); swipe.current.end() }
     // Taken away (a call, a system swipe): not a turn, the page goes back.
     const cancel = () => { off(); if (touch.current?.axis === 'x') touch.current.dx = touch.current.tx = 0; swipe.current.end() }
-    el.addEventListener('touchmove', move, { passive: true })
+    // Not passive: once a swipe is sideways, the page can't scroll up or down too (see below).
+    el.addEventListener('touchmove', move, { passive: false })
     el.addEventListener('touchend', end)
     el.addEventListener('touchcancel', cancel)
   }
@@ -853,6 +854,11 @@ export function Reader({ route }: { route: Route }) {
     const tx = p.clientX - s.x0, dy = p.clientY - s.y
     if (!s.axis && Math.hypot(tx, dy) > 10) s.axis = Math.abs(tx) > Math.abs(dy) * 1.2 ? 'x' : 'y'
     if (s.axis !== 'x') return
+    // A sideways swipe stays sideways: the finger drifting up or down mustn't
+    // scroll the page too. iPhone scrolled it under the half turned page (and
+    // bounced it at the top or end), and the top bar went along with the page
+    // instead of staying put over both.
+    if (e.cancelable) e.preventDefault()
     s.tx = tx
     // The open book turns as soon as the swipe is plain, without waiting
     // for the finger to lift.
