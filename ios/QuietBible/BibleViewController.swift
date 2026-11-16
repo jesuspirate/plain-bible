@@ -21,6 +21,10 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var circleTaps: NSObjectProtocol?
     private var circleNews: NSObjectProtocol?
     private var macKeyboard: [NSObjectProtocol] = []
+    private var macAway: [NSObjectProtocol] = []
+    private var lastPicture: UIImage?
+    private var cover: UIImageView?
+    private var isAway = false
 
     override var preferredStatusBarStyle: UIStatusBarStyle { barStyle }
 
@@ -97,6 +101,81 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         }
         openTappedCircle()
         watchMacKeyboardStrip()
+        keepPageWhileAwayOnMac()
+    }
+
+    /// On a Mac in full screen, going to another Space puts the app in the
+    /// background, and the web view lets go of its drawn page. Coming back,
+    /// the window slid in empty (just the paper color) and the text came a
+    /// second later, every time. So: when the app steps back, keep a picture
+    /// of the page; while it is away, that picture lies over the web view;
+    /// back again, it goes once the page has drawn itself. iPhone and iPad
+    /// keep their own snapshot for the app switcher and are left as they are.
+    private func keepPageWhileAwayOnMac() {
+        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
+        let center = NotificationCenter.default
+        let mine: (Notification) -> Bool = { [weak self] note in
+            (note.object as? UIScene) === self?.view.window?.windowScene
+        }
+        macAway = [
+            // Still drawn and running here: take the picture now.
+            center.addObserver(forName: UIScene.willDeactivateNotification, object: nil, queue: .main) { [weak self] note in
+                guard let self, mine(note), self.cover == nil else { return }
+                self.web.takeSnapshot(with: nil) { [weak self] image, _ in
+                    guard let self, let image else { return }
+                    self.lastPicture = image
+                    if self.isAway { self.coverPage() }
+                }
+            },
+            center.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] note in
+                guard let self, mine(note) else { return }
+                self.isAway = true
+                self.coverPage()
+            },
+            center.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] note in
+                guard let self, mine(note) else { return }
+                self.isAway = false
+                self.uncoverOnceDrawn()
+            },
+            // Back without ever going to the background (another app was in
+            // front, the window stayed in view): the picture isn't needed.
+            center.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] note in
+                guard let self, mine(note), self.cover == nil else { return }
+                self.lastPicture = nil
+            },
+        ]
+    }
+
+    private func coverPage() {
+        guard cover == nil, let picture = lastPicture else { return }
+        let still = UIImageView(image: picture)
+        still.frame = view.bounds
+        still.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        // Never stretched: if the window changed size meanwhile, the page
+        // underneath comes a moment later anyway.
+        still.contentMode = .topLeft
+        still.backgroundColor = web.backgroundColor
+        still.accessibilityElementsHidden = true
+        view.addSubview(still)
+        cover = still
+    }
+
+    /// The page has drawn itself again once it has had two frames; then the
+    /// picture fades away (within 3 seconds in any case).
+    private func uncoverOnceDrawn() {
+        guard let still = cover else { lastPicture = nil; return }
+        let done: () -> Void = { [weak self] in
+            guard let self, self.cover === still else { return }
+            self.cover = nil
+            self.lastPicture = nil
+            UIView.animate(withDuration: 0.15, animations: { still.alpha = 0 }) { _ in still.removeFromSuperview() }
+        }
+        web.callAsyncJavaScript(
+            "await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))",
+            arguments: [:], in: nil, in: .page) { _ in
+            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: done)
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: done)
     }
 
     /// On a Mac, while a field is being typed in, the system lays a dark
