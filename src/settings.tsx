@@ -21,7 +21,7 @@ import { Versions } from './versions'
 import { saveRecording, useRecording } from './lib/recordMode'
 import { StreakRow } from './streaks'
 import { AWAY } from './sideways'
-import { UNFOLDED } from './lib/spread'
+import { UNFOLDED, useWide } from './lib/spread'
 import { deviceLang, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
@@ -339,6 +339,10 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   // Advanced search keeps its query here while you're in Settings.
   const [searchQuery, setSearchQuery] = useState('')
   const saved = Object.values(marks).filter(hasContent).length
+  // The open book is showing now (see Reader): then the page turns like a
+  // book, and Chapter turn does nothing, so it's left out until one page is used.
+  const wide = useWide(), recording = useRecording()
+  const bookOn = wide && settings.spread !== 'single' && !(recording.on && recording.version !== settings.version) && !settings.parallel.some(id => id !== settings.version)
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
       {opts.map(([v, label]) => (
@@ -377,16 +381,16 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <label><input type="checkbox" checked={settings.readSilent} onChange={e => update({ readSilent: (e.target as HTMLInputElement).checked })} /> {t('No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.')}</label>
       </div>
     </div>
-    <div class="field"><span>{t('Chapter turn')}</span>
+    {!bookOn && <div class="field"><span>{t('Chapter turn')}</span>
       <div class="col">
         {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
         <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
       </div>
-    </div>
+    </div>}
     {matchMedia(`(min-width: 1000px), ${UNFOLDED}`).matches && <div class="field"><span>{t('Big screen')}</span>
       <div class="col">
         {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
-        <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
+        <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : bookOn ? t('On now: an open book, two pages side by side, and you turn the page like a book. Chapter turn is only for one page.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
       </div>
     </div>}
     <div class="field"><span>{t('Notes')}</span>
