@@ -15,6 +15,11 @@ const w = window as { plainBibleStarted?: boolean; plainBibleRepair?: () => void
 w.plainBibleStarted = true
 document.getElementById('boot-stuck')?.remove()
 
+// Android (the Play app, Chrome, Vanadium) stops the page at a solid bar above
+// the gesture line, unlike an iPhone, where the page runs on under it. The
+// styles give panels there a finished bottom edge (see html.android).
+if (/Android/.test(navigator.userAgent)) document.documentElement.classList.add('android')
+
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
 // Safari on iPhone only shows a button as pressed (:active) when the page
