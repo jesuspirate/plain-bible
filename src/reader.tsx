@@ -1302,6 +1302,13 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   return { version, keys, ref, colors, current, allBookmarked, hasNote, apply, textOf, quote, link, copy, note, setNote }
 }
 
+/** Tells the iPhone, iPad and Mac app which verses are picked, so its own
+ *  Copy (Cmd+C) copies them. Does nothing in a browser. */
+function toApp(text: string) {
+  (window as unknown as { webkit?: { messageHandlers?: { picked?: { postMessage(s: string): void } } } })
+    .webkit?.messageHandlers?.picked?.postMessage(text)
+}
+
 // Shown while verses are selected: tap more verses to add them, then
 // highlight, bookmark, copy, share or compare them together.
 function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote, onPray }: {
@@ -1324,6 +1331,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // you're typing somewhere or have dragged over some words to copy them.
   const copyNow = useRef(() => {}); copyNow.current = () => copy(quote)
   const quoteNow = useRef(quote); quoteNow.current = quote
+  useEffect(() => toApp(quote), [quote])
   const copied = () => setNote(t('Copied'))
   // Not while typing in a field or note, or with some words dragged over.
   const ours = (target: EventTarget | null) => {
@@ -1349,12 +1357,16 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
       if (!ours(e.target) || !e.clipboardData) return
       e.clipboardData.setData('text/plain', quoteNow.current); e.preventDefault(); copied()
     }
+    // In the iPhone, iPad and Mac app, the app's own Copy does it (Cmd+C).
+    const onNative = () => copied()
+    addEventListener('quietbible:copied', onNative)
     addEventListener('keydown', onKey)
     document.addEventListener('beforecopy', onBefore)
     document.addEventListener('copy', onCopy)
     return () => {
       document.body.classList.remove('selecting'); removeEventListener('keydown', onKey)
       document.removeEventListener('beforecopy', onBefore); document.removeEventListener('copy', onCopy)
+      removeEventListener('quietbible:copied', onNative); toApp('')
     }
   }, [])
 

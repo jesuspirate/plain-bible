@@ -25,6 +25,23 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var lastPicture: UIImage?
     private var cover: UIImageView?
     private var isAway = false
+    /// The verses picked in the reader, as the Copy button copies them.
+    fileprivate var pickedText = ""
+
+    // Cmd+C with verses picked (a Mac or an iPad keyboard). The menu's Copy
+    // asks the web view first; with no words selected it says no, and the
+    // question comes here. Then copy the picked verses. With words selected,
+    // the web view copies them as usual and this never runs.
+    override func canPerformAction(_ action: Selector, withSender sender: Any?) -> Bool {
+        if action == #selector(copy(_:)) { return !pickedText.isEmpty }
+        return super.canPerformAction(action, withSender: sender)
+    }
+
+    override func copy(_ sender: Any?) {
+        guard !pickedText.isEmpty else { return }
+        UIPasteboard.general.string = pickedText
+        web.evaluateJavaScript("dispatchEvent(new Event('quietbible:copied'))")
+    }
 
     override var preferredStatusBarStyle: UIStatusBarStyle { barStyle }
 
@@ -48,6 +65,8 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.userContentController.addScriptMessageHandler(WatchBridge(), contentWorld: .page, name: "watch")
         // Circle notifications and the widget's circle news (Notify.swift).
         config.userContentController.addScriptMessageHandler(NotifyBridge(), contentWorld: .page, name: "notify")
+        // The verses picked in the reader, for Cmd+C (see copy(_:) below).
+        config.userContentController.add(PickedBridge(self), contentWorld: .page, name: "picked")
 
         let web = WKWebView(frame: .zero, configuration: config)
         web.navigationDelegate = self
@@ -533,5 +552,16 @@ extension BibleViewController {
         // in it, the system doesn't show it at all.
         page.inputAssistantItem.leadingBarButtonGroups = []
         page.inputAssistantItem.trailingBarButtonGroups = []
+    }
+}
+
+/// The page says which verses are picked (their text, or "" when none).
+private final class PickedBridge: NSObject, WKScriptMessageHandler {
+    private weak var owner: BibleViewController?
+    init(_ owner: BibleViewController) { self.owner = owner }
+    func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage) {
+        guard message.frameInfo.isMainFrame, message.frameInfo.securityOrigin.host == BibleViewController.host,
+              let text = message.body as? String, text.count <= 200_000 else { return }
+        owner?.pickedText = text
     }
 }
