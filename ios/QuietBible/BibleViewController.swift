@@ -231,6 +231,11 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         }
         macKeyboard = [UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardWillHideNotification]
             .map { center.addObserver(forName: $0, object: nil, queue: .main, using: fit) }
+        // 1.2.5 set the bar's alpha at "will change" and the band still
+        // showed: the system likely sets it back while showing the bar. Hide
+        // it again once the bar is fully up.
+        macKeyboard += [UIResponder.keyboardDidShowNotification, UIResponder.keyboardDidChangeFrameNotification]
+            .map { center.addObserver(forName: $0, object: nil, queue: .main) { [weak self] _ in _ = self?.hideMacInputBar() } }
     }
 
     /// Mac only: make the system's keyboard bar invisible. Found by class
@@ -244,7 +249,12 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             var stack: [UIView] = window.subviews
             while let next = stack.popLast() {
                 if NSStringFromClass(type(of: next)) == "UIInputSetHostView" {
-                    if next.alpha != 0 { next.alpha = 0 }
+                    // Both the bar and its pieces: the dark backdrop and the
+                    // empty 44 point input view under it.
+                    for piece in [next] + next.subviews + next.subviews.flatMap(\.subviews) {
+                        if piece.alpha != 0 { piece.alpha = 0 }
+                        if !piece.isHidden { piece.isHidden = true }
+                    }
                     found = true
                 } else {
                     stack.append(contentsOf: next.subviews)
@@ -255,28 +265,24 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     }
 
     /// TEMPORARY, TestFlight builds on a Mac only: find what draws the dark
-    /// band along the bottom of the window in full screen. A second after a
+    /// band along the bottom of the window in full screen. 1.5 s after a
     /// field gets focus, copy a list of every window and every view that
-    /// reaches the bottom 120 points to the clipboard, once per launch, to be
+    /// reaches the bottom 120 points to the clipboard, each time, to be
     /// pasted back to us. Remove once the band is understood.
-    private var macStripReported = false
     private func reportMacStrip(keyboard: CGRect) {
-        guard !macStripReported,
-              Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" else { return }
-        macStripReported = true
-        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+        guard Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" else { return }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) { [weak self] in
             guard let self, let screen = self.view.window?.screen else { return }
             var lines = ["Quiet Bible strip report",
                          "screen \(Self.text(screen.bounds)) keyboard \(Self.text(keyboard))",
                          "safe area \(self.view.safeAreaInsets) extra \(self.additionalSafeAreaInsets)"]
-            let bottom = screen.bounds.maxY - 120
             for scene in UIApplication.shared.connectedScenes {
                 guard let scene = scene as? UIWindowScene else { continue }
                 lines.append("scene \(type(of: scene)) \(scene.activationState.rawValue)")
                 for window in scene.windows {
                     lines.append("WINDOW \(type(of: window)) \(Self.text(window.frame)) level \(window.windowLevel.rawValue)"
                         + " hidden \(window.isHidden) alpha \(window.alpha) bg \(Self.text(window.backgroundColor))")
-                    Self.walk(window, in: window, depth: 1, bottom: bottom, into: &lines)
+                    Self.walk(window, in: window, depth: 1, bottom: window.bounds.maxY - 120, into: &lines)
                 }
             }
             UIPasteboard.general.string = lines.prefix(400).joined(separator: "\n")
@@ -286,10 +292,11 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private static func walk(_ view: UIView, in window: UIWindow, depth: Int, bottom: CGFloat, into lines: inout [String]) {
         guard depth <= 14 else { return }
         for sub in view.subviews {
-            let frame = sub.convert(sub.bounds, to: window.screen.coordinateSpace)
+            let frame = sub.convert(sub.bounds, to: window)
             guard frame.maxY > bottom else { continue }
             lines.append(String(repeating: "  ", count: depth) + "\(type(of: sub)) \(text(frame))"
                 + (sub.isHidden ? " HIDDEN" : "") + (sub.alpha < 1 ? " alpha \(sub.alpha)" : "")
+                + (sub.layer.opacity < 1 ? " opacity \(sub.layer.opacity)" : "")
                 + " bg \(text(sub.backgroundColor))" + (sub.layer.backgroundColor != nil && sub.backgroundColor == nil ? " layer-bg" : ""))
             walk(sub, in: window, depth: depth + 1, bottom: bottom, into: &lines)
         }
