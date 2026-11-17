@@ -1,4 +1,4 @@
-import { currentLang, N_ } from '../i18n'
+import { currentLang, N_, onLang } from '../i18n'
 
 // Canonical book order and English names/abbreviations used for navigation and
 // reference parsing. Book ids match the ids used in public/data.
@@ -208,7 +208,7 @@ export const bookName = (id: string, lang: string = currentLang()) => NAMES[lang
 export function bookAbbr(id: string, lang: string = currentLang()) {
   const name = NAMES[lang]?.[id]
   if (!name) return bookById(id).abbr
-  if (ABBR[lang][id]) return ABBR[lang][id]
+  if (ABBR[lang]?.[id]) return ABBR[lang][id]
   const n = name.match(/^\d /)?.[0] ?? '', rest = name.slice(n.length)
   return rest.length > 6 ? n + rest.slice(0, 4).trim() : name
 }
@@ -219,13 +219,25 @@ const normName = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/
   .replace(/^(second|2nd)\s+/, '2 ').replace(/^(third|3rd)\s+/, '3 ').replace(/\s+/g, ' ').trim()
 
 const NAME_MAP = new Map<string, string>()
-for (const b of BOOKS) {
-  for (const n of [b.id, b.name, b.abbr, ...b.aliases]) {
-    const k = normName(n)
-    NAME_MAP.set(k, b.id)
-    NAME_MAP.set(k.replace(/ /g, ''), b.id)
-  }
+const known = (id: string, n: string, keep = false) => {
+  const k = normName(n)
+  if (!k) return
+  for (const key of [k, k.replace(/ /g, '')]) if (!keep || !NAME_MAP.has(key)) NAME_MAP.set(key, id)
 }
+for (const b of BOOKS) for (const n of [b.id, b.name, b.abbr, ...b.aliases]) known(b.id, n)
+
+// The other languages' names come with their words (public/i18n/app/<lang>.json):
+// shown while the app is in that language, and understood in references
+// from then on ("Johannes 3:16"), without taking a name another book has.
+onLang((lang, words) => {
+  if (lang === 'en' || lang === 'fr' || lang === 'es') return
+  const names = words['@books'], abbr = words['@abbr']
+  if (!names) return
+  NAMES[lang] = names as Record<string, string>
+  ABBR[lang] = (abbr ?? {}) as Record<string, string>
+  for (const [id, n] of Object.entries(names)) if (BOOK_INDEX[id] !== undefined) known(id, n, true)
+  for (const [id, n] of Object.entries(abbr ?? {})) if (BOOK_INDEX[id] !== undefined) known(id, n, true)
+})
 
 /** A book by its exact name, abbreviation or alias only (no guessing from
  *  a prefix), for spotting references inside ordinary writing. */

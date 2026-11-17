@@ -352,6 +352,9 @@ main.with-bar { padding-bottom: 120px; }
 @media (prefers-reduced-motion: reduce) { .hold-pick { animation: none; } }
 .sb-bar { display: flex; align-items: center; gap: 10px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
+/* Right-to-left languages keep Circles and 🙏 at the right, as in the others (Jet, 2026-11-17); their words still read right to left. */
+:root[dir='rtl'] .sb-bar { direction: ltr; }
+:root[dir='rtl'] .sb-bar > * { direction: rtl; }
 .sb-cancel {
   all: unset; cursor: pointer; flex: none; box-sizing: border-box; height: 52px; padding: 0 18px; border-radius: 26px;
   display: grid; place-items: center; font: 700 17px var(--sans); letter-spacing: .01em;
@@ -614,6 +617,8 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .set-theme .seg { display: flex; flex: 1; border-radius: 12px; }
 .set-theme .seg button { flex: 1; padding: 10px 4px; font-size: 16px; }
 .set-chev { color: var(--muted); font-size: 22px; line-height: 1; }
+/* Right to left (Arabic, Hebrew, Persian…): the arrows point the reading way. */
+[dir='rtl'] .set-chev, [dir='rtl'] .back-icon { display: inline-block; transform: scaleX(-1); }
 .streak-row { gap: 0; cursor: pointer; }
 .streak { flex: 1; display: flex; align-items: center; gap: 8px; }
 .streak + .streak { padding-left: 14px; border-left: 1px solid var(--line); }

@@ -808,7 +808,7 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
   // Asking to lead an Open door circle. The app's maker says yes on /stats.
   if (a === 'lead' && !b && req.method === 'POST') {
     const { note, lang } = await readJson<{ note: string; lang?: string }>(req)
-    const words = typeof lang === 'string' && LANGS.includes(lang) ? lang : 'en'
+    const words = typeof lang === 'string' && isLang(lang) ? lang : 'en'
     const said = typeof note === 'string' ? note.trim().slice(0, 300) : ''
     if (!said) throw new HttpError(400, 'Bad request')
     const was = await db.prepare('SELECT allowed FROM door_leaders WHERE user_id = ?').bind(userId).first<{ allowed: number | null }>()
@@ -1274,8 +1274,11 @@ export function isoWeek(d: Date) {
   return `${y}-W${String(week).padStart(2, '0')}`
 }
 
+// The app's languages (src/i18n.ts): an id like "de" or "zh-hant". Emails and
+// notifications have words in English, French and Spanish; the others read English.
 const LANGS = ['en', 'fr', 'es']
-const LANG_NAMES: Record<string, string> = { en: 'English', fr: 'French', es: 'Spanish' }
+const isLang = (l: string | null | undefined): l is string => !!l && /^[a-z]{2,3}(-han[st])?$/.test(l)
+const langName = (l: string) => { try { return new Intl.DisplayNames(['en'], { type: 'language' }).of(l.replace(/-(han[st])$/, (_, x: string) => '-' + x[0].toUpperCase() + x.slice(1))) ?? l } catch { return l } }
 
 async function helloRoute(req: Request, env: Env) {
   // Only the app itself counts (a stray visit to the address doesn't).
@@ -1288,7 +1291,7 @@ async function helloRoute(req: Request, env: Env) {
   if (q.get('week') === '1') counts.push([isoWeek(now), 'week'])
   if (q.get('month') === '1') counts.push([day.slice(0, 7), 'month'])
   const lang = q.get('lang')
-  if (lang && LANGS.includes(lang)) counts.push([day, `lang:${lang}`])
+  if (isLang(lang)) counts.push([day, `lang:${lang}`])
   await env.DB.batch(counts.map(([period, kind]) =>
     env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, 1) ON CONFLICT (period, kind) DO UPDATE SET n = n + 1').bind(period, kind)))
   return json({ ok: true })
@@ -1422,7 +1425,8 @@ ${reportActs(r)}</div>`).join('')}` : ''
     ['Prayer requests', sum('door:ask', since7), 'sent to leaders, last 7 days'],
     ['Prayed for', sum('door:prayed', since7), 'requests a leader prayed for, last 7 days'],
   ]
-  const langs = LANGS.map(l => [LANG_NAMES[l], sum(`lang:${l}`, since30)] as [string, number])
+  const seen = [...new Set(rows.results.filter(r => r.kind.startsWith('lang:')).map(r => r.kind.slice(5)))]
+  const langs = [...new Set([...LANGS, ...seen])].map(l => [langName(l), sum(`lang:${l}`, since30)] as [string, number]).filter(([, n], i) => i < 3 || n > 0).sort((a, b) => b[1] - a[1])
   const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
   const cards = (list: [string, number, string][]) => list.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')

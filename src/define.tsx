@@ -7,7 +7,7 @@ import { currentLang, t } from './i18n'
 /** The dictionary in the Bible's own language when there is one, else in
  *  the app's language. */
 export const dictLangFor = (bibleLang: string | undefined): DictLang =>
-  DICT_LANGS.includes(bibleLang as DictLang) ? bibleLang as DictLang : currentLang()
+  DICT_LANGS.includes(bibleLang as DictLang) ? bibleLang as DictLang : DICT_LANGS.includes(currentLang() as DictLang) ? currentLang() as DictLang : 'en'
 
 /** The word selected in the Bible's text, if just one word is, and the
  *  language of the version it's in when the page says (side by side

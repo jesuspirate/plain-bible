@@ -55,6 +55,12 @@ section.hero { border-top: none; }
 /* Theme and language side by side; on a phone, language goes under theme. */
 .pickers { display: flex; flex-wrap: wrap; justify-content: flex-end; gap: 8px; }
 .langs button { padding: 0 13px; }
+/* The other languages: a 🌐 pill over a plain list, showing the code of the one in use. */
+.more-lang { position: relative; display: inline-grid; grid-auto-flow: column; place-items: center; gap: 4px; min-height: 46px; padding: 0 13px; border-radius: 999px; font: 600 17px var(--sans); color: var(--soft); cursor: pointer; }
+.more-lang.on { background: var(--text); color: var(--bg); }
+.more-lang select { position: absolute; inset: 0; width: 100%; height: 100%; opacity: 0; cursor: pointer; font-size: 17px; }
+.more-lang:focus-within { outline: 3px solid var(--accent); outline-offset: 2px; }
+.more-lang[hidden] { display: none; }
 
 main { max-width: 1120px; margin: 0 auto; padding: 0 20px; }
 @supports (padding: max(0px)) {

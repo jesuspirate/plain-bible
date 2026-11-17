@@ -708,7 +708,7 @@ export function SearchBar({ here, mini, above }: {
               <button class="sb-item sb-ref" onClick={() => finish(readPath(version, preview.ref.book, preview.ref.chapter, preview.ref.verse, [], preview.ref.verseEnd))}>
                 <span class="sb-kicker">{t('Go to')} · {version}</span>
                 <span class="sb-title">{formatRef(preview.ref)}</span>
-                <span class="sb-verse" dir={info?.rtl ? 'rtl' : undefined}>
+                <span class="sb-verse" dir={info?.rtl ? 'rtl' : 'ltr'}>
                   {preview.lines.map(([n, s]) => <><sup>{n}</sup>{s} </>)}
                 </span>
               </button>
@@ -735,7 +735,7 @@ export function SearchBar({ here, mini, above }: {
                   return (
                     <button class={'sb-item' + (trail?.q === trimmed && trail.at === i ? ' sb-here' : '')} onClick={() => openHit(v)}>
                       <span class="sb-title">{formatRef(v)}{(inV.length > 1 || live.also) && shown && <span class="sb-vtag">{shown.version}</span>}</span>
-                      <span class="sb-verse" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}><VerseText raw={shown?.text ?? ''} ranges={shown?.ranges} /></span>
+                      <span class="sb-verse" dir={tv?.rtl ? 'rtl' : 'ltr'} lang={tv?.lang}><VerseText raw={shown?.text ?? ''} ranges={shown?.ranges} /></span>
                     </button>
                   )
                 })}
