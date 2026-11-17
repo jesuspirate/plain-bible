@@ -216,16 +216,15 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             // UITextEffectsWindow). Make it invisible; again a moment later
             // in case the system lays it out afresh. Typing is unaffected:
             // keys go to the field, not to this bar.
-            let gone = !hiding && self.hideMacInputBar()
             if !hiding {
-                DispatchQueue.main.async { [weak self] in
-                    if let self, self.hideMacInputBar() { self.additionalSafeAreaInsets.bottom = 0 }
-                }
+                _ = self.hideMacInputBar()
+                DispatchQueue.main.async { [weak self] in _ = self?.hideMacInputBar() }
             }
             // The window's own safe area already counts; add only the rest.
-            // When the bar is hidden nothing covers the page, so add nothing.
+            // Always, even after hiding the bar above: on a real Mac the
+            // band still showed (1.2.5), and the search bar fell under it.
             let own = view.safeAreaInsets.bottom - self.additionalSafeAreaInsets.bottom
-            let covered = hiding || gone ? 0
+            let covered = hiding ? 0
                 : max(0, min(view.bounds.maxY - frame.minY, view.bounds.height / 3) - own)
             if self.additionalSafeAreaInsets.bottom != covered { self.additionalSafeAreaInsets.bottom = covered }
             if note.name != UIResponder.keyboardWillHideNotification { self.reportMacStrip(keyboard: end) }
