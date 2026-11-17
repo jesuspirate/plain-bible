@@ -24,7 +24,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var macAway: [NSObjectProtocol] = []
     private var lastPicture: UIImage?
     private var cover: UIImageView?
-    private var isAway = false
+    private var pictureRound = 0
     /// The verses picked in the reader, as the Copy button copies them.
     fileprivate var pickedText = ""
 
@@ -128,8 +128,16 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     /// the window slid in empty (just the paper color) and the text came a
     /// second later, every time. So: when the app steps back, keep a picture
     /// of the page; while it is away, that picture lies over the web view;
-    /// back again, it goes once the page has drawn itself. iPhone and iPad
-    /// keep their own snapshot for the app switcher and are left as they are.
+    /// back again, it goes once the page has surely drawn itself. iPhone and
+    /// iPad keep their own snapshot for the app switcher and are left alone.
+    ///
+    /// The first version asked the web view for its picture, which
+    /// answers later, from the page's own process: often after macOS had
+    /// already put that process to sleep, so after a swipe or two there was
+    /// no picture and the blank came back. And it took the picture away as
+    /// soon as the page had run two frames, sometimes before the text was
+    /// back on screen. Now the picture is copied at once from what is on the
+    /// screen, and stays a moment longer.
     private func keepPageWhileAwayOnMac() {
         guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
         let center = NotificationCenter.default
@@ -137,36 +145,59 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             (note.object as? UIScene) === self?.view.window?.windowScene
         }
         macAway = [
-            // Still drawn and running here: take the picture now.
+            // Still on screen: copy it now.
             center.addObserver(forName: UIScene.willDeactivateNotification, object: nil, queue: .main) { [weak self] note in
-                guard let self, mine(note), self.cover == nil else { return }
-                self.web.takeSnapshot(with: nil) { [weak self] image, _ in
-                    guard let self, let image else { return }
-                    self.lastPicture = image
-                    if self.isAway { self.coverPage() }
-                }
+                guard let self, mine(note) else { return }
+                self.takePicture()
             },
             center.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] note in
                 guard let self, mine(note) else { return }
-                self.isAway = true
+                // Gone without stepping back first: copy it now, while the
+                // page is still drawn.
+                if self.lastPicture == nil { self.takePicture() }
                 self.coverPage()
             },
             center.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] note in
                 guard let self, mine(note) else { return }
-                self.isAway = false
                 self.uncoverOnceDrawn()
             },
-            // Back without ever going to the background (another app was in
-            // front, the window stayed in view): the picture isn't needed.
+            // Back in front: the next time away needs a new picture (an old
+            // one could show another page).
             center.addObserver(forName: UIScene.didActivateNotification, object: nil, queue: .main) { [weak self] note in
-                guard let self, mine(note), self.cover == nil else { return }
+                guard let self, mine(note) else { return }
                 self.lastPicture = nil
+                self.pictureRound += 1
             },
         ]
     }
 
+    /// A copy of what the window shows right now, taken here and at once
+    /// (the page's own process isn't asked, so it can't come too late).
+    private func takePicture() {
+        let bounds = web.bounds
+        guard bounds.width > 0, bounds.height > 0, web.window != nil else { return }
+        let format = UIGraphicsImageRendererFormat(for: web.traitCollection)
+        format.opaque = true
+        var drawn = false
+        let image = UIGraphicsImageRenderer(bounds: bounds, format: format).image { _ in
+            drawn = web.drawHierarchy(in: bounds, afterScreenUpdates: false)
+        }
+        if drawn { lastPicture = image }
+        // The web view's own picture as well, in case the copy came out
+        // without the page: when it arrives (if it arrives while still away,
+        // or before), it takes the copy's place.
+        pictureRound += 1
+        let round = pictureRound
+        web.takeSnapshot(with: nil) { [weak self] image, _ in
+            guard let self, let image, round == self.pictureRound else { return }
+            self.lastPicture = image
+            self.cover?.image = image
+        }
+    }
+
     private func coverPage() {
-        guard cover == nil, let picture = lastPicture else { return }
+        guard let picture = lastPicture else { return }
+        if let old = cover { old.removeFromSuperview() }
         let still = UIImageView(image: picture)
         still.frame = view.bounds
         still.autoresizingMask = [.flexibleWidth, .flexibleHeight]
@@ -179,20 +210,23 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         cover = still
     }
 
-    /// The page has drawn itself again once it has had two frames; then the
-    /// picture fades away (within 3 seconds in any case).
+    /// The picture stays until the page has run two frames and at least a
+    /// second has gone by (the text can come a little after those frames),
+    /// then fades away; after 3 seconds it goes in any case. It shows the
+    /// same page, so holding it a little longer costs nothing.
     private func uncoverOnceDrawn() {
-        guard let still = cover else { lastPicture = nil; return }
+        guard let still = cover else { return }
+        let back = Date()
         let done: () -> Void = { [weak self] in
             guard let self, self.cover === still else { return }
             self.cover = nil
-            self.lastPicture = nil
-            UIView.animate(withDuration: 0.15, animations: { still.alpha = 0 }) { _ in still.removeFromSuperview() }
+            UIView.animate(withDuration: 0.2, animations: { still.alpha = 0 }) { _ in still.removeFromSuperview() }
         }
         web.callAsyncJavaScript(
             "await new Promise(r => requestAnimationFrame(() => requestAnimationFrame(r)))",
             arguments: [:], in: nil, in: .page) { _ in
-            DispatchQueue.main.asyncAfter(deadline: .now() + 0.05, execute: done)
+            let wait = max(0.3, 1.0 - Date().timeIntervalSince(back))
+            DispatchQueue.main.asyncAfter(deadline: .now() + wait, execute: done)
         }
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: done)
     }
