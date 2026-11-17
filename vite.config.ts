@@ -2,6 +2,7 @@ import { readFileSync } from 'node:fs'
 import { defineConfig, type Plugin } from 'vite'
 import preact from '@preact/preset-vite'
 import { VitePWA } from 'vite-plugin-pwa'
+import { LANGS } from './src/i18n'
 
 // Shown in Settings, so you can tell which version you have: the day it was
 // built and its commit.
@@ -59,6 +60,8 @@ const themedManifests: Plugin = {
     order: 'post',
     handler(html, ctx) {
       html = html.replaceAll('{{versions}}', String(counts.versions)).replaceAll('{{languages}}', String(counts.languages))
+        // The languages the welcome and support pages speak, for their first paint.
+        .replaceAll('{{langIds}}', LANGS.map(l => l.id).join('|')).replaceAll('{{rtlIds}}', LANGS.filter(l => l.rtl).map(l => l.id).join('|') || '-')
       return /^\/(welcome|support)\//.test(ctx.path) ? html.replace('href="./manifest.webmanifest"', 'href="../manifest-sepia.webmanifest"') : html
     },
   },
@@ -87,7 +90,9 @@ export default defineConfig({
         clientsClaim: false,
         // Notifications for circles (public/push-sw.js).
         importScripts: ['push-sw.js'],
-        globPatterns: ['**/*.{js,css,html,svg,png}'],
+        // Of the languages' words (public/i18n), only French and Spanish come
+        // with the app; each other language is fetched by those who read in it.
+        globPatterns: ['**/*.{js,css,html,svg,png}', 'i18n/*/{fr,es}.json'],
         // The picture for shared links is for other apps to fetch, not part of the offline Bible.
         // Nor is the QR drawing, which only the support page loads, and only once Bitcoin is set up there.
         globIgnores: ['share.png', '**/qrcode-*.js'],
@@ -100,6 +105,14 @@ export default defineConfig({
             urlPattern: ({ url }) => /\/data\/(bibles\/|strongs-)|\/dict\/\w+\.json$/.test(url.pathname),
             handler: 'CacheFirst',
             options: { cacheName: 'bible-data', cacheableResponse: { statuses: [0, 200] } },
+          },
+          {
+            // A language's words (src/i18n.ts): kept once fetched, so the app
+            // starts in its language offline with no wait, and refreshed in
+            // the background for the next start.
+            urlPattern: ({ url }) => /\/i18n\/\w+\/[\w-]+\.json$/.test(url.pathname),
+            handler: 'StaleWhileRevalidate',
+            options: { cacheName: 'words', cacheableResponse: { statuses: [200] } },
           },
           {
             // Fonts: only the scripts and styles actually used get downloaded.

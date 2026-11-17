@@ -4,6 +4,8 @@
 import '@fontsource-variable/literata'
 import '@fontsource-variable/inter'
 import './welcome.css'
+import { appleHelp, google } from '../src/lib/helpLinks'
+import { known, langPicker, loadWords, type Lang } from './pageLang'
 
 const THEME_KEY = 'plain-bible:welcome-theme'
 const WELCOMED_KEY = 'plain-bible:welcomed'
@@ -97,12 +99,14 @@ function showVerse(id: string) {
 }
 for (const b of $$<HTMLButtonElement>('.chips button')) b.addEventListener('click', () => showVerse(b.dataset.verse!))
 
-// ---- the page's words: English as written in index.html, French and
-// Spanish each a small file of their own, loaded only when read ----
-type Lang = 'en' | 'fr' | 'es'
-type Words = typeof import('./fr').default
+// ---- the page's words: English as written in index.html, every other
+// language a small file of its own, loaded only when read (pageLang.ts) ----
+interface Words {
+  title: string; description: string; homeScreen: string; computerInstall: string; installIphone: string; installAndroid: string
+  installSub: string; installSubComputer: string; verseRef: string; psalm118: string; mbar: string; mock: string[]; closing: string
+  language: string
+}
 const LANG_KEY = 'plain-bible:welcome-lang'
-const LOAD: Record<Exclude<Lang, 'en'>, () => Promise<{ default: Words }>> = { fr: () => import('./fr'), es: () => import('./es') }
 const root = document.documentElement
 const description = $<HTMLMetaElement>('meta[name="description"]')!
 const mock = $$<HTMLParagraphElement>('.m-chapter p')
@@ -121,6 +125,7 @@ const EN: Words = {
   mbar: 'Ps 119 · KJV',
   mock: mock.map(p => p.textContent!.replace(/^\d+/, '')),
   closing: closing.textContent!,
+  language: 'Language',
 } as Words
 const html = new Map($$('[data-t]').map(el => [el, el.innerHTML]))
 const labels = new Map($$('[data-t-label]').map(el => [el, el.getAttribute('aria-label')!]))
@@ -133,9 +138,9 @@ const fill = (s: string, svgs: string[] = []) => {
     .replace(/\{(versions|languages)\}/g, (_, k: 'versions' | 'languages') => root.dataset[k] ?? '')
 }
 
+const shown = langPicker(l => applyLang(l, true))
 async function applyLang(l: Lang, remember: boolean) {
-  try { words = l === 'en' ? {} : (await LOAD[l]()).default } catch { words = {}; l = 'en' }
-  root.lang = l
+  try { words = await loadWords<Words>('welcome', l) } catch { words = {}; l = 'en' }
   for (const [el, en] of html) {
     const w = words[el.dataset.t as keyof Words]
     el.innerHTML = typeof w === 'string' ? fill(w, en.match(/<svg[\s\S]*?<\/svg>/g) ?? []) : en
@@ -153,18 +158,16 @@ async function applyLang(l: Lang, remember: boolean) {
     else p.appendChild(document.createTextNode(text))
   })
   closing.textContent = word('closing')
-  showVerse(l === 'en' ? (chip === 'fr' || chip === 'es' ? 'en' : chip) : l)
-  for (const b of $$<HTMLButtonElement>('.langs button')) b.setAttribute('aria-pressed', String(b.dataset.lang === l))
+  // The lamp verse in the page's language, when it's one of the few shown.
+  showVerse(l in VERSES ? l : l === 'zh-hant' ? 'zh' : chip === 'fr' || chip === 'es' ? 'en' : chip)
+  shown(l, word('language'))
   // Apple's and Google's own pages, in the same language.
-  for (const el of $$<HTMLAnchorElement>('[data-help]')) el.href = el.dataset.help === 'apple'
-    ? `https://support.apple.com/${l === 'en' ? '' : l + '-' + l + '/'}guide/iphone/iph42ab2f3a7/ios`
-    : `https://support.google.com/chrome/answer/9658361?hl=${l}&co=GENIE.Platform%3D${el.dataset.help === 'android' ? 'Android' : 'Desktop'}`
+  for (const el of $$<HTMLAnchorElement>('[data-help]')) el.href = el.dataset.help === 'apple' ? appleHelp(l) : google(el.dataset.help === 'android' ? 'Android' : 'Desktop', l)
   wireLinks()
   root.classList.remove('i18n-wait')
   // The Bible starts in this language too, the first time (src/state.ts).
   if (remember) set(LANG_KEY, l)
 }
-for (const b of $$<HTMLButtonElement>('.langs button')) b.addEventListener('click', () => applyLang(b.dataset.lang as Lang, true))
 
 // ---- Home Screen: the steps for the device in hand first ----
 const ua = navigator.userAgent
@@ -189,7 +192,7 @@ for (const t of $$<HTMLButtonElement>('.seg button')) t.addEventListener('click'
 showPanel(iOS ? 'iphone' : android ? 'android' : 'computer')
 // A computer has no Home Screen.
 const computer = !iOS && !android
-applyLang((['en', 'fr', 'es'].includes(root.lang) ? root.lang : 'en') as Lang, false)
+applyLang(known(root.lang) ? root.lang : 'en', false)
 
 // Where the browser offers to install (Chrome on Android and computers), one button does it.
 interface BeforeInstallPromptEvent extends Event { prompt(): Promise<void>; userChoice: Promise<{ outcome: 'accepted' | 'dismissed' }> }

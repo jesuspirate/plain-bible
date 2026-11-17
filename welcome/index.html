@@ -57,7 +57,14 @@
       // time, or the app's on this device, or the phone's. Not English: the
       // page stays hidden the moment it takes to put its words in (welcome.ts).
       (function () {
-        var ok = /^(en|fr|es)$/, l = null
+        // The languages the pages speak, and those written right to left (vite.config.ts fills them in).
+        var ok = /^({{langIds}})$/, rtl = /^({{rtlIds}})$/, l = null
+        // A device language as the app names it: zh-TW is zh-hant, no is nb (src/i18n.ts, langOf).
+        var id = function (tag) {
+          var p = String(tag).toLowerCase().replace(/_/g, '-').split('-')
+          if (p[0] === 'zh') return p.slice(1).some(function (x) { return /^(hant|tw|hk|mo)$/.test(x) }) ? 'zh-hant' : 'zh-hans'
+          return { no: 'nb', iw: 'he', 'in': 'id', fil: 'tl' }[p[0]] || p[0]
+        }
         try {
           l = localStorage.getItem('plain-bible:welcome-lang') || JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').language
         } catch (e) {}
@@ -65,10 +72,11 @@
           l = 'en'
           var list = navigator.languages && navigator.languages.length ? navigator.languages : [navigator.language || 'en']
           for (var i = 0; i < list.length; i++) {
-            var c = String(list[i]).toLowerCase().split('-')[0]
+            var c = id(list[i])
             if (ok.test(c)) { l = c; break }
           }
         }
+        document.documentElement.dir = rtl.test(l) ? 'rtl' : 'ltr'
         document.documentElement.lang = l
         if (l !== 'en') {
           document.documentElement.classList.add('i18n-wait')
@@ -99,6 +107,7 @@
           <button type="button" data-lang="en" lang="en" aria-pressed="false" aria-label="English">EN</button>
           <button type="button" data-lang="fr" lang="fr" aria-pressed="false" aria-label="Français">FR</button>
           <button type="button" data-lang="es" lang="es" aria-pressed="false" aria-label="Español">ES</button>
+          <label class="more-lang" hidden><span aria-hidden="true">🌐</span><span class="more-code" aria-hidden="true"></span><select aria-label="Language"></select></label>
         </div>
       </div>
     </header>

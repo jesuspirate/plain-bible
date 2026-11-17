@@ -5,11 +5,11 @@ import '@fontsource-variable/literata'
 import '@fontsource-variable/inter'
 import '../welcome/welcome.css'
 import './support.css'
+import { known, langPicker, loadWords, type Lang } from '../welcome/pageLang'
 
 const COLORS = { light: '#faf8f3', sepia: '#f4ecd8', dark: '#16161a' } as const
 type Theme = keyof typeof COLORS
-type Lang = 'en' | 'fr' | 'es'
-type Words = typeof import('./fr').default
+type Words = Record<string, string>
 
 const set = (k: string, v: string) => { try { localStorage.setItem(k, v) } catch { /* private mode */ } }
 const $ = <T extends Element = HTMLElement>(sel: string, root: ParentNode = document) => root.querySelector<T>(sel)
@@ -26,17 +26,16 @@ function applyTheme(t: Theme, remember: boolean) {
 applyTheme((root.dataset.theme as Theme) || 'sepia', false)
 for (const b of $$<HTMLButtonElement>('.themes button[data-theme]')) b.addEventListener('click', () => applyTheme(b.dataset.theme as Theme, true))
 
-// ---- words: English as written in index.html, French and Spanish loaded when read ----
-const LOAD: Record<Exclude<Lang, 'en'>, () => Promise<{ default: Words }>> = { fr: () => import('./fr'), es: () => import('./es') }
+// ---- words: English as written in index.html, the others loaded when read (welcome/pageLang.ts) ----
 const description = $<HTMLMetaElement>('meta[name="description"]')!
 const EN = { title: document.title, description: description.content } as Words
 const html = new Map($$('[data-t]').map(el => [el, el.innerHTML]))
 const labels = new Map($$('[data-t-label]').map(el => [el, el.getAttribute('aria-label')!]))
 let words: Partial<Words> = {}
 
+const shown = langPicker(l => applyLang(l, true))
 async function applyLang(l: Lang, remember: boolean) {
-  try { words = l === 'en' ? {} : (await LOAD[l]()).default } catch { words = {}; l = 'en' }
-  root.lang = l
+  try { words = await loadWords<Words>('support', l) } catch { words = {}; l = 'en' }
   for (const [el, en] of html) {
     const w = words[el.dataset.t as keyof Words]
     // The back arrow is drawn, and stays.
@@ -45,12 +44,11 @@ async function applyLang(l: Lang, remember: boolean) {
   for (const [el, en] of labels) el.setAttribute('aria-label', (words[el.dataset.tLabel as keyof Words] as string) ?? en)
   document.title = words.title ?? EN.title
   description.content = words.description ?? EN.description
-  for (const b of $$<HTMLButtonElement>('.langs button')) b.setAttribute('aria-pressed', String(b.dataset.lang === l))
+  shown(l, words.language ?? 'Language')
   root.classList.remove('i18n-wait')
   if (remember) set('plain-bible:welcome-lang', l)
 }
-for (const b of $$<HTMLButtonElement>('.langs button')) b.addEventListener('click', () => applyLang(b.dataset.lang as Lang, true))
-applyLang((['en', 'fr', 'es'].includes(root.lang) ? root.lang : 'en') as Lang, false)
+applyLang(known(root.lang) ? root.lang : 'en', false)
 
 // ---- Bitcoin: shown only once index.html has a pay link or an address ----
 const btc = $('#bitcoin')!

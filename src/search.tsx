@@ -172,7 +172,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
                 {v.texts.map(x => {
                   const tv = byId.get(x.version)
                   return (
-                    <p class={'hit' + (x.matched ? '' : ' nomatch')} dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
+                    <p class={'hit' + (x.matched ? '' : ' nomatch')} dir={tv?.rtl ? 'rtl' : 'ltr'} lang={tv?.lang}>
                       {versions.length > 1 && <span class="vtag">{x.version}</span>}
                       <VerseText raw={x.text} ranges={x.ranges} strongs={!!tv?.strongs && (settings.strongs || mark.length > 0)} mark={mark} onStrongs={setLex} />
                     </p>

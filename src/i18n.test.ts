@@ -1,51 +1,57 @@
-import { readdirSync, readFileSync, statSync } from 'node:fs'
-import { join } from 'node:path'
+import { readdirSync, readFileSync } from 'node:fs'
 import { describe, expect, it } from 'vitest'
-import fr from './i18n/fr'
-import es from './i18n/es'
+import { LANGS, type Dict } from './i18n'
+import { englishKeys, pluralPairs } from './i18n.keys'
+import { BOOKS } from './lib/books'
 
-// Every English sentence the app shows has its French and Spanish, with the
-// same {placeholders}. The sentences are found where they're written: in
-// t(), tn(), tj() and N_(), thrown as a SyncError, or sent by the sync
-// service (worker/src/index.ts).
-const files = (dir: string): string[] => readdirSync(dir).flatMap(f => {
-  const p = join(dir, f)
-  return statSync(p).isDirectory() ? (f === 'i18n' ? [] : files(p)) : /\.tsx?$/.test(f) && !/\.test\./.test(f) ? [p] : []
-})
-const STR = String.raw`'((?:[^'\\\n]|\\.)*)'|"((?:[^"\\\n]|\\.)*)"`
-const unquote = (m: RegExpExecArray, i = 1) => (m[i] ?? m[i + 1]).replace(/\\(.)/g, '$1')
-
-export function englishKeys() {
-  const keys = new Set<string>()
-  const add = (re: RegExp, text: string, groups: number[]) => { for (const m of text.matchAll(re)) for (const g of groups) keys.add(unquote(m as RegExpExecArray, g)) }
-  for (const f of files('src')) {
-    const s = readFileSync(f, 'utf8')
-    add(new RegExp(String.raw`\b(?:t|tj|N_)\(\s*(?:${STR})`, 'g'), s, [1])
-    add(new RegExp(String.raw`\btn\([^,]+,\s*(?:${STR})\s*,\s*(?:${STR})`, 'g'), s, [1, 3])
-    add(new RegExp(String.raw`new SyncError\(\s*(?:${STR})`, 'g'), s, [1])
-  }
-  const worker = readFileSync('worker/src/index.ts', 'utf8')
-  add(new RegExp(String.raw`HttpError\(\d+,\s*(?:${STR})`, 'g'), worker, [1])
-  for (const m of worker.matchAll(/const expired = '([^']*)'/g)) keys.add(m[1])
-  keys.delete('Cancelled')
-  return [...keys]
-}
-
+// Every language the app speaks has every English sentence, with the same
+// {placeholders}, and so do its welcome and support pages. The words are in
+// public/i18n/<page>/<lang>.json, one file per language, fetched only by the
+// people who read in it.
+const read = (page: string, l: string) => JSON.parse(readFileSync(`public/i18n/${page}/${l}.json`, 'utf8'))
 const holes = (s: string) => [...s.matchAll(/\{(\w+)\}/g)].map(m => m[1]).sort().join()
-
-describe.each([['fr', fr], ['es', es]] as const)('%s', (_, dict) => {
-  const keys = englishKeys()
-  it('has every sentence', () => {
-    expect(keys.filter(k => !(k in dict))).toEqual([])
-  })
-  it('keeps the placeholders', () => {
-    expect(keys.filter(k => k in dict && holes(k) !== holes(dict[k]))).toEqual([])
-  })
-  it('has nothing left over', () => {
-    const known = new Set(keys)
-    expect(Object.keys(dict).filter(k => !known.has(k) && !EXTRA.has(k))).toEqual([])
-  })
-})
+const tags = (s: string) => [...s.matchAll(/<\/?([a-z0-9]+)/gi)].map(m => m[0].toLowerCase()).join()
+const others = LANGS.filter(l => l.id !== 'en').map(l => l.id)
 
 // Sentences the service builds with a number in them.
 const EXTRA = new Set(['You can be in up to 20 circles', 'A circle can have up to 50 people', 'A circle can have up to 300 people', 'Something went wrong'])
+const keys = englishKeys(), plurals = pluralPairs()
+
+it('lists exactly the languages that have words', () => {
+  for (const page of ['app', 'welcome', 'support']) {
+    expect(readdirSync(`public/i18n/${page}`).map(f => f.replace(/\.json$/, '')).sort()).toEqual([...others].sort())
+  }
+})
+
+describe.each(others)('%s', l => {
+  const dict = read('app', l) as Dict
+  const forms = (k: string): string[] => { const v = dict[k]; return typeof v === 'string' ? [v] : v ? Object.values(v) : [] }
+  it('has every sentence', () => {
+    expect(keys.filter(k => !forms(k).length || forms(k).some(s => typeof s !== 'string' || !s.trim()))).toEqual([])
+  })
+  it('keeps the placeholders', () => {
+    expect(keys.filter(k => forms(k).some(s => holes(k) !== holes(s)))).toEqual([])
+  })
+  it('uses plural forms only where a count is', () => {
+    const cats = new Set(new Intl.PluralRules(l.replace(/-(han[st])$/, (_, s: string) => '-' + s[0].toUpperCase() + s.slice(1))).resolvedOptions().pluralCategories)
+    const bad = keys.filter(k => { const v = dict[k]; return v && typeof v === 'object' && (!plurals.has(k) || !('other' in v) || Object.keys(v).some(c => !cats.has(c as Intl.LDMLPluralRule))) })
+    expect(bad).toEqual([])
+  })
+  it('has nothing left over', () => {
+    const known = new Set(keys)
+    expect(Object.keys(dict).filter(k => !known.has(k) && !EXTRA.has(k) && !k.startsWith('@'))).toEqual([])
+  })
+  it('never calls a gift tax-deductible', () => {
+    expect(JSON.stringify([dict, read('support', l), read('welcome', l)])).not.toMatch(/tax[- ]deductible/i)
+  })
+  it.skipIf(l === 'fr' || l === 'es')('names every book', () => {
+    expect(BOOKS.filter(b => !dict['@books']?.[b.id]).map(b => b.id)).toEqual([])
+  })
+  it.each(['welcome', 'support'])('has the %s page', page => {
+    const fr = read(page, 'fr'), words = read(page, l)
+    expect(Object.keys(fr).filter(k => k !== 'mock' && k !== 'closing' && !(k in words))).toEqual([])
+    expect(Object.keys(words).filter(k => !(k in fr))).toEqual([])
+    // The same {placeholders} and HTML tags as the French, which matches the English.
+    expect(Object.keys(words).filter(k => typeof fr[k] === 'string' && (holes(fr[k]) !== holes(words[k]) || tags(fr[k]) !== tags(words[k])))).toEqual([])
+  })
+})

@@ -1104,7 +1104,7 @@ export function Reader({ route }: { route: Route }) {
         <div class="vrow-head">{versions.map(v => <div class="colhead" title={byId.get(v)?.name}>{v}</div>)}</div>
       )}
       {versions.length === 1 && settings.layout === 'paragraph' ? (
-        <p class="para" dir={info?.rtl ? 'rtl' : undefined} lang={info?.lang}>
+        <p class="para" dir={info?.rtl ? 'rtl' : 'ltr'} lang={info?.lang}>
           {primary.books[b][c - 1].map((raw, i) => raw && (
             <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
               <sup class="vn">{i + 1}</sup>{after(i + 1)}
@@ -1118,7 +1118,7 @@ export function Reader({ route }: { route: Route }) {
             const raw = bibles[v].books[b]?.[c - 1]?.[i]
             const tv = byId.get(v)
             return (
-              <div class="cell" dir={tv?.rtl ? 'rtl' : undefined} lang={tv?.lang}>
+              <div class="cell" dir={tv?.rtl ? 'rtl' : 'ltr'} lang={tv?.lang}>
                 <button class="vn" aria-label={t('Verse {v} options', { v: i + 1 })} tabIndex={live ? undefined : -1}>{i + 1}</button>{v === version && after(i + 1)}
                 {raw ? <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} ranges={part(i + 1, v)} markClass="hl-part" /></span> : <span class="muted">—</span>}
                 {v === version && tab(i + 1)}
@@ -1228,7 +1228,7 @@ export function Reader({ route }: { route: Route }) {
         </div>
       )}
       {tied && <div class="pick-verse done" role="status">{tied}</div>}
-      {noteFor && <NotesSheet book={book} chapter={chapter} version={version} {...noteFor} dir={info?.rtl ? 'rtl' : undefined} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
+      {noteFor && <NotesSheet book={book} chapter={chapter} version={version} {...noteFor} dir={info?.rtl ? 'rtl' : 'ltr'} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
         text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
       {chapterSheet && (
         <Sheet title={`${t('Your notes')} · ${bookName(book)} ${chapter}`} onClose={() => setChapterSheet(false)}>
@@ -1416,7 +1416,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             {compare.map(b => (
               <>
                 <dt>{b.id} <span class="muted small">{byId.get(b.id)?.name}</span></dt>
-                <dd dir={byId.get(b.id)?.rtl ? 'rtl' : undefined}>{textOf(b) || <span class="muted">—</span>}</dd>
+                <dd dir={byId.get(b.id)?.rtl ? 'rtl' : 'ltr'}>{textOf(b) || <span class="muted">—</span>}</dd>
               </>
             ))}
           </dl>
@@ -1438,7 +1438,7 @@ export interface NotesTarget {
  *  saved as you type. A sheet opened straight to one note closes when you're
  *  done with it; opened on the list, it goes back to the list. */
 export function NotesSheet({ book, chapter, version, verses, start, text, dir, links, onGo, onClose }: NotesTarget & {
-  book: string; chapter: number; version?: string; text: (v: number) => string; dir?: 'rtl'; links?: NoteLinks; onGo?: (x: LinkedNote) => void; onClose: () => void
+  book: string; chapter: number; version?: string; text: (v: number) => string; dir?: 'rtl' | 'ltr'; links?: NoteLinks; onGo?: (x: LinkedNote) => void; onClose: () => void
 }) {
   const { marks, settings } = useApp()
   // A note can go to your circle as it is, with the verses it's on.
@@ -1510,7 +1510,7 @@ function NoteCards({ notes, book, chapter, onPick }: {
 
 /** The verses a note is about, as a quiet quote. A long passage is folded
  *  to its first lines; tap to see it all. */
-function Passage({ verses, text, dir }: { verses: number[]; text: (v: number) => string; dir?: 'rtl' }) {
+function Passage({ verses, text, dir }: { verses: number[]; text: (v: number) => string; dir?: 'rtl' | 'ltr' }) {
   const [full, setFull] = useState(false)
   const shown = verses.map(v => [v, text(v)] as const).filter(([, s]) => s)
   if (!shown.length) return null

@@ -6,7 +6,7 @@ import { Catalog, DataSource, Translation } from './lib/data'
 import type { SearchOptions } from './lib/query'
 import type { Marks } from './lib/marks'
 import type { PrayerVerse } from './lib/prayerVerses'
-import { N_, type Lang } from './i18n'
+import { knownLang, langOf, N_, type Lang } from './i18n'
 import type { Away } from './sideways'
 
 export type FontId = 'literata' | 'source-serif' | 'garamond' | 'inter' | 'atkinson' | 'system'
@@ -82,9 +82,9 @@ const USUAL: Record<string, string> = { fr: 'LSG', es: 'SpaRV' }
 
 export function defaultSettings(catalog?: Catalog): Settings {
   const picked = welcomeLang()
-  const lang = (picked ?? navigator.language ?? 'en').toLowerCase().split('-')[0]
+  const lang = picked ?? langOf(navigator.language ?? 'en')
   const rank = (id: string) => id === USUAL[lang] ? 0 : id.startsWith('Eth') ? 2 : 1
-  const local = catalog?.translations.filter(t => t.lang.split('-')[0] === lang && lang !== 'en')
+  const local = catalog?.translations.filter(t => (t.lang === lang || t.lang.split('-')[0] === lang) && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
     language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
@@ -105,8 +105,7 @@ export function welcomeTheme(): Settings['theme'] | undefined {
 /** The language picked on the welcome page before the Bible was first opened, if any. */
 export function welcomeLang(): Lang | undefined {
   try {
-    const l = localStorage.getItem('plain-bible:welcome-lang')
-    return l === 'en' || l === 'fr' || l === 'es' ? l : undefined
+    return knownLang(localStorage.getItem('plain-bible:welcome-lang'))
   } catch { return undefined }
 }
 

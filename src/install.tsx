@@ -7,10 +7,7 @@ import { currentLang, t, tj } from './i18n'
 import { CloseIcon } from './icons'
 import { canInstall, INSTALL_EVENT, installNow, installed, isAndroid, isIPhone } from './lib/install'
 import './install.css'
-
-// Apple's and Google's own instructions, in the reader's language.
-const APPLE = { en: 'https://support.apple.com/guide/iphone/iph42ab2f3a7/ios', fr: 'https://support.apple.com/fr-fr/guide/iphone/iph42ab2f3a7/ios', es: 'https://support.apple.com/es-es/guide/iphone/iph42ab2f3a7/ios' }
-const google = (platform: 'Android' | 'Desktop', lang: string) => `https://support.google.com/chrome/answer/9658361?hl=${lang}&co=GENIE.Platform%3D${platform}`
+import { appleHelp, google } from './lib/helpLinks'
 
 const ShareGlyph = () => <svg class="hs-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /><path d="M8 10H6.5A1.5 1.5 0 0 0 5 11.5v8A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-8a1.5 1.5 0 0 0-1.5-1.5H16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
 const AddGlyph = () => <svg class="hs-glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
@@ -25,7 +22,7 @@ export function HomeScreen({ onClose }: { onClose: () => void }) {
   const [oneTap, setOneTap] = useState(canInstall)
   const [busy, setBusy] = useState(false)
   const main = useRef<HTMLButtonElement>(null)
-  const lang = (['fr', 'es'].includes(currentLang()) ? currentLang() : 'en') as 'en' | 'fr' | 'es'
+  const lang = currentLang()
   const iphone = isIPhone(), android = isAndroid()
 
   useEffect(() => {
@@ -59,7 +56,7 @@ export function HomeScreen({ onClose }: { onClose: () => void }) {
     t('In Chrome or Edge, click the install icon at the right end of the address bar.'),
     tj('In Safari on a Mac: click {share} at the top right, then {dock}.', { share: <strong class="nb">{t('Share')} <ShareGlyph /></strong>, dock: <strong>{t('Add to Dock')}</strong> }),
   ]
-  const help = iphone ? { href: APPLE[lang], label: t('Apple’s instructions') }
+  const help = iphone ? { href: appleHelp(lang), label: t('Apple’s instructions') }
     : { href: google(android ? 'Android' : 'Desktop', lang), label: t('Google’s instructions') }
 
   return (

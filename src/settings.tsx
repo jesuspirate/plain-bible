@@ -296,13 +296,13 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
 function LanguagePage() {
   const { settings, update } = useApp()
   const phone = LANGS.find(l => l.id === deviceLang())!.name
-  const opts: [Settings['language'], string, string?][] = [['auto', t('Automatic'), t('Same as this device: {lang}', { lang: phone })], ...LANGS.map(l => [l.id, l.name] as [Settings['language'], string])]
+  const opts: [Settings['language'], string, string?][] = [['auto', t('Automatic'), t('Same as this device: {lang}', { lang: phone })], ...[...LANGS].sort((a, b) => a.name.localeCompare(b.name)).map(l => [l.id, l.name] as [Settings['language'], string])]
   return (
     <>
     <div class="set-list" role="radiogroup" aria-label={t('Language')}>
       {opts.map(([id, name, sub]) => (
         <button role="radio" aria-checked={settings.language === id} class={'set-row lang-row' + (settings.language === id ? ' on' : '')} onClick={() => update({ language: id })}>
-          <span class="set-label">{name}{sub && <span class="set-sub">{sub}</span>}</span>
+          <span class="set-label"><span lang={id === 'auto' ? undefined : id}>{name}</span>{sub && <span class="set-sub">{sub}</span>}</span>
           {settings.language === id && <span class="lang-check" aria-hidden="true">✓</span>}
         </button>
       ))}
