@@ -196,9 +196,62 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             let covered = note.name == UIResponder.keyboardWillHideNotification ? 0
                 : max(0, min(view.bounds.maxY - frame.minY, view.bounds.height / 3) - own)
             if self.additionalSafeAreaInsets.bottom != covered { self.additionalSafeAreaInsets.bottom = covered }
+            if note.name != UIResponder.keyboardWillHideNotification { self.reportMacStrip(keyboard: end) }
         }
         macKeyboard = [UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardWillHideNotification]
             .map { center.addObserver(forName: $0, object: nil, queue: .main, using: fit) }
+    }
+
+    /// TEMPORARY, TestFlight builds on a Mac only: find what draws the dark
+    /// band along the bottom of the window in full screen. A second after a
+    /// field gets focus, copy a list of every window and every view that
+    /// reaches the bottom 120 points to the clipboard, once per launch, to be
+    /// pasted back to us. Remove once the band is understood.
+    private var macStripReported = false
+    private func reportMacStrip(keyboard: CGRect) {
+        guard !macStripReported,
+              Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt" else { return }
+        macStripReported = true
+        DispatchQueue.main.asyncAfter(deadline: .now() + 1) { [weak self] in
+            guard let self, let screen = self.view.window?.screen else { return }
+            var lines = ["Quiet Bible strip report",
+                         "screen \(Self.text(screen.bounds)) keyboard \(Self.text(keyboard))",
+                         "safe area \(self.view.safeAreaInsets) extra \(self.additionalSafeAreaInsets)"]
+            let bottom = screen.bounds.maxY - 120
+            for scene in UIApplication.shared.connectedScenes {
+                guard let scene = scene as? UIWindowScene else { continue }
+                lines.append("scene \(type(of: scene)) \(scene.activationState.rawValue)")
+                for window in scene.windows {
+                    lines.append("WINDOW \(type(of: window)) \(Self.text(window.frame)) level \(window.windowLevel.rawValue)"
+                        + " hidden \(window.isHidden) alpha \(window.alpha) bg \(Self.text(window.backgroundColor))")
+                    Self.walk(window, in: window, depth: 1, bottom: bottom, into: &lines)
+                }
+            }
+            UIPasteboard.general.string = lines.prefix(400).joined(separator: "\n")
+        }
+    }
+
+    private static func walk(_ view: UIView, in window: UIWindow, depth: Int, bottom: CGFloat, into lines: inout [String]) {
+        guard depth <= 14 else { return }
+        for sub in view.subviews {
+            let frame = sub.convert(sub.bounds, to: window.screen.coordinateSpace)
+            guard frame.maxY > bottom else { continue }
+            lines.append(String(repeating: "  ", count: depth) + "\(type(of: sub)) \(text(frame))"
+                + (sub.isHidden ? " HIDDEN" : "") + (sub.alpha < 1 ? " alpha \(sub.alpha)" : "")
+                + " bg \(text(sub.backgroundColor))" + (sub.layer.backgroundColor != nil && sub.backgroundColor == nil ? " layer-bg" : ""))
+            walk(sub, in: window, depth: depth + 1, bottom: bottom, into: &lines)
+        }
+    }
+
+    private static func text(_ r: CGRect) -> String {
+        String(format: "%.0f,%.0f %.0fx%.0f", r.minX, r.minY, r.width, r.height)
+    }
+
+    private static func text(_ c: UIColor?) -> String {
+        guard let c else { return "none" }
+        var r: CGFloat = 0, g: CGFloat = 0, b: CGFloat = 0, a: CGFloat = 0
+        return c.getRed(&r, green: &g, blue: &b, alpha: &a)
+            ? String(format: "%.2f/%.2f/%.2f/%.2f", r, g, b, a) : "\(c)"
     }
 
     /// Open a myquietbible.com link (from a universal link).
