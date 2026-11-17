@@ -22,7 +22,7 @@ import { saveRecording, useRecording } from './lib/recordMode'
 import { StreakRow } from './streaks'
 import { AWAY } from './sideways'
 import { UNFOLDED, useWide } from './lib/spread'
-import { deviceLang, LANGS, locale, N_, t, tj } from './i18n'
+import { currentLang, deviceLang, intlTag, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
 // (handy for reporting a problem). The line under it is the whole update:
@@ -293,10 +293,20 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
 // The language of the app's own words (not the Bible's: that's the version).
 // Automatic follows the phone. Each language is named in itself, so you can
 // find yours whatever the app is in now.
+// Each language's name in the app's own language under it ("Kiswahili ·
+// Swahili"), so you can find one you can't read; left out when it's the same.
+// English uses the names the Bible catalog does ("Ilocano", not Intl's "Iloko").
+const ENGLISH: Record<string, string> = { ilo: 'Ilocano', lg: 'Luganda', nd: 'Ndebele', pon: 'Pohnpeian', luo: 'Dholuo', ny: 'Chichewa', tw: 'Twi', ckb: 'Kurdish (Sorani)', 'zh-hans': 'Chinese (Simplified)', 'zh-hant': 'Chinese (Traditional)', nb: 'Norwegian (Bokmål)', nn: 'Norwegian (Nynorsk)' }
+function inYours(id: string, own: string): string | undefined {
+  let n: string | undefined
+  try { n = new Intl.DisplayNames([intlTag()], { type: 'language' }).of(intlTag(id)) } catch { /* an old browser */ }
+  if (currentLang() === 'en' || !n || n.toLowerCase() === id) n = ENGLISH[id] ?? (n && n.toLowerCase() !== id ? n : undefined)
+  return n && n.toLowerCase() !== own.toLowerCase() ? n[0].toLocaleUpperCase(intlTag()) + n.slice(1) : undefined
+}
 function LanguagePage() {
   const { settings, update } = useApp()
   const phone = LANGS.find(l => l.id === deviceLang())!.name
-  const opts: [Settings['language'], string, string?][] = [['auto', t('Automatic'), t('Same as this device: {lang}', { lang: phone })], ...[...LANGS].sort((a, b) => a.name.localeCompare(b.name)).map(l => [l.id, l.name] as [Settings['language'], string])]
+  const opts: [Settings['language'], string, string?][] = [['auto', t('Automatic'), t('Same as this device: {lang}', { lang: phone })], ...[...LANGS].sort((a, b) => a.name.localeCompare(b.name)).map(l => [l.id, l.name, inYours(l.id, l.name)] as [Settings['language'], string, string?])]
   return (
     <>
     <div class="set-list" role="radiogroup" aria-label={t('Language')}>
