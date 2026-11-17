@@ -73,6 +73,54 @@ jobs:
           printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
           chmod 600 "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
 
+      - name: Make room for a signing certificate
+        # Each run signs on a fresh Mac, so Xcode makes a new "Apple
+        # Development" certificate every time, and Apple allows only a few.
+        # Revoke the old development ones first (they only sign test builds;
+        # Xcode makes a new one when needed). Distribution certificates are
+        # never touched.
+        env:
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          python3 - <<'PY'
+          import base64, json, os, subprocess, time, urllib.request
+          kid, iss = os.environ["ASC_KEY_ID"], os.environ["ASC_ISSUER_ID"]
+          key = os.path.join(os.environ["RUNNER_TEMP"], "asc", f"AuthKey_{kid}.p8")
+          b64 = lambda b: base64.urlsafe_b64encode(b).rstrip(b"=")
+          now = int(time.time())
+          head = b64(json.dumps({"alg": "ES256", "kid": kid, "typ": "JWT"}).encode())
+          body = b64(json.dumps({"iss": iss, "iat": now, "exp": now + 600, "aud": "appstoreconnect-v1"}).encode())
+          der = subprocess.run(["openssl", "dgst", "-sha256", "-sign", key], input=head + b"." + body,
+                               capture_output=True, check=True).stdout
+          # DER ECDSA signature -> the raw 64 bytes a JWT wants.
+          def ints(d):
+              i, out = 2 + (d[1] & 0x7f if d[1] & 0x80 else 0), []
+              for _ in range(2):
+                  n = d[i + 1]; v = d[i + 2:i + 2 + n]; i += 2 + n
+                  out.append(v.lstrip(b"\0").rjust(32, b"\0"))
+              return b"".join(out)
+          token = (head + b"." + body + b"." + b64(ints(der))).decode()
+          def call(method, path):
+              req = urllib.request.Request("https://api.appstoreconnect.apple.com" + path, method=method,
+                                           headers={"Authorization": "Bearer " + token})
+              with urllib.request.urlopen(req) as r:
+                  return json.loads(r.read() or b"{}")
+          dev = "DEVELOPMENT,IOS_DEVELOPMENT,MAC_APP_DEVELOPMENT"
+          try:
+              found = call("GET", f"/v1/certificates?filter[certificateType]={dev}&limit=200")["data"]
+          except Exception as e:
+              print(f"::warning::Could not list certificates ({e}); building anyway."); found = []
+          for cert in found:
+              a = cert["attributes"]
+              try:
+                  call("DELETE", f"/v1/certificates/{cert['id']}")
+                  print(f"Revoked {a.get('certificateType')} {a.get('name')} (expires {a.get('expirationDate')})")
+              except Exception as e:
+                  print(f"::warning::Could not revoke {a.get('name')}: {e}")
+          print(f"{len(found)} development certificate(s) handled.")
+          PY
+
       - name: Build and sign
         # Every upload needs a build number higher than the last. This run's
         # number plus one does that (1.1 went up from Xcode as build 1).
