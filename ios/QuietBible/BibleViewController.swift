@@ -191,15 +191,49 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             guard let self, let view = self.view, let screen = view.window?.screen,
                   let end = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
             let frame = view.convert(end, from: screen.coordinateSpace)
+            let hiding = note.name == UIResponder.keyboardWillHideNotification
+            // The strip is the system's empty keyboard bar (a 44 point
+            // UIInputSetHostView with a dark see-through backdrop, in the
+            // UITextEffectsWindow). Make it invisible; again a moment later
+            // in case the system lays it out afresh. Typing is unaffected:
+            // keys go to the field, not to this bar.
+            let gone = !hiding && self.hideMacInputBar()
+            if !hiding {
+                DispatchQueue.main.async { [weak self] in
+                    if let self, self.hideMacInputBar() { self.additionalSafeAreaInsets.bottom = 0 }
+                }
+            }
             // The window's own safe area already counts; add only the rest.
+            // When the bar is hidden nothing covers the page, so add nothing.
             let own = view.safeAreaInsets.bottom - self.additionalSafeAreaInsets.bottom
-            let covered = note.name == UIResponder.keyboardWillHideNotification ? 0
+            let covered = hiding || gone ? 0
                 : max(0, min(view.bounds.maxY - frame.minY, view.bounds.height / 3) - own)
             if self.additionalSafeAreaInsets.bottom != covered { self.additionalSafeAreaInsets.bottom = covered }
             if note.name != UIResponder.keyboardWillHideNotification { self.reportMacStrip(keyboard: end) }
         }
         macKeyboard = [UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardWillHideNotification]
             .map { center.addObserver(forName: $0, object: nil, queue: .main, using: fit) }
+    }
+
+    /// Mac only: make the system's keyboard bar invisible. Found by class
+    /// name, so a future macOS that changes it just leaves the bar showing
+    /// (the safe area lift above then keeps the page's bars clear of it).
+    /// Never replace the input view instead: that crashes on a Mac (#306).
+    private func hideMacInputBar() -> Bool {
+        guard let windows = view.window?.windowScene?.windows else { return false }
+        var found = false
+        for window in windows where NSStringFromClass(type(of: window)).contains("TextEffectsWindow") {
+            var stack: [UIView] = window.subviews
+            while let next = stack.popLast() {
+                if NSStringFromClass(type(of: next)) == "UIInputSetHostView" {
+                    if next.alpha != 0 { next.alpha = 0 }
+                    found = true
+                } else {
+                    stack.append(contentsOf: next.subviews)
+                }
+            }
+        }
+        return found
     }
 
     /// TEMPORARY, TestFlight builds on a Mac only: find what draws the dark
