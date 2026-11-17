@@ -352,9 +352,9 @@ main.with-bar { padding-bottom: 120px; }
 @media (prefers-reduced-motion: reduce) { .hold-pick { animation: none; } }
 .sb-bar { display: flex; align-items: center; gap: 10px; }
 .sb-bar .sb-field { flex: 1; min-width: 0; }
-/* Hebrew and Persian keep Circles and 🙏 at the right, as in the other languages (Jet, 2026-11-17); their words still read right to left. */
-:root[lang='he'] .sb-bar, :root[lang='fa'] .sb-bar { direction: ltr; }
-:root[lang='he'] .sb-bar > *, :root[lang='fa'] .sb-bar > * { direction: rtl; }
+/* Right-to-left languages keep Circles and 🙏 at the right, as in the others (Jet, 2026-11-17); their words still read right to left. */
+:root[dir='rtl'] .sb-bar { direction: ltr; }
+:root[dir='rtl'] .sb-bar > * { direction: rtl; }
 .sb-cancel {
   all: unset; cursor: pointer; flex: none; box-sizing: border-box; height: 52px; padding: 0 18px; border-radius: 26px;
   display: grid; place-items: center; font: 700 17px var(--sans); letter-spacing: .01em;
