@@ -198,7 +198,9 @@ export function SearchBar({ here, mini, above }: {
     root.classList.add('sb-lock')
     vv?.addEventListener('resize', fit); vv?.addEventListener('scroll', fit)
     vk?.addEventListener('geometrychange', fit)
+    const thaw = holdBook()
     return () => {
+      thaw()
       clearTimeout(noKeyboard)
       vk?.removeEventListener('geometrychange', fit); overlayKeyboard(false)
       if (location.hash === at && Math.abs(scrollY - y) > 1) scrollTo(0, y)
@@ -555,6 +557,15 @@ export function SearchBar({ here, mini, above }: {
     if (!ok) { e.stopPropagation(); e.preventDefault() }
   }
 
+  // A click on a button in the panel (a tab, a book, a chapter) leaves the
+  // field focused, as a tap does on a phone. Otherwise the field let go at
+  // the press, a Mac put its keyboard strip away, the panel dropped under
+  // the pointer before the button was released, and the click was lost:
+  // the Old Testament tab took two clicks.
+  const keepField = (e: MouseEvent) => {
+    if (input.current && document.activeElement === input.current && buttonOf(e.target)) e.preventDefault()
+  }
+
   // Pull the panel down from its top to close it, like an iOS sheet.
   const pull = useRef<{ y: number; dy: number }>()
   const onPanelTouchStart = (e: TouchEvent) => {
@@ -680,7 +691,7 @@ export function SearchBar({ here, mini, above }: {
           <div class="sb-sheet" ref={sheet}
             onTouchStart={onPanelTouchStart} onTouchMove={onPanelTouchMove} onTouchEnd={onPanelTouchEnd} onTouchCancel={onPanelTouchEnd}
             onPointerDownCapture={onPanelPointerDown} onPointerMoveCapture={onPanelPointerMove}
-            onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick}>
+            onPointerCancelCapture={onPanelPointerCancel} onClickCapture={guardClick} onMouseDownCapture={keepField}>
             {/* A grabber to pull it closed. (Theme and the rest of Settings are
                 in the top right corner.) */}
             <div class="sb-head">
@@ -880,6 +891,39 @@ function keyboardUp() {
 }
 
 // The keyboard's height on this phone, per screen size and orientation.
+/** Keeps the open book (iPad on its side, a computer) exactly as tall as it
+ *  is while search is open, and until the screen is back as it was after.
+ *  On a Mac the system's keyboard strip below a field counts as safe area
+ *  while you type, and the book is sized to the room above that: without
+ *  this, the book's bottom rose under the search panel and fell back after
+ *  it closed, and the words moved from page to page each time. Returns the
+ *  release. */
+function holdBook(): () => void {
+  const box = document.querySelector<HTMLElement>('.spread-box')
+  const book = box?.querySelector<HTMLElement>(':scope > article.chapter.spread')
+  if (!box || !book) return () => {}
+  box.style.setProperty('--book-h', book.getBoundingClientRect().height + 'px')
+  // Measures the bottom safe area, which the page can't read directly.
+  const probe = document.createElement('div')
+  probe.style.cssText = 'position:fixed;left:0;bottom:0;width:0;height:env(safe-area-inset-bottom);visibility:hidden;pointer-events:none'
+  document.body.appendChild(probe)
+  const safe = probe.offsetHeight, tall = innerHeight
+  return () => {
+    let ro: ResizeObserver | undefined, cap = 0
+    const free = () => {
+      ro?.disconnect(); clearTimeout(cap); removeEventListener('resize', check)
+      probe.remove(); box.style.removeProperty('--book-h')
+    }
+    // Let go once the strip has gone (it goes a moment after the field lets go).
+    function check() { if (probe.offsetHeight === safe && innerHeight === tall) free() }
+    check()
+    if (!probe.isConnected) return
+    ro = typeof ResizeObserver === 'function' ? new ResizeObserver(check) : undefined
+    ro?.observe(probe); addEventListener('resize', check)
+    cap = window.setTimeout(free, 1500)
+  }
+}
+
 const KEYBOARD = 'plain-bible:keyboard'
 function keyboardHeight(key: string): number {
   try {
