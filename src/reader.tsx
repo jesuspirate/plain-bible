@@ -1313,7 +1313,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const [askUnmark, setAskUnmark] = useState(false)
   // Share: outside the app (the phone's share sheet), or with a circle.
   const [askShare, setAskShare] = useState(false)
-  const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note } = useVerseActions(book, chapter, verses, versions, bibles)
+  const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note, setNote } = useVerseActions(book, chapter, verses, versions, bibles)
   const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: Math.min(...verses) }
   // One plain text with the link at its end, no separate title or url: the
   // Mac share sheet's Copy pasted the text and the link as two pieces, and
@@ -1323,19 +1323,39 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // Cmd+C / Ctrl+C copies the picked verses, like the Copy button, unless
   // you're typing somewhere or have dragged over some words to copy them.
   const copyNow = useRef(() => {}); copyNow.current = () => copy(quote)
+  const quoteNow = useRef(quote); quoteNow.current = quote
+  const copied = () => setNote(t('Copied'))
+  // Not while typing in a field or note, or with some words dragged over.
+  const ours = (target: EventTarget | null) => {
+    const el = target instanceof Element ? target : null
+    if (el?.closest('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return false
+    return !getSelection()?.toString().trim()
+  }
   useEffect(() => {
     document.body.classList.add('selecting')
     const onKey = (e: KeyboardEvent) => {
       if (e.key === 'Escape') onClose()
       else if ((e.metaKey || e.ctrlKey) && !e.altKey && !e.shiftKey && e.key.toLowerCase() === 'c') {
-        const el = e.target as HTMLElement | null
-        if (el?.closest?.('input, textarea, select, [contenteditable]:not([contenteditable="false"])')) return
-        if (getSelection()?.toString().trim()) return
+        if (!ours(e.target)) return
         e.preventDefault(); copyNow.current()
       }
     }
+    // The Mac and iPad apps (and Safari's Edit menu) send Cmd+C to the menu's
+    // Copy, not to the page, and grey it out when no words are selected.
+    // Cancelling "beforecopy" turns that Copy on; "copy" then fills the
+    // clipboard with the picked verses.
+    const onBefore = (e: Event) => { if (ours(e.target)) e.preventDefault() }
+    const onCopy = (e: ClipboardEvent) => {
+      if (!ours(e.target) || !e.clipboardData) return
+      e.clipboardData.setData('text/plain', quoteNow.current); e.preventDefault(); copied()
+    }
     addEventListener('keydown', onKey)
-    return () => { document.body.classList.remove('selecting'); removeEventListener('keydown', onKey) }
+    document.addEventListener('beforecopy', onBefore)
+    document.addEventListener('copy', onCopy)
+    return () => {
+      document.body.classList.remove('selecting'); removeEventListener('keydown', onKey)
+      document.removeEventListener('beforecopy', onBefore); document.removeEventListener('copy', onCopy)
+    }
   }, [])
 
   // A verse tapped low on the screen would sit under this bar: lift it into
