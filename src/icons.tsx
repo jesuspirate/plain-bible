@@ -71,7 +71,7 @@ export const CloseIcon = ({ size, class: c }: P) => (
 
 /** A thick ‹: back. */
 export const BackIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}><path d="M15 4.5L7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
+  <svg {...svg(size, 'back-icon' + (c ? ' ' + c : ''))}><path d="M15 4.5L7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
 // Settings rows. Each row has one of these at its left, in the accent color,

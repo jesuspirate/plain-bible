@@ -11,11 +11,21 @@ export interface LangInfo { id: Lang; name: string; rtl?: true }
 
 /** Every language the app speaks, each named in itself. A language has one
  *  when at least one Bible in the app is in it. */
-export const LANGS: LangInfo[] = [
-  { id: 'en', name: 'English' },
-  { id: 'fr', name: 'Français' },
-  { id: 'es', name: 'Español' },
-]
+export const LANGS: LangInfo[] = ([
+  ['en', 'English'], ['fr', 'Français'], ['es', 'Español'],
+  ['ar', 'العربية', 1], ['as', 'অসমীয়া'], ['bn', 'বাংলা'], ['ceb', 'Cebuano'], ['chr', 'ᏣᎳᎩ'], ['ckb', 'کوردی', 1],
+  ['cs', 'Čeština'], ['da', 'Dansk'], ['de', 'Deutsch'], ['ee', 'Eʋegbe'], ['el', 'Ελληνικά'], ['eo', 'Esperanto'],
+  ['fa', 'فارسی', 1], ['fi', 'Suomi'], ['gu', 'ગુજરાતી'], ['gv', 'Gaelg'], ['ha', 'Hausa'], ['haw', 'ʻŌlelo Hawaiʻi'],
+  ['he', 'עברית', 1], ['hi', 'हिन्दी'], ['hr', 'Hrvatski'], ['ht', 'Kreyòl ayisyen'], ['hu', 'Magyar'], ['hy', 'Հայերեն'],
+  ['id', 'Bahasa Indonesia'], ['ig', 'Igbo'], ['ilo', 'Ilokano'], ['it', 'Italiano'], ['ja', '日本語'], ['ki', 'Gĩkũyũ'],
+  ['kn', 'ಕನ್ನಡ'], ['ko', '한국어'], ['lg', 'Luganda'], ['ln', 'Lingála'], ['luo', 'Dholuo'], ['lv', 'Latviešu'],
+  ['mg', 'Malagasy'], ['ml', 'മലയാളം'], ['mr', 'मराठी'], ['my', 'မြန်မာ'], ['nb', 'Norsk bokmål'], ['nd', 'isiNdebele'],
+  ['ne', 'नेपाली'], ['nl', 'Nederlands'], ['nn', 'Norsk nynorsk'], ['ny', 'Chichewa'], ['om', 'Afaan Oromoo'], ['or', 'ଓଡ଼ିଆ'],
+  ['pa', 'ਪੰਜਾਬੀ'], ['pl', 'Polski'], ['pon', 'Lokaiahn Pohnpei'], ['pt', 'Português'], ['ru', 'Русский'], ['sl', 'Slovenščina'],
+  ['sn', 'chiShona'], ['sq', 'Shqip'], ['sr', 'Српски'], ['sv', 'Svenska'], ['sw', 'Kiswahili'], ['ta', 'தமிழ்'],
+  ['te', 'తెలుగు'], ['tl', 'Tagalog'], ['to', 'Lea faka-Tonga'], ['tw', 'Twi'], ['ug', 'ئۇيغۇرچە', 1], ['uk', 'Українська'],
+  ['vi', 'Tiếng Việt'], ['yo', 'Yorùbá'], ['zh-hans', '简体中文'], ['zh-hant', '繁體中文'],
+] as [Lang, string, 1?][]).map(([id, name, rtl]) => rtl ? { id, name, rtl: true } : { id, name })
 const BY_ID = new Map(LANGS.map(l => [l.id, l]))
 
 /** A count sentence's forms, for languages with more than one plural

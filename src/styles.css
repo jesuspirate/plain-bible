@@ -614,6 +614,8 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .set-theme .seg { display: flex; flex: 1; border-radius: 12px; }
 .set-theme .seg button { flex: 1; padding: 10px 4px; font-size: 16px; }
 .set-chev { color: var(--muted); font-size: 22px; line-height: 1; }
+/* Right to left (Arabic, Hebrew, Persian…): the arrows point the reading way. */
+[dir='rtl'] .set-chev, [dir='rtl'] .back-icon { display: inline-block; transform: scaleX(-1); }
 .streak-row { gap: 0; cursor: pointer; }
 .streak { flex: 1; display: flex; align-items: center; gap: 8px; }
 .streak + .streak { padding-left: 14px; border-left: 1px solid var(--line); }
