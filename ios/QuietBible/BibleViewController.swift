@@ -55,6 +55,10 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
         config.userContentController.addUserScript(PasskeyBridge.script)
         config.userContentController.addScriptMessageHandler(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
+        // Recording prayers on a Mac, where the web view has no microphone (PrayerMicBridge.swift).
+        let mic = PrayerMicBridge()
+        config.userContentController.addUserScript(PrayerMicBridge.script)
+        config.userContentController.addScriptMessageHandler(mic, contentWorld: .page, name: PrayerMicBridge.name)
 
         // Behave exactly like the app on an iPhone Home Screen (no "Add to
         // Home Screen" tips, the keyboard's mic for voice search).
@@ -69,6 +73,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.userContentController.add(PickedBridge(self), contentWorld: .page, name: "picked")
 
         let web = WKWebView(frame: .zero, configuration: config)
+        mic.web = web
         web.navigationDelegate = self
         web.uiDelegate = self
         // Sideways swipes turn chapters; they must not go "back".
