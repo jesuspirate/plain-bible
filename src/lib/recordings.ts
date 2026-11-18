@@ -18,9 +18,9 @@ export interface Recording {
   /** A chapter's file: book number (01–66), the publisher's book code, chapter (001–150). */
   file: (n: string, code: string, c: string) => string
   /** Shown wherever the recording plays, when its maker asks for it: the
-   * words (as they wrote them, in their language), where they link to, and
-   * their logo (in public/). */
-  credit?: { text: string; href: string; logo: string }
+   * words (as they wrote them, in their language; short: for the narrow
+   * reading bar, beside the logo), where they link to, and their logo (in public/). */
+  credit?: { text: string; short: string; href: string; logo: string }
 }
 
 const BASE = 'https://openbible.com/audio/'
@@ -42,7 +42,7 @@ export const RECORDINGS: Recording[] = [
 if (SYNC_URL) RECORDINGS.push({
   id: 'tresor', version: 'LSG', name: 'Trésor Sonore',
   file: (n, _code, c) => `${SYNC_URL}/audio/tresor/${BOOKS[Number(n) - 1].id}/${Number(c)}.mp3`,
-  credit: { text: 'Voix : tresorsonore.com', href: 'https://tresorsonore.com', logo: 'brand/tresorsonore.png' },
+  credit: { text: 'Voix : tresorsonore.com', short: 'tresorsonore.com', href: 'https://tresorsonore.com', logo: 'brand/tresorsonore.png' },
 })
 
 // The publisher's code for each of the 66 books, in the Bible's order.

@@ -700,7 +700,7 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label={t('Choose the voice')}>
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : rec ? (rec.credit ? <><img class="listen-logo" src={rec.credit.logo} alt="" />{rec.credit.text}</> : rec.name) : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
+          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : rec ? (rec.credit ? <><img class="listen-logo" src={rec.credit.logo} alt="" />{rec.credit.short}</> : rec.name) : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={t('Speed {rate} times. Change', { rate: r })}>{r.toLocaleString(locale())}×</button>
         <button class="close-btn listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={24} /></button>

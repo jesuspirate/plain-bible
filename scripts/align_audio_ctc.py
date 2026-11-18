@@ -115,8 +115,33 @@ class Ear:
 
 
 def line_up(said, heard):
+    """As in align_audio.py: quick first; where a chapter repeats itself so
+    much that the quick way loses its place (the offerings of Numbers 7), the
+    longest run of words both have in the same order, worked out in full."""
     sm = difflib.SequenceMatcher(None, said, heard, autojunk=False)
-    return [(b.a + k, b.b + k) for b in sm.get_matching_blocks() for k in range(b.size)]
+    pairs = [(b.a + k, b.b + k) for b in sm.get_matching_blocks() for k in range(b.size)]
+    if len(pairs) >= 0.8 * len(said):
+        return pairs
+    n, m = len(said), len(heard)
+    rows = [[0] * (m + 1)]
+    for i in range(n):
+        prev, w = rows[-1], said[i]
+        row = [0] * (m + 1)
+        for j in range(m):
+            row[j + 1] = prev[j] + 1 if w == heard[j] else (prev[j + 1] if prev[j + 1] >= row[j] else row[j])
+        rows.append(row)
+    out, i, j = [], n, m
+    while i and j:
+        if said[i - 1] == heard[j - 1] and rows[i][j] == rows[i - 1][j - 1] + 1:
+            out.append((i - 1, j - 1))
+            i -= 1
+            j -= 1
+        elif rows[i - 1][j] >= rows[i][j - 1]:
+            i -= 1
+        else:
+            j -= 1
+    out.reverse()
+    return out if len(out) > len(pairs) else pairs
 
 
 def align(ear, audio, verses):
