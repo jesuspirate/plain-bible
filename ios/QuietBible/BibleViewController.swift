@@ -52,9 +52,21 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.mediaTypesRequiringUserActionForPlayback = []
         // The web app reads this to leave out what only fits a website.
         config.applicationNameForUserAgent = "Mobile/15E148 QuietBibleApp/1"
+            + (ProcessInfo.processInfo.isiOSAppOnMac ? " QuietBibleMac/1" : "")
+        // On a Mac, swiping to another desktop (Space) away from the app in
+        // full screen counts as the app going to the background, and the web
+        // view then put the page to sleep. Back again, it had to wake and
+        // draw the page from nothing, which took a second or more: the text
+        // came in after the window. A Mac doesn't need that saving, and no
+        // other app there does it, so the page stays awake.
+        if #available(iOS 17.0, *), ProcessInfo.processInfo.isiOSAppOnMac { config.preferences.inactiveSchedulingPolicy = .none }
         // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
         config.userContentController.addUserScript(PasskeyBridge.script)
         config.userContentController.addScriptMessageHandler(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
+        // Recording prayers on a Mac, where the web view has no microphone (PrayerMicBridge.swift).
+        let mic = PrayerMicBridge()
+        config.userContentController.addUserScript(PrayerMicBridge.script)
+        config.userContentController.addScriptMessageHandler(mic, contentWorld: .page, name: PrayerMicBridge.name)
 
         // Behave exactly like the app on an iPhone Home Screen (no "Add to
         // Home Screen" tips, the keyboard's mic for voice search).
@@ -69,6 +81,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.userContentController.add(PickedBridge(self), contentWorld: .page, name: "picked")
 
         let web = WKWebView(frame: .zero, configuration: config)
+        mic.web = web
         web.navigationDelegate = self
         web.uiDelegate = self
         // Sideways swipes turn chapters; they must not go "back".
@@ -231,15 +244,29 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         DispatchQueue.main.asyncAfter(deadline: .now() + 3, execute: done)
     }
 
-    /// On a Mac, while a field is being typed in, the system lays a dark
-    /// strip over the bottom of the window (most visible in full screen),
-    /// and the page isn't told: the search bar and Cancel ended up under it.
-    /// Count the strip as safe area, so the page keeps its bars above it the
-    /// way it keeps them above an iPhone's home bar. iPhone and iPad are left
-    /// as they are: there the keyboard is handled by the page.
+    /// On a Mac, while a field is being typed in, the system puts up an
+    /// empty 44 point "keyboard" along the bottom of the window (a dark
+    /// strip, most visible in full screen) and tells everyone a keyboard
+    /// came up. Two things followed that made search jump on a Mac:
+    /// - the web view made room for that keyboard: it scrolled the whole
+    ///   page up when the field got focus, and slid it back down over half
+    ///   a second after (Escape most of all), so the book changed size and
+    ///   the words moved from page to page each time search closed;
+    /// - this app counted the strip as safe area, which moved the bars.
+    /// A Mac has no keyboard on screen to make room for. So the web view no
+    /// longer hears about it, the strip is made invisible, and the page is
+    /// left exactly as it is. Only if a future macOS keeps the strip from
+    /// being hidden is it counted as safe area, so the search bar stays
+    /// above it. iPhone and iPad are left as they are.
     private func watchMacKeyboardStrip() {
         guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
         let center = NotificationCenter.default
+        // The web view listens for keyboard notices to make room above a
+        // keyboard; stop it listening (here only, on a Mac).
+        let notices = [UIResponder.keyboardWillShowNotification, UIResponder.keyboardDidShowNotification,
+                       UIResponder.keyboardWillHideNotification, UIResponder.keyboardDidHideNotification,
+                       UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardDidChangeFrameNotification]
+        if let web { notices.forEach { center.removeObserver(web, name: $0, object: nil) } }
         let fit: (Notification) -> Void = { [weak self] note in
             guard let self, let view = self.view, let screen = view.window?.screen,
                   let end = note.userInfo?[UIResponder.keyboardFrameEndUserInfoKey] as? CGRect else { return }
@@ -247,33 +274,27 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             let hiding = note.name == UIResponder.keyboardWillHideNotification
             // The strip is the system's empty keyboard bar (a 44 point
             // UIInputSetHostView with a dark see-through backdrop, in the
-            // UITextEffectsWindow). Make it invisible; again a moment later
-            // in case the system lays it out afresh. Typing is unaffected:
-            // keys go to the field, not to this bar.
-            if !hiding {
-                _ = self.hideMacInputBar()
-                DispatchQueue.main.async { [weak self] in _ = self?.hideMacInputBar() }
-            }
+            // UITextEffectsWindow). Make it invisible, at every notice
+            // (the system can show it again while laying it out) and once
+            // more a moment later. Typing is unaffected: keys go to the
+            // field, not to this bar.
+            let hidden = !hiding && self.hideMacInputBar()
+            if !hiding { DispatchQueue.main.async { [weak self] in _ = self?.hideMacInputBar() } }
             // The window's own safe area already counts; add only the rest.
-            // Always, even after hiding the bar above: on a real Mac the
-            // band still showed (1.2.5), and the search bar fell under it.
             let own = view.safeAreaInsets.bottom - self.additionalSafeAreaInsets.bottom
-            let covered = hiding ? 0
+            let covered = hiding || hidden ? 0
                 : max(0, min(view.bounds.maxY - frame.minY, view.bounds.height / 3) - own)
             if self.additionalSafeAreaInsets.bottom != covered { self.additionalSafeAreaInsets.bottom = covered }
         }
-        macKeyboard = [UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardWillHideNotification]
+        macKeyboard = [UIResponder.keyboardWillChangeFrameNotification, UIResponder.keyboardWillHideNotification,
+                       UIResponder.keyboardDidShowNotification, UIResponder.keyboardDidChangeFrameNotification]
             .map { center.addObserver(forName: $0, object: nil, queue: .main, using: fit) }
-        // 1.2.5 set the bar's alpha at "will change" and the band still
-        // showed: the system likely sets it back while showing the bar. Hide
-        // it again once the bar is fully up.
-        macKeyboard += [UIResponder.keyboardDidShowNotification, UIResponder.keyboardDidChangeFrameNotification]
-            .map { center.addObserver(forName: $0, object: nil, queue: .main) { [weak self] _ in _ = self?.hideMacInputBar() } }
     }
 
     /// Mac only: make the system's keyboard bar invisible. Found by class
     /// name, so a future macOS that changes it just leaves the bar showing
     /// (the safe area lift above then keeps the page's bars clear of it).
+    /// Returns whether it was found.
     /// Never replace the input view instead: that crashes on a Mac (#306).
     private func hideMacInputBar() -> Bool {
         guard let windows = view.window?.windowScene?.windows else { return false }

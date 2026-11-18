@@ -566,6 +566,22 @@ export function SearchBar({ here, mini, above }: {
     if (input.current && document.activeElement === input.current && buttonOf(e.target)) e.preventDefault()
   }
 
+  // Escape closes search when the key comes back up, not as it goes down.
+  // In the Mac app, a field let go of while the key was still down kept the
+  // system's keyboard strip on screen until Escape was pressed a second
+  // time; a click on Cancel never had that trouble. A moment's fallback in
+  // case the key's release goes elsewhere.
+  const escape = useRef(0)
+  const onFieldKeyDown = (e: KeyboardEvent) => {
+    if (e.key !== 'Escape') return
+    e.preventDefault()
+    if (!escape.current) escape.current = window.setTimeout(() => { escape.current = 0; close() }, 400)
+  }
+  const onFieldKeyUp = (e: KeyboardEvent) => {
+    if (e.key !== 'Escape' || !escape.current) return
+    clearTimeout(escape.current); escape.current = 0; close()
+  }
+
   // Pull the panel down from its top to close it, like an iOS sheet.
   const pull = useRef<{ y: number; dy: number }>()
   const onPanelTouchStart = (e: TouchEvent) => {
@@ -822,7 +838,7 @@ export function SearchBar({ here, mini, above }: {
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${shown}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
-            onKeyDown={e => { if (e.key === 'Escape') close() }} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
+            onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}

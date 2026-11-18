@@ -1322,7 +1322,10 @@ button{background:#8a5a2b;color:#fff;border-color:#8a5a2b;font-weight:bold;min-h
 .report{--red:#ff8a80;background:#202026;color:#e6e3dc}.report .when,.report .ask small{color:#a8a092}}`
 const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>${STATS_STYLE}</style></head><body><h1>My Quiet Bible in numbers</h1>${body}</body></html>`,
-  { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer' } })
+  // Never shown inside another site's frame, where a page could line its own
+  // buttons up over "Say yes" or "Remove" once the word is typed in.
+  { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer',
+    'Content-Security-Policy': "frame-ancestors 'none'", 'X-Frame-Options': 'DENY' } })
 
 /** Two strings equal, compared in the same time whatever they hold. */
 async function same(a: string, b: string) {
