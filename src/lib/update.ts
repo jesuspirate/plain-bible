@@ -6,6 +6,7 @@
 // comes back on the same verse. Leaving the app switches it too.
 import { useEffect, useState } from 'preact/hooks'
 import { withoutVerse } from './place'
+import { inMacApp } from './install'
 
 /** idle: nothing to say. checking: asked the site for a new version.
  *  ready: a new version is in, tap to use it. current: already the latest.
@@ -111,7 +112,10 @@ export function newVersionReady() {
   if (state === 'checking') { set('ready'); return applyUpdate() }
   readyAt = Date.now()
   set('ready')
-  const away = () => { if (document.visibilityState === 'hidden') applyUpdate() }
+  // Switching while you're away is unseen on a phone. A Mac's window is
+  // only on another desktop (Space) and back in a swipe: there you'd come
+  // back to the page loading again, so it waits for a quiet moment instead.
+  const away = () => { if (document.visibilityState === 'hidden' && !inMacApp()) applyUpdate() }
   document.addEventListener('visibilitychange', away)
   const touched = () => { lastTouch = Date.now() }
   for (const e of ['pointerdown', 'keydown', 'wheel', 'scroll', 'touchmove']) addEventListener(e, touched, { capture: true, passive: true })
