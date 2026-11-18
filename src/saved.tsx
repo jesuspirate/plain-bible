@@ -163,7 +163,10 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
       clearTimeout(timer)
       timer = window.setTimeout(settle, 140)
     }
-    const down = (e: TouchEvent) => { touching = e.touches.length; ready() }
+    // Not ready() here: changing the lists' size under a finger that only
+    // taps makes iPhone drop the tap, so a verse needed two taps to open.
+    // The row's first move (onScroll) gets them ready instead.
+    const down = (e: TouchEvent) => { touching = e.touches.length }
     const up = (e: TouchEvent) => { touching = e.touches.length; clearTimeout(timer); timer = window.setTimeout(settle, 140) }
     const wheel = (e: WheelEvent) => { if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) ready() }
     r.addEventListener('scroll', onScroll, { passive: true })
