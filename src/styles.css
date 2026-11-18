@@ -555,6 +555,8 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .saved-act { display: inline-flex; align-items: center; gap: 6px; padding: 8px 12px; border-radius: 99px; font: 600 15px var(--sans); color: var(--accent); background: var(--surface); border: 1px solid var(--line); flex: none; }
 .saved-act.on { border-color: var(--accent); }
 .saved-head .ref { font-weight: 700; }
+.saved-open { display: block; color: inherit; text-decoration: none; border-radius: 10px; -webkit-tap-highlight-color: transparent; }
+.saved-open:active { opacity: .6; }
 .dot.big { width: 18px; height: 18px; }
 .saved-palette { margin-top: 10px; padding-top: 10px; border-top: 1px solid color-mix(in srgb, var(--hl) 60%, var(--line)); }
 .saved-palette .swatches { display: grid; grid-template-columns: repeat(8, 1fr); gap: 6px; margin-bottom: 10px; }

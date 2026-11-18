@@ -369,7 +369,10 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                   <button onClick={() => setAskBm(undefined)}>{t('Cancel')}</button>
                 </div>
               </div>}
-              <Text book={r.book} chapter={r.chapter} verses={vs} />
+              {/* The whole verse opens it in the reader, not only the small reference. */}
+              <a class="saved-open" href={'#/' + readPath(version, r.book, r.chapter, r.verse)}>
+                <Text book={r.book} chapter={r.chapter} verses={vs} />
+              </a>
             </li>
           )
         })}
