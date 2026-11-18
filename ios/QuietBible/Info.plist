@@ -52,7 +52,7 @@
 		<string>myquietbible.com</string>
 	</array>
 	<key>NSMicrophoneUsageDescription</key>
-	<string>My Quiet Bible records the prayers you speak, when you tap the prayer button. They stay on this iPhone unless you choose to share them.</string>
+	<string>My Quiet Bible records the prayers you speak, when you tap the prayer button. They stay on this device unless you choose to share them.</string>
 	<key>UIApplicationSceneManifest</key>
 	<dict>
 		<key>UIApplicationSupportsMultipleScenes</key>
