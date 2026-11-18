@@ -59,7 +59,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         // draw the page from nothing, which took a second or more: the text
         // came in after the window. A Mac doesn't need that saving, and no
         // other app there does it, so the page stays awake.
-        if ProcessInfo.processInfo.isiOSAppOnMac { config.preferences.inactiveSchedulingPolicy = .none }
+        if #available(iOS 17.0, *), ProcessInfo.processInfo.isiOSAppOnMac { config.preferences.inactiveSchedulingPolicy = .none }
         // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
         config.userContentController.addUserScript(PasskeyBridge.script)
         config.userContentController.addScriptMessageHandler(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
