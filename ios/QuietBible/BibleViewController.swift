@@ -52,6 +52,14 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         config.mediaTypesRequiringUserActionForPlayback = []
         // The web app reads this to leave out what only fits a website.
         config.applicationNameForUserAgent = "Mobile/15E148 QuietBibleApp/1"
+            + (ProcessInfo.processInfo.isiOSAppOnMac ? " QuietBibleMac/1" : "")
+        // On a Mac, swiping to another desktop (Space) away from the app in
+        // full screen counts as the app going to the background, and the web
+        // view then put the page to sleep. Back again, it had to wake and
+        // draw the page from nothing, which took a second or more: the text
+        // came in after the window. A Mac doesn't need that saving, and no
+        // other app there does it, so the page stays awake.
+        if #available(iOS 17.0, *), ProcessInfo.processInfo.isiOSAppOnMac { config.preferences.inactiveSchedulingPolicy = .none }
         // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
         config.userContentController.addUserScript(PasskeyBridge.script)
         config.userContentController.addScriptMessageHandler(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
