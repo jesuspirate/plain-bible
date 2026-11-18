@@ -5,17 +5,17 @@
 // square, so it's named here: nothing more to download.
 let shown = ''
 
-export function nowPlaying(title: string, detail = '') {
+export function nowPlaying(title: string, detail = '', by?: { artist: string; art: string }) {
   if (typeof navigator === 'undefined' || !('mediaSession' in navigator) || typeof MediaMetadata === 'undefined') return
-  const key = title + '\n' + detail
+  const key = title + '\n' + detail + '\n' + (by?.artist ?? '')
   if (key === shown) return
   shown = key
   try {
     navigator.mediaSession.metadata = new MediaMetadata({
       title,
-      artist: 'My Quiet Bible',
+      artist: by?.artist ?? 'My Quiet Bible',
       album: detail,
-      artwork: [
+      artwork: by ? [{ src: new URL(by.art, document.baseURI).href, sizes: '192x192', type: 'image/png' }] : [
         { src: new URL('icon-512.png', document.baseURI).href, sizes: '512x512', type: 'image/png' },
         { src: new URL('icon-192.png', document.baseURI).href, sizes: '192x192', type: 'image/png' },
       ],

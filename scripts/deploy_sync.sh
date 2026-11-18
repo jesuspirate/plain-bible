@@ -19,6 +19,15 @@ fi
 sed -i "s/^database_id = .*/database_id = \"$id\"/" wrangler.toml
 
 npx wrangler d1 migrations apply "$DB" --remote >&2
+
+# Storage for recorded readings (R2). Made once; if the account can't have it
+# (R2 not turned on, or the token isn't allowed), the service deploys without
+# it and the app simply doesn't offer those readings.
+AUDIO=plain-bible-audio
+if ! npx wrangler r2 bucket info "$AUDIO" >/dev/null 2>&1 && ! npx wrangler r2 bucket create "$AUDIO" >&2; then
+  echo "No R2 storage for $AUDIO: deploying without recorded readings." >&2
+  sed -i '/^\[\[r2_buckets\]\]/,/^bucket_name/d' wrangler.toml
+fi
 out=$(npx wrangler deploy 2>&1) || { echo "$out" >&2; exit 1; }
 echo "$out" >&2
 

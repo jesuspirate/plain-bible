@@ -67,7 +67,11 @@ if (typeof document !== 'undefined') document.addEventListener('visibilitychange
 const emit = () => {
   dispatchEvent(new Event(EVENT))
   // The lock screen: the chapter being read, and the app's own icon.
-  if (now) nowPlaying(formatRef({ book: now.book, chapter: now.chapter }), now.version)
+  if (now) {
+    // A recording whose makers ask to be named: their name and logo there too.
+    const credit = held && recorded() === held.rec ? held.rec.credit : undefined
+    nowPlaying(formatRef({ book: now.book, chapter: now.chapter }), now.version, credit && { artist: credit.text, art: credit.logo })
+  }
   stayAwake()
   // While it's on, a press held on a verse bookmarks it: no text selection or callout in the way.
   document.documentElement.classList.toggle('reading-aloud', !!now)
@@ -696,7 +700,7 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
         </button>
         <button class="listen-what" onClick={() => setVoices(true)} aria-label={t('Choose the voice')}>
           <strong>{bookTitle(n.book, n.lang)} {n.chapter}:{n.verse}</strong>
-          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : rec ? rec.name : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
+          <span class={n.trouble || tip || noteText ? 'listen-trouble' : 'muted'}>{noteText ? '✓ ' + noteText : n.trouble ?? (tip ? t('Flip the side switch off Silent to hear') : silent ? t('No voice') : rec ? (rec.credit ? <><img class="listen-logo" src={rec.credit.logo} alt="" />{rec.credit.text}</> : rec.name) : t('Phone’s own voice'))}{noteText ? '' : ' ▾'}</span>
         </button>
         <button class="listen-rate" onClick={cycle} aria-label={t('Speed {rate} times. Change', { rate: r })}>{r.toLocaleString(locale())}×</button>
         <button class="close-btn listen-stop" onClick={stopListening} aria-label={t('Stop reading aloud')}><CloseIcon size={24} /></button>
@@ -781,7 +785,13 @@ function VoiceSheet({ version, lang, silent, onClose, onPick }: { version: strin
           </button>
         </div>
       </div>
-      {readers.length > 0 && <p class="muted small">{t('The recordings come from openbible.com, the home of the Berean Bible.')}</p>}
+      {readers.some(r => !r.credit) && <p class="muted small">{t('The recordings come from openbible.com, the home of the Berean Bible.')}</p>}
+      {readers.filter(r => r.credit).map(r => (
+        <a class="voice-credit" href={r.credit!.href} target="_blank" rel="noopener">
+          <img src={r.credit!.logo} alt="" width={44} height={44} />
+          <span>{r.credit!.text}</span>
+        </a>
+      ))}
     </Sheet>
   )
 }

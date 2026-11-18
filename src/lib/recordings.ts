@@ -4,7 +4,9 @@
 // what the app carries is only when each word is said (public/audio-times,
 // made by scripts/align_audio.py), fetched a book at a time and only when
 // someone listens, so the highlight can follow the reader's voice.
-import { BOOK_INDEX } from './books'
+import { BOOK_INDEX, BOOKS } from './books'
+
+const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
 
 export interface Recording {
   /** Also the folder of its word times. */
@@ -15,6 +17,10 @@ export interface Recording {
   name: string
   /** A chapter's file: book number (01–66), the publisher's book code, chapter (001–150). */
   file: (n: string, code: string, c: string) => string
+  /** Shown wherever the recording plays, when its maker asks for it: the
+   * words (as they wrote them, in their language), where they link to, and
+   * their logo (in public/). */
+  credit?: { text: string; href: string; logo: string }
 }
 
 const BASE = 'https://openbible.com/audio/'
@@ -26,6 +32,18 @@ export const RECORDINGS: Recording[] = [
   { id: 'hays', version: 'BSB', name: 'Barry Hays', file: (n, code, c) => `${BASE}hays/BSB_${n}_${code}_${c}_H.mp3` },
   { id: 'david', version: 'KJV', name: 'David', file: (n, code, c) => `${BASE}kjv/KJV_${n}_${code}_${c}.mp3` },
 ]
+
+// The Louis Segond 1910, read by Alain Moreau and Jean-Micaël Saltzmann of
+// Trésor Sonore, who gave My Quiet Bible their recordings to keep and serve
+// itself, asking only that « Voix : tresorsonore.com » be shown, linked, with
+// their logo, wherever they play. Served by the sync service from its own
+// storage (worker/, /audio/tresor/<Book>/<chapter>.mp3), so only where that
+// service is set up.
+if (SYNC_URL) RECORDINGS.push({
+  id: 'tresor', version: 'LSG', name: 'Trésor Sonore',
+  file: (n, _code, c) => `${SYNC_URL}/audio/tresor/${BOOKS[Number(n) - 1].id}/${Number(c)}.mp3`,
+  credit: { text: 'Voix : tresorsonore.com', href: 'https://tresorsonore.com', logo: 'brand/tresorsonore.png' },
+})
 
 // The publisher's code for each of the 66 books, in the Bible's order.
 const CODES = ('Gen Exo Lev Num Deu Jos Jdg Rut 1Sa 2Sa 1Ki 2Ki 1Ch 2Ch Ezr Neh Est Job Psa Pro Ecc Sng Isa Jer Lam Ezk Dan '

@@ -25,3 +25,10 @@ database_name = "plain-bible-sync"
 # Filled in by the deploy workflow (scripts/deploy_sync.sh) from the account.
 database_id = "00000000-0000-0000-0000-000000000000"
 migrations_dir = "migrations"
+
+# Recorded Bible readings the app serves itself (the French Louis Segond from
+# Trésor Sonore): one file per chapter at <voice>/<Book>/<chapter>.mp3. The
+# deploy script makes the bucket, and drops this when the account has no R2.
+[[r2_buckets]]
+binding = "AUDIO"
+bucket_name = "plain-bible-audio"
