@@ -200,6 +200,10 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     )
   }
 
+  /** The whole verse opens it in the reader, not only the small reference. */
+  const OpenText = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) =>
+    <a class="saved-open" href={'#/' + readPath(version, book, chapter, verses[0])}><Text book={book} chapter={chapter} verses={verses} /></a>
+
   /** Change some verses' marks, keeping what they were so it can be undone. */
   const change = (ks: string[], patch: Partial<Mark>, what?: string) => {
     const before: Marks = {}
@@ -292,7 +296,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                   <span class="dot big" style={{ background: r.color }} />{t('Color')}
                 </button>
               </div>
-              <Text {...r} />
+              <OpenText {...r} />
               {active && recolor === id && (
                 <div class="saved-palette">
                   <div class="swatches">
@@ -329,7 +333,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                 <span class="spacer" />
                 <button class="saved-act" onClick={open}><EditIcon size={20} />{t('Edit')}</button>
               </div>
-              <Text {...x} />
+              <OpenText {...x} />
               <p class="saved-note" onClick={open}>{x.n}</p>
             </li>
           )
@@ -369,7 +373,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                   <button onClick={() => setAskBm(undefined)}>{t('Cancel')}</button>
                 </div>
               </div>}
-              <Text book={r.book} chapter={r.chapter} verses={vs} />
+              <OpenText book={r.book} chapter={r.chapter} verses={vs} />
             </li>
           )
         })}
