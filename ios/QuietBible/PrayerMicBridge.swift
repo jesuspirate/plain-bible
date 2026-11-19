@@ -156,9 +156,7 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
         player?.stop()
         playerEnded = false
         do {
-            let session = AVAudioSession.sharedInstance()
-            if recorder == nil { try? session.setCategory(.playback, mode: .default) }
-            try? session.setActive(true)
+            // The audio session is left as the web view has it.
             let made = try AVAudioPlayer(data: data)
             made.delegate = self
             guard made.play() else { return false }
@@ -189,8 +187,12 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
     private func letGo() {
         if let interruption { NotificationCenter.default.removeObserver(interruption) }
         interruption = nil
+        // The sound is NOT switched off here (setActive(false)). The web view
+        // plays through this same audio session, and on a Mac switching it
+        // off after a prayer left every sound in the page dead (the audio
+        // Bible, prayers at 0:00) and, it seems, the page itself frozen,
+        // until the app was quit. Only the old setting is put back.
         let session = AVAudioSession.sharedInstance()
-        try? session.setActive(false, options: .notifyOthersOnDeactivation)
         if let before { try? session.setCategory(before.0, mode: before.1, options: before.2) }
         before = nil
     }
