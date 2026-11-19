@@ -3,7 +3,7 @@ import { App } from './app'
 import './fonts'
 import './styles.css'
 import { warmSearch } from './searchClient'
-import { newVersionReady, registered } from './lib/update'
+import { dropVersionMark, newVersionReady, registered, watchWithoutWorker } from './lib/update'
 import { Arriving } from './move'
 import { parseMoveLink } from './lib/move'
 import { savedLang, setLang, t } from './i18n'
@@ -73,6 +73,8 @@ addEventListener('vite:preloadError', e => {
   location.reload()
 })
 
+dropVersionMark()
+if (import.meta.env.PROD && !w.plainBibleWelcome && !('serviceWorker' in navigator)) watchWithoutWorker()
 if (import.meta.env.PROD && 'serviceWorker' in navigator && !w.plainBibleWelcome) {
   import('virtual:pwa-register').then(({ registerSW }) => {
     registerSW({
@@ -80,9 +82,12 @@ if (import.meta.env.PROD && 'serviceWorker' in navigator && !w.plainBibleWelcome
       onNeedReload: newVersionReady,
       onRegisteredSW(_url, reg) {
         registered(reg)
+        if (!reg) watchWithoutWorker()
       },
+      // A web view that has the API but won't run a worker (Fedi on iPhone).
+      onRegisterError: watchWithoutWorker,
     })
-  }).catch(() => {})
+  }).catch(watchWithoutWorker)
   // Start the search worker once the page is up. Its file belongs to this
   // version, and after an update (until the reload) the site only has the
   // new one, so it has to be fetched while it is still there.

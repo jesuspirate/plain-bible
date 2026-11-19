@@ -76,6 +76,53 @@ function watch(r: ServiceWorkerRegistration) {
   setInterval(ask, EVERY)
 }
 
+// ---- without a service worker -------------------------------------------------
+// Some places that open the app have no service worker: Fedi's mini apps on
+// iPhone, for one. There the page comes from the web view's own cache, which
+// may keep an old copy for a long time. So the app asks the site which
+// version it has (version.json, never from a cache), and switches by loading
+// the address once with the new version in it, which no cache holds yet.
+
+/** The newer version on the site, once found. */
+let fresh: string | null = null
+const V = 'v'
+
+async function siteBuild(): Promise<string | null> {
+  try {
+    const r = await fetch(new URL('version.json?t=' + Date.now(), document.baseURI).href, { cache: 'no-store' })
+    if (!r.ok) return null
+    const b = (await r.json())?.build
+    return typeof b === 'string' && b ? b : null
+  } catch { return null }
+}
+
+/** After switching (or a repair, index.html), take the marker back out of the address. */
+export function dropVersionMark() {
+  try {
+    const u = new URL(location.href)
+    if (u.searchParams.has(V)) { u.searchParams.delete(V); history.replaceState(history.state, '', u.pathname + u.search + u.hash) }
+  } catch { /* leave it */ }
+}
+
+/** For a copy with no service worker: notice a new version on the site. */
+let watching = false
+export function watchWithoutWorker() {
+  if (reg || watching) return
+  watching = true
+  const ask = async () => {
+    if (reg || document.visibilityState !== 'visible' || !navigator.onLine) return
+    if (state === 'ready' || Date.now() - asked < GAP) return
+    asked = Date.now()
+    const b = await siteBuild()
+    if (b && b !== __BUILD__ && !reg) { fresh = b; newVersionReady() }
+  }
+  document.addEventListener('visibilitychange', ask)
+  addEventListener('pageshow', e => { if ((e as PageTransitionEvent).persisted) ask() })
+  addEventListener('online', ask)
+  setInterval(ask, EVERY)
+  setTimeout(ask, 3000)
+}
+
 /** How long the update button shows before the app updates by itself. */
 export const COUNTDOWN = 60 * 1000
 // How long you must have left the screen alone: no tap, scroll or key.
@@ -154,6 +201,11 @@ export function applyUpdate() {
     navigator.serviceWorker.addEventListener('controllerchange', () => location.reload(), { once: true })
     waiting.postMessage({ type: 'SKIP_WAITING' })
     setTimeout(() => location.reload(), 3000)
+  } else if (fresh) {
+    // No service worker: an address no cache has seen brings the new page.
+    const u = new URL(location.href)
+    u.searchParams.set(V, fresh.replace(/\W+/g, ''))
+    location.replace(u.href)
   } else location.reload()
 }
 
@@ -163,7 +215,13 @@ export async function checkForUpdate() {
   if (state === 'ready') return applyUpdate()
   if (state === 'checking') return
   if (!navigator.onLine) return set('offline')
-  if (!reg) return set('current')
+  if (!reg) {
+    set('checking')
+    asked = Date.now()
+    const b = await siteBuild()
+    if (b && b !== __BUILD__) { fresh = b; set('ready'); return applyUpdate() }
+    return set(b ? 'current' : 'idle')
+  }
   set('checking')
   asked = Date.now()
   try {

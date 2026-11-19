@@ -135,6 +135,9 @@ export default defineConfig({
       },
     }),
     themedManifests,
+    // Which version is on the site, for copies of the app with no service
+    // worker to ask (Fedi's mini apps on iPhone): see src/lib/update.ts.
+    { name: 'version-file', generateBundle() { this.emitFile({ type: 'asset', fileName: 'version.json', source: JSON.stringify({ build: BUILD }) }) } } as Plugin,
   ],
   worker: { format: 'es' },
 })

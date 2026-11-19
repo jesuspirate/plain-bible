@@ -68,7 +68,9 @@
       // stay blank. Repair clears the saved app files (not your highlights,
       // settings or downloaded Bibles) and loads a fresh copy.
       window.plainBibleRepair = function () {
-        var done = function () { location.reload() }
+        // A new address, so a web view's own cache (no service worker, as in
+        // Fedi on iPhone) can't hand back the same broken page.
+        var done = function () { location.replace(location.pathname + '?v=' + Date.now() + location.hash) }
         try {
           var jobs = []
           if (navigator.serviceWorker) jobs.push(navigator.serviceWorker.getRegistrations().then(function (rs) {
