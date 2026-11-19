@@ -1,6 +1,5 @@
 import UIKit
 import WebKit
-import UIKit.UIGestureRecognizerSubclass
 
 /// The whole app: myquietbible.com in a web view, as on a Home Screen.
 /// The site's own service worker keeps it working offline after the first
@@ -23,7 +22,6 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var circleNews: NSObjectProtocol?
     private var macKeyboard: [NSObjectProtocol] = []
     private var macAway: [NSObjectProtocol] = []
-    private var lastWake: Date?
     private var lastPicture: UIImage?
     private var cover: UIImageView?
     private var pictureRound = 0
@@ -55,13 +53,10 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         // The web app reads this to leave out what only fits a website.
         config.applicationNameForUserAgent = "Mobile/15E148 QuietBibleApp/1"
             + (ProcessInfo.processInfo.isiOSAppOnMac ? " QuietBibleMac/1" : "")
-        // On a Mac, swiping to another desktop (Space) away from the app in
-        // full screen counts as the app going to the background, and the web
-        // view then put the page to sleep. Back again, it had to wake and
-        // draw the page from nothing, which took a second or more: the text
-        // came in after the window. A Mac doesn't need that saving, and no
-        // other app there does it, so the page stays awake.
-        if #available(iOS 17.0, *), ProcessInfo.processInfo.isiOSAppOnMac { config.preferences.inactiveSchedulingPolicy = .none }
+        // (1.2.8 told the page never to pause on a Mac,
+        // `inactiveSchedulingPolicy = .none`. From that build on, coming back
+        // to full screen sometimes left the page's code stopped for good: drawn
+        // but deaf to clicks and keys until the app was quit. Taken out again.)
         // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
         config.userContentController.addUserScript(PasskeyBridge.script)
         config.userContentController.addScriptMessageHandler(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
@@ -136,38 +131,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         openTappedCircle()
         watchMacKeyboardStrip()
         keepPageWhileAwayOnMac()
-        wakeOnTouchOnMac()
-        MacReport.watchEverything { [weak self] in self?.view.window?.windowScene }
-    }
-
-    /// Sometimes, back in a full-screen Space, the Mac never tells the app
-    /// it is in front again: the page stays asleep and every click is lost
-    /// until the app is quit. A click or the pointer moving over the window
-    /// shows it is in front, so then ask for the scene to be brought back.
-    private func wakeOnTouchOnMac() {
-        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
-        let poke: (String) -> Void = { [weak self] how in
-            guard let self, let scene = self.view.window?.windowScene,
-                  scene.activationState == .background || UIApplication.shared.applicationState == .background else { return }
-            let now = Date()
-            if let last = self.lastWake, now.timeIntervalSince(last) < 2 { return }
-            self.lastWake = now
-            MacReport.note("\(how) while away (scene \(scene.activationState.rawValue)): asking to come back")
-            UIApplication.shared.requestSceneSessionActivation(scene.session, userActivity: nil, options: nil) { error in
-                MacReport.note("asking to come back failed: \(error)")
-            }
-        }
-        let touch = TouchWatcher { poke("click") }
-        let hover = UIHoverGestureRecognizer(target: nil, action: nil)
-        hover.addTarget(HoverTarget.shared, action: #selector(HoverTarget.moved))
-        HoverTarget.shared.moved_ = { poke("pointer") }
-        for g in [touch, hover] as [UIGestureRecognizer] {
-            g.cancelsTouchesInView = false
-            g.delaysTouchesBegan = false
-            g.delaysTouchesEnded = false
-            g.delegate = TouchWatcher.alongside
-            view.addGestureRecognizer(g)
-        }
+        MacReport.watchEverything(scene: { [weak self] in self?.view.window?.windowScene }, web: { [weak self] in self?.web })
     }
 
     /// On a Mac in full screen, going to another Space puts the app in the
@@ -675,27 +639,6 @@ private final class PickedBridge: NSObject, WKScriptMessageHandler {
 }
 
 
-/// Sees a click start anywhere in the window, then steps aside so the page
-/// gets it as usual.
-final class TouchWatcher: UIGestureRecognizer {
-    static let alongside = Alongside()
-    private let seen: () -> Void
-    init(_ seen: @escaping () -> Void) { self.seen = seen; super.init(target: nil, action: nil) }
-    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
-        seen()
-        state = .failed
-    }
-    final class Alongside: NSObject, UIGestureRecognizerDelegate {
-        func gestureRecognizer(_ g: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool { true }
-    }
-}
-
-final class HoverTarget: NSObject {
-    static let shared = HoverTarget()
-    var moved_: (() -> Void)?
-    @objc func moved() { moved_?() }
-}
-
 /// TEMPORARY, TestFlight builds on a Mac only: a short timeline of what the
 /// app saw (coming back to full screen, recording a prayer), copied to the
 /// clipboard to be pasted back to us. Remove once both are understood.
@@ -739,7 +682,7 @@ enum MacReport {
 
     /// Every notice about the app, its scenes and windows, as it arrives,
     /// and the app's state each second whenever it changes. Copied each time.
-    static func watchEverything(scene: @escaping () -> UIWindowScene?) {
+    static func watchEverything(scene: @escaping () -> UIWindowScene?, web: @escaping () -> WKWebView?) {
         guard on else { return }
         let keep = ["Scene", "Application", "Window", "Active", "Occlusion", "Space", "Foreground", "Background", "Screen", "Focus"]
         let skip = ["Keyboard", "TextInput", "Pasteboard", "Menu"]
@@ -753,6 +696,20 @@ enum MacReport {
         Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
             let now = "app \(UIApplication.shared.applicationState.rawValue), scene \(scene()?.activationState.rawValue ?? -9), key \(scene()?.keyWindow != nil)"
             if now != last { last = now; note_("state: " + now + " (app 0 active, 1 inactive, 2 background; scene 0 front, 1 front-inactive, 2 background)") }
+        }
+        // The page's own code: asked every 2 s; a page that stops answering
+        // (the freeze) shows here, and again when it answers once more.
+        var answering = true
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+            guard let web = web() else { return }
+            var answered = false
+            web.evaluateJavaScript("document.visibilityState") { value, _ in
+                answered = true
+                if !answering { answering = true; note_("page answers again (\(value ?? "?"))") }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                if !answered && answering { answering = false; note_("page NOT answering") }
+            }
         }
     }
     private static func note_(_ line: String) { note(line); copy(title: "Mac") }
