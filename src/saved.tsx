@@ -203,9 +203,15 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     )
   }
 
-  /** The whole verse opens it in the reader, not only the small reference. */
-  const OpenText = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) =>
-    <a class="saved-open" href={'#/' + readPath(version, book, chapter, verses[0])}><Text book={book} chapter={chapter} verses={verses} /></a>
+  /** A tap anywhere on a card opens its verse in the reader, except on its
+   *  buttons (and the colors or "remove?" card they open). It goes through
+   *  the card's own reference link, so Settings closes behind it too. */
+  const openCard = (e: MouseEvent) => {
+    const el = e.target as Element, card = e.currentTarget as HTMLElement
+    if (el.closest('button, a, input, textarea, .saved-palette, .confirm-card')) return
+    if (String(getSelection() ?? '').trim()) return // picking words to copy
+    card.querySelector<HTMLAnchorElement>('.saved-head a.ref')?.click()
+  }
 
   /** Change some verses' marks, keeping what they were so it can be undone. */
   const change = (ks: string[], patch: Partial<Mark>, what?: string) => {
@@ -291,7 +297,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
         {shown.slice(0, lim).map(r => {
           const id = r.keys[0], ref = refOf(r.book, r.chapter, r.verses)
           return (
-            <li class="hl" style={{ '--hl': r.color }}>
+            <li class="hl go" style={{ '--hl': r.color }} onClick={openCard}>
               <div class="saved-head">
                 <Ref {...r} />
                 <span class="spacer" />
@@ -299,7 +305,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                   <span class="dot big" style={{ background: r.color }} />{t('Color')}
                 </button>
               </div>
-              <OpenText {...r} />
+              <Text {...r} />
               {active && recolor === id && (
                 <div class="saved-palette">
                   <div class="swatches">
@@ -330,14 +336,14 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
         {list.slice(0, lim).map(x => {
           const open = () => setEditing({ key: x.key, verses: x.verses, start: { key: x.key, id: x.id } })
           return (
-            <li>
+            <li class="go" onClick={openCard}>
               <div class="saved-head">
                 <Ref {...x} />
                 <span class="spacer" />
                 <button class="saved-act" onClick={open}><EditIcon size={20} />{t('Edit')}</button>
               </div>
-              <OpenText {...x} />
-              <p class="saved-note" onClick={open}>{x.n}</p>
+              <Text {...x} />
+              <p class="saved-note">{x.n}</p>
             </li>
           )
         })}
@@ -360,7 +366,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
         {list.slice(0, lim).map(k => {
           const r = parseKey(k), vs = [r.verse]
           return (
-            <li>
+            <li class="go" onClick={openCard}>
               <div class="saved-head">
                 <span class="bm-mark" aria-hidden="true"><BookmarkIcon /></span>
                 <Ref book={r.book} chapter={r.chapter} verses={vs} />
@@ -376,7 +382,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
                   <button onClick={() => setAskBm(undefined)}>{t('Cancel')}</button>
                 </div>
               </div>}
-              <OpenText book={r.book} chapter={r.chapter} verses={vs} />
+              <Text book={r.book} chapter={r.chapter} verses={vs} />
             </li>
           )
         })}
