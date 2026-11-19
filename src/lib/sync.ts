@@ -29,6 +29,12 @@ export function changedAt(t: SettingsT | undefined, key: string) {
   return typeof t === 'number' ? t : t?.[key] ?? t?.['*'] ?? 0
 }
 
+/** Settings no longer used. Left in the account by an older app, they made
+ *  every device that synced see the account as "different from here" and
+ *  sync again every two seconds, all day: the merge now drops them, so the
+ *  account is cleaned the next time any device syncs. */
+const RETIRED = ['favorite']
+
 /** Merge two documents: each verse keeps its newest mark (removals included)
  *  and each of its notes keeps its newest version, each setting keeps its
  *  newest value, and a day read or prayed on either side stays done. */
@@ -40,6 +46,7 @@ export function mergeDocs(a: SyncDoc, b: SyncDoc | null | undefined): SyncDoc {
   }
   const settings: Record<string, unknown> = {}, settingsT: Record<string, number> = {}
   for (const k of new Set([...Object.keys(a.settings ?? {}), ...Object.keys(b.settings ?? {})])) {
+    if (RETIRED.includes(k)) continue
     const ta = changedAt(a.settingsT, k), tb = changedAt(b.settingsT, k)
     const useB = k in (b.settings ?? {}) && (!(k in (a.settings ?? {})) || tb > ta)
     settings[k] = useB ? b.settings[k] : a.settings[k]
