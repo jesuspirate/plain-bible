@@ -1,5 +1,6 @@
 import UIKit
 import WebKit
+import UIKit.UIGestureRecognizerSubclass
 
 /// The whole app: myquietbible.com in a web view, as on a Home Screen.
 /// The site's own service worker keeps it working offline after the first
@@ -22,6 +23,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
     private var circleNews: NSObjectProtocol?
     private var macKeyboard: [NSObjectProtocol] = []
     private var macAway: [NSObjectProtocol] = []
+    private var lastWake: Date?
     private var lastPicture: UIImage?
     private var cover: UIImageView?
     private var pictureRound = 0
@@ -134,6 +136,38 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         openTappedCircle()
         watchMacKeyboardStrip()
         keepPageWhileAwayOnMac()
+        wakeOnTouchOnMac()
+        MacReport.watchEverything { [weak self] in self?.view.window?.windowScene }
+    }
+
+    /// Sometimes, back in a full-screen Space, the Mac never tells the app
+    /// it is in front again: the page stays asleep and every click is lost
+    /// until the app is quit. A click or the pointer moving over the window
+    /// shows it is in front, so then ask for the scene to be brought back.
+    private func wakeOnTouchOnMac() {
+        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
+        let poke: (String) -> Void = { [weak self] how in
+            guard let self, let scene = self.view.window?.windowScene,
+                  scene.activationState == .background || UIApplication.shared.applicationState == .background else { return }
+            let now = Date()
+            if let last = self.lastWake, now.timeIntervalSince(last) < 2 { return }
+            self.lastWake = now
+            MacReport.note("\(how) while away (scene \(scene.activationState.rawValue)): asking to come back")
+            UIApplication.shared.requestSceneSessionActivation(scene.session, userActivity: nil, options: nil) { error in
+                MacReport.note("asking to come back failed: \(error)")
+            }
+        }
+        let touch = TouchWatcher { poke("click") }
+        let hover = UIHoverGestureRecognizer(target: nil, action: nil)
+        hover.addTarget(HoverTarget.shared, action: #selector(HoverTarget.moved))
+        HoverTarget.shared.moved_ = { poke("pointer") }
+        for g in [touch, hover] as [UIGestureRecognizer] {
+            g.cancelsTouchesInView = false
+            g.delaysTouchesBegan = false
+            g.delaysTouchesEnded = false
+            g.delegate = TouchWatcher.alongside
+            view.addGestureRecognizer(g)
+        }
     }
 
     /// On a Mac in full screen, going to another Space puts the app in the
@@ -641,6 +675,27 @@ private final class PickedBridge: NSObject, WKScriptMessageHandler {
 }
 
 
+/// Sees a click start anywhere in the window, then steps aside so the page
+/// gets it as usual.
+final class TouchWatcher: UIGestureRecognizer {
+    static let alongside = Alongside()
+    private let seen: () -> Void
+    init(_ seen: @escaping () -> Void) { self.seen = seen; super.init(target: nil, action: nil) }
+    override func touchesBegan(_ touches: Set<UITouch>, with event: UIEvent) {
+        seen()
+        state = .failed
+    }
+    final class Alongside: NSObject, UIGestureRecognizerDelegate {
+        func gestureRecognizer(_ g: UIGestureRecognizer, shouldRecognizeSimultaneouslyWith other: UIGestureRecognizer) -> Bool { true }
+    }
+}
+
+final class HoverTarget: NSObject {
+    static let shared = HoverTarget()
+    var moved_: (() -> Void)?
+    @objc func moved() { moved_?() }
+}
+
 /// TEMPORARY, TestFlight builds on a Mac only: a short timeline of what the
 /// app saw (coming back to full screen, recording a prayer), copied to the
 /// clipboard to be pasted back to us. Remove once both are understood.
@@ -648,21 +703,57 @@ enum MacReport {
     static let on = ProcessInfo.processInfo.isiOSAppOnMac
         && Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
     private static var lines: [String] = []
-    private static var started = Date()
+    private static let clock: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "HH:mm:ss.SSS"; return f
+    }()
+    /// The clipboard as this report last left it, and when something else
+    /// was first seen there (that is left alone for two minutes).
+    private static var ours: Int?
+    private static var othersSince: Date?
 
-    static func start() {
-        guard on else { return }
-        lines = []; started = Date()
-    }
+    /// Marks a new step; the lines before it are kept (a freeze shows only
+    /// in what came before).
+    static func start() { note("----") }
 
     static func note(_ line: String) {
         guard on else { return }
-        lines.append(String(format: "%6.0f ms  ", Date().timeIntervalSince(started) * 1000) + line)
-        if lines.count > 200 { lines.removeFirst(lines.count - 200) }
+        lines.append(clock.string(from: Date()) + "  " + line)
+        if lines.count > 250 { lines.removeFirst(lines.count - 250) }
     }
 
+    /// Copies the whole trail, unless something else was put on the
+    /// clipboard less than two minutes ago (a report from the page, or
+    /// anything copied by hand).
     static func copy(title: String) {
         guard on, !lines.isEmpty else { return }
-        UIPasteboard.general.string = (["Quiet Bible \(title) report"] + lines).joined(separator: "\n")
+        let board = UIPasteboard.general
+        if let ours, board.changeCount != ours {
+            let since = othersSince ?? Date()
+            othersSince = since
+            if Date().timeIntervalSince(since) < 120 { return }
+        }
+        board.string = (["Quiet Bible \(title) report"] + lines).joined(separator: "\n")
+        ours = board.changeCount
+        othersSince = nil
     }
+
+    /// Every notice about the app, its scenes and windows, as it arrives,
+    /// and the app's state each second whenever it changes. Copied each time.
+    static func watchEverything(scene: @escaping () -> UIWindowScene?) {
+        guard on else { return }
+        let keep = ["Scene", "Application", "Window", "Active", "Occlusion", "Space", "Foreground", "Background", "Screen", "Focus"]
+        let skip = ["Keyboard", "TextInput", "Pasteboard", "Menu"]
+        NotificationCenter.default.addObserver(forName: nil, object: nil, queue: nil) { note in
+            let name = note.name.rawValue
+            guard keep.contains(where: name.contains), !skip.contains(where: name.contains) else { return }
+            let what = "notice \(name)"
+            if Thread.isMainThread { note_(what) } else { DispatchQueue.main.async { note_(what) } }
+        }
+        var last = ""
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            let now = "app \(UIApplication.shared.applicationState.rawValue), scene \(scene()?.activationState.rawValue ?? -9), key \(scene()?.keyWindow != nil)"
+            if now != last { last = now; note_("state: " + now + " (app 0 active, 1 inactive, 2 background; scene 0 front, 1 front-inactive, 2 background)") }
+        }
+    }
+    private static func note_(_ line: String) { note(line); copy(title: "Mac") }
 }
