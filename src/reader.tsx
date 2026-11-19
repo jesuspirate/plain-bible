@@ -529,6 +529,20 @@ export function Reader({ route }: { route: Route }) {
     }
     if (held.current) { held.current = false; return }
     if ((e.target as HTMLElement).closest('.w') && settings.strongs) return
+    // With a mouse, a double click on the words picks a word (for its
+    // meaning), so a triple click is the quick highlight there: the verse in
+    // the color you used last, or its highlight taken off, as a double tap
+    // does on a phone. The words the clicks picked are let go.
+    if (fine && e.detail === 3) {
+      getSelection()?.removeAllRanges()
+      // On the number (no words to pick) the double click already did it.
+      const prev = lastTap.current
+      lastTap.current = undefined
+      if (prev?.v !== v) return
+      setSelected(prev.before)
+      toggleHighlight(v)
+      return
+    }
     // Selecting words isn't a tap, and neither is a tap on the selected
     // words (that's for the copy menu). A tap elsewhere while words are still
     // selected clears them and counts, so it isn't lost.
@@ -1053,8 +1067,8 @@ export function Reader({ route }: { route: Route }) {
     const part = (v: number, ver: string) => { const m = mark(v); return partial(v) && m!.v === ver ? m!.r : undefined }
     const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow && v >= glow && v <= targetEnd && (targetEnd > glow || !mark(v)?.c) && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (live && target && v >= target && v <= targetEnd ? ' vmark' : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
     const verse = (v: number) => live
-      ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v) }
-      : { id: undefined, onClick: undefined }
+      ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v), onMouseDown: fine ? (e: MouseEvent) => { if (e.detail === 3) e.preventDefault() } : undefined }
+      : { id: undefined, onClick: undefined, onMouseDown: undefined }
     const hl = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
     const after = (v: number) => {
       if (live) return marksAfter(v)
@@ -1070,7 +1084,7 @@ export function Reader({ route }: { route: Route }) {
     // opens the same bar as clicking the verse. A double click on it instead
     // highlights the verse in the color you used last (or takes it off), as
     // a double tap does on a phone: on a computer a double click on the words
-    // selects one, so the ribbon is the place for it.
+    // selects one, so there it's the ribbon, or a triple click on the words.
     // In a paragraph each verse keeps a little room for it, so it never sits
     // on the next verse's number and nothing moves as it goes from verse to verse.
     const tab = (v: number) => live && (fine || undefined) && <span class="tab-end">{!picking && reading === v && (
@@ -1106,14 +1120,14 @@ export function Reader({ route }: { route: Route }) {
       {versions.length === 1 && settings.layout === 'paragraph' ? (
         <p class="para" dir={info?.rtl ? 'rtl' : 'ltr'} lang={info?.lang}>
           {primary.books[b][c - 1].map((raw, i) => raw && (
-            <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
+            <span id={verse(i + 1).id} class={cls('pv', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} onMouseDown={verse(i + 1).onMouseDown} {...rest(i + 1)}>
               <sup class="vn">{i + 1}</sup>{after(i + 1)}
               <span class="vt"><VerseText raw={raw} strongs={showStrongs} numbers={settings.strongsNumbers} onStrongs={lex} ranges={part(i + 1, version)} markClass="hl-part" /></span>{tab(i + 1)}{' '}
             </span>
           ))}
         </p>
       ) : Array.from({ length: rowsOf }, (_, i) => (
-        <div id={verse(i + 1).id} class={cls('verse', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} {...rest(i + 1)}>
+        <div id={verse(i + 1).id} class={cls('verse', i + 1)} style={hl(i + 1)} onClick={verse(i + 1).onClick} onMouseDown={verse(i + 1).onMouseDown} {...rest(i + 1)}>
           {versions.map(v => {
             const raw = bibles[v].books[b]?.[c - 1]?.[i]
             const tv = byId.get(v)
