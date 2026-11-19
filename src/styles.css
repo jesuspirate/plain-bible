@@ -556,6 +556,10 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .saved-act.on { border-color: var(--accent); }
 .saved-head .ref { font-weight: 700; }
 .saved-list li.go { cursor: pointer; -webkit-tap-highlight-color: transparent; }
+/* The whole card is one button: its words aren't picked like text, so the
+   Mac keeps the hand all over it instead of flicking to the text cursor. */
+.saved-list li.go .saved-head, .saved-list li.go .saved-text, .saved-list li.go .saved-note { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; cursor: pointer; }
+.saved-list li.go .saved-text *, .saved-list li.go .saved-note * { cursor: inherit; }
 .saved-list li.go:active:not(:has(button:active, a:active, .saved-palette:active, .confirm-card:active)) { opacity: .6; }
 .dot.big { width: 18px; height: 18px; }
 .saved-palette { margin-top: 10px; padding-top: 10px; border-top: 1px solid color-mix(in srgb, var(--hl) 60%, var(--line)); }
