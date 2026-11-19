@@ -1220,6 +1220,11 @@ body.selecting .spread-turn { display: none; }
     --pw: calc(50vw - 16px - max(env(safe-area-inset-left), env(safe-area-inset-right))); --pp: 1.15em;
     --book-h: calc(100dvh - 158px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
     margin-top: 8px;
+    /* The spine goes on the middle of the SCREEN, where the fold is, not on
+       the middle of the room beside the camera: on the iPhone Duo the camera
+       strip takes room on one side only, and centring the book in what was
+       left put the spine off the fold. (main's left padding is undone here.) */
+    margin-left: calc(50vw - var(--pw) - max(16px, env(safe-area-inset-left))); margin-right: 0;
   }
   .spread-turn { display: none; }
 }
