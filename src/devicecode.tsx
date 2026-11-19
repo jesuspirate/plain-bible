@@ -27,7 +27,7 @@ function useEvery(ms: number, fn: () => Promise<boolean | void>, on: boolean) {
 }
 
 /** On the signed-in device: the code, then "Let your Mac in?". */
-export function ShowDeviceCode({ onClose, onLink }: { onClose: () => void; onLink: () => void }) {
+export function ShowDeviceCode({ onClose, onLink }: { onClose: () => void; onLink?: () => void }) {
   const [code, setCode] = useState<{ code: string; expires: number }>()
   const [ask, setAsk] = useState<{ label: string; match: string; pub: string }>()
   const [done, setDone] = useState<{ label: string; locked: boolean }>()
@@ -73,12 +73,28 @@ export function ShowDeviceCode({ onClose, onLink }: { onClose: () => void; onLin
         <p class="muted small">{t('Works once, for 15 minutes. Keep this open.')}</p>
         <div class="row wrap">
           <button onClick={close}>{t('Cancel')}</button>
-          <button class="link" onClick={() => { close(); onLink() }}>{t('Make a link instead')}</button>
+          {onLink && <button class="link" onClick={() => { close(); onLink() }}>{t('Make a link instead')}</button>}
         </div>
       </>}
       {msg && <p class="note small">{msg}</p>}
     </div>
   )
+}
+
+/** The code card again, when the app opens while a code it showed is still
+ *  good: on a phone, typing it in another app (Fedi, say) can reload this
+ *  one, and the other device is still waiting for Allow here. */
+export function PendingDeviceCode() {
+  const [open, setOpen] = useState(() => {
+    try {
+      const c = JSON.parse(localStorage.getItem('plain-bible:devicecode') || 'null') as { expires?: number } | null
+      return !!c && !!localStorage.getItem('plain-bible:account') && Date.now() < (c.expires ?? 0)
+    } catch { return false }
+  })
+  if (!open) return null
+  return <div class="move-welcome approve-card" role="dialog" aria-live="polite">
+    <ShowDeviceCode onClose={() => setOpen(false)} />
+  </div>
 }
 
 /** On a device that isn't signed in: type the code, compare four digits,

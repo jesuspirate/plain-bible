@@ -21,6 +21,7 @@ import { ContinueOffer } from './continue'
 import { DAYS_EVENT } from './lib/streaks'
 import { checkCircleNews } from './lib/circleNews'
 import { ApproveCard } from './approve'
+import { PendingDeviceCode } from './devicecode'
 import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
@@ -415,6 +416,7 @@ export function App() {
       {HomeScreen && <HomeScreen onClose={() => setHomeScreen(undefined)} />}
       <MoveWelcome />
       <ApproveCard />
+      <PendingDeviceCode />
       <LeftNote />
     </AppContext.Provider>
   )
