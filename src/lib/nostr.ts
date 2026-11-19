@@ -11,11 +11,28 @@ interface Nip07 {
   signEvent(e: Omit<NostrEvent, 'id' | 'pubkey' | 'sig'>): Promise<NostrEvent>
   nip44?: { encrypt(pubkey: string, text: string): Promise<string>; decrypt(pubkey: string, text: string): Promise<string> }
 }
-const w = () => (typeof window === 'undefined' ? {} : window) as { nostr?: Nip07; fedi?: unknown }
+type Win = { nostr?: Nip07; fedi?: unknown; fediInternal?: unknown; webln?: unknown; navigator?: { userAgent?: string } }
+const w = () => (typeof window === 'undefined' ? {} : window) as Win
 const nostr = () => w().nostr
 
-/** Inside Fedi, with its Nostr key there to sign. */
-export const inFedi = () => !!w().fedi && typeof w().fedi === 'object' && typeof nostr()?.signEvent === 'function'
+/** Inside Fedi, with its Nostr key there to sign. Fedi's own objects
+ *  (window.fedi, or window.fediInternal in some versions) say so; failing
+ *  those, a phone's in-app browser that brings both a Lightning wallet
+ *  (WebLN) and a Nostr key, which on a phone only Fedi does: the Nostr and
+ *  Lightning extensions (Alby and others) live in computer browsers. */
+export function inFedi() {
+  const g = w()
+  if (typeof nostr()?.signEvent !== 'function') return false
+  if (g.fedi || g.fediInternal) return true
+  return !!g.webln && /iPhone|iPad|Android/.test(g.navigator?.userAgent ?? '')
+}
+
+/** What a page was given, for the version line in Settings (finding out
+ *  what an in-app browser like Fedi's provides). Empty in a plain browser. */
+export function injected() {
+  const g = w()
+  return (['nostr', 'webln', 'fedi', 'fediInternal'] as const).filter(k => g[k] !== undefined)
+}
 
 /** The Nostr key this account signs in with here, once it has. */
 const KEY = 'plain-bible:nostr'
