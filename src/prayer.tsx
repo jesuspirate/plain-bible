@@ -9,7 +9,7 @@ import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
-import { macPlayNote, macPlayTap, macPlayWatch } from './lib/macPlayReport'
+import { macPlayTap, macPlayWatch } from './lib/macPlayReport'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { go, canShareInCircles as inCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver } from './state'
 import { pauseListening, readingAt } from './listen'
@@ -449,7 +449,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     const parts = partsOf(full)
     const fixed = parts.map(x => playable(x.audio, x.type))
     const urls = parts.map((x, i) => URL.createObjectURL(new Blob([fixed[i]], { type: x.type })))
-    if (parts[0]) macPlayWatch(el, parts[0].audio, fixed[0], parts[0].type, urls[0])
+    const testing = parts[0] && macPlayWatch(el, parts[0].audio, fixed[0], parts[0].type, urls[0])
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
     el.onended = () => {
@@ -461,8 +461,9 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     setPlaying(id); setPos(0)
     nowPlaying(t('Prayer'))
     if (rest.length || inTurnRef.current) document.getElementById(`pray-${id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
+    if (testing) return
     el.src = urls[0]
-    el.play().catch(e => { macPlayNote(`play() refused: ${e?.name} ${e?.message}`); release() })
+    el.play().catch(release)
   }
   const inTurnRef = useRef(false)
   inTurnRef.current = inTurn
