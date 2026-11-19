@@ -15,6 +15,7 @@ import { DeviceLink, PasteMove } from './move'
 import { EnterDeviceCode } from './devicecode'
 import { KeyBackup } from './approve'
 import { DownloadEverything } from './exporter'
+import { inFedi, nostrSignIn } from './lib/nostr'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
 import { locale, t, tj, tn } from './i18n'
 
@@ -393,7 +394,7 @@ export function AccountSection() {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState('')
-  const [info, setInfo] = useState<{ passkeys: number; list?: PasskeyInfo[]; created: number; email: string | null }>()
+  const [info, setInfo] = useState<{ passkeys: number; list?: PasskeyInfo[]; created: number; email: string | null; nostr?: boolean }>()
   const [email, setEmailOn] = useState(emailSignInOn)
   const [addEmail, setAddEmail] = useState(false)
   const acct = sync.account
@@ -402,6 +403,8 @@ export function AccountSection() {
   useEffect(() => { if (SYNC_URL && navigator.onLine !== false) checkEmailSignIn().then(setEmailOn).catch(() => {}) }, [])
   if (!sync.enabled) return null
   const passkeys = typeof PublicKeyCredential !== 'undefined'
+  // Only inside Fedi, which has the person's Nostr key but no passkeys.
+  const fedi = inFedi()
 
   const act = (label: string, fn: () => Promise<void>) => async () => {
     setWorking(label); setMsg('')
@@ -409,6 +412,7 @@ export function AccountSection() {
       const m = (e as Error).message
       // Safari also reports a passkey sheet that never opened as canceled.
       if (m !== 'Cancelled') setMsg(m)
+      else if (label === 'nostr') setMsg(t('Fedi didn’t sign in. Tap to try again.'))
       else if (label === 'login' || label === 'create') setMsg(t('The passkey request was canceled or timed out. Tap the button to try again.'))
     }
     finally { setWorking('') }
@@ -417,6 +421,18 @@ export function AccountSection() {
   const login = act('login', async () => {
     try { sync.signedIn(await signIn()) } catch (e) { prepareSignIn(); throw e }
   })
+  const nostr = act('nostr', async () => {
+    const r = await nostrSignIn(acct?.token)
+    // Prayers already here go to the account at once (see nostrSignedIn).
+    if (r.token) { sync.signedIn(r.token); setTimeout(() => import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {}), 0) }
+    else if (r.added) setMsg(t('You can now also sign in with Nostr in Fedi.'))
+  })
+  const fediButton = fedi && <>
+    <div class="row wrap">
+      <button class="primary" disabled={!!working} onClick={nostr}>{working === 'nostr' ? t('Waiting for Fedi…') : t('Sign in with Nostr')}</button>
+    </div>
+    <p class="muted small">{t('Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.')}</p>
+  </>
   const addKey = act('add', async () => { await register(acct!.token); setMsg(t('Passkey added. You can now sign in with it on that device too.')) })
   // Signing out leaves nothing of the account here (see lib/signout), and
   // deleting it leaves nothing on the server. So before either, everything
@@ -483,6 +499,7 @@ export function AccountSection() {
         <p class="muted">{t('Optional. Keep your highlights, notes, settings and prayers the same on all your devices.')}{' '}
           {passkeys ? t('Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.')
             : t('No password: we email you a code. New here? The same code makes your account.')}</p>
+        {fediButton}
         {passkeys && <>
           <div class="row wrap">
             <button class="primary" disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in with a passkey')}</button>
@@ -502,12 +519,13 @@ export function AccountSection() {
       <div class="account">
         <p class="muted">{t('Optional. Keep your highlights, notes, settings and prayers the same on all your devices.')}{' '}
           {t('No email, no password: Face ID, a fingerprint or your screen lock unlocks it.')}</p>
+        {fediButton}
         {passkeys ? (
           <div class="row wrap">
             <button class="primary" disabled={!!working} onClick={create}>{working === 'create' ? t('Waiting for passkey…') : t('Create account')}</button>
             <button disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in')}</button>
           </div>
-        ) : <p class="note">{t('This browser does not support passkeys.')}</p>}
+        ) : !fedi && <p class="note">{t('This browser does not support passkeys.')}</p>}
         <details class="account-more">
           <summary>{t('Signed in on another device?')}</summary>
           <EnterDeviceCode />
@@ -551,13 +569,21 @@ export function AccountSection() {
           <span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span>
           <span class="set-label">{info?.email ? t('Change email') : t('Add an email')}{!info?.email && <span class="set-sub">{t('Another way in if you lose your passkey')}</span>}</span>
         </button>}
-        {info?.list?.length ? <PasskeyList list={info.list} token={acct.token} canRemove={info.list.length > 1 || !!info.email}
+        {info?.nostr ? <div class="set-row set-static">
+          <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
+          <span class="set-label">{t('Nostr key (Fedi)')}</span>
+        </div> : fedi && <button class="set-row" onClick={nostr} disabled={!!working}>
+          <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
+          <span class="set-label">{working === 'nostr' ? t('Waiting for Fedi…') : t('Add Nostr sign-in')}<span class="set-sub">{t('Sign in from Fedi with its Nostr key')}</span></span>
+        </button>}
+        {info?.list?.length ? <PasskeyList list={info.list} token={acct.token} canRemove={info.list.length > 1 || !!info.email || !!info.nostr}
           busy={!!working} onChange={note => setMsg(note)} /> : null}
-        <button class="set-row" onClick={addKey} disabled={!!working}>
+        {/* Fedi has no passkeys to add. */}
+        {(passkeys || !fedi) && <button class="set-row" onClick={addKey} disabled={!!working}>
           <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
           <span class="set-label">{working === 'add' ? t('Waiting for passkey…') : keys ? t('Add another passkey') : t('Add a passkey')}
             <span class="set-sub">{keys ? t('Only for a device your passkeys don’t reach') : t('Face ID, a fingerprint or your screen lock')}</span></span>
-        </button>
+        </button>}
         {email && info?.email && !!keys && <button class="set-row" onClick={() => setAskDrop(true)} disabled={!!working}><span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span><span class="set-label">{t('Remove email')}</span></button>}
       </div>
       {askDrop && <div class="confirm-card" role="alertdialog" aria-labelledby="drop-title">

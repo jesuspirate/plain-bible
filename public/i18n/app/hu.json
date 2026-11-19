@@ -1248,5 +1248,18 @@
  "3John": "3Jn",
  "Jude": "Júd",
  "Rev": "Jel"
-}
+},
+"Sign in with Nostr": "Bejelentkezés Nostrral",
+"Waiting for Fedi…": "Várakozás a Fedire…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "A Fedi a Nostr-kulcsoddal jelentkeztet be. Se e-mail, se jelszó. Új vagy itt? Így jön létre a fiókod.",
+"Fedi didn’t sign in. Tap to try again.": "A Fedi nem jelentkeztetett be. Koppints az újrapróbáláshoz.",
+"Add Nostr sign-in": "Nostr-bejelentkezés hozzáadása",
+"Sign in from Fedi with its Nostr key": "Bejelentkezés a Fediből annak Nostr-kulcsával",
+"You can now also sign in with Nostr in Fedi.": "Most már Nostrral is bejelentkezhetsz a Fediben.",
+"Nostr key (Fedi)": "Nostr-kulcs (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "A körökhöz ingyenes fiók kell. A Fediben a Nostr-kulcsod hozza létre: se e-mail, se jelszó.",
+"Fedi’s answer couldn’t be checked. Please try again.": "A Fedi válaszát nem sikerült ellenőrizni. Próbáld újra.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ez a Nostr-kulcs már egy másik My Quiet Bible-fiókba jelentkeztet be.",
+"Welcome in!": "Üdv!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Jelentkezz be, és az imáid és kiemeléseid biztonságban maradnak a fiókodban, akkor is, ha a Fedi törli a tárhelyét."
 }

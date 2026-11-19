@@ -1248,5 +1248,18 @@
  "3John": "三ヨハ",
  "Jude": "ユダ",
  "Rev": "黙"
-}
+},
+"Sign in with Nostr": "Nostrでサインイン",
+"Waiting for Fedi…": "Fediを待っています…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "FediがあなたのNostrキーでサインインします。メールもパスワードも不要です。初めての方は、これでアカウントが作られます。",
+"Fedi didn’t sign in. Tap to try again.": "Fediでサインインできませんでした。タップしてもう一度試してください。",
+"Add Nostr sign-in": "Nostrサインインを追加",
+"Sign in from Fedi with its Nostr key": "FediでそのNostrキーを使ってサインイン",
+"You can now also sign in with Nostr in Fedi.": "FediでNostrでもサインインできるようになりました。",
+"Nostr key (Fedi)": "Nostrキー（Fedi）",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "サークルには無料のアカウントが必要です。Fediでは、あなたのNostrキーで作られます。メールもパスワードも不要です。",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fediの応答を確認できませんでした。もう一度お試しください。",
+"This Nostr key already signs in to another My Quiet Bible account.": "このNostrキーは、すでに別のMy Quiet Bibleアカウントにサインインしています。",
+"Welcome in!": "ようこそ！",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "サインインすると、Fediがデータを消去しても、祈りとハイライトはアカウントに安全に残ります。"
 }

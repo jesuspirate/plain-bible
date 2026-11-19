@@ -1248,5 +1248,18 @@
  "3John": "3 Ioa",
  "Jude": "Iuda",
  "Rev": "Hōʻik"
-}
+},
+"Sign in with Nostr": "Komo me Nostr",
+"Waiting for Fedi…": "Ke kali nei iā Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Hoʻokomo ʻo Fedi iā ʻoe me kāu kī Nostr. ʻAʻohe leka uila, ʻaʻohe ʻōlelo huna. He hou ʻoe ma ʻaneʻi? Na kēia e hana i kāu moʻokāki.",
+"Fedi didn’t sign in. Tap to try again.": "ʻAʻole i hoʻokomo ʻo Fedi iā ʻoe. Kaomi e hoʻāʻo hou.",
+"Add Nostr sign-in": "Hoʻohui i ke komo me Nostr",
+"Sign in from Fedi with its Nostr key": "Komo mai Fedi mai me kona kī Nostr",
+"You can now also sign in with Nostr in Fedi.": "Hiki iā ʻoe ke komo me Nostr ma Fedi pū kekahi i kēia manawa.",
+"Nostr key (Fedi)": "Kī Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Pono nā pōʻai i moʻokāki manuahi. Ma Fedi, na kāu kī Nostr e hana: ʻaʻohe leka uila, ʻaʻohe ʻōlelo huna.",
+"Fedi’s answer couldn’t be checked. Please try again.": "ʻAʻole i hiki ke nānā i ka pane a Fedi. E ʻoluʻolu e hoʻāʻo hou.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ke hoʻokomo nei kēia kī Nostr i kekahi moʻokāki My Quiet Bible ʻē aʻe.",
+"Welcome in!": "E komo mai!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "E komo, a e mālama pono ʻia kāu mau pule a me nā kaha kala i kāu moʻokāki, ʻoiai inā holoi ʻo Fedi i kona waihona."
 }

@@ -1248,5 +1248,18 @@
  "3John": "3 Jao",
  "Jude": "Joda",
  "Rev": "Apok"
-}
+},
+"Sign in with Nostr": "Hiditra amin'ny Nostr",
+"Waiting for Fedi…": "Miandry an'i Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi no mampiditra anao amin'ny lakile Nostr-nao. Tsy misy mailaka, tsy misy tenimiafina. Vaovao eto ve ianao? Izany no mamorona ny kaontinao.",
+"Fedi didn’t sign in. Tap to try again.": "Tsy nampiditra anao i Fedi. Tsindrio raha hanandrana indray.",
+"Add Nostr sign-in": "Ampio fidirana amin'ny Nostr",
+"Sign in from Fedi with its Nostr key": "Hiditra avy ao amin'i Fedi amin'ny lakile Nostr-ny",
+"You can now also sign in with Nostr in Fedi.": "Afaka miditra amin'ny Nostr ao amin'i Fedi koa ianao izao.",
+"Nostr key (Fedi)": "Lakile Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Mila kaonty maimaim-poana ny tarika. Ao amin'i Fedi, ny lakile Nostr-nao no mamorona azy: tsy misy mailaka, tsy misy tenimiafina.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Tsy voamarina ny valin'i Fedi. Andramo indray azafady.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Efa mampiditra amin'ny kaonty My Quiet Bible hafa io lakile Nostr io.",
+"Welcome in!": "Tongasoa!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Midira, dia ho voaaro ao amin'ny kaontinao ny vavakao sy ny fanasongadinanao, na dia mamafa ny fitehirizany aza i Fedi."
 }

@@ -1248,5 +1248,18 @@
  "3John": "約參",
  "Jude": "猶",
  "Rev": "啟"
-}
+},
+"Sign in with Nostr": "用 Nostr 登入",
+"Waiting for Fedi…": "正在等待 Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi 用你的 Nostr 金鑰為你登入。不需要電子郵件，也不需要密碼。第一次使用？這樣就會建立你的帳號。",
+"Fedi didn’t sign in. Tap to try again.": "Fedi 沒有完成登入。點一下再試一次。",
+"Add Nostr sign-in": "新增 Nostr 登入",
+"Sign in from Fedi with its Nostr key": "在 Fedi 中用它的 Nostr 金鑰登入",
+"You can now also sign in with Nostr in Fedi.": "現在你也可以在 Fedi 中用 Nostr 登入了。",
+"Nostr key (Fedi)": "Nostr 金鑰（Fedi）",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "小組需要一個免費帳號。在 Fedi 中，你的 Nostr 金鑰會建立它：不需要電子郵件，也不需要密碼。",
+"Fedi’s answer couldn’t be checked. Please try again.": "無法驗證 Fedi 的回應。請再試一次。",
+"This Nostr key already signs in to another My Quiet Bible account.": "這個 Nostr 金鑰已用於登入另一個 My Quiet Bible 帳號。",
+"Welcome in!": "歡迎！",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "登入後，即使 Fedi 清除了它的儲存空間，你的禱告和螢光標記也會安全地保存在你的帳號裡。"
 }

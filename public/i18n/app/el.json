@@ -1251,5 +1251,18 @@
  "3John": "3 Ιω",
  "Jude": "Ιούδ",
  "Rev": "Απ"
-}
+},
+"Sign in with Nostr": "Σύνδεση με Nostr",
+"Waiting for Fedi…": "Αναμονή για το Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Το Fedi σε συνδέει με το κλειδί Nostr σου. Χωρίς email, χωρίς συνθηματικό. Νέος εδώ; Έτσι δημιουργείται ο λογαριασμός σου.",
+"Fedi didn’t sign in. Tap to try again.": "Το Fedi δεν σε συνέδεσε. Πάτησε για να δοκιμάσεις ξανά.",
+"Add Nostr sign-in": "Προσθήκη σύνδεσης με Nostr",
+"Sign in from Fedi with its Nostr key": "Σύνδεση από το Fedi με το κλειδί Nostr του",
+"You can now also sign in with Nostr in Fedi.": "Τώρα μπορείς να συνδέεσαι και με Nostr στο Fedi.",
+"Nostr key (Fedi)": "Κλειδί Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Οι κύκλοι χρειάζονται δωρεάν λογαριασμό. Στο Fedi τον δημιουργεί το κλειδί Nostr σου: χωρίς email, χωρίς συνθηματικό.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Η απάντηση του Fedi δεν μπόρεσε να ελεγχθεί. Δοκίμασε ξανά.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Αυτό το κλειδί Nostr συνδέει ήδη σε άλλον λογαριασμό My Quiet Bible.",
+"Welcome in!": "Καλώς ήρθες!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Συνδέσου, και οι προσευχές και οι επισημάνσεις σου μένουν ασφαλείς στον λογαριασμό σου, ακόμη κι αν το Fedi καθαρίσει τον χώρο αποθήκευσής του."
 }

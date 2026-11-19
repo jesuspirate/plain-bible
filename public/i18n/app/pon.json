@@ -1248,5 +1248,18 @@
  "3John": "3 Sohn",
  "Jude": "Sud",
  "Rev": "Kaud"
-}
+},
+"Sign in with Nostr": "Pedolong ni Nostr",
+"Waiting for Fedi…": "Awiawih Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi kin kapedolong uhk ni ki en Nostr omw. Sohte imeil, sohte password. Ke kapw met? Met pahn wiahda omw akaun.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi sohte kapedolong uhk. Pwakihada pwe ke en song pwuhrehng.",
+"Add Nostr sign-in": "Kapatahiong pedolong ni Nostr",
+"Sign in from Fedi with its Nostr key": "Pedolong sang Fedi ni ki en Nostr ehu",
+"You can now also sign in with Nostr in Fedi.": "Met ke pil kak pedolong ni Nostr nan Fedi.",
+"Nostr key (Fedi)": "Ki en Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Pwihn kan anahne akaun ehu me sohte pweine. Nan Fedi, ki en Nostr omw me kin wiahda: sohte imeil, sohte password.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Sohte kak kasawihda pasapengen Fedi. Menlau song pwuhrehng.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ki en Nostr wet ahnsou wet kin pedolong nan akaun teio en My Quiet Bible.",
+"Welcome in!": "Kaselehlie!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Pedolong, oh noumw kapakap oh kasansal kan pahn mih nan omw akaun ni mepwung, mendahki ma Fedi pahn kihsang ah wasahn nekinek."
 }

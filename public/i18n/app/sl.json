@@ -1353,5 +1353,18 @@
  "3John": "3 Jn",
  "Jude": "Jud",
  "Rev": "Raz"
-}
+},
+"Sign in with Nostr": "Prijava z Nostr",
+"Waiting for Fedi…": "Čakam na Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi vas prijavi z vašim ključem Nostr. Brez e-pošte in gesla. Ste novi? Tako nastane vaš račun.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi vas ni prijavil. Tapnite za nov poskus.",
+"Add Nostr sign-in": "Dodaj prijavo z Nostr",
+"Sign in from Fedi with its Nostr key": "Prijava iz Fedija z njegovim ključem Nostr",
+"You can now also sign in with Nostr in Fedi.": "Zdaj se lahko prijavite tudi z Nostr v Fediju.",
+"Nostr key (Fedi)": "Ključ Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Krogi potrebujejo brezplačen račun. V Fediju ga ustvari vaš ključ Nostr: brez e-pošte in gesla.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Odgovora Fedija ni bilo mogoče preveriti. Poskusite znova.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ta ključ Nostr že prijavlja v drug račun My Quiet Bible.",
+"Welcome in!": "Dobrodošli!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Prijavite se in vaše molitve in označbe ostanejo varne v vašem računu, tudi če Fedi izbriše svojo shrambo."
 }

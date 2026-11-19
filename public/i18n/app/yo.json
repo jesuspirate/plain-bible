@@ -1248,5 +1248,18 @@
  "3John": "3Jòh",
  "Jude": "Júú",
  "Rev": "Ìfi"
-}
+},
+"Sign in with Nostr": "Wọlé pẹ̀lú Nostr",
+"Waiting for Fedi…": "Ń dúró de Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi ń mú ọ wọlé pẹ̀lú kọ́kọ́rọ́ Nostr rẹ. Kò sí ímeèlì, kò sí ọ̀rọ̀ aṣínà. Ṣé tuntun ni ọ́ níbí? Èyí yóò ṣẹ̀dá àkáǹtì rẹ.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi kò mú ọ wọlé. Tẹ̀ láti gbìyànjú lẹ́ẹ̀kan sí i.",
+"Add Nostr sign-in": "Ṣàfikún wíwọlé pẹ̀lú Nostr",
+"Sign in from Fedi with its Nostr key": "Wọlé láti Fedi pẹ̀lú kọ́kọ́rọ́ Nostr rẹ̀",
+"You can now also sign in with Nostr in Fedi.": "Ní báyìí o tún lè wọlé pẹ̀lú Nostr nínú Fedi.",
+"Nostr key (Fedi)": "Kọ́kọ́rọ́ Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Àwọn ẹgbẹ́ nílò àkáǹtì ọ̀fẹ́. Nínú Fedi, kọ́kọ́rọ́ Nostr rẹ ló ń ṣẹ̀dá rẹ̀: kò sí ímeèlì, kò sí ọ̀rọ̀ aṣínà.",
+"Fedi’s answer couldn’t be checked. Please try again.": "A kò lè ṣàyẹ̀wò ìdáhùn Fedi. Jọ̀ọ́ gbìyànjú lẹ́ẹ̀kan sí i.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Kọ́kọ́rọ́ Nostr yìí ti ń wọlé sí àkáǹtì My Quiet Bible mìíràn.",
+"Welcome in!": "Ẹ káàbọ̀!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Wọlé, àwọn àdúrà rẹ àti àwọn àmì àwọ̀ rẹ yóò wà láìléwu nínú àkáǹtì rẹ, bí Fedi bá tilẹ̀ pa ibi ìpamọ́ rẹ̀ rẹ́."
 }

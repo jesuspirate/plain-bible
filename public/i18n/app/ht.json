@@ -1248,5 +1248,18 @@
  "3John": "3 Jan",
  "Jude": "Jid",
  "Rev": "Rev"
-}
+},
+"Sign in with Nostr": "Konekte ak Nostr",
+"Waiting for Fedi…": "N ap tann Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi konekte w ak kle Nostr ou. Pa gen imèl, pa gen modpas. Ou nouvo isit la? Sa kreye kont ou.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi pa t konekte w. Tape pou eseye ankò.",
+"Add Nostr sign-in": "Ajoute koneksyon ak Nostr",
+"Sign in from Fedi with its Nostr key": "Konekte depi Fedi ak kle Nostr li",
+"You can now also sign in with Nostr in Fedi.": "Kounye a ou ka konekte ak Nostr nan Fedi tou.",
+"Nostr key (Fedi)": "Kle Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Sèk yo bezwen yon kont gratis. Nan Fedi, kle Nostr ou kreye l: pa gen imèl, pa gen modpas.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Nou pa t ka verifye repons Fedi a. Tanpri eseye ankò.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Kle Nostr sa a deja konekte nan yon lòt kont My Quiet Bible.",
+"Welcome in!": "Byenvini!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Konekte, epi lapriyè ou yo ak souliyaj ou yo ap rete an sekirite nan kont ou, menm si Fedi efase depo li."
 }

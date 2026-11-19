@@ -1248,5 +1248,18 @@
  "3John": "3Yok",
  "Jude": "Yud",
  "Rev": "Kubk"
-}
+},
+"Sign in with Nostr": "Yingira ne Nostr",
+"Waiting for Fedi…": "Tulindiridde Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi ekuyingiza n'ekisumuluzo kyo ekya Nostr. Tewali email, tewali kigambo kya kuyingira. Oli mupya wano? Kino kye kikola akawunti yo.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi tekuyingizza. Nyiga ogezeeko nate.",
+"Add Nostr sign-in": "Gattako okuyingira ne Nostr",
+"Sign in from Fedi with its Nostr key": "Yingira okuva mu Fedi n'ekisumuluzo kyayo ekya Nostr",
+"You can now also sign in with Nostr in Fedi.": "Kati osobola n'okuyingira ne Nostr mu Fedi.",
+"Nostr key (Fedi)": "Ekisumuluzo kya Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Ebibinja byetaaga akawunti ey'obwereere. Mu Fedi, ekisumuluzo kyo ekya Nostr kye kigikola: tewali email, tewali kigambo kya kuyingira.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Okuddamu kwa Fedi tekusobodde kukeberebwa. Gezaako nate.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ekisumuluzo kino ekya Nostr kiyingiza dda mu akawunti endala eya My Quiet Bible.",
+"Welcome in!": "Tukwanirizza!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Yingira, essaala zo ne langi zo bisigale nga binywevu mu akawunti yo, ne bwe Fedi yandisangula by'etereka."
 }

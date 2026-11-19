@@ -1248,5 +1248,18 @@
  "3John": "3 Yoh",
  "Jude": "Yud",
  "Rev": "Chiv"
-}
+},
+"Sign in with Nostr": "Lowani ndi Nostr",
+"Waiting for Fedi…": "Tikudikira Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi imakulowetsani ndi kiyi yanu ya Nostr. Palibe imelo, palibe mawu achinsinsi. Ndinu watsopano kuno? Izi zimapanga akaunti yanu.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi sinakulowetseni. Dinani kuti muyesenso.",
+"Add Nostr sign-in": "Onjezani kulowa ndi Nostr",
+"Sign in from Fedi with its Nostr key": "Lowani kuchokera ku Fedi ndi kiyi yake ya Nostr",
+"You can now also sign in with Nostr in Fedi.": "Tsopano mungathenso kulowa ndi Nostr mu Fedi.",
+"Nostr key (Fedi)": "Kiyi ya Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Magulu amafuna akaunti yaulere. Mu Fedi, kiyi yanu ya Nostr ndiyo imaipanga: palibe imelo, palibe mawu achinsinsi.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Yankho la Fedi silinathe kufufuzidwa. Chonde yesaninso.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Kiyi iyi ya Nostr imalowa kale mu akaunti ina ya My Quiet Bible.",
+"Welcome in!": "Takulandirani!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Lowani, ndipo mapemphero anu ndi zowunikira zanu zidzakhala zotetezeka mu akaunti yanu, ngakhale Fedi itachotsa zosungira zake."
 }

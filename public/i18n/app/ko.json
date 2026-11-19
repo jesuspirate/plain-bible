@@ -1248,5 +1248,18 @@
  "3John": "요삼",
  "Jude": "유",
  "Rev": "계"
-}
+},
+"Sign in with Nostr": "Nostr로 로그인",
+"Waiting for Fedi…": "Fedi를 기다리는 중…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi가 내 Nostr 키로 로그인합니다. 이메일도 암호도 필요 없습니다. 처음이신가요? 이렇게 계정이 만들어집니다.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi에서 로그인하지 못했습니다. 탭하여 다시 시도하세요.",
+"Add Nostr sign-in": "Nostr 로그인 추가",
+"Sign in from Fedi with its Nostr key": "Fedi에서 그 Nostr 키로 로그인",
+"You can now also sign in with Nostr in Fedi.": "이제 Fedi에서 Nostr로도 로그인할 수 있습니다.",
+"Nostr key (Fedi)": "Nostr 키 (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "모임에는 무료 계정이 필요합니다. Fedi에서는 내 Nostr 키로 만들어집니다. 이메일도 암호도 필요 없습니다.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi의 응답을 확인하지 못했습니다. 다시 시도하세요.",
+"This Nostr key already signs in to another My Quiet Bible account.": "이 Nostr 키는 이미 다른 My Quiet Bible 계정에 로그인합니다.",
+"Welcome in!": "환영합니다!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "로그인하면 Fedi가 저장 공간을 지워도 기도와 하이라이트가 계정에 안전하게 남습니다."
 }

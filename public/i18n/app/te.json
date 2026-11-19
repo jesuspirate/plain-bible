@@ -1248,5 +1248,18 @@
  "3John": "3 యోహా",
  "Jude": "యూదా",
  "Rev": "ప్రక"
-}
+},
+"Sign in with Nostr": "Nostr తో సైన్ ఇన్ చేయి",
+"Waiting for Fedi…": "Fedi కోసం వేచి ఉంది…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi మీ Nostr కీతో మిమ్మల్ని సైన్ ఇన్ చేస్తుంది. ఈమెయిల్ లేదు, పాస్‌వర్డ్ లేదు. ఇక్కడ కొత్తా? దీనితో మీ ఖాతా తయారవుతుంది.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi సైన్ ఇన్ చేయలేదు. మళ్లీ ప్రయత్నించడానికి నొక్కండి.",
+"Add Nostr sign-in": "Nostr సైన్-ఇన్ జోడించు",
+"Sign in from Fedi with its Nostr key": "Fedi నుండి దాని Nostr కీతో సైన్ ఇన్ చేయండి",
+"You can now also sign in with Nostr in Fedi.": "ఇప్పుడు మీరు Fedi లో Nostr తో కూడా సైన్ ఇన్ చేయవచ్చు.",
+"Nostr key (Fedi)": "Nostr కీ (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "సర్కిల్‌లకు ఉచిత ఖాతా కావాలి. Fedi లో మీ Nostr కీ దాన్ని తయారు చేస్తుంది: ఈమెయిల్ లేదు, పాస్‌వర్డ్ లేదు.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi సమాధానాన్ని తనిఖీ చేయలేకపోయాం. దయచేసి మళ్లీ ప్రయత్నించండి.",
+"This Nostr key already signs in to another My Quiet Bible account.": "ఈ Nostr కీ ఇప్పటికే మరో My Quiet Bible ఖాతాలో సైన్ ఇన్ చేస్తుంది.",
+"Welcome in!": "స్వాగతం!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "సైన్ ఇన్ చేయండి, అప్పుడు Fedi తన నిల్వను తుడిచేసినా మీ ప్రార్థనలు, హైలైట్‌లు మీ ఖాతాలో సురక్షితంగా ఉంటాయి."
 }

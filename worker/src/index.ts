@@ -9,6 +9,7 @@ import {
 import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simplewebauthn/server'
 import { send, vapidPublic, type Subscription, type Vapid } from './push'
 import { APNS_PREFIX, APNS_TOKEN, isApnsEnv, sendApns, type Apns } from './apns'
+import { checkNostrEvent, NOSTR_WRAP } from './nostr'
 
 export interface Env {
   DB: D1Database
@@ -332,6 +333,54 @@ async function emailVerify(req: Request, env: Env) {
 }
 
 // ---------------------------------------------------------------------------
+// Nostr sign-in, for Fedi: its mini apps have the person's Nostr key
+// (NIP-07, window.nostr) but no passkeys. The app signs a one-time challenge
+// with it; the key's public half finds the account. Only that public key is
+// kept. Prayers stay end to end encrypted: the key seals its own copy of the
+// account key (NIP-44), which the server can't open.
+
+async function nostrStart(env: Env) {
+  const challenge = random(32)
+  return json({ challengeId: await saveChallenge(env, challenge, null), challenge })
+}
+
+async function nostrVerify(req: Request, env: Env) {
+  const adding = req.headers.has('Authorization') ? await session(req, env) : null
+  const body = await readJson<{ challengeId: string; event: unknown }>(req)
+  const ch = await takeChallenge(env, body.challengeId)
+  const pubkey = await checkNostrEvent(body.event, ch.challenge, Date.now())
+  if (!pubkey) throw new HttpError(400, 'Fedi’s answer couldn’t be checked. Please try again.')
+  const db = env.DB, now = Date.now()
+  const owner = await db.prepare('SELECT user_id FROM nostr_keys WHERE pubkey = ?').bind(pubkey).first<{ user_id: string }>()
+  // Adding (or changing) the Nostr key of the signed-in account.
+  if (adding) {
+    if (owner && owner.user_id !== adding) throw new HttpError(409, 'This Nostr key already signs in to another My Quiet Bible account.')
+    if (!owner) {
+      await db.batch([
+        db.prepare("DELETE FROM prayer_wraps WHERE user_id = ? AND cred_id LIKE 'nostr:%'").bind(adding),
+        db.prepare('DELETE FROM nostr_keys WHERE user_id = ?').bind(adding),
+        db.prepare('INSERT INTO nostr_keys (pubkey, user_id, created, last_used) VALUES (?, ?, ?, ?)').bind(pubkey, adding, now, now),
+      ])
+    }
+    return json({ added: true, pubkey })
+  }
+  if (owner) {
+    const [n] = await Promise.all([
+      db.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(owner.user_id).first<{ n: number }>(),
+      db.prepare('UPDATE nostr_keys SET last_used = ? WHERE pubkey = ?').bind(now, pubkey).run(),
+    ])
+    return json({ token: await newSession(env, owner.user_id), passkeys: n?.n ?? 0, pubkey })
+  }
+  // A key not seen before makes a new account.
+  const userId = random(16)
+  await db.batch([
+    db.prepare('INSERT INTO users (id, created) VALUES (?, ?)').bind(userId, now),
+    db.prepare('INSERT INTO nostr_keys (pubkey, user_id, created, last_used) VALUES (?, ?, ?, ?)').bind(pubkey, userId, now, now),
+  ])
+  return json({ token: await newSession(env, userId), created: true, passkeys: 0, pubkey })
+}
+
+// ---------------------------------------------------------------------------
 // Routes
 
 // Prayer sync. The app encrypts each recording with a key only the user's
@@ -389,7 +438,11 @@ async function prayerRoute(req: Request, env: Env, parts: string[]): Promise<Res
     if (req.method === 'PUT') {
       const { wrapped } = await readJson<{ wrapped: string }>(req)
       if (typeof wrapped !== 'string' || wrapped.length > 500) throw new HttpError(400, 'Bad request')
-      const cred = await db.prepare('SELECT 1 FROM credentials WHERE id = ? AND user_id = ?').bind(b, userId).first()
+      // A passkey's copy, or the Nostr key's ("nostr:<pubkey>"), sealed in
+      // Fedi with NIP-44 so only that key opens it.
+      const cred = b.startsWith(NOSTR_WRAP)
+        ? await db.prepare('SELECT 1 FROM nostr_keys WHERE pubkey = ? AND user_id = ?').bind(b.slice(NOSTR_WRAP.length), userId).first()
+        : await db.prepare('SELECT 1 FROM credentials WHERE id = ? AND user_id = ?').bind(b, userId).first()
       if (!cred) throw new HttpError(404, 'Not your passkey')
       await db.prepare('INSERT INTO prayer_wraps (cred_id, user_id, wrapped, created) VALUES (?, ?, ?, ?) ON CONFLICT(cred_id) DO UPDATE SET wrapped = excluded.wrapped')
         .bind(b, userId, wrapped, Date.now()).run()
@@ -1546,11 +1599,18 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
     // Sign in (or sign up) with a code sent by email, or add an email to
     // the signed-in account.
     case 'POST /auth/email/start': return emailStart(req, env)
+    // Sign in (or sign up) with a Nostr key, or add one to the signed-in
+    // account. The app only offers it inside Fedi (see src/lib/nostr.ts).
+    case 'POST /auth/nostr/options': return nostrStart(env)
+    case 'POST /auth/nostr/verify': return nostrVerify(req, env)
     case 'POST /auth/email/verify': return emailVerify(req, env)
     case 'DELETE /auth/email': {
       const userId = await session(req, env)
-      const n = await env.DB.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(userId).first<{ n: number }>()
-      if (!n?.n) throw new HttpError(400, 'Add a passkey first. Without your email or a passkey, you couldn’t sign in again.')
+      const [n, nostr] = await Promise.all([
+        env.DB.prepare('SELECT COUNT(*) AS n FROM credentials WHERE user_id = ?').bind(userId).first<{ n: number }>(),
+        env.DB.prepare('SELECT 1 FROM nostr_keys WHERE user_id = ?').bind(userId).first(),
+      ])
+      if (!n?.n && !nostr) throw new HttpError(400, 'Add a passkey first. Without your email or a passkey, you couldn’t sign in again.')
       await env.DB.prepare('DELETE FROM emails WHERE user_id = ?').bind(userId).run()
       return json({ ok: true })
     }
@@ -1634,12 +1694,13 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       const userId = await session(req, env)
       const { id } = await readJson<{ id: string }>(req)
       if (typeof id !== 'string') throw new HttpError(400, 'Bad request')
-      const [keys, mail] = await Promise.all([
+      const [keys, mail, nostr] = await Promise.all([
         env.DB.prepare('SELECT id FROM credentials WHERE user_id = ?').bind(userId).all<{ id: string }>(),
         env.DB.prepare('SELECT 1 FROM emails WHERE user_id = ?').bind(userId).first(),
+        env.DB.prepare('SELECT 1 FROM nostr_keys WHERE user_id = ?').bind(userId).first(),
       ])
       if (!keys.results.some(k => k.id === id)) throw new HttpError(404, 'Not your passkey')
-      if (keys.results.length === 1 && !mail) throw new HttpError(400, 'This is your only way to sign in. Add another passkey or an email first.')
+      if (keys.results.length === 1 && !mail && !nostr) throw new HttpError(400, 'This is your only way to sign in. Add another passkey or an email first.')
       await env.DB.batch([
         env.DB.prepare('DELETE FROM credentials WHERE id = ? AND user_id = ?').bind(id, userId),
         env.DB.prepare('DELETE FROM prayer_wraps WHERE cred_id = ? AND user_id = ?').bind(id, userId),
@@ -1663,18 +1724,19 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
 
     case 'GET /account': {
       const userId = await session(req, env)
-      const [user, keys, data, email, mine] = await Promise.all([
+      const [user, keys, data, email, mine, nostr] = await Promise.all([
         env.DB.prepare('SELECT created FROM users WHERE id = ?').bind(userId).first<{ created: number }>(),
         env.DB.prepare('SELECT id, created, last_used, rp_id, name FROM credentials WHERE user_id = ? ORDER BY created')
           .bind(userId).all<{ id: string; created: number; last_used: number | null; rp_id: string | null; name: string | null }>(),
         env.DB.prepare('SELECT updated FROM data WHERE user_id = ?').bind(userId).first<{ updated: number }>(),
         env.DB.prepare('SELECT hint FROM emails WHERE user_id = ?').bind(userId).first<{ hint: string }>(),
         env.DB.prepare('SELECT cred_id FROM sessions WHERE token_hash = ?').bind(await sha256(bearer(req)!)).first<{ cred_id: string | null }>(),
+        env.DB.prepare('SELECT 1 FROM nostr_keys WHERE user_id = ?').bind(userId).first(),
       ])
       // The passkey this device signed in with is told apart by its
       // credential id: the one the session was made with.
       const list = keys.results.map(k => ({ id: k.id, name: k.name, created: k.created, lastUsed: k.last_used, site: k.rp_id, current: k.id === mine?.cred_id }))
-      return json({ created: user?.created, passkeys: list.length, list, updated: data?.updated ?? null, email: email?.hint ?? null })
+      return json({ created: user?.created, passkeys: list.length, list, updated: data?.updated ?? null, email: email?.hint ?? null, nostr: !!nostr })
     }
 
     case 'DELETE /account': {
@@ -1683,7 +1745,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       const circles = await env.DB.prepare('SELECT circle_id FROM circle_members WHERE user_id = ?').bind(userId).all<{ circle_id: string }>()
       for (const c of circles.results) await env.DB.batch(leaveCircle(env.DB, c.circle_id, userId))
       await env.DB.prepare('DELETE FROM push_circles WHERE endpoint IN (SELECT endpoint FROM push_subs WHERE user_id = ?)').bind(userId).run()
-      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'circle_blocks', 'circle_requests', 'door_leaders', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
+      await env.DB.batch(['circle_replies', 'circle_amens', 'circle_reacts', 'circle_invites', 'circle_blocks', 'circle_requests', 'door_leaders', 'prayer_chunks', 'prayer_parts', 'prayer_gone', 'prayer_wraps', 'prayer_keys', 'data', 'emails', 'email_codes', 'nostr_keys', 'approvals', 'push_subs', 'sessions', 'credentials', 'challenges'].map(t =>
         env.DB.prepare(`DELETE FROM ${t} WHERE user_id = ?`).bind(userId)).concat(
         env.DB.prepare('DELETE FROM users WHERE id = ?').bind(userId)))
       return json({ ok: true })

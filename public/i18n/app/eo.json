@@ -1248,5 +1248,18 @@
  "3John": "3Joh",
  "Jude": "Jud",
  "Rev": "Apok"
-}
+},
+"Sign in with Nostr": "Ensaluti per Nostr",
+"Waiting for Fedi…": "Atendante Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi ensalutigas vin per via Nostr-ŝlosilo. Sen retpoŝto, sen pasvorto. Nova ĉi tie? Tio kreas vian konton.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi ne ensalutigis vin. Tuŝu por reprovi.",
+"Add Nostr sign-in": "Aldoni ensaluton per Nostr",
+"Sign in from Fedi with its Nostr key": "Ensaluti el Fedi per ĝia Nostr-ŝlosilo",
+"You can now also sign in with Nostr in Fedi.": "Nun vi povas ensaluti ankaŭ per Nostr en Fedi.",
+"Nostr key (Fedi)": "Nostr-ŝlosilo (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Rondoj bezonas senpagan konton. En Fedi via Nostr-ŝlosilo kreas ĝin: sen retpoŝto, sen pasvorto.",
+"Fedi’s answer couldn’t be checked. Please try again.": "La respondo de Fedi ne kontroleblis. Bonvolu reprovi.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ĉi tiu Nostr-ŝlosilo jam ensalutigas al alia My Quiet Bible-konto.",
+"Welcome in!": "Bonvenon!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Ensalutu, kaj viaj preĝoj kaj emfazoj restas sekuraj en via konto, eĉ se Fedi viŝas sian konservejon."
 }

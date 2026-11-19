@@ -1248,5 +1248,18 @@
  "3John": "3Yoh",
  "Jude": "Yud",
  "Rev": "Why"
-}
+},
+"Sign in with Nostr": "Masuk dengan Nostr",
+"Waiting for Fedi…": "Menunggu Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi memasukkan Anda dengan kunci Nostr Anda. Tanpa email, tanpa kata sandi. Baru di sini? Ini akan membuat akun Anda.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi tidak memasukkan Anda. Ketuk untuk mencoba lagi.",
+"Add Nostr sign-in": "Tambahkan masuk dengan Nostr",
+"Sign in from Fedi with its Nostr key": "Masuk dari Fedi dengan kunci Nostr-nya",
+"You can now also sign in with Nostr in Fedi.": "Sekarang Anda juga bisa masuk dengan Nostr di Fedi.",
+"Nostr key (Fedi)": "Kunci Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Lingkaran memerlukan akun gratis. Di Fedi, kunci Nostr Anda yang membuatnya: tanpa email, tanpa kata sandi.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Jawaban Fedi tidak dapat diperiksa. Silakan coba lagi.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Kunci Nostr ini sudah masuk ke akun My Quiet Bible lain.",
+"Welcome in!": "Selamat datang!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Masuklah, maka doa dan sorotan Anda tetap aman di akun Anda, bahkan jika Fedi menghapus penyimpanannya."
 }

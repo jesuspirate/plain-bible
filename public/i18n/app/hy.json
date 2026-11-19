@@ -1251,5 +1251,18 @@
  "3John": "3 Հվ",
  "Jude": "Հդ",
  "Rev": "Հայտ"
-}
+},
+"Sign in with Nostr": "Մուտք գործել Nostr-ով",
+"Waiting for Fedi…": "Սպասում ենք Fedi-ին…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi-ն ձեզ մուտք է գործում ձեր Nostr բանալիով։ Առանց էլ. փոստի, առանց գաղտնաբառի։ Նո՞ր եք այստեղ։ Այսպես կստեղծվի ձեր հաշիվը։",
+"Fedi didn’t sign in. Tap to try again.": "Fedi-ն ձեզ մուտք չգործեց։ Հպեք՝ կրկին փորձելու համար։",
+"Add Nostr sign-in": "Ավելացնել մուտք Nostr-ով",
+"Sign in from Fedi with its Nostr key": "Մուտք Fedi-ից՝ նրա Nostr բանալիով",
+"You can now also sign in with Nostr in Fedi.": "Այժմ կարող եք մուտք գործել նաև Nostr-ով Fedi-ում։",
+"Nostr key (Fedi)": "Nostr բանալի (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Շրջանակների համար անվճար հաշիվ է պետք։ Fedi-ում այն ստեղծում է ձեր Nostr բանալին՝ առանց էլ. փոստի, առանց գաղտնաբառի։",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi-ի պատասխանը չհաջողվեց ստուգել։ Կրկին փորձեք։",
+"This Nostr key already signs in to another My Quiet Bible account.": "Այս Nostr բանալին արդեն մուտք է գործում My Quiet Bible-ի մեկ այլ հաշիվ։",
+"Welcome in!": "Բարի գալուստ։",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Մուտք գործեք, և ձեր աղոթքներն ու ընդգծումները ապահով կմնան ձեր հաշվում, նույնիսկ եթե Fedi-ն մաքրի իր պահոցը։"
 }

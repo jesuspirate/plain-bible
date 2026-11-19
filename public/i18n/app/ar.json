@@ -1388,5 +1388,18 @@
  "3John": "3يو",
  "Jude": "يه",
  "Rev": "رؤ"
-}
+},
+"Sign in with Nostr": "تسجيل الدخول عبر Nostr",
+"Waiting for Fedi…": "في انتظار Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "يسجّل Fedi دخولك بمفتاح Nostr الخاص بك. بلا بريد ولا كلمة سر. جديد هنا؟ هكذا يُنشأ حسابك.",
+"Fedi didn’t sign in. Tap to try again.": "لم يسجّل Fedi دخولك. اضغط لإعادة المحاولة.",
+"Add Nostr sign-in": "إضافة تسجيل الدخول عبر Nostr",
+"Sign in from Fedi with its Nostr key": "سجّل الدخول من Fedi بمفتاح Nostr الخاص به",
+"You can now also sign in with Nostr in Fedi.": "يمكنك الآن أيضًا تسجيل الدخول عبر Nostr في Fedi.",
+"Nostr key (Fedi)": "مفتاح Nostr ‏(Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "تحتاج الدوائر إلى حساب مجاني. في Fedi يُنشئه مفتاح Nostr الخاص بك: بلا بريد ولا كلمة سر.",
+"Fedi’s answer couldn’t be checked. Please try again.": "تعذّر التحقق من ردّ Fedi. يُرجى إعادة المحاولة.",
+"This Nostr key already signs in to another My Quiet Bible account.": "مفتاح Nostr هذا يسجّل الدخول بالفعل إلى حساب آخر في My Quiet Bible.",
+"Welcome in!": "أهلًا بك!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "سجّل الدخول، فتبقى صلواتك وتمييزاتك آمنة في حسابك، حتى لو مسح Fedi مساحة تخزينه."
 }

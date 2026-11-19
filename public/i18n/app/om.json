@@ -1248,5 +1248,18 @@
  "3John": "3Yoh",
  "Jude": "Yih",
  "Rev": "Mul"
-}
+},
+"Sign in with Nostr": "Nostr'n seeni",
+"Waiting for Fedi…": "Fedi eegaa jira…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi furtuu Nostr keetiin si seensisa. Imeeliin hin jiru, jechi icciitii hin jiru. Asitti haaraa dha? Kun herrega kee uuma.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi si hin seensisne. Irra deebi'uuf tuqi.",
+"Add Nostr sign-in": "Seensa Nostr dabali",
+"Sign in from Fedi with its Nostr key": "Fedi irraa furtuu Nostr isaatiin seeni",
+"You can now also sign in with Nostr in Fedi.": "Amma Fedi keessatti Nostr'nis seenuu dandeessa.",
+"Nostr key (Fedi)": "Furtuu Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Gareewwan herrega bilisaa barbaadu. Fedi keessatti furtuun Nostr kee uuma: imeeliin hin jiru, jechi icciitii hin jiru.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Deebii Fedi mirkaneessuun hin danda'amne. Maaloo irra deebi'ii yaali.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Furtuun Nostr kun duraanuu herrega My Quiet Bible biraatti seensisa.",
+"Welcome in!": "Baga nagaan dhuftan!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Seeni, kadhannaawwan kee fi halluun kee herrega kee keessatti nagaan turu, Fediin kuusaa isaa haqus."
 }

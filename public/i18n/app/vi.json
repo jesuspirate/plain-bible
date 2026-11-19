@@ -1248,5 +1248,18 @@
  "3John": "3 Gi",
  "Jude": "Giu",
  "Rev": "Khải"
-}
+},
+"Sign in with Nostr": "Đăng nhập bằng Nostr",
+"Waiting for Fedi…": "Đang chờ Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi đăng nhập cho bạn bằng khóa Nostr của bạn. Không cần email, không cần mật khẩu. Bạn mới đến? Việc này sẽ tạo tài khoản cho bạn.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi chưa đăng nhập được. Chạm để thử lại.",
+"Add Nostr sign-in": "Thêm đăng nhập bằng Nostr",
+"Sign in from Fedi with its Nostr key": "Đăng nhập từ Fedi bằng khóa Nostr của nó",
+"You can now also sign in with Nostr in Fedi.": "Giờ bạn cũng có thể đăng nhập bằng Nostr trong Fedi.",
+"Nostr key (Fedi)": "Khóa Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Nhóm cần một tài khoản miễn phí. Trong Fedi, khóa Nostr của bạn sẽ tạo nó: không cần email, không cần mật khẩu.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Không thể kiểm tra phản hồi của Fedi. Vui lòng thử lại.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Khóa Nostr này đã đăng nhập vào một tài khoản My Quiet Bible khác.",
+"Welcome in!": "Chào mừng bạn!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Hãy đăng nhập, lời cầu nguyện và phần tô sáng của bạn sẽ an toàn trong tài khoản, kể cả khi Fedi xóa bộ nhớ của nó."
 }

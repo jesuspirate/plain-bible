@@ -1248,5 +1248,18 @@
  "3John": "3 യോഹ",
  "Jude": "യൂദാ",
  "Rev": "വെളി"
-}
+},
+"Sign in with Nostr": "Nostr ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക",
+"Waiting for Fedi…": "Fedi-ക്കായി കാത്തിരിക്കുന്നു…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi നിങ്ങളുടെ Nostr കീ ഉപയോഗിച്ച് നിങ്ങളെ സൈൻ ഇൻ ചെയ്യുന്നു. ഇമെയിലും പാസ്‌വേഡും വേണ്ട. ഇവിടെ പുതിയതാണോ? ഇതുവഴി നിങ്ങളുടെ അക്കൗണ്ട് ഉണ്ടാകും.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi സൈൻ ഇൻ ചെയ്തില്ല. വീണ്ടും ശ്രമിക്കാൻ ടാപ്പ് ചെയ്യുക.",
+"Add Nostr sign-in": "Nostr സൈൻ-ഇൻ ചേർക്കുക",
+"Sign in from Fedi with its Nostr key": "Fedi-യിൽ നിന്ന് അതിന്റെ Nostr കീ ഉപയോഗിച്ച് സൈൻ ഇൻ ചെയ്യുക",
+"You can now also sign in with Nostr in Fedi.": "ഇപ്പോൾ Fedi-യിൽ Nostr ഉപയോഗിച്ചും സൈൻ ഇൻ ചെയ്യാം.",
+"Nostr key (Fedi)": "Nostr കീ (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "കൂട്ടായ്മകൾക്ക് ഒരു സൗജന്യ അക്കൗണ്ട് വേണം. Fedi-യിൽ നിങ്ങളുടെ Nostr കീ അത് ഉണ്ടാക്കുന്നു: ഇമെയിലും പാസ്‌വേഡും വേണ്ട.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi-യുടെ മറുപടി പരിശോധിക്കാനായില്ല. ദയവായി വീണ്ടും ശ്രമിക്കുക.",
+"This Nostr key already signs in to another My Quiet Bible account.": "ഈ Nostr കീ ഇതിനകം മറ്റൊരു My Quiet Bible അക്കൗണ്ടിൽ സൈൻ ഇൻ ചെയ്യുന്നു.",
+"Welcome in!": "സ്വാഗതം!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "സൈൻ ഇൻ ചെയ്യുക, പിന്നെ Fedi അതിന്റെ സംഭരണം മായ്ച്ചാലും നിങ്ങളുടെ പ്രാർത്ഥനകളും ഹൈലൈറ്റുകളും നിങ്ങളുടെ അക്കൗണ്ടിൽ സുരക്ഷിതമായിരിക്കും."
 }

@@ -1083,5 +1083,18 @@
 "You can lead an Open door circle now": "Ya puedes dirigir un círculo Puerta abierta",
 "My Quiet Bible said yes. Make your circle, then open the door to get the link you share.": "My Quiet Bible dijo que sí. Crea tu círculo y luego abre la puerta para obtener el enlace que compartes.",
 "Make my Open door circle": "Crear mi círculo Puerta abierta",
-"Later": "Más tarde"
+"Later": "Más tarde",
+"Sign in with Nostr": "Iniciar sesión con Nostr",
+"Waiting for Fedi…": "Esperando a Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi inicia tu sesión con tu llave Nostr. Sin correo ni contraseña. ¿Eres nuevo? Así se crea tu cuenta.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi no inició la sesión. Toca para reintentar.",
+"Add Nostr sign-in": "Añadir inicio de sesión con Nostr",
+"Sign in from Fedi with its Nostr key": "Inicia sesión desde Fedi con su llave Nostr",
+"You can now also sign in with Nostr in Fedi.": "Ahora también puedes iniciar sesión con Nostr en Fedi.",
+"Nostr key (Fedi)": "Llave Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Los círculos necesitan una cuenta gratuita. En Fedi, tu llave Nostr la crea: sin correo ni contraseña.",
+"Fedi’s answer couldn’t be checked. Please try again.": "No se pudo comprobar la respuesta de Fedi. Inténtalo de nuevo.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Esta llave Nostr ya inicia sesión en otra cuenta de My Quiet Bible.",
+"Welcome in!": "¡Bienvenido!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Inicia sesión y tus oraciones y resaltados quedarán a salvo en tu cuenta, aunque Fedi borre su almacenamiento."
 }

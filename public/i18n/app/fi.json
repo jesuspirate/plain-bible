@@ -1248,5 +1248,18 @@
  "3John": "3Joh",
  "Jude": "Juud",
  "Rev": "Ilm"
-}
+},
+"Sign in with Nostr": "Kirjaudu Nostrilla",
+"Waiting for Fedi…": "Odotetaan Fediä…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi kirjaa sinut sisään Nostr-avaimellasi. Ei sähköpostia, ei salasanaa. Uusi täällä? Se luo tilisi.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi ei kirjannut sinua sisään. Yritä uudelleen napauttamalla.",
+"Add Nostr sign-in": "Lisää Nostr-kirjautuminen",
+"Sign in from Fedi with its Nostr key": "Kirjaudu Fedistä sen Nostr-avaimella",
+"You can now also sign in with Nostr in Fedi.": "Voit nyt kirjautua myös Nostrilla Fedissä.",
+"Nostr key (Fedi)": "Nostr-avain (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Piirit tarvitsevat ilmaisen tilin. Fedissä Nostr-avaimesi luo sen: ei sähköpostia, ei salasanaa.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedin vastausta ei voitu tarkistaa. Yritä uudelleen.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Tällä Nostr-avaimella kirjaudutaan jo toiselle My Quiet Bible -tilille.",
+"Welcome in!": "Tervetuloa!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Kirjaudu sisään, niin rukouksesi ja korostuksesi pysyvät turvassa tililläsi, vaikka Fedi tyhjentäisi tallennustilansa."
 }

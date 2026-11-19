@@ -25,6 +25,7 @@ import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
 import { overlayOpen } from './lib/overlay'
+import { fediWelcomeDue } from './lib/nostr'
 import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
 import { nativeNotify } from './lib/nativeNotify'
 import { hello } from './lib/hello'
@@ -226,12 +227,26 @@ export function App() {
     addEventListener(TOUR_EVENT, on)
     return () => removeEventListener(TOUR_EVENT, on)
   }, [])
+  // Inside Fedi, before the tour: "Welcome in!", one tap to sign in with
+  // the Nostr key (see fediwelcome). Never shown anywhere else.
+  const [FediWelcome, setFediWelcome] = useState<typeof import('./fediwelcome').FediWelcome>()
+  useEffect(() => {
+    if (page !== 'read' || !fediWelcomeDue()) return
+    let timer = 0
+    const tryNow = () => {
+      if (!fediWelcomeDue()) return
+      if (overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 1000)
+      else import('./fediwelcome').then(m => setFediWelcome(() => m.FediWelcome)).catch(() => {})
+    }
+    timer = window.setTimeout(tryNow, 600)
+    return () => clearTimeout(timer)
+  }, [page])
   useEffect(() => {
     if (page !== 'read' || !tourDue()) return
     let timer = 0
     const tryNow = () => {
       if (!tourDue()) return
-      if (overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 2000)
+      if (fediWelcomeDue() || overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 2000)
       else showTour()
     }
     timer = window.setTimeout(tryNow, 1500)
@@ -395,6 +410,7 @@ export function App() {
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
+      {FediWelcome && <FediWelcome onClose={() => setFediWelcome(undefined)} />}
       {Tour && <Tour onClose={() => setTour(undefined)} />}
       {HomeScreen && <HomeScreen onClose={() => setHomeScreen(undefined)} />}
       <MoveWelcome />

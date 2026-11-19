@@ -1248,5 +1248,18 @@
  "3John": "3 Ean",
  "Jude": "Jude",
  "Rev": "Taish"
-}
+},
+"Sign in with Nostr": "Gow stiagh lesh Nostr",
+"Waiting for Fedi…": "Fuirraghtyn son Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Ta Fedi dy dty choyrt stiagh lesh dty eochair Nostr. Gyn post-L, gyn fockle-follit. Noa ayns shoh? Nee shoh dty choontey.",
+"Fedi didn’t sign in. Tap to try again.": "Cha dug Fedi oo stiagh. Bwoaill dy phrow reesht.",
+"Add Nostr sign-in": "Cur gow stiagh lesh Nostr",
+"Sign in from Fedi with its Nostr key": "Gow stiagh veih Fedi lesh yn eochair Nostr echey",
+"You can now also sign in with Nostr in Fedi.": "Foddee oo nish goll stiagh lesh Nostr ayns Fedi neesht.",
+"Nostr key (Fedi)": "Eochair Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Ta feme ec kiarkylyn er coontey nastee. Ayns Fedi, ta dty eochair Nostr dy yannoo eh: gyn post-L, gyn fockle-follit.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Cha noddym jeeaghyn er freggyrt Fedi. Prow reesht, my sailt.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ta'n eochair Nostr shoh cur stiagh ayns coontey My Quiet Bible elley hannah.",
+"Welcome in!": "Failt ort!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Gow stiagh, as bee dty phadjeryn as soilshaghyn sauchey ayns dty choontey, eer my nee Fedi glenney e stoyr."
 }

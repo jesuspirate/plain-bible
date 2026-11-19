@@ -1248,5 +1248,18 @@
  "3John": "3يۇ",
  "Jude": "يەھ",
  "Rev": "ۋەھ"
-}
+},
+"Sign in with Nostr": "Nostr ئارقىلىق كىرىش",
+"Waiting for Fedi…": "Fedi نى كۈتۈۋاتىدۇ…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi سىزنى Nostr ئاچقۇچىڭىز بىلەن كىرگۈزىدۇ. ئېلخەت يوق، پارول يوق. يېڭىمۇ؟ بۇ ھېساباتىڭىزنى قۇرىدۇ.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi سىزنى كىرگۈزمىدى. قايتا سىناش ئۈچۈن چېكىڭ.",
+"Add Nostr sign-in": "Nostr ئارقىلىق كىرىشنى قوشۇش",
+"Sign in from Fedi with its Nostr key": "Fedi دىن ئۇنىڭ Nostr ئاچقۇچى بىلەن كىرىڭ",
+"You can now also sign in with Nostr in Fedi.": "ئەمدى Fedi دا Nostr ئارقىلىقمۇ كىرەلەيسىز.",
+"Nostr key (Fedi)": "Nostr ئاچقۇچى (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "چەمبەرلەرگە ھەقسىز ھېسابات كېرەك. Fedi دا ئۇنى Nostr ئاچقۇچىڭىز قۇرىدۇ: ئېلخەت يوق، پارول يوق.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi نىڭ جاۋابىنى تەكشۈرگىلى بولمىدى. قايتا سىناڭ.",
+"This Nostr key already signs in to another My Quiet Bible account.": "بۇ Nostr ئاچقۇچى ئاللىقاچان باشقا بىر My Quiet Bible ھېساباتىغا كىرىدۇ.",
+"Welcome in!": "خۇش كەلدىڭىز!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "كىرىڭ، شۇنداقتا Fedi ساقلىغۇچىنى تازىلىۋەتسىمۇ، دۇئالىرىڭىز ۋە گەۋدىلەندۈرۈشلىرىڭىز ھېساباتىڭىزدا بىخەتەر ساقلىنىدۇ."
 }
