@@ -63,13 +63,24 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     ? { v: 1, marks: latest.current.marks, settings: latest.current.settings as unknown as Record<string, unknown>, settingsT: loadSettingsT(), days: loadDays(), ...(latestPlace() ? { place: latestPlace() } : {}) }
     : null
 
+  // What this device last sent: if, after a sync, what's here still doesn't
+  // match the account (something one side keeps and the other drops), it
+  // isn't sent again and again, only once it changes here. Without this, one
+  // such difference had every open device ask the server every two seconds.
+  const tried = useRef('')
   /** Signed in, with something here the account hasn't got yet. */
-  const unsent = () => { const a = loadAccount(), local = localDoc(); return !!a && !!local && docKey(local) !== a.synced }
+  const unsent = () => {
+    const a = loadAccount(), local = localDoc()
+    if (!a || !local) return false
+    const key = docKey(local)
+    return key !== a.synced && key !== tried.current
+  }
   const run = async () => {
     const acct = loadAccount(), local = localDoc()
     if (!SYNC_URL || !acct || !local) return
     if (running.current) { again.current = true; return }
     running.current = true; setBusy(true); holdUpdate('sync', true)
+    tried.current = docKey(local)
     try {
       const { doc, account: next } = await syncNow(acct, local)
       // Merge again with the current state, in case something changed while syncing.
@@ -98,6 +109,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     } catch (e) {
       if (e instanceof SyncError && e.status === 401) { setAccount(null); setError(t('You were signed out. Sign in again to keep syncing.')) }
       else setError((e as Error).message)
+      tried.current = '' // not sent: the next change, or coming back, tries again
     } finally {
       running.current = false; setBusy(false); holdUpdate('sync', false)
       if (again.current) { again.current = false; run() }
@@ -119,9 +131,8 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
   }, [])
   // Shortly after local changes.
   useEffect(() => {
-    const local = localDoc()
-    if (!account || !local || docKey(local) === account.synced) return
-    const timer = setTimeout(auto, 2000)
+    if (!account || !unsent()) return
+    const timer = setTimeout(() => { if (unsent()) auto() }, 2000)
     return () => clearTimeout(timer)
   }, [marks, settings, account?.token])
   // And shortly after a day is read or prayed.
@@ -129,7 +140,7 @@ export function useSync(marks: Marks, setMarksState: (fn: (m: Marks) => Marks) =
     let timer = 0
     const on = () => {
       clearTimeout(timer)
-      timer = window.setTimeout(() => { const local = localDoc(); if (loadAccount() && local && docKey(local) !== loadAccount()?.synced) auto() }, 2000)
+      timer = window.setTimeout(() => { if (unsent()) auto() }, 2000)
     }
     addEventListener(DAYS_EVENT, on)
     return () => { clearTimeout(timer); removeEventListener(DAYS_EVENT, on) }

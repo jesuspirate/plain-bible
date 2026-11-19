@@ -13,10 +13,10 @@ describe('mergeDocs', () => {
     expect(m['Ps.23.1'].c).toBe('#cae1fe')
   })
   it('keeps the newest value of each setting', () => {
-    const a = { v: 1 as const, marks: {}, settings: { favorite: 'LSG', theme: 'dark' }, settingsT: { favorite: 50, theme: 10 } }
-    const b = { v: 1 as const, marks: {}, settings: { favorite: 'KJV', theme: 'sepia' }, settingsT: { favorite: 5, theme: 90 } }
-    expect(mergeDocs(a, b).settings).toEqual({ favorite: 'LSG', theme: 'sepia' })
-    expect(mergeDocs(b, a).settings).toEqual({ favorite: 'LSG', theme: 'sepia' })
+    const a = { v: 1 as const, marks: {}, settings: { version: 'LSG', theme: 'dark' }, settingsT: { version: 50, theme: 10 } }
+    const b = { v: 1 as const, marks: {}, settings: { version: 'KJV', theme: 'sepia' }, settingsT: { version: 5, theme: 90 } }
+    expect(mergeDocs(a, b).settings).toEqual({ version: 'LSG', theme: 'sepia' })
+    expect(mergeDocs(b, a).settings).toEqual({ version: 'LSG', theme: 'sepia' })
   })
   it('treats an old single timestamp as applying to every setting', () => {
     expect(mergeDocs(doc({}, 5, { theme: 'dark' }), doc({}, 9, { theme: 'sepia' })).settings).toEqual({ theme: 'sepia' })
