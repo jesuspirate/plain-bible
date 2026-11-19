@@ -49,5 +49,13 @@ describe('inFedi', () => {
     expect(inFedi()).toBe(true)
     g.window = { fedi: { version: 2 } }
     expect(inFedi()).toBe(false)
+    // Some Fedi versions name it fediInternal; failing both, a phone with WebLN and Nostr.
+    g.window = { nostr: { signEvent: () => {} }, fediInternal: {} }
+    expect(inFedi()).toBe(true)
+    g.window = { nostr: { signEvent: () => {} }, webln: {}, navigator: { userAgent: 'Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)' } }
+    expect(inFedi()).toBe(true)
+    // A computer with the Alby extension: not Fedi.
+    g.window = { nostr: { signEvent: () => {} }, webln: {}, navigator: { userAgent: 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7)' } }
+    expect(inFedi()).toBe(false)
   })
 })
