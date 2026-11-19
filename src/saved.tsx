@@ -8,6 +8,7 @@ import { NotesSheet, NotesTarget, verseRanges } from './reader'
 import { BookmarkIcon, EditIcon, HighlightIcon, NoteIcon, TrashIcon } from './icons'
 import { bookName } from './lib/books'
 import { plain } from './lib/text'
+import { inMacApp } from './lib/install'
 import { readPath, useApp } from './state'
 import { N_, t } from './i18n'
 
@@ -134,9 +135,14 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     if (!r) return
     r.classList.remove('moving'); r.style.removeProperty('--peek-y'); r.style.removeProperty('--room')
   }
+  /** No sideways swipe with a mouse or trackpad (a computer, the Mac app):
+   *  there the row of lists is a plain box, not a scroller, so nothing can
+   *  swallow the first click; the tabs alone change the list. */
+  const [still] = useState(() => inMacApp() || matchMedia('(hover: hover) and (pointer: fine)').matches)
   const pick = (to: Tab) => {
     const r = row.current, el = r?.children[TABS.indexOf(to)] as HTMLElement | undefined
     if (!r || !el || to === tab) return
+    if (still) return setTab(to)
     ready()
     r.scrollTo({ left: el.offsetLeft - (r.firstElementChild as HTMLElement).offsetLeft, behavior: matchMedia('(prefers-reduced-motion: reduce)').matches ? 'auto' : 'smooth' })
   }
@@ -155,7 +161,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   }, [tab, !keys.length])
   useEffect(() => {
     const r = row.current
-    if (!r) return
+    if (!r || still) return
     let touching = 0, timer = 0
     const step = () => { const a = r.children[0] as HTMLElement, b = r.children[1] as HTMLElement | undefined; return b ? b.offsetLeft - a.offsetLeft : r.clientWidth }
     const index = () => Math.max(0, Math.min(TABS.length - 1, Math.round(r.scrollLeft / step())))
@@ -416,7 +422,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
       </div>
       {missing && <p class="note">{t('{version} isn’t saved on this device yet, so the verses can’t be shown. Connect to the internet once and they will be.', { version })}</p>}
       {undo && <div class="saved-undo" role="status"><span>{undo.what}</span><button onClick={putBack}>{t('Undo')}</button></div>}
-      <div class="saved-pages" ref={row} dir="ltr">
+      <div class={'saved-pages' + (still ? ' still' : '')} ref={row} dir="ltr">
         {TABS.map(id => id === shownTab
           ? <div key={id} class="saved-page" dir="auto">{bodyOf(id, true)}</div>
           : <div key={id} class="saved-page beside" dir="auto" inert aria-hidden="true">{bodyOf(id, false)}</div>)}
