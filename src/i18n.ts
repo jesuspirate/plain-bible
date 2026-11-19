@@ -10,7 +10,8 @@ export type Lang = string
 export interface LangInfo { id: Lang; name: string; rtl?: true }
 
 /** Every language the app speaks, each named in itself. A language has one
- *  when at least one Bible in the app is in it. */
+ *  when at least one Bible in the app is in it, or when its readers asked
+ *  (Sepedi, while its Bible waits on permission). */
 export const LANGS: LangInfo[] = ([
   ['en', 'English'], ['fr', 'Français'], ['es', 'Español'],
   ['ar', 'العربية', 1], ['as', 'অসমীয়া'], ['bn', 'বাংলা'], ['ceb', 'Cebuano'], ['chr', 'ᏣᎳᎩ'], ['ckb', 'کوردی', 1],
@@ -20,7 +21,7 @@ export const LANGS: LangInfo[] = ([
   ['id', 'Bahasa Indonesia'], ['ig', 'Igbo'], ['ilo', 'Ilokano'], ['it', 'Italiano'], ['ja', '日本語'], ['ki', 'Gĩkũyũ'],
   ['kn', 'ಕನ್ನಡ'], ['ko', '한국어'], ['lg', 'Luganda'], ['ln', 'Lingála'], ['luo', 'Dholuo'], ['lv', 'Latviešu'],
   ['mg', 'Malagasy'], ['ml', 'മലയാളം'], ['mr', 'मराठी'], ['my', 'မြန်မာ'], ['nb', 'Norsk bokmål'], ['nd', 'isiNdebele'],
-  ['ne', 'नेपाली'], ['nl', 'Nederlands'], ['nn', 'Norsk nynorsk'], ['ny', 'Chichewa'], ['om', 'Afaan Oromoo'], ['or', 'ଓଡ଼ିଆ'],
+  ['ne', 'नेपाली'], ['nl', 'Nederlands'], ['nn', 'Norsk nynorsk'], ['nso', 'Sepedi'], ['ny', 'Chichewa'], ['om', 'Afaan Oromoo'], ['or', 'ଓଡ଼ିଆ'],
   ['pa', 'ਪੰਜਾਬੀ'], ['pl', 'Polski'], ['pon', 'Lokaiahn Pohnpei'], ['pt', 'Português'], ['ru', 'Русский'], ['sl', 'Slovenščina'],
   ['sn', 'chiShona'], ['sq', 'Shqip'], ['sr', 'Српски'], ['sv', 'Svenska'], ['sw', 'Kiswahili'], ['ta', 'தமிழ்'],
   ['te', 'తెలుగు'], ['tl', 'Tagalog'], ['to', 'Lea faka-Tonga'], ['tw', 'Twi'], ['ug', 'ئۇيغۇرچە', 1], ['uk', 'Українська'],
