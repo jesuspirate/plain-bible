@@ -32,6 +32,9 @@ export interface Env {
   APNS_KEY_ID?: string
   /** The private numbers page (/stats?key=…) is on when this is set. */
   STATS_KEY?: string
+  /** Recorded Bible readings the app serves itself (/audio/…), when the
+   *  account has R2 storage (scripts/deploy_sync.sh). */
+  AUDIO?: R2Bucket
 }
 
 const DAY = 86_400_000
@@ -1482,6 +1485,33 @@ async function moderate(env: Env, act: string, id: string) {
   await db.prepare('UPDATE circle_reports SET done = ? WHERE id = ?').bind(Date.now(), id).run()
 }
 
+/** A chapter of a recorded reading: <voice>/<Book>/<chapter>.mp3, from the
+ *  service's own storage, in pieces when the player asks for a range (it
+ *  does, to start a chapter at a verse). Files never change once there. */
+async function audioRoute(req: Request, env: Env, key: string): Promise<Response> {
+  if (!env.AUDIO || !/^[a-z]+\/[1-3]?[A-Za-z]+\/\d{1,3}\.mp3$/.test(key)) throw new HttpError(404, 'Not found')
+  const obj = await env.AUDIO.get(key, { range: req.headers, onlyIf: req.headers })
+  if (!obj) throw new HttpError(404, 'Not found')
+  const headers = new Headers()
+  obj.writeHttpMetadata(headers)
+  headers.set('Content-Type', 'audio/mpeg')
+  headers.set('ETag', obj.httpEtag)
+  headers.set('Accept-Ranges', 'bytes')
+  headers.set('Cache-Control', 'public, max-age=31536000, immutable')
+  headers.set('Access-Control-Allow-Origin', '*')
+  if (!('body' in obj)) return new Response(null, { status: 304, headers })
+  let status = 200
+  const r = obj.range as { offset?: number; length?: number; suffix?: number } | undefined
+  if (r && req.headers.has('Range')) {
+    const start = r.suffix !== undefined ? obj.size - r.suffix : r.offset ?? 0
+    const length = r.suffix !== undefined ? r.suffix : r.length ?? obj.size - start
+    headers.set('Content-Range', `bytes ${start}-${start + length - 1}/${obj.size}`)
+    headers.set('Content-Length', String(length))
+    status = 206
+  } else headers.set('Content-Length', String(obj.size))
+  return new Response(req.method === 'HEAD' ? null : obj.body, { status, headers })
+}
+
 async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
@@ -1503,6 +1533,9 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
   }
   if (pathname === '/push' || pathname.startsWith('/push/')) {
     return pushRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
+  }
+  if (pathname.startsWith('/audio/') && (req.method === 'GET' || req.method === 'HEAD')) {
+    return audioRoute(req, env, decodeURIComponent(pathname.slice(7)))
   }
 
   switch (key) {
