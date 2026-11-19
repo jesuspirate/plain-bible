@@ -521,6 +521,7 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
   scroll-snap-type: x mandatory; overscroll-behavior-x: contain; -webkit-overflow-scrolling: touch;
   margin: 0 -16px; padding: 0 16px; scroll-padding: 0 16px; scrollbar-width: none; }
 .saved-pages::-webkit-scrollbar { display: none; }
+.saved-pages.still { overflow-x: hidden; scroll-snap-type: none; }
 .saved-page { flex: 0 0 100%; min-width: 0; scroll-snap-align: start; scroll-snap-stop: always; }
 .saved-page.beside { max-height: 0; overflow: hidden; }
 .saved-pages.moving .saved-page.beside { max-height: none; height: var(--room, 100vh); }
