@@ -13,7 +13,7 @@ import { useDays } from './streaks'
 import { duration, Prayer, prayers } from './lib/prayers'
 import { circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { playable } from './lib/mp4'
-import { audioUrl, dropAudioUrl } from './lib/audioUrl'
+import { audioUrl, dropAudioUrl, prayerPlayer } from './lib/audioUrl'
 import { PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
@@ -1225,7 +1225,7 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
     const ms = item.body.k === 'prayer' ? item.body.parts.map(p => p.ms) : []
     // One plain file per part: an iPhone stops a fragmented recording early.
     const urls = parts.map(p => audioUrl(playable(p.audio, p.type), p.type))
-    const el = new Audio()
+    const el = prayerPlayer()
     nowPlaying(t('Prayer'))
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)

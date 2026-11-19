@@ -11,7 +11,7 @@ import WebKit
 /// recorder (AAC in an .m4a, mono, 64 kbit/s, like the page asks for).
 /// Where the web view can record (iPhone, iPad) the script stops at its
 /// first line and nothing here runs.
-final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioRecorderDelegate {
+final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioRecorderDelegate, AVAudioPlayerDelegate {
     static let name = "prayermic"
     static let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: true)
 
@@ -26,6 +26,8 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
     private var finished: ((URL?) -> Void)?
     private var loudest: Float = -160
     private var meter: Timer?
+    private var player: AVAudioPlayer?
+    private var playerEnded = false
 
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage,
                                replyHandler: @escaping (Any?, String?) -> Void) {
@@ -67,6 +69,16 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
             recorder.stop()
             DispatchQueue.main.asyncAfter(deadline: .now() + 3) { answer(file) }
         case "release": discard(); replyHandler("ok", nil)
+        // Playing a prayer back (Mac): the web view there never starts one.
+        case "play":
+            guard let b64 = body["data"] as? String, let data = Data(base64Encoded: b64) else { return replyHandler("error", nil) }
+            replyHandler(play(data) ? "ok" : "error", nil)
+        case "playpause": player?.pause(); replyHandler("ok", nil)
+        case "playresume": player?.play(); replyHandler("ok", nil)
+        case "playstop": player?.stop(); player = nil; replyHandler("ok", nil)
+        case "playtime":
+            guard let player else { return replyHandler(["t": 0, "d": 0, "playing": false, "ended": true], nil) }
+            replyHandler(["t": player.currentTime, "d": player.duration, "playing": player.isPlaying, "ended": playerEnded], nil)
         default: replyHandler(nil, "no")
         }
     }
@@ -140,6 +152,25 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
         MacReport.note("prayer: encode error \(error.map { "\($0)" } ?? "none")")
     }
 
+    private func play(_ data: Data) -> Bool {
+        player?.stop()
+        playerEnded = false
+        do {
+            let session = AVAudioSession.sharedInstance()
+            if recorder == nil { try? session.setCategory(.playback, mode: .default) }
+            try? session.setActive(true)
+            let made = try AVAudioPlayer(data: data)
+            made.delegate = self
+            guard made.play() else { return false }
+            player = made
+            return true
+        } catch { return false }
+    }
+
+    func audioPlayerDidFinishPlaying(_ player: AVAudioPlayer, successfully flag: Bool) {
+        playerEnded = true
+    }
+
     private static func inputName() -> String {
         let route = AVAudioSession.sharedInstance().currentRoute.inputs
         return route.isEmpty ? "no input" : route.map { "\($0.portName) (\($0.portType.rawValue))" }.joined(separator: ", ")
@@ -166,9 +197,52 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
 
     // MARK: The page's side
 
-    /// Runs before the page's own code. Where the web view can record, it
-    /// stops at the first line.
+    /// Runs before the page's own code. On a Mac it first offers the page
+    /// a player for prayers; where the web view can record, it then stops.
     private static let js = #"""
+    (() => {
+      const native = window.webkit && webkit.messageHandlers && webkit.messageHandlers.prayermic
+      if (!native || !/QuietBibleMac\//.test(navigator.userAgent)) return
+      const ask = (op, more) => native.postMessage(Object.assign({ op }, more))
+      // Plays a prayer with the Mac's own player: the web view there leaves
+      // a prayer at 0:00. Just what the page uses of an <audio>.
+      class NativeAudio extends EventTarget {
+        constructor() { super(); this._src = ''; this._sent = ''; this.paused = true; this.currentTime = 0; this.duration = NaN; this.ontimeupdate = null; this.onended = null; this._poll = 0 }
+        get src() { return this._src }
+        set src(v) { this._src = String(v || '') }
+        fire(name) { const e = new Event(name); const f = this['on' + name]; if (f) f.call(this, e); this.dispatchEvent(e) }
+        async play() {
+          if (this._sent !== this._src) {
+            const buf = new Uint8Array(await (await fetch(this._src)).arrayBuffer())
+            let bin = ''
+            for (let i = 0; i < buf.length; i += 0x8000) bin += String.fromCharCode.apply(null, buf.subarray(i, i + 0x8000))
+            const r = await ask('play', { data: btoa(bin) })
+            if (r !== 'ok') throw new DOMException('This prayer could not play', 'NotSupportedError')
+            this._sent = this._src; this.currentTime = 0
+          } else await ask('playresume')
+          this.paused = false
+          clearInterval(this._poll)
+          this._poll = setInterval(() => this.tick(), 250)
+          this.fire('play'); this.fire('playing')
+        }
+        async tick() {
+          const r = await ask('playtime').catch(() => null)
+          if (!r || this.paused) return
+          this.currentTime = r.t; this.duration = r.d
+          this.fire('timeupdate')
+          if (r.ended) { clearInterval(this._poll); this.paused = true; this._sent = ''; this.fire('ended') }
+        }
+        pause() {
+          if (this.paused) return
+          this.paused = true; clearInterval(this._poll)
+          ask('playpause').catch(() => {})
+          this.fire('pause')
+        }
+        removeAttribute(name) { if (name === 'src') { this._src = ''; this._sent = ''; ask('playstop').catch(() => {}) } }
+        load() {}
+      }
+      window.QuietBibleNativeAudio = NativeAudio
+    })();
     (() => {
       const native = window.webkit && webkit.messageHandlers && webkit.messageHandlers.prayermic
       if (!native || (typeof MediaRecorder !== 'undefined' && navigator.mediaDevices && navigator.mediaDevices.getUserMedia)) return

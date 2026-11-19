@@ -9,7 +9,7 @@ import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
-import { audioUrl, dropAudioUrl } from './lib/audioUrl'
+import { audioUrl, dropAudioUrl, prayerPlayer } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { go, canShareInCircles as inCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver } from './state'
 import { pauseListening, readingAt } from './listen'
@@ -467,14 +467,14 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const play = (p: PrayerInfo) => {
     const was = playing === p.id && !inTurn
     release()
-    if (!was) start(p.id, [], new Audio())
+    if (!was) start(p.id, [], prayerPlayer())
   }
   const playAll = (ps: PrayerInfo[]) => {
     const was = inTurn
     release()
     if (was || !ps.length) return
     setInTurn(true)
-    start(ps[0].id, ps.slice(1).map(p => p.id), new Audio())
+    start(ps[0].id, ps.slice(1).map(p => p.id), prayerPlayer())
   }
   // Send it to someone, or keep your own copy: the share sheet on phones
   // (Messages, Files, Voice Memos…), a download elsewhere. Each part is its own file.

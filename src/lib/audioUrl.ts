@@ -16,3 +16,10 @@ export function audioUrl(audio: ReturnType<typeof playable>, type: string): stri
 
 /** Lets go of an address from audioUrl. */
 export const dropAudioUrl = (url: string) => { if (url.startsWith('blob:')) URL.revokeObjectURL(url) }
+
+/** A player for a prayer: in the Mac app, the app's own (the web view there
+ *  leaves a prayer at 0:00, though the address loads); elsewhere <audio>. */
+export function prayerPlayer(): HTMLAudioElement {
+  const Native = (window as unknown as { QuietBibleNativeAudio?: new () => HTMLAudioElement }).QuietBibleNativeAudio
+  return Native ? new Native() : new Audio()
+}
