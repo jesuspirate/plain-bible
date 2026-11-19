@@ -9,7 +9,7 @@ import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
 import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
-import { macPlayTap, macPlayWatch } from './lib/macPlayReport'
+import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { go, canShareInCircles as inCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver } from './state'
 import { pauseListening, readingAt } from './listen'
@@ -417,7 +417,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const release = () => {
     turn.current++
     const a = audio.current
-    if (a) { a.el.pause(); a.urls.forEach(u => URL.revokeObjectURL(u)); audio.current = undefined }
+    if (a) { a.el.pause(); a.urls.forEach(dropAudioUrl); audio.current = undefined }
     setPlaying(undefined); setPos(0); setInTurn(false)
   }
   useEffect(() => release, [])
@@ -441,15 +441,13 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     const full = await prayers.get(id)
     if (mine !== turn.current) return
     const next = () => {
-      audio.current?.urls.forEach(u => URL.revokeObjectURL(u))
+      audio.current?.urls.forEach(dropAudioUrl)
       if (rest.length) start(rest[0], rest.slice(1), el); else release()
     }
     if (!full) { next(); return }
     // A prayer picked up again after the phone locked plays its parts in turn.
     const parts = partsOf(full)
-    const fixed = parts.map(x => playable(x.audio, x.type))
-    const urls = parts.map((x, i) => URL.createObjectURL(new Blob([fixed[i]], { type: x.type })))
-    const testing = parts[0] && macPlayWatch(el, parts[0].audio, fixed[0], parts[0].type, urls[0])
+    const urls = parts.map(x => audioUrl(playable(x.audio, x.type), x.type))
     let i = 0, offset = 0
     el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
     el.onended = () => {
@@ -461,14 +459,12 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     setPlaying(id); setPos(0)
     nowPlaying(t('Prayer'))
     if (rest.length || inTurnRef.current) document.getElementById(`pray-${id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-    if (testing) return
     el.src = urls[0]
     el.play().catch(release)
   }
   const inTurnRef = useRef(false)
   inTurnRef.current = inTurn
   const play = (p: PrayerInfo) => {
-    macPlayTap()
     const was = playing === p.id && !inTurn
     release()
     if (!was) start(p.id, [], new Audio())
