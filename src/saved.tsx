@@ -33,6 +33,21 @@ function runsOf(keys: string[], marks: Marks): Run[] {
   return out
 }
 
+/** Bookmarks on verses next to each other read as one passage (Romans
+ *  8:24–26), whenever each was made. Its time is its newest verse's. */
+interface BmRun { keys: string[]; book: string; chapter: number; verses: number[]; t: number }
+export function bookmarkRuns(keys: string[], marks: Marks): BmRun[] {
+  const out: BmRun[] = []
+  for (const k of keys) {
+    if (!marks[k].b) continue
+    const r = parseKey(k), last = out[out.length - 1]
+    if (last && last.book === r.book && last.chapter === r.chapter && last.verses[last.verses.length - 1] === r.verse - 1) {
+      last.keys.push(k); last.verses.push(r.verse); last.t = Math.max(last.t, marks[k].t)
+    } else out.push({ keys: [k], book: r.book, chapter: r.chapter, verses: [r.verse], t: marks[k].t })
+  }
+  return out
+}
+
 /** Lower case and without accents, so "priere" finds "Prière". */
 const fold = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '')
 
@@ -63,7 +78,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     const r = parseKey(key)
     return notesOf(marks[key]).map(x => ({ ...x, key, book: r.book, chapter: r.chapter, verses: x.v ?? [r.verse] }))
   }), [keys])
-  const bookmarks = useMemo(() => keys.filter(k => marks[k].b), [keys])
+  const bookmarks = useMemo(() => bookmarkRuns(keys, marks), [keys])
   const counts: Record<Tab, number> = { highlights: runs.length, notes: notes.length, bookmarks: bookmarks.length }
 
   const [tab, setTabState] = useState<Tab>(() => {
@@ -190,7 +205,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   }).filter(Boolean).join(' ')
   const refOf = (book: string, chapter: number, vs: number[]) => `${bookName(book)} ${chapter}:${verseRanges(vs)}`
   const Ref = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) =>
-    <a class="ref" href={'#/' + readPath(version, book, chapter, verses[0])}>{refOf(book, chapter, verses)}</a>
+    <a class="ref" href={'#/' + readPath(version, book, chapter, verses[0], [], verses.every((v, i) => !i || v === verses[i - 1] + 1) ? verses[verses.length - 1] : undefined)}>{refOf(book, chapter, verses)}</a>
   /** The verses as the reader shows them: each on its own line, with its
    *  number in the same thick style, so a passage reads like the Bible. */
   const Text = ({ book, chapter, verses }: { book: string; chapter: number; verses: number[] }) => {
@@ -352,37 +367,33 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
     </>
   } else {
     const q = fold(f.trim())
-    const list = bookmarks.filter(k => {
-      if (!q) return true
-      const r = parseKey(k)
-      return fold(refOf(r.book, r.chapter, [r.verse])).includes(q) || fold(verseText(r.book, r.chapter, [r.verse])).includes(q)
-    })
-    // A bookmark has no time of its own; its verse's last change stands in.
-    if (recent) list.sort((a, b) => marks[b].t - marks[a].t)
+    const list = bookmarks.filter(b => !q || fold(refOf(b.book, b.chapter, b.verses)).includes(q) || fold(verseText(b.book, b.chapter, b.verses)).includes(q))
+    // A bookmark has no time of its own; its verses' last change stands in.
+    if (recent) list.sort((a, b) => b.t - a.t)
     body = <>
       {bookmarks.length > 3 && tools(t('Find in your bookmarks'), active)}
       {!list.length && <p class="muted">{t('No bookmark has “{words}” in it.', { words: f.trim() })}</p>}
       <ol class="saved-list">
-        {list.slice(0, lim).map(k => {
-          const r = parseKey(k), vs = [r.verse]
+        {list.slice(0, lim).map(b => {
+          const id = b.keys[0]
           return (
             <li class="go" onClick={openCard}>
               <div class="saved-head">
                 <span class="bm-mark" aria-hidden="true"><BookmarkIcon /></span>
-                <Ref book={r.book} chapter={r.chapter} verses={vs} />
+                <Ref {...b} />
                 <span class="spacer" />
-                <button class="saved-act" onClick={() => setAskBm(k)}>
+                <button class="saved-act" onClick={() => setAskBm(id)}>
                   <TrashIcon size={20} />{t('Remove')}
                 </button>
               </div>
-              {active && askBm === k && <div class="confirm-card danger" role="alertdialog" aria-labelledby={'bm-' + k}>
-                <p id={'bm-' + k} class="confirm-title"><strong>{t('Remove this bookmark?')}</strong></p>
+              {active && askBm === id && <div class="confirm-card danger" role="alertdialog" aria-labelledby={'bm-' + id}>
+                <p id={'bm-' + id} class="confirm-title"><strong>{t('Remove this bookmark?')}</strong></p>
                 <div class="confirm-buttons">
-                  <button class="leave-confirm" onClick={() => { setAskBm(undefined); change([k], { b: undefined }, t('Bookmark on {ref} removed.', { ref: refOf(r.book, r.chapter, vs) })) }}>{t('Remove bookmark')}</button>
+                  <button class="leave-confirm" onClick={() => { setAskBm(undefined); change(b.keys, { b: undefined }, t('Bookmark on {ref} removed.', { ref: refOf(b.book, b.chapter, b.verses) })) }}>{t('Remove bookmark')}</button>
                   <button onClick={() => setAskBm(undefined)}>{t('Cancel')}</button>
                 </div>
               </div>}
-              <Text book={r.book} chapter={r.chapter} verses={vs} />
+              <Text {...b} />
             </li>
           )
         })}
