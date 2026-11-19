@@ -20,13 +20,33 @@ function token() {
 
 // ---- on the signed-in device ---------------------------------------------------
 
+const KEPT = 'plain-bible:devicecode'
+type Code = { code: string; expires: number }
+/** The code this device showed, while it's still good. */
+export function keptDeviceCode(): Code | null {
+  try {
+    const c = JSON.parse(localStorage.getItem(KEPT) || 'null') as Code | null
+    if (c && /^\d{6}$/.test(c.code) && Date.now() < c.expires) return c
+    if (c) localStorage.removeItem(KEPT)
+  } catch { /* ignore */ }
+  return null
+}
+function keepDeviceCode(c: Code | null) {
+  try { if (c) localStorage.setItem(KEPT, JSON.stringify({ code: c.code, expires: c.expires })); else localStorage.removeItem(KEPT) } catch { /* ignore */ }
+}
+
 /** A code for one device, for 15 minutes. The same code while it's open, so
  *  a redraw or a second tap doesn't change it under the person typing. */
+// Also kept on the device: on a phone, typing the code in another app (Fedi,
+// say) can reload this one, and the code must still be waiting for its Allow
+// when it opens again (see PendingDeviceCode).
 let made: Promise<{ code: string; expires: number }> | undefined
 export function makeDeviceCode(): Promise<{ code: string; expires: number }> {
+  const kept = keptDeviceCode()
+  if (!made && kept) made = Promise.resolve(kept)
   if (!made) {
     made = api<{ code: string; expires: number }>('/devicecode', { method: 'POST', token: token() })
-    made.catch(() => { made = undefined })
+    made.then(keepDeviceCode, () => { made = undefined })
     return made
   }
   return made.then(c => {
@@ -35,9 +55,9 @@ export function makeDeviceCode(): Promise<{ code: string; expires: number }> {
     return makeDeviceCode()
   })
 }
-export const doneWithDeviceCode = () => { made = undefined }
+export const doneWithDeviceCode = () => { made = undefined; keepDeviceCode(null) }
 export const dropDeviceCode = (code: string) => {
-  made = undefined
+  made = undefined; keepDeviceCode(null)
   return api(`/devicecode/${code}`, { method: 'DELETE', token: token() }).catch(() => {})
 }
 
@@ -54,7 +74,7 @@ export async function allowDevice(code: string, pub: string): Promise<{ prayers:
   const epk = b64url.encode(new Uint8Array(await subtle().exportKey('raw', pair.publicKey)))
   const sealed = b64url.encode(await seal(await shared(pair.privateKey, pub, salt(code)), bytes, aad(code)))
   await api(`/devicecode/${code}`, { method: 'PUT', token: token(), body: { pub, epk, sealed } })
-  made = undefined
+  made = undefined; keepDeviceCode(null)
   return { prayers, locked }
 }
 
