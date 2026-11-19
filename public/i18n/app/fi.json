@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Fedin vastausta ei voitu tarkistaa. Yritä uudelleen.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Tällä Nostr-avaimella kirjaudutaan jo toiselle My Quiet Bible -tilille.",
 "Welcome in!": "Tervetuloa!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Kirjaudu sisään, niin rukouksesi ja korostuksesi pysyvät turvassa tililläsi, vaikka Fedi tyhjentäisi tallennustilansa."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Kirjaudu sisään, niin rukouksesi ja korostuksesi pysyvät turvassa tililläsi, vaikka Fedi tyhjentäisi tallennustilansa.",
+"Nostr key removed.": "Nostr-avain poistettu.",
+"Remove this Nostr key?": "Poistetaanko tämä Nostr-avain?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Fedi-sovellus, jossa tämä avain on, ei enää kirjaudu tilillesi.",
+"Too many Nostr keys on this account. Remove one first.": "Tilillä on liian monta Nostr-avainta. Poista ensin yksi."
 }

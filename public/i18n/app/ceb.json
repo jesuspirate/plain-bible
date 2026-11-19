@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Dili ma-check ang tubag sa Fedi. Palihug sulayi pag-usab.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Kining Nostr key nag-sign in na sa laing My Quiet Bible account.",
 "Welcome in!": "Dayon!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Mag-sign in, ug ang imong mga pag-ampo ug highlight magpabiling luwas sa imong account, bisan kung papason sa Fedi ang storage niini."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Mag-sign in, ug ang imong mga pag-ampo ug highlight magpabiling luwas sa imong account, bisan kung papason sa Fedi ang storage niini.",
+"Nostr key removed.": "Natangtang ang Nostr key.",
+"Remove this Nostr key?": "Tangtangon kining Nostr key?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Ang Fedi app nga adunay kini nga key dili na makasign in sa imong account.",
+"Too many Nostr keys on this account. Remove one first.": "Daghan kaayong Nostr key niining account. Tangtangi una ang usa."
 }

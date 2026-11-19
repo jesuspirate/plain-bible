@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "无法验证 Fedi 的回应。请重试。",
 "This Nostr key already signs in to another My Quiet Bible account.": "这个 Nostr 密钥已用于登录另一个 My Quiet Bible 账户。",
 "Welcome in!": "欢迎！",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "登录后，即使 Fedi 清除了它的存储，你的祷告和高亮也会安全地保存在你的账户里。"
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "登录后，即使 Fedi 清除了它的存储，你的祷告和高亮也会安全地保存在你的账户里。",
+"Nostr key removed.": "已移除 Nostr 密钥。",
+"Remove this Nostr key?": "移除这个 Nostr 密钥？",
+"The Fedi app with this key won’t sign in to your account anymore.": "带有这个密钥的 Fedi 应用将无法再登录你的账户。",
+"Too many Nostr keys on this account. Remove one first.": "这个账户的 Nostr 密钥太多了。请先移除一个。"
 }

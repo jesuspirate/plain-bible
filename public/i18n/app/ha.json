@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Ba a iya duba amsar Fedi ba. Da fatan za a sake gwadawa.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Wannan makullin Nostr yana shiga wani asusun My Quiet Bible daban tuni.",
 "Welcome in!": "Barka da zuwa!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Shiga, sai addu’o’inka da alamomin launinka su zauna lafiya a asusunka, ko da Fedi ta goge ma’ajiyarta."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Shiga, sai addu’o’inka da alamomin launinka su zauna lafiya a asusunka, ko da Fedi ta goge ma’ajiyarta.",
+"Nostr key removed.": "An cire makullin Nostr.",
+"Remove this Nostr key?": "A cire wannan makullin Nostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Manhajar Fedi da ke da wannan makullin ba za ta ƙara shigar da ku asusunku ba.",
+"Too many Nostr keys on this account. Remove one first.": "Makullan Nostr sun yi yawa a wannan asusun. Cire ɗaya tukuna."
 }

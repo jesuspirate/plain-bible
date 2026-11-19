@@ -1096,5 +1096,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "No se pudo comprobar la respuesta de Fedi. Inténtalo de nuevo.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Esta llave Nostr ya inicia sesión en otra cuenta de My Quiet Bible.",
 "Welcome in!": "¡Bienvenido!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Inicia sesión y tus oraciones y resaltados quedarán a salvo en tu cuenta, aunque Fedi borre su almacenamiento."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Inicia sesión y tus oraciones y resaltados quedarán a salvo en tu cuenta, aunque Fedi borre su almacenamiento.",
+"Nostr key removed.": "Llave Nostr quitada.",
+"Remove this Nostr key?": "¿Quitar esta llave Nostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "La app Fedi con esta llave ya no entrará en tu cuenta.",
+"Too many Nostr keys on this account. Remove one first.": "Demasiadas llaves Nostr en esta cuenta. Quita una primero."
 }

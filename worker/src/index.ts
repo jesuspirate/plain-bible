@@ -339,6 +339,8 @@ async function emailVerify(req: Request, env: Env) {
 // kept. Prayers stay end to end encrypted: the key seals its own copy of the
 // account key (NIP-44), which the server can't open.
 
+const NOSTR_KEYS_MAX = 20
+
 async function nostrStart(env: Env) {
   const challenge = random(32)
   return json({ challengeId: await saveChallenge(env, challenge, null), challenge })
@@ -355,12 +357,12 @@ async function nostrVerify(req: Request, env: Env) {
   // Adding (or changing) the Nostr key of the signed-in account.
   if (adding) {
     if (owner && owner.user_id !== adding) throw new HttpError(409, 'This Nostr key already signs in to another My Quiet Bible account.')
+    // Several Fedi apps (each its own key) can sign in to one account, like
+    // several passkeys. Each one opens the account and its prayers.
     if (!owner) {
-      await db.batch([
-        db.prepare("DELETE FROM prayer_wraps WHERE user_id = ? AND cred_id LIKE 'nostr:%'").bind(adding),
-        db.prepare('DELETE FROM nostr_keys WHERE user_id = ?').bind(adding),
-        db.prepare('INSERT INTO nostr_keys (pubkey, user_id, created, last_used) VALUES (?, ?, ?, ?)').bind(pubkey, adding, now, now),
-      ])
+      const n = await db.prepare('SELECT COUNT(*) AS n FROM nostr_keys WHERE user_id = ?').bind(adding).first<{ n: number }>()
+      if ((n?.n ?? 0) >= NOSTR_KEYS_MAX) throw new HttpError(413, 'Too many Nostr keys on this account. Remove one first.')
+      await db.prepare('INSERT INTO nostr_keys (pubkey, user_id, created, last_used) VALUES (?, ?, ?, ?)').bind(pubkey, adding, now, now).run()
     }
     return json({ added: true, pubkey })
   }
@@ -1709,6 +1711,26 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
       return json({ ok: true })
     }
 
+    // Forget one Fedi app's Nostr key, and the copy of the prayer key it
+    // sealed. Not the last way in.
+    case 'DELETE /auth/nostr': {
+      const userId = await session(req, env)
+      const { pubkey } = await readJson<{ pubkey: string }>(req)
+      if (typeof pubkey !== 'string') throw new HttpError(400, 'Bad request')
+      const [keys, mail, nostr] = await Promise.all([
+        env.DB.prepare('SELECT 1 FROM credentials WHERE user_id = ?').bind(userId).first(),
+        env.DB.prepare('SELECT 1 FROM emails WHERE user_id = ?').bind(userId).first(),
+        env.DB.prepare('SELECT pubkey FROM nostr_keys WHERE user_id = ?').bind(userId).all<{ pubkey: string }>(),
+      ])
+      if (!nostr.results.some(k => k.pubkey === pubkey)) throw new HttpError(404, 'Bad request')
+      if (nostr.results.length === 1 && !keys && !mail) throw new HttpError(400, 'This is your only way to sign in. Add another passkey or an email first.')
+      await env.DB.batch([
+        env.DB.prepare('DELETE FROM nostr_keys WHERE pubkey = ? AND user_id = ?').bind(pubkey, userId),
+        env.DB.prepare('DELETE FROM prayer_wraps WHERE cred_id = ? AND user_id = ?').bind(NOSTR_WRAP + pubkey, userId),
+      ])
+      return json({ ok: true })
+    }
+
     // A second sign-in for the same account, carried to the app's new
     // address inside a move, so signing out on one doesn't sign out both.
     case 'POST /auth/handoff': {
@@ -1731,12 +1753,14 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
         env.DB.prepare('SELECT updated FROM data WHERE user_id = ?').bind(userId).first<{ updated: number }>(),
         env.DB.prepare('SELECT hint FROM emails WHERE user_id = ?').bind(userId).first<{ hint: string }>(),
         env.DB.prepare('SELECT cred_id FROM sessions WHERE token_hash = ?').bind(await sha256(bearer(req)!)).first<{ cred_id: string | null }>(),
-        env.DB.prepare('SELECT 1 FROM nostr_keys WHERE user_id = ?').bind(userId).first(),
+        env.DB.prepare('SELECT pubkey, created, last_used FROM nostr_keys WHERE user_id = ? ORDER BY created')
+          .bind(userId).all<{ pubkey: string; created: number; last_used: number | null }>(),
       ])
       // The passkey this device signed in with is told apart by its
       // credential id: the one the session was made with.
       const list = keys.results.map(k => ({ id: k.id, name: k.name, created: k.created, lastUsed: k.last_used, site: k.rp_id, current: k.id === mine?.cred_id }))
-      return json({ created: user?.created, passkeys: list.length, list, updated: data?.updated ?? null, email: email?.hint ?? null, nostr: !!nostr })
+      return json({ created: user?.created, passkeys: list.length, list, updated: data?.updated ?? null, email: email?.hint ?? null,
+        nostr: nostr.results.length > 0, nostrKeys: nostr.results.map(k => ({ id: k.pubkey, created: k.created, lastUsed: k.last_used })) })
     }
 
     case 'DELETE /account': {

@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Không thể kiểm tra phản hồi của Fedi. Vui lòng thử lại.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Khóa Nostr này đã đăng nhập vào một tài khoản My Quiet Bible khác.",
 "Welcome in!": "Chào mừng bạn!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Hãy đăng nhập, lời cầu nguyện và phần tô sáng của bạn sẽ an toàn trong tài khoản, kể cả khi Fedi xóa bộ nhớ của nó."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Hãy đăng nhập, lời cầu nguyện và phần tô sáng của bạn sẽ an toàn trong tài khoản, kể cả khi Fedi xóa bộ nhớ của nó.",
+"Nostr key removed.": "Đã xóa khóa Nostr.",
+"Remove this Nostr key?": "Xóa khóa Nostr này?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Ứng dụng Fedi có khóa này sẽ không đăng nhập vào tài khoản của bạn nữa.",
+"Too many Nostr keys on this account. Remove one first.": "Tài khoản này có quá nhiều khóa Nostr. Hãy xóa bớt một khóa trước."
 }

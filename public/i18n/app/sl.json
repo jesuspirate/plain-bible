@@ -1366,5 +1366,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Odgovora Fedija ni bilo mogoče preveriti. Poskusite znova.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Ta ključ Nostr že prijavlja v drug račun My Quiet Bible.",
 "Welcome in!": "Dobrodošli!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Prijavite se in vaše molitve in označbe ostanejo varne v vašem računu, tudi če Fedi izbriše svojo shrambo."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Prijavite se in vaše molitve in označbe ostanejo varne v vašem računu, tudi če Fedi izbriše svojo shrambo.",
+"Nostr key removed.": "Ključ Nostr je odstranjen.",
+"Remove this Nostr key?": "Želite odstraniti ta ključ Nostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Aplikacija Fedi s tem ključem se ne bo več mogla prijaviti v vaš račun.",
+"Too many Nostr keys on this account. Remove one first.": "Ta račun ima preveč ključev Nostr. Najprej odstranite enega."
 }

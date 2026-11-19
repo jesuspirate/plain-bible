@@ -222,7 +222,9 @@ export const deleteAccount = (token: string) => api('/account', { method: 'DELET
 /** A passkey on the account. `current` marks the one this device signed in
  *  with; `site` is the address it belongs to, once known. */
 export interface PasskeyInfo { id: string; name: string | null; created: number; lastUsed: number | null; site: string | null; current: boolean }
-export const accountInfo = (token: string) => api<{ created: number; passkeys: number; list?: PasskeyInfo[]; updated: number | null; email: string | null; nostr?: boolean }>('/account', { token })
+export const accountInfo = (token: string) => api<{ created: number; passkeys: number; list?: PasskeyInfo[]; updated: number | null; email: string | null; nostr?: boolean; nostrKeys?: NostrKeyInfo[] }>('/account', { token })
+export type NostrKeyInfo = { id: string; created: number; lastUsed: number | null }
+export const removeNostrKey = (token: string, pubkey: string) => api('/auth/nostr', { method: 'DELETE', token, body: { pubkey } })
 export const renamePasskey = (token: string, id: string, name: string) => api<{ name: string | null }>('/auth/passkey', { method: 'PUT', token, body: { id, name } })
 export const removePasskey = (token: string, id: string) => api('/auth/passkey', { method: 'DELETE', token, body: { id } })
 

@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Dwoko mar Fedi ok onyal nonene. Yie item kendo.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Rayawni mar Nostr ni koro donjo e akaunt machielo mar My Quiet Bible.",
 "Welcome in!": "Waroyi!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Donj, kendo lemo mari gi rangi mari nobed maber e akaunt mari, kata ka Fedi ogolo gik mokano."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Donj, kendo lemo mari gi rangi mari nobed maber e akaunt mari, kata ka Fedi ogolo gik mokano.",
+"Nostr key removed.": "Rayawni mar Nostr ogol.",
+"Remove this Nostr key?": "Igol rayawni mar Nostr ni?",
+"The Fedi app with this key won’t sign in to your account anymore.": "App mar Fedi man gi rayawni ni ok obi donjo e akaunt mari kendo.",
+"Too many Nostr keys on this account. Remove one first.": "Rayawni mag Nostr ng’eny moloyo e akaunt ni. Gol achiel mokwongo."
 }

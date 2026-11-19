@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Fedi ၏ အဖြေကို စစ်ဆေး၍ မရပါ။ ထပ်ကြိုးစားပါ။",
 "This Nostr key already signs in to another My Quiet Bible account.": "ဤ Nostr သော့သည် အခြား My Quiet Bible အကောင့်တစ်ခုသို့ ဝင်ပြီးဖြစ်သည်။",
 "Welcome in!": "ကြိုဆိုပါသည်!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "အကောင့်ဝင်ပါ၊ ထို့နောက် Fedi က ၎င်း၏ သိုလှောင်မှုကို ဖျက်လိုက်လျှင်ပင် သင့်ဆုတောင်းချက်များနှင့် အရောင်ခြယ်ချက်များသည် သင့်အကောင့်တွင် လုံခြုံစွာ ရှိနေမည်။"
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "အကောင့်ဝင်ပါ၊ ထို့နောက် Fedi က ၎င်း၏ သိုလှောင်မှုကို ဖျက်လိုက်လျှင်ပင် သင့်ဆုတောင်းချက်များနှင့် အရောင်ခြယ်ချက်များသည် သင့်အကောင့်တွင် လုံခြုံစွာ ရှိနေမည်။",
+"Nostr key removed.": "Nostr သော့ကို ဖယ်ရှားပြီးပါပြီ။",
+"Remove this Nostr key?": "ဤ Nostr သော့ကို ဖယ်ရှားမလား။",
+"The Fedi app with this key won’t sign in to your account anymore.": "ဤသော့ပါသော Fedi အက်ပ်ဖြင့် သင့်အကောင့်သို့ ဝင်၍ မရတော့ပါ။",
+"Too many Nostr keys on this account. Remove one first.": "ဤအကောင့်တွင် Nostr သော့ အလွန်များနေပါသည်။ တစ်ခုကို အရင် ဖယ်ရှားပါ။"
 }

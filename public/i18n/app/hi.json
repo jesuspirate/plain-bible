@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Fedi के उत्तर की जाँच नहीं हो सकी। कृपया फिर से प्रयास करें।",
 "This Nostr key already signs in to another My Quiet Bible account.": "यह Nostr कुंजी पहले से किसी दूसरे My Quiet Bible खाते में साइन इन करती है।",
 "Welcome in!": "स्वागत है!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "साइन इन करें, फिर Fedi अपना स्टोरेज मिटा दे तब भी आपकी प्रार्थनाएँ और हाइलाइट आपके खाते में सुरक्षित रहेंगे।"
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "साइन इन करें, फिर Fedi अपना स्टोरेज मिटा दे तब भी आपकी प्रार्थनाएँ और हाइलाइट आपके खाते में सुरक्षित रहेंगे।",
+"Nostr key removed.": "Nostr कुंजी हटा दी गई।",
+"Remove this Nostr key?": "यह Nostr कुंजी हटाएँ?",
+"The Fedi app with this key won’t sign in to your account anymore.": "इस कुंजी वाला Fedi ऐप अब आपके खाते में साइन इन नहीं करेगा।",
+"Too many Nostr keys on this account. Remove one first.": "इस खाते में बहुत सारी Nostr कुंजियाँ हैं। पहले एक हटाएँ।"
 }

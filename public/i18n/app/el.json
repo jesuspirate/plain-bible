@@ -1264,5 +1264,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Η απάντηση του Fedi δεν μπόρεσε να ελεγχθεί. Δοκίμασε ξανά.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Αυτό το κλειδί Nostr συνδέει ήδη σε άλλον λογαριασμό My Quiet Bible.",
 "Welcome in!": "Καλώς ήρθες!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Συνδέσου, και οι προσευχές και οι επισημάνσεις σου μένουν ασφαλείς στον λογαριασμό σου, ακόμη κι αν το Fedi καθαρίσει τον χώρο αποθήκευσής του."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Συνδέσου, και οι προσευχές και οι επισημάνσεις σου μένουν ασφαλείς στον λογαριασμό σου, ακόμη κι αν το Fedi καθαρίσει τον χώρο αποθήκευσής του.",
+"Nostr key removed.": "Το κλειδί Nostr αφαιρέθηκε.",
+"Remove this Nostr key?": "Αφαίρεση αυτού του κλειδιού Nostr;",
+"The Fedi app with this key won’t sign in to your account anymore.": "Η εφαρμογή Fedi με αυτό το κλειδί δεν θα συνδέεται πλέον στον λογαριασμό σας.",
+"Too many Nostr keys on this account. Remove one first.": "Πάρα πολλά κλειδιά Nostr σε αυτόν τον λογαριασμό. Αφαιρέστε πρώτα ένα."
 }

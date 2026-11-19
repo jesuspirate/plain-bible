@@ -27,13 +27,6 @@ export function inFedi() {
   return !!g.webln && /iPhone|iPad|Android/.test(g.navigator?.userAgent ?? '')
 }
 
-/** What a page was given, for the version line in Settings (finding out
- *  what an in-app browser like Fedi's provides). Empty in a plain browser. */
-export function injected() {
-  const g = w()
-  return (['nostr', 'webln', 'fedi', 'fediInternal'] as const).filter(k => g[k] !== undefined)
-}
-
 /** The Nostr key this account signs in with here, once it has. */
 const KEY = 'plain-bible:nostr'
 export const nostrPubkey = () => { try { return localStorage.getItem(KEY) } catch { return null } }

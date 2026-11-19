@@ -1264,5 +1264,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Fedi-ի պատասխանը չհաջողվեց ստուգել։ Կրկին փորձեք։",
 "This Nostr key already signs in to another My Quiet Bible account.": "Այս Nostr բանալին արդեն մուտք է գործում My Quiet Bible-ի մեկ այլ հաշիվ։",
 "Welcome in!": "Բարի գալուստ։",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Մուտք գործեք, և ձեր աղոթքներն ու ընդգծումները ապահով կմնան ձեր հաշվում, նույնիսկ եթե Fedi-ն մաքրի իր պահոցը։"
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Մուտք գործեք, և ձեր աղոթքներն ու ընդգծումները ապահով կմնան ձեր հաշվում, նույնիսկ եթե Fedi-ն մաքրի իր պահոցը։",
+"Nostr key removed.": "Nostr բանալին հեռացվեց։",
+"Remove this Nostr key?": "Հեռացնե՞լ այս Nostr բանալին",
+"The Fedi app with this key won’t sign in to your account anymore.": "Այս բանալիով Fedi հավելվածն այլևս չի բացի ձեր հաշիվը։",
+"Too many Nostr keys on this account. Remove one first.": "Այս հաշվում չափազանց շատ Nostr բանալիներ կան։ Նախ հեռացրեք մեկը։"
 }

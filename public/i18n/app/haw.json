@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "ʻAʻole i hiki ke nānā i ka pane a Fedi. E ʻoluʻolu e hoʻāʻo hou.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Ke hoʻokomo nei kēia kī Nostr i kekahi moʻokāki My Quiet Bible ʻē aʻe.",
 "Welcome in!": "E komo mai!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "E komo, a e mālama pono ʻia kāu mau pule a me nā kaha kala i kāu moʻokāki, ʻoiai inā holoi ʻo Fedi i kona waihona."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "E komo, a e mālama pono ʻia kāu mau pule a me nā kaha kala i kāu moʻokāki, ʻoiai inā holoi ʻo Fedi i kona waihona.",
+"Nostr key removed.": "Ua wehe ʻia ke kī Nostr.",
+"Remove this Nostr key?": "Wehe i kēia kī Nostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "ʻAʻole e komo hou ka polokalamu Fedi me kēia kī i kou moʻokāki.",
+"Too many Nostr keys on this account. Remove one first.": "Nui loa nā kī Nostr ma kēia moʻokāki. E wehe mua i hoʻokahi."
 }

@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Fedi의 응답을 확인하지 못했습니다. 다시 시도하세요.",
 "This Nostr key already signs in to another My Quiet Bible account.": "이 Nostr 키는 이미 다른 My Quiet Bible 계정에 로그인합니다.",
 "Welcome in!": "환영합니다!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "로그인하면 Fedi가 저장 공간을 지워도 기도와 하이라이트가 계정에 안전하게 남습니다."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "로그인하면 Fedi가 저장 공간을 지워도 기도와 하이라이트가 계정에 안전하게 남습니다.",
+"Nostr key removed.": "Nostr 키를 삭제했습니다.",
+"Remove this Nostr key?": "이 Nostr 키를 삭제하시겠습니까?",
+"The Fedi app with this key won’t sign in to your account anymore.": "이 키가 있는 Fedi 앱으로는 더 이상 계정에 로그인할 수 없습니다.",
+"Too many Nostr keys on this account. Remove one first.": "이 계정에 Nostr 키가 너무 많습니다. 먼저 하나를 삭제하세요."
 }
