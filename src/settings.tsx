@@ -296,7 +296,7 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
 // Each language's name in the app's own language under it ("Kiswahili ·
 // Swahili"), so you can find one you can't read; left out when it's the same.
 // English uses the names the Bible catalog does ("Ilocano", not Intl's "Iloko").
-const ENGLISH: Record<string, string> = { ilo: 'Ilocano', lg: 'Luganda', nd: 'Ndebele', pon: 'Pohnpeian', luo: 'Dholuo', ny: 'Chichewa', tw: 'Twi', ckb: 'Kurdish (Sorani)', 'zh-hans': 'Chinese (Simplified)', 'zh-hant': 'Chinese (Traditional)', nb: 'Norwegian (Bokmål)', nn: 'Norwegian (Nynorsk)' }
+const ENGLISH: Record<string, string> = { ilo: 'Ilocano', lg: 'Luganda', nd: 'Ndebele', pon: 'Pohnpeian', luo: 'Dholuo', ny: 'Chichewa', tw: 'Twi', ckb: 'Kurdish (Sorani)', 'zh-hans': 'Chinese (Simplified)', 'zh-hant': 'Chinese (Traditional)', nb: 'Norwegian (Bokmål)', nn: 'Norwegian (Nynorsk)', nso: 'Sepedi (Northern Sotho)' }
 function inYours(id: string, own: string): string | undefined {
   let n: string | undefined
   try { n = new Intl.DisplayNames([intlTag()], { type: 'language' }).of(intlTag(id)) } catch { /* an old browser */ }
