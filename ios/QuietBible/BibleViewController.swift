@@ -53,13 +53,10 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         // The web app reads this to leave out what only fits a website.
         config.applicationNameForUserAgent = "Mobile/15E148 QuietBibleApp/1"
             + (ProcessInfo.processInfo.isiOSAppOnMac ? " QuietBibleMac/1" : "")
-        // On a Mac, swiping to another desktop (Space) away from the app in
-        // full screen counts as the app going to the background, and the web
-        // view then put the page to sleep. Back again, it had to wake and
-        // draw the page from nothing, which took a second or more: the text
-        // came in after the window. A Mac doesn't need that saving, and no
-        // other app there does it, so the page stays awake.
-        if #available(iOS 17.0, *), ProcessInfo.processInfo.isiOSAppOnMac { config.preferences.inactiveSchedulingPolicy = .none }
+        // (1.2.8 told the page never to pause on a Mac,
+        // `inactiveSchedulingPolicy = .none`. From that build on, coming back
+        // to full screen sometimes left the page's code stopped for good: drawn
+        // but deaf to clicks and keys until the app was quit. Taken out again.)
         // Passkeys on a Mac, where the web view has none (PasskeyBridge.swift).
         config.userContentController.addUserScript(PasskeyBridge.script)
         config.userContentController.addScriptMessageHandler(PasskeyBridge(), contentWorld: .page, name: PasskeyBridge.name)
@@ -134,6 +131,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         openTappedCircle()
         watchMacKeyboardStrip()
         keepPageWhileAwayOnMac()
+        MacReport.watchEverything(scene: { [weak self] in self?.view.window?.windowScene }, web: { [weak self] in self?.web })
     }
 
     /// On a Mac in full screen, going to another Space puts the app in the
@@ -648,21 +646,71 @@ enum MacReport {
     static let on = ProcessInfo.processInfo.isiOSAppOnMac
         && Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
     private static var lines: [String] = []
-    private static var started = Date()
+    private static let clock: DateFormatter = {
+        let f = DateFormatter(); f.dateFormat = "HH:mm:ss.SSS"; return f
+    }()
+    /// The clipboard as this report last left it, and when something else
+    /// was first seen there (that is left alone for two minutes).
+    private static var ours: Int?
+    private static var othersSince: Date?
 
-    static func start() {
-        guard on else { return }
-        lines = []; started = Date()
-    }
+    /// Marks a new step; the lines before it are kept (a freeze shows only
+    /// in what came before).
+    static func start() { note("----") }
 
     static func note(_ line: String) {
         guard on else { return }
-        lines.append(String(format: "%6.0f ms  ", Date().timeIntervalSince(started) * 1000) + line)
-        if lines.count > 200 { lines.removeFirst(lines.count - 200) }
+        lines.append(clock.string(from: Date()) + "  " + line)
+        if lines.count > 250 { lines.removeFirst(lines.count - 250) }
     }
 
+    /// Copies the whole trail, unless something else was put on the
+    /// clipboard less than two minutes ago (a report from the page, or
+    /// anything copied by hand).
     static func copy(title: String) {
         guard on, !lines.isEmpty else { return }
-        UIPasteboard.general.string = (["Quiet Bible \(title) report"] + lines).joined(separator: "\n")
+        let board = UIPasteboard.general
+        if let ours, board.changeCount != ours {
+            let since = othersSince ?? Date()
+            othersSince = since
+            if Date().timeIntervalSince(since) < 120 { return }
+        }
+        board.string = (["Quiet Bible \(title) report"] + lines).joined(separator: "\n")
+        ours = board.changeCount
+        othersSince = nil
     }
+
+    /// Every notice about the app, its scenes and windows, as it arrives,
+    /// and the app's state each second whenever it changes. Copied each time.
+    static func watchEverything(scene: @escaping () -> UIWindowScene?, web: @escaping () -> WKWebView?) {
+        guard on else { return }
+        let keep = ["Scene", "Application", "Window", "Active", "Occlusion", "Space", "Foreground", "Background", "Screen", "Focus"]
+        let skip = ["Keyboard", "TextInput", "Pasteboard", "Menu"]
+        NotificationCenter.default.addObserver(forName: nil, object: nil, queue: nil) { note in
+            let name = note.name.rawValue
+            guard keep.contains(where: name.contains), !skip.contains(where: name.contains) else { return }
+            let what = "notice \(name)"
+            if Thread.isMainThread { note_(what) } else { DispatchQueue.main.async { note_(what) } }
+        }
+        var last = ""
+        Timer.scheduledTimer(withTimeInterval: 1, repeats: true) { _ in
+            let now = "app \(UIApplication.shared.applicationState.rawValue), scene \(scene()?.activationState.rawValue ?? -9), key \(scene()?.keyWindow != nil)"
+            if now != last { last = now; note_("state: " + now + " (app 0 active, 1 inactive, 2 background; scene 0 front, 1 front-inactive, 2 background)") }
+        }
+        // The page's own code: asked every 2 s; a page that stops answering
+        // (the freeze) shows here, and again when it answers once more.
+        var answering = true
+        Timer.scheduledTimer(withTimeInterval: 2, repeats: true) { _ in
+            guard let web = web() else { return }
+            var answered = false
+            web.evaluateJavaScript("document.visibilityState") { value, _ in
+                answered = true
+                if !answering { answering = true; note_("page answers again (\(value ?? "?"))") }
+            }
+            DispatchQueue.main.asyncAfter(deadline: .now() + 1.5) {
+                if !answered && answering { answering = false; note_("page NOT answering") }
+            }
+        }
+    }
+    private static func note_(_ line: String) { note(line); copy(title: "Mac") }
 }
