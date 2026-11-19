@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Fedi ᎤᏁᏤᎸ Ꮭ ᏰᎵ ᎪᎵᏯᏍᏗ ᏱᎨᏎ. ᏔᎵᏁ ᎭᏓᏅᏖ.",
 "This Nostr key already signs in to another My Quiet Bible account.": "ᎯᎠ Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᎦᏳᎳ ᏓᏴᎯᎮᏍᏗ ᏐᎢ My Quiet Bible ᎪᏪᎵ.",
 "Welcome in!": "ᎣᏏᏲ, ᎡᎯᏴᎭ!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "ᏫᏣᏴᎵ, ᏣᏤᎵ ᎠᏓᏙᎵᏍᏙᏗ ᎠᎴ ᎤᏁᏍᏔᏅ ᏂᏚᏍᏛ ᏓᎨᏎᏍᏗ ᏣᏤᎵ ᎪᏪᎵ ᎠᏂ, Fedi ᏱᎦᏅᎦᎸᏓ ᎾᏍᏉ."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "ᏫᏣᏴᎵ, ᏣᏤᎵ ᎠᏓᏙᎵᏍᏙᏗ ᎠᎴ ᎤᏁᏍᏔᏅ ᏂᏚᏍᏛ ᏓᎨᏎᏍᏗ ᏣᏤᎵ ᎪᏪᎵ ᎠᏂ, Fedi ᏱᎦᏅᎦᎸᏓ ᎾᏍᏉ.",
+"Nostr key removed.": "Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᎤᏲᏨ.",
+"Remove this Nostr key?": "ᎯᎠ Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᎯᎲᏏ?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Fedi ᎯᎠ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᎤᏪᎭ Ꮭ ᎿᏉ ᏣᏤᎵ ᎠᎧᎤᏂ ᏱᏓᏴᎯᏍᏔᏂ.",
+"Too many Nostr keys on this account. Remove one first.": "ᎤᏣᏘ Nostr ᎦᎶᎯᏍᏗ ᏗᏍᏚᏗ ᎯᎠ ᎠᎧᎤᏂ. ᏌᏉ ᎢᎬᏱ ᎯᎲᏏ."
 }

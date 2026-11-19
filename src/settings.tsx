@@ -22,7 +22,6 @@ import { saveRecording, useRecording } from './lib/recordMode'
 import { StreakRow } from './streaks'
 import { AWAY } from './sideways'
 import { UNFOLDED, useWide } from './lib/spread'
-import { inFedi, injected } from './lib/nostr'
 import { currentLang, deviceLang, intlTag, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
@@ -41,7 +40,6 @@ function VersionLine() {
     <div class={'version-line' + (state === 'ready' ? ' ready' : '')}>
       <button class="version-copy" onClick={copy} aria-label={t('Version {build}. Tap to copy', { build: __BUILD__ })}>{copied ? t('Copied ✓') : t('Version {build}', { build: __BUILD__ })}</button>
       {/* What an in-app browser (Fedi) gives the page, to tell why its sign-in shows or not. */}
-      {injected().length > 0 && <span class="version-note">{injected().join(' · ')}{inFedi() ? ' ✓' : ''}</span>}
       <button class="version-note" disabled={state === 'checking'} onClick={() => checkForUpdate()}>
         {state === 'checking' ? <SpinnerIcon size={14} class="spin" /> : <RefreshIcon size={14} />} {note}
       </button>

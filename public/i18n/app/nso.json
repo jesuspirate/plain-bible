@@ -1261,5 +1261,9 @@
 "Welcome in!": "O amogetšwe!",
 "Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Tsena, gomme dithapelo tša gago le maswao a mebala di tla dula di bolokegile akhaonteng ya gago, le ge Fedi e ka phumola polokelo ya yona.",
 "Fedi’s answer couldn’t be checked. Please try again.": "Karabo ya Fedi ga se ya kgona go hlahlobja. Hle leka gape.",
-"This Nostr key already signs in to another My Quiet Bible account.": "Senotlelo se sa Nostr se šetše se tsena akhaonteng ye nngwe ya My Quiet Bible."
+"This Nostr key already signs in to another My Quiet Bible account.": "Senotlelo se sa Nostr se šetše se tsena akhaonteng ye nngwe ya My Quiet Bible.",
+"Nostr key removed.": "Senotlelo sa Nostr se tlošitšwe.",
+"Remove this Nostr key?": "Tloša senotlelo se sa Nostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "Tirišo ya Fedi yeo e nago le senotlelo se e ka se sa go tsenya akhaonteng ya gago.",
+"Too many Nostr keys on this account. Remove one first.": "Go na le dinotlelo tša Nostr tše dintši kudu akhaonteng ye. Tloša se tee pele."
 }

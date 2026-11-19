@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Deebii Fedi mirkaneessuun hin danda'amne. Maaloo irra deebi'ii yaali.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Furtuun Nostr kun duraanuu herrega My Quiet Bible biraatti seensisa.",
 "Welcome in!": "Baga nagaan dhuftan!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Seeni, kadhannaawwan kee fi halluun kee herrega kee keessatti nagaan turu, Fediin kuusaa isaa haqus."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Seeni, kadhannaawwan kee fi halluun kee herrega kee keessatti nagaan turu, Fediin kuusaa isaa haqus.",
+"Nostr key removed.": "Furtuun Nostr haqameera.",
+"Remove this Nostr key?": "Furtuu Nostr kana haqi?",
+"The Fedi app with this key won’t sign in to your account anymore.": "App Fedi furtuu kana qabu kana booda herrega kee keessa si hin seensisu.",
+"Too many Nostr keys on this account. Remove one first.": "Furtuuwwan Nostr herrega kana irratti baay'ee baay'atan. Dura tokko haqi."
 }

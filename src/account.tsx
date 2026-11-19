@@ -4,7 +4,7 @@ import { useEffect, useRef, useState } from 'preact/hooks'
 import { holdUpdate } from './lib/update'
 import { Marks, saveMarks } from './lib/marks'
 import {
-  Account, accountInfo, changedAt, checkPasskey, stopPasskey, PasskeyInfo, removePasskey, renamePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
+  Account, accountInfo, changedAt, checkPasskey, stopPasskey, PasskeyInfo, NostrKeyInfo, removePasskey, removeNostrKey, renamePasskey, checkEmailSignIn, deleteAccount, docKey, emailSignInOn, loadAccount, mergeDocs, register,
   noteOwner, removeEmail, saveAccount, prepareSignIn, sendEmailCode, signIn, signOut, SYNC_URL, SyncDoc, SyncError, syncNow, takeSwitched,
   verifyEmailCode,
 } from './lib/sync'
@@ -15,7 +15,7 @@ import { DeviceLink, PasteMove } from './move'
 import { EnterDeviceCode } from './devicecode'
 import { KeyBackup } from './approve'
 import { DownloadEverything } from './exporter'
-import { inFedi, nostrSignIn } from './lib/nostr'
+import { inFedi, nostrPubkey, nostrSignIn } from './lib/nostr'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
 import { locale, t, tj, tn } from './i18n'
 
@@ -388,13 +388,49 @@ function PasskeyList({ list, token, canRemove, busy, onChange }: {
   </>
 }
 
+/** The Fedi apps (one Nostr key each) that sign in to this account. The one
+ *  on this device says "This one" and can't be removed from here; any other
+ *  can, in two steps, unless it is the last way in. */
+function NostrKeyList({ list, token, canRemove, busy, onChange }: {
+  list: NostrKeyInfo[]; token: string; canRemove: boolean; busy: boolean; onChange: (note: string) => void
+}) {
+  const [asking, setAsking] = useState('')
+  const [working, setWorking] = useState(false)
+  const mine = nostrPubkey()
+  const remove = (id: string) => async () => {
+    setWorking(true); onChange('')
+    try { await removeNostrKey(token, id); setAsking(''); onChange(t('Nostr key removed.')) }
+    catch (e) { onChange((e as Error).message) }
+    finally { setWorking(false) }
+  }
+  return <>{list.map(k => asking === k.id ? (
+    <div key={k.id} class="set-row set-static passkey-ask" role="alertdialog" aria-labelledby={'ask-' + k.id}>
+      <p id={'ask-' + k.id}><strong>{t('Remove this Nostr key?')}</strong></p>
+      <p>{t('The Fedi app with this key won’t sign in to your account anymore.')}</p>
+      <div class="confirm-buttons">
+        <button class="danger" disabled={working} onClick={remove(k.id)}>{working ? t('Removing…') : t('Remove')}</button>
+        <button class="primary" disabled={working} onClick={() => setAsking('')}>{t('Keep')}</button>
+      </div>
+    </div>
+  ) : (
+    <div key={k.id} class="set-row set-static passkey-row">
+      <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
+      <span class="set-label passkey-label">{t('Nostr key (Fedi)')}{k.id === mine && <span class="passkey-this">{t('This one')}</span>}
+        <span class="set-sub">{k.id.slice(0, 8)}… · {t('Made {date}', { date: stamp(k.created) })}</span>
+        {k.lastUsed && <span class="set-sub">{t('Last used {date}', { date: stamp(k.lastUsed) })}</span>}
+      </span>
+      {k.id !== mine && canRemove && <button class="passkey-edit" disabled={busy || working} onClick={() => { onChange(''); setAsking(k.id) }}>{t('Remove')}</button>}
+    </div>
+  ))}</>
+}
+
 /** Settings → Account, all on one page: signed out, the ways in; signed in,
  *  who you are, sync, and the account's own buttons, as cards. */
 export function AccountSection() {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
   const [working, setWorking] = useState('')
-  const [info, setInfo] = useState<{ passkeys: number; list?: PasskeyInfo[]; created: number; email: string | null; nostr?: boolean }>()
+  const [info, setInfo] = useState<{ passkeys: number; list?: PasskeyInfo[]; created: number; email: string | null; nostr?: boolean; nostrKeys?: NostrKeyInfo[] }>()
   const [email, setEmailOn] = useState(emailSignInOn)
   const [addEmail, setAddEmail] = useState(false)
   const acct = sync.account
@@ -569,10 +605,9 @@ export function AccountSection() {
           <span class="set-icon" aria-hidden="true"><MailIcon size={24} /></span>
           <span class="set-label">{info?.email ? t('Change email') : t('Add an email')}{!info?.email && <span class="set-sub">{t('Another way in if you lose your passkey')}</span>}</span>
         </button>}
-        {info?.nostr ? <div class="set-row set-static">
-          <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
-          <span class="set-label">{t('Nostr key (Fedi)')}</span>
-        </div> : fedi && <button class="set-row" onClick={nostr} disabled={!!working}>
+        {info?.nostrKeys?.length ? <NostrKeyList list={info.nostrKeys} token={acct.token}
+          canRemove={info.nostrKeys.length > 1 || !!info.email || !!info.passkeys} busy={!!working} onChange={note => setMsg(note)} /> : null}
+        {fedi && !info?.nostrKeys?.some(k => k.id === nostrPubkey()) && <button class="set-row" onClick={nostr} disabled={!!working}>
           <span class="set-icon" aria-hidden="true"><KeyIcon size={24} /></span>
           <span class="set-label">{working === 'nostr' ? t('Waiting for Fedi…') : t('Add Nostr sign-in')}<span class="set-sub">{t('Sign in from Fedi with its Nostr key')}</span></span>
         </button>}

@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Mhinduro yeFedi haina kugona kutariswa. Ndapota edza zvakare.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Kiyi iyi yeNostr yatopinza mune imwe account yeMy Quiet Bible.",
 "Welcome in!": "Mauya!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Pinda, uye minamato yako nezvakapendwa zvako zvinogara zvakachengeteka muaccount yako, kunyange Fedi ikadzima pekuchengetera payo."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Pinda, uye minamato yako nezvakapendwa zvako zvinogara zvakachengeteka muaccount yako, kunyange Fedi ikadzima pekuchengetera payo.",
+"Nostr key removed.": "Kiyi yeNostr yabviswa.",
+"Remove this Nostr key?": "Mubvise kiyi iyi yeNostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "App yeFedi ine kiyi iyi haichazokupinzai muakaundi yenyu.",
+"Too many Nostr keys on this account. Remove one first.": "Makiyi eNostr akawandisa paakaundi iyi. Tangai mabvisa imwe."
 }

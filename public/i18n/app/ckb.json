@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "وەڵامی Fedi نەپشکنرا. تکایە دووبارە هەوڵ بدەرەوە.",
 "This Nostr key already signs in to another My Quiet Bible account.": "ئەم کلیلی Nostrـە پێشتر دەچێتە ناو هەژمارێکی تری My Quiet Bible.",
 "Welcome in!": "بەخێربێیت!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "بچۆ ژوورەوە، ئەوکات نوێژ و ڕەنگکردنەکانت لە هەژمارەکەتدا پارێزراو دەمێننەوە، تەنانەت ئەگەر Fedi کۆگاکەی بسڕێتەوە."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "بچۆ ژوورەوە، ئەوکات نوێژ و ڕەنگکردنەکانت لە هەژمارەکەتدا پارێزراو دەمێننەوە، تەنانەت ئەگەر Fedi کۆگاکەی بسڕێتەوە.",
+"Nostr key removed.": "کلیلی Nostr لابرا.",
+"Remove this Nostr key?": "ئەم کلیلی Nostrـە لاببرێت؟",
+"The Fedi app with this key won’t sign in to your account anymore.": "ئەپی Fedi کە ئەم کلیلەی هەیە چیتر ناتباتە ناو هەژمارەکەتەوە.",
+"Too many Nostr keys on this account. Remove one first.": "کلیلی Nostr لەم هەژمارەدا زۆرن. سەرەتا یەکێکیان لاببە."
 }

@@ -1261,5 +1261,9 @@
 "Fedi’s answer couldn’t be checked. Please try again.": "Ũcookio wa Fedi ndũngĩathimirwo. Ndagũthaitha ũgerie rĩngĩ.",
 "This Nostr key already signs in to another My Quiet Bible account.": "Kĩhingũro gĩkĩ kĩa Nostr nĩ kĩratoonyia akaunti ĩngĩ ya My Quiet Bible.",
 "Welcome in!": "Wamũkĩrĩo!",
-"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Ingĩra, na mahoya maku na rangi ciaku nĩ ikũikara ũhoro-inĩ thĩinĩ wa akaunti yaku, o na Fedi ĩngĩhehenja kĩigo kĩayo."
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Ingĩra, na mahoya maku na rangi ciaku nĩ ikũikara ũhoro-inĩ thĩinĩ wa akaunti yaku, o na Fedi ĩngĩhehenja kĩigo kĩayo.",
+"Nostr key removed.": "Kĩhingũro kĩa Nostr nĩ kĩeherio.",
+"Remove this Nostr key?": "Eheria kĩhingũro gĩkĩ kĩa Nostr?",
+"The Fedi app with this key won’t sign in to your account anymore.": "App ya Fedi ĩrĩ na kĩhingũro gĩkĩ ndĩgũcooka gũgũtoonyia akaunti-inĩ yaku.",
+"Too many Nostr keys on this account. Remove one first.": "Ihingũro cia Nostr nĩ nyingĩ mũno akaunti-inĩ ĩno. Amba weherie kĩmwe."
 }
