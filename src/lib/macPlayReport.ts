@@ -18,9 +18,9 @@ function show() {
     box.style.cssText = 'position:fixed;top:8px;left:8px;z-index:2147483647;max-width:min(640px,90vw);max-height:90vh;overflow:hidden;margin:0;padding:8px 10px;background:#fff;color:#000;font:12px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;border:2px solid #b00;border-radius:8px;pointer-events:none'
     document.body.appendChild(box)
   }
-  box.textContent = [`Quiet Bible play report (web ${__BUILD__})`, ...lines].join('\n')
+  box.textContent = [`Quiet Bible play report (web ${__BUILD__}) ${status}`, ...lines].join('\n')
   clearTimeout(hide)
-  hide = window.setTimeout(() => { box?.remove(); box = null }, 60_000)
+  hide = window.setTimeout(() => { box?.remove(); box = null }, 120_000)
 }
 
 export function macPlayTap() {
@@ -44,70 +44,77 @@ const state = (a: HTMLAudioElement) =>
   `ready ${a.readyState}, net ${a.networkState}, at ${a.currentTime.toFixed(2)}, dur ${a.duration}, paused ${a.paused}` +
   (a.error ? `, error ${a.error.code} ${a.error.message}` : '')
 
-/** Watches the real player, and tries two other ways to play the same sound
- *  (silently) to see which one a Mac takes. */
-export function macPlayWatch(el: HTMLAudioElement, raw: ArrayBuffer, fixed: ArrayBuffer | Uint8Array, type: string, url: string) {
-  if (!inMacApp()) return
-  const head = (b: ArrayBuffer | Uint8Array) => {
-    const u = b instanceof Uint8Array ? b : new Uint8Array(b)
-    return Array.from(u.subarray(4, 8)).map(c => String.fromCharCode(c)).join('')
-  }
-  note(`type ${type}, stored ${raw.byteLength} bytes (${head(raw)}), played ${fixed.byteLength} bytes (${head(fixed)}), ${url.slice(0, 5)}`)
-  note(`page: ${document.documentElement.className}`)
-  for (const e of ['loadstart', 'loadedmetadata', 'canplay', 'playing', 'stalled', 'suspend', 'waiting', 'error', 'ended', 'pause'])
-    el.addEventListener(e, () => note(`player ${e}: ${state(el)}`))
-  setTimeout(() => note(`player +3 s: ${state(el)}`), 3000)
+const wait = (ms: number) => new Promise(r => setTimeout(r, ms))
+const typeOf = (name: string) => name.endsWith('wav') ? 'audio/wav' : name.endsWith('mp3') ? 'audio/mpeg' : 'audio/mp4'
 
-  // 2. The same bytes as a data: address, muted.
-  const bytes = fixed instanceof Uint8Array ? fixed : new Uint8Array(fixed)
+/** Loads `src` in a muted player: metadata, an error, or nothing in 3 s. */
+function load(src: string): Promise<string> {
+  return new Promise(done => {
+    const a = new Audio(); a.muted = true; a.preload = 'auto'
+    const end = (s: string) => { done(s); a.removeAttribute('src'); a.load() }
+    a.addEventListener('loadedmetadata', () => end(`ok, ${a.duration.toFixed(2)} s`), { once: true })
+    a.addEventListener('error', () => end(`error ${a.error?.code} ${a.error?.message}`), { once: true })
+    setTimeout(() => end(`nothing in 3 s (${state(a)})`), 3000)
+    a.src = src; a.load()
+  })
+}
+
+function decode(buf: ArrayBuffer): Promise<string> {
+  const C = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+  const ctx = new C()
+  return Promise.race([
+    ctx.decodeAudioData(buf.slice(0)).then(b => `ok, ${b.duration.toFixed(2)} s`, e => `failed ${e?.name} ${e?.message}`),
+    wait(3000).then(() => 'nothing in 3 s'),
+  ]).finally(() => ctx.close().catch(() => {}))
+}
+
+const dataUrl = (bytes: Uint8Array, type: string) => {
   let bin = ''
   for (let i = 0; i < bytes.length; i += 0x8000) bin += String.fromCharCode(...bytes.subarray(i, i + 0x8000))
-  const d = new Audio()
-  d.muted = true; d.preload = 'auto'
-  d.addEventListener('loadedmetadata', () => note(`data: loaded, dur ${d.duration}`))
-  d.addEventListener('error', () => note(`data: error ${d.error?.code} ${d.error?.message}`))
-  d.src = `data:${type};base64,${btoa(bin)}`
-  d.load()
-  setTimeout(() => { note(`data: +3 s: ${state(d)}`); d.removeAttribute('src'); d.load() }, 3000)
-
-  // 3. Web Audio decoding.
-  try {
-    const C = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-    const ctx = new C()
-    note(`audio context: ${ctx.state}, ${ctx.sampleRate} Hz`)
-    ctx.decodeAudioData(bytes.slice().buffer).then(
-      b => note(`decoded: ${b.duration.toFixed(2)} s, ${b.numberOfChannels} ch`),
-      e => note(`decode failed: ${e?.name} ${e?.message}`),
-    ).finally(() => ctx.close().catch(() => {}))
-  } catch (e) { note(`no audio context: ${(e as Error)?.message}`) }
-  samples()
+  return `data:${type};base64,${btoa(bin)}`
 }
 
-// 4. Small known-good sounds from the site, each three ways: by address,
-//    from memory (blob), and decoded by Web Audio. Shows whether a Mac
-//    plays nothing at all, or only some files.
-function samples() {
-  const C = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
-  for (const name of ['tone.wav', 'tone.mp3', 'tone.m4a', 'iphone.m4a']) {
-    const url = `${import.meta.env.BASE_URL}diag/${name}`
-    const tryEl = (how: string, src: string) => {
-      const a = new Audio(); a.muted = true; a.preload = 'auto'
-      let done = false
-      a.addEventListener('loadedmetadata', () => { done = true; note(`${name} ${how}: ok, ${a.duration.toFixed(2)} s`) })
-      a.addEventListener('error', () => { done = true; note(`${name} ${how}: error ${a.error?.code} ${a.error?.message}`) })
-      a.src = src; a.load()
-      setTimeout(() => { if (!done) note(`${name} ${how}: nothing after 3 s (ready ${a.readyState}, net ${a.networkState})`) }, 3000)
-    }
-    tryEl('address', url)
-    fetch(url).then(r => r.arrayBuffer()).then(buf => {
-      tryEl('blob', URL.createObjectURL(new Blob([buf], { type: name.endsWith('wav') ? 'audio/wav' : name.endsWith('mp3') ? 'audio/mpeg' : 'audio/mp4' })))
-      const ctx = new C()
-      return ctx.decodeAudioData(buf.slice(0)).then(
-        b => note(`${name} decode: ok, ${b.duration.toFixed(2)} s`),
-        e => note(`${name} decode: failed ${e?.name} ${e?.message}`),
-      ).finally(() => ctx.close().catch(() => {}))
-    }).catch(e => note(`${name} fetch failed: ${e?.message}`))
+/** In the Mac app, instead of playing: tries each way of playing, one at a
+ *  time, writing what it is about to try first, so if the page freezes the
+ *  last line names the culprit. The last step plays the prayer for real.
+ *  Returns false outside the Mac app (play as usual). */
+export function macPlayWatch(el: HTMLAudioElement, raw: ArrayBuffer, fixed: ArrayBuffer | Uint8Array, type: string, url: string): boolean {
+  if (!inMacApp()) return false
+  const bytes = fixed instanceof Uint8Array ? fixed : new Uint8Array(fixed)
+  const head = (u: Uint8Array) => Array.from(u.subarray(4, 8)).map(c => String.fromCharCode(c)).join('')
+  note(`prayer: ${type}, stored ${raw.byteLength} bytes, played ${bytes.length} bytes (${head(bytes)})`)
+  const start = performance.now()
+  const alive = setInterval(() => { status = `alive ${Math.round((performance.now() - start) / 1000)} s`; show() }, 1000)
+  const step = async (what: string, run: () => Promise<string>) => {
+    note(`trying ${what}…`); await wait(300)
+    note(`  ${what}: ${await run()}`)
   }
+  ;(async () => {
+    const base = `${import.meta.env.BASE_URL}diag/`
+    const get = (n: string) => fetch(base + n).then(r => r.arrayBuffer())
+    await step('tone.m4a by address', () => load(base + 'tone.m4a'))
+    await step('tone.mp3 by address', () => load(base + 'tone.mp3'))
+    await step('tone.wav decode', async () => decode(await get('tone.wav')))
+    await step('tone.m4a decode', async () => decode(await get('tone.m4a')))
+    await step('iphone.m4a decode', async () => decode(await get('iphone.m4a')))
+    await step('prayer decode', () => decode(bytes.slice().buffer))
+    await step('tone.m4a as data:', async () => load(dataUrl(new Uint8Array(await get('tone.m4a')), 'audio/mp4')))
+    await step('prayer as data:', async () => load(dataUrl(bytes, type)))
+    await step('tone.m4a from memory (blob)', async () => load(URL.createObjectURL(new Blob([await get('tone.m4a')], { type: 'audio/mp4' }))))
+    await step('prayer from memory (blob)', () => load(url))
+    await step('prayer, playing aloud (blob)', () => new Promise(done => {
+      el.addEventListener('playing', () => done('playing'), { once: true })
+      el.addEventListener('error', () => done(`error ${el.error?.code} ${el.error?.message}`), { once: true })
+      setTimeout(() => done(`nothing in 3 s (${state(el)})`), 3000)
+      el.src = url
+      el.play().catch(e => done(`play() refused: ${e?.name} ${e?.message}`))
+    }))
+    note('done')
+    clearInterval(alive); status = 'done'; show()
+  })()
+  return true
 }
+
+let status = ''
 
 export const macPlayNote = (s: string) => { if (inMacApp()) note(s) }
