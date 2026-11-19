@@ -6,8 +6,8 @@ import { copyText, isIOS } from './lib/native'
 import { PhoneIcon } from './icons'
 import { ShowDeviceCode } from './devicecode'
 import { t, tj } from './i18n'
+import { homeScreenHelps } from './lib/install'
 
-const standalone = () => (navigator as { standalone?: boolean }).standalone === true || matchMedia('(display-mode: standalone)').matches
 const set = (k: string, v: string | null) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v) } catch { /* ignore */ } }
 
 /** Shown instead of the app while a device link is being taken in. It
@@ -99,7 +99,7 @@ export function MoveWelcome() {
       <p><strong>{t('This device is linked.')}</strong> {info.prayerKey
         ? t('You’re signed in and your prayers are unlocked. Your highlights, notes and settings arrive in a moment, and your prayers right after.')
         : t('You’re signed in. Your highlights, notes and settings arrive in a moment.')}</p>
-      {isIOS && !standalone() && <p class="small">{tj('To keep it on your Home Screen: tap Share, then {add}. If it opens signed out there, paste the same link once more under Settings → Account (it works for an hour).', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>}
+      {isIOS && homeScreenHelps() && <p class="small">{tj('To keep it on your Home Screen: tap Share, then {add}. If it opens signed out there, paste the same link once more under Settings → Account (it works for an hour).', { add: <strong>{t('Add to Home Screen')}</strong> })}</p>}
       <div class="row wrap"><button class="primary" onClick={close}>{t('Done')}</button></div>
     </div>
   )

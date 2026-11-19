@@ -18,6 +18,15 @@ export const inStoreApp = () => /QuietBibleApp\//.test(nav.userAgent ?? '')
 /** That app running on a Mac, where its window never really goes away. */
 export const inMacApp = () => /QuietBibleMac\//.test(nav.userAgent ?? '')
 export const installed = () => nav.standalone === true || mode('standalone') || mode('fullscreen') || mode('minimal-ui')
+/** Inside an app that shows the site in its own window, where "Add to Home
+ *  Screen" isn't there or means nothing: the App Store and Google Play apps,
+ *  and wallet apps with mini apps (Fedi), which bring Nostr or Lightning. */
+export const inOtherApp = () => {
+  const w = (typeof window === 'undefined' ? {} : window) as { nostr?: unknown; webln?: unknown; fedi?: unknown; fediInternal?: unknown }
+  return inStoreApp() || inMacApp() || fromPlayStore() || !!(w.nostr || w.webln || w.fedi || w.fediInternal)
+}
+/** Putting it on the Home Screen helps: a phone's own browser, not yet there. */
+export const homeScreenHelps = () => !installed() && !inOtherApp()
 
 // Opened from the Google Play app (android/): its first page load comes with
 // this referrer, and the tab keeps a note so a reload still knows. A session
@@ -61,7 +70,7 @@ const seen = (): Seen => { try { return { n: 0, at: 0, ...JSON.parse(localStorag
 const save = (s: Seen) => { try { localStorage.setItem(KEY, JSON.stringify(s)) } catch { /* ignore */ } }
 function done() { save({ ...seen(), done: true }) }
 export function homeScreenDue(now = Date.now()) {
-  if (installed() || !(isIPhone() || isAndroid())) return false
+  if (!homeScreenHelps() || !(isIPhone() || isAndroid())) return false
   const s = seen()
   return !s.done && s.n < 3 && now - s.at > 3 * DAY
 }
