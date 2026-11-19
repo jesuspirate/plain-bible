@@ -10,7 +10,7 @@ import { VersionPicker } from './ui'
 import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
-import { fromPlayStore, inStoreApp, installed, isAndroid, isIPhone, openHomeScreen } from './lib/install'
+import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { QUICK, draw, penAllowed } from './lib/pen'
@@ -506,7 +506,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
             onClick={() => setPage('language')} />
           <Row icon={<DataIcon size={24} />} label={t('Your data')} onClick={() => setPage('data')} />
           {/* Gone once it's on the Home Screen. */}
-          {!installed() && <Row icon={<AddHomeIcon size={24} />} label={isIPhone() || isAndroid() ? t('Put it on your Home Screen') : t('Install it as an app')}
+          {homeScreenHelps() && <Row icon={<AddHomeIcon size={24} />} label={isIPhone() || isAndroid() ? t('Put it on your Home Screen') : t('Install it as an app')}
             sub={t('Opens like an app, works offline')} onClick={openHomeScreen} />}
           <Row icon={<CompassIcon size={24} />} label={t('Take the tour')} sub={t('A one-minute look around the app')} onClick={openTour} />
           <Row icon={<InfoIcon size={24} />} label={t('About')} onClick={() => setPage('about')} />
