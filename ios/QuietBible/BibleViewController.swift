@@ -45,6 +45,38 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
 
     override var preferredStatusBarStyle: UIStatusBarStyle { barStyle }
 
+    // Held sideways, the clock, signal and battery go away so the page is
+    // calm, as in a printed book. On a folding iPhone opened up, iOS puts them
+    // in a strip down the side; on an iPad, along the top. (An iPhone held
+    // sideways already hides them by itself.) Held upright they stay, so the
+    // time is one glance away. The camera's corner stays where it is; the page
+    // already keeps clear of it. A Mac has no status bar.
+    override var prefersStatusBarHidden: Bool {
+        guard !ProcessInfo.processInfo.isiOSAppOnMac, isViewLoaded else { return false }
+        let size = view.bounds.size
+        return size.width > size.height
+    }
+
+    override var preferredStatusBarUpdateAnimation: UIStatusBarAnimation { .fade }
+
+    override func viewWillTransition(to size: CGSize, with coordinator: UIViewControllerTransitionCoordinator) {
+        super.viewWillTransition(to: size, with: coordinator)
+        coordinator.animate(alongsideTransition: { [weak self] _ in
+            self?.setNeedsStatusBarAppearanceUpdate()
+        })
+    }
+
+    override func viewDidLayoutSubviews() {
+        super.viewDidLayoutSubviews()
+        // The first layout, and Split View or Stage Manager resizing the window.
+        let sideways = prefersStatusBarHidden
+        if sideways != wasSideways {
+            wasSideways = sideways
+            setNeedsStatusBarAppearanceUpdate()
+        }
+    }
+    private var wasSideways = false
+
     override func loadView() {
         let config = WKWebViewConfiguration()
         config.limitsNavigationsToAppBoundDomains = true
