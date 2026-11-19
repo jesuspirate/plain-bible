@@ -161,6 +161,8 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             // Still on screen: copy it now.
             center.addObserver(forName: UIScene.willDeactivateNotification, object: nil, queue: .main) { [weak self] note in
                 guard let self, mine(note) else { return }
+                MacReport.start()
+                MacReport.note("stepping back; page drawn now: \(self.pageLooksDrawn())")
                 self.takePicture()
             },
             center.addObserver(forName: UIScene.didEnterBackgroundNotification, object: nil, queue: .main) { [weak self] note in
@@ -169,9 +171,11 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
                 // page is still drawn.
                 if self.lastPicture == nil { self.takePicture() }
                 self.coverPage()
+                MacReport.note("background; cover up: \(self.cover != nil)")
             },
             center.addObserver(forName: UIScene.willEnterForegroundNotification, object: nil, queue: .main) { [weak self] note in
                 guard let self, mine(note) else { return }
+                MacReport.note("coming back; page drawn: \(self.pageLooksDrawn()); cover up: \(self.cover != nil)")
                 self.uncoverOnceDrawn()
             },
             // Back in front: the next time away needs a new picture (an old
@@ -180,6 +184,8 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
                 guard let self, mine(note) else { return }
                 self.lastPicture = nil
                 self.pictureRound += 1
+                MacReport.note("in front; page drawn: \(self.pageLooksDrawn())")
+                self.followComeback()
             },
         ]
     }
@@ -196,6 +202,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
             drawn = web.drawHierarchy(in: bounds, afterScreenUpdates: false)
         }
         if drawn { lastPicture = image }
+        MacReport.note("copy: drawn \(drawn), blank \(Self.blank(image))")
         // The web view's own picture as well, in case the copy came out
         // without the page: when it arrives (if it arrives while still away,
         // or before), it takes the copy's place.
@@ -203,9 +210,64 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         let round = pictureRound
         web.takeSnapshot(with: nil) { [weak self] image, _ in
             guard let self, let image, round == self.pictureRound else { return }
+            MacReport.note("web view's own picture arrived, blank \(Self.blank(image)), cover up: \(self.cover != nil)")
+            // A blank one is no better than the copy (the page may already
+            // have let go of its drawing).
+            if Self.blank(image) { return }
             self.lastPicture = image
             self.cover?.image = image
         }
+    }
+
+    /// TEMPORARY report (TestFlight on a Mac): after coming back, look at
+    /// the page a few times, then copy the timeline to the clipboard.
+    private func followComeback() {
+        guard MacReport.on else { return }
+        for t in [0.1, 0.3, 0.6, 1.0, 2.0, 4.0] {
+            DispatchQueue.main.asyncAfter(deadline: .now() + t) { [weak self] in
+                guard let self else { return }
+                MacReport.note("+\(t) s: page drawn: \(self.pageLooksDrawn()); cover up: \(self.cover != nil)")
+            }
+        }
+        DispatchQueue.main.asyncAfter(deadline: .now() + 4.2) { [weak self] in
+            self?.web.evaluateJavaScript("[document.visibilityState, document.querySelectorAll('.reader article').length, (document.body.innerText || '').length, getComputedStyle(document.body).opacity, document.documentElement.className].join(' | ')") { value, error in
+                MacReport.note("page says: \(value.map { "\($0)" } ?? "no answer \(error.map { "\($0)" } ?? "")")")
+                MacReport.copy(title: "full screen")
+            }
+        }
+    }
+
+    /// Whether the page's own drawing (not the cover over it) shows more
+    /// than plain paper. For the report only.
+    private func pageLooksDrawn() -> String {
+        guard MacReport.on else { return "" }
+        let layer = web.scrollView
+        let bounds = layer.bounds
+        guard bounds.width > 0, bounds.height > 0 else { return "no size" }
+        let format = UIGraphicsImageRendererFormat(for: web.traitCollection)
+        format.opaque = true
+        var ok = false
+        let image = UIGraphicsImageRenderer(bounds: bounds, format: format).image { _ in
+            ok = layer.drawHierarchy(in: bounds, afterScreenUpdates: false)
+        }
+        return ok ? (Self.blank(image) ? "BLANK" : "yes") : "can't tell"
+    }
+
+    /// Plain paper, nothing on it: every pixel of a small copy alike.
+    static func blank(_ image: UIImage) -> Bool {
+        guard let cg = image.cgImage else { return true }
+        let side = 16
+        var px = [UInt8](repeating: 0, count: side * side * 4)
+        guard let ctx = CGContext(data: &px, width: side, height: side, bitsPerComponent: 8, bytesPerRow: side * 4,
+                                  space: CGColorSpaceCreateDeviceRGB(),
+                                  bitmapInfo: CGImageAlphaInfo.premultipliedLast.rawValue) else { return true }
+        ctx.interpolationQuality = .medium
+        ctx.draw(cg, in: CGRect(x: 0, y: 0, width: side, height: side))
+        var spread = 0
+        for i in stride(from: 0, to: px.count, by: 4) {
+            for c in 0..<3 { spread = max(spread, abs(Int(px[i + c]) - Int(px[c]))) }
+        }
+        return spread < 6
     }
 
     private func coverPage() {
@@ -232,6 +294,7 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         let back = Date()
         let done: () -> Void = { [weak self] in
             guard let self, self.cover === still else { return }
+            MacReport.note("cover taken away; page drawn: \(self.pageLooksDrawn())")
             self.cover = nil
             UIView.animate(withDuration: 0.2, animations: { still.alpha = 0 }) { _ in still.removeFromSuperview() }
         }
@@ -574,5 +637,32 @@ private final class PickedBridge: NSObject, WKScriptMessageHandler {
         guard message.frameInfo.isMainFrame, message.frameInfo.securityOrigin.host == BibleViewController.host,
               let text = message.body as? String, text.count <= 200_000 else { return }
         owner?.pickedText = text
+    }
+}
+
+
+/// TEMPORARY, TestFlight builds on a Mac only: a short timeline of what the
+/// app saw (coming back to full screen, recording a prayer), copied to the
+/// clipboard to be pasted back to us. Remove once both are understood.
+enum MacReport {
+    static let on = ProcessInfo.processInfo.isiOSAppOnMac
+        && Bundle.main.appStoreReceiptURL?.lastPathComponent == "sandboxReceipt"
+    private static var lines: [String] = []
+    private static var started = Date()
+
+    static func start() {
+        guard on else { return }
+        lines = []; started = Date()
+    }
+
+    static func note(_ line: String) {
+        guard on else { return }
+        lines.append(String(format: "%6.0f ms  ", Date().timeIntervalSince(started) * 1000) + line)
+        if lines.count > 200 { lines.removeFirst(lines.count - 200) }
+    }
+
+    static func copy(title: String) {
+        guard on, !lines.isEmpty else { return }
+        UIPasteboard.general.string = (["Quiet Bible \(title) report"] + lines).joined(separator: "\n")
     }
 }
