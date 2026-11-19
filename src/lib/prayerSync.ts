@@ -15,6 +15,11 @@ import { t } from '../i18n'
 const ON = 'plain-bible:prayer-sync'
 export const prayerSyncOn = () => { try { return !!localStorage.getItem(ON) } catch { return false } }
 const setOn = (keyId: string | null) => { try { keyId ? localStorage.setItem(ON, keyId) : localStorage.removeItem(ON) } catch { /* ignore */ } }
+/** Set where you tapped Stop syncing on this device, so it isn't turned on
+ *  again by itself. Turning it on again clears it. */
+const OFF = 'plain-bible:prayer-sync-off'
+const setOffHere = (off: boolean) => { try { off ? localStorage.setItem(OFF, '1') : localStorage.removeItem(OFF) } catch { /* ignore */ } }
+const offHere = () => { try { return !!localStorage.getItem(OFF) } catch { return false } }
 
 const CHUNK = 1_000_000
 // The verse a prayer was prayed over travels as its own small sealed part,
@@ -162,13 +167,17 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
 /** Turn prayer sync on for this device. Asks for the passkey; on the
  *  account's first device this makes the prayer key. Returns needCode when
  *  the key has to be typed in (a passkey that can't unlock it). */
-export async function turnOnPrayerSync(code?: string): Promise<'on' | 'needCode'> {
+export async function turnOnPrayerSync(code?: string, onKey?: () => void): Promise<'on' | 'needCode'> {
   const raw = await unlockKey(code)
   if (raw === 'needCode') return raw
   const pk = await prayerKey(raw)
   await meta.set('key', raw)
   keepStorage()
+  setOffHere(false)
   setOn(pk.id)
+  // No passkey is waited on from here: what takes time is fetching the
+  // prayers from the other devices, which can be many.
+  onKey?.()
   await syncPrayers()
   return 'on'
 }
@@ -205,6 +214,7 @@ export async function keepKeyWithPasskey(): Promise<boolean> {
 
 /** Stop syncing on this device. Its prayers stay here, and on the account. */
 export async function turnOffPrayerSync() {
+  setOffHere(true)
   setOn(null)
   await meta.set('key', undefined)
 }
@@ -263,9 +273,28 @@ export function syncPrayers(): Promise<boolean> {
   return running ??= run().finally(() => { running = null })
 }
 
+/** Signed in on a device that already holds the account's key (from
+ *  circles, a passkey sign-in, or another device's approval): prayers sync
+ *  here too, without a tap or a passkey. Being signed in to the account is
+ *  the choice; asking again on each new device only looked like a fault.
+ *  Not where you tapped Stop syncing on this device. */
+async function joinQuietly(token: string): Promise<boolean> {
+  if (offHere()) return false
+  const raw = (await meta.get<Uint8Array>('acct')) ?? (await meta.get<Uint8Array>('key'))
+  if (!raw) return false
+  const remote = await api<Remote>('/prayers', { token })
+  const pk = await prayerKey(raw)
+  if (!remote.keyId || remote.keyId !== pk.id) return false
+  await meta.set('key', raw)
+  keepStorage()
+  setOn(pk.id)
+  return true
+}
+
 async function run(): Promise<boolean> {
   const acct = loadAccount()
-  if (!SYNC_URL || !acct || !prayerSyncOn() || navigator.onLine === false) return false
+  if (!SYNC_URL || !acct || navigator.onLine === false) return false
+  if (!prayerSyncOn() && !(await joinQuietly(acct.token))) return false
   const raw = await meta.get<Uint8Array>('key')
   if (!raw) { setOn(null); return false }
   const token = acct.token
