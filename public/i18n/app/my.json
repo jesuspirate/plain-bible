@@ -1248,5 +1248,18 @@
  "3John": "3 ယော",
  "Jude": "ယုဒ",
  "Rev": "ဗျာ"
-}
+},
+"Sign in with Nostr": "Nostr ဖြင့် အကောင့်ဝင်ရန်",
+"Waiting for Fedi…": "Fedi ကို စောင့်နေသည်…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi က သင့် Nostr သော့ဖြင့် သင့်ကို အကောင့်ဝင်ပေးသည်။ အီးမေးလ် မလို၊ စကားဝှက် မလို။ ဒီမှာ အသစ်လား။ ဤသည်က သင့်အကောင့်ကို ဖန်တီးပေးသည်။",
+"Fedi didn’t sign in. Tap to try again.": "Fedi က အကောင့်ဝင်မပေးခဲ့ပါ။ ထပ်ကြိုးစားရန် နှိပ်ပါ။",
+"Add Nostr sign-in": "Nostr ဖြင့် ဝင်ခြင်း ထည့်ရန်",
+"Sign in from Fedi with its Nostr key": "Fedi မှ ၎င်း၏ Nostr သော့ဖြင့် အကောင့်ဝင်ပါ",
+"You can now also sign in with Nostr in Fedi.": "ယခု Fedi တွင် Nostr ဖြင့်လည်း အကောင့်ဝင်နိုင်ပါပြီ။",
+"Nostr key (Fedi)": "Nostr သော့ (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "အသိုင်းအဝိုင်းများအတွက် အခမဲ့အကောင့် လိုသည်။ Fedi တွင် သင့် Nostr သော့က ၎င်းကို ဖန်တီးသည်- အီးမေးလ် မလို၊ စကားဝှက် မလို။",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi ၏ အဖြေကို စစ်ဆေး၍ မရပါ။ ထပ်ကြိုးစားပါ။",
+"This Nostr key already signs in to another My Quiet Bible account.": "ဤ Nostr သော့သည် အခြား My Quiet Bible အကောင့်တစ်ခုသို့ ဝင်ပြီးဖြစ်သည်။",
+"Welcome in!": "ကြိုဆိုပါသည်!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "အကောင့်ဝင်ပါ၊ ထို့နောက် Fedi က ၎င်း၏ သိုလှောင်မှုကို ဖျက်လိုက်လျှင်ပင် သင့်ဆုတောင်းချက်များနှင့် အရောင်ခြယ်ချက်များသည် သင့်အကောင့်တွင် လုံခြုံစွာ ရှိနေမည်။"
 }

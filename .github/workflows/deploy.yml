@@ -30,6 +30,8 @@ jobs:
         with:
           python-version: '3.12'
       - run: npm ci
+      # The sync service's own packages too: some tests check its code.
+      - run: cd worker && npm ci --silent
       - run: npm test
       - name: Cache source texts
         uses: actions/cache@v6
@@ -39,7 +41,7 @@ jobs:
       - name: Build Bible data
         run: bash scripts/fetch_sources.sh && python3 scripts/build_data.py
       - name: Check sync service types
-        run: cd worker && npm ci --silent && npm run typecheck
+        run: cd worker && npm run typecheck
       # Optional account sync. Runs only on main, and only once the Cloudflare
       # secrets are set in the repository.
       - name: Deploy sync service

@@ -1248,5 +1248,18 @@
  "3John": "3Yoh",
  "Jude": "Yud",
  "Rev": "Nyaɖ"
-}
+},
+"Sign in with Nostr": "Ge ɖe eme kple Nostr",
+"Waiting for Fedi…": "Le Fedi lalam…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi kplɔa wò ge ɖe eme kple wò Nostr safui. Email meli o, nya ɣaɣla meli o. Èle yeye le afii? Esia awɔ wò akɔnta.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi mekplɔ wò ge ɖe eme o. Zi edzi nàgagbugbɔ ate kpɔ.",
+"Add Nostr sign-in": "Tsɔ Nostr ƒe gege ɖe eme kpe ɖe eŋu",
+"Sign in from Fedi with its Nostr key": "Ge ɖe eme tso Fedi me kple eƒe Nostr safui",
+"You can now also sign in with Nostr in Fedi.": "Fifia àte ŋu age ɖe eme kple Nostr le Fedi me hã.",
+"Nostr key (Fedi)": "Nostr safui (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Habɔbɔwo hiã akɔnta femaxee. Le Fedi me la, wò Nostr safui ye wɔnɛ: email meli o, nya ɣaɣla meli o.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Womete ŋu kpɔ Fedi ƒe ŋuɖoɖoa ɖa o. Taflatse gagbugbɔ te kpɔ.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Nostr safui sia gena ɖe My Quiet Bible akɔnta bubu me xoxo.",
+"Welcome in!": "Woezɔ!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Ge ɖe eme, eye wò gbedodoɖawo kple amadedewo anɔ dedie le wò akɔnta me, ne Fedi tutu eƒe nudzraɖoƒe gɔ̃ hã."
 }

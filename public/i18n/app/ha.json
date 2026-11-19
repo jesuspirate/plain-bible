@@ -1248,5 +1248,18 @@
  "3John": "3Yoh",
  "Jude": "Yah",
  "Rev": "Ru’y"
-}
+},
+"Sign in with Nostr": "Shiga da Nostr",
+"Waiting for Fedi…": "Ana jiran Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi tana shigar da kai da makullin Nostr naka. Babu imel, babu kalmar sirri. Sabo ne kai a nan? Wannan zai ƙirƙiri asusunka.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi ba ta shigar da kai ba. Taɓa don sake gwadawa.",
+"Add Nostr sign-in": "Ƙara shiga da Nostr",
+"Sign in from Fedi with its Nostr key": "Shiga daga Fedi da makullin Nostr nata",
+"You can now also sign in with Nostr in Fedi.": "Yanzu kana iya shiga da Nostr a cikin Fedi ma.",
+"Nostr key (Fedi)": "Makullin Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Ƙungiyoyi suna buƙatar asusu kyauta. A cikin Fedi, makullin Nostr naka ne ke ƙirƙira shi: babu imel, babu kalmar sirri.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Ba a iya duba amsar Fedi ba. Da fatan za a sake gwadawa.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Wannan makullin Nostr yana shiga wani asusun My Quiet Bible daban tuni.",
+"Welcome in!": "Barka da zuwa!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Shiga, sai addu’o’inka da alamomin launinka su zauna lafiya a asusunka, ko da Fedi ta goge ma’ajiyarta."
 }

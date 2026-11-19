@@ -1248,5 +1248,18 @@
  "3John": "3Yn",
  "Jude": "Yud",
  "Rev": "Ufu"
-}
+},
+"Sign in with Nostr": "Ingia kwa Nostr",
+"Waiting for Fedi…": "Inamsubiri Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi inakuingiza kwa ufunguo wako wa Nostr. Hakuna barua pepe, hakuna nenosiri. Mgeni hapa? Hii inaunda akaunti yako.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi haikukuingiza. Gusa ili ujaribu tena.",
+"Add Nostr sign-in": "Ongeza kuingia kwa Nostr",
+"Sign in from Fedi with its Nostr key": "Ingia kutoka Fedi kwa ufunguo wake wa Nostr",
+"You can now also sign in with Nostr in Fedi.": "Sasa unaweza pia kuingia kwa Nostr ndani ya Fedi.",
+"Nostr key (Fedi)": "Ufunguo wa Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Vikundi vinahitaji akaunti ya bure. Ndani ya Fedi, ufunguo wako wa Nostr unaiunda: hakuna barua pepe, hakuna nenosiri.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Jibu la Fedi halikuweza kukaguliwa. Tafadhali jaribu tena.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ufunguo huu wa Nostr tayari unaingia kwenye akaunti nyingine ya My Quiet Bible.",
+"Welcome in!": "Karibu!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Ingia, na maombi yako na alama zako za rangi zitabaki salama kwenye akaunti yako, hata Fedi ikifuta hifadhi yake."
 }

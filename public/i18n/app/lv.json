@@ -1332,5 +1332,18 @@
  "3John": "3Jņ",
  "Jude": "Jūd",
  "Rev": "Atkl"
-}
+},
+"Sign in with Nostr": "Pierakstīties ar Nostr",
+"Waiting for Fedi…": "Gaida Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi jūs pieraksta ar jūsu Nostr atslēgu. Bez e-pasta, bez paroles. Jauns šeit? Tā tiek izveidots jūsu konts.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi jūs nepierakstīja. Pieskarieties, lai mēģinātu vēlreiz.",
+"Add Nostr sign-in": "Pievienot pierakstīšanos ar Nostr",
+"Sign in from Fedi with its Nostr key": "Pierakstīties no Fedi ar tā Nostr atslēgu",
+"You can now also sign in with Nostr in Fedi.": "Tagad varat pierakstīties arī ar Nostr lietotnē Fedi.",
+"Nostr key (Fedi)": "Nostr atslēga (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Lokiem vajag bezmaksas kontu. Fedi to izveido jūsu Nostr atslēga: bez e-pasta, bez paroles.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi atbildi nevarēja pārbaudīt. Mēģiniet vēlreiz.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Šī Nostr atslēga jau pieraksta citā My Quiet Bible kontā.",
+"Welcome in!": "Laipni lūdzam!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Pierakstieties, un jūsu lūgšanas un izcēlumi paliks drošībā jūsu kontā, pat ja Fedi notīrīs savu krātuvi."
 }

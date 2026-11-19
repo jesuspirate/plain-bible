@@ -98,6 +98,56 @@ export async function passkeySignedIn(token: string, s: { credId: string; secret
   keepStorage()
 }
 
+// ---- the Nostr key, in Fedi ---------------------------------------------------
+// Fedi has no passkeys, so there the person's Nostr key keeps a copy of the
+// account key instead, sealed to itself with NIP-44: the server can't open
+// it, and a new phone with the same Fedi opens it by itself.
+
+const nostrWrapAt = (pubkey: string) => `/prayers/wrap/${encodeURIComponent('nostr:' + pubkey)}`
+
+/** The account key from the Nostr key's copy, if it has one for `keyId`. */
+async function fromNostr(token: string, keyId: string): Promise<Uint8Array | undefined> {
+  const n = (await import('./nostr')).nip44()
+  if (!n) return
+  const w = await api<{ wrapped: string }>(nostrWrapAt(n.pubkey), { token }).catch(() => null)
+  if (!w) return
+  const raw = await n.decrypt(n.pubkey, w.wrapped).then(t => b64url.decode(t)).catch(() => undefined)
+  return raw && raw.length >= 16 && (await prayerKey(raw)).id === keyId ? raw : undefined
+}
+
+/** Let the Nostr key unlock the account key on other devices too. */
+async function keepWithNostr(token: string, raw: Uint8Array) {
+  const n = (await import('./nostr')).nip44()
+  if (!n) return
+  const wrapped = await n.encrypt(n.pubkey, b64url.encode(raw)).catch(() => null)
+  if (wrapped) await api(nostrWrapAt(n.pubkey), { method: 'PUT', token, body: { wrapped } }).catch(() => {})
+}
+
+/** Right after a Nostr sign-in in Fedi (or adding the key): keep the account
+ *  key on this device if the Nostr key can open it, or teach the Nostr key
+ *  to open the one this device already holds. */
+export async function nostrSignedIn(token: string) {
+  const remote = await api<Remote>('/prayers', { token })
+  // A new account: its key is made now, so prayers sync from the start
+  // (joinQuietly turns it on). Fedi may not keep a mini app's storage, and
+  // then only the account still has them; the Nostr key opens them again.
+  if (!remote.keyId) {
+    if (offHere()) return
+    const raw = newKey()
+    await api('/prayers/key', { method: 'PUT', token, body: { keyId: (await prayerKey(raw)).id } })
+    await meta.set('acct', raw)
+    await keepWithNostr(token, raw)
+    keepStorage()
+    return
+  }
+  let raw = await heldKey(remote.keyId)
+  if (raw) await keepWithNostr(token, raw)
+  else raw = await fromNostr(token, remote.keyId)
+  if (!raw) return
+  await meta.set('acct', raw)
+  keepStorage()
+}
+
 /** Ask the browser not to clear this device's keys when space runs low.
  *  Safari and Chrome decide by themselves, without asking; Firefox would
  *  ask, so not there. */
@@ -148,6 +198,9 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
       if (w) raw = await unwrapKey(w.wrapped, secret.secret).catch(() => undefined)
     }
   }
+  // In Fedi, the Nostr key's copy.
+  let viaNostr = false
+  if (!raw && code === undefined && remote.keyId) viaNostr = !!(raw = await fromNostr(acct.token, remote.keyId))
   if (!raw && !remote.keyId) raw = newKey()
   if (!raw) { pendingSecret = secret; return 'needCode' }
   pendingSecret = null
@@ -161,6 +214,7 @@ export async function unlockKey(code?: string): Promise<Uint8Array | 'needCode'>
   if (secret) {
     await api(`/prayers/wrap/${encodeURIComponent(secret.credId)}`, { method: 'PUT', token: acct.token, body: { wrapped: await wrapKey(raw, secret.secret) } }).catch(() => {})
   }
+  if (!held && !viaNostr) await keepWithNostr(acct.token, raw)
   return raw
 }
 
@@ -198,6 +252,7 @@ export async function startOver() {
     await api(`/prayers/wrap/${encodeURIComponent(pendingSecret.credId)}`, { method: 'PUT', token: acct.token, body: { wrapped: await wrapKey(raw, pendingSecret.secret) } }).catch(() => {})
     pendingSecret = null
   }
+  await keepWithNostr(acct.token, raw)
   keepStorage()
 }
 

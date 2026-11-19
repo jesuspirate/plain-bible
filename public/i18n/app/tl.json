@@ -1248,5 +1248,18 @@
  "3John": "3 Jn",
  "Jude": "Jud",
  "Rev": "Pah"
-}
+},
+"Sign in with Nostr": "Mag-sign in gamit ang Nostr",
+"Waiting for Fedi…": "Hinihintay ang Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Isa-sign in ka ng Fedi gamit ang iyong Nostr key. Walang email, walang password. Bago ka rito? Gagawin nito ang iyong account.",
+"Fedi didn’t sign in. Tap to try again.": "Hindi ka na-sign in ng Fedi. I-tap para subukan ulit.",
+"Add Nostr sign-in": "Magdagdag ng Nostr sign-in",
+"Sign in from Fedi with its Nostr key": "Mag-sign in mula sa Fedi gamit ang Nostr key nito",
+"You can now also sign in with Nostr in Fedi.": "Maaari ka na ring mag-sign in gamit ang Nostr sa Fedi.",
+"Nostr key (Fedi)": "Nostr key (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Kailangan ng mga samahan ng libreng account. Sa Fedi, ang iyong Nostr key ang gagawa nito: walang email, walang password.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Hindi ma-check ang sagot ng Fedi. Pakisubukan ulit.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Ang Nostr key na ito ay nagsa-sign in na sa ibang My Quiet Bible account.",
+"Welcome in!": "Maligayang pagdating!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Mag-sign in, at mananatiling ligtas sa iyong account ang iyong mga panalangin at highlight, kahit burahin ng Fedi ang storage nito."
 }

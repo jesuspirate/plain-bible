@@ -1248,5 +1248,18 @@
  "3John": "3 ᏣᏂ",
  "Jude": "ᏧᏓ",
  "Rev": "ᎠᏥᎾ"
-}
+},
+"Sign in with Nostr": "Nostr ᏫᏣᏴᎵ",
+"Waiting for Fedi…": "Fedi ᎠᎦᏘᏰᏍᎬ…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi ᏫᏣᏴᎯᎮᏍᏗ ᏣᏤᎵ Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ. Ꮭ ᎢᎺᎵ, Ꮭ ᎦᏁᎦ ᏚᏙᎥ. ᎢᏤ ᏂᎯ ᎠᏂ? ᎯᎠ ᏓᏲᏢᏍᏗ ᏣᏤᎵ ᎪᏪᎵ.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi Ꮭ ᏫᏣᏴᎯᎮ. ᎯᏃᏟ ᏔᎵᏁ ᎭᏓᏅᏖ.",
+"Add Nostr sign-in": "Nostr ᏫᏣᏴᎵ ᎯᏯᏙᏢ",
+"Sign in from Fedi with its Nostr key": "Fedi ᏅᏓᏳᏓᎴᏅ Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᏫᏣᏴᎵ",
+"You can now also sign in with Nostr in Fedi.": "ᎪᎯ Nostr ᎾᏍᏉ ᏫᏣᏴᎵ Fedi ᎠᏂ.",
+"Nostr key (Fedi)": "Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "ᏓᏓᏡᎬ ᎠᏎ ᎪᏪᎵ ᏂᎨᏒᎾ ᏧᎬᏩᎶᏗ. Fedi ᎠᏂ, ᏣᏤᎵ Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᏓᏲᏢᏍᏗ: Ꮭ ᎢᎺᎵ, Ꮭ ᎦᏁᎦ ᏚᏙᎥ.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi ᎤᏁᏤᎸ Ꮭ ᏰᎵ ᎪᎵᏯᏍᏗ ᏱᎨᏎ. ᏔᎵᏁ ᎭᏓᏅᏖ.",
+"This Nostr key already signs in to another My Quiet Bible account.": "ᎯᎠ Nostr ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᎦᏳᎳ ᏓᏴᎯᎮᏍᏗ ᏐᎢ My Quiet Bible ᎪᏪᎵ.",
+"Welcome in!": "ᎣᏏᏲ, ᎡᎯᏴᎭ!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "ᏫᏣᏴᎵ, ᏣᏤᎵ ᎠᏓᏙᎵᏍᏙᏗ ᎠᎴ ᎤᏁᏍᏔᏅ ᏂᏚᏍᏛ ᏓᎨᏎᏍᏗ ᏣᏤᎵ ᎪᏪᎵ ᎠᏂ, Fedi ᏱᎦᏅᎦᎸᏓ ᎾᏍᏉ."
 }

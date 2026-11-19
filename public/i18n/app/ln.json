@@ -1248,5 +1248,18 @@
  "3John": "3 Yn",
  "Jude": "Yud",
  "Rev": "Emo"
-}
+},
+"Sign in with Nostr": "Kɔtá na Nostr",
+"Waiting for Fedi…": "Tozali kozela Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi ekɔtisaka yo na fungola na yo ya Nostr. Imɛli te, mot de passe te. Ozali mobakisami ya sika awa? Yango ekosala kɔnti na yo.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi ekɔtisi yo te. Finá mpo na komeka lisusu.",
+"Add Nostr sign-in": "Bakisa kokɔta na Nostr",
+"Sign in from Fedi with its Nostr key": "Kɔtá uta na Fedi na fungola na yango ya Nostr",
+"You can now also sign in with Nostr in Fedi.": "Sikoyo okoki mpe kokɔta na Nostr na kati ya Fedi.",
+"Nostr key (Fedi)": "Fungola ya Nostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Masanga esɛngaka kɔnti ya ofele. Na Fedi, fungola na yo ya Nostr nde esalaka yango: imɛli te, mot de passe te.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Tokokaki te kotala eyano ya Fedi. Meka lisusu.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Fungola oyo ya Nostr esi ekɔtisaka na kɔnti mosusu ya My Quiet Bible.",
+"Welcome in!": "Boyei malamu!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Kɔtá, mpe mabondeli na yo ná langi na yo ekotikala na libateli na kɔnti na yo, ata soki Fedi elongoli biloko na yango."
 }

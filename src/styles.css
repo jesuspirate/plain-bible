@@ -1348,3 +1348,8 @@ body.selecting .continue { display: none; }
 /* Settings, Recording mode: one big button to turn it on or off. */
 .rec-about { margin: 4px 4px 14px; line-height: 1.5; }
 .rec-go { display: block; width: 100%; min-height: 52px; margin: 18px 0 10px; border-radius: 26px; font-size: 18px; font-weight: 600; }
+
+/* Inside Fedi, first open: "Welcome in!" with one big Nostr sign-in. */
+.fedi-welcome { display: flex; flex-direction: column; gap: 12px; padding-bottom: 8px; }
+.fedi-welcome p { margin: 0; }
+.fedi-welcome button.big { min-height: 52px; font-size: 18px; font-weight: 600; width: 100%; }

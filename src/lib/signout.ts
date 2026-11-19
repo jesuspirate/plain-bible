@@ -8,7 +8,7 @@ import { meta, prayers } from './prayers'
 
 const P = 'plain-bible:'
 /** Tied to the account: the sign-in itself, its keys and its circles. */
-const ACCOUNT = ['account', 'owner', 'prayer-sync', 'prayer-sync-off', 'no-passkey', 'key-saved', 'streak-sent', 'push-circles', 'push-checked', 'place-from', 'place-seen'].map(k => P + k)
+const ACCOUNT = ['account', 'owner', 'prayer-sync', 'prayer-sync-off', 'no-passkey', 'nostr', 'key-saved', 'streak-sent', 'push-circles', 'push-checked', 'place-from', 'place-seen'].map(k => P + k)
 const accountBound = (k: string) => ACCOUNT.includes(k) || k.startsWith(P + 'circle') || k.startsWith(P + 'share-circle')
 /** Yours, and synced with the account: highlights, notes and bookmarks,
  *  reading days, when each setting changed (the settings themselves stay,

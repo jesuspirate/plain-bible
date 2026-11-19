@@ -1248,5 +1248,18 @@
  "3John": "3 Joh",
  "Jude": "Jud",
  "Rev": "Op"
-}
+},
+"Sign in with Nostr": "Logg inn med Nostr",
+"Waiting for Fedi…": "Ventar på Fedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi loggar deg inn med Nostr-nøkkelen din. Inga e-post, inkje passord. Ny her? Då lagar det kontoen din.",
+"Fedi didn’t sign in. Tap to try again.": "Fedi logga deg ikkje inn. Trykk for å prøve att.",
+"Add Nostr sign-in": "Legg til Nostr-innlogging",
+"Sign in from Fedi with its Nostr key": "Logg inn frå Fedi med Nostr-nøkkelen der",
+"You can now also sign in with Nostr in Fedi.": "No kan du òg logge inn med Nostr i Fedi.",
+"Nostr key (Fedi)": "Nostr-nøkkel (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Krinsar treng ein gratis konto. I Fedi lagar Nostr-nøkkelen din han: inga e-post, inkje passord.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Svaret frå Fedi kunne ikkje kontrollerast. Prøv att.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Denne Nostr-nøkkelen loggar alt inn på ein annan My Quiet Bible-konto.",
+"Welcome in!": "Velkomen!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Logg inn, så er bønene og markeringane dine trygge på kontoen din, sjølv om Fedi tømer lagringa si."
 }

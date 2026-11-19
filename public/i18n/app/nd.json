@@ -1248,5 +1248,18 @@
  "3John": "3 Joh",
  "Jude": "Juda",
  "Rev": "Isamb"
-}
+},
+"Sign in with Nostr": "Ngena ngeNostr",
+"Waiting for Fedi…": "Silindele iFedi…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "IFedi ikungenisa ngekhiye yakho yeNostr. Akula-imeyili, akulaphasiwedi. Ungumutsha lapha? Lokhu kwenza i-akhawunti yakho.",
+"Fedi didn’t sign in. Tap to try again.": "IFedi kayikungenisanga. Thinta ukuze uzame futhi.",
+"Add Nostr sign-in": "Engeza ukungena ngeNostr",
+"Sign in from Fedi with its Nostr key": "Ngena usuka eFedi ngekhiye yayo yeNostr",
+"You can now also sign in with Nostr in Fedi.": "Khathesi ungangena langeNostr ngaphakathi kweFedi.",
+"Nostr key (Fedi)": "Ikhiye yeNostr (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "Amaqembu adinga i-akhawunti yamahala. EFedi, ikhiye yakho yeNostr iyo eyenzayo: akula-imeyili, akulaphasiwedi.",
+"Fedi’s answer couldn’t be checked. Please try again.": "Impendulo yeFedi ayikwazanga ukuhlolwa. Ake uzame futhi.",
+"This Nostr key already signs in to another My Quiet Bible account.": "Le khiye yeNostr isivele ingenisa kwenye i-akhawunti yeMy Quiet Bible.",
+"Welcome in!": "Siyakwamukela!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "Ngena, imikhuleko lokugqanyisiweyo kwakho kuzahlala kuphephile ku-akhawunti yakho, loba iFedi ingasula isilondolozo sayo."
 }

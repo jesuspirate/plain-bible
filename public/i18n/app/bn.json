@@ -1248,5 +1248,18 @@
  "3John": "3 যোহন",
  "Jude": "যিহূদা",
  "Rev": "প্রকা"
-}
+},
+"Sign in with Nostr": "Nostr দিয়ে সাইন ইন করুন",
+"Waiting for Fedi…": "Fedi-র জন্য অপেক্ষা…",
+"Fedi signs you in with your Nostr key. No email, no password. New here? It makes your account.": "Fedi আপনার Nostr কী দিয়ে আপনাকে সাইন ইন করায়। কোনো ইমেল নেই, কোনো পাসওয়ার্ড নেই। এখানে নতুন? এতেই আপনার অ্যাকাউন্ট তৈরি হয়।",
+"Fedi didn’t sign in. Tap to try again.": "Fedi সাইন ইন করায়নি। আবার চেষ্টা করতে ট্যাপ করুন।",
+"Add Nostr sign-in": "Nostr সাইন-ইন যোগ করুন",
+"Sign in from Fedi with its Nostr key": "Fedi থেকে এর Nostr কী দিয়ে সাইন ইন করুন",
+"You can now also sign in with Nostr in Fedi.": "এখন আপনি Fedi-তে Nostr দিয়েও সাইন ইন করতে পারেন।",
+"Nostr key (Fedi)": "Nostr কী (Fedi)",
+"Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.": "সার্কেলের জন্য একটি বিনামূল্যের অ্যাকাউন্ট লাগে। Fedi-তে আপনার Nostr কী এটি তৈরি করে: কোনো ইমেল নেই, কোনো পাসওয়ার্ড নেই।",
+"Fedi’s answer couldn’t be checked. Please try again.": "Fedi-র উত্তর যাচাই করা যায়নি। আবার চেষ্টা করুন।",
+"This Nostr key already signs in to another My Quiet Bible account.": "এই Nostr কী ইতিমধ্যে অন্য একটি My Quiet Bible অ্যাকাউন্টে সাইন ইন করে।",
+"Welcome in!": "স্বাগতম!",
+"Sign in, and your prayers and highlights stay safe in your account, even if Fedi clears its storage.": "সাইন ইন করুন, তাহলে Fedi তার স্টোরেজ মুছে ফেললেও আপনার প্রার্থনা আর হাইলাইট আপনার অ্যাকাউন্টে নিরাপদ থাকবে।"
 }

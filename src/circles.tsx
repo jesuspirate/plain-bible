@@ -18,6 +18,7 @@ import { PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
 import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
+import { inFedi, nostrSignIn } from './lib/nostr'
 import { AskApproval } from './approve'
 import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
@@ -143,6 +144,8 @@ function SignIn({ joining }: { joining?: boolean }) {
   const [working, setWorking] = useState('')
   const [msg, setMsg] = useState('')
   useEffect(() => { if (navigator.onLine !== false) prepareSignIn() }, [])
+  // Inside Fedi: no passkeys there, but the person's Nostr key signs in.
+  if (inFedi()) return <NostrSignIn />
   if (typeof PublicKeyCredential === 'undefined') return <p class="note">{t('This browser can’t use passkeys, which circles need. Try Safari or Chrome.')}</p>
   const act = (label: string, fn: () => Promise<string | undefined>) => async () => {
     setWorking(label); setMsg('')
@@ -159,6 +162,33 @@ function SignIn({ joining }: { joining?: boolean }) {
       <div class="c-row">
         <button class="c-btn primary" disabled={!!working} onClick={act('create', () => register())}>{working === 'create' ? t('Waiting for passkey…') : t('Create account')}</button>
         <button class="c-btn" disabled={!!working} onClick={act('login', signIn)}>{working === 'login' ? t('Waiting for passkey…') : t('I have one: sign in')}</button>
+      </div>
+      {msg && <p class="note small">{msg}</p>}
+    </div>
+  )
+}
+
+/** Make an account or sign in with Fedi's Nostr key: one tap does both. */
+function NostrSignIn() {
+  const { sync } = useApp()
+  const [working, setWorking] = useState(false)
+  const [msg, setMsg] = useState('')
+  const go = async () => {
+    setWorking(true); setMsg('')
+    try {
+      const r = await nostrSignIn()
+      // Prayers already here go to the account at once (see nostrSignedIn).
+      if (r.token) { sync.signedIn(r.token); setTimeout(() => import('./lib/prayerSync').then(m => m.syncPrayers()).catch(() => {}), 0) }
+    } catch (e) {
+      const m = (e as Error).message
+      setMsg(m === 'Cancelled' ? t('Fedi didn’t sign in. Tap to try again.') : m)
+    } finally { setWorking(false) }
+  }
+  return (
+    <div class="c-card">
+      <p class="small">{t('Circles need a free account. In Fedi, your Nostr key makes it: no email, no password.')}</p>
+      <div class="c-row">
+        <button class="c-btn primary" disabled={working} onClick={go}>{working ? t('Waiting for Fedi…') : t('Sign in with Nostr')}</button>
       </div>
       {msg && <p class="note small">{msg}</p>}
     </div>
