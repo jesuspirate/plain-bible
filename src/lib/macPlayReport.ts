@@ -6,7 +6,22 @@ import { inMacApp } from './install'
 
 let lines: string[] = []
 let t0 = 0
-const note = (s: string) => { lines.push(`${String(Math.round(performance.now() - t0)).padStart(6)} ms  ${s}`) }
+const note = (s: string) => { lines.push(`${String(Math.round(performance.now() - t0)).padStart(6)} ms  ${s}`); show() }
+
+// Also on screen (top left, can't be clicked), for 60 s after the last line:
+// a clipboard write can fail without a word.
+let box: HTMLPreElement | null = null
+let hide = 0
+function show() {
+  if (!box) {
+    box = document.createElement('pre')
+    box.style.cssText = 'position:fixed;top:8px;left:8px;z-index:2147483647;max-width:min(640px,90vw);max-height:80vh;overflow:hidden;margin:0;padding:8px 10px;background:#fff;color:#000;font:12px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;border:2px solid #b00;border-radius:8px;pointer-events:none'
+    document.body.appendChild(box)
+  }
+  box.textContent = [`Quiet Bible play report (web ${__BUILD__})`, ...lines].join('\n')
+  clearTimeout(hide)
+  hide = window.setTimeout(() => { box?.remove(); box = null }, 60_000)
+}
 
 export function macPlayTap() {
   if (!inMacApp()) return
