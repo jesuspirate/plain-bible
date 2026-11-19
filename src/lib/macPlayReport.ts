@@ -15,7 +15,7 @@ let hide = 0
 function show() {
   if (!box) {
     box = document.createElement('pre')
-    box.style.cssText = 'position:fixed;top:8px;left:8px;z-index:2147483647;max-width:min(640px,90vw);max-height:80vh;overflow:hidden;margin:0;padding:8px 10px;background:#fff;color:#000;font:12px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;border:2px solid #b00;border-radius:8px;pointer-events:none'
+    box.style.cssText = 'position:fixed;top:8px;left:8px;z-index:2147483647;max-width:min(640px,90vw);max-height:90vh;overflow:hidden;margin:0;padding:8px 10px;background:#fff;color:#000;font:12px/1.35 ui-monospace,Menlo,monospace;white-space:pre-wrap;border:2px solid #b00;border-radius:8px;pointer-events:none'
     document.body.appendChild(box)
   }
   box.textContent = [`Quiet Bible play report (web ${__BUILD__})`, ...lines].join('\n')
@@ -80,6 +80,34 @@ export function macPlayWatch(el: HTMLAudioElement, raw: ArrayBuffer, fixed: Arra
       e => note(`decode failed: ${e?.name} ${e?.message}`),
     ).finally(() => ctx.close().catch(() => {}))
   } catch (e) { note(`no audio context: ${(e as Error)?.message}`) }
+  samples()
+}
+
+// 4. Small known-good sounds from the site, each three ways: by address,
+//    from memory (blob), and decoded by Web Audio. Shows whether a Mac
+//    plays nothing at all, or only some files.
+function samples() {
+  const C = window.AudioContext || (window as unknown as { webkitAudioContext: typeof AudioContext }).webkitAudioContext
+  for (const name of ['tone.wav', 'tone.mp3', 'tone.m4a', 'iphone.m4a']) {
+    const url = `${import.meta.env.BASE_URL}diag/${name}`
+    const tryEl = (how: string, src: string) => {
+      const a = new Audio(); a.muted = true; a.preload = 'auto'
+      let done = false
+      a.addEventListener('loadedmetadata', () => { done = true; note(`${name} ${how}: ok, ${a.duration.toFixed(2)} s`) })
+      a.addEventListener('error', () => { done = true; note(`${name} ${how}: error ${a.error?.code} ${a.error?.message}`) })
+      a.src = src; a.load()
+      setTimeout(() => { if (!done) note(`${name} ${how}: nothing after 3 s (ready ${a.readyState}, net ${a.networkState})`) }, 3000)
+    }
+    tryEl('address', url)
+    fetch(url).then(r => r.arrayBuffer()).then(buf => {
+      tryEl('blob', URL.createObjectURL(new Blob([buf], { type: name.endsWith('wav') ? 'audio/wav' : name.endsWith('mp3') ? 'audio/mpeg' : 'audio/mp4' })))
+      const ctx = new C()
+      return ctx.decodeAudioData(buf.slice(0)).then(
+        b => note(`${name} decode: ok, ${b.duration.toFixed(2)} s`),
+        e => note(`${name} decode: failed ${e?.name} ${e?.message}`),
+      ).finally(() => ctx.close().catch(() => {}))
+    }).catch(e => note(`${name} fetch failed: ${e?.message}`))
+  }
 }
 
 export const macPlayNote = (s: string) => { if (inMacApp()) note(s) }
