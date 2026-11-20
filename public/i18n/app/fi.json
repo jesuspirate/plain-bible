@@ -1278,5 +1278,19 @@
 "Then tap one:": "Napauta sitten jompaakumpaa:",
 "Only the verses you picked": "Vain valitsemasi jakeet",
 "Reads on from there as the words light up": "Jatkaa lukemista, sanat syttyvät",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Tälle Raamatulle ei ole ääntä tällä laitteella: sanat syttyvät, jotta voit lukea hiljaa."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Tälle Raamatulle ei ole ääntä tällä laitteella: sanat syttyvät, jotta voit lukea hiljaa.",
+"Send a suggestion": "Lähetä ehdotus",
+"An idea, a problem, a kind word": "Idea, ongelma, ystävällinen sana",
+"Too many suggestions for now. Please try again tomorrow.": "Liian monta ehdotusta juuri nyt. Yritä uudelleen huomenna.",
+"That email address doesn’t look right.": "Sähköpostiosoite ei näytä oikealta.",
+"It couldn’t be sent. Try again in a few minutes.": "Lähettäminen ei onnistunut. Yritä uudelleen muutaman minuutin päästä.",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "Olet offline-tilassa. Yhdistä internetiin lähettääksesi sen. Sanasi säilyvät tässä.",
+"Thank you! Your suggestion was sent.": "Kiitos! Ehdotuksesi lähetettiin.",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "Idea, ongelma vai ystävällinen sana? Se menee suoraan sille, joka tekee My Quiet Biblen.",
+"Your suggestion": "Ehdotuksesi",
+"Your email, if you’d like an answer (optional)": "Sähköpostisi, jos haluat vastauksen (valinnainen)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "Mukana lähtee: sovelluksen versio, laitteen tyyppi ja sen kieli. Ei mitään muuta.",
+"Write something first.": "Kirjoita ensin jotain.",
+"That’s a bit long. Please make it shorter.": "Se on vähän pitkä. Lyhennä sitä.",
+"Suggestions aren’t set up yet.": "Ehdotuksia ei ole vielä otettu käyttöön."
 }

@@ -1278,5 +1278,19 @@
 "Then tap one:": "Wozobaya rimwe:",
 "Only the verses you picked": "Ndima dzawasarudza chete",
 "Reads on from there as the words light up": "Inoenderera mberi mazwi achivhenekera",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Hapana inzwi reBhaibheri iri pachishandiso ichi: mazwi anovhenekera kuti uverenge wakanyarara."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Hapana inzwi reBhaibheri iri pachishandiso ichi: mazwi anovhenekera kuti uverenge wakanyarara.",
+"Send a suggestion": "Tumira zano",
+"An idea, a problem, a kind word": "Pfungwa, dambudziko, shoko rakanaka",
+"Too many suggestions for now. Please try again tomorrow.": "Mazano awanda zvakanyanya izvozvi. Ndapota edza zvakare mangwana.",
+"That email address doesn’t look right.": "Kero yeemail iyoyo haiite seyakanaka.",
+"It couldn’t be sent. Try again in a few minutes.": "Hazvina kukwanisa kutumirwa. Edza zvakare mushure memaminitsi mashoma.",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "Hauna kubatana neindaneti. Batana neindaneti kuti uritumire. Mashoko ako akachengetwa pano.",
+"Thank you! Your suggestion was sent.": "Ndatenda! Zano rako ratumirwa.",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "Pfungwa, dambudziko, kana shoko rakanaka? Rinoenda zvakananga kumunhu anogadzira My Quiet Bible.",
+"Your suggestion": "Zano rako",
+"Your email, if you’d like an answer (optional)": "Email yako, kana uchida mhinduro (kana uchida)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "Zvinotumirwa pamwe naro: shanduro yeapp, rudzi rwemuchina nemutauro wawo. Hapana chimwe.",
+"Write something first.": "Nyora chimwe chinhu kutanga.",
+"That’s a bit long. Please make it shorter.": "Rakarebesa zvishoma. Ndapota ripfupise.",
+"Suggestions aren’t set up yet.": "Mazano haasati agadzirwa."
 }

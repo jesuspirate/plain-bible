@@ -1278,5 +1278,19 @@
 "Then tap one:": "Ubusuthinta enye:",
 "Only the verses you picked": "Amavesi owakhethileyo kuphela",
 "Reads on from there as the words light up": "Iqhubeka ibala amabala ekhanya",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Akulalizwi leBhayibhili leli kulesi sisetshenziswa: amabala ayakhanya ukuze ubale uthule."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Akulalizwi leBhayibhili leli kulesi sisetshenziswa: amabala ayakhanya ukuze ubale uthule.",
+"Send a suggestion": "Thumela umbono",
+"An idea, a problem, a kind word": "Umbono, inkinga, ilizwi elihle",
+"Too many suggestions for now. Please try again tomorrow.": "Imibono minengi kakhulu khathesi. Uxolo, zama futhi kusasa.",
+"That email address doesn’t look right.": "Ikheli le-imeyili leli kalibonakali lilungile.",
+"It couldn’t be sent. Try again in a few minutes.": "Akuthumelekanga. Zama futhi ngemva kwemizuzu embalwa.",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "Kawukho ku-inthanethi. Xhumana le-inthanethi ukuze uwuthumele. Amazwi akho agcinwe lapha.",
+"Thank you! Your suggestion was sent.": "Siyabonga! Umbono wakho uthunyelwe.",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "Umbono, inkinga, kumbe ilizwi elihle? Uya ngqo kumuntu owenza i-My Quiet Bible.",
+"Your suggestion": "Umbono wakho",
+"Your email, if you’d like an answer (optional)": "I-imeyili yakho, nxa ufuna impendulo (ngokuzikhethela)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "Kuthunyelwa kanye lawo: inguqulo ye-app, uhlobo lwesigaba lolimi lwaso. Akukho okunye.",
+"Write something first.": "Bhala okuthile kuqala.",
+"That’s a bit long. Please make it shorter.": "Kude kancane. Uxolo, kufinyeze.",
+"Suggestions aren’t set up yet.": "Imibono ayikahlelwa."
 }

@@ -1362,5 +1362,19 @@
 "Then tap one:": "Tad pieskarieties vienai:",
 "Only the verses you picked": "Tikai izvēlētie panti",
 "Reads on from there as the words light up": "Lasa tālāk, vārdi iedegas",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Šai Bībelei šajā ierīcē nav balss: vārdi iedegas, lai varētu lasīt klusi."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Šai Bībelei šajā ierīcē nav balss: vārdi iedegas, lai varētu lasīt klusi.",
+"Send a suggestion": "Nosūtīt ieteikumu",
+"An idea, a problem, a kind word": "Ideja, problēma, labs vārds",
+"Too many suggestions for now. Please try again tomorrow.": "Pārāk daudz ieteikumu. Lūdzu, mēģiniet vēlreiz rīt.",
+"That email address doesn’t look right.": "Šī e-pasta adrese neizskatās pareiza.",
+"It couldn’t be sent. Try again in a few minutes.": "Neizdevās nosūtīt. Mēģiniet vēlreiz pēc dažām minūtēm.",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "Jūs esat bezsaistē. Pievienojieties internetam, lai to nosūtītu. Jūsu vārdi paliek saglabāti šeit.",
+"Thank you! Your suggestion was sent.": "Paldies! Jūsu ieteikums ir nosūtīts.",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "Ideja, problēma vai labs vārds? Tas nonāk tieši pie tā, kurš veido My Quiet Bible.",
+"Your suggestion": "Jūsu ieteikums",
+"Your email, if you’d like an answer (optional)": "Jūsu e-pasts, ja vēlaties atbildi (nav obligāti)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids un tās valoda. Nekas cits.",
+"Write something first.": "Vispirms kaut ko uzrakstiet.",
+"That’s a bit long. Please make it shorter.": "Tas ir mazliet par garu. Lūdzu, saīsiniet.",
+"Suggestions aren’t set up yet.": "Ieteikumi vēl nav iestatīti."
 }

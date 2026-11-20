@@ -1278,5 +1278,19 @@
 "Then tap one:": "Avy eo tsindrio ny iray:",
 "Only the verses you picked": "Ireo andininy nofidinao ihany",
 "Reads on from there as the words light up": "Manohy mamaky raha mamirapiratra ny teny",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Tsy misy feo ho an’ity Baiboly ity amin’ity fitaovana ity: mamirapiratra ny teny mba hamakianao mangina."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Tsy misy feo ho an’ity Baiboly ity amin’ity fitaovana ity: mamirapiratra ny teny mba hamakianao mangina.",
+"Send a suggestion": "Handefa soso-kevitra",
+"An idea, a problem, a kind word": "Hevitra, olana, teny tsara",
+"Too many suggestions for now. Please try again tomorrow.": "Be loatra ny soso-kevitra izao. Andramo indray rahampitso.",
+"That email address doesn’t look right.": "Toa tsy marina io adiresy mailaka io.",
+"It couldn’t be sent. Try again in a few minutes.": "Tsy lasa. Andramo indray afaka minitra vitsivitsy.",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "Tsy mifandray amin’ny Internet ianao. Mifandraisa amin’ ny Internet hanaterana azy. Voatahiry eto ny teninao.",
+"Thank you! Your suggestion was sent.": "Misaotra! Lasa ny soso-kevitrao.",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "Hevitra, olana, sa teny tsara? Mankany mivantana amin’ny olona manao ny My Quiet Bible izany.",
+"Your suggestion": "Ny soso-kevitrao",
+"Your email, if you’d like an answer (optional)": "Ny mailakao, raha mila valiny ianao (tsy voatery)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "Alefa miaraka aminy: ny dikan’ny app, ny karazana fitaovana ary ny fiteniny. Tsy misy hafa.",
+"Write something first.": "Manorata zavatra aloha.",
+"That’s a bit long. Please make it shorter.": "Somary lava. Fohezo azafady.",
+"Suggestions aren’t set up yet.": "Mbola tsy voalamina ny soso-kevitra."
 }

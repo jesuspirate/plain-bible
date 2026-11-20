@@ -1278,5 +1278,19 @@
 "Then tap one:": "त्यसपछि एउटामा ट्याप गर्नुहोस्:",
 "Only the verses you picked": "छानेका पदहरू मात्र",
 "Reads on from there as the words light up": "शब्दहरू उज्यालो हुँदै अगाडि पढ्छ",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "यस उपकरणमा यो बाइबलको आवाज छैन: शब्दहरू उज्यालो हुन्छन्, ताकि तपाईं चुपचाप पढ्न सक्नुहुन्छ।"
+"No voice for this Bible on this device: the words light up so you can read quietly.": "यस उपकरणमा यो बाइबलको आवाज छैन: शब्दहरू उज्यालो हुन्छन्, ताकि तपाईं चुपचाप पढ्न सक्नुहुन्छ।",
+"Send a suggestion": "सुझाव पठाउनुहोस्",
+"An idea, a problem, a kind word": "एउटा विचार, समस्या, राम्रो कुरा",
+"Too many suggestions for now. Please try again tomorrow.": "अहिले धेरै सुझाव आए। कृपया भोलि फेरि प्रयास गर्नुहोस्।",
+"That email address doesn’t look right.": "यो इमेल ठेगाना सही देखिँदैन।",
+"It couldn’t be sent. Try again in a few minutes.": "पठाउन सकिएन। केही मिनेटपछि फेरि प्रयास गर्नुहोस्।",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "तपाईं अफलाइन हुनुहुन्छ। पठाउन इन्टरनेटमा जोडिनुहोस्। तपाईंका शब्दहरू यहीँ राखिएका छन्।",
+"Thank you! Your suggestion was sent.": "धन्यवाद! तपाईंको सुझाव पठाइयो।",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "एउटा विचार, समस्या वा राम्रो कुरा? यो सिधै My Quiet Bible बनाउने व्यक्तिकहाँ पुग्छ।",
+"Your suggestion": "तपाईंको सुझाव",
+"Your email, if you’d like an answer (optional)": "तपाईंको इमेल, जवाफ चाहनुहुन्छ भने (ऐच्छिक)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "सँगै पठाइन्छ: एपको संस्करण, उपकरणको प्रकार र यसको भाषा। अरू केही होइन।",
+"Write something first.": "पहिले केही लेख्नुहोस्।",
+"That’s a bit long. Please make it shorter.": "अलि लामो भयो। कृपया छोटो पार्नुहोस्।",
+"Suggestions aren’t set up yet.": "सुझावहरू अझै सेटअप भएका छैनन्।"
 }

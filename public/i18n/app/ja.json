@@ -1278,5 +1278,19 @@
 "Then tap one:": "次にどちらかをタップ：",
 "Only the verses you picked": "選んだ節だけ",
 "Reads on from there as the words light up": "言葉を光らせながら読み続けます",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。"
+"No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。",
+"Send a suggestion": "提案を送る",
+"An idea, a problem, a kind word": "アイデア、問題、やさしい一言",
+"Too many suggestions for now. Please try again tomorrow.": "ただいま提案が多すぎます。明日もう一度お試しください。",
+"That email address doesn’t look right.": "そのメールアドレスは正しくないようです。",
+"It couldn’t be sent. Try again in a few minutes.": "送信できませんでした。数分後にもう一度お試しください。",
+"You’re offline. Connect to the internet to send it. Your words are kept here.": "オフラインです。送信するにはインターネットに接続してください。書いた言葉はここに残ります。",
+"Thank you! Your suggestion was sent.": "ありがとうございます!提案を送信しました。",
+"An idea, a problem, or a kind word? It goes straight to the person who makes My Quiet Bible.": "アイデア、問題、それともやさしい一言?My Quiet Bible を作っている人に直接届きます。",
+"Your suggestion": "あなたの提案",
+"Your email, if you’d like an answer (optional)": "返信が必要な場合はメールアドレス(任意)",
+"Sent with it: the app’s version, the kind of device and its language. Nothing else.": "一緒に送られるもの:アプリのバージョン、端末の種類、その言語。それ以外は何も送りません。",
+"Write something first.": "まず何か書いてください。",
+"That’s a bit long. Please make it shorter.": "少し長すぎます。短くしてください。",
+"Suggestions aren’t set up yet.": "提案はまだ設定されていません。"
 }

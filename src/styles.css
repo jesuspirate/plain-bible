@@ -1410,3 +1410,10 @@ body.selecting .continue { display: none; }
 .audio-pick .what { color: var(--muted); font-size: 15px; line-height: 1.35; }
 .audio-note { margin: 0; color: var(--muted); font-size: 15px; }
 
+/* Send a suggestion (Settings): a big box to write in, then one big Send. */
+.suggest-field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; font-weight: 600; }
+.suggest-text { font: 17px/1.45 var(--sans); color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; min-height: 9.5em; resize: vertical; width: 100%; }
+.suggest-field .move-input { width: 100%; font-weight: 400; }
+.suggest-send { display: block; width: 100%; min-height: 52px; margin: 8px 0 26px; border-radius: 26px; font-size: 18px; font-weight: 700; }
+.suggest-error { font-weight: 600; }
+.suggest-thanks { font-size: 19px; margin: 18px 0 8px; }
