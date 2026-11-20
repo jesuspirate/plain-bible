@@ -353,7 +353,7 @@ function AudioHow() {
   const { settings, byId } = useApp()
   const route = useRoute()
   const version = route.path[0] === 'read' && byId.has(route.path[1]) ? route.path[1] : settings.version
-  const hear = canHear(version)
+  const hear = canHear(version, byId.get(version)?.lang)
   return <>
     <ol class="audio-steps">
       <li><span class="step-n">1</span><span class="step-body">

@@ -1477,7 +1477,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
             {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
-            {canHear(version) && !settings.readSilent && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
+            {canHear(version, spot.lang) && !settings.readSilent && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>

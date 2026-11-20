@@ -92,8 +92,27 @@ function recordingFor(version: string): Recording | undefined {
   const all = recordingsFor(version)
   return all.find(r => r.id === get(REC_KEY + version)) ?? all[0]
 }
-/** Whether a Bible can be heard here: by a recording, or by the phone. */
-export const canHear = (version: string) => canListen || recordingsFor(version).length > 0
+// The device's voices, by language. A Bible in a language the device has no
+// voice for (Cherokee, Ancient Greek…) would come out in a wrong accent, or
+// not at all: then Listen isn't offered, and Read along goes quietly. Voices
+// arrive a moment after the page loads; until they do, every language counts.
+const SAME: Record<string, string[]> = { nb: ['nb', 'no', 'nn'], nn: ['nn', 'no', 'nb'], tl: ['tl', 'fil'], he: ['he', 'iw'], id: ['id', 'in'], lzh: ['zh'] }
+const base = (lang: string) => lang.toLowerCase().split(/[-_]/)[0]
+let voiceLangs: Set<string> | undefined
+function readVoices() {
+  const vs = synth?.getVoices() ?? []
+  voiceLangs = vs.length ? new Set(vs.map(v => base(v.lang))) : undefined
+}
+if (canListen) { readVoices(); synth!.addEventListener?.('voiceschanged', readVoices) }
+/** Whether this device has a voice for a language. */
+export function hasVoice(lang: string) {
+  if (!canListen) return false
+  if (!voiceLangs) readVoices()
+  return !voiceLangs || (SAME[base(lang)] ?? [base(lang)]).some(l => voiceLangs!.has(l))
+}
+/** Whether a Bible can be heard here: by a recording, or by the device in
+ *  its language. */
+export const canHear = (version: string, lang?: string) => recordingsFor(version).length > 0 || (canListen && (!lang || hasVoice(lang)))
 // A recording that can't be reached (no connection): the phone's own voice
 // reads instead, until reading is next started.
 let unreachable = false
@@ -115,7 +134,7 @@ export function followSettings(s: { follow: 'words' | 'verse'; readSilent: boole
 }
 /** The narrator reading now, if a recording is. */
 const recorded = () => now && !follow.silent && !unreachable ? recordingFor(now.version) : undefined
-const silentNow = () => follow.silent || (!canListen && !recorded())
+const silentNow = () => follow.silent || (!(now ? hasVoice(now.lang) : canListen) && !recorded())
 
 // The verse being read: its words, and the word lit now.
 let cur: { text: string; spans: Span[] } | undefined
