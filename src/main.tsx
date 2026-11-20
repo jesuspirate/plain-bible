@@ -7,6 +7,8 @@ import { dropVersionMark, newVersionReady, registered, watchWithoutWorker } from
 import { Arriving } from './move'
 import { parseMoveLink } from './lib/move'
 import { savedLang, setLang, t } from './i18n'
+import { noteError, watchErrors } from './lib/errors'
+import { canSuggest, SuggestPage } from './suggest'
 
 // The reader puts you back on your verse itself; the browser's own scroll
 // restoration would fight it.
@@ -14,6 +16,8 @@ import { savedLang, setLang, t } from './i18n'
 const w = window as { plainBibleStarted?: boolean; plainBibleRepair?: () => void; plainBibleWelcome?: boolean }
 w.plainBibleStarted = true
 document.getElementById('boot-stuck')?.remove()
+
+watchErrors()
 
 if ('scrollRestoration' in history) history.scrollRestoration = 'manual'
 
@@ -23,11 +27,12 @@ document.addEventListener('touchstart', () => {}, { passive: true })
 
 // Without this, an error while drawing the page leaves it blank. Show what
 // went wrong instead, so it can be reported, and a way back.
-class Crash extends Component<{}, { error?: Error }> {
-  componentDidCatch(error: Error) { this.setState({ error }) }
+class Crash extends Component<{}, { error?: Error; report?: boolean }> {
+  componentDidCatch(error: Error) { noteError(error); this.setState({ error }) }
   render() {
-    const { error } = this.state
+    const { error, report } = this.state
     if (!error) return this.props.children
+    if (report) return <div class="settings"><SuggestPage crashed onDone={() => this.setState({ report: false })} /></div>
     return (
       <div class="center">
         <p class="error">{t('Something went wrong: {error}', { error: String(error.message || error) })}</p>
@@ -35,6 +40,7 @@ class Crash extends Component<{}, { error?: Error }> {
         <p><button onClick={() => location.reload()}>{t('Reload')}</button></p>
         {/* Clears the saved app files (not your data) and loads a fresh copy. */}
         {w.plainBibleRepair && <p><button onClick={w.plainBibleRepair}>{t('Repair and reload')}</button></p>}
+        {canSuggest() && <p><button onClick={() => this.setState({ report: true })}>{t('Report a problem')}</button></p>}
       </div>
     )
   }

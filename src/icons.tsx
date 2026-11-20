@@ -211,3 +211,8 @@ export const VideoIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><rect x="2.5" y="6" width="13" height="12" rx="2.2" fill="currentColor" />
     <path d="M16.5 10.2l5-3v9.6l-5-3z" fill="currentColor" stroke="currentColor" stroke-width="1.4" stroke-linejoin="round" /></svg>
 )
+
+/** A speech bubble: send a suggestion. */
+export const SuggestIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z" {...line} /><circle cx="8.5" cy="10" r="1.3" fill="currentColor" /><circle cx="12" cy="10" r="1.3" fill="currentColor" /><circle cx="15.5" cy="10" r="1.3" fill="currentColor" /></svg>
+)
