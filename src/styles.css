@@ -1140,17 +1140,20 @@ html.spread-on { overflow: hidden; }
 html.spread-on main { max-width: none; padding-bottom: 0; }
 html.spread-on body.selecting main { padding-bottom: 0; }
 html.spread-on .reader > .pager, html.spread-on .reader > .credit { display: none; }
-/* The empty sides of the screen beside the open book hold no words, so the
-   mouse shows the plain arrow there. The iPad app on a Mac looks for the
-   nearest words under the mouse even over empty space, and found the hidden
-   pages laid out beside the book (see article.chapter.spread), so the
-   pointer kept flicking to the text cursor. Only the room around the book is
-   marked as not text; the book and everything else in the reader (the verse
-   bar, notes, the dictionary) stays as it was. */
+/* Where there are no words, the mouse shows the plain arrow: beside the open
+   book, in the gap between its two pages, around the chapter title, after the
+   last line. The iPad app on a Mac looks for the nearest words under the
+   mouse even over empty space, so wherever the page could be picked as text
+   the pointer kept flicking to the text cursor (and beside the book it found
+   the hidden pages, see article.chapter.spread). So in the open book only the
+   words themselves can be picked; everything else in the reader (the verse
+   bar, notes, the dictionary) stays as it was. Picking words across verses
+   and pages still works. */
 html.spread-on .reader { cursor: default; -webkit-user-select: none; user-select: none; }
-/* (:where adds no weight, so every rule already on these, like no picking
-   words while reading aloud, still wins.) */
-:where(html.spread-on .reader > :not(.spread-box), html.spread-on .spread-box > article.chapter.spread) { cursor: auto; -webkit-user-select: text; user-select: text; }
+/* (:where adds no weight, so every rule already on these still wins.) */
+:where(html.spread-on .reader > :not(.spread-box)) { cursor: auto; -webkit-user-select: text; user-select: text; }
+/* Not while reading aloud, when no words can be picked (.reading-aloud). */
+:where(html.spread-on:not(.reading-aloud) .spread-flow .vt) { -webkit-user-select: text; user-select: text; }
 .spread-box {
   --pw: min(calc(50vw - 30px), 34em); --pp: 2.2em;
   /* all the height between the top bar and the search bar */
