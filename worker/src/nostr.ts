@@ -10,8 +10,9 @@ export const NOSTR_WRAP = 'nostr:'
 export const NOSTR_KIND = 27235
 const HEX64 = /^[0-9a-f]{64}$/
 const HEX128 = /^[0-9a-f]{128}$/
-// The phone's clock may be off; the challenge itself lives five minutes.
-const SKEW_S = 10 * 60
+// The phone's clock may be a little off; the challenge itself lives five
+// minutes and is used once, so a signature can't be kept for later.
+const SKEW_S = 5 * 60
 
 const hex = (s: string) => Uint8Array.from(s.match(/../g)!, b => parseInt(b, 16))
 const toHex = (b: Uint8Array) => Array.from(b, x => x.toString(16).padStart(2, '0')).join('')
@@ -22,8 +23,10 @@ export async function nostrEventId(e: { pubkey: string; created_at: number; kind
 }
 
 /** The signer's public key (hex) when `event` is a fresh, well-signed answer
- *  to `challenge`; otherwise null. */
-export async function checkNostrEvent(event: unknown, challenge: string, now: number): Promise<string | null> {
+ *  to `challenge`, made for this very sign-in address (`url`) and method;
+ *  otherwise null. NIP-98's u and method tags tie the signature to us, so
+ *  one signed for another site or app can't be brought here instead. */
+export async function checkNostrEvent(event: unknown, challenge: string, now: number, url: string, method = 'POST'): Promise<string | null> {
   const e = event as Record<string, unknown> | null
   if (!e || typeof e !== 'object') return null
   const { id, pubkey, sig, kind, created_at, tags, content } = e
@@ -31,7 +34,9 @@ export async function checkNostrEvent(event: unknown, challenge: string, now: nu
   if (typeof sig !== 'string' || !HEX128.test(sig) || kind !== NOSTR_KIND || typeof content !== 'string') return null
   if (typeof created_at !== 'number' || !Number.isInteger(created_at) || Math.abs(created_at - now / 1000) > SKEW_S) return null
   if (!Array.isArray(tags) || !tags.every(t => Array.isArray(t) && t.every(v => typeof v === 'string'))) return null
-  if (!tags.some(t => t[0] === 'challenge' && t[1] === challenge)) return null
+  // Exactly one of each, so there's no doubt which one a signer showed.
+  const only = (name: string) => { const f = tags.filter(t => t[0] === name); return f.length === 1 ? f[0][1] : undefined }
+  if (only('challenge') !== challenge || only('u') !== url || only('method')?.toUpperCase() !== method) return null
   if (await nostrEventId({ pubkey, created_at, kind, tags, content }) !== id) return null
   try { return schnorr.verify(hex(sig), hex(id), hex(pubkey)) ? pubkey : null } catch { return null }
 }

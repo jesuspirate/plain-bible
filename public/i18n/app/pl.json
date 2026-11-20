@@ -1372,6 +1372,7 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikacja Fedi z tym kluczem nie będzie już logować na twoje konto.",
 "Too many Nostr keys on this account. Remove one first.": "Za dużo kluczy Nostr na tym koncie. Najpierw usuń jeden.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Potem stuknij Słuchaj, aby go usłyszeć, albo Czytaj z podświetleniem, aby śledzić słowa podczas czytania.",
+"Too many sign-ins from here. Try again later.": "Stąd było zbyt wiele logowań. Spróbuj później.",
 "Audio": "Dźwięk",
 "Hear the Bible read aloud": "Słuchaj Biblii czytanej na głos",
 "Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Dotknij dowolnego wersetu Biblii. Pojawią się dwa przyciski: „Słuchaj” czyta tylko wybrane wersety, a „Czytaj z podświetleniem” czyta dalej od tego miejsca, podświetlając słowa.",
