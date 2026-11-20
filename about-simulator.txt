@@ -1,0 +1,268 @@
+Xcode 27.3
+Build version 27C5020n
+
+== Device Types ==
+iPhone 18 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro)
+iPhone 18 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-18-Pro-Max)
+iPhone Duo (com.apple.CoreSimulator.SimDeviceType.iPhone-Duo)
+iPhone 17 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro)
+iPhone 17 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-17-Pro-Max)
+iPhone 17e (com.apple.CoreSimulator.SimDeviceType.iPhone-17e)
+iPhone Air (com.apple.CoreSimulator.SimDeviceType.iPhone-Air)
+iPhone 17 (com.apple.CoreSimulator.SimDeviceType.iPhone-17)
+iPhone 16 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro)
+iPhone 16 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-16-Pro-Max)
+iPhone 16e (com.apple.CoreSimulator.SimDeviceType.iPhone-16e)
+iPhone 16 (com.apple.CoreSimulator.SimDeviceType.iPhone-16)
+iPhone 16 Plus (com.apple.CoreSimulator.SimDeviceType.iPhone-16-Plus)
+iPhone 15 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro)
+iPhone 15 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-15-Pro-Max)
+iPhone 15 (com.apple.CoreSimulator.SimDeviceType.iPhone-15)
+iPhone 15 Plus (com.apple.CoreSimulator.SimDeviceType.iPhone-15-Plus)
+iPhone 14 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro)
+iPhone 14 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-14-Pro-Max)
+iPhone 14 (com.apple.CoreSimulator.SimDeviceType.iPhone-14)
+iPhone 14 Plus (com.apple.CoreSimulator.SimDeviceType.iPhone-14-Plus)
+iPhone SE (3rd generation) (com.apple.CoreSimulator.SimDeviceType.iPhone-SE-3rd-generation)
+iPhone 13 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro)
+iPhone 13 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-13-Pro-Max)
+iPhone 13 (com.apple.CoreSimulator.SimDeviceType.iPhone-13)
+iPhone 13 mini (com.apple.CoreSimulator.SimDeviceType.iPhone-13-mini)
+iPhone 12 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro)
+iPhone 12 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-12-Pro-Max)
+iPhone 12 (com.apple.CoreSimulator.SimDeviceType.iPhone-12)
+iPhone 12 mini (com.apple.CoreSimulator.SimDeviceType.iPhone-12-mini)
+iPhone SE (2nd generation) (com.apple.CoreSimulator.SimDeviceType.iPhone-SE--2nd-generation-)
+iPhone 11 Pro (com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro)
+iPhone 11 Pro Max (com.apple.CoreSimulator.SimDeviceType.iPhone-11-Pro-Max)
+iPhone 11 (com.apple.CoreSimulator.SimDeviceType.iPhone-11)
+iPhone Xʀ (com.apple.CoreSimulator.SimDeviceType.iPhone-XR)
+iPhone Xs (com.apple.CoreSimulator.SimDeviceType.iPhone-XS)
+iPhone Xs Max (com.apple.CoreSimulator.SimDeviceType.iPhone-XS-Max)
+iPhone X (com.apple.CoreSimulator.SimDeviceType.iPhone-X)
+iPhone 8 (com.apple.CoreSimulator.SimDeviceType.iPhone-8)
+iPhone 8 Plus (com.apple.CoreSimulator.SimDeviceType.iPhone-8-Plus)
+iPhone 7 (com.apple.CoreSimulator.SimDeviceType.iPhone-7)
+iPhone 7 Plus (com.apple.CoreSimulator.SimDeviceType.iPhone-7-Plus)
+iPhone SE (1st generation) (com.apple.CoreSimulator.SimDeviceType.iPhone-SE)
+iPhone 6s (com.apple.CoreSimulator.SimDeviceType.iPhone-6s)
+iPhone 6s Plus (com.apple.CoreSimulator.SimDeviceType.iPhone-6s-Plus)
+iPad mini (A20 Pro) (com.apple.CoreSimulator.SimDeviceType.iPad-mini-A20-Pro)
+iPad Pro 13-inch (M5) (16GB) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-16GB)
+iPad Pro 13-inch (M5) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M5-12GB)
+iPad Pro 11-inch (M5) (16GB) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-16GB)
+iPad Pro 11-inch (M5) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M5-12GB)
+iPad Pro 11-inch (M4) (16GB) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-16GB)
+iPad Pro 11-inch (M4) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-M4-8GB)
+iPad Pro 13-inch (M4) (16GB) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-16GB)
+iPad Pro 13-inch (M4) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-13-inch-M4-8GB)
+iPad Air 13-inch (M4) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M4)
+iPad Air 11-inch (M4) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M4)
+iPad (A16) (com.apple.CoreSimulator.SimDeviceType.iPad-A16)
+iPad Air 13-inch (M3) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M3)
+iPad Air 11-inch (M3) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M3)
+iPad Air 11-inch (M2) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-11-inch-M2)
+iPad Air 13-inch (M2) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-13-inch-M2)
+iPad mini (A17 Pro) (com.apple.CoreSimulator.SimDeviceType.iPad-mini-A17-Pro)
+iPad Pro (11-inch) (4th generation) (16GB) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-16GB)
+iPad Pro (11-inch) (4th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-4th-generation-8GB)
+iPad Pro (12.9-inch) (6th generation) (16GB) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-16GB)
+iPad Pro (12.9-inch) (6th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-6th-generation-8GB)
+iPad (10th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-10th-generation)
+iPad Air (5th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Air-5th-generation)
+iPad mini (6th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-mini-6th-generation)
+iPad Pro (11-inch) (3rd generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-11-inch-3rd-generation)
+iPad Pro (12.9-inch) (5th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro-12-9-inch-5th-generation)
+iPad (9th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-9th-generation)
+iPad Air (4th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Air--4th-generation-)
+iPad (8th generation) (com.apple.CoreSimulator.SimDeviceType.iPad--8th-generation-)
+iPad Air (3rd generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Air--3rd-generation-)
+iPad mini (5th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-mini--5th-generation-)
+iPad Pro (11-inch) (2nd generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch---2nd-generation-)
+iPad Pro (12.9-inch) (4th generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---4th-generation-)
+iPad Pro (11-inch) (1st generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--11-inch-)
+iPad Pro (12.9-inch) (3rd generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---3rd-generation-)
+iPad (7th generation) (com.apple.CoreSimulator.SimDeviceType.iPad--7th-generation-)
+iPad Pro (10.5-inch) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--10-5-inch-)
+iPad Pro (12.9-inch) (2nd generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--12-9-inch---2nd-generation-)
+iPad (6th generation) (com.apple.CoreSimulator.SimDeviceType.iPad--6th-generation-)
+iPad Pro (9.7-inch) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro--9-7-inch-)
+iPad Pro (12.9-inch) (1st generation) (com.apple.CoreSimulator.SimDeviceType.iPad-Pro)
+iPad (5th generation) (com.apple.CoreSimulator.SimDeviceType.iPad--5th-generation-)
+iPad Air 2 (com.apple.CoreSimulator.SimDeviceType.iPad-Air-2)
+iPad mini 4 (com.apple.CoreSimulator.SimDeviceType.iPad-mini-4)
+Apple TV 4K (4th generation) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-4th-generation-4K)
+Apple TV 4K (4th generation) (at 1080p) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-4th-generation-1080p)
+Apple TV 4K (3rd generation) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-3rd-generation-4K)
+Apple TV 4K (3rd generation) (at 1080p) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-3rd-generation-1080p)
+Apple TV 4K (2nd generation) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-2nd-generation-4K)
+Apple TV 4K (2nd generation) (at 1080p) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-2nd-generation-1080p)
+Apple TV 4K (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-4K)
+Apple TV 4K (at 1080p) (com.apple.CoreSimulator.SimDeviceType.Apple-TV-4K-1080p)
+Apple TV (com.apple.CoreSimulator.SimDeviceType.Apple-TV-1080p)
+Apple Watch Series 12 (46mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-12-46mm)
+Apple Watch Series 12 (42mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-12-42mm)
+Apple Watch Ultra 4 (49mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Ultra-4-49mm)
+Apple Watch Series 11 (46mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-11-46mm)
+Apple Watch Series 11 (42mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-11-42mm)
+Apple Watch Series 10 (46mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-10-46mm)
+Apple Watch Series 10 (42mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-10-42mm)
+Apple Watch Series 9 (45mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-9-45mm)
+Apple Watch Series 9 (41mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-9-41mm)
+Apple Watch Ultra 3 (49mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Ultra-3-49mm)
+Apple Watch Ultra 2 (49mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Ultra-2-49mm)
+Apple Watch SE 3 (44mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-SE-3-44mm)
+Apple Watch SE 3 (40mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-SE-3-40mm)
+Apple Watch Series 8 (45mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-8-45mm)
+Apple Watch Series 8 (41mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-8-41mm)
+Apple Watch Ultra (49mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Ultra-49mm)
+Apple Watch SE (44mm) (2nd generation) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-SE-44mm-2nd-generation)
+Apple Watch SE (40mm) (2nd generation) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-SE-40mm-2nd-generation)
+Apple Watch Series 7 (45mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-7-45mm)
+Apple Watch Series 7 (41mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-7-41mm)
+Apple Watch Series 6 (44mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-6-44mm)
+Apple Watch Series 6 (40mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-6-40mm)
+Apple Watch SE (44mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-SE-44mm)
+Apple Watch SE (40mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-SE-40mm)
+Apple Watch Series 5 (44mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-5-44mm)
+Apple Watch Series 5 (40mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-5-40mm)
+Apple Watch Series 4 (44mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-4-44mm)
+Apple Watch Series 4 (40mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-4-40mm)
+Apple Watch Series 3 (42mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-3-42mm)
+Apple Watch Series 3 (38mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-3-38mm)
+Apple Watch Series 2 (42mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-2-42mm)
+Apple Watch Series 2 (38mm) (com.apple.CoreSimulator.SimDeviceType.Apple-Watch-Series-2-38mm)
+Apple Vision Pro (com.apple.CoreSimulator.SimDeviceType.Apple-Vision-Pro-4K)
+Apple Vision Pro (at 2732x2048) (com.apple.CoreSimulator.SimDeviceType.Apple-Vision-Pro)
+iPod touch (7th generation) (com.apple.CoreSimulator.SimDeviceType.iPod-touch--7th-generation-)
+
+== Runtimes ==
+iOS 27.0 (27.0 - 24A434) - com.apple.CoreSimulator.SimRuntime.iOS-27-0
+iOS 27.1 (27.1 - 24A94425) - com.apple.CoreSimulator.SimRuntime.iOS-27-1
+iOS 27.2 (27.2 - 24B8117) - com.apple.CoreSimulator.SimRuntime.iOS-27-2
+iOS 27.2 (27.2 - 24B91016s) - com.apple.CoreSimulator.SimRuntime.iOS-27-2-iPhone19-4
+tvOS 27.0 (27.0 - 24J360) - com.apple.CoreSimulator.SimRuntime.tvOS-27-0
+tvOS 27.2 (27.2 - 24K150) - com.apple.CoreSimulator.SimRuntime.tvOS-27-2
+watchOS 27.0 (27.0 - 24R362) - com.apple.CoreSimulator.SimRuntime.watchOS-27-0
+watchOS 27.2 (27.2 - 24S118) - com.apple.CoreSimulator.SimRuntime.watchOS-27-2
+visionOS 27.0 (27.0 - 24M362) - com.apple.CoreSimulator.SimRuntime.xrOS-27-0
+visionOS 27.2 (27.2 - 24N120) - com.apple.CoreSimulator.SimRuntime.xrOS-27-2
+
+usage: simctl [--set <path>] [--profiles <path>] <subcommand> ...
+       simctl help [subcommand]
+Command line utility to control the Simulator
+
+For subcommands that require a <device> argument, you may specify a device UDID
+or the special "booted" string which will cause simctl to pick a booted device.
+If multiple devices are booted when the "booted" device is selected, simctl
+will choose one of them.
+
+Subcommands:
+	addmedia            Add photos, live photos, videos, or contacts to the library of a device.
+	appinfo             Show information about an installed application.
+	boot                Boot a device or device pair.
+	clone               Clone an existing device.
+	create              Create a new device.
+	delete              Delete specified devices, unavailable devices, or all devices.
+	diagnose            Collect diagnostic information and logs.
+	erase               Erase a device's contents and settings.
+	get_app_container   Print the path of the installed app's container
+	getenv              Print an environment variable from a running device.
+	help                Prints the usage for a given subcommand.
+	icloud_sync         Trigger iCloud sync on a device.
+	install             Install an app on a device.
+	install_app_data    Install an xcappdata package to a device, replacing the current contents of the container.
+	io                  Set up a device IO operation.
+	keychain            Manipulate a device's keychain
+	launch              Launch an application by identifier on a device.
+	list                List available devices, device types, runtimes, or device pairs.
+	listapps            Show the installed applications.
+	location            Control a device's simulated location
+	logverbose          enable or disable verbose logging for a device
+	openurl             Open a URL in a device.
+	pair                Create a new watch and phone pair.
+	pair_activate       Set a given pair as active.
+	pbcopy              Copy standard input onto the device pasteboard.
+	pbpaste             Print the contents of the device's pasteboard to standard output.
+	pbsync              Sync the pasteboard content from one pasteboard to another.
+	personalization     Provides utility when working with personalization manifests
+	privacy             Grant, revoke, or reset privacy and permissions
+	push                Send a simulated push notification
+	reboot              Reboot a device.
+	rename              Rename a device.
+	runtime             Perform operations on runtimes
+	shutdown            Shutdown a device.
+	spawn               Spawn a process by executing a given executable on a device.
+	status_bar          Set or clear status bar overrides
+	terminate           Terminate an application by identifier on a device.
+	ui                  Get or Set UI options
+	uninstall           Uninstall an app from a device.
+	unpair              Unpair a watch and phone pair.
+	upgrade             Upgrade a device to a newer runtime.
+
+Set up a device IO operation.
+Usage: simctl io <device> <operation> <arguments>
+
+Common arguments:
+	    --display    Specifies which display to record. Accepts:
+	                 - Screen ID (eg: "1") 
+	                 - Screen name (eg: "Internal-1")
+	                 - Screen device name (eg: "primary")
+	                 - Screen UUID (eg: "D5293DAA-4D8C-453E-B049-969FE81936A0")
+	                 - Port UUID (eg: "D5293DAA-4D8C-453E-B049-969FE81936A0"
+	                 - Alias (for compatibility): "internal" or "external"
+	                 If a value matches more than one screen, simctl prefers the powered one.
+	                 Use 'simctl io <device> enumerate' to list available screens and their IDs.
+
+	                 If a single default display cannot be determined, screenshot, recordVideo and
+	                 screenConfig will require --display to be passed in.
+
+Supported operations:
+	enumerate [--poll]
+	    Lists all available IO ports and descriptor states.
+	    --poll       Poll after enumeration.
+
+	poll
+	    Polls all available IO ports for events.
+
+	recordVideo [--codec=<codec>] [--display=<display>] [--mask=<policy>] [--force] <file or url>
+	    Records the display to a QuickTime movie at the specified file or url.
+	    --codec      Specifies the codec type: "h264" or "hevc". Default is "hevc".
+
+	    --mask       For non-rectangular displays, handle the mask by policy:
+	                 ignored: The mask is ignored and the unmasked framebuffer is saved.
+	                 alpha: Not supported, but retained for compatibility; the mask is rendered black.
+	                 black: The mask is rendered black.
+
+	    --force      Force the output file to be written to, even if the file already exists.
+
+	simctl writes 'Recording started' to stderr once the first video frame has been processed. Look for this
+	if you want to wait for the recording to start.
+	Send SIGINT (Control + C) to stop recording. simctl exits once the in-flight frames are processed
+	and the video file is finalized.
+
+	screenshot [--type=<type>] [--display=<display>] [--mask=<policy>] <file or url>
+	    Saves a screenshot as a PNG to the specified file or url(use "-" for stdout).
+	    --type       Can be "png", "tiff", "bmp", "gif", "jpeg". Default is png.
+
+	    --mask       For non-rectangular displays, handle the mask by policy:
+	                 ignored: The mask is ignored and the unmasked framebuffer is saved.
+	                 alpha: The mask is used as premultiplied alpha.
+	                 black: The mask is rendered black.
+
+	screenConfig [--display=<display>] <subcommand> [arguments]
+	    Manage device screen configuration.
+
+	    power <on|off>
+	        Set the power state of a screen.
+
+	    geometry <width>x<height>[@<scale>]
+	        Change the geometry of a screen.
+	        The width and height must be compatible with the screen's current mode.
+	        If @<scale> is specified, a mode with that scale factor will be selected.
+
+Example:
+	Save a screenshot of the booted device to screenshot.png:
+	simctl io booted screenshot screenshot.png
+
+

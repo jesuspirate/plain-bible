@@ -1,0 +1,11 @@
+/Applications/Xcode_27.0.0.app: 27.0
+/Applications/Xcode_27.0.app: 27.0
+/Applications/Xcode_27.1.0.app: 27.1
+/Applications/Xcode_27.1.app: 27.1
+/Applications/Xcode_27.2.0.app: 27.2
+/Applications/Xcode_27.2.app: 27.2
+/Applications/Xcode_27.3_beta.app: 27.3
+/Applications/Xcode_27.3.0.app: 27.3
+/Applications/Xcode_27.3.app: 27.3
+/Applications/Xcode_27.app: 27.0
+/Applications/Xcode.app: 27.1

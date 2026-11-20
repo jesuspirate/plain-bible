@@ -1,0 +1,16 @@
+00-first-start-screen1.png: 1398 2034 
+00-first-start-screen3.png: 2007 2853 
+01-reader-psalm-23-screen1.png: 1398 2034 
+01-reader-psalm-23-screen3.png: 2007 2853 
+02-reader-john-3-screen1.png: 1398 2034 
+02-reader-john-3-screen3.png: 2007 2853 
+03-pray-screen1.png: 1398 2034 
+03-pray-screen3.png: 2007 2853 
+04-circles-screen1.png: 1398 2034 
+04-circles-screen3.png: 2007 2853 
+05-reader-again-screen1.png: 1398 2034 
+05-reader-again-screen3.png: 2007 2853 
+07-screen1-off-screen3.png: 2007 2853 
+07-screen1-off.png: 2007 2853 
+07-screen2-off-screen3.png: 2007 2853 
+07-screen2-off.png: 2007 2853 
