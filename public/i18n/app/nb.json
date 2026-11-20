@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Vil du fjerne denne Nostr-nøkkelen?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi-appen med denne nøkkelen kan ikke lenger logge på kontoen din.",
 "Too many Nostr keys on this account. Remove one first.": "For mange Nostr-nøkler på denne kontoen. Fjern en først.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Trykk så på Lytt for å høre det, eller Les med for å følge ordene mens de leses."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Trykk så på Lytt for å høre det, eller Les med for å følge ordene mens de leses.",
+"Audio": "Lyd",
+"Hear the Bible read aloud": "Hør Bibelen lest høyt",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Trykk på et vers i Bibelen. To knapper kommer fram: «Lytt» leser bare versene du valgte, og «Les med» leser videre derfra mens ordene lyser opp.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Denne bibelen kan ikke leses høyt på denne enheten. Trykk på et vers og så «Les med»: ordene lyser opp ett etter ett, så du kan lese med i stillhet.",
+"Try it now": "Prøv nå"
 }

@@ -1371,5 +1371,10 @@
 "Remove this Nostr key?": "Odebrat tento klíč Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikace Fedi s tímto klíčem se už do vašeho účtu nepřihlásí.",
 "Too many Nostr keys on this account. Remove one first.": "Tento účet má příliš mnoho klíčů Nostr. Nejdřív jeden odeberte.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pak klepněte na Poslechnout a uslyšíte ho, nebo na Čtení se zvýrazněním a budete sledovat slova, jak jsou čtena."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pak klepněte na Poslechnout a uslyšíte ho, nebo na Čtení se zvýrazněním a budete sledovat slova, jak jsou čtena.",
+"Audio": "Zvuk",
+"Hear the Bible read aloud": "Poslouchat Bibli předčítanou nahlas",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Klepněte na libovolný verš v Bibli. Objeví se dvě tlačítka: „Poslechnout“ přečte jen vybrané verše a „Čtení se zvýrazněním“ čte odtud dál, zatímco se slova rozsvěcují.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Tuto Bibli nelze na tomto zařízení číst nahlas. Klepněte na verš a pak na „Čtení se zvýrazněním“: slova se rozsvěcují jedno po druhém, takže můžete číst potichu.",
+"Try it now": "Vyzkoušet"
 }

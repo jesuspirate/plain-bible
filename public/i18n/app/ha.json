@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "A cire wannan makullin Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Manhajar Fedi da ke da wannan makullin ba za ta ƙara shigar da ku asusunku ba.",
 "Too many Nostr keys on this account. Remove one first.": "Makullan Nostr sun yi yawa a wannan asusun. Cire ɗaya tukuna.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Sannan ka taɓa Saurara don ka ji ta, ko Karanta tare don ka bi kalmomin yayin da ake karanta su."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Sannan ka taɓa Saurara don ka ji ta, ko Karanta tare don ka bi kalmomin yayin da ake karanta su.",
+"Audio": "Sauti",
+"Hear the Bible read aloud": "Saurari ana karanta Baibul da babbar murya",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Taɓa kowace aya a cikin Baibul. Maɓallai biyu za su bayyana: “Saurara” yana karanta ayoyin da ka zaɓa kawai, “Karanta tare” kuma yana ci gaba da karatu daga can yayin da kalmomi ke haskakawa.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Ba za a iya karanta wannan Baibul da murya a wannan na’ura ba. Taɓa aya, sa’an nan “Karanta tare”: kalmomi suna haskakawa ɗaya bayan ɗaya, don ka karanta a zuci.",
+"Try it now": "Gwada yanzu"
 }

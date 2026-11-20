@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "ဤ Nostr သော့ကို ဖယ်ရှားမလား။",
 "The Fedi app with this key won’t sign in to your account anymore.": "ဤသော့ပါသော Fedi အက်ပ်ဖြင့် သင့်အကောင့်သို့ ဝင်၍ မရတော့ပါ။",
 "Too many Nostr keys on this account. Remove one first.": "ဤအကောင့်တွင် Nostr သော့ အလွန်များနေပါသည်။ တစ်ခုကို အရင် ဖယ်ရှားပါ။",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ပြီးရင် နားထောင်ဖို့ «နားထောင်ရန်» ကို တို့ပါ၊ သို့မဟုတ် ဖတ်နေတဲ့ စကားလုံးတွေကို လိုက်ကြည့်ဖို့ «လိုက်ဖတ်ရန်» ကို တို့ပါ။"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ပြီးရင် နားထောင်ဖို့ «နားထောင်ရန်» ကို တို့ပါ၊ သို့မဟုတ် ဖတ်နေတဲ့ စကားလုံးတွေကို လိုက်ကြည့်ဖို့ «လိုက်ဖတ်ရန်» ကို တို့ပါ။",
+"Audio": "အသံ",
+"Hear the Bible read aloud": "ကျမ်းစာကို အသံထွက်ဖတ်တာ နားထောင်ရန်",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ကျမ်းစာထဲက မည်သည့်အခန်းငယ်ကိုမဆို နှိပ်ပါ။ ခလုတ်နှစ်ခု ပေါ်လာမည်။ “နားထောင်ရန်” သည် သင်ရွေးသော အခန်းငယ်များကိုသာ ဖတ်ပြီး “လိုက်ဖတ်ရန်” သည် စကားလုံးများ လင်းလာစဉ် ထိုနေရာမှ ဆက်ဖတ်သည်။",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ဤကျမ်းစာကို ဤစက်ပေါ်တွင် အသံထွက်မဖတ်နိုင်ပါ။ အခန်းငယ်တစ်ခုကို နှိပ်ပြီး “လိုက်ဖတ်ရန်” ကိုနှိပ်ပါ။ စကားလုံးများ တစ်လုံးချင်း လင်းလာ၍ တိတ်တဆိတ် လိုက်ဖတ်နိုင်သည်။",
+"Try it now": "ယခု စမ်းကြည့်ရန်"
 }

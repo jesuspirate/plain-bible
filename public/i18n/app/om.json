@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Furtuu Nostr kana haqi?",
 "The Fedi app with this key won’t sign in to your account anymore.": "App Fedi furtuu kana qabu kana booda herrega kee keessa si hin seensisu.",
 "Too many Nostr keys on this account. Remove one first.": "Furtuuwwan Nostr herrega kana irratti baay'ee baay'atan. Dura tokko haqi.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Achiis dhaga’uuf Dhaggeeffadhu caqasi, yookaan jechoota akkuma dubbifamaniin hordofuuf Hordofii dubbisi caqasi."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Achiis dhaga’uuf Dhaggeeffadhu caqasi, yookaan jechoota akkuma dubbifamaniin hordofuuf Hordofii dubbisi caqasi.",
+"Audio": "Sagalee",
+"Hear the Bible read aloud": "Macaafa Qulqulluu sagaleen dubbifamu dhaggeeffadhu",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Lakkoofsa Macaafa Qulqulluu kamiyyuu tuqi. Qabduuwwan lama ni mul’atu: “Dhaggeeffadhu” lakkoofsota ati filatte qofa dubbisa, “Hordofii dubbisi” immoo achii jalqabee jechoonni ifaa jiranii itti fufee dubbisa.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Macaafni Qulqulluun kun meeshaa kana irratti sagaleen dubbifamuu hin danda’u. Lakkoofsa tokko tuqi, achiis “Hordofii dubbisi”: jechoonni tokko tokkoon ifu, akka ati callisaan dubbistuuf.",
+"Try it now": "Amma yaali"
 }

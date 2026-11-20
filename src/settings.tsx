@@ -4,10 +4,11 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour } from './state'
+import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar } from './state'
+import { canHear } from './listen'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -122,9 +123,9 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
+type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
 const PAGE_TITLE: Record<Page, string> = {
-  home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), saved: N_('Saved'), search: N_('Advanced search'),
+  home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
 }
 
@@ -344,6 +345,20 @@ function RecordingPage() {
   </>
 }
 
+// How to listen: tap a verse. Said where people look for it, with a button
+// that closes Settings and opens a verse's bar, so the buttons are right there.
+function AudioHow() {
+  const { settings, byId } = useApp()
+  const route = useRoute()
+  const version = route.path[0] === 'read' && byId.has(route.path[1]) ? route.path[1] : settings.version
+  return <>
+    <p class="audio-how">{canHear(version)
+      ? t('Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.')
+      : t('This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.')}</p>
+    <button class="primary audio-show" onClick={showVerseBar}><SpeakerIcon size={24} /> {t('Try it now')}</button>
+  </>
+}
+
 function SettingsBody({ nav }: { nav: SettingsNav }) {
   const { page, setPage } = nav
   const { settings, update, catalog, marks, sync } = useApp()
@@ -385,13 +400,6 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <label><input type="checkbox" checked={settings.penSlow} onChange={e => update({ penSlow: (e.target as HTMLInputElement).checked })} /> {t('Draw each new highlight slowly, like a marker in your hand.')}</label>
       </div>
     </div>
-    <div class="field"><span>{t('Read aloud')}</span>
-      <div class="col">
-        <span class="muted small">{t('Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.')}</span>
-        {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
-        <label><input type="checkbox" checked={settings.readSilent} onChange={e => update({ readSilent: (e.target as HTMLInputElement).checked })} /> {t('No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.')}</label>
-      </div>
-    </div>
     {!bookOn && <div class="field"><span>{t('Chapter turn')}</span>
       <div class="col">
         {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
@@ -426,6 +434,19 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
           <label><input type="checkbox" checked={settings.sideways.includes(a)}
             onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} /> {label}</label>
         ))}
+      </div>
+    </div>
+  </>
+
+  // Listening lives on a verse's bar, where people don't think to look: this
+  // page says so, and Show me opens that bar on a verse in view.
+  if (page === 'audio') return <>
+    <AudioHow />
+    <div class="field"><span>{t('Read aloud')}</span>
+      <div class="col">
+        <span class="muted small">{t('Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.')}</span>
+        {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
+        <label><input type="checkbox" checked={settings.readSilent} onChange={e => update({ readSilent: (e.target as HTMLInputElement).checked })} /> {t('No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.')}</label>
       </div>
     </div>
   </>
@@ -497,6 +518,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
             <button class="size-reset" onClick={() => update({ fontSize: DEFAULT_FONT_SIZE })}>{t('Back to default size ({n})', { n: DEFAULT_FONT_SIZE })}</button>
           </div>}
           <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', t('Light')], ['sepia', t('Sepia')], ['dark', t('Dark')], ['system', t('Auto')]])}</div>
+          <Row icon={<SpeakerIcon size={24} />} label={t('Audio')} sub={t('Hear the Bible read aloud')} onClick={() => setPage('audio')} />
           <Row icon={<LayoutIcon size={24} />} label={t('Font and layout')} value={fontName && t(fontName)} onClick={() => setPage('reading')} />
         </div>
       </section>

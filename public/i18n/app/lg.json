@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Oggyawo ekisumuluzo kino ekya Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "App ya Fedi erina ekisumuluzo kino tejja kuddamu kukuyingiza mu akawunti yo.",
 "Too many Nostr keys on this account. Remove one first.": "Ebisumuluzo bya Nostr bingi nnyo ku akawunti eno. Sooka oggyewo kimu.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Oluvannyuma nyiga Wuliriza okugiwulira, oba Soma ng’ogoberera okugoberera ebigambo nga bisomebwa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Oluvannyuma nyiga Wuliriza okugiwulira, oba Soma ng’ogoberera okugoberera ebigambo nga bisomebwa.",
+"Audio": "Ddoboozi",
+"Hear the Bible read aloud": "Wuliriza Baibuli ng’esomebwa mu ddoboozi",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Kwata ku lunyiriri lwonna mu Baibuli. Wajja kuvaayo bbaatuuni bbiri: “Wuliriza” esoma ennyiriri z’olonze zokka, ate “Soma ng’ogoberera” egenda mu maaso n’okusoma okuva awo ng’ebigambo byaka.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Baibuli eno tesobola kusomebwa mu ddoboozi ku kyuma kino. Kwata ku lunyiriri, oluvannyuma “Soma ng’ogoberera”: ebigambo byaka kimu ku kimu, osobole okusoma mu kasirise.",
+"Try it now": "Gezaako kaakano"
 }

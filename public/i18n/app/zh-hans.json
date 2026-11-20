@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "移除这个 Nostr 密钥？",
 "The Fedi app with this key won’t sign in to your account anymore.": "带有这个密钥的 Fedi 应用将无法再登录你的账户。",
 "Too many Nostr keys on this account. Remove one first.": "这个账户的 Nostr 密钥太多了。请先移除一个。",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "然后轻点“收听”来听，或轻点“跟读”，随着朗读看着文字走。"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "然后轻点“收听”来听，或轻点“跟读”，随着朗读看着文字走。",
+"Audio": "音频",
+"Hear the Bible read aloud": "听圣经朗读",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "点一下圣经里的任何一节。会出现两个按钮：“收听”只读你选的经节，“跟读”从那里一直读下去，同时字词逐个亮起。",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "这本圣经在此设备上无法朗读。点一下经节，再点“跟读”：字词会逐个亮起，方便你默读跟随。",
+"Try it now": "现在试试"
 }

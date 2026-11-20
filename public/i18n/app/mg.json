@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Hanala ity lakile Nostr ity?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Tsy hampiditra anao ao amin’ny kaontinao intsony ny app Fedi manana ity lakile ity.",
 "Too many Nostr keys on this account. Remove one first.": "Be loatra ny lakile Nostr amin’ity kaonty ity. Esory aloha ny iray.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Avy eo tsindrio ny Hihaino mba handrenesana azy, na ny Hamaky miaraka mba hanarahana ny teny rehefa vakiana."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Avy eo tsindrio ny Hihaino mba handrenesana azy, na ny Hamaky miaraka mba hanarahana ny teny rehefa vakiana.",
+"Audio": "Feo",
+"Hear the Bible read aloud": "Henoy ny Baiboly vakiana mafy",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tsindrio izay andininy rehetra ao amin’ny Baiboly. Bokotra roa no hiseho: ny “Hihaino” mamaky ireo andininy nofidinao ihany, ary ny “Hamaky miaraka” manohy mamaky manomboka eo raha mamirapiratra ireo teny.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Tsy azo vakiana mafy amin’ity fitaovana ity ity Baiboly ity. Tsindrio andininy iray, avy eo “Hamaky miaraka”: mamirapiratra tsirairay ireo teny, mba hahafahanao mamaky mangina.",
+"Try it now": "Andramo izao"
 }

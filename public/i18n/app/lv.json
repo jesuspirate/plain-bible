@@ -1350,5 +1350,10 @@
 "Remove this Nostr key?": "Noņemt šo Nostr atslēgu?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi lietotne ar šo atslēgu vairs nevarēs pierakstīties jūsu kontā.",
 "Too many Nostr keys on this account. Remove one first.": "Šim kontam ir pārāk daudz Nostr atslēgu. Vispirms noņemiet vienu.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Tad pieskarieties Klausīties, lai to dzirdētu, vai Lasīt līdzi, lai sekotu vārdiem, kamēr tie tiek lasīti."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Tad pieskarieties Klausīties, lai to dzirdētu, vai Lasīt līdzi, lai sekotu vārdiem, kamēr tie tiek lasīti.",
+"Audio": "Audio",
+"Hear the Bible read aloud": "Klausīties Bībeli lasītu skaļi",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Pieskarieties jebkuram Bībeles pantam. Parādās divas pogas: “Klausīties” nolasa tikai izvēlētos pantus, un “Lasīt līdzi” lasa tālāk no turienes, kamēr vārdi iedegas.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Šo Bībeli šajā ierīcē nevar lasīt skaļi. Pieskarieties pantam un tad “Lasīt līdzi”: vārdi iedegas pa vienam, lai jūs varētu lasīt klusi.",
+"Try it now": "Izmēģināt tagad"
 }

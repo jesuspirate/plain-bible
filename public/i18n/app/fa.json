@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "این کلید Nostr برداشته شود؟",
 "The Fedi app with this key won’t sign in to your account anymore.": "برنامهٔ Fedi که این کلید را دارد دیگر شما را وارد حسابتان نمی‌کند.",
 "Too many Nostr keys on this account. Remove one first.": "این حساب کلیدهای Nostr بیش از حد دارد. اول یکی را بردارید.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "سپس «شنیدن» را بزنید تا آن را بشنوید، یا «خواندن همراه» را تا کلمات را هنگام خوانده شدن دنبال کنید."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "سپس «شنیدن» را بزنید تا آن را بشنوید، یا «خواندن همراه» را تا کلمات را هنگام خوانده شدن دنبال کنید.",
+"Audio": "صدا",
+"Hear the Bible read aloud": "شنیدن کتاب‌مقدس با صدای بلند",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "روی هر آیه‌ای از کتاب‌مقدس بزنید. دو دکمه ظاهر می‌شود: «شنیدن» فقط آیه‌های انتخاب‌شده را می‌خواند و «خواندن همراه» از همان‌جا ادامه می‌دهد و کلمه‌ها روشن می‌شوند.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "این کتاب‌مقدس روی این دستگاه با صدا خوانده نمی‌شود. روی یک آیه بزنید، سپس «خواندن همراه»: کلمه‌ها یکی‌یکی روشن می‌شوند تا بی‌صدا همراهی کنید.",
+"Try it now": "همین حالا امتحان کنید"
 }

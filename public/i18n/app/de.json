@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Diesen Nostr-Schlüssel entfernen?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Die Fedi-App mit diesem Schlüssel meldet dich nicht mehr bei deinem Konto an.",
 "Too many Nostr keys on this account. Remove one first.": "Zu viele Nostr-Schlüssel in diesem Konto. Entferne zuerst einen.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Tippe dann auf Anhören, um ihn zu hören, oder auf Mitlesen, um den Wörtern beim Vorlesen zu folgen."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Tippe dann auf Anhören, um ihn zu hören, oder auf Mitlesen, um den Wörtern beim Vorlesen zu folgen.",
+"Audio": "Audio",
+"Hear the Bible read aloud": "Die Bibel vorlesen lassen",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tippe auf einen Vers in der Bibel. Zwei Knöpfe erscheinen: „Anhören“ liest nur die gewählten Verse, und „Mitlesen“ liest von dort weiter, während die Wörter aufleuchten.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Diese Bibel kann auf diesem Gerät nicht vorgelesen werden. Tippe auf einen Vers, dann auf „Mitlesen“: Die Wörter leuchten nacheinander auf, so kannst du still mitlesen.",
+"Try it now": "Jetzt ausprobieren"
 }

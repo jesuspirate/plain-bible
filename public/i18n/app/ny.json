@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Muchotse kiyi iyi ya Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Pulogalamu ya Fedi yokhala ndi kiyi iyi siidzakulowetsaninso mu akaunti yanu.",
 "Too many Nostr keys on this account. Remove one first.": "Makiyi a Nostr achuluka kwambiri pa akaunti iyi. Chotsani imodzi kaye.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kenako dinani Mverani kuti mumve, kapena Werengani motsatira kuti mutsatire mawu pamene akuwerengedwa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kenako dinani Mverani kuti mumve, kapena Werengani motsatira kuti mutsatire mawu pamene akuwerengedwa.",
+"Audio": "Mawu",
+"Hear the Bible read aloud": "Mverani Baibulo likuwerengedwa mokweza",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Dinani vesi lililonse m’Baibulo. Mabatani awiri adzaonekera: “Mverani” imawerenga mavesi okhawo amene mwasankha, ndipo “Werengani motsatira” imapitiriza kuwerenga kuchokera pamenepo pamene mawu akuwala.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Baibulo ili silingawerengedwe mokweza pa chipangizochi. Dinani vesi, kenako “Werengani motsatira”: mawu amawala limodzi limodzi, kuti muwerenge mwakachetechete.",
+"Try it now": "Yesani tsopano"
 }

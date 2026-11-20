@@ -1371,5 +1371,10 @@
 "Remove this Nostr key?": "Вилучити цей ключ Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Застосунок Fedi з цим ключем більше не зможе входити у ваш обліковий запис.",
 "Too many Nostr keys on this account. Remove one first.": "Забагато ключів Nostr у цьому обліковому записі. Спершу вилучіть один.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Потім торкніться «Слухати», щоб почути його, або «Читання з підсвічуванням», щоб стежити за словами під час читання."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Потім торкніться «Слухати», щоб почути його, або «Читання з підсвічуванням», щоб стежити за словами під час читання.",
+"Audio": "Аудіо",
+"Hear the Bible read aloud": "Слухати Біблію вголос",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Торкніться будь-якого вірша Біблії. З’являться дві кнопки: «Слухати» читає лише вибрані вірші, а «Читання з підсвічуванням» читає далі з цього місця, підсвічуючи слова.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Цю Біблію не можна прочитати вголос на цьому пристрої. Торкніться вірша, потім «Читання з підсвічуванням»: слова підсвічуються одне за одним, і можна читати подумки.",
+"Try it now": "Спробувати"
 }

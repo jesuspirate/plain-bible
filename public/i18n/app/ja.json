@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "このNostrキーを削除しますか？",
 "The Fedi app with this key won’t sign in to your account anymore.": "このキーを持つFediアプリでは、もうアカウントにサインインできません。",
 "Too many Nostr keys on this account. Remove one first.": "このアカウントのNostrキーが多すぎます。先にどれかを削除してください。",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "そのあと「聞く」をタップすると読み上げを聞けます。「目で追って読む」なら、読まれる言葉を目で追えます。"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "そのあと「聞く」をタップすると読み上げを聞けます。「目で追って読む」なら、読まれる言葉を目で追えます。",
+"Audio": "音声",
+"Hear the Bible read aloud": "聖書の朗読を聞く",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "聖書のどの節でもタップしてください。ボタンが二つ出ます。「聞く」は選んだ節だけを読み、「目で追って読む」は言葉を光らせながらそこから先を読み続けます。",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "この聖書はこの端末では読み上げできません。節をタップして「目で追って読む」を押すと、言葉が一つずつ光るので、黙読でついて行けます。",
+"Try it now": "試してみる"
 }

@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "بۇ Nostr ئاچقۇچىنى ئۆچۈرەمسىز؟",
 "The Fedi app with this key won’t sign in to your account anymore.": "بۇ ئاچقۇچ بار Fedi ئەپى ئەمدى ھېساباتىڭىزغا كىرگۈزمەيدۇ.",
 "Too many Nostr keys on this account. Remove one first.": "بۇ ھېساباتتا Nostr ئاچقۇچى بەك كۆپ. ئالدى بىلەن بىرنى ئۆچۈرۈڭ.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ئاندىن ئاڭلاش ئۈچۈن «ئاڭلاش» نى بېسىڭ، ياكى ئوقۇلۇۋاتقان سۆزلەرگە ئەگىشىش ئۈچۈن «ئەگىشىپ ئوقۇش» نى بېسىڭ."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ئاندىن ئاڭلاش ئۈچۈن «ئاڭلاش» نى بېسىڭ، ياكى ئوقۇلۇۋاتقان سۆزلەرگە ئەگىشىش ئۈچۈن «ئەگىشىپ ئوقۇش» نى بېسىڭ.",
+"Audio": "ئاۋاز",
+"Hear the Bible read aloud": "مۇقەددەس كىتابنىڭ ئۈنلۈك ئوقۇلۇشىنى ئاڭلاش",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "مۇقەددەس كىتابتىكى خالىغان ئايەتنى چېكىڭ. ئىككى كۇنۇپكا چىقىدۇ: «ئاڭلاش» پەقەت سىز تاللىغان ئايەتلەرنىلا ئوقۇيدۇ، «ئەگىشىپ ئوقۇش» بولسا سۆزلەر يورۇپ تۇرغاندا ئۇ يەردىن داۋاملىق ئوقۇيدۇ.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "بۇ مۇقەددەس كىتابنى بۇ ئۈسكۈنىدە ئۈنلۈك ئوقۇغىلى بولمايدۇ. بىر ئايەتنى چېكىپ، ئاندىن «ئەگىشىپ ئوقۇش»: سۆزلەر بىر-بىرلەپ يورۇيدۇ، سىز ئىچىڭىزدە ئوقۇيالايسىز.",
+"Try it now": "ھازىر سىناپ بېقىڭ"
 }

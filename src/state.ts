@@ -164,6 +164,12 @@ export const openSearch = () => window.dispatchEvent(new Event(SEARCH_EVENT))
 
 /** The guided tour: a few calm steps over the reader, shown once to someone
  *  new, and again from Settings whenever asked. */
+/** Show me, under Audio in Settings: Settings close and the reader opens the
+ *  bar of a verse in view, with Listen and Read along on it. The app passes
+ *  it on to the reader as VERSE_BAR_EVENT once Settings are out of the way. */
+export const SHOW_VERSE_BAR = 'plain-bible:show-verse-bar'
+export const VERSE_BAR_EVENT = 'plain-bible:verse-bar'
+export const showVerseBar = () => window.dispatchEvent(new Event(SHOW_VERSE_BAR))
 export const TOUR_EVENT = 'plain-bible:tour'
 export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
 const TOUR = 'plain-bible:tour'

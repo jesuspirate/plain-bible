@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Toʻo ʻa e kī Nostr ko ʻení?",
 "The Fedi app with this key won’t sign in to your account anymore.": "ʻE ʻikai toe hū ʻa e ʻapi Fedi ʻoku ʻi ai ʻa e kī ko ʻení ki hoʻo ʻakauní.",
 "Too many Nostr keys on this account. Remove one first.": "Lahi fau ʻa e ngaahi kī Nostr ʻi he ʻakaunti ko ʻení. Toʻo ʻuluaki ha taha.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pea lomiʻi ʻa e Fanongo ke fanongo ki ai, pe Lau fakataha ke muimui ʻi he ngaahi foʻi lea ʻi hono lau."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pea lomiʻi ʻa e Fanongo ke fanongo ki ai, pe Lau fakataha ke muimui ʻi he ngaahi foʻi lea ʻi hono lau.",
+"Audio": "Leʻo",
+"Hear the Bible read aloud": "Fanongo ki he lau leʻo lahi ʻo e Tohitapú",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Lomiʻi ha veesi pē ʻi he Tohitapú. ʻE hā mai ha ongo meʻa lomiʻi: ʻoku lau ʻe “Fanongo” ʻa e ngaahi veesi pē naʻá ke fili, pea ʻoku hokohoko atu ʻe “Lau fakataha” ʻa e lau mei ai lolotonga ʻoku ulo ʻa e ngaahi foʻi leá.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ʻOku ʻikai lava ke lau leʻo lahi ʻa e Tohitapu ko ʻení ʻi he meʻangāue ko ʻení. Lomiʻi ha veesi, pea “Lau fakataha”: ʻoku ulo taki taha ʻa e ngaahi foʻi leá, ke ke lau fakalongolongo.",
+"Try it now": "Feinga he taimí ni"
 }

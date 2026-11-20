@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "यह Nostr कुंजी हटाएँ?",
 "The Fedi app with this key won’t sign in to your account anymore.": "इस कुंजी वाला Fedi ऐप अब आपके खाते में साइन इन नहीं करेगा।",
 "Too many Nostr keys on this account. Remove one first.": "इस खाते में बहुत सारी Nostr कुंजियाँ हैं। पहले एक हटाएँ।",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "फिर सुनने के लिए «सुनें» पर टैप करें, या पढ़े जाते शब्दों के साथ चलने के लिए «साथ-साथ पढ़ें» पर।"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "फिर सुनने के लिए «सुनें» पर टैप करें, या पढ़े जाते शब्दों के साथ चलने के लिए «साथ-साथ पढ़ें» पर।",
+"Audio": "ऑडियो",
+"Hear the Bible read aloud": "बाइबल को ज़ोर से पढ़ते हुए सुनें",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "बाइबल की किसी भी आयत पर टैप करें। दो बटन आएँगे: “सुनें” सिर्फ़ चुनी हुई आयतें पढ़ता है, और “साथ-साथ पढ़ें” वहाँ से आगे पढ़ता जाता है, शब्द चमकते जाते हैं।",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "यह बाइबल इस डिवाइस पर ज़ोर से नहीं पढ़ी जा सकती। किसी आयत पर टैप करें, फिर “साथ-साथ पढ़ें”: शब्द एक-एक करके चमकते हैं, ताकि आप चुपचाप साथ पढ़ सकें।",
+"Try it now": "अभी आज़माएँ"
 }

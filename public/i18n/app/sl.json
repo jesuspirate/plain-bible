@@ -1371,5 +1371,10 @@
 "Remove this Nostr key?": "Želite odstraniti ta ključ Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikacija Fedi s tem ključem se ne bo več mogla prijaviti v vaš račun.",
 "Too many Nostr keys on this account. Remove one first.": "Ta račun ima preveč ključev Nostr. Najprej odstranite enega.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Nato tapnite Poslušaj, da jo slišite, ali Sledi branju, da sledite besedam, ko se berejo."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Nato tapnite Poslušaj, da jo slišite, ali Sledi branju, da sledite besedam, ko se berejo.",
+"Audio": "Zvok",
+"Hear the Bible read aloud": "Poslušajte Sveto pismo, prebrano na glas",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tapnite katero koli vrstico v Svetem pismu. Prikažeta se dva gumba: »Poslušaj« prebere le izbrane vrstice, »Sledi branju« pa bere naprej od tam, medtem ko se besede osvetljujejo.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Tega Svetega pisma na tej napravi ni mogoče brati na glas. Tapnite vrstico in nato »Sledi branju«: besede se osvetlijo ena za drugo, da lahko berete tiho.",
+"Try it now": "Preizkusi zdaj"
 }

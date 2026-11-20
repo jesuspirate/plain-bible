@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Alisin ang Nostr key na ito?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Hindi na makakapag-sign in sa account mo ang Fedi app na may key na ito.",
 "Too many Nostr keys on this account. Remove one first.": "Masyadong maraming Nostr key sa account na ito. Mag-alis muna ng isa.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pagkatapos, i-tap ang Pakinggan para marinig ito, o ang Sabayang pagbasa para sundan ang mga salita habang binabasa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pagkatapos, i-tap ang Pakinggan para marinig ito, o ang Sabayang pagbasa para sundan ang mga salita habang binabasa.",
+"Audio": "Audio",
+"Hear the Bible read aloud": "Pakinggan ang Bibliya na binabasa nang malakas",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "I-tap ang alinmang talata sa Bibliya. Lilitaw ang dalawang button: binabasa ng “Pakinggan” ang mga talatang pinili mo lang, at ang “Sabayang pagbasa” ay nagpapatuloy mula roon habang umiilaw ang mga salita.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Hindi mababasa nang malakas ang Bibliyang ito sa device na ito. I-tap ang isang talata, saka ang “Sabayang pagbasa”: iilaw ang mga salita isa-isa, para makabasa ka nang tahimik.",
+"Try it now": "Subukan ngayon"
 }

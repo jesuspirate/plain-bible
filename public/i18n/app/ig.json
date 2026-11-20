@@ -1266,5 +1266,10 @@
 "Remove this Nostr key?": "Wepụ igodo Nostr a?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Ngwa Fedi nwere igodo a agaghị abanyekwa gị n’akaụntụ gị.",
 "Too many Nostr keys on this account. Remove one first.": "Igodo Nostr adịla ọtụtụ n’akaụntụ a. Buru ụzọ wepụ otu.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Mgbe ahụ pịa Gee ntị ka ị nụ ya, ma ọ bụ Gụkọọ ka i soro okwu ndị ahụ ka a na-agụ ha."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Mgbe ahụ pịa Gee ntị ka ị nụ ya, ma ọ bụ Gụkọọ ka i soro okwu ndị ahụ ka a na-agụ ha.",
+"Audio": "Ụda",
+"Hear the Bible read aloud": "Gee ntị ka a na-agụ Baịbụl n’olu dara ụda",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Pịa amaokwu ọ bụla dị na Baịbụl. Bọtịnụ abụọ ga-apụta: “Gee ntị” na-agụ naanị amaokwu ndị ị họọrọ, “Gụkọọ” na-agụkwa site n’ebe ahụ ka okwu na-enwu.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Enweghị ike ịgụ Baịbụl a n’olu na ngwaọrụ a. Pịa amaokwu, wee pịa “Gụkọọ”: okwu ga-enwu otu otu, ka ị gụọ ya n’obi.",
+"Try it now": "Nwalee ugbu a"
 }
