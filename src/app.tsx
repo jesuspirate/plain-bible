@@ -247,7 +247,7 @@ export function App() {
     let timer = 0
     const tryNow = () => {
       if (!fediWelcomeDue()) return
-      if (overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 1000)
+      if (overlayOpen() || !document.querySelector('.reader article.chapter')) timer = window.setTimeout(tryNow, 1000)
       else import('./fediwelcome').then(m => setFediWelcome(() => m.FediWelcome)).catch(() => {})
     }
     timer = window.setTimeout(tryNow, 600)
@@ -258,7 +258,7 @@ export function App() {
     let timer = 0
     const tryNow = () => {
       if (!tourDue()) return
-      if (fediWelcomeDue() || overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 2000)
+      if (fediWelcomeDue() || overlayOpen() || !document.querySelector('.reader article.chapter')) timer = window.setTimeout(tryNow, 2000)
       else showTour()
     }
     timer = window.setTimeout(tryNow, 1500)
@@ -279,7 +279,7 @@ export function App() {
     let timer = 0
     const tryNow = () => {
       if (!homeScreenDue()) return
-      if (tourDue() || overlayOpen() || !document.querySelector('.reader > article.chapter')) timer = window.setTimeout(tryNow, 2000)
+      if (tourDue() || overlayOpen() || !document.querySelector('.reader article.chapter')) timer = window.setTimeout(tryNow, 2000)
       else { markHomeScreenShown(); showHomeScreen() }
     }
     timer = window.setTimeout(tryNow, 4000)
