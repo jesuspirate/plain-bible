@@ -943,7 +943,6 @@
 "Highlight removed": "Natangtang ang highlight",
 "Bookmarked": "Na-bookmark",
 "Bookmark removed": "Natangtang ang bookmark",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "I-tap ang usa ka bersikulo, unya ang Dungan nga pagbasa: mobasa kini gikan didto, ug mosiga ang mga pulong samtang gibasa, aron makasunod ka. Samtang naka-on: i-tap ang bersikulo nga gibasa aron i-pause o ipadayon, i-tap ang laing bersikulo aron mobasa gikan didto, i-tap og kaduha nga paspas ang bersikulo aron i-highlight kini, o pugngi kini aron i-bookmark. Ang button sa kakusog mopahinay o mopaspas. Magpabilin kini nga naka-on hangtod i-tap nimo ang X. Ang Paminaw mobasa lang sa mga bersikulo nga imong gipili.",
 "Share {ref}": "Ipaambit ang {ref}",
 "Outside the app": "Gawas sa app",
 "With a circle": "Sa usa ka pundok",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Daghan kaayong pag-sign in gikan dinhi. Sulayi pag-usab unya.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Paminawa ang Biblia nga basahon og kusog",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "I-tap ang bisan unsang bersikulo sa Biblia. Duha ka button ang mogawas: ang “Paminaw” mobasa lang sa mga bersikulo nga imong gipili, ug ang “Dungan nga pagbasa” mopadayon sa pagbasa gikan didto samtang mosiga ang mga pulong.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Kini nga Biblia dili mabasa og kusog niini nga device. I-tap ang usa ka bersikulo, unya ang “Dungan nga pagbasa”: mosiga ang mga pulong usa-usa, aron makabasa ka nga hilom.",
 "Try it now": "Sulayi karon",
 "Swipe with two fingers on the trackpad, or press ← or →.": "I-swipe gamit ang duha ka tudlo sa trackpad, o pindota ang ← o →.",
 "Tap: highlight, note, bookmark": "I-tap: i-highlight, nota, bookmark",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "I-tap ang titulo sa kapitulo",
 "Click the chapter title, or press /": "I-click ang titulo sa kapitulo, o pindota ang /",
 "Or pull down at the top of a chapter, then let go": "O sa ibabaw sa kapitulo, ibira paubos unya buhii",
-"Hold 🙏 to choose its skin tone": "Pindota og dugay ang 🙏 aron mopili sa kolor sa panit"
+"Hold 🙏 to choose its skin tone": "Pindota og dugay ang 🙏 aron mopili sa kolor sa panit",
+"Then tap one:": "Unya i-tap ang usa:",
+"Only the verses you picked": "Ang mga bersikulo nga imong gipili lang",
+"Reads on from there as the words light up": "Mopadayon samtang mosiga ang mga pulong",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Walay tingog alang niini nga Biblia niini nga device: mosiga ang mga pulong aron makabasa ka nga hilom."
 }

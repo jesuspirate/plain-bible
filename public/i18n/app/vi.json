@@ -943,7 +943,6 @@
 "Highlight removed": "Đã bỏ tô sáng",
 "Bookmarked": "Đã thêm dấu trang",
 "Bookmark removed": "Đã bỏ dấu trang",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Chạm vào một câu, rồi chạm Đọc theo: ứng dụng đọc tiếp từ chỗ đó, và các chữ sáng lên khi được đọc, để bạn đọc theo. Khi đang bật: chạm vào câu đang đọc để tạm dừng hoặc tiếp tục, chạm vào câu khác để đọc từ đó, chạm nhanh hai lần vào một câu để tô sáng, hoặc chạm và giữ để thêm dấu trang. Nút tốc độ giúp đọc chậm hơn hoặc nhanh hơn. Chế độ này vẫn bật cho đến khi bạn chạm X. Nghe chỉ đọc những câu bạn đã chọn.",
 "Share {ref}": "Chia sẻ {ref}",
 "Outside the app": "Ra ngoài ứng dụng",
 "With a circle": "Với một nhóm",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Quá nhiều lần đăng nhập từ đây. Hãy thử lại sau.",
 "Audio": "Âm thanh",
 "Hear the Bible read aloud": "Nghe đọc Kinh Thánh thành tiếng",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Chạm vào bất kỳ câu nào trong Kinh Thánh. Hai nút hiện ra: “Nghe” chỉ đọc những câu bạn chọn, còn “Đọc theo” đọc tiếp từ đó trong khi các chữ sáng lên.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Kinh Thánh này không thể đọc thành tiếng trên thiết bị này. Chạm vào một câu, rồi “Đọc theo”: các chữ lần lượt sáng lên để bạn đọc thầm theo.",
 "Try it now": "Thử ngay",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Vuốt bằng hai ngón trên bàn di chuột, hoặc nhấn ← hay →.",
 "Tap: highlight, note, bookmark": "Chạm: tô sáng, ghi chú, dấu trang",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Chạm vào tên chương",
 "Click the chapter title, or press /": "Nhấp vào tên chương, hoặc nhấn /",
 "Or pull down at the top of a chapter, then let go": "Hoặc ở đầu chương, kéo xuống rồi thả ra",
-"Hold 🙏 to choose its skin tone": "Giữ 🙏 để chọn màu da"
+"Hold 🙏 to choose its skin tone": "Giữ 🙏 để chọn màu da",
+"Then tap one:": "Rồi chạm vào một nút:",
+"Only the verses you picked": "Chỉ những câu bạn chọn",
+"Reads on from there as the words light up": "Đọc tiếp trong khi chữ sáng lên",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Không có giọng đọc cho Kinh Thánh này trên thiết bị này: chữ sáng lên để bạn đọc thầm."
 }

@@ -943,7 +943,6 @@
 "Highlight removed": "Ruvara rwabviswa",
 "Bookmarked": "Chiratidzo chaiswa",
 "Bookmark removed": "Chiratidzo chabviswa",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Bayai ndima, mozoti Verenga uchitevera: inoverenga kubva ipapo, uye mashoko anovheneka achiverengwa, kuti mutevere. Pazviri kushanda: bayai ndima iri kuverengwa kuti mumise kana kuenderera, bayai imwe ndima kuti muverenge kubva ipapo, bayai ndima kaviri nekukurumidza kuti muipende, kana kuibata kuti muiise chiratidzo. Bhatani rekumhanya rinononoka kana kukurumidza. Zvinoramba zvichishanda kusvikira mabaya X. Teerera inoverenga chete ndima dzamasarudza.",
 "Share {ref}": "Govera {ref}",
 "Outside the app": "Kunze kweapp",
 "With a circle": "Neboka",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Kupinda kwakawandisa kubva pano. Edzai zvakare gare gare.",
 "Audio": "Inzwi",
 "Hear the Bible read aloud": "Teerera Bhaibheri richiverengwa zvinonzwika",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Baya ndima ipi neipi muBhaibheri. Mabhatani maviri anobuda: “Teerera” inoverenga ndima dzawasarudza chete, uye “Verenga uchitevera” inoenderera mberi ichiverenga kubva ipapo mazwi achivhenekera.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Bhaibheri iri haringaverengwe zvinonzwika pachishandiso ichi. Baya ndima, wozobaya “Verenga uchitevera”: mazwi anovhenekera rimwe nerimwe, kuti uverenge wakanyarara.",
 "Try it now": "Edza izvozvi",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Svaipai neminwe miviri patrackpad, kana bayai ← kana →.",
 "Tap: highlight, note, bookmark": "Baya: penda, chinyorwa, chiratidzo",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Bayai zita rechitsauko",
 "Click the chapter title, or press /": "Dzvanyai zita rechitsauko, kana bayai /",
 "Or pull down at the top of a chapter, then let go": "Kana pamusoro pechitsauko, kweverai pasi mozorega",
-"Hold 🙏 to choose its skin tone": "Batai 🙏 kuti musarudze ruvara rweganda"
+"Hold 🙏 to choose its skin tone": "Batai 🙏 kuti musarudze ruvara rweganda",
+"Then tap one:": "Wozobaya rimwe:",
+"Only the verses you picked": "Ndima dzawasarudza chete",
+"Reads on from there as the words light up": "Inoenderera mberi mazwi achivhenekera",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Hapana inzwi reBhaibheri iri pachishandiso ichi: mazwi anovhenekera kuti uverenge wakanyarara."
 }

@@ -943,7 +943,6 @@
 "Highlight removed": "হাইলাইট সরানো হয়েছে",
 "Bookmarked": "বুকমার্ক করা হয়েছে",
 "Bookmark removed": "বুকমার্ক সরানো হয়েছে",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "একটি পদে ট্যাপ করুন, তারপর সঙ্গে পড়ুন: সেখান থেকে পড়া চলতে থাকে, আর পড়ার সঙ্গে সঙ্গে শব্দগুলি আলোকিত হয়, যাতে আপনি অনুসরণ করতে পারেন। চালু থাকার সময়: থামাতে বা চালিয়ে যেতে যে পদটি পড়া হচ্ছে তাতে ট্যাপ করুন, অন্য পদ থেকে পড়তে সেই পদে ট্যাপ করুন, হাইলাইট করতে একটি পদে দ্রুত দুবার ট্যাপ করুন, বা বুকমার্ক করতে চেপে ধরে রাখুন। গতির বোতামে ধীরে বা দ্রুত হয়। X-এ ট্যাপ না করা পর্যন্ত এটি চালু থাকে। শুনুন শুধু আপনার বেছে নেওয়া পদগুলিই পড়ে।",
 "Share {ref}": "{ref} শেয়ার করুন",
 "Outside the app": "অ্যাপের বাইরে",
 "With a circle": "একটি সার্কেলের সঙ্গে",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "এখান থেকে অনেক বেশি সাইন-ইন হয়েছে। পরে আবার চেষ্টা করুন।",
 "Audio": "অডিও",
 "Hear the Bible read aloud": "বাইবেল জোরে পড়া শুনুন",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "বাইবেলের যেকোনো পদে ট্যাপ করুন। দুটি বোতাম আসবে: “শুনুন” শুধু বেছে নেওয়া পদগুলো পড়ে, আর “সঙ্গে পড়ুন” সেখান থেকে পড়ে চলে, শব্দগুলো আলোকিত হতে থাকে।",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "এই বাইবেল এই ডিভাইসে জোরে পড়া যায় না। একটি পদে ট্যাপ করুন, তারপর “সঙ্গে পড়ুন”: শব্দগুলো একে একে আলোকিত হয়, যাতে আপনি নীরবে পড়তে পারেন।",
 "Try it now": "এখন চেষ্টা করুন",
 "Swipe with two fingers on the trackpad, or press ← or →.": "ট্র্যাকপ্যাডে দুই আঙুলে সোয়াইপ করুন, অথবা ← বা → চাপুন।",
 "Tap: highlight, note, bookmark": "ট্যাপ: হাইলাইট, নোট, বুকমার্ক",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "অধ্যায়ের শিরোনামে ট্যাপ করুন",
 "Click the chapter title, or press /": "অধ্যায়ের শিরোনামে ক্লিক করুন, অথবা / চাপুন",
 "Or pull down at the top of a chapter, then let go": "অথবা অধ্যায়ের শুরুতে নিচে টানুন, তারপর ছেড়ে দিন",
-"Hold 🙏 to choose its skin tone": "ত্বকের রং বাছতে 🙏 চেপে ধরে রাখুন"
+"Hold 🙏 to choose its skin tone": "ত্বকের রং বাছতে 🙏 চেপে ধরে রাখুন",
+"Then tap one:": "তারপর একটিতে ট্যাপ করুন:",
+"Only the verses you picked": "শুধু বেছে নেওয়া পদগুলো",
+"Reads on from there as the words light up": "পড়ে চলে, শব্দগুলো আলোকিত হয়",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "এই ডিভাইসে এই বাইবেলের কণ্ঠ নেই: শব্দগুলো আলোকিত হয় যাতে আপনি নীরবে পড়তে পারেন।"
 }

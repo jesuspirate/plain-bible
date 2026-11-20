@@ -943,7 +943,6 @@
 "Highlight removed": "ഹൈലൈറ്റ് നീക്കം ചെയ്തു",
 "Bookmarked": "ബുക്ക്‌മാർക്ക് ചെയ്തു",
 "Bookmark removed": "ബുക്ക്‌മാർക്ക് നീക്കം ചെയ്തു",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ഒരു വാക്യത്തിൽ ടാപ്പ് ചെയ്യുക, തുടർന്ന് കൂടെ വായിക്കുക: അവിടെ നിന്ന് വായന തുടരും, വായിക്കുന്ന വാക്കുകൾ തെളിയും, അതിനാൽ നിങ്ങൾക്ക് പിന്തുടരാം. അത് ഓണായിരിക്കുമ്പോൾ: താൽക്കാലികമായി നിർത്താനോ തുടരാനോ വായിക്കുന്ന വാക്യത്തിൽ ടാപ്പ് ചെയ്യുക, അവിടെ നിന്ന് വായിക്കാൻ മറ്റൊരു വാക്യത്തിൽ ടാപ്പ് ചെയ്യുക, ഹൈലൈറ്റ് ചെയ്യാൻ ഒരു വാക്യത്തിൽ വേഗം രണ്ടുതവണ ടാപ്പ് ചെയ്യുക, അല്ലെങ്കിൽ ബുക്ക്‌മാർക്ക് ചെയ്യാൻ അമർത്തിപ്പിടിക്കുക. വേഗത ബട്ടൺ പതുക്കെയോ വേഗത്തിലോ ആക്കും. X ടാപ്പ് ചെയ്യുന്നതുവരെ അത് ഓണായിരിക്കും. കേൾക്കുക നിങ്ങൾ തിരഞ്ഞെടുത്ത വാക്യങ്ങൾ മാത്രം വായിക്കും.",
 "Share {ref}": "{ref} പങ്കിടുക",
 "Outside the app": "ആപ്പിനു പുറത്ത്",
 "With a circle": "ഒരു കൂട്ടായ്മയുമായി",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "ഇവിടെനിന്ന് വളരെയധികം സൈൻ ഇൻ ശ്രമങ്ങൾ. പിന്നീട് വീണ്ടും ശ്രമിക്കുക.",
 "Audio": "ഓഡിയോ",
 "Hear the Bible read aloud": "ബൈബിൾ ഉറക്കെ വായിക്കുന്നത് കേൾക്കുക",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ബൈബിളിലെ ഏതു വാക്യത്തിലും തൊടുക. രണ്ട് ബട്ടണുകൾ വരും: “കേൾക്കുക” നിങ്ങൾ തിരഞ്ഞെടുത്ത വാക്യങ്ങൾ മാത്രം വായിക്കും, “കൂടെ വായിക്കുക” വാക്കുകൾ തെളിയുമ്പോൾ അവിടെനിന്ന് തുടർന്ന് വായിക്കും.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ഈ ബൈബിൾ ഈ ഉപകരണത്തിൽ ഉറക്കെ വായിക്കാനാവില്ല. ഒരു വാക്യത്തിൽ തൊട്ട് “കൂടെ വായിക്കുക” അമർത്തുക: വാക്കുകൾ ഓരോന്നായി തെളിയും, നിങ്ങൾക്ക് നിശ്ശബ്ദമായി വായിക്കാം.",
 "Try it now": "ഇപ്പോൾ പരീക്ഷിക്കുക",
 "Swipe with two fingers on the trackpad, or press ← or →.": "ട്രാക്ക്പാഡിൽ രണ്ട് വിരലുകൊണ്ട് സ്വൈപ്പ് ചെയ്യുക, അല്ലെങ്കിൽ ← അല്ലെങ്കിൽ → അമർത്തുക.",
 "Tap: highlight, note, bookmark": "ടാപ്പ്: ഹൈലൈറ്റ്, കുറിപ്പ്, ബുക്ക്മാർക്ക്",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "അധ്യായത്തിന്റെ തലക്കെട്ടിൽ ടാപ്പ് ചെയ്യുക",
 "Click the chapter title, or press /": "അധ്യായത്തിന്റെ തലക്കെട്ടിൽ ക്ലിക്ക് ചെയ്യുക, അല്ലെങ്കിൽ / അമർത്തുക",
 "Or pull down at the top of a chapter, then let go": "അല്ലെങ്കിൽ അധ്യായത്തിന്റെ മുകളിൽ താഴേക്ക് വലിച്ച് വിടുക",
-"Hold 🙏 to choose its skin tone": "ചർമ്മത്തിന്റെ നിറം തിരഞ്ഞെടുക്കാൻ 🙏 അമർത്തിപ്പിടിക്കുക"
+"Hold 🙏 to choose its skin tone": "ചർമ്മത്തിന്റെ നിറം തിരഞ്ഞെടുക്കാൻ 🙏 അമർത്തിപ്പിടിക്കുക",
+"Then tap one:": "പിന്നെ ഒന്നിൽ തൊടുക:",
+"Only the verses you picked": "തിരഞ്ഞെടുത്ത വാക്യങ്ങൾ മാത്രം",
+"Reads on from there as the words light up": "വാക്കുകൾ തെളിഞ്ഞ് തുടർന്ന് വായിക്കും",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ഈ ഉപകരണത്തിൽ ഈ ബൈബിളിന് ശബ്ദമില്ല: വാക്കുകൾ തെളിയും, നിശ്ശബ്ദമായി വായിക്കാം."
 }

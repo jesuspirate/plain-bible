@@ -943,7 +943,6 @@
 "Highlight removed": "Wɔayi kɔla no",
 "Bookmarked": "Wɔde agyiraehyɛde ato so",
 "Bookmark removed": "Wɔayi agyiraehyɛde no",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Mia nkyekyɛm bi, afei Kenkan ka ho: ɛkenkan fi hɔ kɔ so, na nsɛmfua no hyerɛn bere a wɔrekenkan, na woatumi adi akyi. Bere a ɛwɔ so no: mia nkyekyɛm a wɔrekenkan no na gyina anaa kɔ so, mia nkyekyɛm foforo na kenkan fi hɔ, mia nkyekyɛm bi mprenu ntɛm na hyɛ kɔla, anaa mia so kyɛ na fa agyiraehyɛde to so. Ahoɔhare bɔtɔn no ma ɛkɔ brɛoo anaa ntɛm. Ɛtena so kosi sɛ wobɛmia X. Tie kenkan nkyekyɛm a woayi no nko ara.",
 "Share {ref}": "Kyɛ {ref}",
 "Outside the app": "App no akyi",
 "With a circle": "Ne kuw bi",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Kɔ mu pii dodo fi ha. San sɔ hwɛ akyire yi.",
 "Audio": "Nne",
 "Hear the Bible read aloud": "Tie Bible no sɛ wɔrekenkan no den",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Mia nkyekyem biara so wɔ Bible no mu. Bɔtɔm abien bɛda adi: “Tie” kenkan nkyekyem a woapaw no nko ara, na “Kenkan ka ho” kɔ so kenkan fi hɔ bere a nsɛmfua no rehyerɛn.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Wontumi nkenkan Bible yi den wɔ saa afiri yi so. Mia nkyekyem bi so, na afei “Kenkan ka ho”: nsɛmfua no bɛhyerɛn baako baako, sɛnea wobɛtumi akenkan komm.",
 "Try it now": "Sɔ hwɛ seesei",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Fa nsateaa mmienu twe wɔ trackpad no so, anaa mia ← anaa →.",
 "Tap: highlight, note, bookmark": "Mia so: hyɛ kɔla, nkaeɛ, agyiraehyɛde",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Mia ti no din so",
 "Click the chapter title, or press /": "Klik ti no din so, anaa mia /",
 "Or pull down at the top of a chapter, then let go": "Anaa wɔ ti bi atifi, twe kɔ fam na gyae",
-"Hold 🙏 to choose its skin tone": "Mia 🙏 so kyɛ na yi honam kɔla"
+"Hold 🙏 to choose its skin tone": "Mia 🙏 so kyɛ na yi honam kɔla",
+"Then tap one:": "Afei mia baako so:",
+"Only the verses you picked": "Nkyekyem a woapaw nko ara",
+"Reads on from there as the words light up": "Kɔ so kenkan bere a nsɛmfua rehyerɛn",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Nne biara nni hɔ ma Bible yi wɔ saa afiri yi so: nsɛmfua no hyerɛn sɛnea wobɛkenkan komm."
 }

@@ -943,7 +943,6 @@
 "Highlight removed": "အရောင်ခြယ်ချက်ကို ဖယ်ရှားပြီး",
 "Bookmarked": "စာမှတ်ထားပြီး",
 "Bookmark removed": "စာမှတ်ကို ဖယ်ရှားပြီး",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ကျမ်းချက်တစ်ခုကို တို့ပြီး လိုက်ဖတ်ရန် ကို တို့ပါ: ထိုနေရာမှ ဆက်ဖတ်ပြီး ဖတ်နေသည့် စကားလုံးများ လင်းလာသဖြင့် လိုက်ကြည့်နိုင်ပါသည်။ ဖွင့်ထားစဉ်: ခဏရပ်ရန် သို့မဟုတ် ဆက်ဖတ်ရန် ဖတ်နေသော ကျမ်းချက်ကို တို့ပါ၊ ထိုနေရာမှ ဖတ်ရန် အခြားကျမ်းချက်ကို တို့ပါ၊ အရောင်ခြယ်ရန် ကျမ်းချက်ကို အမြန် နှစ်ချက်တို့ပါ သို့မဟုတ် စာမှတ်ထားရန် ဖိထားပါ။ အမြန်နှုန်းခလုတ်ဖြင့် နှေးအောင် သို့မဟုတ် မြန်အောင် လုပ်နိုင်ပါသည်။ X ကို တို့သည်အထိ ဖွင့်ထားပါမည်။ နားထောင်ရန် သည် သင်ရွေးထားသော ကျမ်းချက်များကိုသာ ဖတ်ပါသည်။",
 "Share {ref}": "{ref} ကို မျှဝေရန်",
 "Outside the app": "အက်ပ်၏ အပြင်သို့",
 "With a circle": "အသိုင်းအဝိုင်းနှင့်",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "ဤနေရာမှ အကောင့်ဝင်မှု အလွန်များနေပါသည်။ နောက်မှ ထပ်ကြိုးစားပါ။",
 "Audio": "အသံ",
 "Hear the Bible read aloud": "ကျမ်းစာကို အသံထွက်ဖတ်တာ နားထောင်ရန်",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ကျမ်းစာထဲက မည်သည့်အခန်းငယ်ကိုမဆို နှိပ်ပါ။ ခလုတ်နှစ်ခု ပေါ်လာမည်။ “နားထောင်ရန်” သည် သင်ရွေးသော အခန်းငယ်များကိုသာ ဖတ်ပြီး “လိုက်ဖတ်ရန်” သည် စကားလုံးများ လင်းလာစဉ် ထိုနေရာမှ ဆက်ဖတ်သည်။",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ဤကျမ်းစာကို ဤစက်ပေါ်တွင် အသံထွက်မဖတ်နိုင်ပါ။ အခန်းငယ်တစ်ခုကို နှိပ်ပြီး “လိုက်ဖတ်ရန်” ကိုနှိပ်ပါ။ စကားလုံးများ တစ်လုံးချင်း လင်းလာ၍ တိတ်တဆိတ် လိုက်ဖတ်နိုင်သည်။",
 "Try it now": "ယခု စမ်းကြည့်ရန်",
 "Swipe with two fingers on the trackpad, or press ← or →.": "ထရက်ပက်ပေါ်တွင် လက်နှစ်ချောင်းဖြင့် ပွတ်ဆွဲပါ၊ သို့မဟုတ် ← သို့မဟုတ် → ကို နှိပ်ပါ။",
 "Tap: highlight, note, bookmark": "တို့ပါ- အရောင်ခြယ်၊ မှတ်စု၊ မှတ်သားချက်",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "အခန်းခေါင်းစဉ်ကို တို့ပါ",
 "Click the chapter title, or press /": "အခန်းခေါင်းစဉ်ကို နှိပ်ပါ၊ သို့မဟုတ် / ကို နှိပ်ပါ",
 "Or pull down at the top of a chapter, then let go": "သို့မဟုတ် အခန်း၏ထိပ်တွင် အောက်သို့ဆွဲပြီး လွှတ်ပါ",
-"Hold 🙏 to choose its skin tone": "အသားအရောင်ရွေးရန် 🙏 ကို ဖိထားပါ"
+"Hold 🙏 to choose its skin tone": "အသားအရောင်ရွေးရန် 🙏 ကို ဖိထားပါ",
+"Then tap one:": "ထို့နောက် တစ်ခုကို နှိပ်ပါ -",
+"Only the verses you picked": "ရွေးထားသော အခန်းငယ်များသာ",
+"Reads on from there as the words light up": "စကားလုံးများ လင်းလာစဉ် ဆက်ဖတ်သည်",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ဤစက်တွင် ဤကျမ်းစာအတွက် အသံမရှိပါ။ စကားလုံးများ လင်းလာ၍ တိတ်တဆိတ် ဖတ်နိုင်သည်။"
 }

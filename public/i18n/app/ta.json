@@ -943,7 +943,6 @@
 "Highlight removed": "ஹைலைட் அகற்றப்பட்டது",
 "Bookmarked": "புக்மார்க் செய்யப்பட்டது",
 "Bookmark removed": "புக்மார்க் அகற்றப்பட்டது",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ஒரு வசனத்தைத் தட்டி, பிறகு உடன் வாசி: அங்கிருந்து வாசிப்பு தொடரும், வாசிக்கப்படும்போது சொற்கள் ஒளிரும், எனவே நீங்கள் பின்தொடரலாம். இயக்கத்தில் இருக்கும்போது: இடைநிறுத்த அல்லது தொடர, வாசிக்கப்படும் வசனத்தைத் தட்டவும்; அங்கிருந்து வாசிக்க வேறொரு வசனத்தைத் தட்டவும்; ஹைலைட் செய்ய ஒரு வசனத்தை வேகமாக இருமுறை தட்டவும்; புக்மார்க் செய்ய அழுத்திப் பிடிக்கவும். வேகப் பட்டன் மெதுவாக்கும் அல்லது வேகமாக்கும். X ஐத் தட்டும் வரை இது இயக்கத்தில் இருக்கும். கேள் என்பது நீங்கள் தேர்ந்தெடுத்த வசனங்களை மட்டுமே வாசிக்கும்.",
 "Share {ref}": "{ref} ஐப் பகிர்",
 "Outside the app": "ஆப்ஸுக்கு வெளியே",
 "With a circle": "ஒரு வட்டத்துடன்",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "இங்கிருந்து அதிகமான உள்நுழைவுகள். பிறகு மீண்டும் முயலவும்.",
 "Audio": "ஒலி",
 "Hear the Bible read aloud": "வேதாகமத்தை உரக்க வாசிப்பதைக் கேளுங்கள்",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "வேதாகமத்தின் எந்த வசனத்தையும் தட்டுங்கள். இரண்டு பொத்தான்கள் வரும்: “கேள்” நீங்கள் தேர்ந்த வசனங்களை மட்டும் வாசிக்கும், “உடன் வாசி” சொற்கள் ஒளிர அங்கிருந்து தொடர்ந்து வாசிக்கும்.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "இந்த வேதாகமத்தை இந்தச் சாதனத்தில் உரக்க வாசிக்க முடியாது. ஒரு வசனத்தைத் தட்டி, பிறகு “உடன் வாசி”: சொற்கள் ஒவ்வொன்றாக ஒளிரும், நீங்கள் மனதுக்குள் வாசிக்கலாம்.",
 "Try it now": "இப்போது முயலுங்கள்",
 "Swipe with two fingers on the trackpad, or press ← or →.": "டிராக்பேடில் இரண்டு விரல்களால் ஸ்வைப் செய்யுங்கள், அல்லது ← அல்லது → அழுத்துங்கள்.",
 "Tap: highlight, note, bookmark": "தட்டு: ஹைலைட், குறிப்பு, புக்மார்க்",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "அதிகாரத் தலைப்பைத் தட்டுங்கள்",
 "Click the chapter title, or press /": "அதிகாரத் தலைப்பைக் கிளிக் செய்யுங்கள், அல்லது / அழுத்துங்கள்",
 "Or pull down at the top of a chapter, then let go": "அல்லது அதிகாரத்தின் மேலே கீழே இழுத்து விடுங்கள்",
-"Hold 🙏 to choose its skin tone": "தோல் நிறத்தைத் தேர்ந்தெடுக்க 🙏-ஐ அழுத்திப் பிடியுங்கள்"
+"Hold 🙏 to choose its skin tone": "தோல் நிறத்தைத் தேர்ந்தெடுக்க 🙏-ஐ அழுத்திப் பிடியுங்கள்",
+"Then tap one:": "பிறகு ஒன்றைத் தட்டுங்கள்:",
+"Only the verses you picked": "தேர்ந்த வசனங்கள் மட்டும்",
+"Reads on from there as the words light up": "சொற்கள் ஒளிர தொடர்ந்து வாசிக்கும்",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "இந்தச் சாதனத்தில் இந்த வேதாகமத்திற்குக் குரல் இல்லை: சொற்கள் ஒளிரும், மனதுக்குள் வாசிக்கலாம்."
 }

@@ -1377,11 +1377,36 @@ body.selecting .continue { display: none; }
 .rec-about { margin: 4px 4px 14px; line-height: 1.5; }
 .rec-go { display: block; width: 100%; min-height: 52px; margin: 18px 0 10px; border-radius: 26px; font-size: 18px; font-weight: 600; }
 
-/* Audio, in Settings: how to listen, and Show me (opens a verse's bar). */
-.audio-how { margin: 4px 4px 0; font-size: 18px; line-height: 1.5; }
+/* Audio, in Settings: Try it now (a finger then shows where to tap). */
 .audio-show { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 52px; margin: 16px 0 26px; border-radius: 26px; font-size: 18px; font-weight: 600; }
 
 /* Inside Fedi, first open: "Welcome in!" with one big Nostr sign-in. */
 .fedi-welcome { display: flex; flex-direction: column; gap: 12px; padding-bottom: 8px; }
 .fedi-welcome p { margin: 0; }
 .fedi-welcome button.big { min-height: 52px; font-size: 18px; font-weight: 600; width: 100%; }
+
+/* Tap hints (src/taphint.tsx): the tour's soft fingertip on the real thing,
+   with a short label. Above the verse bar; touches pass through. */
+.tap-hint { position: fixed; inset: 0; z-index: 40; pointer-events: none; transition: opacity .25s; }
+.tap-hint.going { opacity: 0; }
+.tap-label { position: absolute; max-width: calc(100vw - 24px); padding: 5px 12px; border-radius: 14px; box-sizing: border-box;
+  background: var(--surface); color: var(--text); border: 1px solid var(--line); font: 600 15px/1.25 var(--sans); box-shadow: 0 2px 10px rgba(0, 0, 0, .08);
+  animation: tap-label .4s ease-out both; }
+@keyframes tap-label { from { opacity: 0; } }
+@media (prefers-reduced-motion: reduce) { .tap-label { animation: none; } }
+
+/* Audio in Settings: three small steps that show the real buttons. */
+.audio-steps { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.audio-steps > li { display: flex; gap: 12px; align-items: flex-start; }
+.audio-steps .step-n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--chip); color: var(--accent); font: 700 15px/28px var(--sans); text-align: center; margin-top: 4px; }
+.audio-steps .step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.audio-steps .step-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; min-height: 36px; }
+.audio-steps .step-title svg { color: var(--accent); flex: none; }
+.audio-show .g-glyph { color: inherit; }
+.audio-pick { display: flex; align-items: center; gap: 12px; }
+.audio-pick .like-btn { flex: none; display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 6px 14px; border-radius: 16px; border: 1px solid var(--line);
+  background: var(--chip); font: 600 16px/1.15 var(--sans); color: var(--text); }
+.audio-pick .like-btn svg { color: var(--accent); flex: none; }
+.audio-pick .what { color: var(--muted); font-size: 15px; line-height: 1.35; }
+.audio-note { margin: 0; color: var(--muted); font-size: 15px; }
+

@@ -943,7 +943,6 @@
 "Highlight removed": "A ti yọ àmì àwọ̀ kúrò",
 "Bookmarked": "A ti fi àmì ìwé sí i",
 "Bookmark removed": "A ti yọ àmì ìwé kúrò",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Ẹ tẹ ẹsẹ kan, lẹ́yìn náà Kà á pẹ̀lú: ó máa kà á láti ibẹ̀ lọ, àwọn ọ̀rọ̀ á sì máa tàn bí a ṣe ń kà wọ́n, kí ẹ lè tẹ̀lé e. Nígbà tí ó bá ń ṣiṣẹ́: ẹ tẹ ẹsẹ tí a ń kà láti dánu dúró tàbí láti máa bá a lọ, ẹ tẹ ẹsẹ mìíràn láti kà á láti ibẹ̀, ẹ tẹ ẹsẹ kan lẹ́ẹ̀mejì kíákíá láti fi àmì àwọ̀ sí i, tàbí ẹ tẹ̀ ẹ́ mọ́lẹ̀ láti fi àmì ìwé sí i. Bọ́tìnnì ìyára máa ń dín in kù tàbí mú un yára. Ó máa ń ṣiṣẹ́ títí ẹ ó fi tẹ X. Gbọ́ máa ń ka àwọn ẹsẹ tí ẹ yàn nìkan.",
 "Share {ref}": "Pín {ref}",
 "Outside the app": "Lóde áàpù",
 "With a circle": "Pẹ̀lú ẹgbẹ́ kan",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Wíwọlé láti ibí ti pọ̀ jù. Ẹ gbìyànjú lẹ́ẹ̀kan sí i lẹ́yìn náà.",
 "Audio": "Ohùn",
 "Hear the Bible read aloud": "Gbọ́ Bíbélì tí wọ́n ń kà sókè",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tẹ ẹsẹ kankan nínú Bíbélì. Bọ́tìnnì méjì yóò hàn: “Gbọ́” ń ka àwọn ẹsẹ tí o yàn nìkan, “Kà á pẹ̀lú” sì ń kà á lọ láti ibẹ̀ bí àwọn ọ̀rọ̀ ṣe ń tàn.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "A kò lè ka Bíbélì yìí sókè lórí ẹ̀rọ yìí. Tẹ ẹsẹ kan, lẹ́yìn náà “Kà á pẹ̀lú”: àwọn ọ̀rọ̀ á máa tàn lọ́kọ̀ọ̀kan, kí o lè kà á ní ìdákẹ́jẹ́ẹ́.",
 "Try it now": "Gbìyànjú báyìí",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Fà ìka méjì sórí trackpad, tàbí tẹ ← tàbí →.",
 "Tap: highlight, note, bookmark": "Tẹ̀: sàmì àwọ̀, àkọsílẹ̀, àmì ìwé",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Tẹ àkọlé orí",
 "Click the chapter title, or press /": "Tẹ àsin lórí àkọlé orí, tàbí tẹ /",
 "Or pull down at the top of a chapter, then let go": "Tàbí ní òkè orí kan, fà á sísàlẹ̀, lẹ́yìn náà fi sílẹ̀",
-"Hold 🙏 to choose its skin tone": "Di 🙏 mú láti yan àwọ̀ ara"
+"Hold 🙏 to choose its skin tone": "Di 🙏 mú láti yan àwọ̀ ara",
+"Then tap one:": "Lẹ́yìn náà tẹ ọ̀kan:",
+"Only the verses you picked": "Àwọn ẹsẹ tí o yàn nìkan",
+"Reads on from there as the words light up": "Ó ń kà á lọ bí ọ̀rọ̀ ṣe ń tàn",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Kò sí ohùn fún Bíbélì yìí lórí ẹ̀rọ yìí: àwọn ọ̀rọ̀ á máa tàn kí o lè kà á ní ìdákẹ́jẹ́ẹ́."
 }

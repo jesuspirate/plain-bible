@@ -943,7 +943,6 @@
 "Highlight removed": "Ընդգծումը հեռացվեց",
 "Bookmarked": "Էջանիշն ավելացվեց",
 "Bookmark removed": "Էջանիշը հեռացվեց",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Հպեք համարին, ապա «Հետևել ընթերցանությանը»․ ընթերցանությունը կսկսվի այդտեղից, և բառերը կլուսավորվեն կարդացվելիս, որ հեշտությամբ հետևեք։ Միացված լինելու ընթացքում՝ հպեք կարդացվող համարին՝ դադարեցնելու կամ շարունակելու համար, հպեք մեկ այլ համարի՝ այնտեղից կարդալու համար, արագ երկու անգամ հպեք համարին՝ այն ընդգծելու համար, կամ պահեք այն՝ էջանիշ դնելու համար։ Արագության կոճակը դանդաղեցնում կամ արագացնում է։ Այն միացված է մնում, մինչև հպեք X-ին։ «Լսել»-ը կարդում է միայն ձեր ընտրած համարները։",
 "Share {ref}": "Կիսվել {ref}-ով",
 "Outside the app": "Հավելվածից դուրս",
 "With a circle": "Շրջանակի հետ",
@@ -1269,8 +1268,6 @@
 "Too many sign-ins from here. Try again later.": "Այս ցանցից չափազանց շատ մուտքեր։ Կրկին փորձեք ավելի ուշ։",
 "Audio": "Ձայն",
 "Hear the Bible read aloud": "Լսել Աստվածաշունչը բարձրաձայն",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Հպեք Աստվածաշնչի ցանկացած համարին։ Կհայտնվեն երկու կոճակ․ «Լսել»-ը կարդում է միայն ընտրված համարները, իսկ «Հետևել ընթերցանությանը»-ը շարունակում է այնտեղից, մինչ բառերը լուսավորվում են։",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Այս Աստվածաշունչը չի կարող բարձրաձայն կարդացվել այս սարքում։ Հպեք համարին, ապա «Հետևել ընթերցանությանը»․ բառերը մեկ առ մեկ լուսավորվում են, որ կարդաք լուռ։",
 "Try it now": "Փորձել հիմա",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Սահեցրեք երկու մատով թաչփադի վրա կամ սեղմեք ← կամ →։",
 "Tap: highlight, note, bookmark": "Հպեք՝ ընդգծել, նշում, էջանիշ",
@@ -1280,5 +1277,9 @@
 "Tap the chapter title": "Հպեք գլխի վերնագրին",
 "Click the chapter title, or press /": "Սեղմեք գլխի վերնագրին կամ սեղմեք /",
 "Or pull down at the top of a chapter, then let go": "Կամ գլխի վերևում քաշեք ներքև, ապա բաց թողեք",
-"Hold 🙏 to choose its skin tone": "Պահեք 🙏-ը՝ մաշկի երանգը ընտրելու համար"
+"Hold 🙏 to choose its skin tone": "Պահեք 🙏-ը՝ մաշկի երանգը ընտրելու համար",
+"Then tap one:": "Հետո հպեք մեկին․",
+"Only the verses you picked": "Միայն ընտրված համարները",
+"Reads on from there as the words light up": "Շարունակում է, բառերը լուսավորվում են",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Այս Աստվածաշնչի համար այս սարքում ձայն չկա․ բառերը լուսավորվում են, որ կարդաք լուռ։"
 }

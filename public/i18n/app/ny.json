@@ -943,7 +943,6 @@
 "Highlight removed": "Chowunikira chachotsedwa",
 "Bookmarked": "Chizindikiro chaikidwa",
 "Bookmark removed": "Chizindikiro chachotsedwa",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Dinani vesi, kenako Werengani motsatira: chimawerenga kuchokera pamenepo, ndipo mawu amawala akamawerengedwa, kuti muzitsatira. Chikamagwira: dinani vesi limene likuwerengedwa kuti muimitse kapena mupitirize, dinani vesi lina kuti muwerenge kuchokera pamenepo, dinani vesi kawiri mwachangu kuti muliwunikire, kapena muligwire kuti muliike chizindikiro. Batani la liwiro limachepetsa kapena kufulumiza. Chimapitirira mpaka mutadina X. Mverani chimawerenga mavesi amene mwasankha okha.",
 "Share {ref}": "Gawanani {ref}",
 "Outside the app": "Kunja kwa pulogalamu",
 "With a circle": "Ndi gulu",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Kulowa kochuluka kwambiri kuchokera pano. Yesaninso pambuyo pake.",
 "Audio": "Mawu",
 "Hear the Bible read aloud": "Mverani Baibulo likuwerengedwa mokweza",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Dinani vesi lililonse m’Baibulo. Mabatani awiri adzaonekera: “Mverani” imawerenga mavesi okhawo amene mwasankha, ndipo “Werengani motsatira” imapitiriza kuwerenga kuchokera pamenepo pamene mawu akuwala.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Baibulo ili silingawerengedwe mokweza pa chipangizochi. Dinani vesi, kenako “Werengani motsatira”: mawu amawala limodzi limodzi, kuti muwerenge mwakachetechete.",
 "Try it now": "Yesani tsopano",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Sunthani ndi zala ziwiri pa trackpad, kapena dinani ← kapena →.",
 "Tap: highlight, note, bookmark": "Dinani: unikira, cholemba, chizindikiro",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Dinani dzina la mutu",
 "Click the chapter title, or press /": "Kanikizani dzina la mutu, kapena dinani /",
 "Or pull down at the top of a chapter, then let go": "Kapena pamwamba pa mutu, kokani pansi kenako melekani",
-"Hold 🙏 to choose its skin tone": "Gwirani 🙏 kuti musankhe mtundu wa khungu"
+"Hold 🙏 to choose its skin tone": "Gwirani 🙏 kuti musankhe mtundu wa khungu",
+"Then tap one:": "Kenako dinani imodzi:",
+"Only the verses you picked": "Mavesi amene mwasankha okha",
+"Reads on from there as the words light up": "Imapitiriza pamene mawu akuwala",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Palibe mawu a Baibulo ili pa chipangizochi: mawu amawala kuti muwerenge mwakachetechete."
 }

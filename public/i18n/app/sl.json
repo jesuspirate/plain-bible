@@ -1038,7 +1038,6 @@
 "Highlight removed": "Označba odstranjena",
 "Bookmarked": "Dodano med zaznamke",
 "Bookmark removed": "Zaznamek odstranjen",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Tapnite vrstico, nato Sledi branju: bere se naprej od tam, besede pa zasvetijo, ko se berejo, da lahko sledite. Ko je vklopljeno: tapnite vrstico, ki se bere, da začasno ustavite ali nadaljujete, tapnite drugo vrstico, da berete od tam, vrstico hitro tapnite dvakrat, da jo označite, ali jo pridržite, da jo dodate med zaznamke. Gumb za hitrost upočasni ali pospeši. Ostane vklopljeno, dokler ne tapnete X. Poslušaj prebere samo izbrane vrstice.",
 "Share {ref}": "Deli {ref}",
 "Outside the app": "Zunaj aplikacije",
 "With a circle": "S krogom",
@@ -1371,8 +1370,6 @@
 "Too many sign-ins from here. Try again later.": "Od tukaj je bilo preveč prijav. Poskusite pozneje.",
 "Audio": "Zvok",
 "Hear the Bible read aloud": "Poslušajte Sveto pismo, prebrano na glas",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tapnite katero koli vrstico v Svetem pismu. Prikažeta se dva gumba: »Poslušaj« prebere le izbrane vrstice, »Sledi branju« pa bere naprej od tam, medtem ko se besede osvetljujejo.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Tega Svetega pisma na tej napravi ni mogoče brati na glas. Tapnite vrstico in nato »Sledi branju«: besede se osvetlijo ena za drugo, da lahko berete tiho.",
 "Try it now": "Preizkusi zdaj",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Podrsajte z dvema prstoma po sledilni ploščici ali pritisnite ← ali →.",
 "Tap: highlight, note, bookmark": "Tapnite: označi, opomba, zaznamek",
@@ -1382,5 +1379,9 @@
 "Tap the chapter title": "Tapnite naslov poglavja",
 "Click the chapter title, or press /": "Kliknite naslov poglavja ali pritisnite /",
 "Or pull down at the top of a chapter, then let go": "Ali na vrhu poglavja povlecite navzdol in spustite",
-"Hold 🙏 to choose its skin tone": "Pridržite 🙏, da izberete barvo kože"
+"Hold 🙏 to choose its skin tone": "Pridržite 🙏, da izberete barvo kože",
+"Then tap one:": "Nato tapnite enega:",
+"Only the verses you picked": "Le izbrane vrstice",
+"Reads on from there as the words light up": "Bere naprej, besede se osvetljujejo",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Za to Sveto pismo na tej napravi ni glasu: besede se osvetljujejo, da lahko berete tiho."
 }

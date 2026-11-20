@@ -943,7 +943,6 @@
 "Highlight removed": "Emfazo forigita",
 "Bookmarked": "Legosignita",
 "Bookmark removed": "Legosigno forigita",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Tuŝetu verson, poste Kunlegi: la legado daŭras de tie, kaj la vortoj ekbrilas dum ili estas legataj, por ke vi povu sekvi. Dum ĝi estas ŝaltita: tuŝetu la legatan verson por paŭzi aŭ daŭrigi, tuŝetu alian verson por legi de tie, tuŝetu verson dufoje rapide por emfazi ĝin, aŭ tenu ĝin por legosigni ĝin. La rapidobutono malrapidigas aŭ rapidigas. Ĝi restas ŝaltita, ĝis vi tuŝetas X. Aŭskulti legas nur la versojn, kiujn vi elektis.",
 "Share {ref}": "Kunhavigi {ref}",
 "Outside the app": "Ekster la aplikaĵo",
 "With a circle": "Kun rondo",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Tro da ensalutoj de ĉi tie. Reprovu poste.",
 "Audio": "Sono",
 "Hear the Bible read aloud": "Aŭskulti la Biblion laŭte legatan",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tuŝu ajnan verson de la Biblio. Aperas du butonoj: «Aŭskulti» legas nur la elektitajn versojn, kaj «Kunlegi» legas plu de tie dum la vortoj eklumas.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Ĉi tiu Biblio ne legeblas laŭte en ĉi tiu aparato. Tuŝu verson, poste «Kunlegi»: la vortoj eklumas unu post la alia, por ke vi legu silente.",
 "Try it now": "Provi nun",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Ŝovu per du fingroj sur la tuŝplato, aŭ premu ← aŭ →.",
 "Tap: highlight, note, bookmark": "Tuŝetu: emfazi, noto, legosigno",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Tuŝetu la ĉapitrotitolon",
 "Click the chapter title, or press /": "Alklaku la ĉapitrotitolon, aŭ premu /",
 "Or pull down at the top of a chapter, then let go": "Aŭ, ĉe la supro de ĉapitro, tiru malsupren kaj ellasu",
-"Hold 🙏 to choose its skin tone": "Tenu 🙏 por elekti ĝian haŭtkoloron"
+"Hold 🙏 to choose its skin tone": "Tenu 🙏 por elekti ĝian haŭtkoloron",
+"Then tap one:": "Poste tuŝu unu:",
+"Only the verses you picked": "Nur la elektitaj versoj",
+"Reads on from there as the words light up": "Legas plu dum la vortoj eklumas",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Neniu voĉo por ĉi tiu Biblio en ĉi tiu aparato: la vortoj eklumas por silenta legado."
 }

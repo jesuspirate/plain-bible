@@ -943,7 +943,6 @@
 "Highlight removed": "Inalis ang highlight",
 "Bookmarked": "Na-bookmark",
 "Bookmark removed": "Inalis ang bookmark",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Mag-tap ng talata, saka ang Sabayang pagbasa: magbabasa ito mula roon, at sisindi ang mga salita habang binabasa, para makasabay ka. Habang naka-on: i-tap ang talatang binabasa para i-pause o ituloy, mag-tap ng ibang talata para magbasa mula roon, i-tap nang dalawang beses nang mabilis ang isang talata para i-highlight ito, o pindutin ito nang matagal para i-bookmark. Pinababagal o pinabibilis ito ng button ng bilis. Mananatili itong naka-on hanggang i-tap mo ang X. Ang Pakinggan ay nagbabasa lang ng mga talatang pinili mo.",
 "Share {ref}": "Ibahagi ang {ref}",
 "Outside the app": "Sa labas ng app",
 "With a circle": "Sa isang samahan",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Masyadong maraming pag-sign in mula rito. Subukan ulit mamaya.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Pakinggan ang Bibliya na binabasa nang malakas",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "I-tap ang alinmang talata sa Bibliya. Lilitaw ang dalawang button: binabasa ng “Pakinggan” ang mga talatang pinili mo lang, at ang “Sabayang pagbasa” ay nagpapatuloy mula roon habang umiilaw ang mga salita.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Hindi mababasa nang malakas ang Bibliyang ito sa device na ito. I-tap ang isang talata, saka ang “Sabayang pagbasa”: iilaw ang mga salita isa-isa, para makabasa ka nang tahimik.",
 "Try it now": "Subukan ngayon",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Mag-swipe gamit ang dalawang daliri sa trackpad, o pindutin ang ← o →.",
 "Tap: highlight, note, bookmark": "I-tap: i-highlight, tala, bookmark",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "I-tap ang pamagat ng kabanata",
 "Click the chapter title, or press /": "I-click ang pamagat ng kabanata, o pindutin ang /",
 "Or pull down at the top of a chapter, then let go": "O sa itaas ng kabanata, hilahin pababa at bitawan",
-"Hold 🙏 to choose its skin tone": "Pindutin nang matagal ang 🙏 para pumili ng kulay ng balat"
+"Hold 🙏 to choose its skin tone": "Pindutin nang matagal ang 🙏 para pumili ng kulay ng balat",
+"Then tap one:": "Saka i-tap ang isa:",
+"Only the verses you picked": "Ang mga talatang pinili mo lang",
+"Reads on from there as the words light up": "Nagpapatuloy habang umiilaw ang mga salita",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Walang boses para sa Bibliyang ito sa device na ito: umiilaw ang mga salita para makabasa ka nang tahimik."
 }

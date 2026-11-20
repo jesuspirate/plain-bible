@@ -943,7 +943,6 @@
 "Highlight removed": "হাইলাইট আঁতৰোৱা হ'ল",
 "Bookmarked": "বুকমাৰ্ক কৰা হ'ল",
 "Bookmark removed": "বুকমাৰ্ক আঁতৰোৱা হ'ল",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "এটা পদত টিপক, তাৰ পিছত লগে লগে পঢ়ক: তাৰ পৰা পঢ়া আগবাঢ়ে, আৰু পঢ়াৰ লগে লগে শব্দবোৰ পোহৰাই উঠে, যাতে আপুনি অনুসৰণ কৰিব পাৰে। অন থকা অৱস্থাত: ৰখাবলৈ বা আগবঢ়াবলৈ পঢ়ি থকা পদটোত টিপক, আন পদৰ পৰা পঢ়িবলৈ সেই পদত টিপক, হাইলাইট কৰিবলৈ এটা পদত বেগাবেগিকৈ দুবাৰ টিপক, বা বুকমাৰ্ক কৰিবলৈ টিপি ধৰি ৰাখক। গতিৰ বুটামে লাহে বা খৰকৈ কৰে। X টিপালৈকে ই অন থাকে। শুনকে কেৱল আপুনি বাছি লোৱা পদবোৰহে পঢ়ে।",
 "Share {ref}": "{ref} শ্বেয়াৰ কৰক",
 "Outside the app": "এপৰ বাহিৰত",
 "With a circle": "এটা ছাৰ্কলৰ সৈতে",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "ইয়াৰ পৰা বহুত বেছি ছাইন-ইন হৈছে। পিছত পুনৰ চেষ্টা কৰক।",
 "Audio": "অডিঅ’",
 "Hear the Bible read aloud": "বাইবেল জোৰেৰে পঢ়া শুনক",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "বাইবেলৰ যিকোনো পদত টেপ কৰক। দুটা বুটাম ওলাব: “শুনক”-এ কেৱল বাছি লোৱা পদবোৰ পঢ়ে, আৰু “লগে লগে পঢ়ক”-এ তাৰ পৰা পঢ়ি যায়, শব্দবোৰ পোহৰ হৈ থাকে।",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "এই বাইবেল এই ডিভাইচত জোৰেৰে পঢ়িব নোৱাৰি। এটা পদত টেপ কৰক, তাৰ পিছত “লগে লগে পঢ়ক”: শব্দবোৰ এটা এটাকৈ পোহৰ হয়, যাতে আপুনি মনে মনে পঢ়িব পাৰে।",
 "Try it now": "এতিয়া চেষ্টা কৰক",
 "Swipe with two fingers on the trackpad, or press ← or →.": "ট্ৰেকপেডত দুটা আঙুলিৰে ছোৱাইপ কৰক, নাইবা ← বা → টিপক।",
 "Tap: highlight, note, bookmark": "টিপক: হাইলাইট, টোকা, বুকমাৰ্ক",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "অধ্যায়ৰ শিৰোনামত টিপক",
 "Click the chapter title, or press /": "অধ্যায়ৰ শিৰোনামত ক্লিক কৰক, নাইবা / টিপক",
 "Or pull down at the top of a chapter, then let go": "নাইবা অধ্যায়ৰ আৰম্ভণিত তললৈ টানক, তাৰ পিছত এৰি দিয়ক",
-"Hold 🙏 to choose its skin tone": "ছালৰ ৰং বাছিবলৈ 🙏 টিপি ধৰি ৰাখক"
+"Hold 🙏 to choose its skin tone": "ছালৰ ৰং বাছিবলৈ 🙏 টিপি ধৰি ৰাখক",
+"Then tap one:": "তাৰ পিছত এটাত টেপ কৰক:",
+"Only the verses you picked": "কেৱল বাছি লোৱা পদবোৰ",
+"Reads on from there as the words light up": "পঢ়ি যায়, শব্দবোৰ পোহৰ হয়",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "এই ডিভাইচত এই বাইবেলৰ মাত নাই: শব্দবোৰ পোহৰ হয়, যাতে আপুনি মনে মনে পঢ়িব পাৰে।"
 }

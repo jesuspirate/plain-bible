@@ -943,7 +943,6 @@
 "Highlight removed": "ਹਾਈਲਾਈਟ ਹਟਾਈ",
 "Bookmarked": "ਬੁੱਕਮਾਰਕ ਕੀਤਾ",
 "Bookmark removed": "ਬੁੱਕਮਾਰਕ ਹਟਾਇਆ",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ਕਿਸੇ ਆਇਤ ’ਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ: ਪੜ੍ਹਨਾ ਉੱਥੋਂ ਅੱਗੇ ਚੱਲਦਾ ਹੈ, ਅਤੇ ਪੜ੍ਹੇ ਜਾ ਰਹੇ ਸ਼ਬਦ ਚਮਕਦੇ ਹਨ, ਤਾਂ ਜੋ ਤੁਸੀਂ ਨਾਲ ਚੱਲ ਸਕੋ। ਚਾਲੂ ਹੋਣ ਦੌਰਾਨ: ਰੋਕਣ ਜਾਂ ਜਾਰੀ ਰੱਖਣ ਲਈ ਪੜ੍ਹੀ ਜਾ ਰਹੀ ਆਇਤ ’ਤੇ ਟੈਪ ਕਰੋ, ਉੱਥੋਂ ਪੜ੍ਹਨ ਲਈ ਕਿਸੇ ਹੋਰ ਆਇਤ ’ਤੇ ਟੈਪ ਕਰੋ, ਹਾਈਲਾਈਟ ਕਰਨ ਲਈ ਕਿਸੇ ਆਇਤ ’ਤੇ ਜਲਦੀ ਨਾਲ ਦੋ ਵਾਰ ਟੈਪ ਕਰੋ, ਜਾਂ ਬੁੱਕਮਾਰਕ ਕਰਨ ਲਈ ਉਸ ਨੂੰ ਦਬਾਈ ਰੱਖੋ। ਗਤੀ ਵਾਲਾ ਬਟਨ ਹੌਲੀ ਜਾਂ ਤੇਜ਼ ਕਰਦਾ ਹੈ। ਇਹ ਉਦੋਂ ਤੱਕ ਚਾਲੂ ਰਹਿੰਦਾ ਹੈ ਜਦੋਂ ਤੱਕ ਤੁਸੀਂ X ’ਤੇ ਟੈਪ ਨਾ ਕਰੋ। ਸੁਣੋ ਸਿਰਫ਼ ਤੁਹਾਡੀਆਂ ਚੁਣੀਆਂ ਆਇਤਾਂ ਪੜ੍ਹਦਾ ਹੈ।",
 "Share {ref}": "{ref} ਸਾਂਝਾ ਕਰੋ",
 "Outside the app": "ਐਪ ਤੋਂ ਬਾਹਰ",
 "With a circle": "ਕਿਸੇ ਸਮੂਹ ਨਾਲ",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "ਇੱਥੋਂ ਬਹੁਤ ਸਾਈਨ ਇਨ ਹੋਏ। ਬਾਅਦ ਵਿੱਚ ਦੁਬਾਰਾ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
 "Audio": "ਆਡੀਓ",
 "Hear the Bible read aloud": "ਬਾਈਬਲ ਉੱਚੀ ਪੜ੍ਹੀ ਜਾਂਦੀ ਸੁਣੋ",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ਬਾਈਬਲ ਦੀ ਕਿਸੇ ਵੀ ਆਇਤ ’ਤੇ ਟੈਪ ਕਰੋ। ਦੋ ਬਟਨ ਆਉਣਗੇ: “ਸੁਣੋ” ਸਿਰਫ਼ ਚੁਣੀਆਂ ਆਇਤਾਂ ਪੜ੍ਹਦਾ ਹੈ, ਅਤੇ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਉੱਥੋਂ ਅੱਗੇ ਪੜ੍ਹਦਾ ਜਾਂਦਾ ਹੈ, ਸ਼ਬਦ ਚਮਕਦੇ ਜਾਂਦੇ ਹਨ।",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ਇਹ ਬਾਈਬਲ ਇਸ ਡਿਵਾਈਸ ’ਤੇ ਉੱਚੀ ਨਹੀਂ ਪੜ੍ਹੀ ਜਾ ਸਕਦੀ। ਕਿਸੇ ਆਇਤ ’ਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ”: ਸ਼ਬਦ ਇੱਕ-ਇੱਕ ਕਰਕੇ ਚਮਕਦੇ ਹਨ, ਤਾਂ ਜੋ ਤੁਸੀਂ ਚੁੱਪ-ਚਾਪ ਪੜ੍ਹ ਸਕੋ।",
 "Try it now": "ਹੁਣੇ ਅਜ਼ਮਾਓ",
 "Swipe with two fingers on the trackpad, or press ← or →.": "ਟਰੈਕਪੈਡ ’ਤੇ ਦੋ ਉਂਗਲਾਂ ਨਾਲ ਸਵਾਈਪ ਕਰੋ, ਜਾਂ ← ਜਾਂ → ਦਬਾਓ।",
 "Tap: highlight, note, bookmark": "ਟੈਪ: ਹਾਈਲਾਈਟ, ਨੋਟ, ਬੁੱਕਮਾਰਕ",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "ਅਧਿਆਇ ਦੇ ਸਿਰਲੇਖ ’ਤੇ ਟੈਪ ਕਰੋ",
 "Click the chapter title, or press /": "ਅਧਿਆਇ ਦੇ ਸਿਰਲੇਖ ’ਤੇ ਕਲਿੱਕ ਕਰੋ, ਜਾਂ / ਦਬਾਓ",
 "Or pull down at the top of a chapter, then let go": "ਜਾਂ ਅਧਿਆਇ ਦੇ ਉੱਪਰ ਹੇਠਾਂ ਖਿੱਚੋ, ਫਿਰ ਛੱਡ ਦਿਓ",
-"Hold 🙏 to choose its skin tone": "ਚਮੜੀ ਦਾ ਰੰਗ ਚੁਣਨ ਲਈ 🙏 ਦਬਾ ਕੇ ਰੱਖੋ"
+"Hold 🙏 to choose its skin tone": "ਚਮੜੀ ਦਾ ਰੰਗ ਚੁਣਨ ਲਈ 🙏 ਦਬਾ ਕੇ ਰੱਖੋ",
+"Then tap one:": "ਫਿਰ ਇੱਕ ’ਤੇ ਟੈਪ ਕਰੋ:",
+"Only the verses you picked": "ਸਿਰਫ਼ ਚੁਣੀਆਂ ਆਇਤਾਂ",
+"Reads on from there as the words light up": "ਅੱਗੇ ਪੜ੍ਹਦਾ ਹੈ, ਸ਼ਬਦ ਚਮਕਦੇ ਹਨ",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ਇਸ ਡਿਵਾਈਸ ’ਤੇ ਇਸ ਬਾਈਬਲ ਦੀ ਆਵਾਜ਼ ਨਹੀਂ: ਸ਼ਬਦ ਚਮਕਦੇ ਹਨ ਤਾਂ ਜੋ ਤੁਸੀਂ ਚੁੱਪ-ਚਾਪ ਪੜ੍ਹ ਸਕੋ।"
 }

@@ -943,7 +943,6 @@
 "Highlight removed": "Kasansal kasohrehlahr",
 "Bookmarked": "Kilelehdier",
 "Bookmark removed": "Kilel kasohrehlahr",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Pedikih iretik ehu, oh Wadek iangahki: e kin wadek sang wasao, oh lokaia kan kin marainla ni ahnsou me re wadekda, pwe komw en kak idawehn. Ni ahnsou me e mi doadoahk: pedikih iretik me wadewadek pwe en kommoal de doaloa, pedikih iretik teio pwe en wadek sang wasao, pedikih iretik ehu pak riau ni marain pwe en kasansal, de pedikih ahnsou reirei pwe en kilelehdi. Wasa en marain kin kamwadang de kamwakaiada. E pahn doadoahkte lel ahnsou me komw pedikih X. Rong kin wadek iretik kan me komw pilada ihte.",
 "Share {ref}": "Nehne {ref}",
 "Outside the app": "Liki sang app",
 "With a circle": "Rehn pwihn ehu",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Pedolong tohto mehlel sang met. Song pwuhrehng mwuhr.",
 "Audio": "Ngihl",
 "Hear the Bible read aloud": "Rong Paipel me wadekda ni ngihl laud",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Kesehdi iretikis koaros nan Paipel. Pwuhten riau pahn pwarada: “Rong” kin wadek iretikis ko ke pilada ehu, oh “Wadek iangahki” kin wadekpeseng sang wasao ni ahnsou me lepin lokaia kan kin marain.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Paipel wet sohte kak wadekda ni ngihl laud nan dipwisou wet. Kesehdi ehu iretikis, eri “Wadek iangahki”: lepin lokaia kan pahn marain ehu ehu, pwe ke en kak wadek ni nennen.",
 "Try it now": "Song met",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Kesepwil ki sendi riau pohn trackpad, de pedikih ← de →.",
 "Tap: highlight, note, bookmark": "Pedikih: kasansal, nting, kilel",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Pedikih ilen irelaud",
 "Click the chapter title, or press /": "Click ilen irelaud, de pedikih /",
 "Or pull down at the top of a chapter, then let go": "De powe nan irelaud ehu, pwekipwekidi oh lusala",
-"Hold 🙏 to choose its skin tone": "Kolokol 🙏 pwe komw en pilada kalahr en kili"
+"Hold 🙏 to choose its skin tone": "Kolokol 🙏 pwe komw en pilada kalahr en kili",
+"Then tap one:": "Eri kesehdi ehu:",
+"Only the verses you picked": "Iretikis ko ke pilada ehu",
+"Reads on from there as the words light up": "Kin wadekpeseng ni lepin lokaia kan marain",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Sohte ngihl ong Paipel wet nan dipwisou wet: lepin lokaia kan kin marain pwe ke en wadek ni nennen."
 }

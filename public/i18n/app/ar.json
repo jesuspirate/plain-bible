@@ -1069,7 +1069,6 @@
 "Highlight removed": "أُزيل التمييز",
 "Bookmarked": "أُضيفت إشارة مرجعية",
 "Bookmark removed": "أُزيلت الإشارة المرجعية",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "اضغط آية، ثم «القراءة مع المتابعة»: تبدأ القراءة من هناك، وتُضاء الكلمات أثناء قراءتها لتتابعها. أثناء التشغيل: اضغط الآية التي تُقرأ للإيقاف المؤقت أو المتابعة، أو اضغط آية أخرى للقراءة منها، أو اضغط آية مرتين بسرعة لتمييزها، أو اضغط عليها مطولًا لوضع إشارة مرجعية. زر السرعة يبطئ أو يسرّع. تبقى مفعّلة حتى تضغط X. أما «استماع» فيقرأ الآيات التي اخترتها فقط.",
 "Share {ref}": "مشاركة {ref}",
 "Outside the app": "خارج التطبيق",
 "With a circle": "مع دائرة",
@@ -1406,8 +1405,6 @@
 "Too many sign-ins from here. Try again later.": "محاولات تسجيل دخول كثيرة جدًا من هنا. حاول لاحقًا.",
 "Audio": "الصوت",
 "Hear the Bible read aloud": "استمع إلى الكتاب المقدس مقروءًا بصوت عالٍ",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "المس أي آية في الكتاب المقدس. يظهر زرّان: «استماع» يقرأ الآيات التي اخترتها فقط، و«القراءة مع المتابعة» يتابع القراءة من هناك بينما تضيء الكلمات.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "لا يمكن قراءة هذا الكتاب المقدس بصوت عالٍ على هذا الجهاز. المس آية، ثم «القراءة مع المتابعة»: تضيء الكلمات واحدة تلو الأخرى، لتقرأ معها بصمت.",
 "Try it now": "جرّبه الآن",
 "Swipe with two fingers on the trackpad, or press ← or →.": "اسحب بإصبعين على لوحة اللمس، أو اضغط ← أو →.",
 "Tap: highlight, note, bookmark": "اضغط: تمييز، ملاحظة، إشارة مرجعية",
@@ -1417,5 +1414,9 @@
 "Tap the chapter title": "اضغط عنوان الأصحاح",
 "Click the chapter title, or press /": "انقر عنوان الأصحاح، أو اضغط /",
 "Or pull down at the top of a chapter, then let go": "أو في أعلى الأصحاح، اسحب للأسفل ثم اترك",
-"Hold 🙏 to choose its skin tone": "اضغط مطولًا على 🙏 لاختيار لون البشرة"
+"Hold 🙏 to choose its skin tone": "اضغط مطولًا على 🙏 لاختيار لون البشرة",
+"Then tap one:": "ثم المس أحدهما:",
+"Only the verses you picked": "الآيات المختارة فقط",
+"Reads on from there as the words light up": "يتابع القراءة والكلمات تضيء",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "لا صوت لهذا الكتاب المقدس على هذا الجهاز: تضيء الكلمات لتقرأ بصمت."
 }

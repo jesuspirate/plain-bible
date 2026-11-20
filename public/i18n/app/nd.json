@@ -943,7 +943,6 @@
 "Highlight removed": "Ukugqamisa kususiwe",
 "Bookmarked": "Uphawu lufakiwe",
 "Bookmark removed": "Uphawu lususiwe",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Thintani ivesi, lapho-ke Bala ulandela: kubala kusukela lapho, lamazwi ayakhanya njengoba ebalwa, ukuze lilandele. Lapho kusebenza: thintani ivesi elibalwayo ukuze limise kumbe liqhubeke, thintani elinye ivesi ukuze libale kusukela lapho, thintani ivesi kabili masinyane ukuze liligqamise, kumbe libambe ukuze lifake uphawu. Inkinobho yejubane yehlisa kumbe iphangisa. Kuhlala kusebenza lize lithinte X. Lalela kubala amavesi elikhethileyo kuphela.",
 "Share {ref}": "Yabelana nge-{ref}",
 "Outside the app": "Ngaphandle kwe-app",
 "With a circle": "Leqembu",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Ukungena okunengi kakhulu kuvela lapha. Zamani futhi ngemva.",
 "Audio": "Umsindo",
 "Hear the Bible read aloud": "Lalela iBhayibhili libalwa ngelizwi",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Thinta ivesi loba yiphi eBhayibhilini. Kuzavela izinkinobho ezimbili: “Lalela” ibala amavesi owakhethileyo kuphela, kanti “Bala ulandela” iqhubeka ibala kusukela lapho amabala ekhanya.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "IBhayibhili leli alibalwa ngelizwi kulesi sisetshenziswa. Thinta ivesi, ubusuthinta “Bala ulandela”: amabala ayakhanya ngalinye ngalinye, ukuze ubale uthule.",
 "Try it now": "Zama khathesi",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Swayipha ngeminwe emibili ku-trackpad, kumbe uthinte ← kumbe →.",
 "Tap: highlight, note, bookmark": "Thinta: gqamisa, inothi, uphawu",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Thintani isihloko sesahluko",
 "Click the chapter title, or press /": "Qhwarhani isihloko sesahluko, kumbe lithinte /",
 "Or pull down at the top of a chapter, then let go": "Kumbe phezulu kwesahluko, donsani phansi beseliyekela",
-"Hold 🙏 to choose its skin tone": "Bambani u-🙏 ukuze likhethe ibala lesikhumba"
+"Hold 🙏 to choose its skin tone": "Bambani u-🙏 ukuze likhethe ibala lesikhumba",
+"Then tap one:": "Ubusuthinta enye:",
+"Only the verses you picked": "Amavesi owakhethileyo kuphela",
+"Reads on from there as the words light up": "Iqhubeka ibala amabala ekhanya",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Akulalizwi leBhayibhili leli kulesi sisetshenziswa: amabala ayakhanya ukuze ubale uthule."
 }

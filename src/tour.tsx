@@ -58,8 +58,11 @@ const hasWidget = () => inStoreApp() && isIPhone() && !!nativeNotify() && typeof
 function steps(): Step[] {
   const settings = loadSettings()
   const version = settings.version ?? defaultSettings().version
-  // The verse bar offers Listen only when this Bible can be heard aloud.
-  const hear = canHear(version) && !settings.readSilent
+  // The verse bar offers Listen only when this Bible can be heard aloud
+  // (a narrator, or a voice on this device for its language).
+  let lang: string | undefined
+  try { lang = JSON.parse(localStorage.getItem('plain-bible:catalog') || 'null')?.translations?.find((x: { id: string }) => x.id === version)?.lang } catch { /* not kept */ }
+  const hear = canHear(version, lang) && !settings.readSilent
   // Signed in or not, sync is on wherever the Circles button is.
   const sync = !!document.querySelector('.sb-circles')
   const tap: Move = { kind: 'tap' }

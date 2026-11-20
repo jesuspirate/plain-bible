@@ -943,7 +943,6 @@
 "Highlight removed": "హైలైట్ తీసివేయబడింది",
 "Bookmarked": "బుక్‌మార్క్ చేయబడింది",
 "Bookmark removed": "బుక్‌మార్క్ తీసివేయబడింది",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ఒక వచనాన్ని నొక్కి, తర్వాత కలిసి చదువు: అక్కడి నుండి చదవడం కొనసాగుతుంది, చదువుతున్నప్పుడు పదాలు వెలుగుతాయి, కాబట్టి మీరు అనుసరించవచ్చు. ఆన్‌లో ఉన్నప్పుడు: పాజ్ చేయడానికి లేదా కొనసాగించడానికి చదువుతున్న వచనాన్ని నొక్కండి, అక్కడి నుండి చదవడానికి మరో వచనాన్ని నొక్కండి, హైలైట్ చేయడానికి ఒక వచనాన్ని వేగంగా రెండుసార్లు నొక్కండి, లేదా బుక్‌మార్క్ చేయడానికి నొక్కి పట్టుకోండి. వేగం బటన్ నెమ్మదిగా లేదా వేగంగా చేస్తుంది. మీరు X నొక్కే వరకు ఇది ఆన్‌లో ఉంటుంది. విను మీరు ఎంచుకున్న వచనాలను మాత్రమే చదువుతుంది.",
 "Share {ref}": "{ref} షేర్ చేయి",
 "Outside the app": "యాప్ బయట",
 "With a circle": "ఒక సర్కిల్‌తో",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "ఇక్కడి నుండి చాలా ఎక్కువ సైన్-ఇన్‌లు. తర్వాత మళ్లీ ప్రయత్నించండి.",
 "Audio": "ఆడియో",
 "Hear the Bible read aloud": "బైబిల్ బిగ్గరగా చదవడం వినండి",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "బైబిల్‌లోని ఏ వచనాన్నైనా తట్టండి. రెండు బటన్లు వస్తాయి: “విను” మీరు ఎంచుకున్న వచనాలను మాత్రమే చదువుతుంది, “కలిసి చదువు” పదాలు వెలుగుతూ ఉండగా అక్కడి నుండి చదువుతూ పోతుంది.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ఈ బైబిల్‌ను ఈ పరికరంలో బిగ్గరగా చదవలేము. ఒక వచనాన్ని తట్టి, తర్వాత “కలిసి చదువు”: పదాలు ఒక్కొక్కటిగా వెలుగుతాయి, మీరు మౌనంగా చదువుకోవచ్చు.",
 "Try it now": "ఇప్పుడు ప్రయత్నించండి",
 "Swipe with two fingers on the trackpad, or press ← or →.": "ట్రాక్‌ప్యాడ్‌పై రెండు వేళ్లతో స్వైప్ చేయండి, లేదా ← లేదా → నొక్కండి.",
 "Tap: highlight, note, bookmark": "ట్యాప్: హైలైట్, నోట్, బుక్‌మార్క్",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "అధ్యాయం శీర్షికపై ట్యాప్ చేయండి",
 "Click the chapter title, or press /": "అధ్యాయం శీర్షికపై క్లిక్ చేయండి, లేదా / నొక్కండి",
 "Or pull down at the top of a chapter, then let go": "లేదా అధ్యాయం పైభాగంలో కిందకు లాగి వదలండి",
-"Hold 🙏 to choose its skin tone": "చర్మం రంగు ఎంచుకోవడానికి 🙏ని నొక్కి పట్టుకోండి"
+"Hold 🙏 to choose its skin tone": "చర్మం రంగు ఎంచుకోవడానికి 🙏ని నొక్కి పట్టుకోండి",
+"Then tap one:": "తర్వాత ఒకదాన్ని తట్టండి:",
+"Only the verses you picked": "ఎంచుకున్న వచనాలు మాత్రమే",
+"Reads on from there as the words light up": "పదాలు వెలుగుతూ చదువుతూ పోతుంది",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ఈ పరికరంలో ఈ బైబిల్‌కు స్వరం లేదు: పదాలు వెలుగుతాయి, మీరు మౌనంగా చదవవచ్చు."
 }

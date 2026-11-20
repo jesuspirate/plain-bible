@@ -943,7 +943,6 @@
 "Highlight removed": "ハイライトを削除しました",
 "Bookmarked": "ブックマークしました",
 "Bookmark removed": "ブックマークを削除しました",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "節をタップしてから「目で追って読む」をタップすると、そこから先を読み進め、読まれている言葉が光るので、目で追うことができます。オンの間は、読まれている節をタップすると一時停止・再開、別の節をタップするとそこから読み、節をすばやく2回タップするとハイライト、長押しするとブックマークできます。速度ボタンで遅くしたり速くしたりできます。X をタップするまでオンのままです。「聞く」は選んだ節だけを読み上げます。",
 "Share {ref}": "{ref} を共有",
 "Outside the app": "アプリの外へ",
 "With a circle": "サークルと",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "ここからのサインインが多すぎます。あとでもう一度お試しください。",
 "Audio": "音声",
 "Hear the Bible read aloud": "聖書の朗読を聞く",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "聖書のどの節でもタップしてください。ボタンが二つ出ます。「聞く」は選んだ節だけを読み、「目で追って読む」は言葉を光らせながらそこから先を読み続けます。",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "この聖書はこの端末では読み上げできません。節をタップして「目で追って読む」を押すと、言葉が一つずつ光るので、黙読でついて行けます。",
 "Try it now": "試してみる",
 "Swipe with two fingers on the trackpad, or press ← or →.": "トラックパッドを2本指でスワイプするか、← または → を押します。",
 "Tap: highlight, note, bookmark": "タップ：ハイライト、メモ、ブックマーク",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "章のタイトルをタップ",
 "Click the chapter title, or press /": "章のタイトルをクリック、または / を押す",
 "Or pull down at the top of a chapter, then let go": "または章の一番上で下に引いて離す",
-"Hold 🙏 to choose its skin tone": "🙏 を長押しして肌の色を選ぶ"
+"Hold 🙏 to choose its skin tone": "🙏 を長押しして肌の色を選ぶ",
+"Then tap one:": "次にどちらかをタップ：",
+"Only the verses you picked": "選んだ節だけ",
+"Reads on from there as the words light up": "言葉を光らせながら読み続けます",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。"
 }

@@ -943,7 +943,6 @@
 "Highlight removed": "已移除螢光標記",
 "Bookmarked": "已加入書籤",
 "Bookmark removed": "已移除書籤",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "點一下一節經文，然後點一下「跟讀」：會從那裡開始往下讀，讀到的字詞會亮起來，方便你跟著讀。跟讀時：點一下正在讀的經文可暫停或繼續，點一下另一節經文可從那裡開始讀，快速點兩下一節經文可加上螢光標記，按住經文可加入書籤。速度按鈕可放慢或加快。它會一直開啟，直到你點一下 X。「收聽」只朗讀你選擇的經文。",
 "Share {ref}": "分享{ref}",
 "Outside the app": "分享到 App 之外",
 "With a circle": "與小組分享",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "從這裡登入的次數太多了。請稍後再試。",
 "Audio": "音訊",
 "Hear the Bible read aloud": "聽聖經朗讀",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "點一下聖經裡的任何一節。會出現兩個按鈕：「收聽」只讀你選的經節，「跟讀」從那裡一直讀下去，同時字詞逐個亮起。",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "這本聖經在此裝置上無法朗讀。點一下經節，再點「跟讀」：字詞會逐個亮起，方便你默讀跟隨。",
 "Try it now": "現在試試",
 "Swipe with two fingers on the trackpad, or press ← or →.": "在觸控板上用兩指輕掃，或按 ← 或 →。",
 "Tap: highlight, note, bookmark": "點一下：螢光標示、筆記、書籤",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "點一下章節標題",
 "Click the chapter title, or press /": "按一下章節標題，或按 /",
 "Or pull down at the top of a chapter, then let go": "或在章節頂端向下拉，然後放開",
-"Hold 🙏 to choose its skin tone": "按住 🙏 選擇膚色"
+"Hold 🙏 to choose its skin tone": "按住 🙏 選擇膚色",
+"Then tap one:": "然後點其中一個：",
+"Only the verses you picked": "只讀你選的經節",
+"Reads on from there as the words light up": "一直讀下去，字詞逐個亮起",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "此裝置上這本聖經沒有語音：字詞會逐個亮起，方便你默讀。"
 }

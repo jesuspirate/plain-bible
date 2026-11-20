@@ -943,7 +943,6 @@
 "Highlight removed": "Halluun haqameera",
 "Bookmarked": "Mallatteeffameera",
 "Bookmark removed": "Mallattoon haqameera",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Caqasa tuqi, achiis Hordofii dubbisi: achii jalqabee dubbisa, jechoonni yeroo dubbifaman ni ibsu, akka ati hordofuu dandeessuuf. Yeroo hojii irra jiru: dhaabuuf ykn itti fufuuf caqasa dubbifamaa jiru tuqi, achii dubbisuuf caqasa biraa tuqi, halluu dibuuf caqasa si'a lama dafiitii tuqi, ykn mallatteessuuf qabadhu. Qabduun saffisaa suuta ykn dafee akka deemu godha. Hanga X tuqxutti hojii irra tura. Dhaggeeffadhu caqasoota ati filatte qofa dubbisa.",
 "Share {ref}": "{ref} qoodi",
 "Outside the app": "Appii alatti",
 "With a circle": "Garee wajjin",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Asii seensi baay'ee ta'eera. Booda irra deebi'ii yaali.",
 "Audio": "Sagalee",
 "Hear the Bible read aloud": "Macaafa Qulqulluu sagaleen dubbifamu dhaggeeffadhu",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Lakkoofsa Macaafa Qulqulluu kamiyyuu tuqi. Qabduuwwan lama ni mul’atu: “Dhaggeeffadhu” lakkoofsota ati filatte qofa dubbisa, “Hordofii dubbisi” immoo achii jalqabee jechoonni ifaa jiranii itti fufee dubbisa.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Macaafni Qulqulluun kun meeshaa kana irratti sagaleen dubbifamuu hin danda’u. Lakkoofsa tokko tuqi, achiis “Hordofii dubbisi”: jechoonni tokko tokkoon ifu, akka ati callisaan dubbistuuf.",
 "Try it now": "Amma yaali",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Trackpad irratti quba lamaan harkisi, ykn ← ykn → tuqi.",
 "Tap: highlight, note, bookmark": "Tuqi: halluu dibi, yaadannoo, mallattoo",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Mata duree boqonnaa tuqi",
 "Click the chapter title, or press /": "Mata duree boqonnaa cuqaasi, ykn / tuqi",
 "Or pull down at the top of a chapter, then let go": "Ykn boqonnaa gubbaatti gadi harkisii gadhiisi",
-"Hold 🙏 to choose its skin tone": "Halluu gogaa filachuuf 🙏 qabadhu"
+"Hold 🙏 to choose its skin tone": "Halluu gogaa filachuuf 🙏 qabadhu",
+"Then tap one:": "Achiis tokko tuqi:",
+"Only the verses you picked": "Lakkoofsota filatte qofa",
+"Reads on from there as the words light up": "Jechoonni ifaa itti fufee dubbisa",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Meeshaa kana irratti Macaafa Qulqulluu kanaaf sagaleen hin jiru: jechoonni ni ifu akka callisaan dubbistuuf."
 }

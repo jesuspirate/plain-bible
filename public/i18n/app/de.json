@@ -943,7 +943,6 @@
 "Highlight removed": "Markierung entfernt",
 "Bookmarked": "Lesezeichen gesetzt",
 "Bookmark removed": "Lesezeichen entfernt",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Tippe auf einen Vers und dann auf „Mitlesen“: Es wird ab dort gelesen, und die Wörter leuchten auf, während sie gelesen werden, sodass du gut folgen kannst. Solange es läuft: Tippe auf den gerade gelesenen Vers, um anzuhalten oder fortzufahren, tippe auf einen anderen Vers, um dort weiterzulesen, tippe zweimal schnell auf einen Vers, um ihn zu markieren, oder halte ihn gedrückt, um ein Lesezeichen zu setzen. Die Tempotaste macht es langsamer oder schneller. Es bleibt an, bis du auf X tippst. „Anhören“ liest nur die Verse, die du ausgewählt hast.",
 "Share {ref}": "{ref} teilen",
 "Outside the app": "Außerhalb der App",
 "With a circle": "Mit einem Kreis",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Zu viele Anmeldungen von hier. Versuche es später erneut.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Die Bibel vorlesen lassen",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tippe auf einen Vers in der Bibel. Zwei Knöpfe erscheinen: „Anhören“ liest nur die gewählten Verse, und „Mitlesen“ liest von dort weiter, während die Wörter aufleuchten.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Diese Bibel kann auf diesem Gerät nicht vorgelesen werden. Tippe auf einen Vers, dann auf „Mitlesen“: Die Wörter leuchten nacheinander auf, so kannst du still mitlesen.",
 "Try it now": "Jetzt ausprobieren",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Wische mit zwei Fingern auf dem Trackpad oder drücke ← oder →.",
 "Tap: highlight, note, bookmark": "Tippen: markieren, Notiz, Lesezeichen",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Tippe auf den Kapiteltitel",
 "Click the chapter title, or press /": "Klicke auf den Kapiteltitel oder drücke /",
 "Or pull down at the top of a chapter, then let go": "Oder oben in einem Kapitel nach unten ziehen, dann loslassen",
-"Hold 🙏 to choose its skin tone": "Halte 🙏 gedrückt, um den Hautton zu wählen"
+"Hold 🙏 to choose its skin tone": "Halte 🙏 gedrückt, um den Hautton zu wählen",
+"Then tap one:": "Dann eines davon antippen:",
+"Only the verses you picked": "Nur die gewählten Verse",
+"Reads on from there as the words light up": "Liest weiter, die Wörter leuchten auf",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Keine Stimme für diese Bibel auf diesem Gerät: Die Wörter leuchten auf, zum stillen Mitlesen."
 }

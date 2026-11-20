@@ -943,7 +943,6 @@
 "Highlight removed": "An cire alamar launi",
 "Bookmarked": "An sa alamar shafi",
 "Bookmark removed": "An cire alamar shafi",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Taɓa aya, sannan Karanta tare: tana karantawa daga nan, kalmomi kuma suna haskakawa yayin da ake karanta su, don ku bi. Yayin da yake a kunne: taɓa ayar da ake karantawa don dakatarwa ko ci gaba, taɓa wata aya don karantawa daga can, taɓa aya sau biyu da sauri don sa mata alamar launi, ko riƙe ta don sa mata alamar shafi. Maɓallin gudu yana rage ko ƙara sauri. Yana zama a kunne har sai kun taɓa X. Saurara tana karanta ayoyin da kuka zaɓa kawai.",
 "Share {ref}": "Raba {ref}",
 "Outside the app": "A wajen manhajar",
 "With a circle": "Da ƙungiya",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Shiga daga nan sun yi yawa. Sake gwadawa daga baya.",
 "Audio": "Sauti",
 "Hear the Bible read aloud": "Saurari ana karanta Baibul da babbar murya",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Taɓa kowace aya a cikin Baibul. Maɓallai biyu za su bayyana: “Saurara” yana karanta ayoyin da ka zaɓa kawai, “Karanta tare” kuma yana ci gaba da karatu daga can yayin da kalmomi ke haskakawa.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Ba za a iya karanta wannan Baibul da murya a wannan na’ura ba. Taɓa aya, sa’an nan “Karanta tare”: kalmomi suna haskakawa ɗaya bayan ɗaya, don ka karanta a zuci.",
 "Try it now": "Gwada yanzu",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Goge da yatsu biyu a kan trackpad, ko danna ← ko →.",
 "Tap: highlight, note, bookmark": "Taɓa: alamar launi, rubutu, alamar shafi",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Taɓa kan babin",
 "Click the chapter title, or press /": "Danna kan babin, ko danna /",
 "Or pull down at the top of a chapter, then let go": "Ko a saman babi, ja ƙasa sannan ku saki",
-"Hold 🙏 to choose its skin tone": "Riƙe 🙏 don zaɓar launin fata"
+"Hold 🙏 to choose its skin tone": "Riƙe 🙏 don zaɓar launin fata",
+"Then tap one:": "Sa’an nan taɓa ɗaya:",
+"Only the verses you picked": "Ayoyin da ka zaɓa kawai",
+"Reads on from there as the words light up": "Yana ci gaba da karatu kalmomi na haskakawa",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Babu murya ga wannan Baibul a wannan na’ura: kalmomi suna haskakawa don ka karanta a zuci."
 }

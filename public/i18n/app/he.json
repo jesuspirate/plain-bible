@@ -943,7 +943,6 @@
 "Highlight removed": "ההדגשה הוסרה",
 "Bookmarked": "נוסף לסימניות",
 "Bookmark removed": "הסימנייה הוסרה",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "יש להקיש על פסוק, ואז על \"קריאה עם מעקב\": הקריאה ממשיכה משם, והמילים נדלקות כשהן נקראות, כדי שיהיה קל לעקוב. בזמן הפעולה: הקשה על הפסוק שנקרא משהה או ממשיכה, הקשה על פסוק אחר קוראת ממנו, הקשה כפולה ומהירה על פסוק מדגישה אותו, ולחיצה ארוכה מוסיפה סימנייה. כפתור המהירות מאט או מאיץ. זה נשאר פועל עד הקשה על X. \"האזנה\" קוראת רק את הפסוקים שבחרת.",
 "Share {ref}": "שיתוף {ref}",
 "Outside the app": "מחוץ לאפליקציה",
 "With a circle": "עם מעגל",
@@ -1270,8 +1269,6 @@
 "Too many sign-ins from here. Try again later.": "יותר מדי התחברויות מכאן. כדאי לנסות שוב מאוחר יותר.",
 "Audio": "שמע",
 "Hear the Bible read aloud": "להאזין לקריאת המקרא בקול",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "הקישו על פסוק כלשהו. יופיעו שני כפתורים: ״האזנה״ קורא רק את הפסוקים שבחרתם, ו״קריאה עם מעקב״ ממשיך לקרוא משם בזמן שהמילים מוארות.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "לא ניתן להקריא את התרגום הזה במכשיר הזה. הקישו על פסוק ואז ״קריאה עם מעקב״: המילים מוארות אחת אחת, כדי שתוכלו לקרוא בשקט.",
 "Try it now": "לנסות עכשיו",
 "Swipe with two fingers on the trackpad, or press ← or →.": "החליקו בשתי אצבעות על משטח המגע, או הקישו ← או →.",
 "Tap: highlight, note, bookmark": "הקשה: הדגשה, הערה, סימנייה",
@@ -1281,5 +1278,9 @@
 "Tap the chapter title": "הקישו על כותרת הפרק",
 "Click the chapter title, or press /": "לחצו על כותרת הפרק, או הקישו /",
 "Or pull down at the top of a chapter, then let go": "או, בראש פרק, משכו למטה ושחררו",
-"Hold 🙏 to choose its skin tone": "החזיקו את 🙏 כדי לבחור גוון עור"
+"Hold 🙏 to choose its skin tone": "החזיקו את 🙏 כדי לבחור גוון עור",
+"Then tap one:": "ואז הקישו על אחד:",
+"Only the verses you picked": "רק הפסוקים שבחרתם",
+"Reads on from there as the words light up": "ממשיך לקרוא והמילים מוארות",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "אין קול לתרגום הזה במכשיר הזה: המילים מוארות כדי שתוכלו לקרוא בשקט."
 }

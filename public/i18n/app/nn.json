@@ -943,7 +943,6 @@
 "Highlight removed": "Markering fjerna",
 "Bookmarked": "Bokmerke lagt til",
 "Bookmark removed": "Bokmerke fjerna",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Trykk på eit vers, og så Les med: lesinga held fram derifrå, og orda lyser opp etter kvart som dei vert lesne, så du kan følgje med. Medan det er på: trykk på verset som vert lese, for å ta pause eller halde fram, trykk på eit anna vers for å lese derifrå, trykk raskt to gonger på eit vers for å markere det, eller hald på det for å setje bokmerke. Fartsknappen gjer det seinare eller raskare. Det er på til du trykkjer på X. Lytt les berre dei versa du valde.",
 "Share {ref}": "Del {ref}",
 "Outside the app": "Utanfor appen",
 "With a circle": "Med ein krins",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "For mange innloggingar herifrå. Prøv att seinare.",
 "Audio": "Lyd",
 "Hear the Bible read aloud": "Høyr Bibelen lesen høgt",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Trykk på eit vers i Bibelen. To knappar kjem fram: «Lytt» les berre versa du valde, og «Les med» les vidare derifrå medan orda lyser opp.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Denne bibelen kan ikkje lesast høgt på denne eininga. Trykk på eit vers og så «Les med»: orda lyser opp eitt etter eitt, så du kan lese med i stille.",
 "Try it now": "Prøv no",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Sveip med to fingrar på styreflata, eller trykk på ← eller →.",
 "Tap: highlight, note, bookmark": "Trykk: marker, notat, bokmerke",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Trykk på kapitteltittelen",
 "Click the chapter title, or press /": "Klikk på kapitteltittelen, eller trykk på /",
 "Or pull down at the top of a chapter, then let go": "Eller dra ned øvst i eit kapittel, og slepp",
-"Hold 🙏 to choose its skin tone": "Hald inne 🙏 for å velje hudfarge"
+"Hold 🙏 to choose its skin tone": "Hald inne 🙏 for å velje hudfarge",
+"Then tap one:": "Trykk så på ein av dei:",
+"Only the verses you picked": "Berre versa du valde",
+"Reads on from there as the words light up": "Les vidare medan orda lyser opp",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Inga stemme for denne bibelen på denne eininga: orda lyser opp, så du kan lese i stille."
 }

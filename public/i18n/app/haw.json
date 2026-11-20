@@ -943,7 +943,6 @@
 "Highlight removed": "Ua wehe ʻia ke kaha kala",
 "Bookmarked": "Ua kaha ʻaoʻao ʻia",
 "Bookmark removed": "Ua wehe ʻia ke kaha ʻaoʻao",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "E kaomi i kekahi paukū, a laila iā Heluhelu pū: heluhelu ʻia mai laila aku, a hoʻomālamalama ʻia nā huaʻōlelo i ka heluhelu ʻia ʻana, i hiki iā ʻoe ke hahai. I ka manawa e ʻā ana: e kaomi i ka paukū e heluhelu ʻia ana e hoʻomaha a hoʻomau paha, e kaomi i kekahi paukū ʻē aʻe e heluhelu mai laila aku, e kaomi pālua wikiwiki i kekahi paukū e kaha kala ai, a i ʻole e kaomi lōʻihi e kaha ʻaoʻao ai. Hoʻolohi a hoʻowikiwiki ke pihi māmā. Noho ʻā ia a kaomi ʻoe iā X. Heluhelu ʻo Hoʻolohe i nā paukū āu i koho ai wale nō.",
 "Share {ref}": "Kaʻana iā {ref}",
 "Outside the app": "Ma waho o ka polokalamu",
 "With a circle": "Me kekahi pōʻai",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Nui loa nā komo ʻana mai ʻaneʻi. E hoʻāʻo hou ma hope.",
 "Audio": "Leo",
 "Hear the Bible read aloud": "Hoʻolohe i ka heluhelu leo nui ʻia o ka Baibala",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Kaomi i kekahi paukū o ka Baibala. Puka mai nā pihi ʻelua: heluhelu ʻo “Hoʻolohe” i nā paukū āu i koho ai wale nō, a hoʻomau ʻo “Heluhelu pū” i ka heluhelu mai laila aku ʻoiai e hoʻomālamalama ʻia nā huaʻōlelo.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ʻAʻole hiki ke heluhelu leo nui ʻia kēia Baibala ma kēia mea hana. Kaomi i kekahi paukū, a laila “Heluhelu pū”: hoʻomālamalama ʻia nā huaʻōlelo pākahi, i hiki iā ʻoe ke heluhelu me ka hāmau.",
 "Try it now": "Hoʻāʻo i kēia manawa",
 "Swipe with two fingers on the trackpad, or press ← or →.": "E kahili me nā manamana lima ʻelua ma ka trackpad, a i ʻole e kaomi i ka ← a i ʻole ka →.",
 "Tap: highlight, note, bookmark": "Kaomi: kaha kala, manaʻo, kaha ʻaoʻao",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "E kaomi i ke poʻo inoa o ka mokuna",
 "Click the chapter title, or press /": "E kōmi i ke poʻo inoa o ka mokuna, a i ʻole e kaomi i ka /",
 "Or pull down at the top of a chapter, then let go": "A i ʻole ma luna o ka mokuna, e huki i lalo a laila e hoʻokuʻu",
-"Hold 🙏 to choose its skin tone": "E paʻa i ka 🙏 e koho i ke kala ʻili"
+"Hold 🙏 to choose its skin tone": "E paʻa i ka 🙏 e koho i ke kala ʻili",
+"Then tap one:": "A laila kaomi i hoʻokahi:",
+"Only the verses you picked": "Nā paukū āu i koho ai wale nō",
+"Reads on from there as the words light up": "Hoʻomau ʻoiai e hoʻomālamalama ʻia nā huaʻōlelo",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ʻAʻohe leo no kēia Baibala ma kēia mea hana: hoʻomālamalama ʻia nā huaʻōlelo i hiki iā ʻoe ke heluhelu me ka hāmau."
 }

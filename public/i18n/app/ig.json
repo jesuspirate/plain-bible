@@ -943,7 +943,6 @@
 "Highlight removed": "Ewepụla akara agba",
 "Bookmarked": "Etinyere akara ibe",
 "Bookmark removed": "Ewepụla akara ibe",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Pịa amaokwu, wee pịa Gụkọọ: ọ na-agụ site n’ebe ahụ, okwu ndị ahụ na-enwukwa ka a na-agụ ha, ka i soro. Mgbe ọ na-arụ ọrụ: pịa amaokwu a na-agụ ka ịkwụsịtụ ma ọ bụ ịga n’ihu, pịa amaokwu ọzọ ka ọ gụọ site n’ebe ahụ, pịa amaokwu ugboro abụọ ngwa ngwa ka itinye ya akara agba, ma ọ bụ jide ya ka itinye ya akara ibe. Bọtịnụ ọsọ na-eme ka ọ dị nwayọọ ma ọ bụ ngwa ngwa. Ọ na-anọ na-arụ ọrụ ruo mgbe ị pịara X. Gee ntị na-agụ naanị amaokwu ndị ị họọrọ.",
 "Share {ref}": "Kesaa {ref}",
 "Outside the app": "N’èzí ngwa ahụ",
 "With a circle": "Ya na otu",
@@ -1266,8 +1265,6 @@
 "Too many sign-ins from here. Try again later.": "Nbanye si ebe a adịla ọtụtụ. Nwaa ọzọ ma emechaa.",
 "Audio": "Ụda",
 "Hear the Bible read aloud": "Gee ntị ka a na-agụ Baịbụl n’olu dara ụda",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Pịa amaokwu ọ bụla dị na Baịbụl. Bọtịnụ abụọ ga-apụta: “Gee ntị” na-agụ naanị amaokwu ndị ị họọrọ, “Gụkọọ” na-agụkwa site n’ebe ahụ ka okwu na-enwu.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Enweghị ike ịgụ Baịbụl a n’olu na ngwaọrụ a. Pịa amaokwu, wee pịa “Gụkọọ”: okwu ga-enwu otu otu, ka ị gụọ ya n’obi.",
 "Try it now": "Nwalee ugbu a",
 "Swipe with two fingers on the trackpad, or press ← or →.": "Swaịpụ jiri mkpịsị aka abụọ na trackpad, ma ọ bụ pịa ← ma ọ bụ →.",
 "Tap: highlight, note, bookmark": "Pịa: akara agba, ndetu, akara ibe",
@@ -1277,5 +1274,9 @@
 "Tap the chapter title": "Pịa aha isi ahụ",
 "Click the chapter title, or press /": "Klik aha isi ahụ, ma ọ bụ pịa /",
 "Or pull down at the top of a chapter, then let go": "Ma ọ bụ n’elu isi, dọda ya ala wee hapụ ya",
-"Hold 🙏 to choose its skin tone": "Jide 🙏 ka ịhọrọ agba akpụkpọ ahụ"
+"Hold 🙏 to choose its skin tone": "Jide 🙏 ka ịhọrọ agba akpụkpọ ahụ",
+"Then tap one:": "Wee pịa otu:",
+"Only the verses you picked": "Naanị amaokwu ị họọrọ",
+"Reads on from there as the words light up": "Ọ na-agụ n’ihu ka okwu na-enwu",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Enweghị olu maka Baịbụl a na ngwaọrụ a: okwu na-enwu ka ị gụọ ya n’obi."
 }
