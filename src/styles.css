@@ -1140,19 +1140,39 @@ html.spread-on { overflow: hidden; }
 html.spread-on main { max-width: none; padding-bottom: 0; }
 html.spread-on body.selecting main { padding-bottom: 0; }
 html.spread-on .reader > .pager, html.spread-on .reader > .credit { display: none; }
+/* The empty sides of the screen beside the open book hold no words, so the
+   mouse shows the plain arrow there. The iPad app on a Mac looks for the
+   nearest words under the mouse even over empty space, and found the hidden
+   pages laid out beside the book (see article.chapter.spread), so the
+   pointer kept flicking to the text cursor. Only the room around the book is
+   marked as not text; the book and everything else in the reader (the verse
+   bar, notes, the dictionary) stays as it was. */
+html.spread-on .reader { cursor: default; -webkit-user-select: none; user-select: none; }
+/* (:where adds no weight, so every rule already on these, like no picking
+   words while reading aloud, still wins.) */
+:where(html.spread-on .reader > :not(.spread-box), html.spread-on .spread-box > article.chapter.spread) { cursor: auto; -webkit-user-select: text; user-select: text; }
 .spread-box {
   --pw: min(calc(50vw - 30px), 34em); --pp: 2.2em;
   /* all the height between the top bar and the search bar */
   --book-h: calc(100dvh - 168px - env(safe-area-inset-top) - env(safe-area-inset-bottom));
   position: relative; width: calc(2 * var(--pw)); margin: 14px auto 0;
   font-size: calc(var(--font-size) * var(--big));
+  /* The book's shadow lives here, not on the book, because the book is cut
+     off by clip-path below and that would cut the shadow off too. */
+  border-radius: 8px;
+  box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 14px 44px rgba(60,40,10,.14);
 }
+/* The pages before and after the two you see are laid out beside them, off
+   to the left and right of the book, and only hidden. overflow: clip hides
+   them from the eye, but the iPad app on a Mac still found their words under
+   the mouse, so the pointer kept turning into the text cursor over the empty
+   sides of the screen. clip-path cuts them off for the mouse too. */
 article.chapter.spread {
   max-width: none; width: 100%; margin: 0; padding: 0; position: relative;
   height: var(--book-h);
   overflow: hidden; overflow: clip; border-radius: 8px;
+  -webkit-clip-path: inset(0 round 8px); clip-path: inset(0 round 8px);
   background: var(--surface);
-  box-shadow: 0 1px 2px rgba(60,40,10,.08), 0 14px 44px rgba(60,40,10,.14);
 }
 .spread-flow {
   position: relative; box-sizing: border-box; width: 100%; height: 100%; padding: 1.1em var(--pp) .9em;
@@ -1182,7 +1202,7 @@ body.selecting .spread-turn { display: none; }
 .leaf-pane { position: absolute; top: 0; width: 50%; height: 100%; overflow: hidden; background: var(--surface); }
 .leaf-pane.left { left: 0; border-radius: 8px 0 0 8px; }
 .leaf-pane.right { left: 50%; border-radius: 0 8px 8px 0; }
-.leaf-pane > article.chapter.spread { position: absolute; left: 0; top: 0; width: 200%; height: 100%; background: none; box-shadow: none; border-radius: 0; }
+.leaf-pane > article.chapter.spread { position: absolute; left: 0; top: 0; width: 200%; height: 100%; background: none; border-radius: 0; -webkit-clip-path: none; clip-path: none; }
 .leaf { position: absolute; left: 50%; top: 0; width: 50%; height: 100%; transform-origin: 0 50%; transform-style: preserve-3d; will-change: transform; }
 .leaf .leaf-pane { left: 0; width: 100%; -webkit-backface-visibility: hidden; backface-visibility: hidden; }
 /* The shadows on the turning page are layers of their own, and each one has to be told it has a hidden side too. */
