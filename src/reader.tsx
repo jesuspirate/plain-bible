@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -236,6 +236,33 @@ export function Reader({ route }: { route: Route }) {
     }
     addEventListener(VERSE_BAR_EVENT, on)
     return () => removeEventListener(VERSE_BAR_EVENT, on)
+  }, [])
+  // The Read along button above 🙏: from the verse you picked, else the verse
+  // a search or link landed on while it's still in view, else the first
+  // verse at the top of the screen (on a two-page book, of the pages open now).
+  const latest = useRef({ selected, target, version, book, chapter, bibles })
+  latest.current = { selected, target, version, book, chapter, bibles }
+  useEffect(() => {
+    const on = () => {
+      const { selected, target, version, book, chapter, bibles } = latest.current
+      const bible = bibles[version]
+      if (!bible) return
+      const from = headerBottom() + 12
+      const inView = (el: Element | null) => {
+        const r = el?.getBoundingClientRect()
+        return !!r && r.height > 0 && r.right > 0 && r.left < innerWidth && r.bottom > from && r.top < innerHeight - 90
+      }
+      let v = selected.length ? Math.min(...selected) : 0
+      if (!v && target && inView(document.getElementById('v' + target))) v = target
+      if (!v) for (const el of document.querySelectorAll('.reader article.chapter :is(.verse, .pv)[id]')) {
+        if (inView(el)) { v = +el.id.slice(1); break }
+      }
+      if (!v) v = 1
+      setSelected([])
+      startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible)
+    }
+    addEventListener(READ_HERE_EVENT, on)
+    return () => removeEventListener(READ_HERE_EVENT, on)
   }, [])
   // The verse the mouse last came to rest on (computers only): it keeps the ribbon.
   const [reading, setReading] = useState<number>()

@@ -42,6 +42,8 @@ export interface Settings {
   follow: 'words' | 'verse'
   /** read along with no voice: the highlight moves through the words by itself */
   readSilent: boolean
+  /** a small Read along button just above 🙏 (off unless picked under Audio) */
+  alongButton: boolean
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'
   /** how the page turns when you swipe to another chapter: over the next one, or side by side */
@@ -87,7 +89,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => (t.lang === lang || t.lang.split('-')[0] === lang) && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, alongButton: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -170,6 +172,10 @@ export const openSearch = () => window.dispatchEvent(new Event(SEARCH_EVENT))
 export const SHOW_VERSE_BAR = 'plain-bible:show-verse-bar'
 export const VERSE_BAR_EVENT = 'plain-bible:verse-bar'
 export const showVerseBar = () => window.dispatchEvent(new Event(SHOW_VERSE_BAR))
+/** The Read along button above 🙏: the reader starts reading along from the
+ *  verse you picked, or else the verse at the top of the screen. */
+export const READ_HERE_EVENT = 'plain-bible:read-here'
+export const readHere = () => window.dispatchEvent(new Event(READ_HERE_EVENT))
 export const TOUR_EVENT = 'plain-bible:tour'
 export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
 const TOUR = 'plain-bible:tour'

@@ -1302,5 +1302,6 @@
 "Spot shown ✓": "Kohta näytetty ✓",
 "Show again": "Näytä uudelleen",
 "Show where": "Näytä missä",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the spot you showed, and any error the app noticed. Nothing else.": "Mukana lähtee: sovelluksen versio, laitteen tyyppi, sen kieli, näkymä jossa olit, näyttämäsi kohta ja kaikki sovelluksen huomaamat virheet. Ei mitään muuta."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the spot you showed, and any error the app noticed. Nothing else.": "Mukana lähtee: sovelluksen versio, laitteen tyyppi, sen kieli, näkymä jossa olit, näyttämäsi kohta ja kaikki sovelluksen huomaamat virheet. Ei mitään muuta.",
+"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Näytä pieni ”Lue mukana” -painike heti 🙏:n yläpuolella. Se lukee näytön ylimmästä jakeesta tai napauttamastasi jakeesta alkaen."
 }

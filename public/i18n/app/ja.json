@@ -1302,5 +1302,6 @@
 "Spot shown ✓": "場所を示しました ✓",
 "Show again": "もう一度示す",
 "Show where": "場所を示す",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the spot you showed, and any error the app noticed. Nothing else.": "一緒に送られるもの:アプリのバージョン、端末の種類、その言語、開いていた画面、示した場所、アプリが記録したエラー。それ以外は何も送りません。"
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the spot you showed, and any error the app noticed. Nothing else.": "一緒に送られるもの:アプリのバージョン、端末の種類、その言語、開いていた画面、示した場所、アプリが記録したエラー。それ以外は何も送りません。",
+"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 のすぐ上に小さな「目で追って読む」ボタンを表示します。画面の一番上の節から、またはタップした節から読みます。"
 }
