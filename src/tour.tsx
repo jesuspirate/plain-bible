@@ -129,7 +129,7 @@ export function Tour({ onClose }: { onClose: () => void }) {
         <div class="tour-buttons">
           {i === 0
             ? <button class="tour-btn" onClick={close}>{t('Not now')}</button>
-            : <button class="tour-btn" onClick={backward}>{t('Back')}</button>}
+            : <button class="tour-btn" onClick={backward}>{t('Previous')}</button>}
           <button ref={next} class="tour-btn primary" onClick={forward}>
             {i === 0 ? t('Show me') : last ? t('Done') : t('Next')}
           </button>
