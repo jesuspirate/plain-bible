@@ -27,7 +27,13 @@ if [ -z "$runtime" ]; then
   runtime=$(xcrun simctl list runtimes available | grep -E '^iOS 2[7-9]' | tail -1 | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.[A-Za-z0-9-]+' || true)
 fi
 if [ -z "$type" ] || [ -z "$runtime" ]; then cat "$out/about-simulator.txt"; exit 1; fi
-udid=$(xcrun simctl create "iPhone Duo pictures" "$type" "$runtime")
+# The Duo can need its own runtime (like iOS-27-2-iPhone19-4): try them all,
+# newest first, until one takes it.
+udid=""
+for r in $(xcrun simctl list runtimes available | grep -E '^iOS 2[7-9]' | grep -oE 'com\.apple\.CoreSimulator\.SimRuntime\.[A-Za-z0-9-]+' | sort -r); do
+  udid=$(xcrun simctl create "iPhone Duo pictures" "$type" "$r" 2>/dev/null) && { echo "runtime used: $r"; break; }
+done
+[ -n "$udid" ] || { echo "No runtime takes the iPhone Duo."; exit 1; }
 
 set -e
 xcodebuild -project ios/QuietBible.xcodeproj -scheme QuietBible -configuration Debug \
@@ -43,9 +49,10 @@ xcrun simctl install "$udid" "$APP"
 xcrun simctl launch "$udid" "$BUNDLE"
 # First start: the Bible downloads and the tour opens over the reader.
 sleep 45
-shot() { # $1 name: one picture per screen the simulator lists
-  xcrun simctl io "$udid" screenshot "$out/$1.png" || true
-  for d in internal external; do xcrun simctl io "$udid" screenshot --display="$d" "$out/$1-$d.png" 2>/dev/null || true; done
+xcrun simctl io "$udid" enumerate > "$out/screens.txt" 2>&1 || true
+shot() { # $1 name: one picture per screen (the Duo has two)
+  xcrun simctl io "$udid" screenshot "$out/$1.png" 2>/dev/null || true
+  for d in 1 2 3; do xcrun simctl io "$udid" screenshot --display="$d" "$out/$1-screen$d.png" 2>/dev/null || true; done
 }
 shot 00-first-start
 # Escape closes the tour (Simulator passes the Mac keyboard on).
@@ -58,6 +65,13 @@ go 02-reader-john-3 'quietbible://read/KJV/John/3?v=16'
 go 03-pray 'quietbible://pray'
 go 04-circles 'quietbible://circles'
 go 05-reader-again 'quietbible://read/KJV/Ps/23'
+# Folded and unfolded: each screen off in turn, a picture of what remains.
+for d in 1 2; do
+  if xcrun simctl io "$udid" screenConfig --display="$d" power off; then
+    sleep 6; go "07-screen$d-off" 'quietbible://read/KJV/Ps/23'
+    xcrun simctl io "$udid" screenConfig --display="$d" power on || true; sleep 4
+  fi
+done
 # Turned sideways, when the Simulator lets System Events reach it.
 osascript -e 'tell application "Simulator" to activate' -e 'delay 1' \
   -e 'tell application "System Events" to key code 123 using command down' && sleep 6 && shot 06-sideways || echo "could not rotate"
