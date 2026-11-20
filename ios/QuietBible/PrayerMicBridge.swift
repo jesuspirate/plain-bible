@@ -22,10 +22,8 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
     private var file: URL?
     private var before: (AVAudioSession.Category, AVAudioSession.Mode, AVAudioSession.CategoryOptions)?
     private var interruption: NSObjectProtocol?
-    /// The page waiting for the finished file, and the loudest moment heard.
+    /// The page waiting for the finished file.
     private var finished: ((URL?) -> Void)?
-    private var loudest: Float = -160
-    private var meter: Timer?
 
     func userContentController(_ controller: WKUserContentController, didReceive message: WKScriptMessage,
                                replyHandler: @escaping (Any?, String?) -> Void) {
@@ -40,8 +38,6 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
         case "resume": recorder?.record(); replyHandler("ok", nil)
         case "stop":
             guard let recorder, let file else { return replyHandler("", nil) }
-            let seconds = recorder.currentTime
-            meter?.invalidate(); meter = nil
             self.recorder = nil; self.file = nil
             // The file is only whole (its index written at the end) once the
             // recorder says it has finished: 1.2.8 read it straight after
@@ -57,8 +53,6 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
                     let data = url.flatMap { try? Data(contentsOf: $0) } ?? Data()
                     try? FileManager.default.removeItem(at: file)
                     DispatchQueue.main.async {
-                        MacReport.note("prayer: \(String(format: "%.1f", seconds)) s, \(data.count) bytes, loudest \(String(format: "%.0f", self?.loudest ?? -160)) dB, input \(Self.inputName())")
-                        MacReport.copy(title: "prayer")
                         replyHandler(data.base64EncodedString(), nil)
                     }
                 }
@@ -105,17 +99,8 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
                 AVEncoderBitRateKey: 64_000,
             ])
             made.delegate = self
-            made.isMeteringEnabled = true
             guard made.record() else { throw CocoaError(.fileWriteUnknown) }
             recorder = made; file = url
-            loudest = -160
-            MacReport.start()
-            MacReport.note("prayer: recording to \(Self.inputName())")
-            meter = Timer.scheduledTimer(withTimeInterval: 0.25, repeats: true) { [weak self, weak made] _ in
-                guard let self, let made else { return }
-                made.updateMeters()
-                self.loudest = max(self.loudest, made.peakPower(forChannel: 0))
-            }
             interruption = NotificationCenter.default.addObserver(
                 forName: AVAudioSession.interruptionNotification, object: session, queue: .main) { [weak self] note in
                 guard let raw = note.userInfo?[AVAudioSessionInterruptionTypeKey] as? UInt,
@@ -132,22 +117,11 @@ final class PrayerMicBridge: NSObject, WKScriptMessageHandlerWithReply, AVAudioR
     }
 
     func audioRecorderDidFinishRecording(_ recorder: AVAudioRecorder, successfully flag: Bool) {
-        MacReport.note("prayer: finished, ok \(flag)")
         finished?(recorder.url)
-    }
-
-    func audioRecorderEncodeErrorDidOccur(_ recorder: AVAudioRecorder, error: Error?) {
-        MacReport.note("prayer: encode error \(error.map { "\($0)" } ?? "none")")
-    }
-
-    private static func inputName() -> String {
-        let route = AVAudioSession.sharedInstance().currentRoute.inputs
-        return route.isEmpty ? "no input" : route.map { "\($0.portName) (\($0.portType.rawValue))" }.joined(separator: ", ")
     }
 
     /// Stop without keeping anything.
     private func discard() {
-        meter?.invalidate(); meter = nil
         guard let recorder else { return }
         recorder.stop()
         recorder.deleteRecording()
