@@ -1268,5 +1268,6 @@
 "Nostr key removed.": "Nostr բանալին հեռացվեց։",
 "Remove this Nostr key?": "Հեռացնե՞լ այս Nostr բանալին",
 "The Fedi app with this key won’t sign in to your account anymore.": "Այս բանալիով Fedi հավելվածն այլևս չի բացի ձեր հաշիվը։",
-"Too many Nostr keys on this account. Remove one first.": "Այս հաշվում չափազանց շատ Nostr բանալիներ կան։ Նախ հեռացրեք մեկը։"
+"Too many Nostr keys on this account. Remove one first.": "Այս հաշվում չափազանց շատ Nostr բանալիներ կան։ Նախ հեռացրեք մեկը։",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ապա հպեք «Լսել»՝ լսելու համար, կամ «Հետևել ընթերցանությանը»՝ բառերին հետևելու համար, մինչ դրանք կարդացվում են։"
 }

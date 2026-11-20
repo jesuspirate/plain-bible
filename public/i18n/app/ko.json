@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostr 키를 삭제했습니다.",
 "Remove this Nostr key?": "이 Nostr 키를 삭제하시겠습니까?",
 "The Fedi app with this key won’t sign in to your account anymore.": "이 키가 있는 Fedi 앱으로는 더 이상 계정에 로그인할 수 없습니다.",
-"Too many Nostr keys on this account. Remove one first.": "이 계정에 Nostr 키가 너무 많습니다. 먼저 하나를 삭제하세요."
+"Too many Nostr keys on this account. Remove one first.": "이 계정에 Nostr 키가 너무 많습니다. 먼저 하나를 삭제하세요.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "그다음 '듣기'를 누르면 들을 수 있고, '따라 읽기'를 누르면 읽히는 단어를 따라갈 수 있어요."
 }

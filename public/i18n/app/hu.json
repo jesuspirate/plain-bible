@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostr-kulcs eltávolítva.",
 "Remove this Nostr key?": "Eltávolítja ezt a Nostr-kulcsot?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Az ezzel a kulccsal rendelkező Fedi-alkalmazás többé nem jelentkezik be a fiókjába.",
-"Too many Nostr keys on this account. Remove one first.": "Túl sok Nostr-kulcs van ezen a fiókon. Először távolítson el egyet."
+"Too many Nostr keys on this account. Remove one first.": "Túl sok Nostr-kulcs van ezen a fiókon. Először távolítson el egyet.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Aztán koppintson a Meghallgatásra, hogy hallja, vagy a Követő olvasásra, hogy kövesse a szavakat, ahogy elhangzanak."
 }

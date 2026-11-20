@@ -6,6 +6,7 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
 import { t } from './i18n'
 import { CloseIcon } from './icons'
 import { defaultSettings, loadSettings, markTourSeen as markSeen } from './state'
+import { canHear } from './listen'
 import { recordingsFor } from './lib/recordings'
 import { inStoreApp, isIPhone } from './lib/install'
 import { nativeNotify } from './lib/nativeNotify'
@@ -40,16 +41,22 @@ const hasWidget = () => inStoreApp() && isIPhone() && !!nativeNotify() && typeof
 // Newer features ride along as one more sentence on the step they belong to,
 // only where they apply, so the tour never grows a step for them.
 function steps(): Step[] {
+  const settings = loadSettings()
+  const version = settings.version ?? defaultSettings().version
   // A Bible with a recorded reading is read by its narrator.
-  const narrated = recordingsFor(loadSettings().version ?? defaultSettings().version).length > 0
+  const narrated = recordingsFor(version).length > 0
+  // The verse bar offers Listen only when this Bible can be heard aloud.
+  const hear = canHear(version) && !settings.readSilent
   // Signed in or not, sync is on wherever the Circles button is.
   const sync = !!document.querySelector('.sb-circles')
   const all: (Step | false)[] = [
     { title: t('Welcome to My Quiet Bible'), body: t('Just the Bible, quiet and simple. Here is a short look around. It takes about a minute.') },
     { title: t('Turn the page'), body: t('Swipe left or right to go to the next or the previous chapter.'), find: onScreen('.reader > article.chapter .chapter-title') },
-    { title: t('Tap a verse'), body: narrated
+    { title: t('Tap a verse'), body: (narrated
       ? t('Tap any verse to highlight it, write a note, save a bookmark or hear a narrator read the Bible from there.')
-      : t('Tap any verse to highlight it, write a note, save a bookmark or hear the Bible read aloud from there.'), find: verseInView },
+      : t('Tap any verse to highlight it, write a note, save a bookmark or hear the Bible read aloud from there.'))
+      // Listen and Read along live in that verse's bar, where people miss them.
+      + (hear ? ' ' + t('Then tap Listen to hear it, or Read along to follow the words as they’re read.') : ''), find: verseInView },
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field') },
     // The two shortcuts to search (#236), lit on the chapter title they start from.
     { title: t('Open search'), body: t('Tap the chapter title. Or, at the top of a chapter, pull down until the round button fills with color, then let go.') + ' ' + t('After a search, open it again to go back to your last result.'), find: onScreen('.reader > article.chapter .chapter-title') },

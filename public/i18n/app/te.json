@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostr కీ తీసివేయబడింది.",
 "Remove this Nostr key?": "ఈ Nostr కీని తీసివేయాలా?",
 "The Fedi app with this key won’t sign in to your account anymore.": "ఈ కీ ఉన్న Fedi యాప్ ఇకపై మీ ఖాతాలో సైన్ ఇన్ చేయదు.",
-"Too many Nostr keys on this account. Remove one first.": "ఈ ఖాతాలో చాలా Nostr కీలు ఉన్నాయి. ముందుగా ఒకదాన్ని తీసివేయండి."
+"Too many Nostr keys on this account. Remove one first.": "ఈ ఖాతాలో చాలా Nostr కీలు ఉన్నాయి. ముందుగా ఒకదాన్ని తీసివేయండి.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "తర్వాత వినడానికి «విను» నొక్కండి, లేదా చదువుతున్న పదాలను అనుసరించడానికి «కలిసి చదువు»."
 }

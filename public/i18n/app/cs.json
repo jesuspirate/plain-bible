@@ -1370,5 +1370,6 @@
 "Nostr key removed.": "Klíč Nostr byl odebrán.",
 "Remove this Nostr key?": "Odebrat tento klíč Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikace Fedi s tímto klíčem se už do vašeho účtu nepřihlásí.",
-"Too many Nostr keys on this account. Remove one first.": "Tento účet má příliš mnoho klíčů Nostr. Nejdřív jeden odeberte."
+"Too many Nostr keys on this account. Remove one first.": "Tento účet má příliš mnoho klíčů Nostr. Nejdřív jeden odeberte.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pak klepněte na Poslechnout a uslyšíte ho, nebo na Čtení se zvýrazněním a budete sledovat slova, jak jsou čtena."
 }

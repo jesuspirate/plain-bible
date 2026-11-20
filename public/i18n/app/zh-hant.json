@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "已移除 Nostr 金鑰。",
 "Remove this Nostr key?": "要移除這個 Nostr 金鑰嗎？",
 "The Fedi app with this key won’t sign in to your account anymore.": "帶有這個金鑰的 Fedi 應用程式將無法再登入你的帳號。",
-"Too many Nostr keys on this account. Remove one first.": "這個帳號的 Nostr 金鑰太多了。請先移除一個。"
+"Too many Nostr keys on this account. Remove one first.": "這個帳號的 Nostr 金鑰太多了。請先移除一個。",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "然後點一下「收聽」來聽，或點一下「跟讀」，隨著朗讀看著文字走。"
 }

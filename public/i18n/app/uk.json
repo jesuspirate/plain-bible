@@ -1370,5 +1370,6 @@
 "Nostr key removed.": "Ключ Nostr вилучено.",
 "Remove this Nostr key?": "Вилучити цей ключ Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Застосунок Fedi з цим ключем більше не зможе входити у ваш обліковий запис.",
-"Too many Nostr keys on this account. Remove one first.": "Забагато ключів Nostr у цьому обліковому записі. Спершу вилучіть один."
+"Too many Nostr keys on this account. Remove one first.": "Забагато ключів Nostr у цьому обліковому записі. Спершу вилучіть один.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Потім торкніться «Слухати», щоб почути його, або «Читання з підсвічуванням», щоб стежити за словами під час читання."
 }

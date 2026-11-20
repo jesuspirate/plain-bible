@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostr চাবি আঁতৰোৱা হ'ল।",
 "Remove this Nostr key?": "এই Nostr চাবিটো আঁতৰাবনে?",
 "The Fedi app with this key won’t sign in to your account anymore.": "এই চাবি থকা Fedi এপে আৰু আপোনাৰ একাউণ্টত ছাইন ইন নকৰে।",
-"Too many Nostr keys on this account. Remove one first.": "এই একাউণ্টত বহুত Nostr চাবি আছে। প্ৰথমে এটা আঁতৰাওক।"
+"Too many Nostr keys on this account. Remove one first.": "এই একাউণ্টত বহুত Nostr চাবি আছে। প্ৰথমে এটা আঁতৰাওক।",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "তাৰ পিছত শুনিবলৈ «শুনক» টিপক, বা পঢ়াৰ লগে লগে শব্দবোৰ চাবলৈ «লগে লগে পঢ়ক» টিপক।"
 }
