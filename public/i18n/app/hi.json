@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "यह Nostr कुंजी हटाएँ?",
 "The Fedi app with this key won’t sign in to your account anymore.": "इस कुंजी वाला Fedi ऐप अब आपके खाते में साइन इन नहीं करेगा।",
 "Too many Nostr keys on this account. Remove one first.": "इस खाते में बहुत सारी Nostr कुंजियाँ हैं। पहले एक हटाएँ।",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "फिर सुनने के लिए «सुनें» पर टैप करें, या पढ़े जाते शब्दों के साथ चलने के लिए «साथ-साथ पढ़ें» पर।"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "फिर सुनने के लिए «सुनें» पर टैप करें, या पढ़े जाते शब्दों के साथ चलने के लिए «साथ-साथ पढ़ें» पर।",
+"Too many sign-ins from here. Try again later.": "यहाँ से बहुत अधिक साइन इन हुए। बाद में फिर से प्रयास करें।"
 }

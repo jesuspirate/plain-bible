@@ -340,8 +340,20 @@ async function emailVerify(req: Request, env: Env) {
 // account key (NIP-44), which the server can't open.
 
 const NOSTR_KEYS_MAX = 20
+// Per network address, so one script can't make accounts without end. Kept
+// generous: a church hall or a Fedi meetup can share one address.
+const NOSTR_TRIES_PER_HOUR = 60
+const NOSTR_NEW_PER_HOUR = 20
+const NOSTR_NEW_PER_DAY = 50
 
-async function nostrStart(env: Env) {
+async function nostrStart(req: Request, env: Env) {
+  const db = env.DB, now = Date.now(), ip = await ipKey(req)
+  const here = await db.prepare('SELECT COUNT(*) AS n FROM nostr_tries WHERE ip = ? AND at > ? AND made = 0').bind(ip, now - HOUR).first<{ n: number }>()
+  if ((here?.n ?? 0) >= NOSTR_TRIES_PER_HOUR) throw new HttpError(429, 'Too many sign-ins from here. Try again later.')
+  await db.batch([
+    db.prepare('DELETE FROM nostr_tries WHERE at < ?').bind(now - DAY),
+    db.prepare('INSERT INTO nostr_tries (ip, at, made) VALUES (?, ?, 0)').bind(ip, now),
+  ])
   const challenge = random(32)
   return json({ challengeId: await saveChallenge(env, challenge, null), challenge })
 }
@@ -350,7 +362,9 @@ async function nostrVerify(req: Request, env: Env) {
   const adding = req.headers.has('Authorization') ? await session(req, env) : null
   const body = await readJson<{ challengeId: string; event: unknown }>(req)
   const ch = await takeChallenge(env, body.challengeId)
-  const pubkey = await checkNostrEvent(body.event, ch.challenge, Date.now())
+  // The address the app signed for: this very route (src/lib/nostr.ts).
+  const u = new URL(req.url)
+  const pubkey = await checkNostrEvent(body.event, ch.challenge, Date.now(), u.origin + u.pathname, 'POST')
   if (!pubkey) throw new HttpError(400, 'Fedi’s answer couldn’t be checked. Please try again.')
   const db = env.DB, now = Date.now()
   const owner = await db.prepare('SELECT user_id FROM nostr_keys WHERE pubkey = ?').bind(pubkey).first<{ user_id: string }>()
@@ -373,9 +387,14 @@ async function nostrVerify(req: Request, env: Env) {
     ])
     return json({ token: await newSession(env, owner.user_id), passkeys: n?.n ?? 0, pubkey })
   }
-  // A key not seen before makes a new account.
+  // A key not seen before makes a new account, a limited number per address.
+  const ip = await ipKey(req)
+  const made = await db.prepare('SELECT COUNT(*) AS n, SUM(at > ?) AS h FROM nostr_tries WHERE ip = ? AND at > ? AND made = 1')
+    .bind(now - HOUR, ip, now - DAY).first<{ n: number; h: number | null }>()
+  if ((made?.h ?? 0) >= NOSTR_NEW_PER_HOUR || (made?.n ?? 0) >= NOSTR_NEW_PER_DAY) throw new HttpError(429, 'Too many sign-ins from here. Try again later.')
   const userId = random(16)
   await db.batch([
+    db.prepare('INSERT INTO nostr_tries (ip, at, made) VALUES (?, ?, 1)').bind(ip, now),
     db.prepare('INSERT INTO users (id, created) VALUES (?, ?)').bind(userId, now),
     db.prepare('INSERT INTO nostr_keys (pubkey, user_id, created, last_used) VALUES (?, ?, ?, ?)').bind(pubkey, userId, now, now),
   ])
@@ -1603,7 +1622,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
     case 'POST /auth/email/start': return emailStart(req, env)
     // Sign in (or sign up) with a Nostr key, or add one to the signed-in
     // account. The app only offers it inside Fedi (see src/lib/nostr.ts).
-    case 'POST /auth/nostr/options': return nostrStart(env)
+    case 'POST /auth/nostr/options': return nostrStart(req, env)
     case 'POST /auth/nostr/verify': return nostrVerify(req, env)
     case 'POST /auth/email/verify': return emailVerify(req, env)
     case 'DELETE /auth/email': {

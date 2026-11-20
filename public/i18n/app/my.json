@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "ဤ Nostr သော့ကို ဖယ်ရှားမလား။",
 "The Fedi app with this key won’t sign in to your account anymore.": "ဤသော့ပါသော Fedi အက်ပ်ဖြင့် သင့်အကောင့်သို့ ဝင်၍ မရတော့ပါ။",
 "Too many Nostr keys on this account. Remove one first.": "ဤအကောင့်တွင် Nostr သော့ အလွန်များနေပါသည်။ တစ်ခုကို အရင် ဖယ်ရှားပါ။",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ပြီးရင် နားထောင်ဖို့ «နားထောင်ရန်» ကို တို့ပါ၊ သို့မဟုတ် ဖတ်နေတဲ့ စကားလုံးတွေကို လိုက်ကြည့်ဖို့ «လိုက်ဖတ်ရန်» ကို တို့ပါ။"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ပြီးရင် နားထောင်ဖို့ «နားထောင်ရန်» ကို တို့ပါ၊ သို့မဟုတ် ဖတ်နေတဲ့ စကားလုံးတွေကို လိုက်ကြည့်ဖို့ «လိုက်ဖတ်ရန်» ကို တို့ပါ။",
+"Too many sign-ins from here. Try again later.": "ဤနေရာမှ အကောင့်ဝင်မှု အလွန်များနေပါသည်။ နောက်မှ ထပ်ကြိုးစားပါ။"
 }

@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Lisuse le khiye yeNostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "I-app yeFedi elale khiye kayisayikungenisa ku-akhawunti yenu.",
 "Too many Nostr keys on this account. Remove one first.": "Amakhiye eNostr manengi kakhulu kule akhawunti. Qala ngokususa eyodwa.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ngemva kwalokho thinta u-Lalela ukuze uyizwe, kumbe u-Bala ulandela ukuze ulandele amazwi njengoba ebalwa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ngemva kwalokho thinta u-Lalela ukuze uyizwe, kumbe u-Bala ulandela ukuze ulandele amazwi njengoba ebalwa.",
+"Too many sign-ins from here. Try again later.": "Ukungena okunengi kakhulu kuvela lapha. Zamani futhi ngemva."
 }

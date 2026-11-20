@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Poistetaanko tämä Nostr-avain?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi-sovellus, jossa tämä avain on, ei enää kirjaudu tilillesi.",
 "Too many Nostr keys on this account. Remove one first.": "Tilillä on liian monta Nostr-avainta. Poista ensin yksi.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Napauta sitten Kuuntele kuullaksesi sen, tai Lue mukana seurataksesi sanoja sitä mukaa kuin ne luetaan."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Napauta sitten Kuuntele kuullaksesi sen, tai Lue mukana seurataksesi sanoja sitä mukaa kuin ne luetaan.",
+"Too many sign-ins from here. Try again later.": "Liikaa kirjautumisia täältä. Yritä myöhemmin uudelleen."
 }

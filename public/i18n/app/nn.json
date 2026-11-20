@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Fjerne denne Nostr-nøkkelen?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi-appen med denne nøkkelen vil ikkje lenger logge inn på kontoen din.",
 "Too many Nostr keys on this account. Remove one first.": "For mange Nostr-nøklar på denne kontoen. Fjern ein først.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Trykk så på Lytt for å høyre det, eller Les med for å følgje orda medan dei blir lesne."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Trykk så på Lytt for å høyre det, eller Les med for å følgje orda medan dei blir lesne.",
+"Too many sign-ins from here. Try again later.": "For mange innloggingar herifrå. Prøv att seinare."
 }

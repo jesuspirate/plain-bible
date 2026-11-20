@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "এই Nostr কী সরাবেন?",
 "The Fedi app with this key won’t sign in to your account anymore.": "এই কী থাকা Fedi অ্যাপ দিয়ে আর আপনার অ্যাকাউন্টে সাইন ইন হবে না।",
 "Too many Nostr keys on this account. Remove one first.": "এই অ্যাকাউন্টে অনেক বেশি Nostr কী আছে। আগে একটি সরান।",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "তারপর শুনতে «শুনুন» ট্যাপ করুন, অথবা পড়ার সময় শব্দগুলো অনুসরণ করতে «সঙ্গে পড়ুন» ট্যাপ করুন।"
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "তারপর শুনতে «শুনুন» ট্যাপ করুন, অথবা পড়ার সময় শব্দগুলো অনুসরণ করতে «সঙ্গে পড়ুন» ট্যাপ করুন।",
+"Too many sign-ins from here. Try again later.": "এখান থেকে অনেক বেশি সাইন-ইন হয়েছে। পরে আবার চেষ্টা করুন।"
 }

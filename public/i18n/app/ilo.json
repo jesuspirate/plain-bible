@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Ikkaten daytoy a Nostr key?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Saanen a makaag-sign in iti account-mo ti Fedi app nga addaan iti daytoy a key.",
 "Too many Nostr keys on this account. Remove one first.": "Adu unay ti Nostr key iti daytoy nga account. Ikkatem pay ti maysa.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kalpasanna, i-tap ti Denggen tapno mangngegmo, wenno ti Sabayan ti panagbasa tapno masurotmo dagiti sao bayat ti pannakabasada."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kalpasanna, i-tap ti Denggen tapno mangngegmo, wenno ti Sabayan ti panagbasa tapno masurotmo dagiti sao bayat ti pannakabasada.",
+"Too many sign-ins from here. Try again later.": "Adu unay ti panag-sign in manipud ditoy. Padasem manen no madamdama."
 }
