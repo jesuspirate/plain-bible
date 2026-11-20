@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostr ئاچقۇچى ئۆچۈرۈلدى.",
 "Remove this Nostr key?": "بۇ Nostr ئاچقۇچىنى ئۆچۈرەمسىز؟",
 "The Fedi app with this key won’t sign in to your account anymore.": "بۇ ئاچقۇچ بار Fedi ئەپى ئەمدى ھېساباتىڭىزغا كىرگۈزمەيدۇ.",
-"Too many Nostr keys on this account. Remove one first.": "بۇ ھېساباتتا Nostr ئاچقۇچى بەك كۆپ. ئالدى بىلەن بىرنى ئۆچۈرۈڭ."
+"Too many Nostr keys on this account. Remove one first.": "بۇ ھېساباتتا Nostr ئاچقۇچى بەك كۆپ. ئالدى بىلەن بىرنى ئۆچۈرۈڭ.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ئاندىن ئاڭلاش ئۈچۈن «ئاڭلاش» نى بېسىڭ، ياكى ئوقۇلۇۋاتقان سۆزلەرگە ئەگىشىش ئۈچۈن «ئەگىشىپ ئوقۇش» نى بېسىڭ."
 }

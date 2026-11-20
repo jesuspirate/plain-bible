@@ -1405,5 +1405,6 @@
 "Nostr key removed.": "أُزيل مفتاح Nostr.",
 "Remove this Nostr key?": "هل تريد إزالة مفتاح Nostr هذا؟",
 "The Fedi app with this key won’t sign in to your account anymore.": "لن يسجّل تطبيق Fedi الذي يحمل هذا المفتاح الدخول إلى حسابك بعد الآن.",
-"Too many Nostr keys on this account. Remove one first.": "مفاتيح Nostr كثيرة جدًا في هذا الحساب. أزل واحدًا أولًا."
+"Too many Nostr keys on this account. Remove one first.": "مفاتيح Nostr كثيرة جدًا في هذا الحساب. أزل واحدًا أولًا.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ثم اضغط «استماع» لتسمعها، أو «القراءة مع المتابعة» لتتابع الكلمات وهي تُقرأ."
 }

@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostr साँचो हटाइयो।",
 "Remove this Nostr key?": "यो Nostr साँचो हटाउने?",
 "The Fedi app with this key won’t sign in to your account anymore.": "यो साँचो भएको Fedi एपले अब तपाईंको खातामा साइन इन गर्दैन।",
-"Too many Nostr keys on this account. Remove one first.": "यो खातामा धेरै Nostr साँचाहरू छन्। पहिले एउटा हटाउनुहोस्।"
+"Too many Nostr keys on this account. Remove one first.": "यो खातामा धेरै Nostr साँचाहरू छन्। पहिले एउटा हटाउनुहोस्।",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "त्यसपछि सुन्न «सुन्नुहोस्» थिच्नुहोस्, वा पढिँदै गरेका शब्दहरू पछ्याउन «सँगै पढ्नुहोस्» थिच्नुहोस्।"
 }

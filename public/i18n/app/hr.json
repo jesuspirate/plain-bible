@@ -1349,5 +1349,6 @@
 "Nostr key removed.": "Nostr ključ je uklonjen.",
 "Remove this Nostr key?": "Ukloniti ovaj Nostr ključ?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikacija Fedi s ovim ključem više se neće prijavljivati u vaš račun.",
-"Too many Nostr keys on this account. Remove one first.": "Previše Nostr ključeva na ovom računu. Najprije uklonite jedan."
+"Too many Nostr keys on this account. Remove one first.": "Previše Nostr ključeva na ovom računu. Najprije uklonite jedan.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Zatim dodirni Slušaj da ga čuješ, ili Prati čitanje da pratiš riječi dok se čitaju."
 }

@@ -1349,5 +1349,6 @@
 "Nostr key removed.": "Nostr atslēga noņemta.",
 "Remove this Nostr key?": "Noņemt šo Nostr atslēgu?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi lietotne ar šo atslēgu vairs nevarēs pierakstīties jūsu kontā.",
-"Too many Nostr keys on this account. Remove one first.": "Šim kontam ir pārāk daudz Nostr atslēgu. Vispirms noņemiet vienu."
+"Too many Nostr keys on this account. Remove one first.": "Šim kontam ir pārāk daudz Nostr atslēgu. Vispirms noņemiet vienu.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Tad pieskarieties Klausīties, lai to dzirdētu, vai Lasīt līdzi, lai sekotu vārdiem, kamēr tie tiek lasīti."
 }

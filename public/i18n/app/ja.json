@@ -1265,5 +1265,6 @@
 "Nostr key removed.": "Nostrキーを削除しました。",
 "Remove this Nostr key?": "このNostrキーを削除しますか？",
 "The Fedi app with this key won’t sign in to your account anymore.": "このキーを持つFediアプリでは、もうアカウントにサインインできません。",
-"Too many Nostr keys on this account. Remove one first.": "このアカウントのNostrキーが多すぎます。先にどれかを削除してください。"
+"Too many Nostr keys on this account. Remove one first.": "このアカウントのNostrキーが多すぎます。先にどれかを削除してください。",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "そのあと「聞く」をタップすると読み上げを聞けます。「目で追って読む」なら、読まれる言葉を目で追えます。"
 }

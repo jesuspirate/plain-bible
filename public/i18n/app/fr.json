@@ -1100,5 +1100,6 @@
 "Nostr key removed.": "Clé Nostr retirée.",
 "Remove this Nostr key?": "Retirer cette clé Nostr ?",
 "The Fedi app with this key won’t sign in to your account anymore.": "L’app Fedi qui a cette clé ne permettra plus d’entrer dans votre compte.",
-"Too many Nostr keys on this account. Remove one first.": "Trop de clés Nostr sur ce compte. Retirez-en une d’abord."
+"Too many Nostr keys on this account. Remove one first.": "Trop de clés Nostr sur ce compte. Retirez-en une d’abord.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Puis touchez Écouter pour l’entendre, ou Lire en suivant pour suivre les mots à mesure qu’ils sont lus."
 }

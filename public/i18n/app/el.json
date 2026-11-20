@@ -1268,5 +1268,6 @@
 "Nostr key removed.": "Το κλειδί Nostr αφαιρέθηκε.",
 "Remove this Nostr key?": "Αφαίρεση αυτού του κλειδιού Nostr;",
 "The Fedi app with this key won’t sign in to your account anymore.": "Η εφαρμογή Fedi με αυτό το κλειδί δεν θα συνδέεται πλέον στον λογαριασμό σας.",
-"Too many Nostr keys on this account. Remove one first.": "Πάρα πολλά κλειδιά Nostr σε αυτόν τον λογαριασμό. Αφαιρέστε πρώτα ένα."
+"Too many Nostr keys on this account. Remove one first.": "Πάρα πολλά κλειδιά Nostr σε αυτόν τον λογαριασμό. Αφαιρέστε πρώτα ένα.",
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Μετά αγγίξτε Ακρόαση για να το ακούσετε, ή Ανάγνωση με παρακολούθηση για να ακολουθείτε τις λέξεις καθώς διαβάζονται."
 }
