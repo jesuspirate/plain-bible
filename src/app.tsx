@@ -15,6 +15,7 @@ import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { LeftNote, touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
+import { PICK_SPOT, SpotPicker } from './suggest'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveWelcome } from './move'
 import { ContinueOffer } from './continue'
@@ -214,6 +215,19 @@ export function App() {
     return () => removeEventListener(SETTINGS_EVENT, on)
   }, [])
   useEffect(() => { setSettingsOpen(false) }, [route.path.join('/')])
+
+  // Report a problem → Show where: Settings steps aside so the spot can be
+  // tapped, then opens again on the report.
+  const [picking, setPicking] = useState(false)
+  useEffect(() => {
+    const on = () => {
+      setSettingsOpen(false)
+      if (parseHash().path[0] === 'settings') go('read')
+      setTimeout(() => setPicking(true), 250)
+    }
+    addEventListener(PICK_SPOT, on)
+    return () => removeEventListener(PICK_SPOT, on)
+  }, [])
 
   // Show me, under Audio in Settings: back to the reader, then a verse's bar.
   useEffect(() => {
@@ -420,6 +434,7 @@ export function App() {
       {sidewaysEdge}
       {view === 'search' && <ListenPlayer floating />}
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
+      {picking && <SpotPicker onDone={() => { setPicking(false); setSettingsOpen(true) }} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       {FediWelcome && <FediWelcome onClose={() => setFediWelcome(undefined)} />}

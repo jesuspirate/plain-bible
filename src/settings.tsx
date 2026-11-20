@@ -17,7 +17,7 @@ import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { QUICK, draw, penAllowed } from './lib/pen'
 import { AccountSection } from './account'
-import { canSuggest, SuggestPage } from './suggest'
+import { canSuggest, reopenReport, SuggestPage } from './suggest'
 import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
@@ -129,12 +129,12 @@ type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versio
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
-  suggest: N_('Send a suggestion'),
+  suggest: N_('Report a problem'),
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
-  const [page, setPage] = useState<Page>('home')
+  const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : 'home')
   const back = () => setPage('home')
   return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : 1 }
 }
@@ -546,7 +546,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
           {homeScreenHelps() && <Row icon={<AddHomeIcon size={24} />} label={isIPhone() || isAndroid() ? t('Put it on your Home Screen') : t('Install it as an app')}
             sub={t('Opens like an app, works offline')} onClick={openHomeScreen} />}
           <Row icon={<CompassIcon size={24} />} label={t('Take the tour')} sub={t('A one-minute look around the app')} onClick={openTour} />
-          {canSuggest() && <Row icon={<SuggestIcon size={24} />} label={t('Send a suggestion')} sub={t('An idea, a problem, a kind word')} onClick={() => setPage('suggest')} />}
+          {canSuggest() && <Row icon={<SuggestIcon size={24} />} label={t('Report a problem')} sub={t('Or send a suggestion')} onClick={() => setPage('suggest')} />}
           <Row icon={<InfoIcon size={24} />} label={t('About')} onClick={() => setPage('about')} />
         </div>
       </section>

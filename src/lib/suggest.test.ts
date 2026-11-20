@@ -32,3 +32,24 @@ describe('suggestionMail', () => {
     expect(r.ok && r.mail.subject.length).toBe('Suggestion: '.length + 60)
   })
 })
+
+describe('problem reports', () => {
+  it('bring the screen, the spot and recent errors', () => {
+    const r = suggestionMail({ kind: 'problem', text: 'Listen does nothing', screen: '#/read/LSG/JHN/3', size: '390×844', theme: 'sepia',
+      where: '“Écouter” [div.verse-bar > button.listen] at 30% across, 80% down', errors: ['TypeError: x is undefined (listen.tsx:12)', 5] })
+    if (!r.ok) throw new Error('expected ok')
+    expect(r.mail.subject).toBe('Problem: Listen does nothing')
+    expect(r.mail.text).toContain('Screen: #/read/LSG/JHN/3 · 390×844 · theme sepia')
+    expect(r.mail.text).toContain('Spot shown: “Écouter” [div.verse-bar > button.listen]')
+    expect(r.mail.text).toContain('  - TypeError: x is undefined (listen.tsx:12)')
+  })
+  it('say so when nothing was shown', () => {
+    const r = suggestionMail({ kind: 'problem', text: 'Hm' })
+    expect(r.ok && r.mail.text).toContain('Spot shown: none')
+    expect(r.ok && r.mail.text).toContain('Errors the app noticed: none')
+  })
+  it('suggestions carry none of it', () => {
+    const r = suggestionMail({ text: 'Idea', screen: '#/x', where: 'here' })
+    expect(r.ok && r.mail.text).not.toContain('Screen:')
+  })
+})

@@ -292,7 +292,7 @@ async function suggestRoute(req: Request, env: Env) {
     db.prepare('SELECT COUNT(*) AS n FROM suggest_sends WHERE at > ?').bind(now - DAY).first<{ n: number }>(),
   ])
   if ((here?.h ?? 0) >= SUGGEST_PER_HOUR || (here?.n ?? 0) >= SUGGEST_PER_DAY || (all?.n ?? 0) >= SUGGEST_ALL_PER_DAY) {
-    throw new HttpError(429, 'Too many suggestions for now. Please try again tomorrow.')
+    throw new HttpError(429, 'Too many messages for now. Please try again tomorrow.')
   }
   await db.batch([
     db.prepare('DELETE FROM suggest_sends WHERE at < ?').bind(now - DAY),
@@ -307,7 +307,7 @@ async function suggestRoute(req: Request, env: Env) {
     }),
   }).catch(() => null)
   if (!res?.ok) {
-    console.error('suggestion not sent', res?.status)
+    console.error("report not sent", res?.status)
     throw new HttpError(502, 'It couldn’t be sent. Try again in a few minutes.')
   }
   return json({ ok: true })
