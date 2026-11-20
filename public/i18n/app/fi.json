@@ -1278,5 +1278,6 @@
 "Then tap one:": "Napauta sitten jompaakumpaa:",
 "Only the verses you picked": "Vain valitsemasi jakeet",
 "Reads on from there as the words light up": "Jatkaa lukemista, sanat syttyvät",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Tälle Raamatulle ei ole ääntä tällä laitteella: sanat syttyvät, jotta voit lukea hiljaa."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Tälle Raamatulle ei ole ääntä tällä laitteella: sanat syttyvät, jotta voit lukea hiljaa.",
+"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Näytä pieni ”Lue mukana” -painike heti 🙏:n yläpuolella. Se lukee näytön ylimmästä jakeesta tai napauttamastasi jakeesta alkaen."
 }

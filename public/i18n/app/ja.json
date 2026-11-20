@@ -1278,5 +1278,6 @@
 "Then tap one:": "次にどちらかをタップ：",
 "Only the verses you picked": "選んだ節だけ",
 "Reads on from there as the words light up": "言葉を光らせながら読み続けます",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。"
+"No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。",
+"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 のすぐ上に小さな「目で追って読む」ボタンを表示します。画面の一番上の節から、またはタップした節から読みます。"
 }

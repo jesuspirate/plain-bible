@@ -1113,5 +1113,6 @@
 "Then tap one:": "Puis toucher l’un des deux :",
 "Only the verses you picked": "Seulement les versets choisis",
 "Reads on from there as the words light up": "Continue la lecture, les mots s’allument",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "Pas de voix pour cette Bible sur cet appareil : les mots s’allument pour lire en silence."
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Pas de voix pour cette Bible sur cet appareil : les mots s’allument pour lire en silence.",
+"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Afficher un petit bouton « Lire en suivant » juste au-dessus de 🙏. Il lit à partir du verset en haut de l’écran, ou du verset touché."
 }

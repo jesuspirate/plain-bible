@@ -1278,5 +1278,6 @@
 "Then tap one:": "त्यसपछि एउटामा ट्याप गर्नुहोस्:",
 "Only the verses you picked": "छानेका पदहरू मात्र",
 "Reads on from there as the words light up": "शब्दहरू उज्यालो हुँदै अगाडि पढ्छ",
-"No voice for this Bible on this device: the words light up so you can read quietly.": "यस उपकरणमा यो बाइबलको आवाज छैन: शब्दहरू उज्यालो हुन्छन्, ताकि तपाईं चुपचाप पढ्न सक्नुहुन्छ।"
+"No voice for this Bible on this device: the words light up so you can read quietly.": "यस उपकरणमा यो बाइबलको आवाज छैन: शब्दहरू उज्यालो हुन्छन्, ताकि तपाईं चुपचाप पढ्न सक्नुहुन्छ।",
+"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 को ठीक माथि एउटा सानो “सँगै पढ्नुहोस्” बटन देखाउनुहोस्। यसले स्क्रिनको माथिको पदबाट, वा तपाईंले छोएको पदबाट पढ्छ।"
 }
