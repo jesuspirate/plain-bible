@@ -10,8 +10,10 @@ on:
     paths: ['ios/duo-pictures/**', '.github/workflows/duo-pictures.yml']
   workflow_dispatch:
 
+# Read-only by default. Only the small "keep" job below may write, and it
+# runs none of the pull request's own code: it only stores the pictures.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   take:
@@ -26,8 +28,24 @@ jobs:
         with:
           name: duo-pictures
           path: pictures/
+
+  keep:
+    needs: take
+    if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - uses: actions/download-artifact@v7
+        continue-on-error: true
+        with:
+          name: duo-pictures
+          path: pictures/
       - name: Keep as a git ref
-        if: always() && hashFiles('pictures/*') != '' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        if: hashFiles('pictures/*') != ''
         env:
           PR: ${{ github.event.pull_request.number }}
         run: |
