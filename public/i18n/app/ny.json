@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Muchotse kiyi iyi ya Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Pulogalamu ya Fedi yokhala ndi kiyi iyi siidzakulowetsaninso mu akaunti yanu.",
 "Too many Nostr keys on this account. Remove one first.": "Makiyi a Nostr achuluka kwambiri pa akaunti iyi. Chotsani imodzi kaye.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kenako dinani Mverani kuti mumve, kapena Werengani motsatira kuti mutsatire mawu pamene akuwerengedwa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kenako dinani Mverani kuti mumve, kapena Werengani motsatira kuti mutsatire mawu pamene akuwerengedwa.",
+"Too many sign-ins from here. Try again later.": "Kulowa kochuluka kwambiri kuchokera pano. Yesaninso pambuyo pake."
 }

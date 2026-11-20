@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "ئەم کلیلی Nostrـە لاببرێت؟",
 "The Fedi app with this key won’t sign in to your account anymore.": "ئەپی Fedi کە ئەم کلیلەی هەیە چیتر ناتباتە ناو هەژمارەکەتەوە.",
 "Too many Nostr keys on this account. Remove one first.": "کلیلی Nostr لەم هەژمارەدا زۆرن. سەرەتا یەکێکیان لاببە.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "پاشان کرتە لە «گوێگرتن» بکە بۆ بیستنی، یان «خوێندنەوە لەگەڵیدا» بۆ شوێنکەوتنی وشەکان کاتێک دەخوێنرێنەوە."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "پاشان کرتە لە «گوێگرتن» بکە بۆ بیستنی، یان «خوێندنەوە لەگەڵیدا» بۆ شوێنکەوتنی وشەکان کاتێک دەخوێنرێنەوە.",
+"Too many sign-ins from here. Try again later.": "چوونەژوورەوە لێرەوە زۆر بووە. دواتر هەوڵ بدەرەوە."
 }

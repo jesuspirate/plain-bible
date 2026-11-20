@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Xóa khóa Nostr này?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Ứng dụng Fedi có khóa này sẽ không đăng nhập vào tài khoản của bạn nữa.",
 "Too many Nostr keys on this account. Remove one first.": "Tài khoản này có quá nhiều khóa Nostr. Hãy xóa bớt một khóa trước.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Rồi chạm Nghe để nghe, hoặc Đọc theo để dõi theo từng chữ khi được đọc."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Rồi chạm Nghe để nghe, hoặc Đọc theo để dõi theo từng chữ khi được đọc.",
+"Too many sign-ins from here. Try again later.": "Quá nhiều lần đăng nhập từ đây. Hãy thử lại sau."
 }

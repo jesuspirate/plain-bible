@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Ĉu forigi ĉi tiun Nostr-ŝlosilon?",
 "The Fedi app with this key won’t sign in to your account anymore.": "La Fedi-aplikaĵo kun ĉi tiu ŝlosilo ne plu ensalutos en vian konton.",
 "Too many Nostr keys on this account. Remove one first.": "Tro da Nostr-ŝlosiloj en ĉi tiu konto. Unue forigu unu.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Poste tuŝetu Aŭskulti por aŭdi ĝin, aŭ Kunlegi por sekvi la vortojn dum ili estas legataj."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Poste tuŝetu Aŭskulti por aŭdi ĝin, aŭ Kunlegi por sekvi la vortojn dum ili estas legataj.",
+"Too many sign-ins from here. Try again later.": "Tro da ensalutoj de ĉi tie. Reprovu poste."
 }

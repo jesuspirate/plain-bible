@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Gow ersooyl yn eochair Nostr shoh?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Cha jean yn app Fedi lesh yn eochair shoh oo y chur stiagh ayns dty choontey ny smoo.",
 "Too many Nostr keys on this account. Remove one first.": "Ro wooilley eochraghyn Nostr er y choontey shoh. Gow ersooyl fer hoshiaght.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Eisht bean rish Clasht dy chlashtyn eh, ny Lhaih marish dy eiyrt er ny goan myr t’ad goll er lhaih."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Eisht bean rish Clasht dy chlashtyn eh, ny Lhaih marish dy eiyrt er ny goan myr t’ad goll er lhaih.",
+"Too many sign-ins from here. Try again later.": "Ro vooar goll stiagh veih shoh. Prow reesht ny s’anmey."
 }

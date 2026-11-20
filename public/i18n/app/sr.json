@@ -1350,5 +1350,6 @@
 "Remove this Nostr key?": "Уклонити овај Nostr кључ?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Апликација Fedi са овим кључем више неће моћи да се пријави на ваш налог.",
 "Too many Nostr keys on this account. Remove one first.": "Превише Nostr кључева на овом налогу. Прво уклоните један.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Затим додирни Слушај да га чујеш, или Прати читање да пратиш речи док се читају."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Затим додирни Слушај да га чујеш, или Прати читање да пратиш речи док се читају.",
+"Too many sign-ins from here. Try again later.": "Превише пријава са ове мреже. Покушајте поново касније."
 }

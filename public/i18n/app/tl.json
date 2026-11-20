@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Alisin ang Nostr key na ito?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Hindi na makakapag-sign in sa account mo ang Fedi app na may key na ito.",
 "Too many Nostr keys on this account. Remove one first.": "Masyadong maraming Nostr key sa account na ito. Mag-alis muna ng isa.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pagkatapos, i-tap ang Pakinggan para marinig ito, o ang Sabayang pagbasa para sundan ang mga salita habang binabasa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pagkatapos, i-tap ang Pakinggan para marinig ito, o ang Sabayang pagbasa para sundan ang mga salita habang binabasa.",
+"Too many sign-ins from here. Try again later.": "Masyadong maraming pag-sign in mula rito. Subukan ulit mamaya."
 }

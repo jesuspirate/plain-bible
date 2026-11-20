@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "این کلید Nostr برداشته شود؟",
 "The Fedi app with this key won’t sign in to your account anymore.": "برنامهٔ Fedi که این کلید را دارد دیگر شما را وارد حسابتان نمی‌کند.",
 "Too many Nostr keys on this account. Remove one first.": "این حساب کلیدهای Nostr بیش از حد دارد. اول یکی را بردارید.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "سپس «شنیدن» را بزنید تا آن را بشنوید، یا «خواندن همراه» را تا کلمات را هنگام خوانده شدن دنبال کنید."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "سپس «شنیدن» را بزنید تا آن را بشنوید، یا «خواندن همراه» را تا کلمات را هنگام خوانده شدن دنبال کنید.",
+"Too many sign-ins from here. Try again later.": "ورودهای بیش از حد از اینجا. بعداً دوباره امتحان کنید."
 }

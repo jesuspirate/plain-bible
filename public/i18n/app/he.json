@@ -1270,5 +1270,6 @@
 "Remove this Nostr key?": "להסיר את מפתח Nostr הזה?",
 "The Fedi app with this key won’t sign in to your account anymore.": "אפליקציית Fedi עם המפתח הזה כבר לא תחבר לחשבון שלך.",
 "Too many Nostr keys on this account. Remove one first.": "יותר מדי מפתחות Nostr בחשבון הזה. יש להסיר אחד קודם.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "אחר כך הקישו על „האזנה” כדי לשמוע, או על „קריאה עם מעקב” כדי לעקוב אחרי המילים בזמן שהן נקראות."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "אחר כך הקישו על „האזנה” כדי לשמוע, או על „קריאה עם מעקב” כדי לעקוב אחרי המילים בזמן שהן נקראות.",
+"Too many sign-ins from here. Try again later.": "יותר מדי התחברויות מכאן. כדאי לנסות שוב מאוחר יותר."
 }

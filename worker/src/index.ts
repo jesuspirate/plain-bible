@@ -349,7 +349,7 @@ const NOSTR_NEW_PER_DAY = 50
 async function nostrStart(req: Request, env: Env) {
   const db = env.DB, now = Date.now(), ip = await ipKey(req)
   const here = await db.prepare('SELECT COUNT(*) AS n FROM nostr_tries WHERE ip = ? AND at > ? AND made = 0').bind(ip, now - HOUR).first<{ n: number }>()
-  if ((here?.n ?? 0) >= NOSTR_TRIES_PER_HOUR) throw new HttpError(429, 'Too many sign-ins from here. Try again in an hour.')
+  if ((here?.n ?? 0) >= NOSTR_TRIES_PER_HOUR) throw new HttpError(429, 'Too many sign-ins from here. Try again later.')
   await db.batch([
     db.prepare('DELETE FROM nostr_tries WHERE at < ?').bind(now - DAY),
     db.prepare('INSERT INTO nostr_tries (ip, at, made) VALUES (?, ?, 0)').bind(ip, now),
@@ -391,7 +391,7 @@ async function nostrVerify(req: Request, env: Env) {
   const ip = await ipKey(req)
   const made = await db.prepare('SELECT COUNT(*) AS n, SUM(at > ?) AS h FROM nostr_tries WHERE ip = ? AND at > ? AND made = 1')
     .bind(now - HOUR, ip, now - DAY).first<{ n: number; h: number | null }>()
-  if ((made?.h ?? 0) >= NOSTR_NEW_PER_HOUR || (made?.n ?? 0) >= NOSTR_NEW_PER_DAY) throw new HttpError(429, 'Too many new accounts from here. Try again later.')
+  if ((made?.h ?? 0) >= NOSTR_NEW_PER_HOUR || (made?.n ?? 0) >= NOSTR_NEW_PER_DAY) throw new HttpError(429, 'Too many sign-ins from here. Try again later.')
   const userId = random(16)
   await db.batch([
     db.prepare('INSERT INTO nostr_tries (ip, at, made) VALUES (?, ?, 1)').bind(ip, now),

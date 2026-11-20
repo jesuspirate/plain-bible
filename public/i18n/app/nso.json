@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Tloša senotlelo se sa Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Tirišo ya Fedi yeo e nago le senotlelo se e ka se sa go tsenya akhaonteng ya gago.",
 "Too many Nostr keys on this account. Remove one first.": "Go na le dinotlelo tša Nostr tše dintši kudu akhaonteng ye. Tloša se tee pele.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ka morago kgotla Theeletša go e kwa, goba Bala o latela go latela mantšu ge a balwa."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ka morago kgotla Theeletša go e kwa, goba Bala o latela go latela mantšu ge a balwa.",
+"Too many sign-ins from here. Try again later.": "Go tsena go go ntši kudu go tšwa mo. Leka gape ka morago."
 }

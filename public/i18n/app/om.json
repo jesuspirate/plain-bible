@@ -1266,5 +1266,6 @@
 "Remove this Nostr key?": "Furtuu Nostr kana haqi?",
 "The Fedi app with this key won’t sign in to your account anymore.": "App Fedi furtuu kana qabu kana booda herrega kee keessa si hin seensisu.",
 "Too many Nostr keys on this account. Remove one first.": "Furtuuwwan Nostr herrega kana irratti baay'ee baay'atan. Dura tokko haqi.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Achiis dhaga’uuf Dhaggeeffadhu caqasi, yookaan jechoota akkuma dubbifamaniin hordofuuf Hordofii dubbisi caqasi."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Achiis dhaga’uuf Dhaggeeffadhu caqasi, yookaan jechoota akkuma dubbifamaniin hordofuuf Hordofii dubbisi caqasi.",
+"Too many sign-ins from here. Try again later.": "Asii seensi baay'ee ta'eera. Booda irra deebi'ii yaali."
 }

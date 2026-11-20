@@ -1269,5 +1269,6 @@
 "Remove this Nostr key?": "Të hiqet ky çelës Nostr?",
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikacioni Fedi me këtë çelës nuk do të hyjë më në llogarinë tuaj.",
 "Too many Nostr keys on this account. Remove one first.": "Shumë çelësa Nostr në këtë llogari. Hiqni njërin më parë.",
-"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pastaj prek Dëgjo për ta dëgjuar, ose Lexo duke ndjekur për të ndjekur fjalët ndërsa lexohen."
+"Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Pastaj prek Dëgjo për ta dëgjuar, ose Lexo duke ndjekur për të ndjekur fjalët ndërsa lexohen.",
+"Too many sign-ins from here. Try again later.": "Shumë identifikime nga ky rrjet. Provoni përsëri më vonë."
 }
