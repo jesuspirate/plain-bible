@@ -6,7 +6,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar } from './state'
 import { canHear } from './listen'
-import { FingerIcon } from './taphint'
+import { Glyph } from './gesture'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
@@ -348,7 +348,7 @@ function RecordingPage() {
 
 // How to listen, shown more than told: tap a verse, then one of the two
 // buttons drawn as they look on the verse's bar. Try it now closes Settings
-// and a finger taps a verse in view (TapHint); the choice stays theirs.
+// and the tour's fingertip taps a verse in view, then the two buttons (taphint); the choice stays theirs.
 function AudioHow() {
   const { settings, byId } = useApp()
   const route = useRoute()
@@ -357,7 +357,7 @@ function AudioHow() {
   return <>
     <ol class="audio-steps">
       <li><span class="step-n">1</span><span class="step-body">
-        <span class="step-title"><FingerIcon size={28} />{t('Tap a verse')}</span>
+        <span class="step-title"><Glyph kind="tap" />{t('Tap a verse')}</span>
       </span></li>
       <li><span class="step-n">2</span><span class="step-body">
         <span class="step-title">{t('Then tap one:')}</span>
@@ -368,7 +368,7 @@ function AudioHow() {
     </ol>
     {!hear && <p class="audio-note">{t('No voice for this Bible on this device: the words light up so you can read quietly.')}</p>}
     {/* Doesn't pick a verse for you: it shows you where to tap. */}
-    <button class="primary audio-show" onClick={showVerseBar}><FingerIcon size={24} /> {t('Try it now')}</button>
+    <button class="primary audio-show" onClick={showVerseBar}><Glyph kind="tap" /> {t('Try it now')}</button>
   </>
 }
 
