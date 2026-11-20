@@ -1,0 +1,36 @@
+name: iPhone Duo pictures
+
+# Takes pictures of the app on Apple's iPhone Duo simulator (the folding
+# iPhone), built with Xcode 27, as the starting point for its App Store
+# pictures. Kept with the run, and as a lone commit at
+# refs/duo-pictures/pr-<number> (not a branch).
+
+on:
+  pull_request:
+    paths: ['ios/duo-pictures/**', '.github/workflows/duo-pictures.yml']
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  take:
+    runs-on: macos-26
+    timeout-minutes: 60
+    steps:
+      - uses: actions/checkout@v7
+      - name: Take
+        run: bash ios/duo-pictures/take.sh pictures
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: duo-pictures
+          path: pictures/
+      - name: Keep as a git ref
+        if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        env:
+          PR: ${{ github.event.pull_request.number }}
+        run: |
+          tree=$(for f in pictures/*; do printf '100644 blob %s\t%s\n' "$(git hash-object -w "$f")" "$(basename "$f")"; done | git mktree)
+          commit=$(git -c user.name=pictures -c user.email=pictures@localhost commit-tree "$tree" -m "Duo pictures for #$PR")
+          git push -f origin "$commit:refs/duo-pictures/pr-$PR"
