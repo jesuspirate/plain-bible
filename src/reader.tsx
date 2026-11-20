@@ -223,9 +223,10 @@ export function Reader({ route }: { route: Route }) {
     const on = () => {
       const from = (document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0) + 8, to = innerHeight - 170
       let first: Element | undefined
-      for (const el of document.querySelectorAll('.reader > article.chapter :is(.verse, .pv)[id]')) {
+      for (const el of document.querySelectorAll('.reader article.chapter :is(.verse, .pv)[id]')) {
         const r = el.getBoundingClientRect()
-        if (!r.height) continue
+        // On a two-page book, only the pages open now (not the ones beside them).
+        if (!r.height || r.right <= 0 || r.left >= innerWidth) continue
         first ??= el
         if (r.top >= from && r.bottom <= to) { first = el; break }
       }
