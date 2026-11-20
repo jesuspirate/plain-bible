@@ -946,7 +946,6 @@
 "Highlight removed": "Rangi nĩ yeherio",
 "Bookmarked": "Nĩ kwĩkĩrwo kĩmenyithia",
 "Bookmark removed": "Kĩmenyithia nĩ kĩeherio",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Hutia mũhari, ũcoke Thoma ũkĩrũmĩrĩra: nĩ gũgũthomwo kuuma hau, na ciugo nĩ ciakaga o ũrĩa irathomwo, nĩguo ũhote kũrũmĩrĩra. Rĩrĩa kũrarutwo wĩra: hutia mũhari ũrathomwo nĩguo ũrũgamie kana ũthiĩ na mbere, hutia mũhari ũngĩ nĩguo ũthome kuuma hau, hutia mũhari maita meerĩ na ihenya nĩguo ũwĩkĩre rangi, kana ũũhatĩke nĩguo ũwĩkĩre kĩmenyithia. Gĩthũki kĩa ihenya nĩ kĩnyihanagia kana kĩongagĩrĩra ihenya. Nĩ gũgũikara gũkĩrutwo wĩra nginya ũhutie X. Thikĩrĩria nĩ ĩthomaga mĩhari ĩrĩa ũthuurĩte tu.",
 "Share {ref}": "Gayana {ref}",
 "Outside the app": "Nja ya app",
 "With a circle": "Na gĩkundi",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Gũtoonya nĩ kũingĩ mũno kuuma haha. Geria rĩngĩ thutha.",
 "Audio": "Mũgambo",
 "Hear the Bible read aloud": "Thikĩrĩria Bibilia ĩgĩthomwo na mũgambo",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Hutia rũhunju o rwothe thĩinĩ wa Bibilia. Ndirũrũ igĩrĩ nĩ ikuumĩra: “Thikĩrĩria” ĩthomaga tu ndũhunju iria ũthuurĩte, na “Thoma ũkĩrũmĩrĩra” ĩthiaga na mbere gũthoma kuuma hau ciugo igĩkũũka ũtheri.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Bibilia ĩno ndĩngĩthomwo na mũgambo kũrĩ kĩndũ gĩkĩ. Hutia rũhunju, ũcooke ũhutie “Thoma ũkĩrũmĩrĩra”: ciugo nĩ ikũũkaga ũtheri ĩmwe ĩmwe, nĩguo ũthome ũkirĩte.",
-"Try it now": "Geria rĩu"
+"Try it now": "Geria rĩu",
+"Then tap one:": "Ũcooke ũhutie ĩmwe:",
+"Only the verses you picked": "Ndũhunju iria ũthuurĩte tu",
+"Reads on from there as the words light up": "Ĩthiaga na mbere ciugo igĩkũũka ũtheri",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Gũtirĩ mũgambo wa Bibilia ĩno kũrĩ kĩndũ gĩkĩ: ciugo nĩ ikũũkaga ũtheri nĩguo ũthome ũkirĩte."
 }

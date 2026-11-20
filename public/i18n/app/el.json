@@ -946,7 +946,6 @@
 "Highlight removed": "Η επισήμανση αφαιρέθηκε",
 "Bookmarked": "Προστέθηκε σελιδοδείκτης",
 "Bookmark removed": "Ο σελιδοδείκτης αφαιρέθηκε",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Αγγίξτε ένα εδάφιο και μετά Ανάγνωση με παρακολούθηση: η ανάγνωση ξεκινά από εκεί και οι λέξεις φωτίζονται καθώς διαβάζονται, ώστε να τις παρακολουθείτε. Όσο είναι ενεργή: αγγίξτε το εδάφιο που διαβάζεται για παύση ή συνέχεια, αγγίξτε άλλο εδάφιο για να διαβάσει από εκεί, αγγίξτε ένα εδάφιο δύο φορές γρήγορα για να το επισημάνετε ή πατήστε το παρατεταμένα για σελιδοδείκτη. Το κουμπί ταχύτητας επιβραδύνει ή επιταχύνει. Μένει ενεργή μέχρι να αγγίξετε το X. Η Ακρόαση διαβάζει μόνο τα εδάφια που επιλέξατε.",
 "Share {ref}": "Κοινοποίηση {ref}",
 "Outside the app": "Εκτός εφαρμογής",
 "With a circle": "Με έναν κύκλο",
@@ -1273,7 +1272,9 @@
 "Too many sign-ins from here. Try again later.": "Πάρα πολλές συνδέσεις από αυτό το δίκτυο. Δοκιμάστε ξανά αργότερα.",
 "Audio": "Ήχος",
 "Hear the Bible read aloud": "Ακούστε τη Βίβλο να διαβάζεται φωναχτά",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Πατήστε σε οποιοδήποτε εδάφιο της Βίβλου. Εμφανίζονται δύο κουμπιά: το «Ακρόαση» διαβάζει μόνο τα εδάφια που επιλέξατε, και το «Ανάγνωση με παρακολούθηση» συνεχίζει από εκεί ενώ οι λέξεις φωτίζονται.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Αυτή η Βίβλος δεν μπορεί να διαβαστεί φωναχτά σε αυτή τη συσκευή. Πατήστε ένα εδάφιο και μετά «Ανάγνωση με παρακολούθηση»: οι λέξεις φωτίζονται μία μία, για να διαβάζετε σιωπηλά.",
-"Try it now": "Δοκιμάστε τώρα"
+"Try it now": "Δοκιμάστε τώρα",
+"Then tap one:": "Μετά πατήστε ένα:",
+"Only the verses you picked": "Μόνο τα εδάφια που επιλέξατε",
+"Reads on from there as the words light up": "Συνεχίζει, οι λέξεις φωτίζονται",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Δεν υπάρχει φωνή για αυτή τη Βίβλο σε αυτή τη συσκευή: οι λέξεις φωτίζονται για σιωπηλή ανάγνωση."
 }

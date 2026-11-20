@@ -1022,7 +1022,6 @@
 "Highlight removed": "Izcēlums noņemts",
 "Bookmarked": "Pievienots grāmatzīmēm",
 "Bookmark removed": "Grāmatzīme noņemta",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Pieskarieties pantam, tad Lasīt līdzi: lasīšana turpinās no turienes, un vārdi iedegas, kad tie tiek lasīti, lai jūs varētu sekot. Kamēr tas ieslēgts: pieskarieties lasāmajam pantam, lai apturētu vai turpinātu, pieskarieties citam pantam, lai lasītu no tā, ātri divreiz pieskarieties pantam, lai to izceltu, vai turiet to, lai pievienotu grāmatzīmi. Ātruma poga palēnina vai paātrina. Tas paliek ieslēgts, līdz pieskaraties X. Klausīties nolasa tikai izvēlētos pantus.",
 "Share {ref}": "Kopīgot {ref}",
 "Outside the app": "Ārpus lietotnes",
 "With a circle": "Ar loku",
@@ -1354,7 +1353,9 @@
 "Too many sign-ins from here. Try again later.": "No šejienes pārāk daudz pierakstīšanos. Mēģiniet vēlāk.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Klausīties Bībeli lasītu skaļi",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Pieskarieties jebkuram Bībeles pantam. Parādās divas pogas: “Klausīties” nolasa tikai izvēlētos pantus, un “Lasīt līdzi” lasa tālāk no turienes, kamēr vārdi iedegas.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Šo Bībeli šajā ierīcē nevar lasīt skaļi. Pieskarieties pantam un tad “Lasīt līdzi”: vārdi iedegas pa vienam, lai jūs varētu lasīt klusi.",
-"Try it now": "Izmēģināt tagad"
+"Try it now": "Izmēģināt tagad",
+"Then tap one:": "Tad pieskarieties vienai:",
+"Only the verses you picked": "Tikai izvēlētie panti",
+"Reads on from there as the words light up": "Lasa tālāk, vārdi iedegas",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Šai Bībelei šajā ierīcē nav balss: vārdi iedegas, lai varētu lasīt klusi."
 }

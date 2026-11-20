@@ -946,7 +946,6 @@
 "Highlight removed": "ಹೈಲೈಟ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
 "Bookmarked": "ಬುಕ್‌ಮಾರ್ಕ್ ಮಾಡಲಾಗಿದೆ",
 "Bookmark removed": "ಬುಕ್‌ಮಾರ್ಕ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ವಚನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ, ನಂತರ ಜೊತೆಯಲ್ಲಿ ಓದಿ: ಅಲ್ಲಿಂದ ಓದು ಮುಂದುವರಿಯುತ್ತದೆ, ಮತ್ತು ಓದಲಾಗುತ್ತಿರುವ ಪದಗಳು ಬೆಳಗುತ್ತವೆ, ಆದ್ದರಿಂದ ನೀವು ಜೊತೆಯಲ್ಲಿ ಅನುಸರಿಸಬಹುದು. ಅದು ಆನ್ ಆಗಿರುವಾಗ: ವಿರಾಮಕ್ಕೆ ಅಥವಾ ಮುಂದುವರಿಸಲು ಓದಲಾಗುತ್ತಿರುವ ವಚನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ, ಅಲ್ಲಿಂದ ಓದಲು ಇನ್ನೊಂದು ವಚನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ, ಹೈಲೈಟ್ ಮಾಡಲು ವಚನವನ್ನು ಬೇಗನೆ ಎರಡು ಬಾರಿ ಟ್ಯಾಪ್ ಮಾಡಿ, ಅಥವಾ ಬುಕ್‌ಮಾರ್ಕ್ ಮಾಡಲು ಒತ್ತಿ ಹಿಡಿಯಿರಿ. ವೇಗದ ಬಟನ್ ನಿಧಾನ ಅಥವಾ ವೇಗ ಮಾಡುತ್ತದೆ. ನೀವು X ಟ್ಯಾಪ್ ಮಾಡುವವರೆಗೆ ಅದು ಆನ್ ಆಗಿರುತ್ತದೆ. ಆಲಿಸಿ ನೀವು ಆರಿಸಿದ ವಚನಗಳನ್ನು ಮಾತ್ರ ಓದುತ್ತದೆ.",
 "Share {ref}": "{ref} ಹಂಚಿಕೊಳ್ಳಿ",
 "Outside the app": "ಆ್ಯಪ್‌ನ ಹೊರಗೆ",
 "With a circle": "ಬಳಗದೊಂದಿಗೆ",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "ಇಲ್ಲಿಂದ ತುಂಬಾ ಸೈನ್ ಇನ್‌ಗಳು. ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
 "Audio": "ಆಡಿಯೋ",
 "Hear the Bible read aloud": "ಬೈಬಲ್ ಗಟ್ಟಿಯಾಗಿ ಓದುವುದನ್ನು ಆಲಿಸಿ",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ಬೈಬಲ್‌ನ ಯಾವುದೇ ವಚನವನ್ನು ತಟ್ಟಿ. ಎರಡು ಬಟನ್‌ಗಳು ಬರುತ್ತವೆ: “ಆಲಿಸಿ” ನೀವು ಆರಿಸಿದ ವಚನಗಳನ್ನು ಮಾತ್ರ ಓದುತ್ತದೆ, “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಪದಗಳು ಬೆಳಗುತ್ತಿರುವಂತೆ ಅಲ್ಲಿಂದ ಮುಂದೆ ಓದುತ್ತದೆ.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ಈ ಬೈಬಲ್ ಅನ್ನು ಈ ಸಾಧನದಲ್ಲಿ ಗಟ್ಟಿಯಾಗಿ ಓದಲು ಆಗದು. ಒಂದು ವಚನವನ್ನು ತಟ್ಟಿ, ನಂತರ “ಜೊತೆಯಲ್ಲಿ ಓದಿ”: ಪದಗಳು ಒಂದೊಂದಾಗಿ ಬೆಳಗುತ್ತವೆ, ನೀವು ಮೌನವಾಗಿ ಓದಬಹುದು.",
-"Try it now": "ಈಗ ಪ್ರಯತ್ನಿಸಿ"
+"Try it now": "ಈಗ ಪ್ರಯತ್ನಿಸಿ",
+"Then tap one:": "ನಂತರ ಒಂದನ್ನು ತಟ್ಟಿ:",
+"Only the verses you picked": "ಆರಿಸಿದ ವಚನಗಳು ಮಾತ್ರ",
+"Reads on from there as the words light up": "ಪದಗಳು ಬೆಳಗುತ್ತಾ ಮುಂದೆ ಓದುತ್ತದೆ",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ಈ ಸಾಧನದಲ್ಲಿ ಈ ಬೈಬಲ್‌ಗೆ ಧ್ವನಿ ಇಲ್ಲ: ಪದಗಳು ಬೆಳಗುತ್ತವೆ, ನೀವು ಮೌನವಾಗಿ ಓದಬಹುದು."
 }

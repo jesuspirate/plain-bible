@@ -6,9 +6,10 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar } from './state'
 import { canHear } from './listen'
+import { FingerIcon } from './taphint'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -345,17 +346,29 @@ function RecordingPage() {
   </>
 }
 
-// How to listen: tap a verse. Said where people look for it, with a button
-// that closes Settings and opens a verse's bar, so the buttons are right there.
+// How to listen, shown more than told: tap a verse, then one of the two
+// buttons drawn as they look on the verse's bar. Try it now closes Settings
+// and a finger taps a verse in view (TapHint); the choice stays theirs.
 function AudioHow() {
   const { settings, byId } = useApp()
   const route = useRoute()
   const version = route.path[0] === 'read' && byId.has(route.path[1]) ? route.path[1] : settings.version
+  const hear = canHear(version)
   return <>
-    <p class="audio-how">{canHear(version)
-      ? t('Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.')
-      : t('This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.')}</p>
-    <button class="primary audio-show" onClick={showVerseBar}><SpeakerIcon size={24} /> {t('Try it now')}</button>
+    <ol class="audio-steps">
+      <li><span class="step-n">1</span><span class="step-body">
+        <span class="step-title"><FingerIcon size={28} />{t('Tap a verse')}</span>
+      </span></li>
+      <li><span class="step-n">2</span><span class="step-body">
+        <span class="step-title">{t('Then tap one:')}</span>
+        {/* The very buttons the verse's bar shows. */}
+        {hear && <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span><span class="what">{t('Only the verses you picked')}</span></span>}
+        <span class="audio-pick"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span><span class="what">{t('Reads on from there as the words light up')}</span></span>
+      </span></li>
+    </ol>
+    {!hear && <p class="audio-note">{t('No voice for this Bible on this device: the words light up so you can read quietly.')}</p>}
+    {/* Doesn't pick a verse for you: it shows you where to tap. */}
+    <button class="primary audio-show" onClick={showVerseBar}><FingerIcon size={24} /> {t('Try it now')}</button>
   </>
 }
 
@@ -444,7 +457,6 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <AudioHow />
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">
-        <span class="muted small">{t('Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.')}</span>
         {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
         <label><input type="checkbox" checked={settings.readSilent} onChange={e => update({ readSilent: (e.target as HTMLInputElement).checked })} /> {t('No voice: the highlight moves through the words by itself, so you can read along quietly at your own pace.')}</label>
       </div>

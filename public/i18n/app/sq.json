@@ -946,7 +946,6 @@
 "Highlight removed": "Theksimi u hoq",
 "Bookmarked": "U shtua faqeshënuesi",
 "Bookmark removed": "Faqeshënuesi u hoq",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Prekni një varg, pastaj Lexo duke ndjekur: leximi nis që andej, dhe fjalët ndriçohen ndërsa lexohen, që t’i ndiqni lehtë. Ndërsa është aktiv: prekni vargun që po lexohet për ta ndalur ose vazhduar, prekni një varg tjetër për të lexuar që andej, prekni një varg dy herë shpejt për ta theksuar, ose mbajeni shtypur për t’i vënë faqeshënues. Butoni i shpejtësisë e ngadalëson ose e shpejton. Mbetet aktiv derisa të prekni X. Dëgjo lexon vetëm vargjet që zgjodhët.",
 "Share {ref}": "Ndaj {ref}",
 "Outside the app": "Jashtë aplikacionit",
 "With a circle": "Me një rreth",
@@ -1273,7 +1272,9 @@
 "Too many sign-ins from here. Try again later.": "Shumë identifikime nga ky rrjet. Provoni përsëri më vonë.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Dëgjoni Biblën të lexuar me zë",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Prekni cilindo varg të Biblës. Dalin dy butona: «Dëgjo» lexon vetëm vargjet e zgjedhura, ndërsa «Lexo duke ndjekur» vazhdon leximin prej aty, ndërsa fjalët ndriçohen.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Kjo Bibël nuk mund të lexohet me zë në këtë pajisje. Prekni një varg, pastaj «Lexo duke ndjekur»: fjalët ndriçohen një nga një, që të lexoni në heshtje.",
-"Try it now": "Provo tani"
+"Try it now": "Provo tani",
+"Then tap one:": "Pastaj prekni njërin:",
+"Only the verses you picked": "Vetëm vargjet e zgjedhura",
+"Reads on from there as the words light up": "Vazhdon leximin, fjalët ndriçohen",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Pa zë për këtë Bibël në këtë pajisje: fjalët ndriçohen që të lexoni në heshtje."
 }

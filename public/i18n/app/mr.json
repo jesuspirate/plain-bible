@@ -946,7 +946,6 @@
 "Highlight removed": "हायलाइट काढला",
 "Bookmarked": "बुकमार्क केले",
 "Bookmark removed": "बुकमार्क काढला",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "वचनावर टॅप करा, मग सोबत वाचा: वाचन तिथून पुढे चालते, आणि वाचले जाणारे शब्द उजळतात, म्हणजे तुम्ही सोबत राहू शकता. चालू असताना: थांबवण्यासाठी किंवा पुढे चालू ठेवण्यासाठी वाचल्या जाणाऱ्या वचनावर टॅप करा, तिथून वाचण्यासाठी दुसऱ्या वचनावर टॅप करा, हायलाइट करण्यासाठी वचनावर पटकन दोनदा टॅप करा, किंवा बुकमार्क करण्यासाठी ते दाबून ठेवा. वेगाचे बटण हळू किंवा जलद करते. तुम्ही X वर टॅप करेपर्यंत हे चालू राहते. ऐका फक्त तुम्ही निवडलेली वचने वाचते.",
 "Share {ref}": "{ref} शेअर करा",
 "Outside the app": "ॲपच्या बाहेर",
 "With a circle": "गटासोबत",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "इथून खूप साइन इन झाले. नंतर पुन्हा प्रयत्न करा.",
 "Audio": "ऑडिओ",
 "Hear the Bible read aloud": "बायबल मोठ्याने वाचलेले ऐका",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "बायबलमधील कोणत्याही वचनावर टॅप करा. दोन बटणे दिसतील: “ऐका” फक्त निवडलेली वचने वाचते, आणि “सोबत वाचा” तिथून पुढे वाचत राहते, शब्द उजळत जातात.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "हे बायबल या डिव्हाइसवर मोठ्याने वाचता येत नाही. एखाद्या वचनावर टॅप करा, मग “सोबत वाचा”: शब्द एकेक करून उजळतात, म्हणजे तुम्ही मनात वाचू शकता.",
-"Try it now": "आता वापरून पहा"
+"Try it now": "आता वापरून पहा",
+"Then tap one:": "मग यापैकी एकावर टॅप करा:",
+"Only the verses you picked": "फक्त निवडलेली वचने",
+"Reads on from there as the words light up": "पुढे वाचते, शब्द उजळत जातात",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "या डिव्हाइसवर या बायबलसाठी आवाज नाही: शब्द उजळतात म्हणजे तुम्ही मनात वाचू शकता."
 }

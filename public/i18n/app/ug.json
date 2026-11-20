@@ -946,7 +946,6 @@
 "Highlight removed": "گەۋدىلەندۈرۈش ئۆچۈرۈلدى",
 "Bookmarked": "خەتكۈچ قوشۇلدى",
 "Bookmark removed": "خەتكۈچ ئۆچۈرۈلدى",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "بىر ئايەتنى بېسىپ، ئاندىن «ئەگىشىپ ئوقۇش» نى بېسىڭ: ئۇ شۇ يەردىن ئوقۇيدۇ، سۆزلەر ئوقۇلغانسېرى يورۇيدۇ، شۇڭا ئەگىشەلەيسىز. ئوچۇق ۋاقىتتا: ئوقۇلۇۋاتقان ئايەتنى بېسىپ توختىتىڭ ياكى داۋاملاشتۇرۇڭ، باشقا ئايەتنى بېسىپ شۇ يەردىن ئوقۇتۇڭ، ئايەتنى تېز ئىككى قېتىم بېسىپ گەۋدىلەندۈرۈڭ ياكى بېسىپ تۇرۇپ خەتكۈچ قوشۇڭ. سۈرئەت كۇنۇپكىسى ئاستىلىتىدۇ ياكى تېزلىتىدۇ. X نى باسمىغۇچە ئوچۇق تۇرىدۇ. «ئاڭلاش» پەقەت سىز تاللىغان ئايەتلەرنىلا ئوقۇيدۇ.",
 "Share {ref}": "{ref} نى ھەمبەھىرلەش",
 "Outside the app": "ئەپنىڭ سىرتىدا",
 "With a circle": "چەمبەر بىلەن",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "بۇ يەردىن كىرىش بەك كۆپ بولدى. كېيىن قايتا سىناڭ.",
 "Audio": "ئاۋاز",
 "Hear the Bible read aloud": "مۇقەددەس كىتابنىڭ ئۈنلۈك ئوقۇلۇشىنى ئاڭلاش",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "مۇقەددەس كىتابتىكى خالىغان ئايەتنى چېكىڭ. ئىككى كۇنۇپكا چىقىدۇ: «ئاڭلاش» پەقەت سىز تاللىغان ئايەتلەرنىلا ئوقۇيدۇ، «ئەگىشىپ ئوقۇش» بولسا سۆزلەر يورۇپ تۇرغاندا ئۇ يەردىن داۋاملىق ئوقۇيدۇ.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "بۇ مۇقەددەس كىتابنى بۇ ئۈسكۈنىدە ئۈنلۈك ئوقۇغىلى بولمايدۇ. بىر ئايەتنى چېكىپ، ئاندىن «ئەگىشىپ ئوقۇش»: سۆزلەر بىر-بىرلەپ يورۇيدۇ، سىز ئىچىڭىزدە ئوقۇيالايسىز.",
-"Try it now": "ھازىر سىناپ بېقىڭ"
+"Try it now": "ھازىر سىناپ بېقىڭ",
+"Then tap one:": "ئاندىن بىرىنى چېكىڭ:",
+"Only the verses you picked": "پەقەت تاللانغان ئايەتلەر",
+"Reads on from there as the words light up": "سۆزلەر يورۇپ داۋاملىق ئوقۇيدۇ",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "بۇ ئۈسكۈنىدە بۇ مۇقەددەس كىتابنىڭ ئاۋازى يوق: سۆزلەر يورۇيدۇ، ئىچىڭىزدە ئوقۇيالايسىز."
 }

@@ -19,11 +19,16 @@ import { useRecording } from './lib/recordMode'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
+import { showTapHint } from './taphint'
 import { overlayOpen } from './lib/overlay'
 import { grow, keepCaretInView } from './lib/caret'
 import { QUICK, draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
 import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, useWide } from './lib/spread'
+
+// After Try it now (Audio in Settings), the next verse bar shows which two
+// buttons are the audio ones.
+let glowAudioUntil = 0
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -211,19 +216,22 @@ export function Reader({ route }: { route: Route }) {
   }, [loaded])
 
   useEffect(() => setSelected([]), [book, chapter, version])
-  // Show me, from Audio in Settings: the bar of the first verse wholly in
-  // view (clear of the bars), as if it had been tapped.
+  // Try it now, from Audio in Settings: a finger softly taps the first verse
+  // wholly in view (clear of the bars). Nothing is picked for you; when you
+  // tap a verse, its Listen and Read along glow once.
   useEffect(() => {
     const on = () => {
       const from = (document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0) + 8, to = innerHeight - 170
-      let first: number | undefined
-      for (const el of document.querySelectorAll<HTMLElement>('.reader > article.chapter :is(.verse, .pv)[id]')) {
-        const v = Number(el.id.slice(1)), r = el.getBoundingClientRect()
-        if (!v || !r.height) continue
-        first ??= v
-        if (r.top >= from && r.bottom <= to) { setSelected([v]); return }
+      let first: Element | undefined
+      for (const el of document.querySelectorAll('.reader > article.chapter :is(.verse, .pv)[id]')) {
+        const r = el.getBoundingClientRect()
+        if (!r.height) continue
+        first ??= el
+        if (r.top >= from && r.bottom <= to) { first = el; break }
       }
-      if (first) setSelected([first])
+      if (!first) return
+      showTapHint(first, t('Tap a verse'))
+      glowAudioUntil = Date.now() + 60_000
     }
     addEventListener(VERSE_BAR_EVENT, on)
     return () => removeEventListener(VERSE_BAR_EVENT, on)
@@ -1347,6 +1355,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   onPray: (vs: number[]) => void
 }) {
   const { settings, update, byId, data } = useApp()
+  // Just after Try it now: the two audio buttons glow, once.
+  const [glow] = useState(() => { const on = Date.now() < glowAudioUntil; glowAudioUntil = 0; return on })
   const [compare, setCompare] = useState<Bible[]>()
   const [askUnmark, setAskUnmark] = useState(false)
   // Share: outside the app (the phone's share sheet), or with a circle.
@@ -1456,7 +1466,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
             {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
-            {canHear(version) && !settings.readSilent && <button onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
+            {canHear(version) && !settings.readSilent && <button class={glow ? 'glow-once' : undefined} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
@@ -1467,7 +1477,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           </div>
           {/* The two things done from a verse, not to it: read on from here until X, and pray. */}
           <div class="selbar-big">
-            <button onClick={() => { startListening(spot, bibles[version]); onClose() }}><ReadIcon size={26} /><span>{t('Read along')}</span></button>
+            <button class={glow ? 'glow-once' : undefined} onClick={() => { startListening(spot, bibles[version]); onClose() }}><ReadIcon size={26} /><span>{t('Read along')}</span></button>
             <button class="selbar-pray-btn" onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
           </div>
         </>}

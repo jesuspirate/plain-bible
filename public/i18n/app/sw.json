@@ -946,7 +946,6 @@
 "Highlight removed": "Alama ya rangi imeondolewa",
 "Bookmarked": "Alamisho limewekwa",
 "Bookmark removed": "Alamisho limeondolewa",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Gusa mstari, kisha Soma ukifuatisha: inasoma kuanzia hapo, na maneno yanang’aa yanaposomwa, ili ufuatishe. Ikiwa imewashwa: gusa mstari unaosomwa ili usitishe au uendelee, gusa mstari mwingine ili isome kuanzia hapo, gusa mstari mara mbili haraka ili uuwekee alama ya rangi, au uushikilie ili uweke alamisho. Kitufe cha kasi kinapunguza au kuongeza mwendo. Inabaki imewashwa hadi uguse X. Sikiliza inasoma mistari uliyochagua tu.",
 "Share {ref}": "Shiriki {ref}",
 "Outside the app": "Nje ya programu",
 "With a circle": "Na kikundi",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Kuingia mara nyingi mno kutoka hapa. Jaribu tena baadaye.",
 "Audio": "Sauti",
 "Hear the Bible read aloud": "Sikiliza Biblia ikisomwa kwa sauti",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Gusa mstari wowote wa Biblia. Vitufe viwili vinatokea: “Sikiliza” husoma mistari uliyochagua tu, na “Soma ukifuatisha” huendelea kusoma kuanzia hapo huku maneno yakiwaka.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Biblia hii haiwezi kusomwa kwa sauti kwenye kifaa hiki. Gusa mstari, kisha “Soma ukifuatisha”: maneno yanawaka moja baada ya jingine, ili usome kimya.",
-"Try it now": "Jaribu sasa"
+"Try it now": "Jaribu sasa",
+"Then tap one:": "Kisha gusa kimoja:",
+"Only the verses you picked": "Mistari uliyochagua tu",
+"Reads on from there as the words light up": "Huendelea kusoma maneno yakiwaka",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Hakuna sauti kwa Biblia hii kwenye kifaa hiki: maneno yanawaka ili usome kimya."
 }

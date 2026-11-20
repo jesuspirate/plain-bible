@@ -946,7 +946,6 @@
 "Highlight removed": "하이라이트 삭제됨",
 "Bookmarked": "책갈피에 추가됨",
 "Bookmark removed": "책갈피 삭제됨",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "구절을 탭한 다음 따라 읽기를 탭하세요. 거기서부터 읽어 나가며, 읽는 단어가 밝게 표시되어 따라갈 수 있습니다. 켜져 있는 동안: 읽고 있는 구절을 탭하면 일시 정지하거나 계속하고, 다른 구절을 탭하면 거기서부터 읽고, 구절을 빠르게 두 번 탭하면 하이라이트하고, 길게 누르면 책갈피에 추가합니다. 속도 버튼으로 느리게 또는 빠르게 할 수 있습니다. X를 탭할 때까지 켜져 있습니다. 듣기는 선택한 구절만 읽습니다.",
 "Share {ref}": "{ref} 공유",
 "Outside the app": "앱 밖으로",
 "With a circle": "모임과",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "이곳에서 로그인 시도가 너무 많습니다. 나중에 다시 시도하세요.",
 "Audio": "오디오",
 "Hear the Bible read aloud": "성경 낭독 듣기",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "성경의 아무 절이나 누르세요. 버튼 두 개가 나타납니다. ‘듣기’는 고른 절만 읽고, ‘따라 읽기’는 단어에 불을 밝히며 거기서부터 계속 읽습니다.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "이 성경은 이 기기에서 소리 내어 읽을 수 없습니다. 절을 누른 뒤 ‘따라 읽기’를 누르면 단어가 하나씩 밝아져 조용히 따라 읽을 수 있습니다.",
-"Try it now": "지금 해 보기"
+"Try it now": "지금 해 보기",
+"Then tap one:": "그다음 하나를 누르세요:",
+"Only the verses you picked": "고른 절만",
+"Reads on from there as the words light up": "단어를 밝히며 계속 읽습니다",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "이 기기에는 이 성경의 음성이 없습니다. 단어가 밝아져 조용히 읽을 수 있습니다."
 }

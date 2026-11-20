@@ -946,7 +946,6 @@
 "Highlight removed": "Markering verwijderd",
 "Bookmarked": "Bladwijzer toegevoegd",
 "Bookmark removed": "Bladwijzer verwijderd",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Tik op een vers en dan op Meelezen: er wordt vanaf daar gelezen, en de woorden lichten op terwijl ze worden gelezen, zodat je kunt meevolgen. Zolang het aan staat: tik op het vers dat wordt gelezen om te pauzeren of verder te gaan, tik op een ander vers om vanaf daar te lezen, tik twee keer snel op een vers om het te markeren, of houd het vast om er een bladwijzer bij te zetten. Met de snelheidsknop gaat het langzamer of sneller. Het blijft aan tot je op X tikt. Luisteren leest alleen de verzen die je hebt gekozen.",
 "Share {ref}": "{ref} delen",
 "Outside the app": "Buiten de app",
 "With a circle": "Met een kring",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Te veel inlogpogingen vanaf hier. Probeer het later opnieuw.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "De Bijbel laten voorlezen",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tik op een vers in de Bijbel. Er verschijnen twee knoppen: ‘Luisteren’ leest alleen de gekozen verzen, en ‘Meelezen’ leest vanaf daar verder terwijl de woorden oplichten.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Deze Bijbel kan op dit apparaat niet worden voorgelezen. Tik op een vers en dan op ‘Meelezen’: de woorden lichten één voor één op, zodat je stil kunt meelezen.",
-"Try it now": "Nu proberen"
+"Try it now": "Nu proberen",
+"Then tap one:": "Tik dan op een van beide:",
+"Only the verses you picked": "Alleen de gekozen verzen",
+"Reads on from there as the words light up": "Leest verder terwijl de woorden oplichten",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Geen stem voor deze Bijbel op dit apparaat: de woorden lichten op, zodat je stil kunt meelezen."
 }

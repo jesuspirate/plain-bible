@@ -946,7 +946,6 @@
 "Highlight removed": "Langi eggyiddwawo",
 "Bookmarked": "Kissiddwako akabonero",
 "Bookmark removed": "Akabonero kaggyiddwawo",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Nyiga olunyiriri, olwo Soma ng’ogoberera: kisoma okuva awo, era ebigambo byaka nga bisomebwa, osobole okugoberera. Nga kikola: nyiga olunyiriri olusomebwa okuyimiriza oba okugenda mu maaso, nyiga olunyiriri olulala okusoma okuva awo, nyiga olunyiriri emirundi ebiri mangu okulussaako langi, oba lunyigireko okulussaako akabonero. Eppeesa ly’embiro ligenda mpola oba mangu. Kisigala nga kikola okutuusa lw’onyiga X. Wuliriza esoma ennyiriri z’olonze zokka.",
 "Share {ref}": "Gabana {ref}",
 "Outside the app": "Ebweru w’app",
 "With a circle": "N’ekibinja",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Okuyingira kungi nnyo okuva wano. Gezaako nate oluvannyuma.",
 "Audio": "Ddoboozi",
 "Hear the Bible read aloud": "Wuliriza Baibuli ng’esomebwa mu ddoboozi",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Kwata ku lunyiriri lwonna mu Baibuli. Wajja kuvaayo bbaatuuni bbiri: “Wuliriza” esoma ennyiriri z’olonze zokka, ate “Soma ng’ogoberera” egenda mu maaso n’okusoma okuva awo ng’ebigambo byaka.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Baibuli eno tesobola kusomebwa mu ddoboozi ku kyuma kino. Kwata ku lunyiriri, oluvannyuma “Soma ng’ogoberera”: ebigambo byaka kimu ku kimu, osobole okusoma mu kasirise.",
-"Try it now": "Gezaako kaakano"
+"Try it now": "Gezaako kaakano",
+"Then tap one:": "Oluvannyuma kwata ku emu:",
+"Only the verses you picked": "Ennyiriri z’olonze zokka",
+"Reads on from there as the words light up": "Egenda mu maaso ng’ebigambo byaka",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Tewali ddoboozi lya Baibuli eno ku kyuma kino: ebigambo byaka osobole okusoma mu kasirise."
 }

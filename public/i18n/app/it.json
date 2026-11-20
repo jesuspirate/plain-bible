@@ -946,7 +946,6 @@
 "Highlight removed": "Evidenziazione rimossa",
 "Bookmarked": "Aggiunto ai segnalibri",
 "Bookmark removed": "Segnalibro rimosso",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Tocca un versetto, poi Leggi seguendo: la lettura prosegue da lì, e le parole si illuminano man mano che vengono lette, così puoi seguire. Mentre è attiva: tocca il versetto in lettura per mettere in pausa o riprendere, tocca un altro versetto per leggere da lì, tocca due volte rapidamente un versetto per evidenziarlo, oppure tienilo premuto per aggiungerlo ai segnalibri. Il pulsante della velocità rallenta o accelera. Resta attiva finché non tocchi X. Ascolta legge solo i versetti che hai scelto.",
 "Share {ref}": "Condividi {ref}",
 "Outside the app": "Fuori dall’app",
 "With a circle": "Con una cerchia",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Troppi accessi da qui. Riprova più tardi.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Ascoltare la Bibbia letta ad alta voce",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tocca un versetto qualsiasi della Bibbia. Compaiono due pulsanti: «Ascolta» legge solo i versetti scelti, e «Leggi seguendo» continua a leggere da lì mentre le parole si illuminano.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Questa Bibbia non può essere letta ad alta voce su questo dispositivo. Tocca un versetto, poi «Leggi seguendo»: le parole si illuminano una alla volta, per leggere in silenzio.",
-"Try it now": "Prova ora"
+"Try it now": "Prova ora",
+"Then tap one:": "Poi tocca uno dei due:",
+"Only the verses you picked": "Solo i versetti scelti",
+"Reads on from there as the words light up": "Continua a leggere e le parole si illuminano",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Nessuna voce per questa Bibbia su questo dispositivo: le parole si illuminano per leggere in silenzio."
 }

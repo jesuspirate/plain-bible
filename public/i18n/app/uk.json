@@ -1041,7 +1041,6 @@
 "Highlight removed": "Виділення прибрано",
 "Bookmarked": "Закладку додано",
 "Bookmark removed": "Закладку вилучено",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Торкніться вірша, потім «Читання з підсвічуванням»: читання піде з цього місця, а слова підсвічуватимуться під час читання, щоб ви могли стежити. Поки режим увімкнено: торкніться вірша, який читається, щоб призупинити або продовжити; торкніться іншого вірша, щоб читати з нього; швидко торкніться вірша двічі, щоб виділити його, або утримуйте, щоб додати в закладки. Кнопка швидкості робить читання повільнішим чи швидшим. Режим працює, доки ви не торкнетеся X. «Слухати» читає лише вибрані вірші.",
 "Share {ref}": "Поділитися: {ref}",
 "Outside the app": "Поза застосунком",
 "With a circle": "З колом",
@@ -1375,7 +1374,9 @@
 "Too many sign-ins from here. Try again later.": "Звідси забагато входів. Спробуйте пізніше.",
 "Audio": "Аудіо",
 "Hear the Bible read aloud": "Слухати Біблію вголос",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Торкніться будь-якого вірша Біблії. З’являться дві кнопки: «Слухати» читає лише вибрані вірші, а «Читання з підсвічуванням» читає далі з цього місця, підсвічуючи слова.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Цю Біблію не можна прочитати вголос на цьому пристрої. Торкніться вірша, потім «Читання з підсвічуванням»: слова підсвічуються одне за одним, і можна читати подумки.",
-"Try it now": "Спробувати"
+"Try it now": "Спробувати",
+"Then tap one:": "Потім торкніться однієї:",
+"Only the verses you picked": "Лише вибрані вірші",
+"Reads on from there as the words light up": "Читає далі, підсвічуючи слова",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Для цієї Біблії на цьому пристрої немає голосу: слова підсвічуються, щоб читати подумки."
 }

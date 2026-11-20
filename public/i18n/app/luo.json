@@ -946,7 +946,6 @@
 "Highlight removed": "Rangi ogol",
 "Bookmarked": "Oket alama",
 "Bookmark removed": "Alama ogol",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Mul ndiko, eka Som kiluwo: somo chakore kanyo, kendo weche ler ka isomogi, mondo inyal luwo. Ka tiyo: mul ndiko ma isomo mondo ichung’ matin kata idhi nyime, mul ndiko machielo mondo isom kowuok kanyo, mul ndiko nyadiriyo piyo mondo iket rangi, kata imake matek mondo iket alama. Button mar reth miyo osomo mos kata piyo. Dong’ ka tiyo nyaka imul X. Winj somo mana ndiko ma iseyiero.",
 "Share {ref}": "Pog {ref}",
 "Outside the app": "Oko mar app",
 "With a circle": "Gi kanyakla",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Donjo ng’eny moloyo koa ka. Tem kendo bang’e.",
 "Audio": "Duol",
 "Hear the Bible read aloud": "Winj Muma kisome gi duol",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Mul ndiko moro amora e Muma. Nyiyo ariyo biro nenore: “Winj” somo mana ndiko mane iyiero, to “Som kiluwo” dhi nyime gi somo chakre kanyo ka weche ler.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Muma ni ok nyal somi gi duol e gimani. Mul ndiko achiel, eka “Som kiluwo”: weche ler achiel achiel, mondo isom ka ilingʼ.",
-"Try it now": "Tem sani"
+"Try it now": "Tem sani",
+"Then tap one:": "Eka mul achiel:",
+"Only the verses you picked": "Ndiko mane iyiero kende",
+"Reads on from there as the words light up": "Dhi nyime gi somo ka weche ler",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Onge duol mar Muma ni e gimani: weche ler mondo isom ka ilingʼ."
 }

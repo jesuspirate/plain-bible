@@ -946,7 +946,6 @@
 "Highlight removed": "હાઇલાઇટ દૂર કર્યું",
 "Bookmarked": "બુકમાર્ક કર્યું",
 "Bookmark removed": "બુકમાર્ક દૂર કર્યો",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "કલમ પર ટૅપ કરો, પછી સાથે વાંચો: વાંચન ત્યાંથી આગળ ચાલે છે, અને વંચાતા શબ્દો પ્રકાશિત થાય છે, જેથી તમે સાથે ચાલી શકો. ચાલુ હોય ત્યારે: થોભાવવા કે આગળ વધવા વંચાતી કલમ પર ટૅપ કરો, ત્યાંથી વાંચવા બીજી કલમ પર ટૅપ કરો, હાઇલાઇટ કરવા કલમ પર ઝડપથી બે વાર ટૅપ કરો, અથવા બુકમાર્ક કરવા તેને દબાવી રાખો. ઝડપનું બટન ધીમું કે ઝડપી કરે છે. તમે X પર ટૅપ ન કરો ત્યાં સુધી તે ચાલુ રહે છે. સાંભળો ફક્ત તમે પસંદ કરેલી કલમો વાંચે છે.",
 "Share {ref}": "{ref} શેર કરો",
 "Outside the app": "ઍપની બહાર",
 "With a circle": "જૂથ સાથે",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "અહીંથી ઘણા બધા સાઇન ઇન થયા. પછી ફરી પ્રયાસ કરો.",
 "Audio": "ઑડિયો",
 "Hear the Bible read aloud": "બાઇબલ મોટેથી વંચાતું સાંભળો",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "બાઇબલની કોઈ પણ કલમ પર ટૅપ કરો. બે બટન દેખાશે: “સાંભળો” ફક્ત પસંદ કરેલી કલમો વાંચે છે, અને “સાથે વાંચો” ત્યાંથી આગળ વાંચતું રહે છે, શબ્દો પ્રકાશિત થતા જાય છે.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "આ બાઇબલ આ ઉપકરણ પર મોટેથી વાંચી શકાતું નથી. કોઈ કલમ પર ટૅપ કરો, પછી “સાથે વાંચો”: શબ્દો એક પછી એક પ્રકાશિત થાય છે, જેથી તમે મનમાં વાંચી શકો.",
-"Try it now": "હમણાં અજમાવો"
+"Try it now": "હમણાં અજમાવો",
+"Then tap one:": "પછી એક પર ટૅપ કરો:",
+"Only the verses you picked": "ફક્ત પસંદ કરેલી કલમો",
+"Reads on from there as the words light up": "આગળ વાંચે છે, શબ્દો પ્રકાશિત થાય છે",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "આ ઉપકરણ પર આ બાઇબલનો અવાજ નથી: શબ્દો પ્રકાશિત થાય છે જેથી તમે મનમાં વાંચી શકો."
 }

@@ -1041,7 +1041,6 @@
 "Highlight removed": "Выделение удалено",
 "Bookmarked": "Закладка добавлена",
 "Bookmark removed": "Закладка удалена",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Нажмите на стих, затем «Чтение с подсветкой»: чтение пойдёт с этого места, а слова будут подсвечиваться по мере чтения, чтобы вы могли следить. Пока режим включён: нажмите на читаемый стих, чтобы поставить на паузу или продолжить; нажмите на другой стих, чтобы читать с него; быстро нажмите на стих дважды, чтобы выделить его, или удерживайте, чтобы добавить в закладки. Кнопка скорости делает чтение медленнее или быстрее. Режим работает, пока вы не нажмёте X. «Слушать» читает только выбранные стихи.",
 "Share {ref}": "Поделиться: {ref}",
 "Outside the app": "Вне приложения",
 "With a circle": "С кругом",
@@ -1375,7 +1374,9 @@
 "Too many sign-ins from here. Try again later.": "Отсюда слишком много входов. Попробуйте позже.",
 "Audio": "Аудио",
 "Hear the Bible read aloud": "Слушать Библию вслух",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Нажмите на любой стих Библии. Появятся две кнопки: «Слушать» читает только выбранные стихи, а «Чтение с подсветкой» читает дальше с этого места, подсвечивая слова.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Эту Библию нельзя прочитать вслух на этом устройстве. Нажмите на стих, затем «Чтение с подсветкой»: слова подсвечиваются одно за другим, и можно читать про себя.",
-"Try it now": "Попробовать"
+"Try it now": "Попробовать",
+"Then tap one:": "Затем нажмите одну:",
+"Only the verses you picked": "Только выбранные стихи",
+"Reads on from there as the words light up": "Читает дальше, подсвечивая слова",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Для этой Библии на этом устройстве нет голоса: слова подсвечиваются, чтобы читать про себя."
 }

@@ -946,7 +946,6 @@
 "Highlight removed": "Woɖe amadede ɖa",
 "Bookmarked": "Wode agbalẽdzesi",
 "Bookmark removed": "Woɖe agbalẽdzesi ɖa",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Zi kpukpui aɖe dzi, emegbe Xlẽe kpli: exlẽnɛ tso afima yi edzi, eye nyawo klẽna esime wole wo xlẽm, be nàte ŋu adze wo yome. Ne ele dɔ wɔm: zi kpukpui si wole xlẽm dzi be nàtɔ te vie alo nàyi edzi, zi kpukpui bubu dzi be wòaxlẽ tso afima, zi kpukpui dzi zi eve kaba be nàde amadede edzi, alo te edzi ɖi be nàde agbalẽdzesi edzi. Duƒuƒu ƒe bɔtɔ la naa wòzɔna blewu alo kabakaba. Enɔa dɔ wɔm va se ɖe esime nàzi X dzi. Ɖo to xlẽa kpukpui siwo nètia ɖeɖe ko.",
 "Share {ref}": "Ma {ref}",
 "Outside the app": "Le dɔwɔnuƒomɔ la godo",
 "With a circle": "Kple habɔbɔ aɖe",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Gege ɖe eme siwo tso afi sia sɔ gbɔ akpa. Gate kpɔ emegbe.",
 "Audio": "Gbeɖiɖi",
 "Hear the Bible read aloud": "Ɖo to Biblia si wole xlẽm kple gbe",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Ƒo asi kpukpui aɖe dzi le Biblia me. Bɔtɔ eve adze: “Ɖo to” xlẽa kpukpui siwo nètia ko, eye “Xlẽe kpli” yia edzi xlẽa tso afima esime nyawo le klẽm.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Womate ŋu axlẽ Biblia sia kple gbe le mɔ̃ sia dzi o. Ƒo asi kpukpui aɖe dzi, emegbe “Xlẽe kpli”: nyawo aklẽ ɖeka ɖeka, ne nàxlẽe le dzi me.",
-"Try it now": "Te kpɔ fifia"
+"Try it now": "Te kpɔ fifia",
+"Then tap one:": "Emegbe ƒo asi ɖeka dzi:",
+"Only the verses you picked": "Kpukpui siwo nètia ko",
+"Reads on from there as the words light up": "Yia edzi xlẽm esime nyawo le klẽm",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Gbe meli na Biblia sia le mɔ̃ sia dzi o: nyawo klẽna ne nàxlẽe le dzi me."
 }

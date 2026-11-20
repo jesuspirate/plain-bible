@@ -1022,7 +1022,6 @@
 "Highlight removed": "Истицање уклоњено",
 "Bookmarked": "Додато у обележиваче",
 "Bookmark removed": "Обележивач уклоњен",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Додирните стих, затим Прати читање: читање креће одатле, а речи светле док се читају, па их лако пратите. Док је укључено: додирните стих који се чита да паузирате или наставите, додирните други стих да читате одатле, брзо двапут додирните стих да га истакнете или га задржите да додате обележивач. Дугме за брзину успорава или убрзава. Остаје укључено док не додирнете X. Слушај чита само стихове које сте изабрали.",
 "Share {ref}": "Подели {ref}",
 "Outside the app": "Ван апликације",
 "With a circle": "Са кругом",
@@ -1354,7 +1353,9 @@
 "Too many sign-ins from here. Try again later.": "Превише пријава са ове мреже. Покушајте поново касније.",
 "Audio": "Звук",
 "Hear the Bible read aloud": "Слушајте Библију читану наглас",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Додирните било који стих у Библији. Појављују се два дугмета: „Слушај” чита само изабране стихове, а „Прати читање” чита даље одатле док се речи осветљавају.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Ова Библија не може да се чита наглас на овом уређају. Додирните стих, па „Прати читање”: речи се осветљавају једна по једна, да можете да читате у тишини.",
-"Try it now": "Пробај сада"
+"Try it now": "Пробај сада",
+"Then tap one:": "Затим додирните једно:",
+"Only the verses you picked": "Само изабрани стихови",
+"Reads on from there as the words light up": "Чита даље док се речи осветљавају",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Нема гласа за ову Библију на овом уређају: речи се осветљавају да можете да читате у тишини."
 }

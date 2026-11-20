@@ -946,7 +946,6 @@
 "Highlight removed": "Markering fjernet",
 "Bookmarked": "Bogmærke tilføjet",
 "Bookmark removed": "Bogmærke fjernet",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Tryk på et vers og derefter på Læs med: Der læses videre derfra, og ordene lyser op, mens de bliver læst, så du kan følge med. Mens det er slået til: Tryk på det vers, der læses, for at sætte på pause eller fortsætte, tryk på et andet vers for at læse derfra, tryk hurtigt to gange på et vers for at markere det, eller hold på det for at sætte et bogmærke. Hastighedsknappen gør det langsommere eller hurtigere. Det forbliver slået til, indtil du trykker på X. Lyt læser kun de vers, du har valgt.",
 "Share {ref}": "Del {ref}",
 "Outside the app": "Uden for appen",
 "With a circle": "Med en kreds",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "For mange login herfra. Prøv igen senere.",
 "Audio": "Lyd",
 "Hear the Bible read aloud": "Hør Bibelen læst højt",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tryk på et vers i Bibelen. To knapper kommer frem: “Lyt” læser kun de valgte vers, og “Læs med” læser videre derfra, mens ordene lyser op.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Denne bibel kan ikke læses højt på denne enhed. Tryk på et vers og så “Læs med”: ordene lyser op ét ad gangen, så du kan læse med i stilhed.",
-"Try it now": "Prøv nu"
+"Try it now": "Prøv nu",
+"Then tap one:": "Tryk så på en af dem:",
+"Only the verses you picked": "Kun de valgte vers",
+"Reads on from there as the words light up": "Læser videre, mens ordene lyser op",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Ingen stemme til denne bibel på denne enhed: ordene lyser op, så du kan læse med i stilhed."
 }

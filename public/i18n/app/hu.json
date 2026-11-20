@@ -946,7 +946,6 @@
 "Highlight removed": "Kiemelés eltávolítva",
 "Bookmarked": "Könyvjelző hozzáadva",
 "Bookmark removed": "Könyvjelző eltávolítva",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Koppintson egy versre, majd a Követő olvasás gombra: onnan folytatódik az olvasás, és a szavak felolvasás közben felragyognak, így követheti. Amíg be van kapcsolva: koppintson az épp olvasott versre a szüneteltetéshez vagy folytatáshoz, egy másik versre, hogy onnan olvasson, gyorsan kétszer egy versre a kiemeléshez, vagy tartsa lenyomva a könyvjelzőhöz. A sebesség gomb lassít vagy gyorsít. Addig marad bekapcsolva, amíg az X-re nem koppint. A Meghallgatás csak a kiválasztott verseket olvassa fel.",
 "Share {ref}": "{ref} megosztása",
 "Outside the app": "Az alkalmazáson kívül",
 "With a circle": "Egy körrel",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Innen túl sok bejelentkezés történt. Próbálja újra később.",
 "Audio": "Hang",
 "Hear the Bible read aloud": "Hallgassa a Bibliát felolvasva",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Koppintson a Biblia bármelyik versére. Két gomb jelenik meg: a „Meghallgatás” csak a kiválasztott verseket olvassa fel, a „Követő olvasás” pedig onnan olvas tovább, miközben a szavak felvillannak.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Ez a Biblia ezen az eszközön nem olvasható fel. Koppintson egy versre, majd a „Követő olvasás” gombra: a szavak egyenként felvillannak, így csendben követheti.",
-"Try it now": "Kipróbálás"
+"Try it now": "Kipróbálás",
+"Then tap one:": "Aztán koppintson az egyikre:",
+"Only the verses you picked": "Csak a kiválasztott versek",
+"Reads on from there as the words light up": "Továbbolvas, a szavak felvillannak",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Ehhez a Bibliához nincs hang ezen az eszközön: a szavak felvillannak, így csendben olvashat."
 }

@@ -946,7 +946,6 @@
 "Highlight removed": "Souliyaj retire",
 "Bookmarked": "Makè mete",
 "Bookmark removed": "Makè retire",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Peze yon vèsè, epi Li ansanm: li kontinye li apati de la, epi mo yo limen pandan y ap li yo, pou ou ka swiv. Pandan li aktive: peze vèsè y ap li a pou kanpe oswa kontinye, peze yon lòt vèsè pou li apati de la, peze yon vèsè de fwa rapid pou souliye l, oswa kenbe l peze pou mete yon makè. Bouton vitès la fè l pi dousman oswa pi vit. Li rete aktive jiskaske ou peze X. Koute li sèlman vèsè ou te chwazi yo.",
 "Share {ref}": "Pataje {ref}",
 "Outside the app": "Andeyò aplikasyon an",
 "With a circle": "Ak yon sèk",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Twòp koneksyon soti isit la. Eseye ankò pita.",
 "Audio": "Odyo",
 "Hear the Bible read aloud": "Koute Bib la li awotvwa",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Touche nenpòt vèsè nan Bib la. De bouton parèt: “Koute” li sèlman vèsè ou chwazi yo, epi “Li ansanm” kontinye li apati la pandan mo yo ap limen.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Bib sa a pa ka li awotvwa sou aparèy sa a. Touche yon vèsè, apre sa “Li ansanm”: mo yo limen youn apre lòt, pou ou ka li an silans.",
-"Try it now": "Eseye kounye a"
+"Try it now": "Eseye kounye a",
+"Then tap one:": "Apre sa touche youn:",
+"Only the verses you picked": "Sèlman vèsè ou chwazi yo",
+"Reads on from there as the words light up": "Kontinye li pandan mo yo limen",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Pa gen vwa pou Bib sa a sou aparèy sa a: mo yo limen pou ou ka li an silans."
 }

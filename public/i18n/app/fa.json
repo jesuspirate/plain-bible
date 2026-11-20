@@ -946,7 +946,6 @@
 "Highlight removed": "برجسته‌سازی برداشته شد",
 "Bookmarked": "نشانک گذاشته شد",
 "Bookmark removed": "نشانک برداشته شد",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "روی آیه‌ای بزنید، سپس «خواندن همراه»: خواندن از همان‌جا ادامه می‌یابد و واژه‌ها هنگام خوانده شدن روشن می‌شوند تا بتوانید دنبال کنید. در این حالت: روی آیه‌ای که خوانده می‌شود بزنید تا مکث یا ادامه دهد، روی آیهٔ دیگری بزنید تا از آنجا بخواند، دو بار سریع روی آیه بزنید تا برجسته شود، یا آن را نگه دارید تا نشانک بگذارید. دکمهٔ سرعت آهسته‌تر یا تندتر می‌کند. تا وقتی روی X بزنید روشن می‌ماند. «شنیدن» فقط آیه‌هایی را که انتخاب کرده‌اید می‌خواند.",
 "Share {ref}": "هم‌رسانی {ref}",
 "Outside the app": "بیرون از برنامه",
 "With a circle": "با یک حلقه",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "ورودهای بیش از حد از اینجا. بعداً دوباره امتحان کنید.",
 "Audio": "صدا",
 "Hear the Bible read aloud": "شنیدن کتاب‌مقدس با صدای بلند",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "روی هر آیه‌ای از کتاب‌مقدس بزنید. دو دکمه ظاهر می‌شود: «شنیدن» فقط آیه‌های انتخاب‌شده را می‌خواند و «خواندن همراه» از همان‌جا ادامه می‌دهد و کلمه‌ها روشن می‌شوند.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "این کتاب‌مقدس روی این دستگاه با صدا خوانده نمی‌شود. روی یک آیه بزنید، سپس «خواندن همراه»: کلمه‌ها یکی‌یکی روشن می‌شوند تا بی‌صدا همراهی کنید.",
-"Try it now": "همین حالا امتحان کنید"
+"Try it now": "همین حالا امتحان کنید",
+"Then tap one:": "سپس یکی را بزنید:",
+"Only the verses you picked": "فقط آیه‌های انتخاب‌شده",
+"Reads on from there as the words light up": "ادامه می‌دهد و کلمه‌ها روشن می‌شوند",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "برای این کتاب‌مقدس روی این دستگاه صدایی نیست: کلمه‌ها روشن می‌شوند تا بی‌صدا بخوانید."
 }

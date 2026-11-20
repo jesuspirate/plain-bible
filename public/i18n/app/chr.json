@@ -946,7 +946,6 @@
 "Highlight removed": "ᎤᏁᏍᏔᏅ ᎤᏲᏨ",
 "Bookmarked": "ᎤᏰᎸᏛ ᎤᏯᏙᏢ",
 "Bookmark removed": "ᎤᏰᎸᏛ ᎤᏲᏨ",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "ᎧᏃᎮᏛ ᎯᏯᏏᎳᏛ, ᎿᏉ ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ: ᎾᎿ ᏅᏓᎬᏩᏓᎴᏅᏛ ᎠᎪᎵᏰᏍᎪ, ᎠᎴ ᎧᏁᏨ ᏓᎦᎦᏛ ᎦᎪᎵᏰᏍᎬ, ᎯᏍᏓᏩᏛᏍᏗ. ᎠᏛᏁᎲ: ᎦᎪᎵᏰᏍᎬ ᎧᏃᎮᏛ ᎯᏯᏏᎳᏛ ᎯᏲᎯᏍᏗ ᎠᎴ ᏣᏍᏓᏩᏗᏍᏗ, ᏐᎢ ᎧᏃᎮᏛ ᎯᏯᏏᎳᏛ ᎾᎿ ᏅᏓᎬᏩᏓᎴᏅᏛ ᎯᎪᎵᏰᏗ, ᏔᎵ ᎤᏍᏆᎸᎯᏗ ᎧᏃᎮᏛ ᎯᏯᏏᎳᏛ ᎤᏁᏍᏔᏗ, ᎠᎴ ᎯᏂᏴ ᎤᏰᎸᏛ ᎤᏯᏙᏢᏗ. ᎤᏍᏆᎸᎯᏗ ᎦᏃᏙᏗ ᎤᏟ ᎠᏰᎵ ᎠᎴ ᎤᏟ ᎤᏍᏆᎸᎯᏗ. ᎠᏛᏁᎲ ᎬᏂ X ᏱᏣᏯᏏᎳᏛ. ᎯᏛᎦ ᏣᏑᏰᏛ ᎧᏃᎮᏛ ᎤᏩᏒ ᎠᎪᎵᏰᏍᎪ.",
 "Share {ref}": "{ref} ᎯᏁᏗ",
 "Outside the app": "App ᏙᏱᏗᏢ",
 "With a circle": "ᏓᏓᏡᎬ ᎬᏗ",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "ᎤᏣᏘ ᏫᏣᏴᎸᎢ ᎠᏂ ᏅᏓᏳᏓᎴᏅᎯ. ᎣᏂ ᏔᎵᏁ ᎭᏓᏅᏖ.",
 "Audio": "ᎧᏁᎬ",
 "Hear the Bible read aloud": "ᎯᏛᎦ ᎪᏪᎵ ᎦᎸᏉᏗ ᎠᏂᎪᎵᏰᏍᎬ ᎠᏍᏓᏯ",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ᏘᏍᏆᏂᎪᏗ ᏌᏉ ᎪᏪᎵ ᎦᎸᏉᏗ. ᏔᎵ ᏗᏍᏆᏂᎪᏙᏗ ᏛᎾᏄᎪᏥ: “ᎯᏛᎦ” ᏓᎪᎵᏰᏍᎬ ᏂᎯ ᏘᏑᏰᏒ ᎤᏅᏍᏗ, ᎠᎴ “ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᎪᎵᏰᏍᎬ ᎾᎿ ᏅᏓᏳᎶᏒ ᏧᏁᏢᏔᏅᏛ ᏓᏓᏍᏛᎦ.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ᎯᎠ ᎪᏪᎵ ᎦᎸᏉᏗ ᎥᏝ ᏰᎵ ᎠᏍᏓᏯ ᎦᎪᎵᏰᏗ ᏱᎩ ᎯᎠ ᎪᏪᎵᏍᏗ. ᏘᏍᏆᏂᎪᏗ ᏌᏉ, ᎿᏉ “ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ”: ᏧᏁᏢᏔᏅᏛ ᏌᏉ ᏌᏉ ᏓᏓᏍᏛᎦ, ᎤᏍᏆᏂᎩᏛ ᎯᎪᎵᏰᏗ.",
-"Try it now": "ᎪᎯ ᎯᎦᏔᎲᎦ"
+"Try it now": "ᎪᎯ ᎯᎦᏔᎲᎦ",
+"Then tap one:": "ᎿᏉ ᏘᏍᏆᏂᎪᏗ ᏌᏉ:",
+"Only the verses you picked": "ᏘᏑᏰᏒ ᎤᏅᏍᏗ",
+"Reads on from there as the words light up": "ᎠᏂᎪᎵᏰᏍᎬ ᏧᏁᏢᏔᏅᏛ ᏓᏓᏍᏛᎦ",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ᎥᏝ ᎧᏁᎬ ᏱᎩ ᎯᎠ ᎪᏪᎵ ᎦᎸᏉᏗ ᎯᎠ ᎪᏪᎵᏍᏗ: ᏧᏁᏢᏔᏅᏛ ᏓᏓᏍᏛᎦ, ᎤᏍᏆᏂᎩᏛ ᎯᎪᎵᏰᏗ."
 }

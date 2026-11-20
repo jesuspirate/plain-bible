@@ -1377,11 +1377,44 @@ body.selecting .continue { display: none; }
 .rec-about { margin: 4px 4px 14px; line-height: 1.5; }
 .rec-go { display: block; width: 100%; min-height: 52px; margin: 18px 0 10px; border-radius: 26px; font-size: 18px; font-weight: 600; }
 
-/* Audio, in Settings: how to listen, and Show me (opens a verse's bar). */
-.audio-how { margin: 4px 4px 0; font-size: 18px; line-height: 1.5; }
+/* Audio, in Settings: Try it now (a finger then shows where to tap). */
 .audio-show { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 52px; margin: 16px 0 26px; border-radius: 26px; font-size: 18px; font-weight: 600; }
 
 /* Inside Fedi, first open: "Welcome in!" with one big Nostr sign-in. */
 .fedi-welcome { display: flex; flex-direction: column; gap: 12px; padding-bottom: 8px; }
 .fedi-welcome p { margin: 0; }
 .fedi-welcome button.big { min-height: 52px; font-size: 18px; font-weight: 600; width: 100%; }
+
+/* TapHint (src/taphint.tsx): a finger taps softly on the real thing, with a
+   short label. Quiet: small, slow, a few taps, then it fades by itself. */
+.tap-hint { position: fixed; z-index: 60; width: 0; height: 0; pointer-events: none; animation: tap-in .5s ease-out both; }
+.tap-hint.going { opacity: 0; transition: opacity .2s; }
+.tap-ring { position: absolute; left: -16px; top: -16px; width: 32px; height: 32px; border-radius: 50%; border: 2px solid var(--accent); opacity: 0; animation: tap-ring 2.2s ease-out .4s 3; }
+.tap-ring.late { animation-delay: .7s; }
+.tap-finger { position: absolute; left: -9px; top: -2px; color: var(--accent); opacity: .9; filter: drop-shadow(0 1px 2px rgba(0, 0, 0, .15)); animation: tap-finger 2.2s ease-in-out .4s 3; }
+.tap-label { position: absolute; left: 50%; bottom: 22px; transform: translateX(-50%); white-space: nowrap; padding: 5px 12px; border-radius: 14px;
+  background: var(--surface); color: var(--text); border: 1px solid var(--line); font: 600 15px/1.2 var(--sans); box-shadow: 0 2px 10px rgba(0, 0, 0, .08); }
+.tap-hint.below .tap-label { bottom: auto; top: 44px; }
+@keyframes tap-in { from { opacity: 0; } }
+@keyframes tap-ring { 0%, 18% { transform: scale(.4); opacity: 0; } 25% { opacity: .55; } 70%, 100% { transform: scale(1.5); opacity: 0; } }
+@keyframes tap-finger { 0%, 100% { transform: translateY(6px); } 22% { transform: translateY(0); } 30% { transform: translateY(5px); } }
+@media (prefers-reduced-motion: reduce) { .tap-hint, .tap-ring, .tap-finger { animation: none; } .tap-ring { opacity: .4; } }
+
+/* Audio in Settings: three small steps that show the real buttons. */
+.audio-steps { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.audio-steps > li { display: flex; gap: 12px; align-items: flex-start; }
+.audio-steps .step-n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--chip); color: var(--accent); font: 700 15px/28px var(--sans); text-align: center; margin-top: 4px; }
+.audio-steps .step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.audio-steps .step-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; min-height: 36px; }
+.audio-steps .step-title svg { color: var(--accent); flex: none; }
+.audio-pick { display: flex; align-items: center; gap: 12px; }
+.audio-pick .like-btn { flex: none; display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 6px 14px; border-radius: 16px; border: 1px solid var(--line);
+  background: var(--chip); font: 600 16px/1.15 var(--sans); color: var(--text); }
+.audio-pick .like-btn svg { color: var(--accent); flex: none; }
+.audio-pick .what { color: var(--muted); font-size: 15px; line-height: 1.35; }
+.audio-note { margin: 0; color: var(--muted); font-size: 15px; }
+
+/* After Try it now: the verse's two audio buttons glow once, softly. */
+.selbar .glow-once { animation: glow-once 1.6s ease-in-out .3s 2; }
+@keyframes glow-once { 50% { box-shadow: 0 0 0 3px color-mix(in srgb, var(--accent) 35%, transparent); } }
+@media (prefers-reduced-motion: reduce) { .selbar .glow-once { animation: none; outline: 2px solid color-mix(in srgb, var(--accent) 35%, transparent); } }

@@ -946,7 +946,6 @@
 "Highlight removed": "Sorotan dihapus",
 "Bookmarked": "Ditandai",
 "Bookmark removed": "Penanda dihapus",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Ketuk ayat, lalu Baca bersama: pembacaan berlanjut dari situ, dan kata-kata menyala saat dibaca, agar Anda bisa mengikutinya. Selama aktif: ketuk ayat yang sedang dibaca untuk menjeda atau melanjutkan, ketuk ayat lain untuk membaca dari situ, ketuk ayat dua kali dengan cepat untuk menyorotnya, atau tahan untuk menandainya. Tombol kecepatan membuatnya lebih lambat atau lebih cepat. Fitur ini tetap aktif sampai Anda mengetuk X. Dengarkan hanya membacakan ayat yang Anda pilih.",
 "Share {ref}": "Bagikan {ref}",
 "Outside the app": "Di luar aplikasi",
 "With a circle": "Ke lingkaran",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Terlalu banyak upaya masuk dari jaringan ini. Coba lagi nanti.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Dengarkan Alkitab dibacakan",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Ketuk ayat mana saja di Alkitab. Muncul dua tombol: “Dengarkan” membacakan ayat yang Anda pilih saja, dan “Baca bersama” terus membaca dari situ sementara kata-katanya menyala.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Alkitab ini tidak dapat dibacakan di perangkat ini. Ketuk sebuah ayat, lalu “Baca bersama”: kata-katanya menyala satu per satu, agar Anda dapat membaca dalam hati.",
-"Try it now": "Coba sekarang"
+"Try it now": "Coba sekarang",
+"Then tap one:": "Lalu ketuk salah satu:",
+"Only the verses you picked": "Hanya ayat yang Anda pilih",
+"Reads on from there as the words light up": "Terus membaca sementara kata-kata menyala",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Tidak ada suara untuk Alkitab ini di perangkat ini: kata-kata menyala agar Anda dapat membaca dalam hati."
 }

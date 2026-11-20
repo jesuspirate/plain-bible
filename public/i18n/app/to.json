@@ -946,7 +946,6 @@
 "Highlight removed": "Kuo toʻo ʻa e fakalanu",
 "Bookmarked": "Kuo fakaʻilongaʻi",
 "Bookmark removed": "Kuo toʻo ʻa e fakaʻilonga",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Lomiʻi ha veesi, pea ko e Lau fakataha: ʻoku hoko atu ʻa e lau mei ai, pea ʻoku maama ʻa e ngaahi foʻi lea ʻi hono lau, ke ke muimui ai. Lolotonga ʻene ʻā: lomiʻi ʻa e veesi ʻoku lau ke mālōlō pe hoko atu, lomiʻi ha veesi kehe ke lau mei ai, lomiʻi vave tuʻo ua ha veesi ke fakalanu, pe lomiʻi fuoloa ke fakaʻilongaʻi. ʻOku fakatuai pe fakavaveʻi ʻe he meʻa lomiʻi vave. ʻOku nofo ʻā pē kae ʻoua ke ke lomiʻi ʻa e X. Ko e Fanongo ʻoku lau pē ʻa e ngaahi veesi naʻá ke fili.",
 "Share {ref}": "Vahevahe ʻa e {ref}",
 "Outside the app": "ʻI tuʻa ʻi he ʻapí",
 "With a circle": "Mo ha kulupu",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Lahi fau ʻa e hū mei heni. Toe feinga ʻamui.",
 "Audio": "Leʻo",
 "Hear the Bible read aloud": "Fanongo ki he lau leʻo lahi ʻo e Tohitapú",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Lomiʻi ha veesi pē ʻi he Tohitapú. ʻE hā mai ha ongo meʻa lomiʻi: ʻoku lau ʻe “Fanongo” ʻa e ngaahi veesi pē naʻá ke fili, pea ʻoku hokohoko atu ʻe “Lau fakataha” ʻa e lau mei ai lolotonga ʻoku ulo ʻa e ngaahi foʻi leá.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ʻOku ʻikai lava ke lau leʻo lahi ʻa e Tohitapu ko ʻení ʻi he meʻangāue ko ʻení. Lomiʻi ha veesi, pea “Lau fakataha”: ʻoku ulo taki taha ʻa e ngaahi foʻi leá, ke ke lau fakalongolongo.",
-"Try it now": "Feinga he taimí ni"
+"Try it now": "Feinga he taimí ni",
+"Then tap one:": "Pea lomiʻi ha taha:",
+"Only the verses you picked": "Ko e ngaahi veesi pē naʻá ke fili",
+"Reads on from there as the words light up": "Hokohoko atu lolotonga ʻoku ulo ʻa e ngaahi foʻi leá",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "ʻOku ʻikai ha leʻo ki he Tohitapu ko ʻeni ʻi he meʻangāue ko ʻení: ʻoku ulo ʻa e ngaahi foʻi leá ke ke lau fakalongolongo."
 }

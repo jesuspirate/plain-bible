@@ -946,7 +946,6 @@
 "Highlight removed": "Naikkat ti highlight",
 "Bookmarked": "Na-bookmark",
 "Bookmark removed": "Naikkat ti bookmark",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "I-tap ti maysa a bersikulo, sa ti Sabayan ti panagbasa: agbasa daytoy manipud sadiay, ket sumilaw dagiti sao bayat ti pannakabasada, tapno makasurotka. Bayat a naka-on: i-tap ti bersikulo a mabasbasa tapno i-pause wenno ituloy, i-tap ti sabali a bersikulo tapno agbasa manipud sadiay, i-tap a mamindua a dagus ti bersikulo tapno i-highlight, wenno petpetam tapno i-bookmark. Ti button ti kapardas ket pabuntogenna wenno papardasenna. Agtalinaed a naka-on agingga nga i-tap-mo ti X. Ti Denggen ket basaenna laeng dagiti bersikulo a pinilim.",
 "Share {ref}": "Ibingay ti {ref}",
 "Outside the app": "Iti ruar ti app",
 "With a circle": "Iti maysa a bunggoy",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Adu unay ti panag-sign in manipud ditoy. Padasem manen no madamdama.",
 "Audio": "Audio",
 "Hear the Bible read aloud": "Denggen ti Biblia a mabasa a napigsa",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "I-tap ti aniaman a bersikulo iti Biblia. Agparang ti dua a button: ti “Denggen” basaenna laeng dagiti bersikulo a pinilim, ken ti “Sabayan ti panagbasa” agtultuloy nga agbasa manipud sadiay bayat nga agsilsilnag dagiti sasao.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Saan a mabasa a napigsa daytoy a Biblia iti daytoy a device. I-tap ti maysa a bersikulo, kalpasanna ti “Sabayan ti panagbasa”: agsilnag dagiti sasao iti tunggal maysa, tapno makabasaka a siuulimek.",
-"Try it now": "Padasem itan"
+"Try it now": "Padasem itan",
+"Then tap one:": "Kalpasanna i-tap ti maysa:",
+"Only the verses you picked": "Dagiti laeng bersikulo a pinilim",
+"Reads on from there as the words light up": "Agtultuloy bayat nga agsilnag dagiti sasao",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Awan ti timek para iti daytoy a Biblia iti daytoy a device: agsilnag dagiti sasao tapno makabasaka a siuulimek."
 }

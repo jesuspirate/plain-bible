@@ -946,7 +946,6 @@
 "Highlight removed": "Soilshaghey goit ersooyl",
 "Bookmarked": "Cowrey-lioar currit",
 "Bookmark removed": "Cowrey-lioar goit ersooyl",
-"Tap a verse, then Read along: it reads on from there, and the words light up as they’re read, so you can follow along. While it’s on: tap the verse being read to pause or go on, tap another verse to read from there, tap a verse twice quickly to highlight it, or hold it to bookmark it. The speed button goes slower or quicker. It stays on until you tap X. Listen reads only the verses you picked.": "Bean rish rann, eisht Lhaih marish: t’eh lhaih veih shen, as ta ny fockleyn soilshean myr t’ad lhaiht, dy vod oo geiyrt. Choud’s t’eh er: bean rish y rann lhaiht dy hassoo ny dy gholl er, bean rish rann elley dy lhaih veih shen, bean rish rann daa cheayrt dy tappee dy hoilshaghey eh, ny cum sheese er dy chur cowrey-lioar er. Ta’n cramman tappeid jannoo eh ny s’moal ny ny s’tappee. T’eh fuirraght er derrey ver oo bean er X. Ta Clasht lhaih ny rannaghyn reih oo ynrican.",
 "Share {ref}": "Rheynn {ref}",
 "Outside the app": "Mooie veih’n app",
 "With a circle": "Lesh kiarkyl",
@@ -1270,7 +1269,9 @@
 "Too many sign-ins from here. Try again later.": "Ro vooar goll stiagh veih shoh. Prow reesht ny s’anmey.",
 "Audio": "Clashtyn",
 "Hear the Bible read aloud": "Clasht rish y Vible lhaiht dy ard",
-"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Bean rish rann erbee ’sy Vible. Hig daa chramp: ta “Clasht” lhaih ny rannaghyn reih oo ynrican, as ta “Lhaih marish” lhaih er-y-hoshiaght veih shen tra ta ny fockle soilshaghey.",
-"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Cha noddym y Vible shoh y lhaih dy ard er y chialg shoh. Bean rish rann, eisht “Lhaih marish”: ta ny fockle soilshaghey fer as fer, dy vod oo lhaih dy feagh.",
-"Try it now": "Prow eh nish"
+"Try it now": "Prow eh nish",
+"Then tap one:": "Eisht bean rish fer jeu:",
+"Only the verses you picked": "Ny rannaghyn reih oo ynrican",
+"Reads on from there as the words light up": "Lhaih er-y-hoshiaght, ny fockle soilshaghey",
+"No voice for this Bible on this device: the words light up so you can read quietly.": "Cha nel coraa son y Vible shoh er y chialg shoh: ta ny fockle soilshaghey dy vod oo lhaih dy feagh."
 }
