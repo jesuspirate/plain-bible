@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "이 키가 있는 Fedi 앱으로는 더 이상 계정에 로그인할 수 없습니다.",
 "Too many Nostr keys on this account. Remove one first.": "이 계정에 Nostr 키가 너무 많습니다. 먼저 하나를 삭제하세요.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "그다음 '듣기'를 누르면 들을 수 있고, '따라 읽기'를 누르면 읽히는 단어를 따라갈 수 있어요.",
-"Too many sign-ins from here. Try again later.": "이곳에서 로그인 시도가 너무 많습니다. 나중에 다시 시도하세요."
+"Too many sign-ins from here. Try again later.": "이곳에서 로그인 시도가 너무 많습니다. 나중에 다시 시도하세요.",
+"Audio": "오디오",
+"Hear the Bible read aloud": "성경 낭독 듣기",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "성경의 아무 절이나 누르세요. 버튼 두 개가 나타납니다. ‘듣기’는 고른 절만 읽고, ‘따라 읽기’는 단어에 불을 밝히며 거기서부터 계속 읽습니다.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "이 성경은 이 기기에서 소리 내어 읽을 수 없습니다. 절을 누른 뒤 ‘따라 읽기’를 누르면 단어가 하나씩 밝아져 조용히 따라 읽을 수 있습니다.",
+"Try it now": "지금 해 보기"
 }

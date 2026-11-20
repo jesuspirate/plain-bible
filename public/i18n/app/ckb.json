@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "ئەپی Fedi کە ئەم کلیلەی هەیە چیتر ناتباتە ناو هەژمارەکەتەوە.",
 "Too many Nostr keys on this account. Remove one first.": "کلیلی Nostr لەم هەژمارەدا زۆرن. سەرەتا یەکێکیان لاببە.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "پاشان کرتە لە «گوێگرتن» بکە بۆ بیستنی، یان «خوێندنەوە لەگەڵیدا» بۆ شوێنکەوتنی وشەکان کاتێک دەخوێنرێنەوە.",
-"Too many sign-ins from here. Try again later.": "چوونەژوورەوە لێرەوە زۆر بووە. دواتر هەوڵ بدەرەوە."
+"Too many sign-ins from here. Try again later.": "چوونەژوورەوە لێرەوە زۆر بووە. دواتر هەوڵ بدەرەوە.",
+"Audio": "دەنگ",
+"Hear the Bible read aloud": "گوێ لە خوێندنەوەی کتێبی پیرۆز بگرە بە دەنگی بەرز",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "دەست لە هەر ئایەتێکی کتێبی پیرۆز بدە. دوو دوگمە دەردەکەون: «گوێگرتن» تەنها ئەو ئایەتانە دەخوێنێتەوە کە هەڵتبژاردوون، و «خوێندنەوە لەگەڵیدا» لەوێوە بەردەوام دەبێت لە کاتێکدا وشەکان ڕووناک دەبنەوە.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ئەم کتێبی پیرۆزە لەسەر ئەم ئامێرە بە دەنگ ناخوێندرێتەوە. دەست لە ئایەتێک بدە، پاشان «خوێندنەوە لەگەڵیدا»: وشەکان یەک لە دوای یەک ڕووناک دەبنەوە، بۆ ئەوەی بە بێدەنگی بیخوێنیتەوە.",
+"Try it now": "ئێستا تاقی بکەرەوە"
 }

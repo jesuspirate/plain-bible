@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi-sovellus, jossa tämä avain on, ei enää kirjaudu tilillesi.",
 "Too many Nostr keys on this account. Remove one first.": "Tilillä on liian monta Nostr-avainta. Poista ensin yksi.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Napauta sitten Kuuntele kuullaksesi sen, tai Lue mukana seurataksesi sanoja sitä mukaa kuin ne luetaan.",
-"Too many sign-ins from here. Try again later.": "Liikaa kirjautumisia täältä. Yritä myöhemmin uudelleen."
+"Too many sign-ins from here. Try again later.": "Liikaa kirjautumisia täältä. Yritä myöhemmin uudelleen.",
+"Audio": "Ääni",
+"Hear the Bible read aloud": "Kuuntele Raamattua ääneen luettuna",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Napauta mitä tahansa Raamatun jaetta. Esiin tulee kaksi painiketta: ”Kuuntele” lukee vain valitsemasi jakeet, ja ”Lue mukana” jatkaa lukemista siitä eteenpäin, kun sanat syttyvät.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Tätä Raamattua ei voi lukea ääneen tällä laitteella. Napauta jaetta ja sitten ”Lue mukana”: sanat syttyvät yksi kerrallaan, joten voit lukea hiljaa mukana.",
+"Try it now": "Kokeile nyt"
 }

@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Aplikasyon Fedi ki gen kle sa a p ap ka konekte nan kont ou ankò.",
 "Too many Nostr keys on this account. Remove one first.": "Twòp kle Nostr sou kont sa a. Retire youn anvan.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Apre sa, peze Koute pou tande l, oswa Li ansanm pou swiv mo yo pandan y ap li yo.",
-"Too many sign-ins from here. Try again later.": "Twòp koneksyon soti isit la. Eseye ankò pita."
+"Too many sign-ins from here. Try again later.": "Twòp koneksyon soti isit la. Eseye ankò pita.",
+"Audio": "Odyo",
+"Hear the Bible read aloud": "Koute Bib la li awotvwa",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Touche nenpòt vèsè nan Bib la. De bouton parèt: “Koute” li sèlman vèsè ou chwazi yo, epi “Li ansanm” kontinye li apati la pandan mo yo ap limen.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Bib sa a pa ka li awotvwa sou aparèy sa a. Touche yon vèsè, apre sa “Li ansanm”: mo yo limen youn apre lòt, pou ou ka li an silans.",
+"Try it now": "Eseye kounye a"
 }

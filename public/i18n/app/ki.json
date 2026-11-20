@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "App ya Fedi ĩrĩ na kĩhingũro gĩkĩ ndĩgũcooka gũgũtoonyia akaunti-inĩ yaku.",
 "Too many Nostr keys on this account. Remove one first.": "Ihingũro cia Nostr nĩ nyingĩ mũno akaunti-inĩ ĩno. Amba weherie kĩmwe.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Thuutha ũcio hutia Thikĩrĩria nĩguo ũigue, kana Thoma ũkĩrũmĩrĩra nĩguo ũrũmĩrĩre ciugo o ũrĩa irathomwo.",
-"Too many sign-ins from here. Try again later.": "Gũtoonya nĩ kũingĩ mũno kuuma haha. Geria rĩngĩ thutha."
+"Too many sign-ins from here. Try again later.": "Gũtoonya nĩ kũingĩ mũno kuuma haha. Geria rĩngĩ thutha.",
+"Audio": "Mũgambo",
+"Hear the Bible read aloud": "Thikĩrĩria Bibilia ĩgĩthomwo na mũgambo",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Hutia rũhunju o rwothe thĩinĩ wa Bibilia. Ndirũrũ igĩrĩ nĩ ikuumĩra: “Thikĩrĩria” ĩthomaga tu ndũhunju iria ũthuurĩte, na “Thoma ũkĩrũmĩrĩra” ĩthiaga na mbere gũthoma kuuma hau ciugo igĩkũũka ũtheri.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Bibilia ĩno ndĩngĩthomwo na mũgambo kũrĩ kĩndũ gĩkĩ. Hutia rũhunju, ũcooke ũhutie “Thoma ũkĩrũmĩrĩra”: ciugo nĩ ikũũkaga ũtheri ĩmwe ĩmwe, nĩguo ũthome ũkirĩte.",
+"Try it now": "Geria rĩu"
 }

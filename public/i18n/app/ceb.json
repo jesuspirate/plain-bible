@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Ang Fedi app nga adunay kini nga key dili na makasign in sa imong account.",
 "Too many Nostr keys on this account. Remove one first.": "Daghan kaayong Nostr key niining account. Tangtangi una ang usa.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Dayon i-tap ang Paminaw aron madungog kini, o ang Dungan nga pagbasa aron masundan ang mga pulong samtang gibasa.",
-"Too many sign-ins from here. Try again later.": "Daghan kaayong pag-sign in gikan dinhi. Sulayi pag-usab unya."
+"Too many sign-ins from here. Try again later.": "Daghan kaayong pag-sign in gikan dinhi. Sulayi pag-usab unya.",
+"Audio": "Audio",
+"Hear the Bible read aloud": "Paminawa ang Biblia nga basahon og kusog",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "I-tap ang bisan unsang bersikulo sa Biblia. Duha ka button ang mogawas: ang “Paminaw” mobasa lang sa mga bersikulo nga imong gipili, ug ang “Dungan nga pagbasa” mopadayon sa pagbasa gikan didto samtang mosiga ang mga pulong.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Kini nga Biblia dili mabasa og kusog niini nga device. I-tap ang usa ka bersikulo, unya ang “Dungan nga pagbasa”: mosiga ang mga pulong usa-usa, aron makabasa ka nga hilom.",
+"Try it now": "Sulayi karon"
 }

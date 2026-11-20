@@ -1102,5 +1102,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "L’app Fedi qui a cette clé ne permettra plus d’entrer dans votre compte.",
 "Too many Nostr keys on this account. Remove one first.": "Trop de clés Nostr sur ce compte. Retirez-en une d’abord.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Puis touchez Écouter pour l’entendre, ou Lire en suivant pour suivre les mots à mesure qu’ils sont lus.",
-"Too many sign-ins from here. Try again later.": "Trop de connexions depuis ce réseau. Réessayez plus tard."
+"Too many sign-ins from here. Try again later.": "Trop de connexions depuis ce réseau. Réessayez plus tard.",
+"Audio": "Audio",
+"Hear the Bible read aloud": "Écouter la Bible lue à voix haute",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Touchez un verset de la Bible. Deux boutons apparaissent : « Écouter » lit seulement les versets choisis, et « Lire en suivant » continue la lecture à partir de là pendant que les mots s’allument.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Cette Bible ne peut pas être lue à voix haute sur cet appareil. Touchez un verset, puis « Lire en suivant » : les mots s’allument un à un, pour lire en silence à votre rythme.",
+"Try it now": "Essayer maintenant"
 }

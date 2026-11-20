@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "এই চাবি থকা Fedi এপে আৰু আপোনাৰ একাউণ্টত ছাইন ইন নকৰে।",
 "Too many Nostr keys on this account. Remove one first.": "এই একাউণ্টত বহুত Nostr চাবি আছে। প্ৰথমে এটা আঁতৰাওক।",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "তাৰ পিছত শুনিবলৈ «শুনক» টিপক, বা পঢ়াৰ লগে লগে শব্দবোৰ চাবলৈ «লগে লগে পঢ়ক» টিপক।",
-"Too many sign-ins from here. Try again later.": "ইয়াৰ পৰা বহুত বেছি ছাইন-ইন হৈছে। পিছত পুনৰ চেষ্টা কৰক।"
+"Too many sign-ins from here. Try again later.": "ইয়াৰ পৰা বহুত বেছি ছাইন-ইন হৈছে। পিছত পুনৰ চেষ্টা কৰক।",
+"Audio": "অডিঅ’",
+"Hear the Bible read aloud": "বাইবেল জোৰেৰে পঢ়া শুনক",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "বাইবেলৰ যিকোনো পদত টেপ কৰক। দুটা বুটাম ওলাব: “শুনক”-এ কেৱল বাছি লোৱা পদবোৰ পঢ়ে, আৰু “লগে লগে পঢ়ক”-এ তাৰ পৰা পঢ়ি যায়, শব্দবোৰ পোহৰ হৈ থাকে।",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "এই বাইবেল এই ডিভাইচত জোৰেৰে পঢ়িব নোৱাৰি। এটা পদত টেপ কৰক, তাৰ পিছত “লগে লগে পঢ়ক”: শব্দবোৰ এটা এটাকৈ পোহৰ হয়, যাতে আপুনি মনে মনে পঢ়িব পাৰে।",
+"Try it now": "এতিয়া চেষ্টা কৰক"
 }

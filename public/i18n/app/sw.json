@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Programu ya Fedi yenye ufunguo huu haitaingia tena kwenye akaunti yako.",
 "Too many Nostr keys on this account. Remove one first.": "Funguo za Nostr ni nyingi mno kwenye akaunti hii. Ondoa mmoja kwanza.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Kisha gusa Sikiliza ili uusikie, au Soma ukifuatisha ili ufuate maneno yanaposomwa.",
-"Too many sign-ins from here. Try again later.": "Kuingia mara nyingi mno kutoka hapa. Jaribu tena baadaye."
+"Too many sign-ins from here. Try again later.": "Kuingia mara nyingi mno kutoka hapa. Jaribu tena baadaye.",
+"Audio": "Sauti",
+"Hear the Bible read aloud": "Sikiliza Biblia ikisomwa kwa sauti",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Gusa mstari wowote wa Biblia. Vitufe viwili vinatokea: “Sikiliza” husoma mistari uliyochagua tu, na “Soma ukifuatisha” huendelea kusoma kuanzia hapo huku maneno yakiwaka.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Biblia hii haiwezi kusomwa kwa sauti kwenye kifaa hiki. Gusa mstari, kisha “Soma ukifuatisha”: maneno yanawaka moja baada ya jingine, ili usome kimya.",
+"Try it now": "Jaribu sasa"
 }

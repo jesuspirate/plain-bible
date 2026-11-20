@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource, refreshSaved } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, tourDue, parseHash } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, SHOW_VERSE_BAR, VERSE_BAR_EVENT, tourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { followSettings, ListenPlayer } from './listen'
@@ -214,6 +214,17 @@ export function App() {
     return () => removeEventListener(SETTINGS_EVENT, on)
   }, [])
   useEffect(() => { setSettingsOpen(false) }, [route.path.join('/')])
+
+  // Show me, under Audio in Settings: back to the reader, then a verse's bar.
+  useEffect(() => {
+    const on = () => {
+      setSettingsOpen(false)
+      if ((parseHash().path[0] || 'read') !== 'read') go('read')
+      setTimeout(() => dispatchEvent(new Event(VERSE_BAR_EVENT)), 450)
+    }
+    addEventListener(SHOW_VERSE_BAR, on)
+    return () => removeEventListener(SHOW_VERSE_BAR, on)
+  }, [])
 
   // The guided tour loads only when it opens: once for everyone, as soon as
   // the reader is up with nothing else over it, or from Settings any time.

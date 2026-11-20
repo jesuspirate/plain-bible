@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -211,6 +211,23 @@ export function Reader({ route }: { route: Route }) {
   }, [loaded])
 
   useEffect(() => setSelected([]), [book, chapter, version])
+  // Show me, from Audio in Settings: the bar of the first verse wholly in
+  // view (clear of the bars), as if it had been tapped.
+  useEffect(() => {
+    const on = () => {
+      const from = (document.querySelector('header.top')?.getBoundingClientRect().bottom ?? 0) + 8, to = innerHeight - 170
+      let first: number | undefined
+      for (const el of document.querySelectorAll<HTMLElement>('.reader > article.chapter :is(.verse, .pv)[id]')) {
+        const v = Number(el.id.slice(1)), r = el.getBoundingClientRect()
+        if (!v || !r.height) continue
+        first ??= v
+        if (r.top >= from && r.bottom <= to) { setSelected([v]); return }
+      }
+      if (first) setSelected([first])
+    }
+    addEventListener(VERSE_BAR_EVENT, on)
+    return () => removeEventListener(VERSE_BAR_EVENT, on)
+  }, [])
   // The verse the mouse last came to rest on (computers only): it keeps the ribbon.
   const [reading, setReading] = useState<number>()
   useEffect(() => setReading(undefined), [book, chapter, version])

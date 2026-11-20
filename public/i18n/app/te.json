@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "ఈ కీ ఉన్న Fedi యాప్ ఇకపై మీ ఖాతాలో సైన్ ఇన్ చేయదు.",
 "Too many Nostr keys on this account. Remove one first.": "ఈ ఖాతాలో చాలా Nostr కీలు ఉన్నాయి. ముందుగా ఒకదాన్ని తీసివేయండి.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "తర్వాత వినడానికి «విను» నొక్కండి, లేదా చదువుతున్న పదాలను అనుసరించడానికి «కలిసి చదువు».",
-"Too many sign-ins from here. Try again later.": "ఇక్కడి నుండి చాలా ఎక్కువ సైన్-ఇన్‌లు. తర్వాత మళ్లీ ప్రయత్నించండి."
+"Too many sign-ins from here. Try again later.": "ఇక్కడి నుండి చాలా ఎక్కువ సైన్-ఇన్‌లు. తర్వాత మళ్లీ ప్రయత్నించండి.",
+"Audio": "ఆడియో",
+"Hear the Bible read aloud": "బైబిల్ బిగ్గరగా చదవడం వినండి",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "బైబిల్‌లోని ఏ వచనాన్నైనా తట్టండి. రెండు బటన్లు వస్తాయి: “విను” మీరు ఎంచుకున్న వచనాలను మాత్రమే చదువుతుంది, “కలిసి చదువు” పదాలు వెలుగుతూ ఉండగా అక్కడి నుండి చదువుతూ పోతుంది.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ఈ బైబిల్‌ను ఈ పరికరంలో బిగ్గరగా చదవలేము. ఒక వచనాన్ని తట్టి, తర్వాత “కలిసి చదువు”: పదాలు ఒక్కొక్కటిగా వెలుగుతాయి, మీరు మౌనంగా చదువుకోవచ్చు.",
+"Try it now": "ఇప్పుడు ప్రయత్నించండి"
 }

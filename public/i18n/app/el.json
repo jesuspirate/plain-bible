@@ -1270,5 +1270,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Η εφαρμογή Fedi με αυτό το κλειδί δεν θα συνδέεται πλέον στον λογαριασμό σας.",
 "Too many Nostr keys on this account. Remove one first.": "Πάρα πολλά κλειδιά Nostr σε αυτόν τον λογαριασμό. Αφαιρέστε πρώτα ένα.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Μετά αγγίξτε Ακρόαση για να το ακούσετε, ή Ανάγνωση με παρακολούθηση για να ακολουθείτε τις λέξεις καθώς διαβάζονται.",
-"Too many sign-ins from here. Try again later.": "Πάρα πολλές συνδέσεις από αυτό το δίκτυο. Δοκιμάστε ξανά αργότερα."
+"Too many sign-ins from here. Try again later.": "Πάρα πολλές συνδέσεις από αυτό το δίκτυο. Δοκιμάστε ξανά αργότερα.",
+"Audio": "Ήχος",
+"Hear the Bible read aloud": "Ακούστε τη Βίβλο να διαβάζεται φωναχτά",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Πατήστε σε οποιοδήποτε εδάφιο της Βίβλου. Εμφανίζονται δύο κουμπιά: το «Ακρόαση» διαβάζει μόνο τα εδάφια που επιλέξατε, και το «Ανάγνωση με παρακολούθηση» συνεχίζει από εκεί ενώ οι λέξεις φωτίζονται.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Αυτή η Βίβλος δεν μπορεί να διαβαστεί φωναχτά σε αυτή τη συσκευή. Πατήστε ένα εδάφιο και μετά «Ανάγνωση με παρακολούθηση»: οι λέξεις φωτίζονται μία μία, για να διαβάζετε σιωπηλά.",
+"Try it now": "Δοκιμάστε τώρα"
 }

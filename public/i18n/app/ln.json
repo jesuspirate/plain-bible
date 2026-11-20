@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Application Fedi oyo ezali na fungola oyo ekokɔtisa lisusu te na kɔnti na yo.",
 "Too many Nostr keys on this account. Remove one first.": "Bafungola ya Nostr ebele mingi na kɔnti oyo. Longola moko liboso.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Na nsima finá Yoká mpo na koyoka yango, to Tánga elongo mpo na kolanda maloba ntango bazali kotánga yango.",
-"Too many sign-ins from here. Try again later.": "Kokɔta mingi mpenza uta awa. Meka lisusu sima."
+"Too many sign-ins from here. Try again later.": "Kokɔta mingi mpenza uta awa. Meka lisusu sima.",
+"Audio": "Mongongo",
+"Hear the Bible read aloud": "Yoká Biblia ezali kotángama na mongongo",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Simbá vɛrsɛ nyonso na Biblia. Bitúká mibale ekobima: “Yoká” etángaka kaka bavɛrsɛ oponi, mpe “Tánga elongo” ekobi kotánga kobanda wana ntango maloba ezali kongɛnga.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Biblia oyo ekoki kotángama na mongongo te na esaleli oyo. Simbá vɛrsɛ moko, sima “Tánga elongo”: maloba ekongɛnga moko moko, mpo otánga na kimya.",
+"Try it now": "Meká sikoyo"
 }

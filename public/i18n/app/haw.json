@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "ʻAʻole e komo hou ka polokalamu Fedi me kēia kī i kou moʻokāki.",
 "Too many Nostr keys on this account. Remove one first.": "Nui loa nā kī Nostr ma kēia moʻokāki. E wehe mua i hoʻokahi.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "A laila e kaomi iā Hoʻolohe e lohe ai, a i ʻole iā Heluhelu pū e hahai i nā huaʻōlelo i ka heluhelu ʻia ʻana.",
-"Too many sign-ins from here. Try again later.": "Nui loa nā komo ʻana mai ʻaneʻi. E hoʻāʻo hou ma hope."
+"Too many sign-ins from here. Try again later.": "Nui loa nā komo ʻana mai ʻaneʻi. E hoʻāʻo hou ma hope.",
+"Audio": "Leo",
+"Hear the Bible read aloud": "Hoʻolohe i ka heluhelu leo nui ʻia o ka Baibala",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Kaomi i kekahi paukū o ka Baibala. Puka mai nā pihi ʻelua: heluhelu ʻo “Hoʻolohe” i nā paukū āu i koho ai wale nō, a hoʻomau ʻo “Heluhelu pū” i ka heluhelu mai laila aku ʻoiai e hoʻomālamalama ʻia nā huaʻōlelo.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ʻAʻole hiki ke heluhelu leo nui ʻia kēia Baibala ma kēia mea hana. Kaomi i kekahi paukū, a laila “Heluhelu pū”: hoʻomālamalama ʻia nā huaʻōlelo pākahi, i hiki iā ʻoe ke heluhelu me ka hāmau.",
+"Try it now": "Hoʻāʻo i kēia manawa"
 }

@@ -1407,5 +1407,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "لن يسجّل تطبيق Fedi الذي يحمل هذا المفتاح الدخول إلى حسابك بعد الآن.",
 "Too many Nostr keys on this account. Remove one first.": "مفاتيح Nostr كثيرة جدًا في هذا الحساب. أزل واحدًا أولًا.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ثم اضغط «استماع» لتسمعها، أو «القراءة مع المتابعة» لتتابع الكلمات وهي تُقرأ.",
-"Too many sign-ins from here. Try again later.": "محاولات تسجيل دخول كثيرة جدًا من هنا. حاول لاحقًا."
+"Too many sign-ins from here. Try again later.": "محاولات تسجيل دخول كثيرة جدًا من هنا. حاول لاحقًا.",
+"Audio": "الصوت",
+"Hear the Bible read aloud": "استمع إلى الكتاب المقدس مقروءًا بصوت عالٍ",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "المس أي آية في الكتاب المقدس. يظهر زرّان: «استماع» يقرأ الآيات التي اخترتها فقط، و«القراءة مع المتابعة» يتابع القراءة من هناك بينما تضيء الكلمات.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "لا يمكن قراءة هذا الكتاب المقدس بصوت عالٍ على هذا الجهاز. المس آية، ثم «القراءة مع المتابعة»: تضيء الكلمات واحدة تلو الأخرى، لتقرأ معها بصمت.",
+"Try it now": "جرّبه الآن"
 }

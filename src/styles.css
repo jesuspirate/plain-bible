@@ -1377,6 +1377,10 @@ body.selecting .continue { display: none; }
 .rec-about { margin: 4px 4px 14px; line-height: 1.5; }
 .rec-go { display: block; width: 100%; min-height: 52px; margin: 18px 0 10px; border-radius: 26px; font-size: 18px; font-weight: 600; }
 
+/* Audio, in Settings: how to listen, and Show me (opens a verse's bar). */
+.audio-how { margin: 4px 4px 0; font-size: 18px; line-height: 1.5; }
+.audio-show { display: flex; align-items: center; justify-content: center; gap: 10px; width: 100%; min-height: 52px; margin: 16px 0 26px; border-radius: 26px; font-size: 18px; font-weight: 600; }
+
 /* Inside Fedi, first open: "Welcome in!" with one big Nostr sign-in. */
 .fedi-welcome { display: flex; flex-direction: column; gap: 12px; padding-bottom: 8px; }
 .fedi-welcome p { margin: 0; }

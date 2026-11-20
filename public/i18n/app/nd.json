@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "I-app yeFedi elale khiye kayisayikungenisa ku-akhawunti yenu.",
 "Too many Nostr keys on this account. Remove one first.": "Amakhiye eNostr manengi kakhulu kule akhawunti. Qala ngokususa eyodwa.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ngemva kwalokho thinta u-Lalela ukuze uyizwe, kumbe u-Bala ulandela ukuze ulandele amazwi njengoba ebalwa.",
-"Too many sign-ins from here. Try again later.": "Ukungena okunengi kakhulu kuvela lapha. Zamani futhi ngemva."
+"Too many sign-ins from here. Try again later.": "Ukungena okunengi kakhulu kuvela lapha. Zamani futhi ngemva.",
+"Audio": "Umsindo",
+"Hear the Bible read aloud": "Lalela iBhayibhili libalwa ngelizwi",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Thinta ivesi loba yiphi eBhayibhilini. Kuzavela izinkinobho ezimbili: “Lalela” ibala amavesi owakhethileyo kuphela, kanti “Bala ulandela” iqhubeka ibala kusukela lapho amabala ekhanya.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "IBhayibhili leli alibalwa ngelizwi kulesi sisetshenziswa. Thinta ivesi, ubusuthinta “Bala ulandela”: amabala ayakhanya ngalinye ngalinye, ukuze ubale uthule.",
+"Try it now": "Zama khathesi"
 }

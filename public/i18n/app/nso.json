@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Tirišo ya Fedi yeo e nago le senotlelo se e ka se sa go tsenya akhaonteng ya gago.",
 "Too many Nostr keys on this account. Remove one first.": "Go na le dinotlelo tša Nostr tše dintši kudu akhaonteng ye. Tloša se tee pele.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Ka morago kgotla Theeletša go e kwa, goba Bala o latela go latela mantšu ge a balwa.",
-"Too many sign-ins from here. Try again later.": "Go tsena go go ntši kudu go tšwa mo. Leka gape ka morago."
+"Too many sign-ins from here. Try again later.": "Go tsena go go ntši kudu go tšwa mo. Leka gape ka morago.",
+"Audio": "Modumo",
+"Hear the Bible read aloud": "Theeletša Beibele e balwa ka lentšu",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Kgwatha temana efe goba efe ka Beibeleng. Dikonope tše pedi di tla tšwelela: “Theeletša” e bala fela ditemana tšeo o di kgethilego, gomme “Bala o latela” e tšwela pele go bala go tloga moo mantšu a ntše a bonega.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Beibele ye e ka se balwe ka lentšu mo sedirišweng se. Kgwatha temana, ke moka “Bala o latela”: mantšu a bonega le lengwe ka le lengwe, gore o bale o homotše.",
+"Try it now": "Leka bjale"
 }

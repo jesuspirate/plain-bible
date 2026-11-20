@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "Fedi ᎯᎠ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ ᎤᏪᎭ Ꮭ ᎿᏉ ᏣᏤᎵ ᎠᎧᎤᏂ ᏱᏓᏴᎯᏍᏔᏂ.",
 "Too many Nostr keys on this account. Remove one first.": "ᎤᏣᏘ Nostr ᎦᎶᎯᏍᏗ ᏗᏍᏚᏗ ᎯᎠ ᎠᎧᎤᏂ. ᏌᏉ ᎢᎬᏱ ᎯᎲᏏ.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "ᎿᏉ ᎯᏛᎦ ᎯᏍᏓᏩᏚᎦ ᎯᏛᎪᏗᏱ, ᎠᎴ ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ ᎯᏍᏓᏩᏗᏍᏗᏱ ᎧᏁᎢᏍᏗ.",
-"Too many sign-ins from here. Try again later.": "ᎤᏣᏘ ᏫᏣᏴᎸᎢ ᎠᏂ ᏅᏓᏳᏓᎴᏅᎯ. ᎣᏂ ᏔᎵᏁ ᎭᏓᏅᏖ."
+"Too many sign-ins from here. Try again later.": "ᎤᏣᏘ ᏫᏣᏴᎸᎢ ᎠᏂ ᏅᏓᏳᏓᎴᏅᎯ. ᎣᏂ ᏔᎵᏁ ᎭᏓᏅᏖ.",
+"Audio": "ᎧᏁᎬ",
+"Hear the Bible read aloud": "ᎯᏛᎦ ᎪᏪᎵ ᎦᎸᏉᏗ ᎠᏂᎪᎵᏰᏍᎬ ᎠᏍᏓᏯ",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "ᏘᏍᏆᏂᎪᏗ ᏌᏉ ᎪᏪᎵ ᎦᎸᏉᏗ. ᏔᎵ ᏗᏍᏆᏂᎪᏙᏗ ᏛᎾᏄᎪᏥ: “ᎯᏛᎦ” ᏓᎪᎵᏰᏍᎬ ᏂᎯ ᏘᏑᏰᏒ ᎤᏅᏍᏗ, ᎠᎴ “ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᎪᎵᏰᏍᎬ ᎾᎿ ᏅᏓᏳᎶᏒ ᏧᏁᏢᏔᏅᏛ ᏓᏓᏍᏛᎦ.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "ᎯᎠ ᎪᏪᎵ ᎦᎸᏉᏗ ᎥᏝ ᏰᎵ ᎠᏍᏓᏯ ᎦᎪᎵᏰᏗ ᏱᎩ ᎯᎠ ᎪᏪᎵᏍᏗ. ᏘᏍᏆᏂᎪᏗ ᏌᏉ, ᎿᏉ “ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ”: ᏧᏁᏢᏔᏅᏛ ᏌᏉ ᏌᏉ ᏓᏓᏍᏛᎦ, ᎤᏍᏆᏂᎩᏛ ᎯᎪᎵᏰᏗ.",
+"Try it now": "ᎪᎯ ᎯᎦᏔᎲᎦ"
 }

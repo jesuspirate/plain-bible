@@ -1267,5 +1267,10 @@
 "The Fedi app with this key won’t sign in to your account anymore.": "De Fedi-app met deze sleutel kan niet meer inloggen op je account.",
 "Too many Nostr keys on this account. Remove one first.": "Te veel Nostr-sleutels op dit account. Verwijder er eerst een.",
 "Then tap Listen to hear it, or Read along to follow the words as they’re read.": "Tik dan op Luisteren om het te horen, of op Meelezen om de woorden te volgen terwijl ze worden voorgelezen.",
-"Too many sign-ins from here. Try again later.": "Te veel inlogpogingen vanaf hier. Probeer het later opnieuw."
+"Too many sign-ins from here. Try again later.": "Te veel inlogpogingen vanaf hier. Probeer het later opnieuw.",
+"Audio": "Audio",
+"Hear the Bible read aloud": "De Bijbel laten voorlezen",
+"Tap any verse in the Bible. Two buttons come up: Listen reads just the verses you picked, and Read along reads on from there while the words light up.": "Tik op een vers in de Bijbel. Er verschijnen twee knoppen: ‘Luisteren’ leest alleen de gekozen verzen, en ‘Meelezen’ leest vanaf daar verder terwijl de woorden oplichten.",
+"This Bible can’t be read aloud on this device. Tap any verse, then Read along: the words light up one by one, so you can read along quietly.": "Deze Bijbel kan op dit apparaat niet worden voorgelezen. Tik op een vers en dan op ‘Meelezen’: de woorden lichten één voor één op, zodat je stil kunt meelezen.",
+"Try it now": "Nu proberen"
 }
