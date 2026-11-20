@@ -15,7 +15,7 @@ permissions:
 
 jobs:
   take:
-    runs-on: macos-26
+    runs-on: xcode-27
     timeout-minutes: 60
     steps:
       - uses: actions/checkout@v7
@@ -27,7 +27,7 @@ jobs:
           name: duo-pictures
           path: pictures/
       - name: Keep as a git ref
-        if: always() && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+        if: always() && hashFiles('pictures/*') != '' && github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         env:
           PR: ${{ github.event.pull_request.number }}
         run: |

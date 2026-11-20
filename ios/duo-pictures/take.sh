@@ -8,8 +8,12 @@ out="$(mkdir -p "${1:-out}" && cd "${1:-out}" && pwd)"
 DD="${RUNNER_TEMP:-/tmp}/quietbible-duo-dd"
 BUNDLE=com.myquietbible.ios
 
-xcode=$(ls -d /Applications/Xcode_27*.app 2>/dev/null | grep -vi beta | sort -V | tail -1)
-if [ -z "$xcode" ]; then echo "No Xcode 27 on this Mac:"; ls -d /Applications/Xcode*; exit 1; fi
+# The newest Xcode 27 or later, whatever its folder is called.
+xcode=$(for x in /Applications/Xcode*.app; do
+  v=$(defaults read "$x/Contents/Info" CFBundleShortVersionString 2>/dev/null) || continue
+  echo "$v $x"; done | sort -V | awk '$1 >= 27 {x=$2} END {print x}')
+for x in /Applications/Xcode*.app; do echo "$x: $(defaults read "$x/Contents/Info" CFBundleShortVersionString 2>/dev/null)"; done > "$out/xcodes.txt"
+if [ -z "$xcode" ]; then echo "No Xcode 27 on this Mac:"; cat "$out/xcodes.txt"; exit 1; fi
 sudo xcode-select -s "$xcode"
 xcodebuild -version | tee "$out/about-simulator.txt"
 { echo; xcrun simctl list devicetypes; echo; xcrun simctl list runtimes; echo; xcrun simctl help; echo; xcrun simctl help io; } >> "$out/about-simulator.txt" 2>&1
