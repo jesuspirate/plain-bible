@@ -1508,11 +1508,21 @@ async function myVerse(env: Env): Promise<MyVerse | string> {
   if (!env.STATS_EMAIL) return 'the STATS_EMAIL secret hasn’t reached the sync service yet'
   if (!env.EMAIL_SECRET) return 'email sign-in is off on the sync service'
   try {
-    const hash = await emailHash(env, env.STATS_EMAIL.trim().toLowerCase())
-    const row = await env.DB.prepare('SELECT d.body FROM emails e JOIN data d ON d.user_id = e.user_id WHERE e.hash = ?').bind(hash).first<{ body: string }>()
+    // Forgiving about how the secret was typed: quotes, <>, "mailto:", spaces,
+    // and several addresses separated by commas or spaces (the first that
+    // belongs to an account with synced data wins).
+    const emails = env.STATS_EMAIL.toLowerCase().replace(/mailto:/g, '').split(/[\s,;<>"']+/).filter(e => e.includes('@'))
+    let row: { body: string } | null = null, known = false
+    for (const e of emails) {
+      const hash = await emailHash(env, e)
+      row = await env.DB.prepare('SELECT d.body FROM emails e JOIN data d ON d.user_id = e.user_id WHERE e.hash = ?').bind(hash).first<{ body: string }>()
+      if (row) break
+      known ||= !!(await env.DB.prepare('SELECT 1 FROM emails WHERE hash = ?').bind(hash).first())
+    }
     if (!row) {
-      const known = await env.DB.prepare('SELECT 1 FROM emails WHERE hash = ?').bind(hash).first()
-      return known ? 'the account with that email has nothing synced yet' : 'no account signs in with the STATS_EMAIL address (check its spelling, or add that email in Settings → Account)'
+      const shown = emails.map(emailHint).join(', ') || 'nothing that looks like an email'
+      return known ? 'the account with that email has nothing synced yet'
+        : `no account signs in with the STATS_EMAIL address (it reads as ${shown}; compare with the email shown in Settings → Account, or add that email there)`
     }
     const doc = JSON.parse(row.body) as { marks?: Record<string, { b?: 1; v?: string }>; settings?: { version?: unknown; language?: unknown } }
     const keys = Object.entries(doc.marks ?? {}).filter(([, m]) => m?.b === 1).map(([k]) => k.split('.'))
