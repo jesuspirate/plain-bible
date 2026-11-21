@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "轻点两下：快速高亮",
 "Triple click: quick highlight": "连点三下：快速高亮",
 "Tap the chapter title": "轻点章节标题",
-"Click the chapter title, or press /": "点按章节标题，或按 /",
+"Click the chapter title, or press {keys}": "点按章节标题，或按 {keys}",
 "Or pull down at the top of a chapter, then let go": "或在章节顶部向下拉，然后松开",
 "Hold 🙏 to choose its skin tone": "按住 🙏 选择肤色",
 "Then tap one:": "然后点其中一个：",

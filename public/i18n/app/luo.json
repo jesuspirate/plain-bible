@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Mul nyadiriyo: rangi mapiyo",
 "Triple click: quick highlight": "Click nyadidek: rangi mapiyo",
 "Tap the chapter title": "Mul wi sula",
-"Click the chapter title, or press /": "Click wi sula, kata mul /",
+"Click the chapter title, or press {keys}": "Click wi sula, kata mul {keys}",
 "Or pull down at the top of a chapter, then let go": "Kata e wi sula, ywe piny eka iwe",
 "Hold 🙏 to choose its skin tone": "Mak 🙏 mondo iyier rangi del",
 "Then tap one:": "Eka mul achiel:",

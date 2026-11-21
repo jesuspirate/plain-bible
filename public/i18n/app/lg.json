@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Nyiga emirundi ebiri: langi mangu",
 "Triple click: quick highlight": "Kona emirundi esatu: langi mangu",
 "Tap the chapter title": "Nyiga omutwe gw’essuula",
-"Click the chapter title, or press /": "Kona ku mutwe gw’essuula, oba nyiga /",
+"Click the chapter title, or press {keys}": "Kona ku mutwe gw’essuula, oba nyiga {keys}",
 "Or pull down at the top of a chapter, then let go": "Oba waggulu ku ssuula, wanula wansi olwo oteeke",
 "Hold 🙏 to choose its skin tone": "Kwata 🙏 okulonda langi y’olususu",
 "Then tap one:": "Oluvannyuma kwata ku emu:",

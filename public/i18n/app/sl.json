@@ -1377,7 +1377,7 @@
 "Double tap: quick highlight": "Dvojni tap: hitro označevanje",
 "Triple click: quick highlight": "Trojni klik: hitro označevanje",
 "Tap the chapter title": "Tapnite naslov poglavja",
-"Click the chapter title, or press /": "Kliknite naslov poglavja ali pritisnite /",
+"Click the chapter title, or press {keys}": "Kliknite naslov poglavja ali pritisnite {keys}",
 "Or pull down at the top of a chapter, then let go": "Ali na vrhu poglavja povlecite navzdol in spustite",
 "Hold 🙏 to choose its skin tone": "Pridržite 🙏, da izberete barvo kože",
 "Then tap one:": "Nato tapnite enega:",

@@ -86,7 +86,7 @@ function steps(): Step[] {
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap] },
     // The two shortcuts to search (#236), lit on the chapter title they start from.
     { title: t('Open search'), find: onScreen('.reader article.chapter .chapter-title'), gap: fine ? undefined : 70, rows: [
-        { glyph: 'tap', text: fine ? t('Click the chapter title, or press /') : t('Tap the chapter title') },
+        { glyph: 'tap', text: fine ? t('Click the chapter title, or press {keys}', { keys: /Mac|iP(hone|ad)/.test(navigator.platform || navigator.userAgent) ? '⌘K' : 'Ctrl+K' }) : t('Tap the chapter title') },
         ...(fine ? [] : [{ glyph: 'pull', text: t('Or pull down at the top of a chapter, then let go') } as Row]),
       ], after: t('After a search, open it again to go back to your last result.'),
       moves: fine ? [{ kind: 'tap', row: 0 }] : [{ kind: 'tap', row: 0 }, { kind: 'pull', row: 1 }] },

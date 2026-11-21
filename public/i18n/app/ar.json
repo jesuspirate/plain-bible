@@ -1412,7 +1412,7 @@
 "Double tap: quick highlight": "ضغطتان: تمييز سريع",
 "Triple click: quick highlight": "ثلاث نقرات: تمييز سريع",
 "Tap the chapter title": "اضغط عنوان الأصحاح",
-"Click the chapter title, or press /": "انقر عنوان الأصحاح، أو اضغط /",
+"Click the chapter title, or press {keys}": "انقر عنوان الأصحاح، أو اضغط {keys}",
 "Or pull down at the top of a chapter, then let go": "أو في أعلى الأصحاح، اسحب للأسفل ثم اترك",
 "Hold 🙏 to choose its skin tone": "اضغط مطولًا على 🙏 لاختيار لون البشرة",
 "Then tap one:": "ثم المس أحدهما:",

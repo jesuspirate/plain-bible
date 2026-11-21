@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Kgotla gabedi: go swaya ka pela",
 "Triple click: quick highlight": "Klika gararo: go swaya ka pela",
 "Tap the chapter title": "Kgotla hlogo ya kgaolo",
-"Click the chapter title, or press /": "Klika hlogo ya kgaolo, goba kgotla /",
+"Click the chapter title, or press {keys}": "Klika hlogo ya kgaolo, goba kgotla {keys}",
 "Or pull down at the top of a chapter, then let go": "Goba ka godimo ga kgaolo, goga fase ke moka o lokolle",
 "Hold 🙏 to choose its skin tone": "Swara 🙏 go kgetha mmala wa letlalo",
 "Then tap one:": "Ke moka kgwatha e tee:",

@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Kaomi pālua: kaha kala wikiwiki",
 "Triple click: quick highlight": "Kōmi pākolu: kaha kala wikiwiki",
 "Tap the chapter title": "E kaomi i ke poʻo inoa o ka mokuna",
-"Click the chapter title, or press /": "E kōmi i ke poʻo inoa o ka mokuna, a i ʻole e kaomi i ka /",
+"Click the chapter title, or press {keys}": "E kōmi i ke poʻo inoa o ka mokuna, a i ʻole e kaomi i ka {keys}",
 "Or pull down at the top of a chapter, then let go": "A i ʻole ma luna o ka mokuna, e huki i lalo a laila e hoʻokuʻu",
 "Hold 🙏 to choose its skin tone": "E paʻa i ka 🙏 e koho i ke kala ʻili",
 "Then tap one:": "A laila kaomi i hoʻokahi:",

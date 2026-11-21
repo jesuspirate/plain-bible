@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Gusa mara mbili: angazia haraka",
 "Triple click: quick highlight": "Bofya mara tatu: angazia haraka",
 "Tap the chapter title": "Gusa kichwa cha sura",
-"Click the chapter title, or press /": "Bofya kichwa cha sura, au bonyeza /",
+"Click the chapter title, or press {keys}": "Bofya kichwa cha sura, au bonyeza {keys}",
 "Or pull down at the top of a chapter, then let go": "Au juu ya sura, vuta chini kisha uachilie",
 "Hold 🙏 to choose its skin tone": "Shikilia 🙏 ili kuchagua rangi ya ngozi",
 "Then tap one:": "Kisha gusa kimoja:",

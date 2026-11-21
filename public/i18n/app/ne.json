@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "दुई पटक ट्याप: छिटो हाइलाइट",
 "Triple click: quick highlight": "तीन पटक क्लिक: छिटो हाइलाइट",
 "Tap the chapter title": "अध्यायको शीर्षकमा ट्याप गर्नुहोस्",
-"Click the chapter title, or press /": "अध्यायको शीर्षकमा क्लिक गर्नुहोस्, वा / थिच्नुहोस्",
+"Click the chapter title, or press {keys}": "अध्यायको शीर्षकमा क्लिक गर्नुहोस्, वा {keys} थिच्नुहोस्",
 "Or pull down at the top of a chapter, then let go": "वा अध्यायको माथि तल तान्नुहोस्, अनि छोड्नुहोस्",
 "Hold 🙏 to choose its skin tone": "छालाको रङ रोज्न 🙏 थिचिराख्नुहोस्",
 "Then tap one:": "त्यसपछि एउटामा ट्याप गर्नुहोस्:",

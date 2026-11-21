@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Bean daa cheayrt: soilshaghey tappee",
 "Triple click: quick highlight": "Click three keayrtyn: soilshaghey tappee",
 "Tap the chapter title": "Bean rish ard-ennym y chaibil",
-"Click the chapter title, or press /": "Click er ard-ennym y chaibil, ny bwoaill /",
+"Click the chapter title, or press {keys}": "Click er ard-ennym y chaibil, ny bwoaill {keys}",
 "Or pull down at the top of a chapter, then let go": "Ny, ec mullagh caibil, tayrn sheese as lhig da",
 "Hold 🙏 to choose its skin tone": "Cum 🙏 dy reih daah y chrackan echey",
 "Then tap one:": "Eisht bean rish fer jeu:",

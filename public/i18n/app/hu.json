@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Dupla koppintás: gyors kiemelés",
 "Triple click: quick highlight": "Tripla kattintás: gyors kiemelés",
 "Tap the chapter title": "Koppints a fejezet címére",
-"Click the chapter title, or press /": "Kattints a fejezet címére, vagy nyomd meg a / gombot",
+"Click the chapter title, or press {keys}": "Kattints a fejezet címére, vagy nyomd meg a {keys} gombot",
 "Or pull down at the top of a chapter, then let go": "Vagy a fejezet tetején húzd lefelé, majd engedd el",
 "Hold 🙏 to choose its skin tone": "Tartsd lenyomva a 🙏 gombot a bőrszín kiválasztásához",
 "Then tap one:": "Aztán koppintson az egyikre:",

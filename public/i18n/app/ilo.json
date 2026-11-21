@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Mamindua nga i-tap: dagus a highlight",
 "Triple click: quick highlight": "Mamitlo nga i-click: dagus a highlight",
 "Tap the chapter title": "I-tap ti titulo ti kapitulo",
-"Click the chapter title, or press /": "I-click ti titulo ti kapitulo, wenno pindoten ti /",
+"Click the chapter title, or press {keys}": "I-click ti titulo ti kapitulo, wenno pindoten ti {keys}",
 "Or pull down at the top of a chapter, then let go": "Wenno iti ngato ti kapitulo, guyuden nga agpababa sa ibbatan",
 "Hold 🙏 to choose its skin tone": "Iggaman ti 🙏 tapno agpili iti kolor ti kudil",
 "Then tap one:": "Kalpasanna i-tap ti maysa:",

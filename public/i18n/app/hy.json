@@ -1275,7 +1275,7 @@
 "Double tap: quick highlight": "Կրկնակի հպում՝ արագ ընդգծում",
 "Triple click: quick highlight": "Եռակի սեղմում՝ արագ ընդգծում",
 "Tap the chapter title": "Հպեք գլխի վերնագրին",
-"Click the chapter title, or press /": "Սեղմեք գլխի վերնագրին կամ սեղմեք /",
+"Click the chapter title, or press {keys}": "Սեղմեք գլխի վերնագրին կամ սեղմեք {keys}",
 "Or pull down at the top of a chapter, then let go": "Կամ գլխի վերևում քաշեք ներքև, ապա բաց թողեք",
 "Hold 🙏 to choose its skin tone": "Պահեք 🙏-ը՝ մաշկի երանգը ընտրելու համար",
 "Then tap one:": "Հետո հպեք մեկին․",

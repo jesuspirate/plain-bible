@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Kaksoisnapautus: pikakorostus",
 "Triple click: quick highlight": "Kolmoisnapsautus: pikakorostus",
 "Tap the chapter title": "Napauta luvun otsikkoa",
-"Click the chapter title, or press /": "Napsauta luvun otsikkoa tai paina /",
+"Click the chapter title, or press {keys}": "Napsauta luvun otsikkoa tai paina {keys}",
 "Or pull down at the top of a chapter, then let go": "Tai vedä luvun alussa alaspäin ja päästä irti",
 "Hold 🙏 to choose its skin tone": "Pidä 🙏 painettuna valitaksesi ihonvärin",
 "Then tap one:": "Napauta sitten jompaakumpaa:",

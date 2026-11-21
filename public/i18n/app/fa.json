@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "دو ضربه: برجسته‌سازی سریع",
 "Triple click: quick highlight": "سه کلیک: برجسته‌سازی سریع",
 "Tap the chapter title": "روی عنوان فصل ضربه بزنید",
-"Click the chapter title, or press /": "روی عنوان فصل کلیک کنید، یا / را فشار دهید",
+"Click the chapter title, or press {keys}": "روی عنوان فصل کلیک کنید، یا {keys} را فشار دهید",
 "Or pull down at the top of a chapter, then let go": "یا در بالای فصل، به پایین بکشید و رها کنید",
 "Hold 🙏 to choose its skin tone": "🙏 را نگه دارید تا رنگ پوست را انتخاب کنید",
 "Then tap one:": "سپس یکی را بزنید:",

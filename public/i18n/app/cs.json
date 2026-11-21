@@ -1377,7 +1377,7 @@
 "Double tap: quick highlight": "Dvojité klepnutí: rychlé zvýraznění",
 "Triple click: quick highlight": "Trojité kliknutí: rychlé zvýraznění",
 "Tap the chapter title": "Klepněte na název kapitoly",
-"Click the chapter title, or press /": "Klikněte na název kapitoly, nebo stiskněte /",
+"Click the chapter title, or press {keys}": "Klikněte na název kapitoly, nebo stiskněte {keys}",
 "Or pull down at the top of a chapter, then let go": "Nebo na začátku kapitoly táhněte dolů a pusťte",
 "Hold 🙏 to choose its skin tone": "Podržte 🙏 a vyberte odstín pleti",
 "Then tap one:": "Pak klepněte na jedno z nich:",

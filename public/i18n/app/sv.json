@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Dubbeltryck: snabb markering",
 "Triple click: quick highlight": "Trippelklick: snabb markering",
 "Tap the chapter title": "Tryck på kapitelrubriken",
-"Click the chapter title, or press /": "Klicka på kapitelrubriken, eller tryck på /",
+"Click the chapter title, or press {keys}": "Klicka på kapitelrubriken, eller tryck på {keys}",
 "Or pull down at the top of a chapter, then let go": "Eller dra nedåt överst i ett kapitel och släpp",
 "Hold 🙏 to choose its skin tone": "Håll in 🙏 för att välja hudton",
 "Then tap one:": "Tryck sedan på en av dem:",

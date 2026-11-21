@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Tsindrio indroa: fanasongadinana haingana",
 "Triple click: quick highlight": "Tsindrio intelo: fanasongadinana haingana",
 "Tap the chapter title": "Tsindrio ny lohatenin’ny toko",
-"Click the chapter title, or press /": "Tsindrio ny lohatenin’ny toko, na tsindrio ny /",
+"Click the chapter title, or press {keys}": "Tsindrio ny lohatenin’ny toko, na tsindrio ny {keys}",
 "Or pull down at the top of a chapter, then let go": "Na eo an-tampon’ny toko, sintony midina dia avelao",
 "Hold 🙏 to choose its skin tone": "Tazony ny 🙏 hisafidianana ny lokon-koditra",
 "Then tap one:": "Avy eo tsindrio ny iray:",

@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "دوو کرتە: ڕەنگکردنی خێرا",
 "Triple click: quick highlight": "سێ کلیک: ڕەنگکردنی خێرا",
 "Tap the chapter title": "کرتە لە ناونیشانی بەشەکە بکە",
-"Click the chapter title, or press /": "کلیک لە ناونیشانی بەشەکە بکە، یان / دابگرە",
+"Click the chapter title, or press {keys}": "کلیک لە ناونیشانی بەشەکە بکە، یان {keys} دابگرە",
 "Or pull down at the top of a chapter, then let go": "یان لە سەرەوەی بەشێک، بۆ خوارەوە ڕابکێشە و بەری بدە",
 "Hold 🙏 to choose its skin tone": "🙏 دابگرە بۆ هەڵبژاردنی ڕەنگی پێست",
 "Then tap one:": "پاشان دەست لە یەکێکیان بدە:",

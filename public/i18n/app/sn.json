@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Baya kaviri: penda nekukurumidza",
 "Triple click: quick highlight": "Dzvanya katatu: penda nekukurumidza",
 "Tap the chapter title": "Bayai zita rechitsauko",
-"Click the chapter title, or press /": "Dzvanyai zita rechitsauko, kana bayai /",
+"Click the chapter title, or press {keys}": "Dzvanyai zita rechitsauko, kana bayai {keys}",
 "Or pull down at the top of a chapter, then let go": "Kana pamusoro pechitsauko, kweverai pasi mozorega",
 "Hold 🙏 to choose its skin tone": "Batai 🙏 kuti musarudze ruvara rweganda",
 "Then tap one:": "Wozobaya rimwe:",

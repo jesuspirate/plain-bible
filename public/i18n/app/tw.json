@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Mia so mprenu: hyɛ kɔla ntɛm",
 "Triple click: quick highlight": "Klik mprɛnsa: hyɛ kɔla ntɛm",
 "Tap the chapter title": "Mia ti no din so",
-"Click the chapter title, or press /": "Klik ti no din so, anaa mia /",
+"Click the chapter title, or press {keys}": "Klik ti no din so, anaa mia {keys}",
 "Or pull down at the top of a chapter, then let go": "Anaa wɔ ti bi atifi, twe kɔ fam na gyae",
 "Hold 🙏 to choose its skin tone": "Mia 🙏 so kyɛ na yi honam kɔla",
 "Then tap one:": "Afei mia baako so:",

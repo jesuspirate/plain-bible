@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "I-double tap: mabilis na highlight",
 "Triple click: quick highlight": "I-triple click: mabilis na highlight",
 "Tap the chapter title": "I-tap ang pamagat ng kabanata",
-"Click the chapter title, or press /": "I-click ang pamagat ng kabanata, o pindutin ang /",
+"Click the chapter title, or press {keys}": "I-click ang pamagat ng kabanata, o pindutin ang {keys}",
 "Or pull down at the top of a chapter, then let go": "O sa itaas ng kabanata, hilahin pababa at bitawan",
 "Hold 🙏 to choose its skin tone": "Pindutin nang matagal ang 🙏 para pumili ng kulay ng balat",
 "Then tap one:": "Saka i-tap ang isa:",

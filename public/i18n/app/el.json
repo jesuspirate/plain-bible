@@ -1275,7 +1275,7 @@
 "Double tap: quick highlight": "Διπλό πάτημα: γρήγορη επισήμανση",
 "Triple click: quick highlight": "Τριπλό κλικ: γρήγορη επισήμανση",
 "Tap the chapter title": "Πατήστε τον τίτλο του κεφαλαίου",
-"Click the chapter title, or press /": "Κάντε κλικ στον τίτλο του κεφαλαίου ή πατήστε /",
+"Click the chapter title, or press {keys}": "Κάντε κλικ στον τίτλο του κεφαλαίου ή πατήστε {keys}",
 "Or pull down at the top of a chapter, then let go": "Ή, στην αρχή ενός κεφαλαίου, τραβήξτε προς τα κάτω και αφήστε",
 "Hold 🙏 to choose its skin tone": "Κρατήστε πατημένο το 🙏 για να επιλέξετε απόχρωση δέρματος",
 "Then tap one:": "Μετά πατήστε ένα:",

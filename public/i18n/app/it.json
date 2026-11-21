@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Doppio tocco: evidenziazione rapida",
 "Triple click: quick highlight": "Triplo clic: evidenziazione rapida",
 "Tap the chapter title": "Tocca il titolo del capitolo",
-"Click the chapter title, or press /": "Fai clic sul titolo del capitolo, o premi /",
+"Click the chapter title, or press {keys}": "Fai clic sul titolo del capitolo, o premi {keys}",
 "Or pull down at the top of a chapter, then let go": "Oppure, in cima a un capitolo, tira giù e poi lascia",
 "Hold 🙏 to choose its skin tone": "Tieni premuto 🙏 per scegliere il tono della pelle",
 "Then tap one:": "Poi tocca uno dei due:",

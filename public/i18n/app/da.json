@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Dobbelttryk: hurtig fremhævning",
 "Triple click: quick highlight": "Tredobbeltklik: hurtig fremhævning",
 "Tap the chapter title": "Tryk på kapitlets titel",
-"Click the chapter title, or press /": "Klik på kapitlets titel, eller tryk på /",
+"Click the chapter title, or press {keys}": "Klik på kapitlets titel, eller tryk på {keys}",
 "Or pull down at the top of a chapter, then let go": "Eller træk ned øverst i et kapitel, og slip",
 "Hold 🙏 to choose its skin tone": "Hold 🙏 nede for at vælge hudfarve",
 "Then tap one:": "Tryk så på en af dem:",

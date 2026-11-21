@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Si’a lama tuqi: halluu ariifachiisaa",
 "Triple click: quick highlight": "Si’a sadii cuqaasi: halluu ariifachiisaa",
 "Tap the chapter title": "Mata duree boqonnaa tuqi",
-"Click the chapter title, or press /": "Mata duree boqonnaa cuqaasi, ykn / tuqi",
+"Click the chapter title, or press {keys}": "Mata duree boqonnaa cuqaasi, ykn {keys} tuqi",
 "Or pull down at the top of a chapter, then let go": "Ykn boqonnaa gubbaatti gadi harkisii gadhiisi",
 "Hold 🙏 to choose its skin tone": "Halluu gogaa filachuuf 🙏 qabadhu",
 "Then tap one:": "Achiis tokko tuqi:",

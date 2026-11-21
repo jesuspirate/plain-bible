@@ -1356,7 +1356,7 @@
 "Double tap: quick highlight": "Dubultpieskāriens: ātra iezīmēšana",
 "Triple click: quick highlight": "Trīskāršs klikšķis: ātra iezīmēšana",
 "Tap the chapter title": "Pieskarieties nodaļas virsrakstam",
-"Click the chapter title, or press /": "Noklikšķiniet uz nodaļas virsraksta vai nospiediet /",
+"Click the chapter title, or press {keys}": "Noklikšķiniet uz nodaļas virsraksta vai nospiediet {keys}",
 "Or pull down at the top of a chapter, then let go": "Vai nodaļas augšā velciet uz leju un atlaidiet",
 "Hold 🙏 to choose its skin tone": "Turiet 🙏, lai izvēlētos ādas toni",
 "Then tap one:": "Tad pieskarieties vienai:",

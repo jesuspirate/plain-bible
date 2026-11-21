@@ -1276,7 +1276,7 @@
 "Double tap: quick highlight": "הקשה כפולה: הדגשה מהירה",
 "Triple click: quick highlight": "לחיצה משולשת: הדגשה מהירה",
 "Tap the chapter title": "הקישו על כותרת הפרק",
-"Click the chapter title, or press /": "לחצו על כותרת הפרק, או הקישו /",
+"Click the chapter title, or press {keys}": "לחצו על כותרת הפרק, או הקישו {keys}",
 "Or pull down at the top of a chapter, then let go": "או, בראש פרק, משכו למטה ושחררו",
 "Hold 🙏 to choose its skin tone": "החזיקו את 🙏 כדי לבחור גוון עור",
 "Then tap one:": "ואז הקישו על אחד:",

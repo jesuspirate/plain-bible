@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "ダブルタップ：すばやくハイライト",
 "Triple click: quick highlight": "トリプルクリック：すばやくハイライト",
 "Tap the chapter title": "章のタイトルをタップ",
-"Click the chapter title, or press /": "章のタイトルをクリック、または / を押す",
+"Click the chapter title, or press {keys}": "章のタイトルをクリック、または {keys} を押す",
 "Or pull down at the top of a chapter, then let go": "または章の一番上で下に引いて離す",
 "Hold 🙏 to choose its skin tone": "🙏 を長押しして肌の色を選ぶ",
 "Then tap one:": "次にどちらかをタップ：",

@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "두 번 탭: 빠른 강조",
 "Triple click: quick highlight": "세 번 클릭: 빠른 강조",
 "Tap the chapter title": "장 제목을 탭하세요",
-"Click the chapter title, or press /": "장 제목을 클릭하거나 /를 누르세요",
+"Click the chapter title, or press {keys}": "장 제목을 클릭하거나 {keys}를 누르세요",
 "Or pull down at the top of a chapter, then let go": "또는 장 맨 위에서 아래로 당겼다 놓으세요",
 "Hold 🙏 to choose its skin tone": "🙏를 길게 눌러 피부색을 고르세요",
 "Then tap one:": "그다음 하나를 누르세요:",

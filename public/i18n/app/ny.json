@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Dinani kawiri: kuwunikira mwachangu",
 "Triple click: quick highlight": "Kanikizani katatu: kuwunikira mwachangu",
 "Tap the chapter title": "Dinani dzina la mutu",
-"Click the chapter title, or press /": "Kanikizani dzina la mutu, kapena dinani /",
+"Click the chapter title, or press {keys}": "Kanikizani dzina la mutu, kapena dinani {keys}",
 "Or pull down at the top of a chapter, then let go": "Kapena pamwamba pa mutu, kokani pansi kenako melekani",
 "Hold 🙏 to choose its skin tone": "Gwirani 🙏 kuti musankhe mtundu wa khungu",
 "Then tap one:": "Kenako dinani imodzi:",

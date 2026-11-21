@@ -1377,7 +1377,7 @@
 "Double tap: quick highlight": "Двойное нажатие: быстрое выделение",
 "Triple click: quick highlight": "Тройной щелчок: быстрое выделение",
 "Tap the chapter title": "Нажмите на название главы",
-"Click the chapter title, or press /": "Щёлкните название главы или нажмите /",
+"Click the chapter title, or press {keys}": "Щёлкните название главы или нажмите {keys}",
 "Or pull down at the top of a chapter, then let go": "Или вверху главы потяните вниз и отпустите",
 "Hold 🙏 to choose its skin tone": "Удерживайте 🙏, чтобы выбрать оттенок кожи",
 "Then tap one:": "Затем нажмите одну:",

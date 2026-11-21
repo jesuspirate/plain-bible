@@ -1275,7 +1275,7 @@
 "Double tap: quick highlight": "Prekje e dyfishtë: theksim i shpejtë",
 "Triple click: quick highlight": "Klikim i trefishtë: theksim i shpejtë",
 "Tap the chapter title": "Prek titullin e kapitullit",
-"Click the chapter title, or press /": "Kliko titullin e kapitullit, ose shtyp /",
+"Click the chapter title, or press {keys}": "Kliko titullin e kapitullit, ose shtyp {keys}",
 "Or pull down at the top of a chapter, then let go": "Ose në krye të një kapitulli tërhiq poshtë, pastaj lësho",
 "Hold 🙏 to choose its skin tone": "Mbaj shtypur 🙏 për të zgjedhur ngjyrën e lëkurës",
 "Then tap one:": "Pastaj prekni njërin:",

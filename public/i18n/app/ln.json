@@ -1272,7 +1272,7 @@
 "Double tap: quick highlight": "Finá mbala mibale: langi noki",
 "Triple click: quick highlight": "Kliké mbala misato: langi noki",
 "Tap the chapter title": "Finá motó ya likambo ya mokapo",
-"Click the chapter title, or press /": "Kliké motó ya likambo ya mokapo, to finá /",
+"Click the chapter title, or press {keys}": "Kliké motó ya likambo ya mokapo, to finá {keys}",
 "Or pull down at the top of a chapter, then let go": "To likoló ya mokapo, benda na nse mpe tika",
 "Hold 🙏 to choose its skin tone": "Simbá 🙏 mpo na kopono langi ya poso",
 "Then tap one:": "Na sima simbá moko:",
