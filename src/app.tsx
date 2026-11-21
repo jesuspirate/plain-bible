@@ -15,6 +15,8 @@ import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { LeftNote, touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
+import { START_STEPS, StepsPill } from './suggest'
+import { resumeSteps, startSteps } from './lib/steps'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
 import { MoveWelcome } from './move'
 import { ContinueOffer } from './continue'
@@ -214,6 +216,20 @@ export function App() {
     return () => removeEventListener(SETTINGS_EVENT, on)
   }, [])
   useEffect(() => { setSettingsOpen(false) }, [route.path.join('/')])
+
+  // Report a problem → Show what happens: Settings steps aside and the
+  // person uses the app as usual until they tap Stop, then Settings opens
+  // again on the report. A recording carries on if the app reloads.
+  const [recordingSteps, setRecordingSteps] = useState(resumeSteps)
+  useEffect(() => {
+    const on = () => {
+      setSettingsOpen(false)
+      if (parseHash().path[0] === 'settings') go('read')
+      setTimeout(() => { startSteps(); setRecordingSteps(true) }, 250)
+    }
+    addEventListener(START_STEPS, on)
+    return () => removeEventListener(START_STEPS, on)
+  }, [])
 
   // Show me, under Audio in Settings: back to the reader, then a verse's bar.
   useEffect(() => {
@@ -420,6 +436,7 @@ export function App() {
       {sidewaysEdge}
       {view === 'search' && <ListenPlayer floating />}
       {settingsOpen && <SettingsSheet onClose={() => setSettingsOpen(false)} />}
+      {recordingSteps && <StepsPill onStop={() => { setRecordingSteps(false); setSettingsOpen(true) }} />}
       {praying && Prayer && <Prayer at={prayAt} onClose={() => { setPraying(false); setPrayAt(undefined) }} />}
       {sharing && circles && <circles.ShareSheet request={sharing} onClose={() => setSharing(undefined)} />}
       {FediWelcome && <FediWelcome onClose={() => setFediWelcome(undefined)} />}

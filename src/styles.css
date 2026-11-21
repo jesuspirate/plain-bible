@@ -329,6 +329,21 @@ main.with-bar { padding-bottom: 120px; }
    border that 🙏 doesn't have: keep it as it is at rest. */
 @media (hover: hover) { .sb-circles:hover { border-color: var(--line); } }
 .sb-circles:focus-visible, .sb-pray:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
+/* Read along, if ticked under Audio: a smaller plain glass button just above
+   🙏, centred on it, so it's there to find but 🙏 still leads. */
+.sb-pray-spot { position: relative; flex: none; display: grid; }
+.sb-along {
+  all: unset; cursor: pointer; position: absolute; left: 50%; bottom: calc(100% + 12px); margin-left: -23px;
+  display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%; box-sizing: border-box;
+  color: color-mix(in srgb, var(--text) 80%, transparent); background: var(--surface); border: 1px solid var(--line);
+  box-shadow: 0 6px 18px rgba(0,0,0,.12); -webkit-tap-highlight-color: transparent;
+}
+.sb-along::before { content: ''; position: absolute; inset: -5px; border-radius: 50%; }
+.sb-along:active { transform: scale(.94); }
+@media (hover: hover) { .sb-along:hover { border-color: var(--line); color: var(--text); } }
+.sb-along:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
+/* The "Continue at…" card sits where it would be: it waits until that's answered. */
+.sb:has(> .continue) .sb-along { display: none; }
 .sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
 /* Buttons you can press and hold (hold.tsx): no text selection, no callout, no scrolling away. */
@@ -765,12 +780,12 @@ html.sb-floor .sb.sb-open { padding-bottom: max(10px, env(safe-area-inset-bottom
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] { --rim-light: rgba(255,255,255,.62); --rim-dark: rgba(0,0,0,.8); --glass-tint: rgba(62,62,72,.66); } }
 @supports (background: color-mix(in srgb, red 50%, transparent)) and ((-webkit-backdrop-filter: blur(1px)) or (backdrop-filter: blur(1px))) {
   :root { --glass-open: color-mix(in srgb, var(--surface) 86%, transparent); }
-  .sb-field, .sb-mini .sb-field, .sb-circles, .listen, .sb.sb-open .sb-field, .sb.sb-open .sb-sheet {
+  .sb-field, .sb-mini .sb-field, .sb-circles, .sb-along, .listen, .sb.sb-open .sb-field, .sb.sb-open .sb-sheet {
     -webkit-backdrop-filter: blur(14px) saturate(160%); backdrop-filter: blur(14px) saturate(160%);
   }
   .sb-field { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .sb-mini .sb-field { border-color: transparent; background: var(--glass-tint); box-shadow: 0 4px 14px rgba(0,0,0,.14); }
-  .sb-circles, .sb-circles:hover { border-color: transparent; background: var(--glass-tint); }
+  .sb-circles, .sb-circles:hover, .sb-along, .sb-along:hover { border-color: transparent; background: var(--glass-tint); }
   /* The reading-aloud bar is the same glass as the search field it stands in for. */
   .listen { position: relative; border-color: transparent; background: var(--glass-tint); box-shadow: 0 10px 30px rgba(0,0,0,.14); }
   .listen.listen-float { position: fixed; }
@@ -783,7 +798,7 @@ html.sb-floor .sb.sb-open { padding-bottom: max(10px, env(safe-area-inset-bottom
   .sb-field input::placeholder { color: color-mix(in srgb, var(--text) 82%, transparent); }
   .sb-field .sb-glass { color: var(--text); filter: drop-shadow(0 0 3px var(--surface)); }
   /* The rim: a 1px ring drawn with a gradient, light top and bottom, dark at the sides. */
-  .sb-field::after, .sb-pray::after, .sb-circles::after, .listen::after {
+  .sb-field::after, .sb-pray::after, .sb-circles::after, .sb-along::after, .listen::after {
     content: ''; position: absolute; inset: 0; border-radius: inherit; padding: 1.5px; pointer-events: none;
     background: linear-gradient(to bottom, var(--rim-light), var(--rim-dark) 34%, var(--rim-dark) 66%, var(--rim-light));
     -webkit-mask: linear-gradient(#000 0 0) content-box, linear-gradient(#000 0 0); -webkit-mask-composite: xor;
@@ -1112,8 +1127,8 @@ button.link.dc-or { display: block; margin: 4px 0 8px; padding: 6px 0; font-size
 
 /* Dark: on a small round button the bright top and bottom of the rim meet
    and read as a white ring. A softer light keeps it glass, not outlined. */
-:root[data-theme='dark'] .sb-circles, :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] .sb-circles, :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }
+:root[data-theme='dark'] .sb-circles, :root[data-theme='dark'] .sb-along, :root[data-theme='dark'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .sb-circles, :root[data-theme='system'] .sb-along, :root[data-theme='system'] .sb-mini .sb-field { --rim-light: rgba(255,255,255,.26); } }
 
 /* ---- big screens: bigger words, on a page ----
    An iPad or a computer has room: the words grow with the screen by
@@ -1265,18 +1280,18 @@ body.selecting .spread-turn { display: none; }
 /* ---- the phone on its side (src/sideways.tsx) ----
    The bars picked in Settings slide away as you read on, so the words fill
    the screen; only moved and faded, nothing redrawn, so it stays smooth. */
-header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3s cubic-bezier(.2, .8, .2, 1), opacity .25s; }
+header.top, .sb-field, .listen, .sb-circles, .sb-pray, .sb-along { transition: translate .3s cubic-bezier(.2, .8, .2, 1), opacity .25s; }
 @media (orientation: landscape) and (max-height: 500px) and (hover: none) {
   :root.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
   :root.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
-  :root.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
+  :root.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray, .sb-along) {
     translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
   }
 }
 /* Recording mode does the same whichever way the phone is held. */
 :root.recording.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
 :root.recording.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
-:root.recording.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
+:root.recording.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray, .sb-along) {
   translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
 }
 
@@ -1297,7 +1312,7 @@ header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3
   height: calc(30px + env(safe-area-inset-top)); display: flex; justify-content: center; -webkit-tap-highlight-color: transparent;
 }
 .away-edge span { margin-top: calc(4px + env(safe-area-inset-top)); width: 44px; height: 4px; border-radius: 2px; background: color-mix(in srgb, var(--muted) 35%, transparent); }
-@media (prefers-reduced-motion: reduce) { header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: none; } }
+@media (prefers-reduced-motion: reduce) { header.top, .sb-field, .listen, .sb-circles, .sb-pray, .sb-along { transition: none; } }
 /* Before a device link is taken in: one card, asking first. Same glass rim
    as the other pop-up panels. */
 .move-ask { position: fixed; inset: 0; overflow: auto; display: flex; align-items: center; justify-content: center; padding: 16px calc(16px + env(safe-area-inset-right)) 16px calc(16px + env(safe-area-inset-left)); box-sizing: border-box; background: var(--bg, transparent); }
@@ -1410,3 +1425,33 @@ body.selecting .continue { display: none; }
 .audio-pick .what { color: var(--muted); font-size: 15px; line-height: 1.35; }
 .audio-note { margin: 0; color: var(--muted); font-size: 15px; }
 
+/* Send a suggestion (Settings): a big box to write in, then one big Send. */
+.suggest-field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; font-weight: 600; }
+.suggest-text { font: 17px/1.45 var(--sans); color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; min-height: 9.5em; resize: vertical; width: 100%; }
+.suggest-field .move-input { width: 100%; font-weight: 400; }
+.suggest-send { display: block; width: 100%; min-height: 52px; margin: 8px 0 26px; border-radius: 26px; font-size: 18px; font-weight: 700; }
+.suggest-error { font-weight: 600; }
+.suggest-thanks { font-size: 19px; margin: 18px 0 8px; }
+.suggest-kind { display: flex; width: 100%; margin: 0 0 14px; border-radius: 23px; }
+.suggest-kind button { flex: 1; min-height: 46px; font-size: 17px; font-weight: 600; }
+.suggest-where { display: flex; align-items: center; gap: 12px; margin: -4px 0 18px; flex-wrap: wrap; }
+.suggest-where button { min-height: 46px; border-radius: 23px; padding: 8px 18px; font-weight: 600; display: inline-flex; align-items: center; gap: 8px; }
+.suggest-marked { font-weight: 700; color: var(--accent); }
+.suggest-where { flex-direction: column; align-items: stretch; }
+.suggest-where-row { display: flex; align-items: center; gap: 10px 12px; flex-wrap: wrap; }
+.suggest-show { align-self: flex-start; }
+.suggest-how { margin: 2px 4px 0; }
+.suggest-steps { margin: 4px 0 0; padding: 10px 12px 10px 34px; max-height: 14em; overflow: auto; border: 1px solid var(--line); border-radius: 12px;
+  background: var(--surface); font: 13px/1.45 ui-monospace, SFMono-Regular, Menlo, monospace; color: var(--muted); overflow-wrap: anywhere; }
+/* Show where: the page stays as it is, with one quiet line at the top. */
+/* Show what happens: a small pill under the top bar while the steps are
+   written down. Only the pill takes taps; the app works as usual under it. */
+.steps-pill { position: fixed; z-index: 2000; left: 50%; transform: translateX(-50%); top: calc(max(10px, env(safe-area-inset-top)) + 60px);
+  display: flex; align-items: center; gap: 10px; padding: 5px 5px 5px 16px; border-radius: 30px; white-space: nowrap;
+  background: var(--surface); border: 1px solid var(--line); box-shadow: 0 6px 24px rgba(0,0,0,.18); font-weight: 600; font-size: 17px; color: var(--text); }
+.steps-pill button { min-height: 46px; border-radius: 23px; padding: 8px 20px; font-size: 17px; font-weight: 700; }
+.steps-n { color: var(--muted); font-weight: 500; font-variant-numeric: tabular-nums; }
+.steps-dot { display: inline-block; flex: none; width: 12px; height: 12px; border-radius: 50%; background: #d43b3b; }
+.steps-pill .steps-dot { animation: steps-dot 2s ease-in-out infinite; }
+@keyframes steps-dot { 50% { opacity: .35; } }
+@media (prefers-reduced-motion: reduce) { .steps-pill .steps-dot { animation: none; } }

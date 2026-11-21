@@ -9,7 +9,7 @@ import { canHear } from './listen'
 import { Glyph } from './gesture'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -17,6 +17,7 @@ import { checkForUpdate, useUpdate } from './lib/update'
 import { hasContent } from './lib/marks'
 import { QUICK, draw, penAllowed } from './lib/pen'
 import { AccountSection } from './account'
+import { canSuggest, reopenReport, SuggestPage } from './suggest'
 import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
@@ -124,15 +125,16 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
+type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest'
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
+  suggest: N_('Report a problem'),
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
-  const [page, setPage] = useState<Page>('home')
+  const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : 'home')
   const back = () => setPage('home')
   return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : 1 }
 }
@@ -455,6 +457,9 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   // page says so, and Show me opens that bar on a verse in view.
   if (page === 'audio') return <>
     <AudioHow />
+    <div class="field"><span>{t('Read along')}</span>
+      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.')}</label>
+    </div>
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">
         {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
@@ -469,6 +474,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'sync') return <AccountSection />
   if (page === 'language') return <LanguagePage />
   if (page === 'recording') return <RecordingPage />
+  if (page === 'suggest') return <SuggestPage onDone={() => setPage('home')} />
 
   if (page === 'data') return <>
     <DataTools />
@@ -543,6 +549,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
           {homeScreenHelps() && <Row icon={<AddHomeIcon size={24} />} label={isIPhone() || isAndroid() ? t('Put it on your Home Screen') : t('Install it as an app')}
             sub={t('Opens like an app, works offline')} onClick={openHomeScreen} />}
           <Row icon={<CompassIcon size={24} />} label={t('Take the tour')} sub={t('A one-minute look around the app')} onClick={openTour} />
+          {canSuggest() && <Row icon={<SuggestIcon size={24} />} label={t('Report a problem')} sub={t('Or send a suggestion')} onClick={() => setPage('suggest')} />}
           <Row icon={<InfoIcon size={24} />} label={t('About')} onClick={() => setPage('about')} />
         </div>
       </section>

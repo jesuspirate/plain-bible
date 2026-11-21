@@ -12,10 +12,10 @@ import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, inCircles, openCircles, openPrayer, readPath, SEARCH_EVENT, TONES, useApp } from './state'
+import { go, inCircles, openCircles, openPrayer, readHere, readPath, SEARCH_EVENT, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
-import { CircleIcon, CloseIcon } from './icons'
+import { CircleIcon, CloseIcon, ReadIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
@@ -42,6 +42,18 @@ function PrayButton() {
       </button>
       {picker}
     </>
+  )
+}
+
+/** Read along, if ticked under Audio: a small glass button just above 🙏,
+ *  quieter than it. It reads on from the verse you picked, or else the verse
+ *  at the top of the screen. While reading aloud it steps aside: the reading
+ *  bar has the pause and the X. */
+function AlongButton() {
+  return (
+    <button type="button" class="sb-along" aria-label={t('Read along')} title={t('Read along')} onClick={readHere}>
+      <ReadIcon size={26} />
+    </button>
   )
 }
 
@@ -850,7 +862,9 @@ export function SearchBar({ here, mini, above }: {
         {/* Circles, then prayer, always one tap away just right of search.
             🙏 opens the glowing microphone over the page. */}
         {!open && SYNC_URL && <CirclesButton />}
-        {!open && <PrayButton />}
+        {!open && (settings.alongButton && here && !aloud
+          ? <span class="sb-pray-spot"><AlongButton /><PrayButton /></span>
+          : <PrayButton />)}
         {/* Pressing Cancel mustn't take the focus from the field first: on a
             Mac that hides the strip at the bottom, the bar drops under the
             pointer, and the click misses Cancel. */}

@@ -11,6 +11,7 @@ import { send, vapidPublic, type Subscription, type Vapid } from './push'
 import { APNS_PREFIX, APNS_TOKEN, isApnsEnv, sendApns, type Apns } from './apns'
 import { checkNostrEvent, NOSTR_WRAP } from './nostr'
 import { plainBookName } from '../../src/lib/bookList'
+import { suggestionMail } from './suggest'
 
 export interface Env {
   DB: D1Database
@@ -269,6 +270,52 @@ async function tellMaker(env: Env, subject: string, text: string) {
     headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
     body: JSON.stringify({ from: env.EMAIL_FROM, to: [env.REPORT_EMAIL || 'hello@myquietbible.com'], subject, text }),
   }).then(r => { if (!r.ok) console.error('maker email', r.status) }, e => console.error('maker email', e))
+}
+
+// ---------------------------------------------------------------------------
+// Suggestions: anyone, signed in or not, can write to the app's maker from
+// Settings. It's sent by email (to REPORT_EMAIL) and never stored. A reply
+// address only if the person types one, then Reply in the mail answers them.
+// The app adds its version, kind of device and language, nothing else.
+
+const SUGGEST_PER_HOUR = 5
+const SUGGEST_PER_DAY = 15
+const SUGGEST_ALL_PER_DAY = 300
+
+async function suggestRoute(req: Request, env: Env) {
+  if (!emailOn(env)) throw new HttpError(404, 'Suggestions aren’t set up yet.')
+  const made = suggestionMail(await readJson(req))
+  if (!made.ok) {
+    if (made.why === 'empty') throw new HttpError(400, 'Write something first.')
+    if (made.why === 'long') throw new HttpError(413, 'That’s a bit long. Please make it shorter.')
+    throw new HttpError(400, 'That email address doesn’t look right.')
+  }
+  const { mail } = made
+  const db = env.DB, now = Date.now(), ip = await ipKey(req)
+  const [here, all] = await Promise.all([
+    db.prepare('SELECT COUNT(*) AS n, COUNT(CASE WHEN at > ? THEN 1 END) AS h FROM suggest_sends WHERE ip = ? AND at > ?').bind(now - HOUR, ip, now - DAY).first<{ n: number; h: number }>(),
+    db.prepare('SELECT COUNT(*) AS n FROM suggest_sends WHERE at > ?').bind(now - DAY).first<{ n: number }>(),
+  ])
+  if ((here?.h ?? 0) >= SUGGEST_PER_HOUR || (here?.n ?? 0) >= SUGGEST_PER_DAY || (all?.n ?? 0) >= SUGGEST_ALL_PER_DAY) {
+    throw new HttpError(429, 'Too many messages for now. Please try again tomorrow.')
+  }
+  await db.batch([
+    db.prepare('DELETE FROM suggest_sends WHERE at < ?').bind(now - DAY),
+    db.prepare('INSERT INTO suggest_sends (ip, at) VALUES (?, ?)').bind(ip, now),
+  ])
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: env.EMAIL_FROM, to: [env.REPORT_EMAIL || 'hello@myquietbible.com'], subject: mail.subject, text: mail.text,
+      ...(mail.replyTo ? { reply_to: mail.replyTo } : {}),
+    }),
+  }).catch(() => null)
+  if (!res?.ok) {
+    console.error("report not sent", res?.status)
+    throw new HttpError(502, 'It couldn’t be sent. Try again in a few minutes.')
+  }
+  return json({ ok: true })
 }
 
 async function emailStart(req: Request, env: Env) {
@@ -1686,6 +1733,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
 
   switch (key) {
     case 'GET /hello': return helloRoute(req, env)
+    case 'POST /suggest': return suggestRoute(req, env)
     case 'GET /stats': case 'POST /stats': return statsRoute(req, env)
     case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env), apns: !!apns(env) })
 
