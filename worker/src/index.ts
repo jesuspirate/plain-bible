@@ -1381,23 +1381,24 @@ const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;
 // (no images, nothing fetched, nothing moving), calm console cards. Always
 // dark, with big bright text for easy reading.
 const STARS = [
-  ['12% 18%', '#fff', 1.6], ['27% 72%', '#cfe8ff', 1.2], ['41% 33%', '#fff', 1], ['58% 81%', '#ffe9c4', 1.4], ['66% 12%', '#fff', 1.2],
-  ['79% 47%', '#cfe8ff', 1.6], ['91% 76%', '#fff', 1], ['6% 58%', '#ffe9c4', 1], ['34% 91%', '#fff', 1.2], ['85% 22%', '#fff', 1],
-  ['50% 55%', '#cfe8ff', 1], ['19% 40%', '#fff', 1], ['72% 64%', '#fff', 1.2], ['96% 40%', '#cfe8ff', 1.2], ['3% 90%', '#fff', 1.4],
-].map(([at, c, r]) => `radial-gradient(${r}px ${r}px at ${at},${c} 98%,transparent)`).join(',')
+  ['12% 18%', '#ffffff', 1.3], ['27% 72%', '#cfe8ff', 1], ['41% 33%', '#ffffff', 1], ['58% 81%', '#ffe9c4', 1.2], ['66% 12%', '#ffffff', 1],
+  ['79% 47%', '#cfe8ff', 1.3], ['91% 76%', '#ffffff', 1], ['6% 58%', '#ffe9c4', 1], ['34% 91%', '#ffffff', 1], ['85% 22%', '#ffffff', 1],
+  ['50% 55%', '#cfe8ff', 1], ['19% 40%', '#ffffff', 1], ['72% 64%', '#ffffff', 1], ['96% 40%', '#cfe8ff', 1], ['3% 90%', '#ffffff', 1.2],
+// Faint on purpose: the stars sit far behind, the numbers come first.
+].map(([at, c, r]) => `radial-gradient(${r}px ${r}px at ${at},${c}55 98%,transparent)`).join(',')
 const STATS_STYLE = `html{background:${STARS},#05060f;background-size:240px 240px;background-attachment:fixed;color-scheme:dark}
 body{font:20px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;max-width:46em;margin:0 auto;padding:28px 16px 56px;color:#eef3ff;background:transparent;min-height:100vh}
 body:before,body:after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none}
 body:before{background:radial-gradient(ellipse 60% 40% at 85% 8%,#2a1d5244,transparent 70%)}
 body:after{background:radial-gradient(circle at 50% 100%,#0c2a4a 0,#0a1f38 58%,#4fa8e0aa 59.3%,#1d4f7a55 60.5%,transparent 66%) 50% calc(100% + 72vmax)/150vmax 150vmax no-repeat}
 h1{font-size:1.7em;line-height:1.15;margin:0 0 24px;letter-spacing:.05em;text-transform:uppercase;color:#bfe9f7;font-weight:600}
-h1 small{display:block;font-size:.5em;letter-spacing:.02em;color:#e9d6a8;font-weight:normal;text-transform:none;margin-top:8px}
+.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none;font-style:italic}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
 h2{font-size:1.05em;letter-spacing:.06em;text-transform:uppercase;color:#bfe9f7;margin:32px 0 12px;border-bottom:1px solid #9fd8f033;padding-bottom:6px}
 h2:before{content:'\\25B8  ';color:#e9d6a8}
 .grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px;margin-top:20px}
-.card{border:2px solid #9fd8f040;border-radius:14px;padding:14px 16px;background:#0a1226e0}
+.card{border:2px solid #9fd8f040;border-radius:14px;padding:14px 16px;background:#0a1226f7}
 .card b{display:block;font-size:2.4em;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}.card span{color:#b9c7e6;font-size:.85em}
-table{border-collapse:collapse;margin-top:12px;width:100%;background:#0a1226d0;border-radius:12px}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #9fd8f026;font-variant-numeric:tabular-nums}
+table{border-collapse:collapse;margin-top:12px;width:100%;background:#0a1226f7;border-radius:12px}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #9fd8f026;font-variant-numeric:tabular-nums}
 th{color:#bfe9f7}td:first-child,th:first-child{text-align:left}p.note{color:#b9c7e6;font-size:.85em}
 input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #9fd8f066;width:100%;box-sizing:border-box;margin-top:10px;background:#0a1226;color:#eef3ff}
 button{background:#e9d6a8;color:#1a1408;border-color:#e9d6a8;font-weight:bold;min-height:56px;cursor:pointer}p.error{color:#ff8a80;font-weight:bold}
@@ -1409,9 +1410,11 @@ button{background:#e9d6a8;color:#1a1408;border-color:#e9d6a8;font-weight:bold;mi
 .report button.keep{font-size:1.2em}
 .report .ask{border:2px solid var(--red);border-radius:12px;padding:12px 14px;margin-top:6px}.report .ask p{margin:0 0 4px;font-weight:bold;font-size:1.1em}
 .report .ask small{display:block;color:#b9c7e6;margin-bottom:10px}
-.mark{margin:20px 0 0;padding:14px 18px;border-left:3px solid #e9d6a8;background:#0a1226c0;border-radius:0 12px 12px 0;color:#f3e6c4;font-size:1.05em}`
+.mark{margin:20px 0 0;padding:14px 18px;border-left:3px solid #e9d6a8;background:#0a1226f2;border-radius:0 12px 12px 0;color:#f3e6c4;font-size:1.05em}`
+// Under the title, a word from God rather than about the maker.
+const VERSE = `<p class="verse" lang="fr"><a href="https://myquietbible.com/#/read/LSG/Acts/5?v=29">« Pierre et les apôtres répondirent: Il faut obéir à Dieu plutôt qu’aux hommes. »<span>Actes 5:29 (LSG)</span></a></p>`
 const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>MQB Command Center</title><style>${STATS_STYLE}</style></head><body><h1>MQB Command Center<small>A quiet ship watching over the world</small></h1>${body}</body></html>`,
+<meta name="robots" content="noindex"><title>MQB Command Center</title><style>${STATS_STYLE}</style></head><body><h1>MQB Command Center</h1>${VERSE}${body}</body></html>`,
   // Never shown inside another site's frame, where a page could line its own
   // buttons up over "Say yes" or "Remove" once the word is typed in.
   { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer',
