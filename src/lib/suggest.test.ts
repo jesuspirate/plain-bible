@@ -58,3 +58,26 @@ describe('problem reports', () => {
     expect(r.ok && r.mail.text).not.toContain('Screen:')
   })
 })
+
+describe('suggestionMail cleans what an older app sent', () => {
+  const KEY43 = 'Zm9vYmFyYmF6cXV4Zm9vYmFyYmF6cXV4Zm9vYmFyYmE'
+  it('never mails a link key, a code or search words', () => {
+    const r = suggestionMail({
+      kind: 'problem', text: 'Stuck', screen: `#/join?i=abcdefghijklmnopqrstuv&k=${KEY43}`,
+      steps: [`0:00 Started on #/move/abc.${KEY43} · 390×844`, '0:02 Screen #/search?q=private%20words'],
+      where: `“1 2 3 4 5 6” [p.c-bigcode] at 50% across, 40% down`,
+      errors: [`URL 'https://myquietbible.com/#/join?d=x&k=${KEY43}' cannot be created`],
+    })
+    if (!r.ok) throw new Error('expected ok')
+    expect(r.mail.text).not.toContain(KEY43)
+    expect(r.mail.text).not.toContain('private')
+    expect(r.mail.text).toContain('Screen: #/join?i=…&k=…')
+    expect(r.mail.text).toContain('0:00 Started on #/move/… · 390×844')
+    expect(r.mail.text).toContain('0:02 Screen #/search?q=…')
+  })
+  it('hides a code someone tapped, in an older app\'s spot', () => {
+    const r = suggestionMail({ kind: 'problem', text: 'x', where: '“1 2 3 4 5 6” [p.c-bigcode] at 50% across, 40% down' })
+    if (!r.ok) throw new Error('expected ok')
+    expect(r.mail.text).toContain('Spot shown: “…” [p.c-bigcode] at 50% across, 40% down')
+  })
+})

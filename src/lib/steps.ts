@@ -6,6 +6,9 @@
 // until the person sends the report (and can read them first); they survive
 // the app reloading, since that can be the very problem.
 
+import { screenOf, scrub, scrubLabel } from '../../worker/src/scrub'
+export { screenOf }
+
 const KEY = 'plain-bible:report-steps'
 const MAX = 120
 /** A recording older than this isn't picked up again after a reload. */
@@ -26,7 +29,7 @@ export function addStep(what: string, now = Date.now()) {
   // The same thing twice in a row (a held key, a second scroll) is one step.
   if (what === lastWhat) return
   lastWhat = what
-  const line = `${clock(now - rec.t0)} ${what}`.replace(/[\u0000-\u001f\u007f]+/g, ' ').slice(0, 240)
+  const line = `${clock(now - rec.t0)} ${scrub(what)}`.replace(/[\u0000-\u001f\u007f]+/g, ' ').slice(0, 240)
   rec.steps.push(line)
   if (rec.steps.length > MAX) { rec.steps.splice(1, 1); rec.dropped++ }
   changed()
@@ -38,24 +41,9 @@ export const recordedSteps = (): string[] => (rec.dropped
   ? [rec.steps[0], `… ${rec.dropped} earlier steps not kept`, ...rec.steps.slice(1)]
   : [...rec.steps]
 // Steps kept by an older version wrote the whole address: clean them too.
-).map(s => s.replace(/#\/\S*/g, screenOf))
+).map(scrub)
 export function clearSteps() { rec = { on: false, t0: 0, steps: [], dropped: 0 }; try { localStorage.removeItem(KEY) } catch { /* */ } listeners.forEach(f => f()) }
 
-/** The screen, for a report: where in the app, never what it carries. A
- *  link can hold a secret in the address (a circle invite's key, a device
- *  link's key) and a search holds the typed words, so only the path and a few
- *  plain numbers are kept; anything else is shown as … */
-const KEEP = new Set(['v', 'e', 'at', 'p', 'b', 's'])
-const TOKEN = /[A-Za-z0-9_-]{20,}/
-export function screenOf(hash: string): string {
-  const [path, query] = hash.replace(/^#\/?/, '').split('?', 2)
-  const parts = path.split('/').filter(Boolean)
-  // A device link is nothing but its secret.
-  const kept = parts[0] === 'move' ? ['move', '…'] : parts.map(p => TOKEN.test(p) ? '…' : p)
-  const params = [...new URLSearchParams(query ?? '')].map(([k, v]) =>
-    KEEP.has(k) && /^[\w,.:-]{0,40}$/.test(v) && !TOKEN.test(v) ? `${k}=${v}` : `${k.replace(/[^\w-]/g, '').slice(0, 12)}=…`)
-  return ('#/' + kept.join('/') + (params.length ? '?' + params.join('&') : '')).slice(0, 120)
-}
 const screen = () => screenOf(location.hash)
 
 // ---------------------------------------------------------------------------
@@ -85,7 +73,7 @@ export function pathOf(el: Element | null): string {
 
 /** A few plain words for the thing at a spot: its name, where it sits, and where on the screen. */
 export function describeSpot(el: Element | null, x: number, y: number, w: number, h: number): string {
-  let label = nameOf(el)
+  let label = scrubLabel(nameOf(el))
   if (label.length > 60) label = label.slice(0, 59) + '…'
   return `${label ? `“${label}” ` : ''}[${pathOf(el)}] at ${Math.round(x / w * 100)}% across, ${Math.round(y / h * 100)}% down`
 }

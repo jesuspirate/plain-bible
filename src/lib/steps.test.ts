@@ -76,6 +76,10 @@ describe('steps', () => {
     expect(all).toMatch(/Started on #\/join\?i=…&k=… /)
     expect(all).toMatch(/App reloaded · #\/move\/…/)
   })
+  it('never writes a one-time code someone tapped', () => {
+    const code = { ...el('P', 'c-bigcode', body, '481 592'), getAttribute: (k: string) => k === 'aria-label' ? '4 8 1 5 9 2' : null }
+    expect(describeSpot(code as unknown as Element, 50, 100, 100, 200)).toBe('“…” [p.c-bigcode] at 50% across, 50% down')
+  })
   it('cleans steps an older version saved with the whole address', () => {
     startSteps(0)
     addStep(`Screen #/join?i=${ID22}&k=${KEY43}`, 1_000)
