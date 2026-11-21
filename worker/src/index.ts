@@ -1462,7 +1462,7 @@ body:before,body:after{content:'';position:fixed;inset:0;z-index:-1;pointer-even
 body:before{background:radial-gradient(ellipse 60% 40% at 85% 8%,#2a1d5244,transparent 70%)}
 body:after{background:radial-gradient(circle at 50% 100%,#0c2a4a 0,#0a1f38 58%,#4fa8e0aa 59.3%,#1d4f7a55 60.5%,transparent 66%) 50% calc(100% + 72vmax)/150vmax 150vmax no-repeat}
 h1{font-size:1.7em;line-height:1.15;margin:0 0 24px;letter-spacing:.05em;text-transform:uppercase;color:#bfe9f7;font-weight:600}
-.why{margin:-2px 0 10px}.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
+.why{margin:-2px 0 10px}.own{display:block;padding:14px 0 4px}.own input{margin-top:8px;max-width:8em;display:block}.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
 h2{font-size:1.05em;letter-spacing:.06em;text-transform:uppercase;color:#bfe9f7;margin:32px 0 12px;border-bottom:1px solid #9fd8f033;padding-bottom:6px}
 h2:before{content:'\\25B8  ';color:#e9d6a8}
 /* Tiles share each row; a short last row stretches, so no tile ever sits beside an empty gap. */
@@ -1576,6 +1576,7 @@ function chooser(sections: Section[], layout: Layout, key: string) {
   return `<details class="choose"><summary>Choose what shows</summary><p class="note">Tiles at 0 stay out of the way. Choose Show to keep one in sight anyway, or Hide to put one away.</p><form method="post" action="/stats"><input type="hidden" name="key" value="${esc(key)}">
 ${sections.map(sec => `<h3>${esc(sec.title)}</h3>${sec.tiles.map(t => row(t.id, t.label)).join('')}${(sec.groups ?? []).map(g => row(g.id, g.title)).join('')}`).join('')}
 <h3>Other</h3>${row('mark', 'Devices found, without an ad')}${row('table', 'Day by day table')}
+<label class="own">Your own family’s devices, left out of All devices ever<input type="number" name="own" min="0" max="99" inputmode="numeric" value="${esc(layout.get('own') ?? '0')}"></label>
 <button type="submit" name="act" value="layout">Save</button></form></details>`
 }
 
@@ -1623,7 +1624,10 @@ async function statsRoute(req: Request, env: Env) {
   if (act === 'layout') {
     const listed = sent!.getAll('all').map(String).filter(id => /^[a-z0-9-]{1,40}$/.test(id)).slice(0, 100)
     const set = listed.map(id => [id, String(sent!.get(`how:${id}`) ?? '')] as const).filter(([, how]) => how === 'show' || how === 'hide')
-    await env.DB.batch([env.DB.prepare('DELETE FROM stats_layout'), ...set.map(([id, how]) => env.DB.prepare('INSERT OR REPLACE INTO stats_layout (id, how) VALUES (?, ?)').bind(id, how))])
+    // How many of the devices are the maker's own family's, left out of Lifetime.
+    const own = Math.min(99, Math.max(0, Math.floor(Number(sent!.get('own') ?? 0)) || 0))
+    await env.DB.batch([env.DB.prepare('DELETE FROM stats_layout'), ...[...set, ...(own ? [['own', String(own)] as const] : [])]
+      .map(([id, how]) => env.DB.prepare('INSERT OR REPLACE INTO stats_layout (id, how) VALUES (?, ?)').bind(id, how))])
   }
   const leadAsks = (await env.DB.prepare('SELECT user_id, note, asked FROM door_leaders WHERE allowed IS NULL ORDER BY asked LIMIT 20')
     .all<{ user_id: string; note: string | null; asked: number }>()).results
@@ -1665,8 +1669,10 @@ ${reportActs(r)}</div>`).join('')}` : ''
     env.DB.prepare('SELECT id, how FROM stats_layout').all<{ id: string; how: string }>(),
   ])
   const layout: Layout = new Map(hiddenRows.results.map(r => [r.id, r.how]))
+  const own = Number(layout.get('own') ?? 0) || 0
   const get = (period: string, kind: string) => rows.results.find(r => r.period === period && r.kind === kind)?.n ?? 0
   const sum = (kind: string, from = '') => rows.results.filter(r => r.kind === kind && r.period >= from).reduce((a, r) => a + r.n, 0)
+  const ever = Math.max(0, sum('new') - own)
   const since30 = new Date(now.getTime() - 29 * DAY).toISOString().slice(0, 10)
   const since7 = new Date(now.getTime() - 6 * DAY).toISOString().slice(0, 10)
   const n = (x: number) => x.toLocaleString('en')
@@ -1720,7 +1726,7 @@ ${reportActs(r)}</div>`).join('')}` : ''
       { id: 'languages', title: 'App languages', tiles: split('lang:', langName) },
     ] },
     { title: 'Lifetime', tiles: [
-      { id: 'ever', label: 'All devices ever', value: n(sum('new')), sub: 'counted since the count began' },
+      { id: 'ever', label: 'All devices ever', value: n(ever), sub: own ? `since the count began, not counting your own ${n(own)}` : 'counted since the count began' },
       { id: 'accounts', label: 'Accounts', value: n(accounts), sub: 'signed up to sync' },
       { id: 'circles', label: 'Circles', value: n(circles), sub: 'made so far' },
       { id: 'notified', label: 'Notifications on', value: n(notified), sub: 'accounts hearing from their circles' },
@@ -1738,7 +1744,6 @@ ${reportActs(r)}</div>`).join('')}` : ''
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
   // A quiet word among the stars: every device here found the app on its
   // own, with no ads and no social media. No target, no countdown.
-  const ever = sum('new')
   const found = ever && layout.get('mark') !== 'hide' ? `${n(ever)} device${ever === 1 ? ' has' : 's have'} found My Quiet Bible, all without a single ad.` : ''
   return statsPage(`${reportList}${leadList}${found ? `<p class="mark">\u2726 ${esc(found)}</p>` : ''}
 ${sections.map(sec => sectionHtml(sec, layout)).join('')}
