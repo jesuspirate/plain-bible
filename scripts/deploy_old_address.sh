@@ -13,10 +13,13 @@ export CI=1
 W="$ROOT/worker/node_modules/.bin/wrangler"
 # Away from worker/wrangler.toml, which describes the sync Worker, not this.
 cd "$(mktemp -d)"
-"$W" pages project create "$PROJECT" --production-branch main >&2 || true
+cf() { curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H 'Content-Type: application/json' "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$PROJECT$1" "${@:2}"; }
+# Made once. Asking first keeps a red "already exists" error out of every deploy log.
+if ! (cf "" || true) | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{process.exit(JSON.parse(s).success?0:1)}catch{process.exit(1)}})'; then
+  "$W" pages project create "$PROJECT" --production-branch main >&2 || true
+fi
 "$W" pages deploy "$ROOT/scripts/old-address" --project-name "$PROJECT" --branch main --commit-dirty=true
 
-cf() { curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H 'Content-Type: application/json' "https://api.cloudflare.com/client/v4/accounts/$CLOUDFLARE_ACCOUNT_ID/pages/projects/$PROJECT$1" "${@:2}"; }
 # Attaching the domain is harmless before DNS points here: it waits as pending.
 cf /domains -X POST --data "{\"name\":\"$DOMAIN\"}" > /dev/null || true
 sub=$(cf "" | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{process.stdout.write(JSON.parse(s).result.subdomain||"")}catch{}})')

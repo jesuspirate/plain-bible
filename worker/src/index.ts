@@ -1462,7 +1462,7 @@ body:before,body:after{content:'';position:fixed;inset:0;z-index:-1;pointer-even
 body:before{background:radial-gradient(ellipse 60% 40% at 85% 8%,#2a1d5244,transparent 70%)}
 body:after{background:radial-gradient(circle at 50% 100%,#0c2a4a 0,#0a1f38 58%,#4fa8e0aa 59.3%,#1d4f7a55 60.5%,transparent 66%) 50% calc(100% + 72vmax)/150vmax 150vmax no-repeat}
 h1{font-size:1.7em;line-height:1.15;margin:0 0 24px;letter-spacing:.05em;text-transform:uppercase;color:#bfe9f7;font-weight:600}
-.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
+.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}small.why{display:block;margin:-4px 0 10px;font-size:.75em;color:#8f9bb8}
 h2{font-size:1.05em;letter-spacing:.06em;text-transform:uppercase;color:#bfe9f7;margin:32px 0 12px;border-bottom:1px solid #9fd8f033;padding-bottom:6px}
 h2:before{content:'\\25B8  ';color:#e9d6a8}
 /* Tiles share each row; a short last row stretches, so no tile ever sits beside an empty gap. */
@@ -1490,28 +1490,30 @@ button{background:#e9d6a8;color:#1a1408;border-color:#e9d6a8;font-weight:bold;mi
 // Under the title, a word from God rather than about the maker: Acts 5:29,
 // or one of his own bookmarks (see myVerse).
 const ACTS_5_29 = '« Pierre et les apôtres répondirent: Il faut obéir à Dieu plutôt qu’aux hommes. »'
-const verseLine = (v?: MyVerse) => v
+const verseLine = (v?: MyVerse | string) => v && typeof v === 'object'
   ? `<p class="verse" lang="${esc(v.lang)}"><a href="${esc(v.href)}"><span class="t" id="vt">…</span><span>${esc(v.ref)}</span></a></p>
 <script>(()=>{const s=document.getElementById('vt'),a=s.parentNode,v=${JSON.stringify({ u: v.url, b: v.book, c: v.chapter, f: v.from, t: v.to })};
-const no=()=>{s.textContent=${JSON.stringify(ACTS_5_29)};a.href='https://myquietbible.com/#/read/LSG/Acts/5?v=29';a.lastChild.textContent='Actes 5:29 (LSG)'};
-fetch(v.u).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const ch=d.books[v.b][v.c-1],w=[];for(let i=v.f;i<=v.t;i++)if(ch[i-1])w.push(ch[i-1].replace(/\{([^{}|]*)\|[^{}]*\}/g,'$1'));
-if(!w.length)return no();s.textContent='« '+w.join(' ')+' »'}).catch(no)})()</script>`
-  : `<p class="verse" lang="fr"><a href="https://myquietbible.com/#/read/LSG/Acts/5?v=29"><span class="t">${ACTS_5_29}</span><span>Actes 5:29 (LSG)</span></a></p>`
+const no=e=>{s.textContent=${JSON.stringify(ACTS_5_29)};a.href='https://myquietbible.com/#/read/LSG/Acts/5?v=29';a.lastChild.textContent='Actes 5:29 (LSG)';
+const w=document.createElement('small');w.className='why';w.textContent='Your bookmark '+${JSON.stringify(v.ref)}+' could not be read ('+(e&&e.message||'no words')+').';a.parentNode.after(w)};
+fetch(v.u).then(r=>r.ok?r.json():Promise.reject(new Error('the Bible file answered '+r.status))).then(d=>{const ch=d.books[v.b][v.c-1],w=[];for(let i=v.f;i<=v.t;i++)if(ch[i-1])w.push(ch[i-1].replace(/\{([^{}|]*)\|[^{}]*\}/g,'$1'));
+if(!w.length)return no(new Error('no such verse in '+v.u.split('/').pop()));s.textContent='« '+w.join(' ')+' »'}).catch(no)})()</script>`
+  : `<p class="verse" lang="fr"><a href="https://myquietbible.com/#/read/LSG/Acts/5?v=29"><span class="t">${ACTS_5_29}</span><span>Actes 5:29 (LSG)</span></a></p>${v ? `<small class="why">${esc(v)}</small>` : ''}`
 interface MyVerse { lang: string; href: string; ref: string; url: string; book: string; chapter: number; from: number; to: number }
 /** One of the maker's bookmarks, picked at random each time the page opens,
  *  in his own Bible. Read from the one account STATS_EMAIL signs in to, and
  *  only its bookmarks; the words themselves are fetched by his browser from
  *  the app's site, like the app does. Nothing set or nothing saved: none. */
-async function myVerse(env: Env): Promise<MyVerse | undefined> {
-  if (!env.STATS_EMAIL || !env.EMAIL_SECRET) return
+async function myVerse(env: Env): Promise<MyVerse | string> {
+  if (!env.STATS_EMAIL) return 'Acts 5:29 shows because STATS_EMAIL is not set.'
+  if (!env.EMAIL_SECRET) return 'Acts 5:29 shows because email sign-in is not set up.'
   try {
     const hash = await emailHash(env, env.STATS_EMAIL.trim().toLowerCase())
     const row = await env.DB.prepare('SELECT d.body FROM emails e JOIN data d ON d.user_id = e.user_id WHERE e.hash = ?').bind(hash).first<{ body: string }>()
-    if (!row) return
+    if (!row) return 'Acts 5:29 shows because no account with saved data signs in with the email in STATS_EMAIL.'
     const doc = JSON.parse(row.body) as { marks?: Record<string, { b?: 1; v?: string }>; settings?: { version?: unknown; language?: unknown } }
     const keys = Object.entries(doc.marks ?? {}).filter(([, m]) => m?.b === 1).map(([k]) => k.split('.'))
       .map(([book, c, v]) => ({ book, chapter: +c, verse: +v })).filter(k => /^\w+$/.test(k.book) && k.chapter > 0 && k.verse > 0)
-    if (!keys.length) return
+    if (!keys.length) return 'Acts 5:29 shows because the account for STATS_EMAIL has no bookmarks yet.'
     // Bookmarks on neighbouring verses are one passage, as in Saved.
     const has = new Set(keys.map(k => `${k.book}.${k.chapter}.${k.verse}`))
     const starts = keys.filter(k => !has.has(`${k.book}.${k.chapter}.${k.verse - 1}`))
@@ -1528,9 +1530,9 @@ async function myVerse(env: Env): Promise<MyVerse | undefined> {
       href: `https://myquietbible.com/#/read/${version}/${pick.book}/${pick.chapter}?v=${pick.verse}${to > pick.verse ? `&e=${to}` : ''}`,
       url: `https://myquietbible.com/data/bibles/${version}.json`,
     }
-  } catch (e) { console.error('stats verse', e) }
+  } catch (e) { console.error('stats verse', e); return `Acts 5:29 shows because your bookmarks could not be read (${e instanceof Error ? e.message : e}).` }
 }
-const statsPage = (body: string, status = 200, verse?: MyVerse) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+const statsPage = (body: string, status = 200, verse?: MyVerse | string) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
 <meta name="robots" content="noindex"><title>MQB Observatory</title><style>${STATS_STYLE}</style></head><body><h1>MQB Observatory</h1>${verseLine(verse)}${body}</body></html>`,
   // Never shown inside another site's frame, where a page could line its own
   // buttons up over "Say yes" or "Remove" once the word is typed in.
