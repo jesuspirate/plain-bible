@@ -25,6 +25,7 @@ import { grow, keepCaretInView } from './lib/caret'
 import { QUICK, draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
 import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, useWide } from './lib/spread'
+import { tally } from './lib/tally'
 
 // After Try it now (Audio in Settings), the next verse bar shows which two
 // buttons are the audio ones: the fingertip taps each, with what it does.
@@ -81,6 +82,8 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => watchReading(), [])
   const turned = useRef(false)
   useEffect(() => { if (turned.current) dispatchEvent(new Event(TURN_EVENT)); turned.current = true }, [book, chapter])
+  // A chapter counts as read once it has stayed open half a minute (tally.ts).
+  useEffect(() => { const t = setTimeout(() => tally('ch'), 30_000); return () => clearTimeout(t) }, [book, chapter])
 
   // A version that isn't on the device can't open offline; it tries again
   // by itself once the connection is back.
@@ -526,6 +529,7 @@ export function Reader({ route }: { route: Route }) {
       if (had) delete next.b; else next.b = 1
       return { ...all, [key]: tidy(next as never) }
     })
+    if (!had) tally('bm')
     return !had
   }
   // Held still for half a second: bookmark (or unbookmark) the verse. While
@@ -1345,7 +1349,7 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
   const hasNote = notesCovering(marks, book, chapter, verses[0]).length > 0
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); if (patch.b === 1) tally('bm'); setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>
@@ -1404,7 +1408,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // One plain text with the link at its end, no separate title or url: the
   // Mac share sheet's Copy pasted the text and the link as two pieces, and
   // showed only the reference and the site, as if one verse went out.
-  const shareOut = () => canShare ? share({ text: `${quote}\n${link}` }) : copy(link)
+  const shareOut = () => { tally('sh'); return canShare ? share({ text: `${quote}\n${link}` }) : copy(link) }
 
   // Cmd+C / Ctrl+C copies the picked verses, like the Copy button, unless
   // you're typing somewhere or have dragged over some words to copy them.

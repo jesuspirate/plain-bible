@@ -32,6 +32,7 @@ import { Sheet } from './ui'
 import { nowPlaying } from './lib/nowplaying'
 import './circles.css'
 import { locale, t, tj, tn } from './i18n'
+import { tally } from './lib/tally'
 
 const NAME = 'plain-bible:circle-name'
 const lastName = () => { try { return localStorage.getItem(NAME) || '' } catch { return '' } }
@@ -1359,6 +1360,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           const b = await data.bible(request.version).catch(() => undefined), v = request.verse
           const size = renumbered(b, v.book) ? 0 : chapterSize(b, v.book, v.chapter)
           await shareVerse(pick, kind, toStandard(b, v), request.version, request.text, kind === 'note' ? theNote : words.trim(), size)
+          tally('sh')
         }
         // Shared already: a second tap won't send it there twice.
         setPicks(p => p.filter(x => x !== pick))

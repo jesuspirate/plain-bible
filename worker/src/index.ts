@@ -1406,6 +1406,9 @@ export function isoWeek(d: Date) {
 // The app's languages (src/i18n.ts): an id like "de" or "zh-hant". Emails and
 // notifications have words in English, French and Spanish; the others read English.
 const LANGS = ['en', 'fr', 'es']
+const KEEPS = ['7', '30', '90']
+const TALLIES = ['pr', 'ch', 'sh', 'bm']
+const PLATFORMS: [string, string][] = [['ios', 'iPhone & iPad app'], ['mac', 'Mac app'], ['android', 'Android app'], ['fedi', 'In Fedi'], ['phone', 'Phone browser'], ['computer', 'Computer browser']]
 const isLang = (l: string | null | undefined): l is string => !!l && /^[a-z]{2,3}(-han[st])?$/.test(l)
 const langName = (l: string) => { try { return new Intl.DisplayNames(['en'], { type: 'language' }).of(l.replace(/-(han[st])$/, (_, x: string) => '-' + x[0].toUpperCase() + x.slice(1))) ?? l } catch { return l } }
 
@@ -1421,8 +1424,23 @@ async function helloRoute(req: Request, env: Env) {
   if (q.get('month') === '1') counts.push([day.slice(0, 7), 'month'])
   const lang = q.get('lang')
   if (isLang(lang)) counts.push([day, `lang:${lang}`])
-  await env.DB.batch(counts.map(([period, kind]) =>
-    env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, 1) ON CONFLICT (period, kind) DO UPDATE SET n = n + 1').bind(period, kind)))
+  // Since its first hello under this count, and still opening a week, a
+  // month, three months later (each told once by the device).
+  if (q.get('start') === '1') counts.push([day, 'start'])
+  for (const n of (q.get('kept') ?? '').split(',')) if (KEEPS.includes(n)) counts.push([day, `kept:${n}`])
+  const bible = q.get('bible'), on = q.get('on'), h = Number(q.get('h') ?? NaN), wd = Number(q.get('wd') ?? NaN)
+  if (bible && /^[A-Za-z0-9_-]{1,20}$/.test(bible)) counts.push([day, `bible:${bible}`])
+  if (on && PLATFORMS.some(([id]) => id === on)) counts.push([day, `on:${on}`])
+  if (Number.isInteger(h) && h >= 0 && h < 24) counts.push([day, `hour:${h}`])
+  if (Number.isInteger(wd) && wd >= 0 && wd < 7) counts.push([day, `wd:${wd}`])
+  // How many prayers, chapters, shares and bookmarks since the last hello.
+  const adds: [string, string, number][] = counts.map(([period, kind]) => [period, kind, 1])
+  for (const k of TALLIES) {
+    const n = Number(q.get(k) ?? 0)
+    if (Number.isInteger(n) && n > 0) adds.push([day, `total:${k}`, Math.min(n, 500)])
+  }
+  await env.DB.batch(adds.map(([period, kind, n]) =>
+    env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, ?) ON CONFLICT (period, kind) DO UPDATE SET n = n + excluded.n').bind(period, kind, n)))
   return json({ ok: true })
 }
 
@@ -1447,7 +1465,13 @@ h1{font-size:1.7em;line-height:1.15;margin:0 0 24px;letter-spacing:.05em;text-tr
 .verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
 h2{font-size:1.05em;letter-spacing:.06em;text-transform:uppercase;color:#bfe9f7;margin:32px 0 12px;border-bottom:1px solid #9fd8f033;padding-bottom:6px}
 h2:before{content:'\\25B8  ';color:#e9d6a8}
-.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px;margin-top:20px}
+/* Tiles share each row; a short last row stretches, so no tile ever sits beside an empty gap. */
+.grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.card b.long{font-size:1.7em;line-height:1.4}@media (max-width:480px){.card b.long{font-size:1.25em}}.grid>.card{flex:1 1 calc((100% - (var(--cols,3) - 1) * 12px) / var(--cols,3));min-width:8em;box-sizing:border-box}
+h3{font-size:.85em;letter-spacing:.06em;text-transform:uppercase;color:#9fc3d6;margin:20px 0 0;font-weight:600}
+.choose{margin-top:36px;border:2px solid #9fd8f040;border-radius:14px;padding:4px 16px 16px;background:#0a1226f2}.choose summary{cursor:pointer;font-weight:bold;color:#bfe9f7;padding:14px 0;font-size:1.1em}
+.pick{border:0;border-bottom:1px solid #9fd8f01f;margin:0;padding:12px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.pick legend{float:left;width:100%;padding:0 0 8px;font-size:1em}
+.pick label{flex:1 1 6em;display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:2px solid #9fd8f040;border-radius:12px;cursor:pointer;color:#b9c7e6}
+.pick label:has(input:checked){border-color:#e9d6a8;color:#fff;font-weight:bold;background:#e9d6a81f}.pick input[type=radio]{width:22px;height:22px;margin:0;accent-color:#e9d6a8}
 .card{border:2px solid #9fd8f040;border-radius:14px;padding:14px 16px;background:#0a1226f7}
 .card b{display:block;font-size:2.4em;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}.card span{color:#b9c7e6;font-size:.85em}
 table{border-collapse:collapse;margin-top:12px;width:100%;background:#0a1226f7;border-radius:12px}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #9fd8f026;font-variant-numeric:tabular-nums}
@@ -1513,6 +1537,42 @@ const statsPage = (body: string, status = 200, verse?: MyVerse) => new Response(
   { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer',
     'Content-Security-Policy': "frame-ancestors 'none'", 'X-Frame-Options': 'DENY' } })
 
+/** One number on the numbers page. A tile at 0 stays out of the way unless
+ *  the maker asked to see it anyway (see chooser). */
+interface Tile { id: string; label: string; value: string; sub: string; zero?: boolean }
+/** Tiles that come and go together (a share of each Bible, say), shown or
+ *  hidden as one. */
+interface Group { id: string; title: string; tiles: Tile[] }
+interface Section { title: string; tiles: Tile[]; groups?: Group[] }
+/** Rows of even tiles: as few gaps in the last row as can be (4 tiles make
+ *  2 rows of 2, 7 make 4 and 3), so no tile sits alone under a full row. */
+const cols = (n: number) => n <= 3 ? n : [3, 4, 2].reduce((best, c) => (c - n % c) % c < (best - n % best) % best ? c : best)
+const gridHtml = (tiles: Tile[]) => `<div class="grid" style="--cols:${cols(tiles.length)}">${tiles.map(tileHtml).join('')}</div>`
+const tileHtml = (t: Tile) => `<div class="card">${esc(t.label)}<b${t.value.length > 6 ? ' class="long"' : ''}>${esc(t.value)}</b><span>${esc(t.sub)}</span></div>`
+type Layout = Map<string, string>
+const shows = (layout: Layout, id: string, zero: boolean) => layout.get(id) === 'show' || (!zero && layout.get(id) !== 'hide')
+function sectionHtml(sec: Section, layout: Layout) {
+  const isZero = (t: Tile) => !!t.zero || t.value === '0' || t.value === '0%'
+  const tiles = sec.tiles.filter(t => shows(layout, t.id, isZero(t)))
+  const groups = (sec.groups ?? []).filter(g => g.tiles.length && shows(layout, g.id, false))
+  if (!tiles.length && !groups.length) return ''
+  return `<h2>${esc(sec.title)}</h2>${tiles.length ? gridHtml(tiles) : ''}
+${groups.map(g => `<h3>${esc(g.title)}, last 30 days</h3>${gridHtml(g.tiles)}`).join('')}`
+}
+/** "Choose what shows": for each tile, Show (even at 0), Unless 0 (the
+ *  usual), or Hide. Big round choices, one row per tile. */
+function chooser(sections: Section[], layout: Layout, key: string) {
+  const row = (id: string, label: string) => {
+    const how = layout.get(id) ?? 'auto'
+    return `<fieldset class="pick"><legend>${esc(label)}</legend><input type="hidden" name="all" value="${esc(id)}">${([['show', 'Show'], ['auto', 'Unless 0'], ['hide', 'Hide']] as const)
+      .map(([v, l]) => `<label><input type="radio" name="how:${esc(id)}" value="${v}"${how === v ? ' checked' : ''}>${l}</label>`).join('')}</fieldset>`
+  }
+  return `<details class="choose"><summary>Choose what shows</summary><p class="note">Tiles at 0 stay out of the way. Choose Show to keep one in sight anyway, or Hide to put one away.</p><form method="post" action="/stats"><input type="hidden" name="key" value="${esc(key)}">
+${sections.map(sec => `<h3>${esc(sec.title)}</h3>${sec.tiles.map(t => row(t.id, t.label)).join('')}${(sec.groups ?? []).map(g => row(g.id, g.title)).join('')}`).join('')}
+<h3>Other</h3>${row('mark', 'Devices found, without an ad')}${row('table', 'Day by day table')}
+<button type="submit" name="act" value="layout">Save</button></form></details>`
+}
+
 /** Two strings equal, compared in the same time whatever they hold. */
 async function same(a: string, b: string) {
   const [x, y] = await Promise.all([sha256(a), sha256(b)])
@@ -1553,6 +1613,12 @@ async function statsRoute(req: Request, env: Env) {
     if (res.meta.changes) await tellLeader(env, who)
   }
   if (who && act === 'lead-no') await env.DB.prepare('DELETE FROM door_leaders WHERE user_id = ? AND allowed IS NULL').bind(who).run()
+  // Which tiles show: Show, Hide, or the usual (unless 0), for each listed.
+  if (act === 'layout') {
+    const listed = sent!.getAll('all').map(String).filter(id => /^[a-z0-9-]{1,40}$/.test(id)).slice(0, 100)
+    const set = listed.map(id => [id, String(sent!.get(`how:${id}`) ?? '')] as const).filter(([, how]) => how === 'show' || how === 'hide')
+    await env.DB.batch([env.DB.prepare('DELETE FROM stats_layout'), ...set.map(([id, how]) => env.DB.prepare('INSERT OR REPLACE INTO stats_layout (id, how) VALUES (?, ?)').bind(id, how))])
+  }
   const leadAsks = (await env.DB.prepare('SELECT user_id, note, asked FROM door_leaders WHERE allowed IS NULL ORDER BY asked LIMIT 20')
     .all<{ user_id: string; note: string | null; asked: number }>()).results
   const leadList = leadAsks.length ? `<h2>Asking to lead an Open door circle</h2>
@@ -1578,7 +1644,7 @@ ${reportActs(r)}</div>`).join('')}` : ''
   const now = new Date(), day = now.toISOString().slice(0, 10)
   const week = Date.now() - 7 * DAY
   const count = (sql: string, ...args: unknown[]) => env.DB.prepare(sql).bind(...args).first<{ n: number }>().then(r => r?.n ?? 0)
-  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified, doors, doorsOpen, doorPeople] = await Promise.all([
+  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified, doors, doorsOpen, doorPeople, hiddenRows] = await Promise.all([
     env.DB.prepare('SELECT period, kind, n FROM hello').all<{ period: string; kind: string; n: number }>(),
     count('SELECT COUNT(*) AS n FROM users'),
     count('SELECT COUNT(*) AS n FROM circles'),
@@ -1590,55 +1656,91 @@ ${reportActs(r)}</div>`).join('')}` : ''
     count('SELECT COUNT(*) AS n FROM circles WHERE leader IS NOT NULL'),
     count('SELECT COUNT(*) AS n FROM circles WHERE leader IS NOT NULL AND door_id IS NOT NULL'),
     count('SELECT COUNT(*) AS n FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE c.leader IS NOT NULL AND m.user_id != c.leader'),
+    env.DB.prepare('SELECT id, how FROM stats_layout').all<{ id: string; how: string }>(),
   ])
+  const layout: Layout = new Map(hiddenRows.results.map(r => [r.id, r.how]))
   const get = (period: string, kind: string) => rows.results.find(r => r.period === period && r.kind === kind)?.n ?? 0
   const sum = (kind: string, from = '') => rows.results.filter(r => r.kind === kind && r.period >= from).reduce((a, r) => a + r.n, 0)
   const since30 = new Date(now.getTime() - 29 * DAY).toISOString().slice(0, 10)
-  const big: [string, number, string][] = [
-    ['Today', get(day, 'day'), 'devices opened the app'],
-    ['This week', get(isoWeek(now), 'week'), 'devices opened the app'],
-    ['This month', get(day.slice(0, 7), 'month'), 'devices opened the app'],
-    ['New in 30 days', sum('new', since30), 'devices opened it for the first time'],
-    ['All devices ever', sum('new'), 'counted since the count began'],
-    ['On a Home Screen today', get(day, 'home'), 'of today’s devices'],
-    ['Accounts', accounts, 'signed up to sync'],
-    ['New accounts', newAccounts, 'in the last 7 days'],
-    ['Circles', circles, 'made so far'],
-    ['Active circles', activeCircles, 'shared something in the last 7 days'],
-    ['Shared in circles', shared, 'verses, notes and prayers in the last 7 days'],
-    ['Prayed with', prayedWith, '🙏 on something shared, last 7 days'],
-    ['Notifications on', notified, 'accounts hearing from their circles'],
-  ]
   const since7 = new Date(now.getTime() - 6 * DAY).toISOString().slice(0, 10)
-  const door: [string, number, string][] = [
-    ['Open door circles', doors, `${doorsOpen} with the door open now`],
-    ['People in them', doorPeople, 'not counting the leaders'],
-    ['Came in', sum('door:join', since7), 'through an Open door link, last 7 days'],
-    ['Prayer requests', sum('door:ask', since7), 'sent to leaders, last 7 days'],
-    ['Prayed for', sum('door:prayed', since7), 'requests a leader prayed for, last 7 days'],
+  const n = (x: number) => x.toLocaleString('en')
+  const pct = (part: number, whole: number) => whole ? `${Math.round(100 * part / whole)}%` : '0%'
+  // Shares of the last 30 days' hellos: kind of device, Bible, app language.
+  const split = (prefix: string, name: (id: string) => string, keep = 6): Tile[] => {
+    const ids = [...new Set(rows.results.filter(r => r.kind.startsWith(prefix) && r.period >= since30).map(r => r.kind.slice(prefix.length)))]
+    const list = ids.map(id => [id, sum(prefix + id, since30)] as const).filter(([, x]) => x > 0).sort((a, b) => b[1] - a[1]).slice(0, keep)
+    const all = ids.reduce((a, id) => a + sum(prefix + id, since30), 0)
+    return list.map(([id, x]) => ({ id: '', label: name(id), value: pct(x, all), sub: `${n(x)} daily hellos` }))
+  }
+  // The busiest hour and day of the week for opening the app, last 30 days.
+  const busiest = (prefix: string, span: number) => {
+    let best = -1, top = 0
+    for (let i = 0; i < span; i++) { const x = sum(prefix + i, since30); if (x > top) { top = x; best = i } }
+    return best
+  }
+  const hour = busiest('hour:', 24), weekday = busiest('wd:', 7)
+  // Still opening N days after a device's first day under this count, out of
+  // the devices whose first day is at least N days ago.
+  const kept = (days: number, label: string): Tile => {
+    const before = new Date(now.getTime() - days * DAY).toISOString().slice(0, 10)
+    const old = rows.results.filter(r => r.kind === 'start' && r.period <= before).reduce((a, r) => a + r.n, 0)
+    const still = sum(`kept:${days}`)
+    return { id: `kept${days}`, label, value: pct(still, old), sub: `${n(still)} of ${n(old)} devices still opening it`, zero: !still }
+  }
+  const sections: Section[] = [
+    { title: 'Today', tiles: [
+      { id: 'today', label: 'Devices', value: n(get(day, 'day')), sub: 'opened the app today' },
+      { id: 'today-new', label: 'New devices', value: n(get(day, 'new')), sub: 'opened it for the first time today' },
+      { id: 'today-home', label: 'On a Home Screen', value: n(get(day, 'home')), sub: 'of today’s devices' },
+    ] },
+    { title: 'This week', tiles: [
+      { id: 'week', label: 'Devices', value: n(get(isoWeek(now), 'week')), sub: 'opened the app since Monday' },
+      { id: 'week-accounts', label: 'New accounts', value: n(newAccounts), sub: 'in the last 7 days' },
+      { id: 'week-active', label: 'Active circles', value: n(activeCircles), sub: 'shared something, last 7 days' },
+      { id: 'week-shared', label: 'Shared in circles', value: n(shared), sub: 'verses, notes and prayers, last 7 days' },
+      { id: 'week-prayed', label: 'Prayed with', value: n(prayedWith), sub: '🙏 on something shared, last 7 days' },
+      { id: 'week-door-in', label: 'Came in', value: n(sum('door:join', since7)), sub: 'through an Open door link, last 7 days' },
+      { id: 'week-door-ask', label: 'Prayer requests', value: n(sum('door:ask', since7)), sub: 'sent to Open door leaders, last 7 days' },
+      { id: 'week-door-prayed', label: 'Prayed for', value: n(sum('door:prayed', since7)), sub: 'requests a leader prayed for, last 7 days' },
+    ] },
+    { title: 'This month', tiles: [
+      { id: 'month', label: 'Devices', value: n(get(day.slice(0, 7), 'month')), sub: 'opened the app this month' },
+      { id: 'month-new', label: 'New in 30 days', value: n(sum('new', since30)), sub: 'devices opened it for the first time' },
+      { id: 'hour', label: 'Busiest hour', value: hour < 0 ? '' : `${hour % 12 || 12} ${hour < 12 ? 'AM' : 'PM'}`, sub: 'when most open it first each day', zero: hour < 0 },
+      { id: 'weekday', label: 'Busiest day', value: weekday < 0 ? '' : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][weekday], sub: 'of the week, last 30 days', zero: weekday < 0 },
+    ], groups: [
+      { id: 'devices', title: 'Kind of device', tiles: split('on:', id => PLATFORMS.find(([p]) => p === id)?.[1] ?? id) },
+      { id: 'bibles', title: 'Bibles', tiles: split('bible:', id => id) },
+      { id: 'languages', title: 'App languages', tiles: split('lang:', langName) },
+    ] },
+    { title: 'Lifetime', tiles: [
+      { id: 'ever', label: 'All devices ever', value: n(sum('new')), sub: 'counted since the count began' },
+      { id: 'accounts', label: 'Accounts', value: n(accounts), sub: 'signed up to sync' },
+      { id: 'circles', label: 'Circles', value: n(circles), sub: 'made so far' },
+      { id: 'notified', label: 'Notifications on', value: n(notified), sub: 'accounts hearing from their circles' },
+      { id: 'doors', label: 'Open door circles', value: n(doors), sub: `${n(doorsOpen)} with the door open now` },
+      { id: 'door-people', label: 'People in them', value: n(doorPeople), sub: 'not counting the leaders' },
+      { id: 'total-pr', label: 'Prayers recorded', value: n(sum('total:pr')), sub: 'since this count began', zero: !sum('total:pr') },
+      { id: 'total-ch', label: 'Chapters read', value: n(sum('total:ch')), sub: 'open half a minute or more', zero: !sum('total:ch') },
+      { id: 'total-sh', label: 'Verses shared', value: n(sum('total:sh')), sub: 'outside the app or in circles', zero: !sum('total:sh') },
+      { id: 'total-bm', label: 'Bookmarks saved', value: n(sum('total:bm')), sub: 'since this count began', zero: !sum('total:bm') },
+      kept(7, 'Still opening after a week'),
+      kept(30, 'Still opening after a month'),
+      kept(90, 'Still opening after 3 months'),
+    ] },
   ]
-  const seen = [...new Set(rows.results.filter(r => r.kind.startsWith('lang:')).map(r => r.kind.slice(5)))]
-  const langs = [...new Set([...LANGS, ...seen])].map(l => [langName(l), sum(`lang:${l}`, since30)] as [string, number]).filter(([, n], i) => i < 3 || n > 0).sort((a, b) => b[1] - a[1])
-  const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
-  // A quiet milestone among the stars: every device here found the app on
-  // its own, with no ads and no social media.
-  const ever = sum('new'), marks = [100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000]
-  const next = marks.find(m => m > ever), reached = [...marks].reverse().find(m => m <= ever)
-  const milestone = next && ever >= next * 0.9
-    ? `Almost ${next.toLocaleString('en')} devices: ${ever.toLocaleString('en')} so far, ${(next - ever).toLocaleString('en')} to go. Every one found without a single ad.`
-    : reached ? `${reached.toLocaleString('en')} devices found My Quiet Bible, without a single ad.` : ''
-  const cards = (list: [string, number, string][]) => list.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')
-  return statsPage(`${reportList}${leadList}${milestone ? `<p class="mark">\u2726 ${esc(milestone)}</p>` : ''}<div class="grid">
-${cards(big)}
-</div><h2>Open door circles</h2><div class="grid">
-${cards(door)}
-</div><h2>Languages, last 30 days</h2><div class="grid">
-${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round(100 * n / langTotal) : 0}%</b><span>${n.toLocaleString('en')} daily hellos</span></div>`).join('')}
-</div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
+  // A quiet word among the stars: every device here found the app on its
+  // own, with no ads and no social media. No target, no countdown.
+  const ever = sum('new')
+  const found = ever && layout.get('mark') !== 'hide' ? `${n(ever)} device${ever === 1 ? ' has' : 's have'} found My Quiet Bible, all without a single ad.` : ''
+  return statsPage(`${reportList}${leadList}${found ? `<p class="mark">\u2726 ${esc(found)}</p>` : ''}
+${sections.map(sec => sectionHtml(sec, layout)).join('')}
+${layout.get('table') === 'hide' ? '' : `<h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
-</table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
-On the first day, every device already using the app counts as new. Days are in UTC.</p>`, 200, await myVerse(env))
+</table>`}<p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
+On the first day, every device already using the app counts as new. Days are in UTC.</p>
+${chooser(sections, layout, key)}`, 200, await myVerse(env))
 }
 
 /** "You can lead an Open door circle now", on each device of theirs that
