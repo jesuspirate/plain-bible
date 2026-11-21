@@ -10,6 +10,7 @@ import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simp
 import { send, vapidPublic, type Subscription, type Vapid } from './push'
 import { APNS_PREFIX, APNS_TOKEN, isApnsEnv, sendApns, type Apns } from './apns'
 import { checkNostrEvent, NOSTR_WRAP } from './nostr'
+import { plainBookName } from '../../src/lib/bookList'
 import { suggestionMail } from './suggest'
 
 export interface Env {
@@ -34,6 +35,10 @@ export interface Env {
   APNS_KEY_ID?: string
   /** The private numbers page (/stats?key=…) is on when this is set. */
   STATS_KEY?: string
+  /** The maker's own sign-in email. When set, the numbers page shows one of
+   *  that account's bookmarks under its title, a new one each time. Only that
+   *  one account is ever read. */
+  STATS_EMAIL?: string
   /** Recorded Bible readings the app serves itself (/audio/…), when the
    *  account has R2 storage (scripts/deploy_sync.sh). */
   AUDIO?: R2Bucket
@@ -1423,26 +1428,86 @@ async function helloRoute(req: Request, env: Env) {
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
-const STATS_STYLE = `body{font:20px/1.5 Georgia,serif;max-width:44em;margin:0 auto;padding:24px 16px 48px;background:#faf8f3;color:#22211f}
-h1{font-size:1.5em}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px}
-.card{border:2px solid #d9cdb8;border-radius:14px;padding:14px 16px;background:#fff}
-.card b{display:block;font-size:2.4em;line-height:1.1}.card span{color:#6b6255;font-size:.85em}
-table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #e3dccf}
-td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
-input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #d9cdb8;width:100%;box-sizing:border-box;margin-top:10px}
-button{background:#8a5a2b;color:#fff;border-color:#8a5a2b;font-weight:bold;min-height:56px}p.error{color:#b3261e;font-weight:bold}
-.report{--red:#b3261e;border:2px solid var(--red);border-radius:14px;padding:14px 16px;background:#fff;color:#22211f;margin-bottom:16px;scroll-margin-top:16px}
-.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}.report .when{color:#6b6255;font-size:.85em;margin:0}
+// The maker's own page, dressed as the bridge of a quiet ship looking down on
+// the world (his idea): still stars and a planet's edge drawn with CSS alone
+// (no images, nothing fetched, nothing moving), calm console cards. Always
+// dark, with big bright text for easy reading.
+const STARS = [
+  ['12% 18%', '#ffffff', 1.3], ['27% 72%', '#cfe8ff', 1], ['41% 33%', '#ffffff', 1], ['58% 81%', '#ffe9c4', 1.2], ['66% 12%', '#ffffff', 1],
+  ['79% 47%', '#cfe8ff', 1.3], ['91% 76%', '#ffffff', 1], ['6% 58%', '#ffe9c4', 1], ['34% 91%', '#ffffff', 1], ['85% 22%', '#ffffff', 1],
+  ['50% 55%', '#cfe8ff', 1], ['19% 40%', '#ffffff', 1], ['72% 64%', '#ffffff', 1], ['96% 40%', '#cfe8ff', 1], ['3% 90%', '#ffffff', 1.2],
+// Faint on purpose: the stars sit far behind, the numbers come first.
+].map(([at, c, r]) => `radial-gradient(${r}px ${r}px at ${at},${c}55 98%,transparent)`).join(',')
+const STATS_STYLE = `html{background:${STARS},#05060f;background-size:240px 240px;background-attachment:fixed;color-scheme:dark}
+body{font:20px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;max-width:46em;margin:0 auto;padding:28px 16px 56px;color:#eef3ff;background:transparent;min-height:100vh}
+body:before,body:after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none}
+body:before{background:radial-gradient(ellipse 60% 40% at 85% 8%,#2a1d5244,transparent 70%)}
+body:after{background:radial-gradient(circle at 50% 100%,#0c2a4a 0,#0a1f38 58%,#4fa8e0aa 59.3%,#1d4f7a55 60.5%,transparent 66%) 50% calc(100% + 72vmax)/150vmax 150vmax no-repeat}
+h1{font-size:1.7em;line-height:1.15;margin:0 0 24px;letter-spacing:.05em;text-transform:uppercase;color:#bfe9f7;font-weight:600}
+.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
+h2{font-size:1.05em;letter-spacing:.06em;text-transform:uppercase;color:#bfe9f7;margin:32px 0 12px;border-bottom:1px solid #9fd8f033;padding-bottom:6px}
+h2:before{content:'\\25B8  ';color:#e9d6a8}
+.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px;margin-top:20px}
+.card{border:2px solid #9fd8f040;border-radius:14px;padding:14px 16px;background:#0a1226f7}
+.card b{display:block;font-size:2.4em;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}.card span{color:#b9c7e6;font-size:.85em}
+table{border-collapse:collapse;margin-top:12px;width:100%;background:#0a1226f7;border-radius:12px}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #9fd8f026;font-variant-numeric:tabular-nums}
+th{color:#bfe9f7}td:first-child,th:first-child{text-align:left}p.note{color:#b9c7e6;font-size:.85em}
+input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #9fd8f066;width:100%;box-sizing:border-box;margin-top:10px;background:#0a1226;color:#eef3ff}
+button{background:#e9d6a8;color:#1a1408;border-color:#e9d6a8;font-weight:bold;min-height:56px;cursor:pointer}p.error{color:#ff8a80;font-weight:bold}
+.report{--red:#ff8a80;border:2px solid var(--red);border-radius:14px;padding:14px 16px;background:#1a0d18ee;color:#eef3ff;margin-bottom:16px;scroll-margin-top:16px}
+.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}.report .when{color:#b9c7e6;font-size:.85em;margin:0}
 .report .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;margin-top:6px}
 .report .acts .bad{display:flex;flex-direction:column;gap:10px}.report .acts button{margin:0;height:100%}.report .acts .bad button{height:auto;flex:1 0 auto}
 .report button.del{background:transparent;color:var(--red);border-color:var(--red);font-weight:normal;font-size:1em}
 .report button.keep{font-size:1.2em}
 .report .ask{border:2px solid var(--red);border-radius:12px;padding:12px 14px;margin-top:6px}.report .ask p{margin:0 0 4px;font-weight:bold;font-size:1.1em}
-.report .ask small{display:block;color:#6b6255;margin-bottom:10px}
-@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card,input{background:#202026;color:#e6e3dc;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}
-.report{--red:#ff8a80;background:#202026;color:#e6e3dc}.report .when,.report .ask small{color:#a8a092}}`
-const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>${STATS_STYLE}</style></head><body><h1>My Quiet Bible in numbers</h1>${body}</body></html>`,
+.report .ask small{display:block;color:#b9c7e6;margin-bottom:10px}
+.mark{margin:20px 0 0;padding:14px 18px;border-left:3px solid #e9d6a8;background:#0a1226f2;border-radius:0 12px 12px 0;color:#f3e6c4;font-size:1.05em}`
+// Under the title, a word from God rather than about the maker: Acts 5:29,
+// or one of his own bookmarks (see myVerse).
+const ACTS_5_29 = '« Pierre et les apôtres répondirent: Il faut obéir à Dieu plutôt qu’aux hommes. »'
+const verseLine = (v?: MyVerse) => v
+  ? `<p class="verse" lang="${esc(v.lang)}"><a href="${esc(v.href)}"><span class="t" id="vt">…</span><span>${esc(v.ref)}</span></a></p>
+<script>(()=>{const s=document.getElementById('vt'),a=s.parentNode,v=${JSON.stringify({ u: v.url, b: v.book, c: v.chapter, f: v.from, t: v.to })};
+const no=()=>{s.textContent=${JSON.stringify(ACTS_5_29)};a.href='https://myquietbible.com/#/read/LSG/Acts/5?v=29';a.lastChild.textContent='Actes 5:29 (LSG)'};
+fetch(v.u).then(r=>r.ok?r.json():Promise.reject()).then(d=>{const ch=d.books[v.b][v.c-1],w=[];for(let i=v.f;i<=v.t;i++)if(ch[i-1])w.push(ch[i-1].replace(/\{([^{}|]*)\|[^{}]*\}/g,'$1'));
+if(!w.length)return no();s.textContent='« '+w.join(' ')+' »'}).catch(no)})()</script>`
+  : `<p class="verse" lang="fr"><a href="https://myquietbible.com/#/read/LSG/Acts/5?v=29"><span class="t">${ACTS_5_29}</span><span>Actes 5:29 (LSG)</span></a></p>`
+interface MyVerse { lang: string; href: string; ref: string; url: string; book: string; chapter: number; from: number; to: number }
+/** One of the maker's bookmarks, picked at random each time the page opens,
+ *  in his own Bible. Read from the one account STATS_EMAIL signs in to, and
+ *  only its bookmarks; the words themselves are fetched by his browser from
+ *  the app's site, like the app does. Nothing set or nothing saved: none. */
+async function myVerse(env: Env): Promise<MyVerse | undefined> {
+  if (!env.STATS_EMAIL || !env.EMAIL_SECRET) return
+  try {
+    const hash = await emailHash(env, env.STATS_EMAIL.trim().toLowerCase())
+    const row = await env.DB.prepare('SELECT d.body FROM emails e JOIN data d ON d.user_id = e.user_id WHERE e.hash = ?').bind(hash).first<{ body: string }>()
+    if (!row) return
+    const doc = JSON.parse(row.body) as { marks?: Record<string, { b?: 1; v?: string }>; settings?: { version?: unknown; language?: unknown } }
+    const keys = Object.entries(doc.marks ?? {}).filter(([, m]) => m?.b === 1).map(([k]) => k.split('.'))
+      .map(([book, c, v]) => ({ book, chapter: +c, verse: +v })).filter(k => /^\w+$/.test(k.book) && k.chapter > 0 && k.verse > 0)
+    if (!keys.length) return
+    // Bookmarks on neighbouring verses are one passage, as in Saved.
+    const has = new Set(keys.map(k => `${k.book}.${k.chapter}.${k.verse}`))
+    const starts = keys.filter(k => !has.has(`${k.book}.${k.chapter}.${k.verse - 1}`))
+    const pick = starts[Math.floor(Math.random() * starts.length)]
+    let to = pick.verse
+    while (has.has(`${pick.book}.${pick.chapter}.${to + 1}`) && to - pick.verse < 9) to++
+    const set = doc.settings ?? {}
+    const version = typeof set.version === 'string' && /^[\w-]+$/.test(set.version) ? set.version : 'LSG'
+    const lang = set.language === 'en' || set.language === 'es' || set.language === 'fr' ? set.language : version === 'LSG' ? 'fr' : 'en'
+    const verses = to > pick.verse ? `${pick.verse}-${to}` : `${pick.verse}`
+    return {
+      lang, book: pick.book, chapter: pick.chapter, from: pick.verse, to,
+      ref: `${plainBookName(pick.book, lang)} ${pick.chapter}:${verses} (${version})`,
+      href: `https://myquietbible.com/#/read/${version}/${pick.book}/${pick.chapter}?v=${pick.verse}${to > pick.verse ? `&e=${to}` : ''}`,
+      url: `https://myquietbible.com/data/bibles/${version}.json`,
+    }
+  } catch (e) { console.error('stats verse', e) }
+}
+const statsPage = (body: string, status = 200, verse?: MyVerse) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>MQB Observatory</title><style>${STATS_STYLE}</style></head><body><h1>MQB Observatory</h1>${verseLine(verse)}${body}</body></html>`,
   // Never shown inside another site's frame, where a page could line its own
   // buttons up over "Say yes" or "Remove" once the word is typed in.
   { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer',
@@ -1556,8 +1621,15 @@ ${reportActs(r)}</div>`).join('')}` : ''
   const langs = [...new Set([...LANGS, ...seen])].map(l => [langName(l), sum(`lang:${l}`, since30)] as [string, number]).filter(([, n], i) => i < 3 || n > 0).sort((a, b) => b[1] - a[1])
   const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
+  // A quiet milestone among the stars: every device here found the app on
+  // its own, with no ads and no social media.
+  const ever = sum('new'), marks = [100, 250, 500, 1000, 2500, 5000, 10000, 25000, 50000, 100000]
+  const next = marks.find(m => m > ever), reached = [...marks].reverse().find(m => m <= ever)
+  const milestone = next && ever >= next * 0.9
+    ? `Almost ${next.toLocaleString('en')} devices: ${ever.toLocaleString('en')} so far, ${(next - ever).toLocaleString('en')} to go. Every one found without a single ad.`
+    : reached ? `${reached.toLocaleString('en')} devices found My Quiet Bible, without a single ad.` : ''
   const cards = (list: [string, number, string][]) => list.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')
-  return statsPage(`${reportList}${leadList}<div class="grid">
+  return statsPage(`${reportList}${leadList}${milestone ? `<p class="mark">\u2726 ${esc(milestone)}</p>` : ''}<div class="grid">
 ${cards(big)}
 </div><h2>Open door circles</h2><div class="grid">
 ${cards(door)}
@@ -1566,7 +1638,7 @@ ${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round
 </div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
 </table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
-On the first day, every device already using the app counts as new. Days are in UTC.</p>`)
+On the first day, every device already using the app counts as new. Days are in UTC.</p>`, 200, await myVerse(env))
 }
 
 /** "You can lead an Open door circle now", on each device of theirs that

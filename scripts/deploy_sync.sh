@@ -46,6 +46,11 @@ fi
 if [ -n "${STATS_KEY:-}" ]; then
   printf '%s' "$STATS_KEY" | npx wrangler secret put STATS_KEY >&2
 fi
+# One of the maker's own bookmarks under the numbers page's title: on once
+# STATS_EMAIL (the email he signs in to the app with) is a repository secret.
+if [ -n "${STATS_EMAIL:-}" ]; then
+  printf '%s' "$STATS_EMAIL" | npx wrangler secret put STATS_EMAIL >&2
+fi
 # Where report notices from circles go (default hello@, which the mail
 # forwarder may hold back): on once REPORT_EMAIL is a repository secret.
 if [ -n "${REPORT_EMAIL:-}" ]; then
