@@ -34,10 +34,29 @@ export function addStep(what: string, now = Date.now()) {
 
 export const recording = () => rec.on
 /** The steps as they'll be sent, the first and last kept when there were many. */
-export const recordedSteps = (): string[] => rec.dropped
+export const recordedSteps = (): string[] => (rec.dropped
   ? [rec.steps[0], `… ${rec.dropped} earlier steps not kept`, ...rec.steps.slice(1)]
   : [...rec.steps]
+// Steps kept by an older version wrote the whole address: clean them too.
+).map(s => s.replace(/#\/\S*/g, screenOf))
 export function clearSteps() { rec = { on: false, t0: 0, steps: [], dropped: 0 }; try { localStorage.removeItem(KEY) } catch { /* */ } listeners.forEach(f => f()) }
+
+/** The screen, for a report: where in the app, never what it carries. A
+ *  link can hold a secret in the address (a circle invite's key, a device
+ *  link's key) and a search holds the typed words, so only the path and a few
+ *  plain numbers are kept; anything else is shown as … */
+const KEEP = new Set(['v', 'e', 'at', 'p', 'b', 's'])
+const TOKEN = /[A-Za-z0-9_-]{20,}/
+export function screenOf(hash: string): string {
+  const [path, query] = hash.replace(/^#\/?/, '').split('?', 2)
+  const parts = path.split('/').filter(Boolean)
+  // A device link is nothing but its secret.
+  const kept = parts[0] === 'move' ? ['move', '…'] : parts.map(p => TOKEN.test(p) ? '…' : p)
+  const params = [...new URLSearchParams(query ?? '')].map(([k, v]) =>
+    KEEP.has(k) && /^[\w,.:-]{0,40}$/.test(v) && !TOKEN.test(v) ? `${k}=${v}` : `${k.replace(/[^\w-]/g, '').slice(0, 12)}=…`)
+  return ('#/' + kept.join('/') + (params.length ? '?' + params.join('&') : '')).slice(0, 120)
+}
+const screen = () => screenOf(location.hash)
 
 // ---------------------------------------------------------------------------
 // What a tap was on, in words.
@@ -117,7 +136,7 @@ function watch() {
     } else if ((e.metaKey || e.ctrlKey) && e.key.length === 1) addStep(`Key ${e.metaKey ? '⌘' : 'Ctrl'}+${e.key.toUpperCase()}`)
   })
   on('focusin', e => { if (e.target !== typedIn) typedIn = null })
-  on('hashchange', () => addStep(`Screen ${location.hash.slice(0, 120) || '#/'}`))
+  on('hashchange', () => addStep(`Screen ${screen()}`))
   let size = `${innerWidth}×${innerHeight}`, sized = 0
   on('resize', () => {
     clearTimeout(sized)
@@ -133,7 +152,7 @@ function watch() {
 export function startSteps(now = Date.now()) {
   lastWhat = ''
   rec = { on: true, t0: now, steps: [], dropped: 0 }
-  addStep(`Started on ${location.hash.slice(0, 120) || '#/'} · ${innerWidth}×${innerHeight} · theme ${document.documentElement.dataset.theme ?? '?'}`, now)
+  addStep(`Started on ${screen()} · ${innerWidth}×${innerHeight} · theme ${document.documentElement.dataset.theme ?? '?'}`, now)
   watch()
 }
 
@@ -154,7 +173,7 @@ export function resumeSteps(): boolean {
     if (!was.on) return false
     if (Date.now() - was.t0 > STALE) { stopSteps(); return false }
   } catch { return false }
-  addStep(`App reloaded · ${location.hash.slice(0, 120) || '#/'}`)
+  addStep(`App reloaded · ${screen()}`)
   watch()
   return true
 }

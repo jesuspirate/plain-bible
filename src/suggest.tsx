@@ -9,7 +9,7 @@ import { useEffect, useState } from 'preact/hooks'
 import { SYNC_URL } from './lib/sync'
 import { recentErrors } from './lib/errors'
 import { inMacApp, inOtherApp, inStoreApp, fromPlayStore, installed } from './lib/install'
-import { onStepsChange, recordedSteps, clearSteps, stopSteps } from './lib/steps'
+import { onStepsChange, recordedSteps, clearSteps, screenOf, stopSteps } from './lib/steps'
 import { currentLang, t } from './i18n'
 
 const MAX = 3000
@@ -89,7 +89,7 @@ export function SuggestPage({ onDone, crashed }: { onDone: () => void; crashed?:
         method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'omit',
         body: JSON.stringify({
           kind, text: text.trim(), email: email.trim() || undefined, version: __BUILD__, platform: platformLabel(), lang: currentLang(),
-          ...(problem ? { screen: location.hash.slice(0, 120), steps: steps.length ? steps : undefined, errors: recentErrors(), size: `${innerWidth}×${innerHeight}`, theme: document.documentElement.dataset.theme } : {}),
+          ...(problem ? { screen: screenOf(location.hash), steps: steps.length ? steps : undefined, errors: recentErrors(), size: `${innerWidth}×${innerHeight}`, theme: document.documentElement.dataset.theme } : {}),
         }),
         signal: AbortSignal.timeout?.(20_000),
       })
