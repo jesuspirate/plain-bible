@@ -6,6 +6,9 @@
 // until the person sends the report (and can read them first); they survive
 // the app reloading, since that can be the very problem.
 
+import { screenOf, scrub, scrubLabel } from '../../worker/src/scrub'
+export { screenOf }
+
 const KEY = 'plain-bible:report-steps'
 const MAX = 120
 /** A recording older than this isn't picked up again after a reload. */
@@ -26,7 +29,7 @@ export function addStep(what: string, now = Date.now()) {
   // The same thing twice in a row (a held key, a second scroll) is one step.
   if (what === lastWhat) return
   lastWhat = what
-  const line = `${clock(now - rec.t0)} ${what}`.replace(/[\u0000-\u001f\u007f]+/g, ' ').slice(0, 240)
+  const line = `${clock(now - rec.t0)} ${scrub(what)}`.replace(/[\u0000-\u001f\u007f]+/g, ' ').slice(0, 240)
   rec.steps.push(line)
   if (rec.steps.length > MAX) { rec.steps.splice(1, 1); rec.dropped++ }
   changed()
@@ -34,10 +37,14 @@ export function addStep(what: string, now = Date.now()) {
 
 export const recording = () => rec.on
 /** The steps as they'll be sent, the first and last kept when there were many. */
-export const recordedSteps = (): string[] => rec.dropped
+export const recordedSteps = (): string[] => (rec.dropped
   ? [rec.steps[0], `… ${rec.dropped} earlier steps not kept`, ...rec.steps.slice(1)]
   : [...rec.steps]
+// Steps kept by an older version wrote the whole address: clean them too.
+).map(scrub)
 export function clearSteps() { rec = { on: false, t0: 0, steps: [], dropped: 0 }; try { localStorage.removeItem(KEY) } catch { /* */ } listeners.forEach(f => f()) }
+
+const screen = () => screenOf(location.hash)
 
 // ---------------------------------------------------------------------------
 // What a tap was on, in words.
@@ -66,7 +73,7 @@ export function pathOf(el: Element | null): string {
 
 /** A few plain words for the thing at a spot: its name, where it sits, and where on the screen. */
 export function describeSpot(el: Element | null, x: number, y: number, w: number, h: number): string {
-  let label = nameOf(el)
+  let label = scrubLabel(nameOf(el))
   if (label.length > 60) label = label.slice(0, 59) + '…'
   return `${label ? `“${label}” ` : ''}[${pathOf(el)}] at ${Math.round(x / w * 100)}% across, ${Math.round(y / h * 100)}% down`
 }
@@ -117,7 +124,7 @@ function watch() {
     } else if ((e.metaKey || e.ctrlKey) && e.key.length === 1) addStep(`Key ${e.metaKey ? '⌘' : 'Ctrl'}+${e.key.toUpperCase()}`)
   })
   on('focusin', e => { if (e.target !== typedIn) typedIn = null })
-  on('hashchange', () => addStep(`Screen ${location.hash.slice(0, 120) || '#/'}`))
+  on('hashchange', () => addStep(`Screen ${screen()}`))
   let size = `${innerWidth}×${innerHeight}`, sized = 0
   on('resize', () => {
     clearTimeout(sized)
@@ -133,7 +140,7 @@ function watch() {
 export function startSteps(now = Date.now()) {
   lastWhat = ''
   rec = { on: true, t0: now, steps: [], dropped: 0 }
-  addStep(`Started on ${location.hash.slice(0, 120) || '#/'} · ${innerWidth}×${innerHeight} · theme ${document.documentElement.dataset.theme ?? '?'}`, now)
+  addStep(`Started on ${screen()} · ${innerWidth}×${innerHeight} · theme ${document.documentElement.dataset.theme ?? '?'}`, now)
   watch()
 }
 
@@ -154,7 +161,7 @@ export function resumeSteps(): boolean {
     if (!was.on) return false
     if (Date.now() - was.t0 > STALE) { stopSteps(); return false }
   } catch { return false }
-  addStep(`App reloaded · ${location.hash.slice(0, 120) || '#/'}`)
+  addStep(`App reloaded · ${screen()}`)
   watch()
   return true
 }

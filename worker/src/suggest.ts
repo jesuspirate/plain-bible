@@ -2,7 +2,10 @@
 // for the app's maker. Only the words, a reply address if the person typed
 // one, and the app's version, kind of device and language (short labels,
 // cleaned). A problem also brings the screen, the steps the person recorded
-// (Show what happens) and the last few errors the app ran into.
+// (Show what happens) and the last few errors the app ran into, all cleaned
+// of link keys, codes and search words (./scrub), even from an older app.
+
+import { scrub, scrubStep, screenOf } from './scrub'
 
 const SUGGEST_MAX = 3000
 /** A short plain label from the app (version, device, language), or '?'. */
@@ -32,11 +35,11 @@ export function suggestionMail(b: SuggestBody | null): { ok: true; mail: Suggest
     `App: ${label(b?.version)} · ${label(b?.platform)} · ${label(b?.lang)}`,
   ]
   if (problem) {
-    const errors = Array.isArray(b?.errors) ? b.errors.slice(-5).map(e => line(e, 200)).filter(Boolean) : []
-    about.push(`Screen: ${label(b?.screen, 120)} · ${label(b?.size, 20)} · theme ${label(b?.theme, 12)}`)
+    const errors = Array.isArray(b?.errors) ? b.errors.slice(-5).map(e => scrub(line(e, 200))).filter(Boolean) : []
+    about.push(`Screen: ${typeof b?.screen === 'string' && b.screen ? line(screenOf(b.screen), 120) : '?'} · ${label(b?.size, 20)} · theme ${label(b?.theme, 12)}`)
     // Older apps sent one tapped spot as `where`.
-    const steps = Array.isArray(b?.steps) ? b.steps.slice(0, 125).map(s => line(s, 240)).filter(Boolean) : []
-    const where = line(b?.where, 300)
+    const steps = Array.isArray(b?.steps) ? b.steps.slice(0, 125).map(s => scrubStep(line(s, 240))).filter(Boolean) : []
+    const where = scrubStep(line(b?.where, 300))
     about.push(steps.length ? `Steps recorded (${steps.length}):\n` + steps.map(s => '  ' + s).join('\n')
       : where ? `Spot shown: ${where}` : 'Steps recorded: none')
     about.push(errors.length ? 'Errors the app noticed:\n' + errors.map(e => '  - ' + e).join('\n') : 'Errors the app noticed: none')

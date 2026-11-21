@@ -13,9 +13,9 @@ type El = { tagName: string; className?: string; id?: string; textContent?: stri
 const el = (tagName: string, className: string, parentElement: El | typeof body, textContent = ''): El & { getAttribute(k: string): string | null } =>
   ({ tagName, className, id: '', textContent, parentElement, getAttribute: () => null })
 
-const { addStep, clearSteps, describeSpot, recordedSteps, recording, resumeSteps, startSteps, stopSteps } = await import('./steps')
+const { addStep, clearSteps, describeSpot, recordedSteps, recording, resumeSteps, screenOf, startSteps, stopSteps } = await import('./steps')
 
-afterEach(() => { stopSteps(); clearSteps() })
+afterEach(() => { stopSteps(); clearSteps(); location.hash = '#/read' })
 
 describe('steps', () => {
   it('writes each step with the time since Start, and stops', () => {
@@ -50,5 +50,39 @@ describe('steps', () => {
     const at = (e: El) => describeSpot(e as unknown as Element, 50, 100, 100, 200)
     expect(at(el('SPAN', '', button, 'Écouter'))).toBe('“Écouter” [div.bar > button.listen > span] at 50% across, 50% down')
     expect(at(el('SPAN', '', el('P', 'note', body, 'my private prayer'), 'my private prayer'))).toBe('[p.note > span] at 50% across, 50% down')
+  })
+  // Links carry secrets in the address: a circle invite's key, a device
+  // link's key. A search carries the words typed. None of it goes in a report.
+  const KEY43 = 'Zm9vYmFyYmF6cXV4Zm9vYmFyYmF6cXV4Zm9vYmFyYmE'
+  const ID22 = 'abcdefghijklmnopqrstuv'
+  it('keeps where in the app, never a link\'s secret or typed words', () => {
+    expect(screenOf('#/read/KJV/John/3?v=16&e=18')).toBe('#/read/KJV/John/3?v=16&e=18')
+    expect(screenOf('')).toBe('#/')
+    expect(screenOf(`#/join?i=${ID22}&k=${KEY43}`)).toBe('#/join?i=…&k=…')
+    expect(screenOf(`#/join?d=${ID22}&k=${KEY43}`)).toBe('#/join?d=…&k=…')
+    expect(screenOf(`#/move/${ID22}.${KEY43}`)).toBe('#/move/…')
+    expect(screenOf(`#/read/${ID22}.${KEY43}/Gen/1`)).toBe('#/read/…/Gen/1')
+    expect(screenOf('#/search?q=my%20private%20words&v=KJV')).toBe('#/search?q=…&v=KJV')
+  })
+  it('never writes a secret from the address into the steps', () => {
+    location.hash = `#/join?i=${ID22}&k=${KEY43}`
+    startSteps()
+    location.hash = `#/move/${ID22}.${KEY43}`
+    expect(resumeSteps()).toBe(true)
+    stopSteps()
+    const all = recordedSteps().join('\n')
+    expect(all).not.toContain(KEY43)
+    expect(all).not.toContain(ID22)
+    expect(all).toMatch(/Started on #\/join\?i=…&k=… /)
+    expect(all).toMatch(/App reloaded · #\/move\/…/)
+  })
+  it('never writes a one-time code someone tapped', () => {
+    const code = { ...el('P', 'c-bigcode', body, '481 592'), getAttribute: (k: string) => k === 'aria-label' ? '4 8 1 5 9 2' : null }
+    expect(describeSpot(code as unknown as Element, 50, 100, 100, 200)).toBe('“…” [p.c-bigcode] at 50% across, 50% down')
+  })
+  it('cleans steps an older version saved with the whole address', () => {
+    startSteps(0)
+    addStep(`Screen #/join?i=${ID22}&k=${KEY43}`, 1_000)
+    expect(recordedSteps()[1]).toBe('0:01 Screen #/join?i=…&k=…')
   })
 })

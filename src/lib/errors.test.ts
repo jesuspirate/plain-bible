@@ -12,4 +12,8 @@ describe('recent errors', () => {
     expect(e[0]).toMatch(/^boom 3/)
     expect(e[4].length).toBe(200)
   })
+  it('never keeps a link\'s key an error quotes', () => {
+    noteError(new Error("A history state object with URL 'https://myquietbible.com/#/join?i=abcdefghijklmnopqrstuv&k=Zm9vYmFyYmF6cXV4Zm9vYmFyYmF6cXV4Zm9vYmFyYmE' cannot be created"))
+    expect(recentErrors().at(-1)).toMatch(/^A history state object with URL 'https:\/\/myquietbible\.com\/#\/join\?i=…&k=…' cannot be created/)
+  })
 })
