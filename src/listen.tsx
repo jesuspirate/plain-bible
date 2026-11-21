@@ -31,6 +31,7 @@ import { go, parseHash, readPath } from './state'
 import { CloseIcon, PauseIcon, PlayIcon } from './icons'
 import { Sheet } from './ui'
 import { locale, N_, t } from './i18n'
+import { noteError } from './lib/errors'
 
 export interface Spot {
   version: string; lang: string; book: string; chapter: number; verse: number
@@ -368,6 +369,12 @@ let player: HTMLAudioElement | undefined
 let held: { rec: Recording; url: string; times?: ChapterTimes; from?: number; tries?: number } | undefined
 let keep = false // paused in the middle of a recording: play goes on from that very moment
 let frame = 0
+// Where the recording was the last time the highlight followed it, and when.
+let followed = { t: 0, at: 0 }
+const followedNow = (a: HTMLAudioElement) => { followed = { t: a.currentTime, at: performance.now() } }
+// Once caught out that way, the player's time is believed over its flags
+// until the reading is next started.
+let overrule = false
 
 function audio(): HTMLAudioElement {
   if (player) return player
@@ -377,8 +384,29 @@ function audio(): HTMLAudioElement {
   a.addEventListener('ended', () => { if (now?.playing && held) chapterDone() })
   // Stopped by the phone itself (a call, another app's sound): wait, paused, where it was.
   a.addEventListener('pause', () => { if (a.paused && !a.ended && now?.playing && held && recorded()) pauseListening() })
+  // …and started again by the phone itself once the interruption is over:
+  // the reading goes on with it, highlight and all, rather than the voice
+  // carrying on alone while the app thinks it's paused.
+  a.addEventListener('playing', () => {
+    if (!now || now.playing || !held?.times || !recorded() || a.muted) return
+    noteError('read along: the player started again by itself')
+    run++; keep = false
+    now = { ...now, playing: true, trouble: undefined }
+    emit()
+    followedNow(a); following()
+  })
   a.addEventListener('error', () => { if (now?.playing && held) lost(run) })
+  // A steady beat besides: the page's own timers can stop calling (seen on
+  // iPhone), and then the highlight stood still while the voice went on.
+  setInterval(() => { if (now?.playing && held && !a.paused) track() }, 400)
   return a
+}
+
+/** Follow the recording on every frame while it plays. */
+function following() {
+  const loop = () => { if (!now?.playing || !held) return; track(); frame = requestAnimationFrame(loop) }
+  cancelAnimationFrame(frame)
+  frame = requestAnimationFrame(loop)
 }
 
 function hush() {
@@ -429,9 +457,9 @@ function hear(my: number) {
     if (e?.name === 'NotAllowedError') pauseListening(t('Tap play to start.'))
     else if (e?.name !== 'AbortError') lost(my)
   })
-  const loop = () => { if (!now?.playing || !held) return; track(); frame = requestAnimationFrame(loop) }
+  followedNow(a); overrule = false
   cancelAnimationFrame(frame)
-  if (resume) { frame = requestAnimationFrame(loop); return }
+  if (resume) return following()
   loadTimes(rec, n.book).then(all => {
     if (my !== run || held?.url !== url || !now) return
     const times = all?.[n.chapter - 1]
@@ -450,7 +478,7 @@ function hear(my: number) {
     cur = verseWords(now, verse); wordNow = -1
     clearWord()
     emit()
-    frame = requestAnimationFrame(loop)
+    following()
   })
 }
 
@@ -465,13 +493,28 @@ function jump(verse: number): number {
 /** The recording moved on: which verse and word it's at, shown on the page. */
 function track() {
   const n = now, a = player, h = held
-  if (!n?.playing || !a || !h?.times || a.muted || a.seeking) return
-  if (h.from !== undefined) {
-    // A jump the player didn't take (asked before it could move): ask again, a few times at most.
-    if (a.currentTime < h.from - 1 && a.readyState >= 3 && (h.tries = (h.tries ?? 0) + 1) <= 3) a.currentTime = Math.max(0, h.from - 0.08)
-    if (a.currentTime < h.from - 0.01) return
-    h.from = undefined; h.tries = 0
+  if (!n?.playing || !a || !h?.times) return
+  // The voice has plainly gone on for a while (seconds of it) without the
+  // highlight: on iPhones the player can be left saying it's still seeking,
+  // or a jump or unmuting can go unanswered, while it plays on. Then what's
+  // heard is what's followed.
+  if (!overrule && !a.paused && performance.now() - followed.at > 2500 && a.currentTime - followed.t > 2) {
+    overrule = true
+    noteError(`read along: caught up (${a.muted ? 'muted ' : ''}${a.seeking ? 'seeking ' : ''}${h.from !== undefined ? 'jump ' : ''}at ${a.currentTime.toFixed(1)}s)`)
   }
+  if (overrule) {
+    if (a.muted) a.muted = false
+    h.from = undefined; h.tries = 0
+  } else {
+    if (a.muted || a.seeking) return
+    if (h.from !== undefined) {
+      // A jump the player didn't take (asked before it could move): ask again, a few times at most.
+      if (a.currentTime < h.from - 1 && a.readyState >= 3 && (h.tries = (h.tries ?? 0) + 1) <= 3) a.currentTime = Math.max(0, h.from - 0.08)
+      if (a.currentTime < h.from - 0.01) return
+      h.from = undefined; h.tries = 0
+    }
+  }
+  followedNow(a)
   const at = locate(h.times, a.currentTime + 0.03)
   if (!at) return // the chapter's name is being said
   if (n.only && !n.only.includes(at.verse)) {
