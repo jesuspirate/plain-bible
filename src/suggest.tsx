@@ -2,14 +2,14 @@
 // write to the person who makes the app, from Settings, signed in or not.
 // It goes by email through the sync service and isn't kept there. Sent with
 // it, and said so on the page: the app's version, the kind of device and
-// the language; for a problem also the screen, the spot the person showed
-// (tap where it is) and any error the app ran into. A reply address only if
+// the language; for a problem also the screen, the steps the person
+// recorded (Show what happens) and any error the app ran into. A reply address only if
 // the person types one.
 import { useEffect, useState } from 'preact/hooks'
 import { SYNC_URL } from './lib/sync'
 import { recentErrors } from './lib/errors'
 import { inMacApp, inOtherApp, inStoreApp, fromPlayStore, installed } from './lib/install'
-import { Glyph } from './gesture'
+import { onStepsChange, recordedSteps, clearSteps, stopSteps } from './lib/steps'
 import { currentLang, t } from './i18n'
 
 const MAX = 3000
@@ -18,11 +18,10 @@ const keep = (k: string, v: string) => { try { v ? localStorage.setItem(k, v) : 
 const kept = (k: string) => { try { return localStorage.getItem(k) ?? '' } catch { return '' } }
 
 type Kind = 'problem' | 'idea'
-// Kept while Settings is put away to show the spot, then opened again here.
+// Kept while Settings is put away to record the steps, then opened again here.
 let kindNow: Kind = 'problem'
-let spotNow = ''
 let reopen = false
-/** Settings opens on this page again after the spot was shown. */
+/** Settings opens on this page again after the steps were recorded. */
 export const reopenReport = () => { const r = reopen; reopen = false; return r }
 
 /** The kind of device and app, in a few plain words, to help find a problem. */
@@ -39,57 +38,22 @@ export function platformLabel(ua = navigator.userAgent): string {
 export const canSuggest = () => !!SYNC_URL
 
 // ---------------------------------------------------------------------------
-// Show where: Settings goes away, a quiet line at the top says to tap the
-// spot, and the tap is described in words (which button, which verse) for
-// the report. No picture is taken.
+// Show what happens: Settings goes away, a small pill at the top says it's
+// recording, and the person uses the app as usual (tap, scroll, open other
+// screens) until they tap Stop. The steps are written down in words
+// (src/lib/steps.ts), shown on the report before it's sent. No picture.
 
-export const PICK_SPOT = 'plain-bible:pick-spot'
+export const START_STEPS = 'plain-bible:start-steps'
 
-/** A few plain words for the thing at a spot: its label, and where it sits. */
-export function describeSpot(el: Element | null, x: number, y: number, w: number, h: number): string {
-  const parts: string[] = []
-  let label = ''
-  for (let n: Element | null = el, i = 0; n && n !== document.body && i < 8; n = n.parentElement, i++) {
-    const cls = typeof n.className === 'string' ? n.className.trim().split(/\s+/)[0] : ''
-    if (parts.length < 4) parts.unshift(n.tagName.toLowerCase() + (n.id ? '#' + n.id : '') + (cls ? '.' + cls : ''))
-    if (!label) label = n.getAttribute('aria-label') ?? ''
-  }
-  if (!label) label = (el?.textContent ?? '').replace(/\s+/g, ' ').trim()
-  if (label.length > 60) label = label.slice(0, 59) + '…'
-  const at = `${Math.round(x / w * 100)}% across, ${Math.round(y / h * 100)}% down`
-  return `${label ? `“${label}” ` : ''}[${parts.join(' > ')}] at ${at} of ${w}×${h}`
-}
-
-export function SpotPicker({ onDone }: { onDone: () => void }) {
-  const [ring, setRing] = useState<{ x: number; y: number } | null>(null)
-  const finish = (spot?: string) => {
-    if (spot !== undefined) spotNow = spot
-    reopen = true
-    onDone()
-  }
-  useEffect(() => {
-    const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') { e.stopPropagation(); finish() } }
-    addEventListener('keydown', esc, true)
-    return () => removeEventListener('keydown', esc, true)
-  }, [])
-  const tap = (e: PointerEvent) => {
-    if (ring) return
-    e.preventDefault()
-    const layer = e.currentTarget as HTMLElement
-    layer.style.pointerEvents = 'none'
-    const under = document.elementFromPoint(e.clientX, e.clientY)
-    layer.style.pointerEvents = ''
-    setRing({ x: e.clientX, y: e.clientY })
-    const spot = describeSpot(under, e.clientX, e.clientY, innerWidth, innerHeight)
-    setTimeout(() => finish(spot), 450)
-  }
+export function StepsPill({ onStop }: { onStop: () => void }) {
+  const [n, setN] = useState(() => recordedSteps().length)
+  useEffect(() => onStepsChange(() => setN(recordedSteps().length)), [])
+  const finish = () => { stopSteps(); reopen = true; onStop() }
   return (
-    <div class="spot-layer" onPointerDown={tap}>
-      <div class="spot-bar" onPointerDown={e => e.stopPropagation()}>
-        <span class="spot-say"><Glyph kind="tap" /> {t('Tap where the problem is')}</span>
-        <button onClick={() => finish()}>{t('Cancel')}</button>
-      </div>
-      {ring && <span class="spot-ring" style={{ left: ring.x + 'px', top: ring.y + 'px' }} />}
+    <div class="steps-pill" role="status">
+      <span class="steps-dot" aria-hidden="true" />
+      <span class="steps-say">{t('Recording')}<span class="steps-n" aria-hidden="true"> · {Math.max(0, n - 1)}</span></span>
+      <button class="primary" onClick={finish}>{t('Stop')}</button>
     </div>
   )
 }
@@ -101,7 +65,9 @@ export function SuggestPage({ onDone, crashed }: { onDone: () => void; crashed?:
   const setKind = (k: Kind) => { kindNow = k; setKindState(k) }
   const [text, setText] = useState(() => kept(DRAFT))
   const [email, setEmail] = useState('')
-  const [spot, setSpot] = useState(spotNow)
+  const [steps, setSteps] = useState(recordedSteps)
+  const [seeSteps, setSeeSteps] = useState(false)
+  useEffect(() => onStepsChange(() => setSteps(recordedSteps())), [])
   const [state, setState] = useState<'idle' | 'sending' | 'sent'>('idle')
   const [error, setError] = useState('')
   const [online, setOnline] = useState(() => navigator.onLine !== false)
@@ -123,7 +89,7 @@ export function SuggestPage({ onDone, crashed }: { onDone: () => void; crashed?:
         method: 'POST', headers: { 'Content-Type': 'application/json' }, credentials: 'omit',
         body: JSON.stringify({
           kind, text: text.trim(), email: email.trim() || undefined, version: __BUILD__, platform: platformLabel(), lang: currentLang(),
-          ...(problem ? { screen: location.hash.slice(0, 120), where: spot || undefined, errors: recentErrors(), size: `${innerWidth}×${innerHeight}`, theme: document.documentElement.dataset.theme } : {}),
+          ...(problem ? { screen: location.hash.slice(0, 120), steps: steps.length ? steps : undefined, errors: recentErrors(), size: `${innerWidth}×${innerHeight}`, theme: document.documentElement.dataset.theme } : {}),
         }),
         signal: AbortSignal.timeout?.(20_000),
       })
@@ -136,8 +102,8 @@ export function SuggestPage({ onDone, crashed }: { onDone: () => void; crashed?:
         return
       }
       keep(DRAFT, '')
-      spotNow = ''
-      setText(''); setEmail(''); setSpot('')
+      clearSteps()
+      setText(''); setEmail('')
       setState('sent')
     } catch {
       setError(navigator.onLine === false ? t('You’re offline. Connect to the internet to send it. Your words are kept here.') : t('It couldn’t be sent. Try again in a few minutes.'))
@@ -165,17 +131,26 @@ export function SuggestPage({ onDone, crashed }: { onDone: () => void; crashed?:
         <textarea class="suggest-text" rows={6} maxLength={MAX} value={text} onInput={e => setText((e.target as HTMLTextAreaElement).value)} />
       </label>
       {problem && !crashed && <div class="suggest-where">
-        {spot
-          ? <><span class="suggest-marked">{t('Spot shown ✓')}</span>
-              <button type="button" onClick={() => dispatchEvent(new Event(PICK_SPOT))}>{t('Show again')}</button></>
-          : <button type="button" class="suggest-show" onClick={() => dispatchEvent(new Event(PICK_SPOT))}><Glyph kind="tap" /> {t('Show where')}</button>}
+        {steps.length
+          ? <>
+              <div class="suggest-where-row">
+                <span class="suggest-marked">{t('Steps recorded: {n} ✓', { n: steps.length })}</span>
+                <button type="button" aria-expanded={seeSteps} onClick={() => setSeeSteps(!seeSteps)}>{seeSteps ? t('Hide the steps') : t('See the steps')}</button>
+                <button type="button" onClick={() => dispatchEvent(new Event(START_STEPS))}>{t('Record again')}</button>
+              </div>
+              {seeSteps && <ol class="suggest-steps">{steps.map(s => <li>{s}</li>)}</ol>}
+            </>
+          : <>
+              <button type="button" class="suggest-show" onClick={() => dispatchEvent(new Event(START_STEPS))}><span class="steps-dot" aria-hidden="true" /> {t('Show what happens')}</button>
+              <p class="muted small suggest-how">{t('Use the app as usual, then tap Stop. Each step is written down, not filmed.')}</p>
+            </>}
       </div>}
       <label class="suggest-field">
         <span>{t('Your email, if you’d like an answer (optional)')}</span>
         <input class="move-input" type="email" inputMode="email" autoComplete="email" value={email} onInput={e => setEmail((e.target as HTMLInputElement).value)} />
       </label>
       <p class="muted small">{problem
-        ? t('Sent with it: the app’s version, the kind of device, its language, the screen you were on, the spot you showed, and any error the app noticed. Nothing else.')
+        ? t('Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.')
         : t('Sent with it: the app’s version, the kind of device and its language. Nothing else.')}</p>
       {!online && <p class="suggest-error error">{t('You’re offline. Connect to the internet to send it. Your words are kept here.')}</p>}
       {error && online && <p class="suggest-error error" role="alert">{error}</p>}

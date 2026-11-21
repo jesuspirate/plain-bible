@@ -43,9 +43,14 @@ describe('problem reports', () => {
     expect(r.mail.text).toContain('Spot shown: “Écouter” [div.verse-bar > button.listen]')
     expect(r.mail.text).toContain('  - TypeError: x is undefined (listen.tsx:12)')
   })
+  it('bring the recorded steps, one per line', () => {
+    const r = suggestionMail({ kind: 'problem', text: 'Page jumps', steps: ['0:00 Started on #/read', '0:03 Scrolled down in [main] to 40%', 7, '0:05 Tap “Écouter” [button.listen]\nx'] })
+    if (!r.ok) throw new Error('expected ok')
+    expect(r.mail.text).toContain('Steps recorded (3):\n  0:00 Started on #/read\n  0:03 Scrolled down in [main] to 40%\n  0:05 Tap “Écouter” [button.listen] x')
+  })
   it('say so when nothing was shown', () => {
     const r = suggestionMail({ kind: 'problem', text: 'Hm' })
-    expect(r.ok && r.mail.text).toContain('Spot shown: none')
+    expect(r.ok && r.mail.text).toContain('Steps recorded: none')
     expect(r.ok && r.mail.text).toContain('Errors the app noticed: none')
   })
   it('suggestions carry none of it', () => {
