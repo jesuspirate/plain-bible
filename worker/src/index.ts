@@ -1507,7 +1507,7 @@ async function myVerse(env: Env): Promise<MyVerse | undefined> {
   } catch (e) { console.error('stats verse', e) }
 }
 const statsPage = (body: string, status = 200, verse?: MyVerse) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>MQB Command Center</title><style>${STATS_STYLE}</style></head><body><h1>MQB Command Center</h1>${verseLine(verse)}${body}</body></html>`,
+<meta name="robots" content="noindex"><title>MQB Observatory</title><style>${STATS_STYLE}</style></head><body><h1>MQB Observatory</h1>${verseLine(verse)}${body}</body></html>`,
   // Never shown inside another site's frame, where a page could line its own
   // buttons up over "Say yes" or "Remove" once the word is typed in.
   { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer',
