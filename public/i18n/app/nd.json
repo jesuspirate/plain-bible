@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Yenza amazwi aphawuliweyo athinteke (KJV, BSB, imibhalo yesiHebheru leyesiGreki)",
 "Show the numbers inline": "Tshengisa inombolo phakathi kombhalo",
 "Search bar": "Umgqa wokudinga",
-"Phone on its side": "Ifoni ilele",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Lapho libala ifoni ilele, lokho elikukhethayo lapha kuyasuka ukuze amazwi agcwalise isikrini. Skrolani phezulu kancane, kumbe lithinte umphetho ophezulu, ukuze kubuye.",
 "Top bar": "Umgqa ophezulu",
 "Prayer and Circles buttons": "Izinkinobho zoMkhuleko leZamaqembu",
 "Show the bars": "Tshengisa imigqa",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Swayiphani kwesokhohlo kumbe kwesokudla ukuze liye esahlukweni esilandelayo kumbe esandulelayo.",
 "Tap a verse": "Thinta ivesi",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Thayiphani amazwi elikhumbulayo, kumbe isiqephu esinjengo-Johane 3:16. Thintani lapha lokukhetha ibhuku lesahluko.",
-"Open search": "Vula ukudinga",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Yabelanani ngamavesi lemikhuleko labantu abalutshwana elibathembayo, njengemuli yenu kumbe iqembu elincane lomkhuleko.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Thintani 🙏 ukuze likhuleke ngelizwi ligcine umkhuleko wenu. Uhlala uyimfihlo.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Ngemva kokuya kwenye indawo, thintani lapha ukuze libuyele lapho ebelibala khona.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Qhwarha kathathu: ukugqamisa masinyane",
 "Tap the chapter title": "Thintani isihloko sesahluko",
 "Click the chapter title, or press /": "Qhwarhani isihloko sesahluko, kumbe lithinte /",
-"Or pull down at the top of a chapter, then let go": "Kumbe phezulu kwesahluko, donsani phansi beseliyekela",
 "Hold 🙏 to choose its skin tone": "Bambani u-🙏 ukuze likhethe ibala lesikhumba",
 "Only the verses you picked": "Amavesi owakhethileyo kuphela",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Akulalizwi leBhayibhili leli kulesi sisetshenziswa: amabala ayakhanya ukuze ubale uthule.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Amazwi ekhasini",
 "Turning pages": "Ukuphenya amakhasi",
 "On screen": "Esikrinini",
-"Extras": "Okunye"
+"Extras": "Okunye",
+"Pull down at the top of a chapter, then let go": "Phezulu kwesahluko, donsani phansi beseliyekela",
+"Other ways to open search": "Ezinye indlela zokuvula ukudinga",
+"You can also press / to open it.": "Lingacindezela lo / ukuze likuvule.",
+"Listen: hear the verses you picked": "Lalela: zwana amavesi elikhethileyo",
+"Hide while the phone is on its side": "Fihla nxa ifoni ilele ngehlangothi",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Okukhethileyo kuyasuka nxa libala lisehla ekhasini, ukuze amazwi agcwalise isikrini. Khwelisani kancane, kumbe lithinte umphetho ophezulu, ukuze kubuye."
 }

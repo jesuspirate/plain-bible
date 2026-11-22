@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Na woate ŋu azi nya siwo dzi dzesi le dzi (KJV, BSB, Hebrigbe kple Helagbe me nyawo)",
 "Show the numbers inline": "Fia xexlẽdzesiwo le nuŋɔŋlɔ la me",
 "Search bar": "Nudidi ƒe ati",
-"Phone on its side": "Kalẽtefonu mlɔ anyi",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Ne èle nu xlẽm eye kalẽtefonu mlɔ anyi la, nu si nètia le afi sia ʋlina dzona be nyawo nayɔ ŋkume la. Ʋlii yi dzi vie, alo zi ŋkume la ƒe tame dzi, be wòagbɔ.",
 "Top bar": "Tame ƒe ati",
 "Prayer and Circles buttons": "Gbedodoɖa kple Habɔbɔwo ƒe bɔtɔwo",
 "Show the bars": "Fia atiawo",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Ʋli ɖe miame alo ɖusime be nàyi ta si kplɔe ɖo alo esi do ŋgɔ dzi.",
 "Tap a verse": "Zi kpukpui aɖe dzi",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Ŋlɔ nya siwo nèɖo ŋku edzi, alo akpa aɖe abe Yohanes 3:16 ene. Zi afi sia dzi hã be nàtia agbalẽ kple ta.",
-"Open search": "Ʋu nudidi",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Ma kpukpuiwo kple gbedodoɖawo kple ame ʋɛ aɖewo siwo ŋu nèka ɖo, abe wò ƒometɔwo alo gbedodoɖa habɔbɔ sue aɖe ene.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Zi 🙏 dzi be nàdo gbe ɖa kple gbe sesĩe eye nàdzra wò gbedodoɖa ɖo. Enɔa ɣaɣla me.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Ne èyi teƒe bubu la, zi afi sia dzi be nàgbugbɔ ayi afi si nèxlẽ nu le.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Klik zi etɔ̃: amadede kaba",
 "Tap the chapter title": "Zi ta la ƒe tanya dzi",
 "Click the chapter title, or press /": "Klik ta la ƒe tanya dzi, alo zi / dzi",
-"Or pull down at the top of a chapter, then let go": "Alo le ta aɖe ƒe tame, he ɖe anyi eye nàɖe asi le eŋu",
 "Hold 🙏 to choose its skin tone": "Lé 🙏 me ɖe asi be nàtia ŋutigbalẽ ƒe amakpɔkpɔ",
 "Only the verses you picked": "Kpukpui siwo nètia ko",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Gbe meli na Biblia sia le mɔ̃ sia dzi o: nyawo klẽna ne nàxlẽe le dzi me.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Nyawo siwo le axa la dzi",
 "Turning pages": "Axawo trɔtrɔ",
 "On screen": "Le mɔ̃a ŋkume",
-"Extras": "Bubuwo"
+"Extras": "Bubuwo",
+"Pull down at the top of a chapter, then let go": "Le ta aɖe ƒe tame, he ɖe anyi eye nàɖe asi le eŋu",
+"Other ways to open search": "Mɔ bubuwo siwo dzi nàto aʋu nudidi",
+"You can also press / to open it.": "Àte ŋu azi / hã atsɔ aʋui.",
+"Listen: hear the verses you picked": "Ɖo to: se kpukpui siwo nètia",
+"Hide while the phone is on its side": "Ɣlae ne fon la mlɔ axadzi",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Nu siwo nète dzesi ɖo la ʋuna ɖe aga ne èle exlẽm yi ŋkɔ la te, ale be nyawo nayɔ sikirin la dzi. Tsɔe yi dzi vie, alo ka ŋgɔ ƒe dzi, be woagbɔ."
 }

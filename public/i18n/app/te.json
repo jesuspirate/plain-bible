@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "ట్యాగ్ చేసిన పదాలను నొక్కగలిగేలా చేయి (KJV, BSB, హీబ్రూ, గ్రీకు పాఠాలు)",
 "Show the numbers inline": "సంఖ్యలను పాఠంలోనే చూపు",
 "Search bar": "సెర్చ్ బార్",
-"Phone on its side": "ఫోన్ అడ్డంగా ఉన్నప్పుడు",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "ఫోన్‌ను అడ్డంగా పెట్టి చదువుతున్నప్పుడు, ఇక్కడ మీరు టిక్ చేసినవి పక్కకు జారిపోతాయి, కాబట్టి అక్షరాలు స్క్రీన్ మొత్తం నిండుతాయి. తిరిగి తేవడానికి, కొంచెం పైకి స్క్రోల్ చేయండి, లేదా పై అంచును నొక్కండి.",
 "Top bar": "పై బార్",
 "Prayer and Circles buttons": "ప్రార్థన, సర్కిల్‌ల బటన్‌లు",
 "Show the bars": "బార్‌లను చూపు",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "తర్వాతి లేదా మునుపటి అధ్యాయానికి వెళ్లడానికి ఎడమకు లేదా కుడికి స్వైప్ చేయండి.",
 "Tap a verse": "ఒక వచనాన్ని నొక్కండి",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "మీకు గుర్తున్న పదాలను, లేదా యోహాను 3:16 లాంటి భాగాన్ని టైప్ చేయండి. పుస్తకం, అధ్యాయం ఎంచుకోవడానికి కూడా ఇక్కడ నొక్కండి.",
-"Open search": "సెర్చ్ తెరువు",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "మీ కుటుంబం లేదా ఒక చిన్న ప్రార్థన గుంపు లాగా, మీరు నమ్మే కొద్దిమందితో వచనాలను, ప్రార్థనలను షేర్ చేయండి.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "బిగ్గరగా ప్రార్థించి, మీ ప్రార్థనను ఉంచుకోవడానికి 🙏 నొక్కండి. అది ప్రైవేట్‌గానే ఉంటుంది.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "వేరే చోటికి వెళ్లిన తర్వాత, మీరు చదువుతున్న చోటికి తిరిగి రావడానికి ఇక్కడ నొక్కండి.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "మూడుసార్లు క్లిక్: వేగంగా హైలైట్",
 "Tap the chapter title": "అధ్యాయం శీర్షికపై ట్యాప్ చేయండి",
 "Click the chapter title, or press /": "అధ్యాయం శీర్షికపై క్లిక్ చేయండి, లేదా / నొక్కండి",
-"Or pull down at the top of a chapter, then let go": "లేదా అధ్యాయం పైభాగంలో కిందకు లాగి వదలండి",
 "Hold 🙏 to choose its skin tone": "చర్మం రంగు ఎంచుకోవడానికి 🙏ని నొక్కి పట్టుకోండి",
 "Only the verses you picked": "ఎంచుకున్న వచనాలు మాత్రమే",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ఈ పరికరంలో ఈ బైబిల్‌కు స్వరం లేదు: పదాలు వెలుగుతాయి, మీరు మౌనంగా చదవవచ్చు.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "పేజీలోని పదాలు",
 "Turning pages": "పేజీ తిప్పడం",
 "On screen": "తెరపై",
-"Extras": "అదనపువి"
+"Extras": "అదనపువి",
+"Pull down at the top of a chapter, then let go": "అధ్యాయం పైభాగంలో కిందకు లాగి వదలండి",
+"Other ways to open search": "సెర్చ్ తెరవడానికి ఇతర మార్గాలు",
+"You can also press / to open it.": "దాన్ని తెరవడానికి / కూడా నొక్కవచ్చు.",
+"Listen: hear the verses you picked": "విను: ఎంచుకున్న వచనాలు వినండి",
+"Hide while the phone is on its side": "ఫోన్ అడ్డంగా ఉన్నప్పుడు దాచు",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "పేజీ కిందకు చదువుతున్నప్పుడు టిక్ చేసినవి పక్కకు తప్పుకుంటాయి, పదాలు తెర నిండుతాయి. వాటిని తిరిగి తేవడానికి కొంచెం పైకి స్క్రోల్ చేయండి లేదా పై అంచును తట్టండి."
 }

@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "让带标记的字词可以轻点（KJV、BSB、希伯来文和希腊文经文）",
 "Show the numbers inline": "在经文中显示编号",
 "Search bar": "搜索栏",
-"Phone on its side": "横放手机",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "横放手机阅读时，你在这里勾选的项目会滑开，让经文占满屏幕。稍微向上滚动，或轻点屏幕顶部边缘，即可让它们重新出现。",
 "Top bar": "顶部栏",
 "Prayer and Circles buttons": "祷告和小组按钮",
 "Show the bars": "显示栏",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "向左或向右轻扫，即可前往下一章或上一章。",
 "Tap a verse": "轻点一节经文",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "输入你记得的字词，或像约翰福音 3:16 这样的经文出处。也可以轻点这里选择书卷和章。",
-"Open search": "打开搜索",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "与几位你信任的人分享经文和祷告，例如你的家人或一个小型祷告小组。",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "轻点 🙏 出声祷告并保存你的祷告。它是私密的。",
 "After you jump somewhere else, tap here to go back to where you were reading.": "跳到其他地方后，轻点这里即可回到刚才阅读的位置。",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "连点三下：快速高亮",
 "Tap the chapter title": "轻点章节标题",
 "Click the chapter title, or press /": "点按章节标题，或按 /",
-"Or pull down at the top of a chapter, then let go": "或在章节顶部向下拉，然后松开",
 "Hold 🙏 to choose its skin tone": "按住 🙏 选择肤色",
 "Only the verses you picked": "只读你选的经节",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "此设备上这本圣经没有语音：字词会逐个亮起，方便你默读。",
@@ -1323,5 +1319,11 @@
 "Words on the page": "页面上的文字",
 "Turning pages": "翻页",
 "On screen": "屏幕显示",
-"Extras": "其他"
+"Extras": "其他",
+"Pull down at the top of a chapter, then let go": "在章节顶部向下拉，然后松开",
+"Other ways to open search": "打开搜索的其他方法",
+"You can also press / to open it.": "也可以按 / 打开。",
+"Listen: hear the verses you picked": "收听：听你选的经文",
+"Hide while the phone is on its side": "手机横放时隐藏",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "勾选的项目会在你往下阅读时移开，让文字铺满屏幕。稍微往上滚动，或轻点顶部边缘，即可让它们回来。"
 }

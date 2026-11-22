@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Ma nsɛmfua a wɔahyɛ ho nsow nyɛ nea wotumi mia so (KJV, BSB, Hebri ne Greek nsɛm)",
 "Show the numbers inline": "Kyerɛ nɔma no wɔ nsɛm no mu",
 "Search bar": "Nhwehwɛmu dua",
-"Phone on its side": "Fon a ɛda nkyɛn",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Sɛ wode fon no da nkyɛn rekenkan a, nea wohyɛ ho nsow wɔ ha no bɛyi ama nsɛm no ahyɛ screen no ma. Twe kɔ soro kakra, anaa mia ɔsoro ano, na ɛbɛsan aba.",
 "Top bar": "Ɔsoro dua",
 "Prayer and Circles buttons": "Mpaebɔ ne Akuw bɔtɔn",
 "Show the bars": "Kyerɛ nnua no",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Twe kɔ benkum anaa nifa na kɔ ti a edi hɔ anaa nea ɛdi kan no so.",
 "Tap a verse": "Mia nkyekyɛm bi",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Kyerɛw nsɛmfua a wokae, anaa beaeɛ te sɛ Yohane 3:16. Mia ha nso na yi nhoma ne ti.",
-"Open search": "Bue nhwehwɛmu",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Kyɛ nkyekyɛm ne mpaebɔ ne nnipa kakra a wogye wɔn di, te sɛ w’abusua anaa mpaebɔ kuw ketewa bi.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Mia 🙏 na bɔ mpae dennen na kora wo mpaebɔ. Ɛtena kokoam.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Sɛ wokɔ baabi foforo a, mia ha na san kɔ faako a na wokenkan no.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Klik mprɛnsa: hyɛ kɔla ntɛm",
 "Tap the chapter title": "Mia ti no din so",
 "Click the chapter title, or press /": "Klik ti no din so, anaa mia /",
-"Or pull down at the top of a chapter, then let go": "Anaa wɔ ti bi atifi, twe kɔ fam na gyae",
 "Hold 🙏 to choose its skin tone": "Mia 🙏 so kyɛ na yi honam kɔla",
 "Only the verses you picked": "Nkyekyem a woapaw nko ara",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Nne biara nni hɔ ma Bible yi wɔ saa afiri yi so: nsɛmfua no hyerɛn sɛnea wobɛkenkan komm.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Nsɛmfua a ɛwɔ krataafa no so",
 "Turning pages": "Krataafa dane",
 "On screen": "Wɔ skrin no so",
-"Extras": "Nkekaho"
+"Extras": "Nkekaho",
+"Pull down at the top of a chapter, then let go": "Wɔ ti bi atifi, twe kɔ fam na gyae",
+"Other ways to open search": "Akwan foforo a wobɛfa so abue nhwehwɛmu",
+"You can also press / to open it.": "Wobɛtumi aka / nso de abue.",
+"Listen: hear the verses you picked": "Tie: tie nkyekyem a woapaw",
+"Hide while the phone is on its side": "Fa sie bere a fon no da ne nkyɛn",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Nneɛma a woahyɛ ho nsɛnkyerɛnne no kɔ nkyɛn bere a woresi kɔ krataafa no ase, sɛnea nsɛm no bɛhyɛ skrin no ma. Twe kɔ soro kakra, anaa mia atifi ano, na ɛsan aba."
 }

@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Ita kuti mashoko akamakwa abayike (KJV, BSB, zvinyorwa zveChiHebheru neChiGiriki)",
 "Show the numbers inline": "Ratidza nhamba mukati memavara",
 "Search bar": "Bhawa rekutsvaga",
-"Phone on its side": "Foni yakarara",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Pamunoverenga foni yakarara, zvamasarudza pano zvinobva kuti mashoko azadze chidzitiro. Kwidzai zvishoma, kana bayai mupendero wepamusoro, kuti zvidzoke.",
 "Top bar": "Bhawa repamusoro",
 "Prayer and Circles buttons": "Mabhatani eMunamato neMapoka",
 "Show the bars": "Ratidza mabhawa",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Svaipai kuruboshwe kana kurudyi kuti muende kuchitsauko chinotevera kana chakapfuura.",
 "Tap a verse": "Baya ndima",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Nyorai mashoko amunorangarira, kana ndima yakaita saJohani 3:16. Bayai pano zvakare kuti musarudze bhuku nechitsauko.",
-"Open search": "Vhura kutsvaga",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Goverai ndima neminamato nevanhu vashoma vamunovimba navo, semhuri yenyu kana boka diki remunamato.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Bayai 🙏 kuti munamate zvinonzwika uye muchengete munamato wenyu. Unoramba wakavanzika.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Mushure mekuenda kumwe, bayai pano kuti mudzokere pamaiverenga.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Dzvanya katatu: penda nekukurumidza",
 "Tap the chapter title": "Bayai zita rechitsauko",
 "Click the chapter title, or press /": "Dzvanyai zita rechitsauko, kana bayai /",
-"Or pull down at the top of a chapter, then let go": "Kana pamusoro pechitsauko, kweverai pasi mozorega",
 "Hold 🙏 to choose its skin tone": "Batai 🙏 kuti musarudze ruvara rweganda",
 "Only the verses you picked": "Ndima dzawasarudza chete",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Hapana inzwi reBhaibheri iri pachishandiso ichi: mazwi anovhenekera kuti uverenge wakanyarara.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Mazwi ari papeji",
 "Turning pages": "Kutendeuka mapeji",
 "On screen": "Pachidzitiro",
-"Extras": "Zvimwe"
+"Extras": "Zvimwe",
+"Pull down at the top of a chapter, then let go": "Pamusoro pechitsauko, kweverai pasi mozorega",
+"Other ways to open search": "Dzimwe nzira dzekuvhura kutsvaga",
+"You can also press / to open it.": "Munogonawo kudzvanya / kuti muvhure.",
+"Listen: hear the verses you picked": "Teerera: inzwai ndima dzamasarudza",
+"Hide while the phone is on its side": "Viga kana foni yakarara parutivi",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zvamasarudza zvinobva pamberi pamunenge muchiverenga muchidzika peji, kuti mazwi azadze sikirini. Kwidzai zvishoma, kana kubata mucheto wepamusoro, kuti zvidzoke."
 }

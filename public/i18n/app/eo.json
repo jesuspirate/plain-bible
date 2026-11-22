@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Igi markitajn vortojn tuŝeteblaj (KJV, BSB, hebreaj kaj grekaj tekstoj)",
 "Show the numbers inline": "Montri la numerojn en la teksto",
 "Search bar": "Serĉobreto",
-"Phone on its side": "Telefono kuŝanta",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Kiam vi legas kun la telefono kuŝanta, tio, kion vi markas ĉi tie, glitas for, por ke la vortoj plenigu la ekranon. Rulumu iom supren, aŭ tuŝetu la supran randon, por revenigi ĝin.",
 "Top bar": "Supra breto",
 "Prayer and Circles buttons": "Butonoj Preĝi kaj Rondoj",
 "Show the bars": "Montri la bretojn",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Ŝovu maldekstren aŭ dekstren por iri al la sekva aŭ antaŭa ĉapitro.",
 "Tap a verse": "Tuŝeti verson",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Tajpu vortojn, kiujn vi memoras, aŭ tekstopecon kiel Joh 3:16. Tuŝetu ĉi tie ankaŭ por elekti libron kaj ĉapitron.",
-"Open search": "Malfermi serĉon",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Kunhavigu versojn kaj preĝojn kun kelkaj homoj, al kiuj vi fidas, kiel via familio aŭ malgranda preĝgrupo.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Tuŝetu 🙏 por preĝi laŭte kaj konservi vian preĝon. Ĝi restas privata.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Post kiam vi saltis aliloken, tuŝetu ĉi tie por reveni al kie vi legis.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Triobla klako: rapida emfazo",
 "Tap the chapter title": "Tuŝetu la ĉapitrotitolon",
 "Click the chapter title, or press /": "Alklaku la ĉapitrotitolon, aŭ premu /",
-"Or pull down at the top of a chapter, then let go": "Aŭ, ĉe la supro de ĉapitro, tiru malsupren kaj ellasu",
 "Hold 🙏 to choose its skin tone": "Tenu 🙏 por elekti ĝian haŭtkoloron",
 "Only the verses you picked": "Nur la elektitaj versoj",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Neniu voĉo por ĉi tiu Biblio en ĉi tiu aparato: la vortoj eklumas por silenta legado.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Vortoj sur la paĝo",
 "Turning pages": "Paĝoturnado",
 "On screen": "Sur la ekrano",
-"Extras": "Aldonaĵoj"
+"Extras": "Aldonaĵoj",
+"Pull down at the top of a chapter, then let go": "Ĉe la supro de ĉapitro, tiru malsupren kaj ellasu",
+"Other ways to open search": "Aliaj manieroj malfermi serĉon",
+"You can also press / to open it.": "Vi ankaŭ povas premi / por malfermi ĝin.",
+"Listen: hear the verses you picked": "Aŭskulti: aŭdu la elektitajn versojn",
+"Hide while the phone is on its side": "Kaŝi dum la telefono kuŝas flanke",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Markitaj aferoj forglitas dum vi legas malsupren laŭ la paĝo, por ke la teksto plenigu la ekranon. Rulumu iom supren aŭ tuŝu la supran randon por revenigi ilin."
 }

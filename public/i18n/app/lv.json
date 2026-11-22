@@ -607,8 +607,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Padarīt marķētos vārdus pieskaramus (KJV, BSB, ebreju un grieķu teksti)",
 "Show the numbers inline": "Rādīt numurus tekstā",
 "Search bar": "Meklēšanas josla",
-"Phone on its side": "Tālrunis guļus",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Kad lasāt ar tālruni guļus, tas, ko šeit atzīmējat, aizslīd prom, lai vārdi aizpildītu ekrānu. Paritiniet mazliet atpakaļ uz augšu vai pieskarieties augšmalai, lai to atgrieztu.",
 "Top bar": "Augšējā josla",
 "Prayer and Circles buttons": "Lūgšanas un Loku pogas",
 "Show the bars": "Rādīt joslas",
@@ -897,7 +895,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Velciet pa kreisi vai pa labi, lai pārietu uz nākamo vai iepriekšējo nodaļu.",
 "Tap a verse": "Pieskarties pantam",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Ierakstiet vārdus, ko atceraties, vai fragmentu, piemēram, Jņ 3:16. Pieskarieties šeit, lai izvēlētos arī grāmatu un nodaļu.",
-"Open search": "Atvērt meklēšanu",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Kopīgojiet pantus un lūgšanas ar dažiem cilvēkiem, kuriem uzticaties, piemēram, ģimeni vai nelielu lūgšanu grupu.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Pieskarieties 🙏, lai lūgtu skaļi un saglabātu savu lūgšanu. Tā paliek privāta.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Kad esat pārgājis citur, pieskarieties šeit, lai atgrieztos tur, kur lasījāt.",
@@ -1356,7 +1353,6 @@
 "Triple click: quick highlight": "Trīskāršs klikšķis: ātra iezīmēšana",
 "Tap the chapter title": "Pieskarieties nodaļas virsrakstam",
 "Click the chapter title, or press /": "Noklikšķiniet uz nodaļas virsraksta vai nospiediet /",
-"Or pull down at the top of a chapter, then let go": "Vai nodaļas augšā velciet uz leju un atlaidiet",
 "Hold 🙏 to choose its skin tone": "Turiet 🙏, lai izvēlētos ādas toni",
 "Only the verses you picked": "Tikai izvēlētie panti",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Šai Bībelei šajā ierīcē nav balss: vārdi iedegas, lai varētu lasīt klusi.",
@@ -1407,5 +1403,11 @@
 "Words on the page": "Teksts lapā",
 "Turning pages": "Lapu šķiršana",
 "On screen": "Ekrānā",
-"Extras": "Papildus"
+"Extras": "Papildus",
+"Pull down at the top of a chapter, then let go": "Nodaļas augšā velciet uz leju un atlaidiet",
+"Other ways to open search": "Citi veidi, kā atvērt meklēšanu",
+"You can also press / to open it.": "To var atvērt arī ar taustiņu /.",
+"Listen: hear the verses you picked": "Klausīties: dzirdēt izvēlētos pantus",
+"Hide while the phone is on its side": "Paslēpt, kad tālrunis ir guļus",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Atzīmētais aizslīd, kamēr lasāt lapu uz leju, lai teksts aizpildītu ekrānu. Ritiniet nedaudz uz augšu vai pieskarieties augšējai malai, lai to atgrieztu."
 }

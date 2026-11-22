@@ -620,8 +620,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Označene besede naj bodo tapljive (KJV, BSB, hebrejska in grška besedila)",
 "Show the numbers inline": "Pokaži številke v besedilu",
 "Search bar": "Iskalna vrstica",
-"Phone on its side": "Telefon postrani",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Ko berete s telefonom postrani, se to, kar tukaj obkljukate, umakne, da besedilo zapolni zaslon. Malo se pomaknite nazaj navzgor ali tapnite zgornji rob, da se vrne.",
 "Top bar": "Zgornja vrstica",
 "Prayer and Circles buttons": "Gumba Moli in Krogi",
 "Show the bars": "Pokaži vrstice",
@@ -916,7 +914,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Podrsajte levo ali desno, da greste na naslednje ali prejšnje poglavje.",
 "Tap a verse": "Tapnite vrstico",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Vpišite besede, ki se jih spomnite, ali odlomek, na primer Janez 3:16. Tapnite tukaj, da izberete tudi knjigo in poglavje.",
-"Open search": "Odpri iskanje",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Delite vrstice in molitve z nekaj ljudmi, ki jim zaupate, na primer z družino ali majhno molitveno skupino.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Tapnite 🙏, da molite na glas in shranite svojo molitev. Ostane zasebna.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Ko skočite drugam, tapnite tukaj, da se vrnete tja, kjer ste brali.",
@@ -1377,7 +1374,6 @@
 "Triple click: quick highlight": "Trojni klik: hitro označevanje",
 "Tap the chapter title": "Tapnite naslov poglavja",
 "Click the chapter title, or press /": "Kliknite naslov poglavja ali pritisnite /",
-"Or pull down at the top of a chapter, then let go": "Ali na vrhu poglavja povlecite navzdol in spustite",
 "Hold 🙏 to choose its skin tone": "Pridržite 🙏, da izberete barvo kože",
 "Only the verses you picked": "Le izbrane vrstice",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Za to Sveto pismo na tej napravi ni glasu: besede se osvetljujejo, da lahko berete tiho.",
@@ -1428,5 +1424,11 @@
 "Words on the page": "Besedilo na strani",
 "Turning pages": "Obračanje strani",
 "On screen": "Na zaslonu",
-"Extras": "Dodatno"
+"Extras": "Dodatno",
+"Pull down at the top of a chapter, then let go": "Na vrhu poglavja povlecite navzdol in spustite",
+"Other ways to open search": "Drugi načini za odpiranje iskanja",
+"You can also press / to open it.": "Odprete ga lahko tudi s tipko /.",
+"Listen: hear the verses you picked": "Poslušaj: slišite izbrane vrstice",
+"Hide while the phone is on its side": "Skrij, ko je telefon položen",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Označeno se umakne, ko berete navzdol po strani, da besedilo zapolni zaslon. Pomaknite se malo navzgor ali tapnite zgornji rob, da se vrne."
 }

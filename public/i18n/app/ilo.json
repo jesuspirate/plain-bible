@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Pagbalinen a ma-tap dagiti sao nga addaan tag (KJV, BSB, dagiti teksto a Hebreo ken Griego)",
 "Show the numbers inline": "Ipakita dagiti numero iti uneg ti teksto",
 "Search bar": "Search bar",
-"Phone on its side": "Nakaidda a phone",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Bayat ti panagbasa a nakaidda ti phone, agislide nga umadayo ti tsinekam ditoy tapno mapno dagiti sao ti screen. Ag-scroll iti bassit nga agpangato, wenno i-tap ti ngato nga igid, tapno agsubli daytoy.",
 "Top bar": "Ngato a bar",
 "Prayer and Circles buttons": "Dagiti button ti Kararag ken Bunggoy",
 "Show the bars": "Ipakita dagiti bar",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "I-swipe iti kannigid wenno kannawan tapno mapan iti sumaruno wenno napalabas a kapitulo.",
 "Tap a verse": "I-tap ti bersikulo",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "I-type dagiti sao a malagipmo, wenno paset a kas iti Juan 3:16. I-tap met ditoy tapno mangpili iti libro ken kapitulo.",
-"Open search": "Lukatan ti panagbiruk",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Ibingay dagiti bersikulo ken kararag kadagiti sumagmamano a tao a pagtalkam, kas iti pamiliam wenno bassit a grupo ti kararag.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "I-tap ti 🙏 tapno agkararag a napigsa ken idulin ti kararag-mo. Agtalinaed daytoy a pribado.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Kalpasan ti panagakarmo iti sabali a lugar, i-tap ditoy tapno agsubli iti ayan ti basbasaem.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Mamitlo nga i-click: dagus a highlight",
 "Tap the chapter title": "I-tap ti titulo ti kapitulo",
 "Click the chapter title, or press /": "I-click ti titulo ti kapitulo, wenno pindoten ti /",
-"Or pull down at the top of a chapter, then let go": "Wenno iti ngato ti kapitulo, guyuden nga agpababa sa ibbatan",
 "Hold 🙏 to choose its skin tone": "Iggaman ti 🙏 tapno agpili iti kolor ti kudil",
 "Only the verses you picked": "Dagiti laeng bersikulo a pinilim",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Awan ti timek para iti daytoy a Biblia iti daytoy a device: agsilnag dagiti sasao tapno makabasaka a siuulimek.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Dagiti sao iti panid",
 "Turning pages": "Panangbaliktad ti panid",
 "On screen": "Iti screen",
-"Extras": "Dadduma pay"
+"Extras": "Dadduma pay",
+"Pull down at the top of a chapter, then let go": "Iti ngato ti kapitulo, guyuden nga agpababa sa ibbatan",
+"Other ways to open search": "Dadduma pay a wagas a panglukat iti panagbiruk",
+"You can also press / to open it.": "Mabalinmo met a pinduten ti / tapno malukatan.",
+"Listen: hear the verses you picked": "Denggen: denggen dagiti bersikulo a pinilim",
+"Hide while the phone is on its side": "Ilemmeng no nakaidda ti telepono",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Dagiti naitsekan ket agpaadayo bayat ti panagbasam nga agpababa iti panid, tapno mapno dagiti sao ti screen. Ipangato bassit, wenno tapen ti ngato nga igid, tapno agsubli dagitoy."
 }

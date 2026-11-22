@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Fè mo ki make yo kapab peze (KJV, BSB, tèks ebre ak grèk)",
 "Show the numbers inline": "Montre nimewo yo nan tèks la",
 "Search bar": "Ba rechèch",
-"Phone on its side": "Telefòn kouche sou kote",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Lè w ap li ak telefòn nan kouche sou kote, sa ou make isit la ap glise ale pou mo yo plen ekran an. Monte yon ti kras, oswa peze bò anlè a, pou fè l tounen.",
 "Top bar": "Ba anlè a",
 "Prayer and Circles buttons": "Bouton Lapriyè ak Sèk",
 "Show the bars": "Montre ba yo",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Glise sou bò goch oswa sou bò dwat pou ale nan chapit apre a oswa chapit anvan an.",
 "Tap a verse": "Peze yon vèsè",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Tape mo ou sonje, oswa yon pasaj tankou Jan 3:16. Peze isit la tou pou chwazi yon liv ak yon chapit.",
-"Open search": "Louvri rechèch la",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Pataje vèsè ak lapriyè ak kèk moun ou fè konfyans, tankou fanmi ou oswa yon ti gwoup lapriyè.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Peze 🙏 pou priye awotvwa epi kenbe lapriyè ou. Li rete prive.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Apre ou ale yon lòt kote, peze isit la pou retounen kote ou t ap li a.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Klike twa fwa: souliye rapid",
 "Tap the chapter title": "Peze tit chapit la",
 "Click the chapter title, or press /": "Klike sou tit chapit la, oswa peze /",
-"Or pull down at the top of a chapter, then let go": "Oswa anlè yon chapit, rale desann epi lage l",
 "Hold 🙏 to choose its skin tone": "Kenbe 🙏 pou chwazi koulè po a",
 "Only the verses you picked": "Sèlman vèsè ou chwazi yo",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Pa gen vwa pou Bib sa a sou aparèy sa a: mo yo limen pou ou ka li an silans.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Mo yo sou paj la",
 "Turning pages": "Vire paj yo",
 "On screen": "Sou ekran an",
-"Extras": "Plis"
+"Extras": "Plis",
+"Pull down at the top of a chapter, then let go": "Anlè yon chapit, rale desann epi lage l",
+"Other ways to open search": "Lòt fason pou louvri rechèch la",
+"You can also press / to open it.": "Ou ka peze / tou pou louvri l.",
+"Listen: hear the verses you picked": "Koute: tande vèsè ou chwazi yo",
+"Hide while the phone is on its side": "Kache lè telefòn nan kouche",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Sa ou tcheke yo ale sou kote pandan w ap li desann paj la, pou mo yo plen ekran an. Monte yon ti kras, oswa tape bò anwo a, pou fè yo tounen."
 }

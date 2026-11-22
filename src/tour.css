@@ -30,8 +30,5 @@
 .tour-rows li.on { background: color-mix(in srgb, var(--accent) 12%, transparent); }
 .tour-card p.tour-after { margin-top: 8px; }
 @media (prefers-reduced-motion: reduce) { .tour-rows li { transition: none; } }
-/* Listen and Read along, as they look in the verse's bar. */
-.tour-bar { display: flex; flex-wrap: wrap; gap: 8px; }
-.tour-bar > span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 999px;
-  border: 1px solid var(--line); font-weight: 600; }
-.tour-bar svg { color: var(--accent); }
+/* Listen: its speaker sits where the other lines have their gesture. */
+.tour-icon { flex: none; display: inline-flex; align-items: center; justify-content: center; width: 28px; height: 28px; color: var(--accent); }

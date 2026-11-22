@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "بەلگىلەنگەن سۆزلەرنى باسقىلى بولىدىغان قىلىش (KJV، BSB، ئىبرانىي ۋە گرېكچە تېكىستلەر)",
 "Show the numbers inline": "نومۇرلارنى تېكىست ئىچىدە كۆرسىتىش",
 "Search bar": "ئىزدەش بالدىقى",
-"Phone on its side": "تېلېفون توغرىسىغا",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "تېلېفوننى توغرىسىغا تۇتۇپ ئوقۇغاندا، بۇ يەردە بەلگىلىگەنلىرىڭىز سىيرىلىپ يوقىلىدۇ، سۆزلەر ئېكراننى تولدۇرىدۇ. قايتۇرۇش ئۈچۈن ئازراق يۇقىرىغا سىيرىڭ ياكى ئۈستۈنكى گىرۋەكنى بېسىڭ.",
 "Top bar": "ئۈستۈنكى بالداق",
 "Prayer and Circles buttons": "دۇئا ۋە چەمبەرلەر كۇنۇپكىلىرى",
 "Show the bars": "بالداقلارنى كۆرسىتىش",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "كېيىنكى ياكى ئالدىنقى بابقا بېرىش ئۈچۈن سولغا ياكى ئوڭغا سىيرىڭ.",
 "Tap a verse": "ئايەتنى بېسىڭ",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "ئېسىڭىزدىكى سۆزلەرنى ياكى يۇھاننا 3:16 غا ئوخشاش بۆلەكنى يېزىڭ. كىتاب ۋە باب تاللاش ئۈچۈنمۇ بۇ يەرنى بېسىڭ.",
-"Open search": "ئىزدەشنى ئېچىش",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "ئايەت ۋە دۇئالارنى ئىشەنگەن بىر نەچچە كىشى، مەسىلەن ئائىلىڭىز ياكى كىچىك دۇئا گۇرۇپپىسى بىلەن ھەمبەھىرلەڭ.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "ئۈنلۈك دۇئا قىلىپ دۇئايىڭىزنى ساقلاش ئۈچۈن 🙏 نى بېسىڭ. ئۇ شەخسىي قالىدۇ.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "باشقا يەرگە ئۆتكەندىن كېيىن، ئوقۇۋاتقان يېرىڭىزگە قايتىش ئۈچۈن بۇ يەرنى بېسىڭ.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "ئۈچ قېتىم چېكىش: تېز گەۋدىلەندۈرۈش",
 "Tap the chapter title": "باب ماۋزۇسىنى بېسىڭ",
 "Click the chapter title, or press /": "باب ماۋزۇسىنى چېكىڭ، ياكى / نى بېسىڭ",
-"Or pull down at the top of a chapter, then let go": "ياكى بابنىڭ بېشىدا تۆۋەنگە تارتىپ قويۇۋېتىڭ",
 "Hold 🙏 to choose its skin tone": "تېرە رەڭگىنى تاللاش ئۈچۈن 🙏 نى بېسىپ تۇرۇڭ",
 "Only the verses you picked": "پەقەت تاللانغان ئايەتلەر",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "بۇ ئۈسكۈنىدە بۇ مۇقەددەس كىتابنىڭ ئاۋازى يوق: سۆزلەر يورۇيدۇ، ئىچىڭىزدە ئوقۇيالايسىز.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "بەتتىكى سۆزلەر",
 "Turning pages": "بەت ئۆرۈش",
 "On screen": "ئېكراندا",
-"Extras": "قوشۇمچە"
+"Extras": "قوشۇمچە",
+"Pull down at the top of a chapter, then let go": "بابنىڭ بېشىدا تۆۋەنگە تارتىپ قويۇۋېتىڭ",
+"Other ways to open search": "ئىزدەشنى ئېچىشنىڭ باشقا يوللىرى",
+"You can also press / to open it.": "ئۇنى ئېچىش ئۈچۈن / نى باسسىڭىزمۇ بولىدۇ.",
+"Listen: hear the verses you picked": "ئاڭلاش: تاللىغان ئايەتلەرنى ئاڭلاڭ",
+"Hide while the phone is on its side": "تېلېفون يانتۇ تۇرغاندا يوشۇرۇش",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "بەتنى تۆۋەنگە ئوقۇغانسېرى بەلگە قويۇلغانلار ئېلىپ كېتىلىدۇ، شۇنىڭ بىلەن خەت ئېكراننى تولدۇرىدۇ. قايتۇرۇش ئۈچۈن سەل يۇقىرىغا سۈرۈڭ ياكى ئۈستى گىرۋەكنى چېكىڭ."
 }

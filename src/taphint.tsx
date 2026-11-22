@@ -7,11 +7,12 @@
 //
 //   showTapHints([{ el: verse, label: t('Tap a verse'), times: 3 }])
 //
-// Used by Audio in Settings (Try it now).
+// Used by Audio and Search bar in Settings (Try it now), and Account.
 import { render } from 'preact'
-import { Gesture, GESTURE_MS, stillMotion } from './gesture'
+import { Gesture, GESTURE_MS, stillMotion, type Kind } from './gesture'
 
-export type TapStep = { el: Element; label: string; times?: number }
+/** kind: the gesture shown (a tap unless said, e.g. a pull down). */
+export type TapStep = { el: Element; label: string; times?: number; kind?: Kind }
 
 let stopCurrent: (() => void) | undefined
 
@@ -57,7 +58,7 @@ export function showTapHints(steps: TapStep[]): () => void {
     const step = steps[i]
     if (!step || !step.el.isConnected) { end(); return }
     const { x, y } = spot(step.el)
-    render(<><Gesture key={`${i}-${n}`} kind="tap" x={x} y={y} /><Label x={x} y={y} text={step.label} /></>, box)
+    render(<><Gesture key={`${i}-${n}`} kind={step.kind ?? 'tap'} x={x} y={y} /><Label x={x} y={y} text={step.label} /></>, box)
     if (++n >= (step.times ?? 1)) { i++; n = 0 }
     timer = window.setTimeout(next, stillMotion() ? 2600 : GESTURE_MS)
   }

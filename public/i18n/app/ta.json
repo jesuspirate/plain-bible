@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "குறியிடப்பட்ட சொற்களைத் தட்டக்கூடியதாக்கு (KJV, BSB, எபிரெய, கிரேக்கப் பாடங்கள்)",
 "Show the numbers inline": "எண்களை வரிக்குள்ளேயே காட்டு",
 "Search bar": "தேடல் பட்டி",
-"Phone on its side": "ஃபோன் பக்கவாட்டில் இருக்கும்போது",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "ஃபோனைப் பக்கவாட்டில் வைத்து வாசிக்கும்போது, இங்கே நீங்கள் குறிப்பவை விலகிச் செல்லும்; சொற்கள் திரை முழுவதையும் நிரப்பும். மீண்டும் கொண்டுவர, சற்று மேலே உருட்டவும், அல்லது மேல் விளிம்பைத் தட்டவும்.",
 "Top bar": "மேல் பட்டி",
 "Prayer and Circles buttons": "ஜெபம், வட்டங்கள் பட்டன்கள்",
 "Show the bars": "பட்டிகளைக் காட்டு",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "அடுத்த அல்லது முந்தைய அதிகாரத்திற்குச் செல்ல இடது அல்லது வலது பக்கம் ஸ்வைப் செய்யவும்.",
 "Tap a verse": "ஒரு வசனத்தைத் தட்டவும்",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "நினைவில் உள்ள சொற்களை, அல்லது யோவான் 3:16 போன்ற ஒரு பகுதியைத் தட்டச்சு செய்யவும். புத்தகத்தையும் அதிகாரத்தையும் தேர்ந்தெடுக்கவும் இங்கே தட்டவும்.",
-"Open search": "தேடலைத் திற",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "உங்கள் குடும்பம் அல்லது ஒரு சிறு ஜெபக் குழு போல, நீங்கள் நம்பும் சிலருடன் வசனங்களையும் ஜெபங்களையும் பகிருங்கள்.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "சத்தமாக ஜெபித்து, உங்கள் ஜெபத்தைச் சேமிக்க 🙏 ஐத் தட்டவும். அது தனிப்பட்டதாகவே இருக்கும்.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "வேறு இடத்திற்குச் சென்ற பிறகு, நீங்கள் வாசித்துக்கொண்டிருந்த இடத்திற்குத் திரும்ப இங்கே தட்டவும்.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "மும்முறை கிளிக்: விரைவு ஹைலைட்",
 "Tap the chapter title": "அதிகாரத் தலைப்பைத் தட்டுங்கள்",
 "Click the chapter title, or press /": "அதிகாரத் தலைப்பைக் கிளிக் செய்யுங்கள், அல்லது / அழுத்துங்கள்",
-"Or pull down at the top of a chapter, then let go": "அல்லது அதிகாரத்தின் மேலே கீழே இழுத்து விடுங்கள்",
 "Hold 🙏 to choose its skin tone": "தோல் நிறத்தைத் தேர்ந்தெடுக்க 🙏-ஐ அழுத்திப் பிடியுங்கள்",
 "Only the verses you picked": "தேர்ந்த வசனங்கள் மட்டும்",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "இந்தச் சாதனத்தில் இந்த வேதாகமத்திற்குக் குரல் இல்லை: சொற்கள் ஒளிரும், மனதுக்குள் வாசிக்கலாம்.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "பக்கத்தில் உள்ள சொற்கள்",
 "Turning pages": "பக்கம் புரட்டுதல்",
 "On screen": "திரையில்",
-"Extras": "கூடுதல்"
+"Extras": "கூடுதல்",
+"Pull down at the top of a chapter, then let go": "அதிகாரத்தின் மேலே கீழே இழுத்து விடுங்கள்",
+"Other ways to open search": "தேடலைத் திறக்க வேறு வழிகள்",
+"You can also press / to open it.": "திறக்க / ஐயும் அழுத்தலாம்.",
+"Listen: hear the verses you picked": "கேள்: தேர்ந்தெடுத்த வசனங்களைக் கேளுங்கள்",
+"Hide while the phone is on its side": "தொலைபேசி பக்கவாட்டில் இருக்கும்போது மறை",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "பக்கத்தில் கீழே படிக்கும்போது டிக் செய்தவை விலகும், சொற்கள் திரையை நிரப்பும். திரும்பக் கொண்டுவர சற்று மேலே உருட்டுங்கள் அல்லது மேல் ஓரத்தைத் தட்டுங்கள்."
 }

@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Pangani mawu olembedwa kuti adinike (KJV, BSB, malemba a Chiheberi ndi Chigiriki)",
 "Show the numbers inline": "Onetsani manambala m'kati mwa malemba",
 "Search bar": "Bala losakira",
-"Phone on its side": "Foni itagona",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Mukamawerenga foni itagona, zimene mwasankha pano zimachoka kuti mawu adzaze sikirini. Kwezani pang'ono, kapena dinani m'mphepete mwa pamwamba, kuti zibwerere.",
 "Top bar": "Bala la pamwamba",
 "Prayer and Circles buttons": "Mabatani a Pemphero ndi Magulu",
 "Show the bars": "Onetsani mabala",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Sunthani kumanzere kapena kumanja kuti mupite ku mutu wotsatira kapena wam'mbuyo.",
 "Tap a verse": "Dinani vesi",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Lembani mawu amene mukukumbukira, kapena ndime ngati Yohane 3:16. Dinani panonso kuti musankhe buku ndi mutu.",
-"Open search": "Tsegulani kusaka",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Gawanani mavesi ndi mapemphero ndi anthu ochepa amene mumawakhulupirira, monga banja lanu kapena kagulu kakang'ono ka pemphero.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Dinani 🙏 kuti mupemphere mokweza ndi kusunga pemphero lanu. Limakhala lachinsinsi.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Mukapita kwina, dinani pano kuti mubwerere kumene mumawerenga.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Kanikizani katatu: kuwunikira mwachangu",
 "Tap the chapter title": "Dinani dzina la mutu",
 "Click the chapter title, or press /": "Kanikizani dzina la mutu, kapena dinani /",
-"Or pull down at the top of a chapter, then let go": "Kapena pamwamba pa mutu, kokani pansi kenako melekani",
 "Hold 🙏 to choose its skin tone": "Gwirani 🙏 kuti musankhe mtundu wa khungu",
 "Only the verses you picked": "Mavesi amene mwasankha okha",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Palibe mawu a Baibulo ili pa chipangizochi: mawu amawala kuti muwerenge mwakachetechete.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Mawu patsamba",
 "Turning pages": "Kutembenuza masamba",
 "On screen": "Pa sikirini",
-"Extras": "Zina"
+"Extras": "Zina",
+"Pull down at the top of a chapter, then let go": "Pamwamba pa mutu, kokani pansi kenako melekani",
+"Other ways to open search": "Njira zina zotsegulira kusaka",
+"You can also press / to open it.": "Mungathenso kudina / kuti mutsegule.",
+"Listen: hear the verses you picked": "Mverani: imvani mavesi amene mwasankha",
+"Hide while the phone is on its side": "Bisani foni ikagona m’mbali",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zimene mwasankha zimachoka mukamawerenga kutsika tsamba, kuti mawu adzaze sikirini. Kwerani pang’ono, kapena dinani m’mphepete mwa pamwamba, kuti zibwerere."
 }

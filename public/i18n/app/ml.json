@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "ടാഗ് ചെയ്ത വാക്കുകൾ ടാപ്പ് ചെയ്യാവുന്നതാക്കുക (KJV, BSB, എബ്രായ, ഗ്രീക്ക് പാഠങ്ങൾ)",
 "Show the numbers inline": "നമ്പറുകൾ വാചകത്തിനുള്ളിൽ കാണിക്കുക",
 "Search bar": "തിരയൽ ബാർ",
-"Phone on its side": "ഫോൺ ചരിച്ചുവയ്ക്കുമ്പോൾ",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "ഫോൺ ചരിച്ചുവച്ച് വായിക്കുമ്പോൾ, വാക്കുകൾ സ്ക്രീൻ നിറയ്ക്കാനായി നിങ്ങൾ ഇവിടെ ടിക്ക് ചെയ്തവ മാറിപ്പോകും. അവ തിരികെ കൊണ്ടുവരാൻ അല്പം മുകളിലേക്ക് സ്ക്രോൾ ചെയ്യുക, അല്ലെങ്കിൽ മുകളിലെ അറ്റത്ത് ടാപ്പ് ചെയ്യുക.",
 "Top bar": "മുകളിലെ ബാർ",
 "Prayer and Circles buttons": "പ്രാർത്ഥന, കൂട്ടായ്മകൾ ബട്ടണുകൾ",
 "Show the bars": "ബാറുകൾ കാണിക്കുക",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "അടുത്ത അല്ലെങ്കിൽ മുമ്പത്തെ അദ്ധ്യായത്തിലേക്ക് പോകാൻ ഇടത്തോട്ടോ വലത്തോട്ടോ സ്വൈപ്പ് ചെയ്യുക.",
 "Tap a verse": "ഒരു വാക്യത്തിൽ ടാപ്പ് ചെയ്യുക",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "ഓർമ്മയുള്ള വാക്കുകൾ, അല്ലെങ്കിൽ യോഹന്നാൻ 3:16 പോലെ ഒരു ഭാഗം ടൈപ്പ് ചെയ്യുക. പുസ്തകവും അദ്ധ്യായവും തിരഞ്ഞെടുക്കാനും ഇവിടെ ടാപ്പ് ചെയ്യുക.",
-"Open search": "തിരയൽ തുറക്കുക",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "നിങ്ങളുടെ കുടുംബം അല്ലെങ്കിൽ ഒരു ചെറിയ പ്രാർത്ഥനാ കൂട്ടം പോലെ, നിങ്ങൾ വിശ്വസിക്കുന്ന കുറച്ചുപേരുമായി വാക്യങ്ങളും പ്രാർത്ഥനകളും പങ്കിടുക.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "ഉറക്കെ പ്രാർത്ഥിച്ച് പ്രാർത്ഥന സൂക്ഷിക്കാൻ 🙏 ടാപ്പ് ചെയ്യുക. അത് സ്വകാര്യമായിരിക്കും.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "മറ്റെവിടേക്കെങ്കിലും പോയ ശേഷം, വായിച്ചുകൊണ്ടിരുന്നിടത്തേക്ക് മടങ്ങാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "മൂന്നുതവണ ക്ലിക്ക്: വേഗത്തിൽ ഹൈലൈറ്റ്",
 "Tap the chapter title": "അധ്യായത്തിന്റെ തലക്കെട്ടിൽ ടാപ്പ് ചെയ്യുക",
 "Click the chapter title, or press /": "അധ്യായത്തിന്റെ തലക്കെട്ടിൽ ക്ലിക്ക് ചെയ്യുക, അല്ലെങ്കിൽ / അമർത്തുക",
-"Or pull down at the top of a chapter, then let go": "അല്ലെങ്കിൽ അധ്യായത്തിന്റെ മുകളിൽ താഴേക്ക് വലിച്ച് വിടുക",
 "Hold 🙏 to choose its skin tone": "ചർമ്മത്തിന്റെ നിറം തിരഞ്ഞെടുക്കാൻ 🙏 അമർത്തിപ്പിടിക്കുക",
 "Only the verses you picked": "തിരഞ്ഞെടുത്ത വാക്യങ്ങൾ മാത്രം",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ഈ ഉപകരണത്തിൽ ഈ ബൈബിളിന് ശബ്ദമില്ല: വാക്കുകൾ തെളിയും, നിശ്ശബ്ദമായി വായിക്കാം.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "പേജിലെ വാക്കുകൾ",
 "Turning pages": "പേജ് മറിക്കൽ",
 "On screen": "സ്ക്രീനിൽ",
-"Extras": "കൂടുതൽ"
+"Extras": "കൂടുതൽ",
+"Pull down at the top of a chapter, then let go": "അധ്യായത്തിന്റെ മുകളിൽ താഴേക്ക് വലിച്ച് വിടുക",
+"Other ways to open search": "തിരയൽ തുറക്കാനുള്ള മറ്റു വഴികൾ",
+"You can also press / to open it.": "തുറക്കാൻ / അമർത്തുകയും ചെയ്യാം.",
+"Listen: hear the verses you picked": "കേൾക്കുക: തിരഞ്ഞെടുത്ത വാക്യങ്ങൾ കേൾക്കുക",
+"Hide while the phone is on its side": "ഫോൺ ചരിച്ചു പിടിക്കുമ്പോൾ മറയ്ക്കുക",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "പേജിൽ താഴേക്ക് വായിക്കുമ്പോൾ ടിക്ക് ചെയ്തവ മാറിപ്പോകും, വാക്കുകൾ സ്ക്രീൻ നിറയും. തിരികെ കൊണ്ടുവരാൻ അല്പം മുകളിലേക്ക് സ്ക്രോൾ ചെയ്യുക അല്ലെങ്കിൽ മുകളിലെ അരികിൽ ടാപ്പ് ചെയ്യുക."
 }

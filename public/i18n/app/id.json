@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Buat kata bertanda dapat diketuk (KJV, BSB, teks Ibrani dan Yunani)",
 "Show the numbers inline": "Tampilkan nomor di dalam teks",
 "Search bar": "Bilah pencarian",
-"Phone on its side": "Ponsel dimiringkan",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Saat Anda membaca dengan ponsel dimiringkan, yang Anda centang di sini akan bergeser hilang agar teks memenuhi layar. Gulir sedikit ke atas, atau ketuk tepi atas, untuk memunculkannya kembali.",
 "Top bar": "Bilah atas",
 "Prayer and Circles buttons": "Tombol Doa dan Lingkaran",
 "Show the bars": "Tampilkan bilah",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Geser ke kiri atau kanan untuk pindah ke pasal berikutnya atau sebelumnya.",
 "Tap a verse": "Ketuk ayat",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Ketik kata-kata yang Anda ingat, atau perikop seperti Yohanes 3:16. Ketuk di sini juga untuk memilih kitab dan pasal.",
-"Open search": "Buka pencarian",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Bagikan ayat dan doa dengan beberapa orang yang Anda percayai, seperti keluarga atau kelompok doa kecil.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Ketuk 🙏 untuk berdoa dengan suara dan menyimpan doa Anda. Doa itu tetap pribadi.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Setelah Anda pindah ke tempat lain, ketuk di sini untuk kembali ke tempat Anda membaca.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Klik tiga kali: sorot cepat",
 "Tap the chapter title": "Ketuk judul pasal",
 "Click the chapter title, or press /": "Klik judul pasal, atau tekan /",
-"Or pull down at the top of a chapter, then let go": "Atau di atas pasal, tarik ke bawah lalu lepaskan",
 "Hold 🙏 to choose its skin tone": "Tahan 🙏 untuk memilih warna kulit",
 "Only the verses you picked": "Hanya ayat yang Anda pilih",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Tidak ada suara untuk Alkitab ini di perangkat ini: kata-kata menyala agar Anda dapat membaca dalam hati.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Teks di halaman",
 "Turning pages": "Membalik halaman",
 "On screen": "Di layar",
-"Extras": "Tambahan"
+"Extras": "Tambahan",
+"Pull down at the top of a chapter, then let go": "Di atas pasal, tarik ke bawah lalu lepaskan",
+"Other ways to open search": "Cara lain membuka pencarian",
+"You can also press / to open it.": "Anda juga bisa menekan / untuk membukanya.",
+"Listen: hear the verses you picked": "Dengarkan: dengar ayat yang Anda pilih",
+"Hide while the phone is on its side": "Sembunyikan saat ponsel miring",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Yang dicentang akan menyingkir saat Anda membaca ke bawah halaman, agar teks memenuhi layar. Gulir sedikit ke atas, atau ketuk tepi atas, untuk memunculkannya lagi."
 }

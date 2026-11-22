@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Gemarkeerde woorden aantikbaar maken (KJV, BSB, Hebreeuwse en Griekse teksten)",
 "Show the numbers inline": "Nummers in de tekst tonen",
 "Search bar": "Zoekbalk",
-"Phone on its side": "Telefoon gekanteld",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Als je leest met je telefoon gekanteld, schuift wat je hier aanvinkt weg, zodat de tekst het scherm vult. Scrol een stukje terug omhoog of tik op de bovenrand om het terug te halen.",
 "Top bar": "Bovenbalk",
 "Prayer and Circles buttons": "Knoppen Bidden en Kringen",
 "Show the bars": "Balken tonen",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Veeg naar links of rechts om naar het volgende of vorige hoofdstuk te gaan.",
 "Tap a verse": "Tik op een vers",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Typ woorden die je je herinnert, of een gedeelte zoals Johannes 3:16. Tik hier ook om een boek en hoofdstuk te kiezen.",
-"Open search": "Zoeken openen",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Deel verzen en gebeden met een paar mensen die je vertrouwt, zoals je familie of een kleine gebedsgroep.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Tik op 🙏 om hardop te bidden en je gebed te bewaren. Het blijft privé.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Ben je ergens anders heen gesprongen, tik dan hier om terug te gaan naar waar je las.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Driedubbelklik: snel markeren",
 "Tap the chapter title": "Tik op de hoofdstuktitel",
 "Click the chapter title, or press /": "Klik op de hoofdstuktitel, of druk op /",
-"Or pull down at the top of a chapter, then let go": "Of trek bovenaan een hoofdstuk omlaag en laat los",
 "Hold 🙏 to choose its skin tone": "Houd 🙏 vast om de huidskleur te kiezen",
 "Only the verses you picked": "Alleen de gekozen verzen",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Geen stem voor deze Bijbel op dit apparaat: de woorden lichten op, zodat je stil kunt meelezen.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "De tekst op de pagina",
 "Turning pages": "Bladzijden omslaan",
 "On screen": "Op het scherm",
-"Extras": "Extra’s"
+"Extras": "Extra’s",
+"Pull down at the top of a chapter, then let go": "Trek bovenaan een hoofdstuk omlaag en laat los",
+"Other ways to open search": "Andere manieren om zoeken te openen",
+"You can also press / to open it.": "Je kunt ook op / drukken om het te openen.",
+"Listen: hear the verses you picked": "Luisteren: hoor de verzen die je koos",
+"Hide while the phone is on its side": "Verbergen als de telefoon gekanteld is",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Wat je aanvinkt, schuift weg terwijl je de pagina afleest, zodat de tekst het scherm vult. Scrol een stukje omhoog, of tik op de bovenrand, om het terug te halen."
 }

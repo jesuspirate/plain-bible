@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "הפיכת מילים מתויגות לניתנות להקשה (KJV,‏ BSB, טקסטים בעברית וביוונית)",
 "Show the numbers inline": "הצגת המספרים בתוך הטקסט",
 "Search bar": "סרגל חיפוש",
-"Phone on its side": "טלפון לרוחב",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "בזמן קריאה כשהטלפון לרוחב, מה שמסומן כאן מחליק הצידה כדי שהמילים ימלאו את המסך. גלילה קטנה למעלה, או הקשה על הקצה העליון, מחזירה אותו.",
 "Top bar": "סרגל עליון",
 "Prayer and Circles buttons": "כפתורי התפילה והמעגלים",
 "Show the bars": "הצגת הסרגלים",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "החלקה שמאלה או ימינה עוברת לפרק הבא או הקודם.",
 "Tap a verse": "הקשה על פסוק",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "אפשר להקליד מילים שזוכרים, או קטע כמו יוחנן 3:16. הקשה כאן מאפשרת גם לבחור ספר ופרק.",
-"Open search": "פתיחת החיפוש",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "שיתוף פסוקים ותפילות עם כמה אנשים שסומכים עליהם, כמו המשפחה או קבוצת תפילה קטנה.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "הקשה על 🙏 מאפשרת להתפלל בקול ולשמור את התפילה. היא נשארת פרטית.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "אחרי מעבר למקום אחר, הקשה כאן מחזירה למקום שבו קראת.",
@@ -1276,7 +1273,6 @@
 "Triple click: quick highlight": "לחיצה משולשת: הדגשה מהירה",
 "Tap the chapter title": "הקישו על כותרת הפרק",
 "Click the chapter title, or press /": "לחצו על כותרת הפרק, או הקישו /",
-"Or pull down at the top of a chapter, then let go": "או, בראש פרק, משכו למטה ושחררו",
 "Hold 🙏 to choose its skin tone": "החזיקו את 🙏 כדי לבחור גוון עור",
 "Only the verses you picked": "רק הפסוקים שבחרתם",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "אין קול לתרגום הזה במכשיר הזה: המילים מוארות כדי שתוכלו לקרוא בשקט.",
@@ -1327,5 +1323,11 @@
 "Words on the page": "המילים בדף",
 "Turning pages": "דפדוף",
 "On screen": "על המסך",
-"Extras": "תוספות"
+"Extras": "תוספות",
+"Pull down at the top of a chapter, then let go": "בראש פרק, משכו למטה ושחררו",
+"Other ways to open search": "דרכים נוספות לפתוח את החיפוש",
+"You can also press / to open it.": "אפשר גם ללחוץ על / כדי לפתוח אותו.",
+"Listen: hear the verses you picked": "האזנה: לשמוע את הפסוקים שבחרתם",
+"Hide while the phone is on its side": "הסתרה כשהטלפון לרוחב",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "מה שסימנתם מתרחק כשקוראים במורד הדף, כדי שהטקסט ימלא את המסך. גללו מעט למעלה, או הקישו על הקצה העליון, כדי להחזיר."
 }

@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "ಟ್ಯಾಗ್ ಮಾಡಿದ ಪದಗಳನ್ನು ಟ್ಯಾಪ್ ಮಾಡುವಂತೆ ಮಾಡಿ (KJV, BSB, ಹೀಬ್ರೂ ಮತ್ತು ಗ್ರೀಕ್ ಪಠ್ಯಗಳು)",
 "Show the numbers inline": "ಸಂಖ್ಯೆಗಳನ್ನು ಪಠ್ಯದೊಳಗೆ ತೋರಿಸಿ",
 "Search bar": "ಹುಡುಕಾಟ ಪಟ್ಟಿ",
-"Phone on its side": "ಫೋನ್ ಅಡ್ಡವಾಗಿದ್ದಾಗ",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "ಫೋನ್ ಅಡ್ಡವಾಗಿಟ್ಟು ಓದುವಾಗ, ಪದಗಳು ಪರದೆಯನ್ನು ತುಂಬುವಂತೆ ನೀವು ಇಲ್ಲಿ ಗುರುತಿಸಿದವು ಸರಿದು ಹೋಗುತ್ತವೆ. ಅವುಗಳನ್ನು ಮರಳಿ ತರಲು ಸ್ವಲ್ಪ ಮೇಲೆ ಸ್ಕ್ರಾಲ್ ಮಾಡಿ, ಅಥವಾ ಮೇಲಿನ ಅಂಚನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.",
 "Top bar": "ಮೇಲಿನ ಪಟ್ಟಿ",
 "Prayer and Circles buttons": "ಪ್ರಾರ್ಥನೆ ಮತ್ತು ಬಳಗಗಳ ಬಟನ್‌ಗಳು",
 "Show the bars": "ಪಟ್ಟಿಗಳನ್ನು ತೋರಿಸಿ",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "ಮುಂದಿನ ಅಥವಾ ಹಿಂದಿನ ಅಧ್ಯಾಯಕ್ಕೆ ಹೋಗಲು ಎಡಕ್ಕೆ ಅಥವಾ ಬಲಕ್ಕೆ ಸ್ವೈಪ್ ಮಾಡಿ.",
 "Tap a verse": "ವಚನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "ನಿಮಗೆ ನೆನಪಿರುವ ಪದಗಳನ್ನು, ಅಥವಾ ಯೋಹಾನ 3:16 ನಂತಹ ಭಾಗವನ್ನು ಟೈಪ್ ಮಾಡಿ. ಪುಸ್ತಕ ಮತ್ತು ಅಧ್ಯಾಯ ಆರಿಸಲೂ ಇಲ್ಲಿ ಟ್ಯಾಪ್ ಮಾಡಿ.",
-"Open search": "ಹುಡುಕಾಟ ತೆರೆಯಿರಿ",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "ನಿಮ್ಮ ಕುಟುಂಬ ಅಥವಾ ಚಿಕ್ಕ ಪ್ರಾರ್ಥನಾ ಗುಂಪಿನಂತೆ, ನೀವು ನಂಬುವ ಕೆಲವರೊಂದಿಗೆ ವಚನಗಳನ್ನೂ ಪ್ರಾರ್ಥನೆಗಳನ್ನೂ ಹಂಚಿಕೊಳ್ಳಿ.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "ಗಟ್ಟಿಯಾಗಿ ಪ್ರಾರ್ಥಿಸಿ ನಿಮ್ಮ ಪ್ರಾರ್ಥನೆಯನ್ನು ಇಟ್ಟುಕೊಳ್ಳಲು 🙏 ಟ್ಯಾಪ್ ಮಾಡಿ. ಅದು ಖಾಸಗಿಯಾಗಿರುತ್ತದೆ.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "ನೀವು ಬೇರೆಡೆಗೆ ಹೋದ ನಂತರ, ನೀವು ಓದುತ್ತಿದ್ದಲ್ಲಿಗೆ ಹಿಂತಿರುಗಲು ಇಲ್ಲಿ ಟ್ಯಾಪ್ ಮಾಡಿ.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "ಮೂರು ಬಾರಿ ಕ್ಲಿಕ್: ತ್ವರಿತ ಹೈಲೈಟ್",
 "Tap the chapter title": "ಅಧ್ಯಾಯದ ಶೀರ್ಷಿಕೆಯನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ",
 "Click the chapter title, or press /": "ಅಧ್ಯಾಯದ ಶೀರ್ಷಿಕೆಯನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ, ಅಥವಾ / ಒತ್ತಿ",
-"Or pull down at the top of a chapter, then let go": "ಅಥವಾ ಅಧ್ಯಾಯದ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಕೆಳಗೆ ಎಳೆದು ಬಿಡಿ",
 "Hold 🙏 to choose its skin tone": "ಚರ್ಮದ ಬಣ್ಣ ಆರಿಸಲು 🙏 ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
 "Only the verses you picked": "ಆರಿಸಿದ ವಚನಗಳು ಮಾತ್ರ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ಈ ಸಾಧನದಲ್ಲಿ ಈ ಬೈಬಲ್‌ಗೆ ಧ್ವನಿ ಇಲ್ಲ: ಪದಗಳು ಬೆಳಗುತ್ತವೆ, ನೀವು ಮೌನವಾಗಿ ಓದಬಹುದು.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "ಪುಟದ ಮೇಲಿನ ಪದಗಳು",
 "Turning pages": "ಪುಟ ತಿರುಗಿಸುವುದು",
 "On screen": "ಪರದೆಯ ಮೇಲೆ",
-"Extras": "ಹೆಚ್ಚುವರಿ"
+"Extras": "ಹೆಚ್ಚುವರಿ",
+"Pull down at the top of a chapter, then let go": "ಅಧ್ಯಾಯದ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಕೆಳಗೆ ಎಳೆದು ಬಿಡಿ",
+"Other ways to open search": "ಹುಡುಕಾಟ ತೆರೆಯುವ ಇತರ ವಿಧಾನಗಳು",
+"You can also press / to open it.": "ಅದನ್ನು ತೆರೆಯಲು ನೀವು / ಒತ್ತಬಹುದು.",
+"Listen: hear the verses you picked": "ಆಲಿಸಿ: ಆಯ್ದ ವಚನಗಳನ್ನು ಕೇಳಿ",
+"Hide while the phone is on its side": "ಫೋನ್ ಅಡ್ಡವಾಗಿದ್ದಾಗ ಮರೆಮಾಡಿ",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ಪುಟದ ಕೆಳಗೆ ಓದುತ್ತಾ ಹೋದಂತೆ ಟಿಕ್ ಮಾಡಿದವು ಸರಿದು ಹೋಗುತ್ತವೆ, ಪದಗಳು ಪರದೆ ತುಂಬುತ್ತವೆ. ಅವನ್ನು ಮರಳಿ ತರಲು ಸ್ವಲ್ಪ ಮೇಲೆ ಸ್ಕ್ರೋಲ್ ಮಾಡಿ ಅಥವಾ ಮೇಲಿನ ಅಂಚನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ."
 }

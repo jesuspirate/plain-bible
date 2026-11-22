@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Lhig da fockleyn cowrit ve bentyn (KJV, BSB, screeuyn Ebraish as Greagish)",
 "Show the numbers inline": "Soilshee ny earrooyn ayns y screeu",
 "Search bar": "Barr shirree",
-"Phone on its side": "Chellvane er e lhiattee",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Tra t’ou lhaih lesh y chellvane er e lhiattee, ta ny reddyn t’ou cowrey ayns shoh skyrraghtyn ersooyl dy lhieeney ny fockleyn yn scaileen. Skyrr seose beggan, ny bean rish yn oirr heose, dy chur eh back.",
 "Top bar": "Barr heose",
 "Prayer and Circles buttons": "Crammanyn Padjer as Kiarkylyn",
 "Show the bars": "Soilshee ny barraghyn",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Skyrr gys yn laue chiare ny yn laue yesh dy gholl gys y nah chaibil ny’n caibil roish.",
 "Tap a verse": "Bean rish rann",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Scrieu fockleyn t’ou cooinaghtyn, ny raad myr Ean 3:16. Bean rish ayns shoh neesht dy reih lioar as caibil.",
-"Open search": "Foshil y shirrey",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Rheynn rannaghyn as padjeryn lesh beggan sleih t’ou credjal, myr dty lught-thie ny possan padjer beg.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Bean rish 🙏 dy ghuee magh ard as dy reayll dty phadjer. T’ee fuirraght preevaadjagh.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Lurg dhyt goll gys ynnyd elley, bean rish ayns shoh dy gholl back gys y raad v’ou lhaih.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Click three keayrtyn: soilshaghey tappee",
 "Tap the chapter title": "Bean rish ard-ennym y chaibil",
 "Click the chapter title, or press /": "Click er ard-ennym y chaibil, ny bwoaill /",
-"Or pull down at the top of a chapter, then let go": "Ny, ec mullagh caibil, tayrn sheese as lhig da",
 "Hold 🙏 to choose its skin tone": "Cum 🙏 dy reih daah y chrackan echey",
 "Only the verses you picked": "Ny rannaghyn reih oo ynrican",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Cha nel coraa son y Vible shoh er y chialg shoh: ta ny fockle soilshaghey dy vod oo lhaih dy feagh.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Ny goan er y duillag",
 "Turning pages": "Chyndaa duillagyn",
 "On screen": "Er y scrieen",
-"Extras": "Tooilley"
+"Extras": "Tooilley",
+"Pull down at the top of a chapter, then let go": "Ec mullagh caibil, tayrn sheese as lhig da",
+"Other ways to open search": "Aghtyn elley dy osley y shirrey",
+"You can also press / to open it.": "Foddee oo / y vrooghey neesht dy osley eh.",
+"Listen: hear the verses you picked": "Clasht: clasht ny rannaghyn ta reiht ayd",
+"Hide while the phone is on its side": "Follee choud as ta’n fone er e lhiattee",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ta ny reddyn ta cowrit goll ass shilley myr t’ou lhaih sheese y duillag, myr shen dy lhieen ny goan y scrieen. Scrol seose beggan, ny bean da’n oirr heose, dy chur ad er ash."
 }

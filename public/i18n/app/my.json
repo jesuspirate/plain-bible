@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "tag ပါသော စကားလုံးများကို တို့နိုင်အောင် လုပ်ရန် (KJV၊ BSB၊ ဟေဗြဲနှင့် ဂရိ စာသားများ)",
 "Show the numbers inline": "နံပါတ်များကို စာသားထဲတွင် ပြရန်",
 "Search bar": "ရှာဖွေရေးဘား",
-"Phone on its side": "ဖုန်းကို ဘေးတိုက်ထားလျှင်",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "ဖုန်းကို ဘေးတိုက်ထား၍ ဖတ်နေစဉ် ဤနေရာတွင် သင်အမှန်ခြစ်ထားသည်များသည် စကားလုံးများ မျက်နှာပြင် အပြည့်ဖြစ်စေရန် ရွေ့ထွက်သွားပါမည်။ ပြန်ပေါ်လာစေရန် အပေါ်သို့ အနည်းငယ် လှိမ့်ပါ သို့မဟုတ် အပေါ်အစွန်းကို တို့ပါ။",
 "Top bar": "အပေါ်ဘား",
 "Prayer and Circles buttons": "ဆုတောင်းရန်နှင့် အသိုင်းအဝိုင်းများ ခလုတ်များ",
 "Show the bars": "ဘားများကို ပြရန်",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "နောက် သို့မဟုတ် ယခင် အခန်းကြီးသို့ သွားရန် ဘယ် သို့မဟုတ် ညာသို့ ပွတ်ဆွဲပါ။",
 "Tap a verse": "ကျမ်းချက်ကို တို့ပါ",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "သင်မှတ်မိသော စကားလုံးများ သို့မဟုတ် ယောဟန် 3:16 ကဲ့သို့ ကျမ်းပိုဒ်ကို ရိုက်ပါ။ ကျမ်းစောင်နှင့် အခန်းကြီး ရွေးရန်လည်း ဤနေရာကို တို့ပါ။",
-"Open search": "ရှာဖွေမှုကို ဖွင့်ရန်",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "ကျမ်းချက်များနှင့် ဆုတောင်းချက်များကို သင့်မိသားစု သို့မဟုတ် ဆုတောင်းအုပ်စုငယ်ကဲ့သို့ သင်ယုံကြည်သော လူအနည်းငယ်နှင့် မျှဝေပါ။",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "အသံထွက်ဆုတောင်းပြီး သင့်ဆုတောင်းချက်ကို သိမ်းရန် 🙏 ကို တို့ပါ။ ၎င်းသည် ကိုယ်ပိုင်အဖြစ် ရှိနေပါမည်။",
 "After you jump somewhere else, tap here to go back to where you were reading.": "အခြားနေရာသို့ သွားပြီးနောက် ဖတ်လက်စနေရာသို့ ပြန်သွားရန် ဤနေရာကို တို့ပါ။",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "သုံးချက်နှိပ်ပါ- အမြန်အရောင်ခြယ်",
 "Tap the chapter title": "အခန်းခေါင်းစဉ်ကို တို့ပါ",
 "Click the chapter title, or press /": "အခန်းခေါင်းစဉ်ကို နှိပ်ပါ၊ သို့မဟုတ် / ကို နှိပ်ပါ",
-"Or pull down at the top of a chapter, then let go": "သို့မဟုတ် အခန်း၏ထိပ်တွင် အောက်သို့ဆွဲပြီး လွှတ်ပါ",
 "Hold 🙏 to choose its skin tone": "အသားအရောင်ရွေးရန် 🙏 ကို ဖိထားပါ",
 "Only the verses you picked": "ရွေးထားသော အခန်းငယ်များသာ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ဤစက်တွင် ဤကျမ်းစာအတွက် အသံမရှိပါ။ စကားလုံးများ လင်းလာ၍ တိတ်တဆိတ် ဖတ်နိုင်သည်။",
@@ -1323,5 +1319,11 @@
 "Words on the page": "စာမျက်နှာပေါ်ရှိ စကားလုံးများ",
 "Turning pages": "စာမျက်နှာလှန်ခြင်း",
 "On screen": "မျက်နှာပြင်ပေါ်တွင်",
-"Extras": "အပိုများ"
+"Extras": "အပိုများ",
+"Pull down at the top of a chapter, then let go": "အခန်း၏ထိပ်တွင် အောက်သို့ဆွဲပြီး လွှတ်ပါ",
+"Other ways to open search": "ရှာဖွေမှုကို ဖွင့်ရန် အခြားနည်းလမ်းများ",
+"You can also press / to open it.": "/ ကိုနှိပ်၍လည်း ဖွင့်နိုင်သည်။",
+"Listen: hear the verses you picked": "နားထောင်ရန်: ရွေးထားသော အခန်းငယ်များကို နားထောင်ပါ",
+"Hide while the phone is on its side": "ဖုန်းကို ဘေးတိုက်ထားချိန် ဖျောက်ရန်",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "စာမျက်နှာအောက်သို့ ဖတ်သွားသည်နှင့် အမှန်ခြစ်ထားသည်များ ဖယ်သွားပြီး စာက မျက်နှာပြင်ကို ပြည့်စေသည်။ ပြန်ပေါ်ရန် အပေါ်သို့ နည်းနည်းဆွဲပါ သို့မဟုတ် အပေါ်အစွန်းကို တို့ပါ။"
 }

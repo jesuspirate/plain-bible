@@ -183,6 +183,10 @@ export const openSearch = () => window.dispatchEvent(new Event(SEARCH_EVENT))
 export const SHOW_VERSE_BAR = 'plain-bible:show-verse-bar'
 export const VERSE_BAR_EVENT = 'plain-bible:verse-bar'
 export const showVerseBar = () => window.dispatchEvent(new Event(SHOW_VERSE_BAR))
+/** Try it now, under Search bar in Settings: Settings close, and the
+ *  fingertip shows the other ways to open search on the chapter title. */
+export const SHOW_SEARCH_WAYS = 'plain-bible:show-search-ways'
+export const showSearchWays = () => window.dispatchEvent(new Event(SHOW_SEARCH_WAYS))
 /** The Read along button above 🙏: the reader starts reading along from the
  *  verse you picked, or else the verse at the top of the screen. */
 export const READ_HERE_EVENT = 'plain-bible:read-here'

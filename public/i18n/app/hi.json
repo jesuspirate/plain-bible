@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "टैग किए गए शब्दों को टैप करने योग्य बनाएँ (KJV, BSB, इब्रानी और यूनानी पाठ)",
 "Show the numbers inline": "संख्याएँ पाठ के भीतर दिखाएँ",
 "Search bar": "खोज बार",
-"Phone on its side": "फ़ोन आड़ा होने पर",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "जब आप फ़ोन आड़ा करके पढ़ते हैं, तो जिन पर आप यहाँ निशान लगाते हैं वे हट जाते हैं, ताकि शब्द पूरी स्क्रीन भर दें। उन्हें वापस लाने के लिए थोड़ा ऊपर स्क्रॉल करें, या ऊपरी किनारे पर टैप करें।",
 "Top bar": "ऊपरी बार",
 "Prayer and Circles buttons": "प्रार्थना और समूह बटन",
 "Show the bars": "बार दिखाएँ",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "अगले या पिछले अध्याय पर जाने के लिए बाएँ या दाएँ स्वाइप करें।",
 "Tap a verse": "किसी पद पर टैप करें",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "याद आए शब्द टाइप करें, या यूहन्ना 3:16 जैसा कोई खंड। पुस्तक और अध्याय चुनने के लिए भी यहाँ टैप करें।",
-"Open search": "खोज खोलें",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "पद और प्रार्थनाएँ कुछ भरोसेमंद लोगों के साथ साझा करें, जैसे आपका परिवार या कोई छोटा प्रार्थना समूह।",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "बोलकर प्रार्थना करने और अपनी प्रार्थना रखने के लिए 🙏 पर टैप करें। यह निजी रहती है।",
 "After you jump somewhere else, tap here to go back to where you were reading.": "कहीं और जाने के बाद, जहाँ आप पढ़ रहे थे वहाँ लौटने के लिए यहाँ टैप करें।",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "तीन बार क्लिक: झटपट हाइलाइट",
 "Tap the chapter title": "अध्याय के शीर्षक पर टैप करें",
 "Click the chapter title, or press /": "अध्याय के शीर्षक पर क्लिक करें, या / दबाएँ",
-"Or pull down at the top of a chapter, then let go": "या अध्याय के ऊपर नीचे की ओर खींचें, फिर छोड़ दें",
 "Hold 🙏 to choose its skin tone": "त्वचा का रंग चुनने के लिए 🙏 दबाकर रखें",
 "Only the verses you picked": "सिर्फ़ चुनी हुई आयतें",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "इस डिवाइस पर इस बाइबल की आवाज़ नहीं है: शब्द चमकते हैं ताकि आप चुपचाप पढ़ सकें।",
@@ -1323,5 +1319,11 @@
 "Words on the page": "पन्ने पर शब्द",
 "Turning pages": "पन्ना पलटना",
 "On screen": "स्क्रीन पर",
-"Extras": "अतिरिक्त"
+"Extras": "अतिरिक्त",
+"Pull down at the top of a chapter, then let go": "अध्याय के ऊपर नीचे की ओर खींचें, फिर छोड़ दें",
+"Other ways to open search": "खोज खोलने के और तरीके",
+"You can also press / to open it.": "इसे खोलने के लिए आप / भी दबा सकते हैं।",
+"Listen: hear the verses you picked": "सुनें: चुनी हुई आयतें सुनें",
+"Hide while the phone is on its side": "फ़ोन आड़ा होने पर छिपाएँ",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "पन्ने पर नीचे पढ़ते समय टिक की गई चीज़ें हट जाती हैं, ताकि शब्द स्क्रीन भर दें। उन्हें वापस लाने के लिए थोड़ा ऊपर स्क्रॉल करें या ऊपरी किनारे पर टैप करें।"
 }

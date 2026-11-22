@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Ataovy azo tsindriana ireo teny voamarika (KJV, BSB, soratra hebreo sy grika)",
 "Show the numbers inline": "Asehoy ao anaty soratra ny laharana",
 "Search bar": "Tsipika fikarohana",
-"Phone on its side": "Finday mandry",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Rehefa mamaky amin’ny finday mandry ianao, dia miala ireo zavatra marihinao eto mba hamenoan’ny teny ny efijery. Akarina kely ny pejy, na tsindrio ny sisiny ambony, mba hiverenany.",
 "Top bar": "Tsipika ambony",
 "Prayer and Circles buttons": "Bokotra Vavaka sy Tarika",
 "Show the bars": "Asehoy ireo tsipika",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Asosay miankavia na miankavanana mba handehanana amin’ny toko manaraka na teo aloha.",
 "Tap a verse": "Tsindrio ny andininy iray",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Soraty ny teny tsaroanao, na andalan-teny toy ny Jaona 3:16. Tsindrio eto koa raha hisafidy boky sy toko.",
-"Open search": "Sokafy ny fikarohana",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Zarao amin’olona vitsivitsy itokisanao ny andininy sy ny vavaka, toy ny fianakavianao na vondrona fivavahana kely.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Tsindrio ny 🙏 raha hivavaka mafy feo sy hitahiry ny vavakao. Mijanona ho anao manokana izy.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Rehefa avy nankany an-kafa ianao, tsindrio eto raha hiverina amin’izay namakianao.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Tsindrio intelo: fanasongadinana haingana",
 "Tap the chapter title": "Tsindrio ny lohatenin’ny toko",
 "Click the chapter title, or press /": "Tsindrio ny lohatenin’ny toko, na tsindrio ny /",
-"Or pull down at the top of a chapter, then let go": "Na eo an-tampon’ny toko, sintony midina dia avelao",
 "Hold 🙏 to choose its skin tone": "Tazony ny 🙏 hisafidianana ny lokon-koditra",
 "Only the verses you picked": "Ireo andininy nofidinao ihany",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Tsy misy feo ho an’ity Baiboly ity amin’ity fitaovana ity: mamirapiratra ny teny mba hamakianao mangina.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Ny teny eo amin’ny pejy",
 "Turning pages": "Famadihana pejy",
 "On screen": "Eo amin’ny efijery",
-"Extras": "Fanampiny"
+"Extras": "Fanampiny",
+"Pull down at the top of a chapter, then let go": "Eo an-tampon’ny toko, sintony midina dia avelao",
+"Other ways to open search": "Fomba hafa hanokafana ny fikarohana",
+"You can also press / to open it.": "Azonao atao koa ny manindry / hanokafana azy.",
+"Listen: hear the verses you picked": "Hihaino: henoy ireo andininy nofidinao",
+"Hide while the phone is on its side": "Afeno rehefa mitsivalana ny finday",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Miala ireo zavatra nomarihinao rehefa mamaky midina ny pejy ianao, mba hamenoan’ny soratra ny efijery. Atsangano kely, na tsindrio ny sisiny ambony, hamerenana azy."
 }

@@ -2,7 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource, refreshSaved } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, SHOW_VERSE_BAR, VERSE_BAR_EVENT, tourDue, parseHash } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, SHOW_VERSE_BAR, VERSE_BAR_EVENT, SHOW_SEARCH_WAYS, tourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { followSettings, ListenPlayer } from './listen'
@@ -27,6 +27,8 @@ import { PendingDeviceCode } from './devicecode'
 import { readerVersions } from './lib/passage'
 import { fromStandard } from './lib/versification'
 import { currentLang, pickLang, setLang, t } from './i18n'
+import { showTapHints } from './taphint'
+import { fine } from './gesture'
 import { overlayOpen } from './lib/overlay'
 import { fediWelcomeDue } from './lib/nostr'
 import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
@@ -240,6 +242,27 @@ export function App() {
     }
     addEventListener(SHOW_VERSE_BAR, on)
     return () => removeEventListener(SHOW_VERSE_BAR, on)
+  }, [])
+  // Try it now under Search bar: back to the top of the chapter, where the
+  // fingertip taps its title, then (on a touch screen) pulls down.
+  useEffect(() => {
+    const on = () => {
+      setSettingsOpen(false)
+      if ((parseHash().path[0] || 'read') !== 'read') go('read')
+      setTimeout(() => {
+        window.scrollTo(0, 0)
+        const title = [...document.querySelectorAll('.reader article.chapter .chapter-title')].find(el => {
+          const r = el.getBoundingClientRect()
+          return r.width > 0 && r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight
+        })
+        if (!title) return
+        showTapHints(fine
+          ? [{ el: title, label: t('Click the chapter title, or press /') }]
+          : [{ el: title, label: t('Tap the chapter title') }, { el: title, label: t('Pull down at the top of a chapter, then let go'), kind: 'pull' }])
+      }, 450)
+    }
+    addEventListener(SHOW_SEARCH_WAYS, on)
+    return () => removeEventListener(SHOW_SEARCH_WAYS, on)
   }, [])
 
   // The guided tour loads only when it opens: once for everyone, as soon as

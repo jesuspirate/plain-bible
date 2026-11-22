@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Οι επισημασμένες λέξεις να αγγίζονται (KJV, BSB, εβραϊκά και ελληνικά κείμενα)",
 "Show the numbers inline": "Εμφάνιση των αριθμών μέσα στο κείμενο",
 "Search bar": "Γραμμή αναζήτησης",
-"Phone on its side": "Τηλέφωνο οριζόντια",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Όταν διαβάζετε με το τηλέφωνο οριζόντια, ό,τι επιλέξετε εδώ παραμερίζει, ώστε το κείμενο να γεμίζει την οθόνη. Κυλήστε λίγο προς τα πάνω ή αγγίξτε το πάνω άκρο για να επανέλθει.",
 "Top bar": "Πάνω γραμμή",
 "Prayer and Circles buttons": "Κουμπιά Προσευχής και Κύκλων",
 "Show the bars": "Εμφάνιση των γραμμών",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Σύρετε αριστερά ή δεξιά για να μεταβείτε στο επόμενο ή στο προηγούμενο κεφάλαιο.",
 "Tap a verse": "Αγγίξτε ένα εδάφιο",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Πληκτρολογήστε λέξεις που θυμάστε ή μια περικοπή όπως Ιωάννης 3:16. Αγγίξτε εδώ και για να επιλέξετε βιβλίο και κεφάλαιο.",
-"Open search": "Άνοιγμα αναζήτησης",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Μοιραστείτε εδάφια και προσευχές με λίγους ανθρώπους που εμπιστεύεστε, όπως την οικογένειά σας ή μια μικρή ομάδα προσευχής.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Αγγίξτε 🙏 για να προσευχηθείτε φωναχτά και να κρατήσετε την προσευχή σας. Μένει ιδιωτική.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Αφού μεταβείτε κάπου αλλού, αγγίξτε εδώ για να επιστρέψετε εκεί όπου διαβάζατε.",
@@ -1275,7 +1272,6 @@
 "Triple click: quick highlight": "Τριπλό κλικ: γρήγορη επισήμανση",
 "Tap the chapter title": "Πατήστε τον τίτλο του κεφαλαίου",
 "Click the chapter title, or press /": "Κάντε κλικ στον τίτλο του κεφαλαίου ή πατήστε /",
-"Or pull down at the top of a chapter, then let go": "Ή, στην αρχή ενός κεφαλαίου, τραβήξτε προς τα κάτω και αφήστε",
 "Hold 🙏 to choose its skin tone": "Κρατήστε πατημένο το 🙏 για να επιλέξετε απόχρωση δέρματος",
 "Only the verses you picked": "Μόνο τα εδάφια που επιλέξατε",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Δεν υπάρχει φωνή για αυτή τη Βίβλο σε αυτή τη συσκευή: οι λέξεις φωτίζονται για σιωπηλή ανάγνωση.",
@@ -1326,5 +1322,11 @@
 "Words on the page": "Το κείμενο στη σελίδα",
 "Turning pages": "Γύρισμα σελίδας",
 "On screen": "Στην οθόνη",
-"Extras": "Επιπλέον"
+"Extras": "Επιπλέον",
+"Pull down at the top of a chapter, then let go": "Στην αρχή ενός κεφαλαίου, τραβήξτε προς τα κάτω και αφήστε",
+"Other ways to open search": "Άλλοι τρόποι για άνοιγμα αναζήτησης",
+"You can also press / to open it.": "Μπορείτε επίσης να πατήσετε / για να την ανοίξετε.",
+"Listen: hear the verses you picked": "Ακρόαση: ακούστε τα εδάφια που επιλέξατε",
+"Hide while the phone is on its side": "Απόκρυψη όταν το τηλέφωνο είναι οριζόντια",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Όσα έχετε τσεκάρει φεύγουν καθώς διαβάζετε προς τα κάτω, ώστε το κείμενο να γεμίζει την οθόνη. Κυλήστε λίγο προς τα πάνω ή πατήστε το πάνω άκρο για να επιστρέψουν."
 }

@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Ngaohi ke lava ʻo lomiʻi ʻa e ngaahi foʻi lea kuo fakaʻilongaʻi (KJV, BSB, ngaahi tohi faka-Hepelū mo faka-Kalisi)",
 "Show the numbers inline": "Fakahā ʻa e ngaahi fika ʻi loto ʻi he tohí",
 "Search bar": "Laine kumi",
-"Phone on its side": "Telefoni fakatakoto",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "ʻI hoʻo lau mo e telefoni fakatakoto, ʻoku seliti atu ʻa e meʻa ʻokú ke fakaʻilongaʻi heni koeʻuhí ke fonu ʻa e sikalini ʻi he ngaahi foʻi lea. Seliti hake siʻi, pe lomiʻi ʻa e kauʻi ʻi ʻolunga, ke toe ʻomai.",
 "Top bar": "Laine ʻi ʻolunga",
 "Prayer and Circles buttons": "Ngaahi meʻa lomiʻi Lotu mo e Kulupu",
 "Show the bars": "Fakahā ʻa e ngaahi laine",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Tekeʻi ki toʻohema pe toʻomataʻu ke ʻalu ki he vahe hoko pe vahe kimuʻa.",
 "Tap a verse": "Lomiʻi ha veesi",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Hiki ʻa e ngaahi foʻi lea ʻokú ke manatuʻi, pe ha konga hangē ko e Sione 3:16. Lomiʻi foki heni ke fili ha tohi mo ha vahe.",
-"Open search": "Fakaava ʻa e kumí",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Vahevahe ha ngaahi veesi mo e lotu mo ha kau tokosiʻi ʻokú ke falala ki ai, hangē ko ho fāmili pe ha kiʻi kulupu lotu.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Lomiʻi ʻa e 🙏 ke lotu leʻo-lahi pea tauhi hoʻo lotu. ʻOku nofo fakafoʻituitui pē ia.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Hili hoʻo hopo ki ha feituʻu kehe, lomiʻi heni ke foki ki he feituʻu naʻá ke lau ai.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Kiliki tuʻo tolu: fakalanu vave",
 "Tap the chapter title": "Lomiʻi ʻa e hingoa ʻo e vahe",
 "Click the chapter title, or press /": "Kiliki ʻa e hingoa ʻo e vahe, pe lomiʻi ʻa e /",
-"Or pull down at the top of a chapter, then let go": "Pe ʻi ʻolunga ʻi ha vahe, toho ki lalo pea tukuange",
 "Hold 🙏 to choose its skin tone": "Puke ʻa e 🙏 ke fili ʻa e lanu kili",
 "Only the verses you picked": "Ko e ngaahi veesi pē naʻá ke fili",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ʻOku ʻikai ha leʻo ki he Tohitapu ko ʻeni ʻi he meʻangāue ko ʻení: ʻoku ulo ʻa e ngaahi foʻi leá ke ke lau fakalongolongo.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Ngaahi lea ʻi he peesi",
 "Turning pages": "Fulihi ʻo e peesi",
 "On screen": "ʻI he sikilini",
-"Extras": "Ngaahi meʻa kehe"
+"Extras": "Ngaahi meʻa kehe",
+"Pull down at the top of a chapter, then let go": "ʻI ʻolunga ʻi ha vahe, toho ki lalo pea tukuange",
+"Other ways to open search": "Ngaahi founga kehe ke fakaava ʻaki ʻa e kumí",
+"You can also press / to open it.": "ʻE lava foki ke ke lomiʻi ʻa e / ke fakaava ia.",
+"Listen: hear the verses you picked": "Fanongo: fanongo ki he ngaahi veesi kuó ke fili",
+"Hide while the phone is on its side": "Fufū ʻi he taimi ʻoku tokoto ai ʻa e telefoní",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ʻOku hiki ʻa e meʻa kuó ke fakaʻilongaʻí ʻi hoʻo lau hifo ʻi he peesí, koeʻuhí ke fakafonu ʻe he ngaahi leá ʻa e sikiliní. Sikolo hake siʻi, pe lomiʻi ʻa e kauʻi ʻolungá, ke toe foki mai."
 }

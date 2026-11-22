@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "وشە تاگکراوەکان کرتەپێکراو بکە (KJV، BSB، دەقە عیبری و یۆنانییەکان)",
 "Show the numbers inline": "ژمارەکان لە ناو دەقدا نیشان بدە",
 "Search bar": "شریتی گەڕان",
-"Phone on its side": "مۆبایل بە لادا",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "کاتێک مۆبایلەکە بە لادا دەخوێنیتەوە، ئەوەی لێرە نیشانی دەکەیت لادەچێت بۆ ئەوەی وشەکان شاشەکە پڕ بکەن. کەمێک بۆ سەرەوە بخلیسکێنە، یان کرتە لە لێواری سەرەوە بکە، بۆ گەڕاندنەوەی.",
 "Top bar": "شریتی سەرەوە",
 "Prayer and Circles buttons": "دوگمەکانی نوێژ و بازنەکان",
 "Show the bars": "نیشاندانی شریتەکان",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "بۆ چەپ یان ڕاست بخلیسکێنە بۆ چوون بۆ بەشی داهاتوو یان پێشوو.",
 "Tap a verse": "کرتە لە ئایەتێک بکە",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "ئەو وشانە بنووسە کە لە بیرتن، یان بڕگەیەکی وەک یۆحەنا 3:16. هەروەها کرتە لێرە بکە بۆ هەڵبژاردنی پەڕتووک و بەش.",
-"Open search": "کردنەوەی گەڕان",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "ئایەت و نوێژ لەگەڵ چەند کەسێک کە متمانەیان پێ دەکەیت هاوبەش بکە، وەک خێزانەکەت یان گروپێکی بچووکی نوێژ.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "کرتە لە 🙏 بکە بۆ نوێژکردن بە دەنگی بەرز و هێشتنەوەی نوێژەکەت. تایبەت دەمێنێتەوە.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "دوای چوون بۆ شوێنێکی تر، کرتە لێرە بکە بۆ گەڕانەوە بۆ ئەو شوێنەی دەتخوێندەوە.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "سێ کلیک: ڕەنگکردنی خێرا",
 "Tap the chapter title": "کرتە لە ناونیشانی بەشەکە بکە",
 "Click the chapter title, or press /": "کلیک لە ناونیشانی بەشەکە بکە، یان / دابگرە",
-"Or pull down at the top of a chapter, then let go": "یان لە سەرەوەی بەشێک، بۆ خوارەوە ڕابکێشە و بەری بدە",
 "Hold 🙏 to choose its skin tone": "🙏 دابگرە بۆ هەڵبژاردنی ڕەنگی پێست",
 "Only the verses you picked": "تەنها ئەو ئایەتانەی هەڵتبژاردوون",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "لەسەر ئەم ئامێرە دەنگ بۆ ئەم کتێبی پیرۆزە نییە: وشەکان ڕووناک دەبنەوە بۆ ئەوەی بە بێدەنگی بخوێنیتەوە.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "وشەکان لەسەر لاپەڕە",
 "Turning pages": "هەڵدانەوەی لاپەڕە",
 "On screen": "لەسەر شاشە",
-"Extras": "زیادە"
+"Extras": "زیادە",
+"Pull down at the top of a chapter, then let go": "لە سەرەوەی بەشێک، بۆ خوارەوە ڕابکێشە و بەری بدە",
+"Other ways to open search": "ڕێگای تری کردنەوەی گەڕان",
+"You can also press / to open it.": "دەتوانیت / ش دابگریت بۆ کردنەوەی.",
+"Listen: hear the verses you picked": "گوێگرتن: گوێ لەو ئایەتانە بگرە کە هەڵتبژاردوون",
+"Hide while the phone is on its side": "شاردنەوە کاتێک مۆبایل لەسەر لایە",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ئەوەی نیشانەت کردووە لادەچێت کاتێک بەرەو خوارەوەی پەڕە دەخوێنیتەوە، تا نووسینەکە شاشەکە پڕ بکات. کەمێک بۆ سەرەوە بڕۆ، یان لە لێواری سەرەوە بدە، بۆ گەڕاندنەوەیان."
 }
