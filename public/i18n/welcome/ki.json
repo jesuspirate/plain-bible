@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Hingũra Bibilia</a> thĩinĩ wa Chrome, kana browser ĩrĩa ũhũthagĩra.</span></li>\n            <li><span>Hingũra menu ya browser, kaingĩ tũcunjĩ tũtatũ {svg} igũrũ ũrĩo.</span></li>\n            <li><span>Hutia <strong>Install and create shortcut</strong> (browsers imwe ciugaga <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Thuura <strong>Install</strong>, ti <strong>Create shortcut</strong>. Ũcoke ũhutie <strong>Install</strong> rĩngĩ.</span></li>\n            <li><span>Tawa nĩ ũkuoneka hamwe na app ciaku iria ingĩ.</span></li>",
 "computerNote": "Ĩhingũkaga ndirica-inĩ yayo, ta app ĩngĩ o yothe.",
 "computerInstalled": "Nĩ yekĩrwo. Hingũra My Quiet Bible hamwe na app ciaku iria ingĩ.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Hingũra Bibilia</a> thĩinĩ wa Chrome kana Edge.</span></li>\n            <li><span>Hutia icon ya kwĩkĩra mũthia-inĩ wa ũrĩo wa address bar, skrini ĩrĩ na mũguĩ <span class=\"nb\">{svg},</span> ũcoke <strong>Install</strong>.</span></li>\n            <li><span>Mac-inĩ na Safari: hutia <strong>Share</strong> igũrũ ũrĩo, ũcoke <strong>Add to Dock</strong>.</span></li>\n            <li><span>Kana ũige tab o ũguo. Ĩrutaga wĩra o ũndũ ũmwe, na ĩririkanaga harĩa warĩ.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Hingũra Bibilia</a> thĩinĩ wa Chrome kana Edge.</span></li><li><span>Hutia icon ya kwĩkĩra mũthia-inĩ wa ũrĩo wa address bar, skrini ĩrĩ na mũguĩ <span class=\"nb\">{svg},</span> ũcoke <strong>Install</strong>.</span></li><li><span>Kana ũige tab o ũguo. Ĩrutaga wĩra o ũndũ ũmwe, na ĩririkanaga harĩa warĩ.</span></li>",
 "ref": "Thaburi 119:105",
 "more": "Makĩria",
 "support": "Mĩteithie",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ti ya kũhatwo o na rĩ. Gũtirĩ kĩndũ kĩumaga thimu-inĩ yaku tiga ũhutie Gayana.</li>\n              <li>O gĩkundi kĩrĩ na kĩhingũro gĩakĩo. Andũ akĩo tu nĩo mangĩhingũra ũrĩa ũrĩ thĩinĩ; o na ithuĩ tũtingĩhota.</li><li>Thiĩrĩ ciendaga gũtoonya kwa tũhũ, na kĩhingũro kana namba ĩtũmĩtwo na email.</li>",
 "listenH": "Thikĩrĩria",
 "listenP": "Hutia mũhari, thuutha ũcio Thikĩrĩria. Kana ũhutie Thoma ũkĩrũmĩrĩra harĩ mũhari wa gũcaria, na o kiugo nĩ kĩrĩkenaga kĩgĩthomwo. Athomi a ma nĩ mathomaga BSB, King James na Louis Segond. Nĩ ũndũ wa ngari, jikoni, kana maitho manogu.",
-"orMac": "Ũcio nĩ wa Mac. Kana, kombiuta o yothe, kuuma brausa yaku:"
+"orMac": "Thĩinĩ wa Windows kana Linux:",
+"macStore": "Thĩinĩ wa Mac:"
 }

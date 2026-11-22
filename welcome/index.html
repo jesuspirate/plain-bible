@@ -316,21 +316,23 @@
         </div>
 
         <div class="panel" id="panel-computer" role="region" aria-labelledby="tab-computer" hidden>
-          <!-- On a Mac, the same app from the App Store (ios/, the iPad app on Mac). -->
+          <!-- On a Mac, the App Store (ios/, the iPad app on Mac). Other computers install from the browser; a Mac sees only the App Store (welcome.ts). -->
+          <p class="or" data-t="macStore">On a Mac:</p>
           <a class="store-badge" href="https://apps.apple.com/app/my-quiet-bible/id6831915876" target="_blank" rel="noopener" data-t="appStore"><svg viewBox="0 0 24 24" aria-hidden="true"><path fill="currentColor" d="M16.37 12.6c-.02-2.33 1.9-3.45 1.99-3.5-1.08-1.59-2.77-1.8-3.37-1.83-1.43-.15-2.8.84-3.53.84-.73 0-1.85-.82-3.04-.8-1.57.02-3.01.91-3.82 2.31-1.63 2.82-.42 7 1.17 9.29.78 1.12 1.7 2.38 2.91 2.33 1.17-.05 1.61-.75 3.02-.75 1.41 0 1.81.75 3.04.73 1.26-.02 2.05-1.14 2.82-2.27.89-1.3 1.25-2.56 1.27-2.62-.03-.01-2.44-.94-2.46-3.73zM14.06 5.75c.64-.78 1.08-1.86.96-2.94-.93.04-2.05.62-2.72 1.4-.6.69-1.12 1.79-.98 2.85 1.04.08 2.1-.53 2.74-1.31z"/></svg><span><small>Download on the</small> App Store</span></a>
-          <p class="or" data-t="orMac">That's for a Mac. Or, on any computer, from your browser:</p>
-          <div class="install-now" hidden>
-            <button type="button" class="btn primary" data-install data-t="install">Install My Quiet Bible</button>
-            <p class="note" data-t="computerNote">It opens in its own window, like any other app.</p>
+          <div class="not-mac">
+            <p class="or" data-t="orMac">On Windows or Linux:</p>
+            <div class="install-now" hidden>
+              <button type="button" class="btn primary" data-install data-t="install">Install My Quiet Bible</button>
+              <p class="note" data-t="computerNote">It opens in its own window, like any other app.</p>
+            </div>
+            <p class="installed" hidden data-t="computerInstalled">Installed. Open My Quiet Bible with your other apps.</p>
+            <ol class="steps" data-t="computerSteps">
+              <li><span><a href="../#/read" data-open>Open the Bible</a> in Chrome or Edge.</span></li>
+              <li><span>Click the install icon at the right end of the address bar, a screen with an arrow <span class="nb"><svg class="inline" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 7.5v5M9.8 10.5l2.2 2.2 2.2-2.2M8 20h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>,</span> then <strong>Install</strong>.</span></li>
+              <li><span>Or simply keep the tab. It works the same, and remembers your place.</span></li>
+            </ol>
+            <p class="official"><a data-help="desktop" href="https://support.google.com/chrome/answer/9658361?hl=en&amp;co=GENIE.Platform%3DDesktop" target="_blank" rel="noopener" data-t="googleHelp">Google’s own instructions ↗</a></p>
           </div>
-          <p class="installed" hidden data-t="computerInstalled">Installed. Open My Quiet Bible with your other apps.</p>
-          <ol class="steps" data-t="computerSteps">
-            <li><span><a href="../#/read" data-open>Open the Bible</a> in Chrome or Edge.</span></li>
-            <li><span>Click the install icon at the right end of the address bar, a screen with an arrow <span class="nb"><svg class="inline" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="4" width="18" height="12" rx="2" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 7.5v5M9.8 10.5l2.2 2.2 2.2-2.2M8 20h8" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>,</span> then <strong>Install</strong>.</span></li>
-            <li><span>On a Mac with Safari: click <strong>Share</strong> at the top right, then <strong>Add to Dock</strong>.</span></li>
-            <li><span>Or simply keep the tab. It works the same, and remembers your place.</span></li>
-          </ol>
-          <p class="official"><a data-help="desktop" href="https://support.google.com/chrome/answer/9658361?hl=en&amp;co=GENIE.Platform%3DDesktop" target="_blank" rel="noopener" data-t="googleHelp">Google’s own instructions ↗</a></p>
         </div>
       </section>
 

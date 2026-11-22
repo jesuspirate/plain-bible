@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Hapni Biblën</a> në Chrome, ose në shfletuesin që përdorni.</span></li><li><span>Hapni menynë e shfletuesit, zakonisht tri pika {svg} lart djathtas.</span></li><li><span>Prekni <strong>Instalo dhe krijo shkurtore</strong> (disa shfletues thonë <strong>Shto në ekranin bazë</strong>).</span></li><li><span>Zgjidhni <strong>Instalo</strong>, jo <strong>Krijo shkurtore</strong>. Pastaj prekni përsëri <strong>Instalo</strong>.</span></li><li><span>Llamba shfaqet bashkë me aplikacionet e tjera.</span></li>",
 "computerNote": "Hapet në dritaren e vet, si çdo aplikacion tjetër.",
 "computerInstalled": "U instalua. Hapeni My Quiet Bible bashkë me aplikacionet e tjera.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Hapni Biblën</a> në Chrome ose Edge.</span></li><li><span>Klikoni ikonën e instalimit në skajin e djathtë të shiritit të adresës, një ekran me shigjetë <span class=\"nb\">{svg},</span> pastaj <strong>Instalo</strong>.</span></li><li><span>Në Mac me Safari: klikoni <strong>Share</strong> lart djathtas, pastaj <strong>Add to Dock</strong>.</span></li><li><span>Ose thjesht mbajeni skedën. Funksionon njësoj dhe mban mend ku e latë.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Hapni Biblën</a> në Chrome ose Edge.</span></li><li><span>Klikoni ikonën e instalimit në skajin e djathtë të shiritit të adresës, një ekran me shigjetë <span class=\"nb\">{svg},</span> pastaj <strong>Instalo</strong>.</span></li><li><span>Ose thjesht mbajeni skedën. Funksionon njësoj dhe mban mend ku e latë.</span></li>",
 "ref": "Psalmi 119:105",
 "more": "Më shumë",
 "support": "Mbështeteni",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Kurrë e detyrueshme. Asgjë nuk largohet nga telefoni juaj nëse nuk prekni Ndaj.</li><li>Çdo rreth ka çelësin e vet. Vetëm anëtarët e tij mund të hapin atë që ka brenda; as ne nuk mundemi.</li><li>Rrethet kërkojnë hyrje falas, me çelës kalimi ose me kod që vjen me email.</li>",
 "listenH": "Dëgjo",
 "listenP": "Prekni një varg, pastaj Dëgjo. Ose prekni Lexo duke ndjekur te shiriti i kërkimit, dhe çdo fjalë ndizet ndërsa lexohet. Lexues të vërtetë lexojnë BSB, King James dhe Louis Segond. Për makinën, kuzhinën ose sytë e lodhur.",
-"orMac": "Ky është për Mac. Ose, në çdo kompjuter, nga shfletuesi:"
+"orMac": "Në Windows ose Linux:",
+"macStore": "Në Mac:"
 }

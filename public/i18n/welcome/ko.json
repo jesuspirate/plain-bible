@@ -52,7 +52,7 @@
 "androidSteps": "<li><span>Chrome이나 사용하는 브라우저에서 <a href=\"../#/read\" data-open=\"\">성경을 여세요</a>.</span></li>\n            <li><span>브라우저 메뉴를 여세요. 보통 오른쪽 위의 점 세 개 {svg}입니다.</span></li>\n            <li><span><strong>설치 및 바로가기 만들기</strong>를 탭하세요(브라우저에 따라 <strong>홈 화면에 추가</strong>).</span></li>\n            <li><span><strong>바로가기 만들기</strong>가 아니라 <strong>설치</strong>를 선택하세요. 그런 다음 <strong>설치</strong>를 다시 탭하세요.</span></li>\n            <li><span>다른 앱들과 함께 등불이 나타납니다.</span></li>",
 "computerNote": "다른 앱처럼 별도의 창으로 열립니다.",
 "computerInstalled": "설치되었습니다. 다른 앱들 사이에서 My Quiet Bible을 여세요.",
-"computerSteps": "<li><span>Chrome이나 Edge에서 <a href=\"../#/read\" data-open=\"\">성경을 여세요</a>.</span></li>\n            <li><span>주소창 오른쪽 끝의 설치 아이콘(화살표가 있는 화면 <span class=\"nb\">{svg})을</span> 클릭한 다음 <strong>설치</strong>를 클릭하세요.</span></li>\n            <li><span>Safari를 쓰는 Mac에서는: 오른쪽 위의 <strong>공유</strong>를 클릭한 다음 <strong>Dock에 추가</strong>를 클릭하세요.</span></li>\n            <li><span>아니면 이 탭을 그대로 두셔도 됩니다. 똑같이 작동하고, 읽던 곳도 기억합니다.</span></li>",
+"computerSteps": "<li><span>Chrome이나 Edge에서 <a href=\"../#/read\" data-open=\"\">성경을 여세요</a>.</span></li><li><span>주소창 오른쪽 끝의 설치 아이콘(화살표가 있는 화면 <span class=\"nb\">{svg})을</span> 클릭한 다음 <strong>설치</strong>를 클릭하세요.</span></li><li><span>아니면 이 탭을 그대로 두셔도 됩니다. 똑같이 작동하고, 읽던 곳도 기억합니다.</span></li>",
 "ref": "시편 119:105",
 "more": "더 보기",
 "support": "후원하기",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>꼭 쓸 필요는 없습니다. 공유를 탭하지 않으면 아무것도 휴대폰 밖으로 나가지 않습니다.</li>\n              <li>모임마다 고유한 키가 있습니다. 모임 사람만 그 안의 내용을 열 수 있고, 저희조차 열 수 없습니다.</li><li>모임을 쓰려면 무료 로그인이 필요합니다. 패스키나 이메일로 받은 코드로요.</li>",
 "listenH": "듣기",
 "listenP": "구절을 누른 다음 듣기를 누르세요. 또는 검색창의 따라 읽기를 누르면 읽히는 단어마다 불이 켜집니다. BSB, King James, Louis Segond는 실제 낭독자가 읽어 줍니다. 차 안에서, 부엌에서, 또는 눈이 피곤할 때.",
-"orMac": "이건 Mac용입니다. 또는 어떤 컴퓨터에서든 브라우저에서:"
+"orMac": "Windows나 Linux에서는:",
+"macStore": "Mac에서는:"
 }

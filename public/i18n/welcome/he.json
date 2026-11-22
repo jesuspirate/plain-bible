@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open>לפתוח את כתבי הקודש</a> ב־Chrome, או בדפדפן שבשימוש.</span></li><li><span>לפתוח את תפריט הדפדפן, בדרך כלל שלוש נקודות {svg} בפינה העליונה.</span></li><li><span>להקיש על <strong>התקנה ויצירת קיצור דרך</strong> (בדפדפנים מסוימים כתוב <strong>הוספה למסך הבית</strong>).</span></li><li><span>לבחור <strong>התקנה</strong>, לא <strong>יצירת קיצור דרך</strong>. ואז להקיש שוב על <strong>התקנה</strong>.</span></li><li><span>המנורה תופיע עם שאר האפליקציות.</span></li>",
 "computerNote": "היא נפתחת בחלון משלה, כמו כל אפליקציה אחרת.",
 "computerInstalled": "הותקן. אפשר לפתוח את My Quiet Bible עם שאר האפליקציות.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open>לפתוח את כתבי הקודש</a> ב־Chrome או ב־Edge.</span></li><li><span>ללחוץ על סמל ההתקנה בקצה שורת הכתובת, מסך עם חץ <span class=\"nb\">{svg},</span> ואז על <strong>התקנה</strong>.</span></li><li><span>ב־Mac עם Safari: ללחוץ על <strong>שיתוף</strong> בפינה העליונה, ואז על <strong>הוספה ל־Dock</strong>.</span></li><li><span>או פשוט להשאיר את הכרטיסייה. זה עובד אותו דבר, וזוכר איפה הפסקת.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open>לפתוח את כתבי הקודש</a> ב־Chrome או ב־Edge.</span></li><li><span>ללחוץ על סמל ההתקנה בקצה שורת הכתובת, מסך עם חץ <span class=\"nb\">{svg},</span> ואז על <strong>התקנה</strong>.</span></li><li><span>או פשוט להשאיר את הכרטיסייה. זה עובד אותו דבר, וזוכר איפה הפסקת.</span></li>",
 "ref": "תהלים 119:105",
 "more": "עוד",
 "support": "תמיכה",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>אף פעם לא חובה. שום דבר לא יוצא מהטלפון בלי הקשה על \"שיתוף\".</li><li>לכל מעגל מפתח משלו. רק החברים בו יכולים לפתוח את מה שבתוכו; אפילו לא אנחנו.</li><li>מעגלים דורשים כניסה חינמית, עם מפתח גישה או קוד שנשלח במייל.</li>",
 "listenH": "האזנה",
 "listenP": "הקישו על פסוק ואז על „האזנה”. או הקישו על „קריאה עם מעקב” בשורת החיפוש, וכל מילה נדלקת בזמן שהיא נקראת. קריינים אמיתיים קוראים את BSB, King James ו־Louis Segond. לרכב, למטבח, או לעיניים עייפות.",
-"orMac": "זה ל־Mac. או, בכל מחשב, מהדפדפן:"
+"orMac": "ב־Windows או ב־Linux:",
+"macStore": "ב־Mac:"
 }

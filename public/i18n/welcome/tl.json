@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buksan ang Bibliya</a> sa Chrome, o sa browser na ginagamit mo.</span></li>\n            <li><span>Buksan ang menu ng browser, kadalasang tatlong tuldok {svg} sa kanang itaas.</span></li>\n            <li><span>I-tap ang <strong>I-install at gumawa ng shortcut</strong> (sa ilang browser, <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Piliin ang <strong>I-install</strong>, hindi ang <strong>Gumawa ng shortcut</strong>. Saka i-tap ulit ang <strong>I-install</strong>.</span></li>\n            <li><span>Lalabas ang ilawan kasama ng iba mong app.</span></li>",
 "computerNote": "Bumubukas ito sa sarili nitong window, gaya ng ibang app.",
 "computerInstalled": "Naka-install na. Buksan ang My Quiet Bible kasama ng iba mong app.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buksan ang Bibliya</a> sa Chrome o Edge.</span></li>\n            <li><span>I-click ang icon ng pag-install sa kanang dulo ng address bar, isang screen na may arrow <span class=\"nb\">{svg},</span> saka ang <strong>Install</strong>.</span></li>\n            <li><span>Sa Mac na may Safari: i-click ang <strong>Share</strong> sa kanang itaas, saka ang <strong>Add to Dock</strong>.</span></li>\n            <li><span>O panatilihin lang ang tab. Pareho itong gumagana, at natatandaan kung saan ka na.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buksan ang Bibliya</a> sa Chrome o Edge.</span></li><li><span>I-click ang icon ng pag-install sa kanang dulo ng address bar, isang screen na may arrow <span class=\"nb\">{svg},</span> saka ang <strong>Install</strong>.</span></li><li><span>O panatilihin lang ang tab. Pareho itong gumagana, at natatandaan kung saan ka na.</span></li>",
 "ref": "Awit 119:105",
 "more": "Iba pa",
 "support": "Suportahan",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Hindi kailanman sapilitan. Walang lumalabas sa phone mo maliban kung i-tap mo ang Ibahagi.</li>\n              <li>May sariling key ang bawat samahan. Ang mga kasapi lang nito ang makakabukas sa laman nito; kahit kami ay hindi.</li><li>Kailangan ng mga circle ng libreng pag-sign in, gamit ang passkey o code na ipinadala sa email.</li>",
 "listenH": "Pakinggan",
 "listenP": "I-tap ang isang talata, saka ang Pakinggan. O i-tap ang Sabayang pagbasa sa search bar, at umiilaw ang bawat salita habang binabasa. Totoong tagapagbasa ang bumabasa ng BSB, King James at Louis Segond. Para sa sasakyan, kusina, o pagod na mata.",
-"orMac": "Para iyan sa Mac. O, sa kahit anong computer, mula sa iyong browser:"
+"orMac": "Sa Windows o Linux:",
+"macStore": "Sa Mac:"
 }

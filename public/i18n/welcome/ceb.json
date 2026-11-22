@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ablihi ang Biblia</a> sa Chrome, o sa browser nga imong gigamit.</span></li>\n            <li><span>Ablihi ang menu sa browser, kasagaran tulo ka tuldok {svg} sa tuo sa ibabaw.</span></li>\n            <li><span>I-tap ang <strong>Install and create shortcut</strong> (ang ubang browser nag-ingon og <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Pilia ang <strong>Install</strong>, dili ang <strong>Create shortcut</strong>. Unya i-tap pag-usab ang <strong>Install</strong>.</span></li>\n            <li><span>Makita ang lampara uban sa imong ubang mga app.</span></li>",
 "computerNote": "Maabli kini sa kaugalingong window, sama sa ubang app.",
 "computerInstalled": "Na-install na. Ablihi ang My Quiet Bible uban sa imong ubang mga app.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ablihi ang Biblia</a> sa Chrome o Edge.</span></li>\n            <li><span>I-click ang icon sa pag-install sa tumoy sa tuo sa address bar, usa ka screen nga may pana <span class=\"nb\">{svg},</span> unya ang <strong>Install</strong>.</span></li>\n            <li><span>Sa Mac nga may Safari: i-click ang <strong>Share</strong> sa tuo sa ibabaw, unya ang <strong>Add to Dock</strong>.</span></li>\n            <li><span>O ipabilin lang ang tab. Pareho ra kini molihok, ug mahinumdom kon asa ka na.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ablihi ang Biblia</a> sa Chrome o Edge.</span></li><li><span>I-click ang icon sa pag-install sa tumoy sa tuo sa address bar, usa ka screen nga may pana <span class=\"nb\">{svg},</span> unya ang <strong>Install</strong>.</span></li><li><span>O ipabilin lang ang tab. Pareho ra kini molihok, ug mahinumdom kon asa ka na.</span></li>",
 "ref": "Salmo 119:105",
 "more": "Dugang pa",
 "support": "Suportahi",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Dili gyud pinugos. Walay mogawas sa imong phone gawas kon i-tap nimo ang Ipaambit.</li>\n              <li>Ang matag pundok adunay kaugalingong yawe. Ang mga sakop lang niini ang makaabli sa sulod niini; bisan kami dili.</li><li>Ang mga circle nagkinahanglan og libre nga pag-sign in, gamit ang passkey o code nga gipadala sa email.</li>",
 "listenH": "Paminaw",
 "listenP": "I-tap ang usa ka bersikulo, unya Paminaw. O i-tap ang Dungan nga pagbasa sa search bar, ug ang matag pulong mosiga samtang gibasa. Tinuod nga mga magbabasa ang mobasa sa BSB, King James ug Louis Segond. Para sa sakyanan, kusina, o kapoy nga mata.",
-"orMac": "Kana para sa Mac. O, sa bisan unsang computer, gikan sa imong browser:"
+"orMac": "Sa Windows o Linux:",
+"macStore": "Sa Mac:"
 }

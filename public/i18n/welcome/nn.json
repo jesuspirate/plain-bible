@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Opne Bibelen</a> i Chrome, eller nettlesaren du brukar.</span></li>\n            <li><span>Opne menyen i nettlesaren, vanlegvis tre prikkar {svg} øvst til høgre.</span></li>\n            <li><span>Trykk på <strong>Installer og opprett snarvei</strong> (i nokre nettlesarar står det <strong>Legg til på startskjermen</strong>).</span></li>\n            <li><span>Vel <strong>Installer</strong>, ikkje <strong>Opprett snarvei</strong>. Trykk så på <strong>Installer</strong> att.</span></li>\n            <li><span>Lampa dukkar opp saman med dei andre appane dine.</span></li>",
 "computerNote": "Han opnar seg i sitt eige vindauge, som alle andre appar.",
 "computerInstalled": "Installert. Opne My Quiet Bible saman med dei andre appane dine.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Opne Bibelen</a> i Chrome eller Edge.</span></li>\n            <li><span>Klikk på installeringsikonet heilt til høgre i adresselinja, ein skjerm med ei pil <span class=\"nb\">{svg},</span> og så på <strong>Installer</strong>.</span></li>\n            <li><span>På ein Mac med Safari: klikk på <strong>Del</strong> øvst til høgre og så på <strong>Legg til i Dock</strong>.</span></li>\n            <li><span>Eller berre behald fana. Ho verkar på same måten og hugsar kvar du er.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Opne Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klikk på installeringsikonet heilt til høgre i adresselinja, ein skjerm med ei pil <span class=\"nb\">{svg},</span> og så på <strong>Installer</strong>.</span></li><li><span>Eller berre behald fana. Ho verkar på same måten og hugsar kvar du er.</span></li>",
 "ref": "Salme 119:105",
 "more": "Meir",
 "support": "Støtt arbeidet",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Aldri påkravd. Ingenting forlèt telefonen din utan at du trykkjer på Del.</li>\n              <li>Kvar krins har sin eigen nøkkel. Berre medlemmene kan opne det som er i han; ikkje ein gong vi kan det.</li><li>Krinsar krev ei gratis innlogging, med ein tilgangsnøkkel eller ein kode på e-post.</li>",
 "listenH": "Lytt",
 "listenP": "Trykk på eit vers og så på Lytt. Eller trykk på Les med i søkjefeltet, så lyser kvart ord opp medan det vert lese. Ekte opplesarar les BSB, King James og Louis Segond. For bilen, kjøkenet eller trøytte auge.",
-"orMac": "Den er for Mac. Eller, på kva datamaskin som helst, frå nettlesaren:"
+"orMac": "På Windows eller Linux:",
+"macStore": "På ein Mac:"
 }

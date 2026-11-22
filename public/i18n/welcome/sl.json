@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Odprite Sveto pismo</a> v Chromu ali v brskalniku, ki ga uporabljate.</span></li><li><span>Odprite meni brskalnika, običajno tri pike {svg} zgoraj desno.</span></li><li><span>Tapnite <strong>Namesti in ustvari bližnjico</strong> (nekateri brskalniki pišejo <strong>Dodaj na začetni zaslon</strong>).</span></li><li><span>Izberite <strong>Namesti</strong>, ne <strong>Ustvari bližnjico</strong>. Nato znova tapnite <strong>Namesti</strong>.</span></li><li><span>Svetilka se pokaže med vašimi drugimi aplikacijami.</span></li>",
 "computerNote": "Odpre se v svojem oknu kot vsaka druga aplikacija.",
 "computerInstalled": "Nameščeno. My Quiet Bible odprite med drugimi aplikacijami.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Odprite Sveto pismo</a> v Chromu ali Edgu.</span></li><li><span>Kliknite ikono za namestitev na desnem koncu naslovne vrstice, zaslon s puščico <span class=\"nb\">{svg},</span> nato <strong>Namesti</strong>.</span></li><li><span>Na Macu s Safarijem: zgoraj desno kliknite <strong>Share</strong>, nato <strong>Add to Dock</strong>.</span></li><li><span>Ali pa preprosto obdržite zavihek. Deluje enako in si zapomni, kje ste ostali.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Odprite Sveto pismo</a> v Chromu ali Edgu.</span></li><li><span>Kliknite ikono za namestitev na desnem koncu naslovne vrstice, zaslon s puščico <span class=\"nb\">{svg},</span> nato <strong>Namesti</strong>.</span></li><li><span>Ali pa preprosto obdržite zavihek. Deluje enako in si zapomni, kje ste ostali.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Več",
 "support": "Podprite",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nikoli ni obvezno. Nič ne zapusti vašega telefona, dokler ne tapnete Deli.</li><li>Vsak krog ima svoj ključ. Kar je v njem, lahko odprejo samo njegovi člani; niti mi ne.</li><li>Krogi zahtevajo brezplačno prijavo, s ključem za dostop ali kodo po e-pošti.</li>",
 "listenH": "Poslušajte",
 "listenP": "Tapnite vrstico, nato Poslušaj. Ali pa v iskalni vrstici tapnite Sledi branju in vsaka beseda zasveti, ko je prebrana. Pravi bralci berejo BSB, King James in Louis Segond. Za avto, kuhinjo ali utrujene oči.",
-"orMac": "To je za Mac. Ali pa na katerem koli računalniku, iz brskalnika:"
+"orMac": "V sistemu Windows ali Linux:",
+"macStore": "Na Macu:"
 }

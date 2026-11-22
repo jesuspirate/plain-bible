@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Tsegulani Baibulo</a> mu Chrome, kapena msakatuli umene mumagwiritsa ntchito.</span></li>\n            <li><span>Tsegulani menyu ya msakatuli, nthawi zambiri madontho atatu {svg} pamwamba kumanja.</span></li>\n            <li><span>Dinani <strong>Install and create shortcut</strong> (asakatuli ena amati <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Sankhani <strong>Install</strong>, osati <strong>Create shortcut</strong>. Kenako dinaninso <strong>Install</strong>.</span></li>\n            <li><span>Nyali imaonekera pamodzi ndi mapulogalamu anu ena.</span></li>",
 "computerNote": "Imatseguka pa windo lake, ngati pulogalamu ina iliyonse.",
 "computerInstalled": "Yaikidwa. Tsegulani My Quiet Bible pamodzi ndi mapulogalamu anu ena.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Tsegulani Baibulo</a> mu Chrome kapena Edge.</span></li>\n            <li><span>Dinani chithunzi choikira kumapeto kumanja kwa bala la adiresi, sikirini yokhala ndi muvi <span class=\"nb\">{svg},</span> kenako <strong>Install</strong>.</span></li>\n            <li><span>Pa Mac ndi Safari: dinani <strong>Share</strong> pamwamba kumanja, kenako <strong>Add to Dock</strong>.</span></li>\n            <li><span>Kapena ingosiyani tabu. Imagwira ntchito chimodzimodzi, ndipo imakumbukira malo anu.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Tsegulani Baibulo</a> mu Chrome kapena Edge.</span></li><li><span>Dinani chithunzi choikira kumapeto kumanja kwa bala la adiresi, sikirini yokhala ndi muvi <span class=\"nb\">{svg},</span> kenako <strong>Install</strong>.</span></li><li><span>Kapena ingosiyani tabu. Imagwira ntchito chimodzimodzi, ndipo imakumbukira malo anu.</span></li>",
 "ref": "Salimo 119:105",
 "more": "Zina",
 "support": "Ithandizeni",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Sikofunika nthawi zonse. Palibe chimene chimachoka pa foni yanu pokhapokha mutadina Gawanani.</li>\n              <li>Gulu lililonse lili ndi kiyi yake. Mamembala ake okha ndi amene angatsegule zimene zili mmenemo; ngakhale ife sitingathe.</li><li>Magulu amafuna kulowa kwaulere, ndi kiyi yolowera kapena khodi yotumizidwa pa imelo.</li>",
 "listenH": "Mverani",
 "listenP": "Dinani vesi, kenako Mverani. Kapena dinani Werengani motsatira pa bala lofufuzira, ndipo liwu lililonse limawala likamawerengedwa. Owerenga enieni amawerenga BSB, King James ndi Louis Segond. Kwa galimoto, kukhitchini, kapena maso otopa.",
-"orMac": "Imeneyo ndi ya Mac. Kapena, pa kompyuta iliyonse, kuchokera pa msakatuli wanu:"
+"orMac": "Pa Windows kapena Linux:",
+"macStore": "Pa Mac:"
 }

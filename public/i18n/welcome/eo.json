@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Malfermu la Biblion</a> en Chrome, aŭ la retumilo, kiun vi uzas.</span></li>\n            <li><span>Malfermu la menuon de la retumilo, kutime tri punktoj {svg} supre dekstre.</span></li>\n            <li><span>Tuŝetu <strong>Instali kaj krei ŝparvojon</strong> (kelkaj retumiloj diras <strong>Aldoni al hejmekrano</strong>).</span></li>\n            <li><span>Elektu <strong>Instali</strong>, ne <strong>Krei ŝparvojon</strong>. Poste tuŝetu <strong>Instali</strong> denove.</span></li>\n            <li><span>La lampo aperas kun viaj aliaj aplikaĵoj.</span></li>",
 "computerNote": "Ĝi malfermiĝas en propra fenestro, kiel ajna alia aplikaĵo.",
 "computerInstalled": "Instalita. Malfermu My Quiet Bible kun viaj aliaj aplikaĵoj.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Malfermu la Biblion</a> en Chrome aŭ Edge.</span></li>\n            <li><span>Alklaku la instalan piktogramon ĉe la dekstra fino de la adresbreto, ekranon kun sago <span class=\"nb\">{svg},</span> poste <strong>Instali</strong>.</span></li>\n            <li><span>En Mac kun Safari: alklaku <strong>Kunhavigi</strong> supre dekstre, poste <strong>Aldoni al Doko</strong>.</span></li>\n            <li><span>Aŭ simple tenu la langeton. Ĝi funkcias same kaj memoras vian lokon.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Malfermu la Biblion</a> en Chrome aŭ Edge.</span></li><li><span>Alklaku la instalan piktogramon ĉe la dekstra fino de la adresbreto, ekranon kun sago <span class=\"nb\">{svg},</span> poste <strong>Instali</strong>.</span></li><li><span>Aŭ simple tenu la langeton. Ĝi funkcias same kaj memoras vian lokon.</span></li>",
 "ref": "Psalmo 119:105",
 "more": "Pli",
 "support": "Subteni ĝin",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Neniam deviga. Nenio forlasas vian telefonon, krom se vi tuŝetas Kunhavigi.</li>\n              <li>Ĉiu rondo havas sian propran ŝlosilon. Nur ĝiaj membroj povas malfermi tion, kio estas en ĝi; eĉ ne ni.</li><li>Rondoj bezonas senpagan ensaluton, per pasŝlosilo aŭ per kodo sendita retpoŝte.</li>",
 "listenH": "Aŭskulti",
 "listenP": "Tuŝu verson, poste Aŭskulti. Aŭ tuŝu Kunlegi en la serĉa breto, kaj ĉiu vorto lumiĝas dum oni legas ĝin. Veraj legantoj legas la BSB, la King James kaj la Louis Segond. Por la aŭto, la kuirejo aŭ lacaj okuloj.",
-"orMac": "Tio estas por Mac. Aŭ, en ajna komputilo, el via retumilo:"
+"orMac": "Ĉe Windows aŭ Linukso:",
+"macStore": "Ĉe Mac:"
 }

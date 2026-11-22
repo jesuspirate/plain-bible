@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Yaw Muma</a> e Chrome, kata browser ma iti godo.</span></li>\n            <li><span>Yaw menu mar browser, mang’eny ton adek {svg} malo korachwich.</span></li>\n            <li><span>Mul <strong>Install and create shortcut</strong> (browsers moko wacho ni <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Yier <strong>Install</strong>, ok <strong>Create shortcut</strong>. Eka imul <strong>Install</strong> kendo.</span></li>\n            <li><span>Taa nenore kaachiel gi app mamoko mari.</span></li>",
 "computerNote": "Yawore e dirisa mare, kaka app moro amora.",
 "computerInstalled": "Osegur. Yaw My Quiet Bible kaachiel gi app mamoko mari.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Yaw Muma</a> e Chrome kata Edge.</span></li>\n            <li><span>Mul icon mar guro e giko korachwich mar address bar, skrin man gi asere <span class=\"nb\">{svg},</span> eka <strong>Install</strong>.</span></li>\n            <li><span>E Mac gi Safari: mul <strong>Share</strong> malo korachwich, eka <strong>Add to Dock</strong>.</span></li>\n            <li><span>Kata mana kan tab. Tiyo e yo achiel, kendo paro kama ni iye.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Yaw Muma</a> e Chrome kata Edge.</span></li><li><span>Mul icon mar guro e giko korachwich mar address bar, skrin man gi asere <span class=\"nb\">{svg},</span> eka <strong>Install</strong>.</span></li><li><span>Kata mana kan tab. Tiyo e yo achiel, kendo paro kama ni iye.</span></li>",
 "ref": "Zaburi 119:105",
 "more": "Mamoko",
 "support": "Konye",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ok ochuno ngang’. Onge gima wuok e simu mari ka ok imulo Pog.</li>\n              <li>Kanyakla ka kanyakla nigi rayaw mare. Jogo man e iye kende ema nyalo yawo gima ni e iye; kata wan ok wanyal.</li><li>Sirni dwaro donjo nono, gi rayaw mar donjo kata kod ma ioro e email.</li>",
 "listenH": "Winj",
 "listenP": "Mul ndiko achiel, eka Winj. Kata mul Som kiluwo e bar mar manyo, kendo wach ka wach rieny ka isome. Josomo madier somo BSB, King James gi Louis Segond. Ne gari, jikon, kata wenge mool.",
-"orMac": "Mano en mar Mac. Kata, e kompiuta moro amora, kowuok e browser mari:"
+"orMac": "E Windows kata Linux:",
+"macStore": "E Mac:"
 }

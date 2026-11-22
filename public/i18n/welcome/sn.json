@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Vhurai Bhaibheri</a> muChrome, kana mubhurawuza yamunoshandisa.</span></li>\n            <li><span>Vhurai menyu yebhurawuza, kazhinji madoti matatu {svg} kumusoro kurudyi.</span></li>\n            <li><span>Bayai <strong>Install and create shortcut</strong> (mamwe mabhurawuza anoti <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Sarudzai <strong>Install</strong>, kwete <strong>Create shortcut</strong>. Mozobaya <strong>Install</strong> zvakare.</span></li>\n            <li><span>Mwenje unoonekwa pamwe nemamwe maapp enyu.</span></li>",
 "computerNote": "Inovhurika muhwindo rayo, seimwe app ipi neipi.",
 "computerInstalled": "Yaiswa. Vhurai My Quiet Bible pamwe nemamwe maapp enyu.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Vhurai Bhaibheri</a> muChrome kana Edge.</span></li>\n            <li><span>Dzvanyai mufananidzo wekuisa kumucheto kurudyi kwebhawa rekero, chidzitiro chine museve <span class=\"nb\">{svg},</span> mozoti <strong>Install</strong>.</span></li>\n            <li><span>PaMac neSafari: dzvanyai <strong>Share</strong> kumusoro kurudyi, mozoti <strong>Add to Dock</strong>.</span></li>\n            <li><span>Kana chingochengetai tabhu. Inoshanda zvakafanana, uye inorangarira pamakasvika.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Vhurai Bhaibheri</a> muChrome kana Edge.</span></li><li><span>Dzvanyai mufananidzo wekuisa kumucheto kurudyi kwebhawa rekero, chidzitiro chine museve <span class=\"nb\">{svg},</span> mozoti <strong>Install</strong>.</span></li><li><span>Kana chingochengetai tabhu. Inoshanda zvakafanana, uye inorangarira pamakasvika.</span></li>",
 "ref": "Pisarema 119:105",
 "more": "Zvimwe",
 "support": "Itsigirei",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Hazvimbomanikidzwi. Hapana chinobva pafoni yenyu kunze kwekunge mabaya Govera.</li>\n              <li>Boka rimwe nerimwe rine kiyi yaro. Nhengo dzaro chete ndidzo dzinogona kuvhura zviri mariri; kunyange isu hatigoni.</li><li>Mapoka anoda kupinda mahara, nekiyi yekupinda kana kodhi inotumirwa ne-email.</li>",
 "listenH": "Teerera",
 "listenP": "Baya ndima, wozoti Teerera. Kana kuti baya Verenga uchitevera pabhawa rekutsvaga, uye shoko rimwe nerimwe rinovheneka richiverengwa. Vaverengi chaivo vanoverenga BSB, King James naLouis Segond. Kwemota, mukicheni, kana maziso aneta.",
-"orMac": "Iyoyo ndeyeMac. Kana kuti, pakombiyuta ipi zvayo, kubva pabrowser yako:"
+"orMac": "PaWindows kana Linux:",
+"macStore": "PaMac:"
 }

@@ -52,7 +52,7 @@
 "androidSteps": "<li><span>Chrome ᎠᎴ ᏣᏁᏉᏤᎰ ᎠᏓᏃᏣᎵᏍᎩ ᎾᎿ <a href=\"../#/read\" data-open=\"\">ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎯᏍᏚᎢ</a>.</span></li>\n            <li><span>ᎠᏓᏃᏣᎵᏍᎩ menu ᎯᏍᏚᎢ, ᎤᏣᏘ ᏦᎢ ᏗᏓᏁᏍᏗᏍᎩ {svg} ᎦᏚᎢ ᎠᎦᏘᏏ.</span></li>\n            <li><span><strong>Install and create shortcut</strong> ᎯᏯᏏᎳᏛ (ᎢᎸᏍᎩ ᎠᏓᏃᏣᎵᏍᎩ <strong>Add to Home screen</strong> ᏂᎦᏪᎭ).</span></li>\n            <li><span><strong>Install</strong> ᎯᏑᏰᏍᏓ, Ꮭ <strong>Create shortcut</strong> ᏱᎩ. ᎿᏉ ᏔᎵᏁ <strong>Install</strong> ᎯᏯᏏᎳᏛ.</span></li>\n            <li><span>ᎢᎦᎦᏛ ᏐᎢ ᏣᏤᎵ app ᎢᏧᎳᎭ ᏓᎦᎾᏄᎪᏥ.</span></li>",
 "computerNote": "ᎤᏩᏒ ᎤᏤᎵ ᏗᎦᏚᏗ ᎠᏍᏚᎢᏍᎪ, ᏐᎢ app ᎾᏍᎩᏯ.",
 "computerInstalled": "ᎤᏯᎣᏅ. My Quiet Bible ᎯᏍᏚᎢ ᏐᎢ ᏣᏤᎵ app ᎢᏧᎳᎭ.",
-"computerSteps": "<li><span>Chrome ᎠᎴ Edge ᎾᎿ <a href=\"../#/read\" data-open=\"\">ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎯᏍᏚᎢ</a>.</span></li>\n            <li><span>ᎠᏯᎣᏍᏗ ᎤᏰᎸᏛ ᎯᏯᏏᎳᏛ ᎠᎦᏘᏏ ᎢᏗᏢ, ᏗᎦᎪᏩᏛᏗ ᎦᏂ ᎤᏪᎭ <span class=\"nb\">{svg},</span> ᎿᏉ <strong>Install</strong>.</span></li>\n            <li><span>Mac ᎠᎴ Safari: <strong>Share</strong> ᎦᏚᎢ ᎠᎦᏘᏏ ᎯᏯᏏᎳᏛ, ᎿᏉ <strong>Add to Dock</strong>.</span></li>\n            <li><span>ᎠᎴ ᎾᏍᎩᏉ ᎯᏍᏆᏂᎪᏓ. ᎾᏍᎩᏯ ᎠᏛᏁᎪ, ᎠᎴ ᏣᏤᎵ ᎤᏃᏢ ᎠᏅᏓᏗᏍᎪ.</span></li>",
+"computerSteps": "<li><span>Chrome ᎠᎴ Edge ᎾᎿ <a href=\"../#/read\" data-open=\"\">ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎯᏍᏚᎢ</a>.</span></li><li><span>ᎠᏯᎣᏍᏗ ᎤᏰᎸᏛ ᎯᏯᏏᎳᏛ ᎠᎦᏘᏏ ᎢᏗᏢ, ᏗᎦᎪᏩᏛᏗ ᎦᏂ ᎤᏪᎭ <span class=\"nb\">{svg},</span> ᎿᏉ <strong>Install</strong>.</span></li><li><span>ᎠᎴ ᎾᏍᎩᏉ ᎯᏍᏆᏂᎪᏓ. ᎾᏍᎩᏯ ᎠᏛᏁᎪ, ᎠᎴ ᏣᏤᎵ ᎤᏃᏢ ᎠᏅᏓᏗᏍᎪ.</span></li>",
 "ref": "ᏗᎧᏃᎩᏍᏗ 119:105",
 "more": "ᎤᏟ",
 "support": "ᏍᏆᏍᏕᎸ",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ꮭ ᎢᎸᎯᏳ ᏯᏚᎵᏍᎪ. Ꮭ ᎪᎱᏍᏗ ᏣᏤᎵ ᏗᎦᏬᏂᎯᏍᏗ ᏯᏄᎪᎪ ᎯᏁᏗ Ꮭ ᏱᏣᏯᏏᎳᏛ.</li>\n              <li>ᏂᎦᎥ ᏓᏓᏡᎬ ᎤᏩᏒ ᎤᏤᎵ ᎠᏍᏚᎢᏍᏙᏗ. ᎾᎿ ᎠᏁᎯ ᎤᏅᏒ ᏰᎵ ᏓᏂᏍᏚᎢᏍᏗ; Ꮭ ᎾᏍᏉ ᎠᏴ ᏰᎵ.</li><li>ᏚᏓᏓᏟᏴᏛ ᏓᏂᏂᏴᏍᎪ ᎠᏎᏉ ᏗᏴᏍᏗ, ᎠᏍᏚᏗ ᎬᏗ ᎠᎴ ᎪᏪᎵ ᎠᏆᏛᏅ ᎠᏓᏁᏟᏴᏍᏔᏅ.</li>",
 "listenH": "ᎯᏛᎦ",
 "listenP": "ᎯᏃᎮᏍᎩ ᏌᏉ ᎯᏯᏅᎥᎦ, ᎿᏉᏃ ᎯᏛᎦ. ᎠᎴ ᎯᏯᏅᎥᎦ ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ ᎭᏩᏛ ᏗᏟᎶᏍᏔᏅ ᎤᎵᏍᏛ, ᏂᎦᏓᏃ ᎧᏁᏢᏍᏗ ᎦᎦᏛ ᎠᎪᎵᏰᏍᎬ. ᏚᏳᎪᏛ ᎠᏂᎪᎵᏯᏍᎩ ᎠᏂᎪᎵᏰᏍᎪ BSB, King James ᎠᎴ Louis Segond. ᏐᏈᎵ ᏧᎳᏏᏕᏂ, ᎦᏁᏍᏙᏗᏱ, ᎠᎴ ᏗᎦᏙᎵ ᎤᏕᏯᏔᏁᎸ.",
-"orMac": "ᎾᏍᎩ Mac ᎤᏤᎵ. ᎠᎴ ᎢᏳᏍᏗ ᎪᏢᏅ ᎠᏓᎪᏪᎳᏙᏗ, ᏂᎯ ᏣᏤᎵ ᎭᏩᏛ ᏗᏟᎶᏍᏔᏅ:"
+"orMac": "Windows ᎠᎴ Linux ᎾᎿᎢ:",
+"macStore": "Mac ᎾᎿᎢ:"
 }

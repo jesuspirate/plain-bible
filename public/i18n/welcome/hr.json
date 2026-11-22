@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otvorite Bibliju</a> u Chromeu ili pregledniku koji koristite.</span></li><li><span>Otvorite izbornik preglednika, obično tri točke {svg} gore desno.</span></li><li><span>Dodirnite <strong>Instaliraj i izradi prečac</strong> (neki preglednici kažu <strong>Dodaj na početni zaslon</strong>).</span></li><li><span>Odaberite <strong>Instaliraj</strong>, a ne <strong>Izradi prečac</strong>. Zatim ponovno dodirnite <strong>Instaliraj</strong>.</span></li><li><span>Svjetiljka se pojavljuje uz vaše druge aplikacije.</span></li>",
 "computerNote": "Otvara se u vlastitom prozoru, kao svaka druga aplikacija.",
 "computerInstalled": "Instalirano. Otvorite My Quiet Bible uz svoje druge aplikacije.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otvorite Bibliju</a> u Chromeu ili Edgeu.</span></li><li><span>Kliknite ikonu za instalaciju na desnom kraju adresne trake, zaslon sa strelicom <span class=\"nb\">{svg},</span> zatim <strong>Instaliraj</strong>.</span></li><li><span>Na Macu sa Safarijem: kliknite <strong>Dijeli</strong> gore desno, zatim <strong>Dodaj u Dock</strong>.</span></li><li><span>Ili jednostavno zadržite karticu. Radi jednako i pamti gdje ste stali.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otvorite Bibliju</a> u Chromeu ili Edgeu.</span></li><li><span>Kliknite ikonu za instalaciju na desnom kraju adresne trake, zaslon sa strelicom <span class=\"nb\">{svg},</span> zatim <strong>Instaliraj</strong>.</span></li><li><span>Ili jednostavno zadržite karticu. Radi jednako i pamti gdje ste stali.</span></li>",
 "ref": "Psalam 119,105",
 "more": "Više",
 "support": "Podržite",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nikad obavezno. Ništa ne napušta vaš telefon ako ne dodirnete Podijeli.</li><li>Svaki krug ima vlastiti ključ. Samo njegovi članovi mogu otvoriti ono što je u njemu; čak ni mi ne možemo.</li><li>Krugovi traže besplatnu prijavu, pristupnim ključem ili kodom poslanim e-poštom.</li>",
 "listenH": "Slušajte",
 "listenP": "Dodirnite redak, zatim Slušaj. Ili dodirnite Prati čitanje u traci za pretraživanje i svaka riječ zasvijetli dok se čita. Pravi čitači čitaju BSB, King James i Louis Segond. Za auto, kuhinju ili umorne oči.",
-"orMac": "To je za Mac. Ili, na bilo kojem računalu, iz preglednika:"
+"orMac": "Na Windowsima ili Linuxu:",
+"macStore": "Na Macu:"
 }

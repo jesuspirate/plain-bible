@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buɗe Littafi Mai Tsarki</a> a Chrome, ko burauzar da kuke amfani da ita.</span></li><li><span>Buɗe menu na burauzar, galibi ɗigo uku {svg} a saman dama.</span></li><li><span>Taɓa <strong>Install and create shortcut</strong> (wasu burauzoyi suna cewa <strong>Add to Home screen</strong>).</span></li><li><span>Zaɓi <strong>Install</strong>, ba <strong>Create shortcut</strong> ba. Sannan ku sake taɓa <strong>Install</strong>.</span></li><li><span>Fitilar za ta bayyana tare da sauran manhajojinku.</span></li>",
 "computerNote": "Yana buɗewa a cikin tagarsa, kamar kowace manhaja.",
 "computerInstalled": "An saka. Buɗe My Quiet Bible tare da sauran manhajojinku.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buɗe Littafi Mai Tsarki</a> a Chrome ko Edge.</span></li><li><span>Danna gunkin sakawa a ƙarshen dama na sandar adireshi, allo mai kibiya <span class=\"nb\">{svg},</span> sannan <strong>Install</strong>.</span></li><li><span>A Mac mai Safari: danna <strong>Share</strong> a saman dama, sannan <strong>Add to Dock</strong>.</span></li><li><span>Ko kawai ku bar shafin a buɗe. Yana aiki iri ɗaya, kuma yana tuna inda kuka tsaya.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buɗe Littafi Mai Tsarki</a> a Chrome ko Edge.</span></li><li><span>Danna gunkin sakawa a ƙarshen dama na sandar adireshi, allo mai kibiya <span class=\"nb\">{svg},</span> sannan <strong>Install</strong>.</span></li><li><span>Ko kawai ku bar shafin a buɗe. Yana aiki iri ɗaya, kuma yana tuna inda kuka tsaya.</span></li>",
 "ref": "Zabura 119:105",
 "more": "Ƙari",
 "support": "Tallafa masa",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ba dole ba ne koyaushe. Babu abin da ke barin wayarku sai kun taɓa Raba.</li><li>Kowace ƙungiya tana da maɓallinta. Membobinta kaɗai ne za su iya buɗe abin da ke ciki; ko mu ma ba za mu iya ba.</li><li>Da’irori suna buƙatar shiga kyauta, da maɓallin shiga ko lambar da aka aika ta imel.</li>",
 "listenH": "Saurara",
 "listenP": "Taɓa aya, sannan Saurara. Ko taɓa Karanta tare a sandar nema, kuma kowace kalma tana haskakawa yayin da ake karanta ta. Ainihin masu karatu suna karanta BSB, King James da Louis Segond. Don mota, kicin, ko gajiyayyun idanu.",
-"orMac": "Wannan na Mac ne. Ko, a kowace kwamfuta, daga burauzarka:"
+"orMac": "A kan Windows ko Linux:",
+"macStore": "A kan Mac:"
 }

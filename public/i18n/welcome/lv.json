@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Atveriet Bībeli</a> pārlūkā Chrome vai tajā, ko izmantojat.</span></li>\n            <li><span>Atveriet pārlūka izvēlni, parasti trīs punktus {svg} augšā labajā pusē.</span></li>\n            <li><span>Pieskarieties <strong>Instalēt un izveidot saīsni</strong> (dažās pārlūkprogrammās rakstīts <strong>Pievienot sākuma ekrānam</strong>).</span></li>\n            <li><span>Izvēlieties <strong>Instalēt</strong>, nevis <strong>Izveidot saīsni</strong>. Tad vēlreiz pieskarieties <strong>Instalēt</strong>.</span></li>\n            <li><span>Lampa parādās starp citām jūsu lietotnēm.</span></li>",
 "computerNote": "Tā atveras savā logā kā jebkura cita lietotne.",
 "computerInstalled": "Instalēts. Atveriet My Quiet Bible kopā ar citām lietotnēm.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Atveriet Bībeli</a> pārlūkā Chrome vai Edge.</span></li>\n            <li><span>Noklikšķiniet uz instalēšanas ikonas adreses joslas labajā galā, ekrāna ar bultiņu <span class=\"nb\">{svg},</span> tad uz <strong>Instalēt</strong>.</span></li>\n            <li><span>Mac datorā ar Safari: noklikšķiniet uz <strong>Kopīgot</strong> augšā labajā pusē, tad uz <strong>Pievienot Dock</strong>.</span></li>\n            <li><span>Vai vienkārši paturiet cilni. Tā darbojas tāpat un atceras, kur palikāt.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Atveriet Bībeli</a> pārlūkā Chrome vai Edge.</span></li><li><span>Noklikšķiniet uz instalēšanas ikonas adreses joslas labajā galā, ekrāna ar bultiņu <span class=\"nb\">{svg},</span> tad uz <strong>Instalēt</strong>.</span></li><li><span>Vai vienkārši paturiet cilni. Tā darbojas tāpat un atceras, kur palikāt.</span></li>",
 "ref": "Psalms 119:105",
 "more": "Vairāk",
 "support": "Atbalstīt",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nekad nav obligāti. Nekas neatstāj jūsu tālruni, ja vien nepieskaraties Kopīgot.</li>\n              <li>Katram lokam ir sava atslēga. Tikai tā dalībnieki var atvērt to, kas tajā ir; pat mēs ne.</li><li>Lokiem vajag bezmaksas pierakstīšanos ar piekļuves atslēgu vai e-pastā sūtītu kodu.</li>",
 "listenH": "Klausīties",
 "listenP": "Pieskarieties pantam, tad Klausīties. Vai meklēšanas joslā pieskarieties Lasīt līdzi, un katrs vārds iedegas, kad to nolasa. Īsti lasītāji lasa BSB, King James un Louis Segond. Mašīnai, virtuvei vai nogurušām acīm.",
-"orMac": "Tas ir Mac datoram. Vai jebkurā datorā, no pārlūka:"
+"orMac": "Windows vai Linux datorā:",
+"macStore": "Mac datorā:"
 }

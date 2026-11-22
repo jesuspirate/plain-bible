@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open>Bula Beibele</a> go Chrome, goba sefetleking seo o se šomišago.</span></li><li><span>Bula menyu ya sefetleki, gantši ke dikhutlo tše tharo {svg} ka godimo ka go le letona.</span></li><li><span>Kgotla <strong>Install and create shortcut</strong> (disefetleki tše dingwe di re <strong>Add to Home screen</strong>).</span></li><li><span>Kgetha <strong>Install</strong>, e sego <strong>Create shortcut</strong>. Ke moka o kgotle <strong>Install</strong> gape.</span></li><li><span>Lebone le tšwelela le diapp tša gago tše dingwe.</span></li>",
 "computerNote": "E bulega lefasetereng la yona, bjalo ka app ye nngwe le ye nngwe.",
 "computerInstalled": "E tsentšwe. Bula My Quiet Bible le diapp tša gago tše dingwe.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open>Bula Beibele</a> go Chrome goba Edge.</span></li><li><span>Kgotla aekhone ya go tsenya mafelelong a bara ya aterese, sekirini se se nago le motsu <span class=\"nb\">{svg},</span> ke moka <strong>Install</strong>.</span></li><li><span>Go Mac ka Safari: kgotla <strong>Share</strong> ka godimo ka go le letona, ke moka <strong>Add to Dock</strong>.</span></li><li><span>Goba o boloke thebe fela. E šoma ka mo go swanago, gomme e gopola letlakala la gago.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open>Bula Beibele</a> go Chrome goba Edge.</span></li><li><span>Kgotla aekhone ya go tsenya mafelelong a bara ya aterese, sekirini se se nago le motsu <span class=\"nb\">{svg},</span> ke moka <strong>Install</strong>.</span></li><li><span>Goba o boloke thebe fela. E šoma ka mo go swanago, gomme e gopola letlakala la gago.</span></li>",
 "ref": "Psalme 119:105",
 "more": "Tše dingwe",
 "support": "E thekge",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ga se gapeletšo le gatee. Ga go se se tlogelago mogala wa gago ge o sa kgotle Abelana.</li>\n              <li>Sedikologo se sengwe le se sengwe se na le senotlelo sa sona. Ke maloko a sona fela ao a ka bulago seo se lego go sona; le rena ga re kgone.</li><li>Didikadikwe di nyaka go tsena ga mahala, ka senotlelo sa go tsena goba khoutu ye e romelwago ka imeile.</li>",
 "listenH": "Theeletša",
 "listenP": "Kgoma temana, ka morago Theeletša. Goba kgoma Bala o latela ka go bara ya go nyaka, gomme lentšu le lengwe le le lengwe le a bonega ge le balwa. Babadi ba nnete ba bala BSB, King James le Louis Segond. Bakeng sa koloi, khitšhing, goba mahlo a lapilego.",
-"orMac": "Seo ke sa Mac. Goba, khomphutheng efe goba efe, go tšwa go bratšara ya gago:"
+"orMac": "Go Windows goba Linux:",
+"macStore": "Go Mac:"
 }

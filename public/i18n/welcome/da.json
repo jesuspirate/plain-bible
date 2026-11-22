@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åbn Bibelen</a> i Chrome eller den browser, du bruger.</span></li><li><span>Åbn browserens menu, som regel tre prikker {svg} øverst til højre.</span></li><li><span>Tryk på <strong>Installer og opret genvej</strong> (nogle browsere skriver <strong>Føj til startskærm</strong>).</span></li><li><span>Vælg <strong>Installer</strong>, ikke <strong>Opret genvej</strong>. Tryk så på <strong>Installer</strong> igen.</span></li><li><span>Lampen vises sammen med dine andre apps.</span></li>",
 "computerNote": "Den åbner i sit eget vindue, ligesom enhver anden app.",
 "computerInstalled": "Installeret. Åbn My Quiet Bible sammen med dine andre apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åbn Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klik på installationsikonet i højre ende af adresselinjen, en skærm med en pil <span class=\"nb\">{svg},</span> og derefter på <strong>Installer</strong>.</span></li><li><span>På en Mac med Safari: Klik på <strong>Del</strong> øverst til højre og derefter på <strong>Føj til Dock</strong>.</span></li><li><span>Eller behold bare fanen. Den virker på samme måde og husker, hvor du er.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åbn Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klik på installationsikonet i højre ende af adresselinjen, en skærm med en pil <span class=\"nb\">{svg},</span> og derefter på <strong>Installer</strong>.</span></li><li><span>Eller behold bare fanen. Den virker på samme måde og husker, hvor du er.</span></li>",
 "ref": "Salme 119,105",
 "more": "Mere",
 "support": "Støt det",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Aldrig et krav. Intet forlader din telefon, medmindre du trykker på Del.</li><li>Hver kreds har sin egen nøgle. Kun medlemmerne kan åbne det, der er i den; ikke engang vi kan.</li><li>Kredse kræver et gratis login med en adgangsnøgle eller en kode sendt på e-mail.</li>",
 "listenH": "Lyt",
 "listenP": "Tryk på et vers og derefter på Lyt. Eller tryk på Læs med i søgefeltet, så lyser hvert ord op, mens det bliver læst. Rigtige oplæsere læser BSB, King James og Louis Segond. Til bilen, køkkenet eller trætte øjne.",
-"orMac": "Den er til Mac. Eller, på enhver computer, fra din browser:"
+"orMac": "På Windows eller Linux:",
+"macStore": "På en Mac:"
 }

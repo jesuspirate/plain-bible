@@ -52,7 +52,7 @@
 "androidSteps": "<li><span>Chrome keessatti, ykn biraawzarii ati fayyadamtu keessatti <a href=\"../#/read\" data-open=\"\">Macaafa Qulqulluu bani</a>.</span></li>\n            <li><span>Menu biraawzarii bani, yeroo baay'ee tuqaalee sadii {svg} gubbaa mirgaan.</span></li>\n            <li><span><strong>Install and create shortcut</strong> tuqi (biraawzaroonni tokko tokko <strong>Add to Home screen</strong> jedhu).</span></li>\n            <li><span><strong>Install</strong> filadhu, <strong>Create shortcut</strong> miti. Achiis irra deebi'ii <strong>Install</strong> tuqi.</span></li>\n            <li><span>Ibsaan appii kee biroo wajjin mul'ata.</span></li>",
 "computerNote": "Akkuma appii kamiyyuu, foddaa mataa isaa keessatti banama.",
 "computerInstalled": "Fe'ameera. My Quiet Bible appii kee biroo wajjin bani.",
-"computerSteps": "<li><span>Chrome ykn Edge keessatti <a href=\"../#/read\" data-open=\"\">Macaafa Qulqulluu bani</a>.</span></li>\n            <li><span>Mallattoo fe'iinsaa qarqara mirgaa sarara teessoo irratti, iskiriinii xiyya qabu <span class=\"nb\">{svg},</span> tuqi, achiis <strong>Install</strong>.</span></li>\n            <li><span>Mac irratti Safari wajjin: gubbaa mirgaan <strong>Share</strong> tuqi, achiis <strong>Add to Dock</strong>.</span></li>\n            <li><span>Ykn tab sana qofa qabadhu. Akkuma sanaatti hojjeta, iddoo keetis yaadata.</span></li>",
+"computerSteps": "<li><span>Chrome ykn Edge keessatti <a href=\"../#/read\" data-open=\"\">Macaafa Qulqulluu bani</a>.</span></li><li><span>Mallattoo fe'iinsaa qarqara mirgaa sarara teessoo irratti, iskiriinii xiyya qabu <span class=\"nb\">{svg},</span> tuqi, achiis <strong>Install</strong>.</span></li><li><span>Ykn tab sana qofa qabadhu. Akkuma sanaatti hojjeta, iddoo keetis yaadata.</span></li>",
 "ref": "Faarfannaa 119:105",
 "more": "Dabalata",
 "support": "Deeggari",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Gonkumaa dirqama miti. Hanga Qoodi tuqxutti wanti bilbila kee irraa ba'u hin jiru.</li>\n              <li>Gareen tokkoon tokkoon furtuu mataa isaa qaba. Waan keessa jiru kan banuu danda'an miseensota isaa qofa; nuti illee hin dandeenyu.</li><li>Marsaawwan seensa bilisaa barbaadu, furtuu seensaa ykn koodii imeeliin ergameen.</li>",
 "listenH": "Dhaggeeffadhu",
 "listenP": "Lakkoofsa tokko tuqi, achiis Dhaggeeffadhu. Yookaan sarara barbaacha irratti Hordofii dubbisi tuqi, jechi hundinuu yeroo dubbifamu ni ifa. Dubbistoonni dhugaa BSB, King James fi Louis Segond ni dubbisu. Konkolaataaf, kushiinaaf, ykn ija dadhabeef.",
-"orMac": "Kun Mac’f. Yookaan, kompiitara kamiinuu, barbaadduu kee irraa:"
+"orMac": "Windows ykn Linux irratti:",
+"macStore": "Mac irratti:"
 }

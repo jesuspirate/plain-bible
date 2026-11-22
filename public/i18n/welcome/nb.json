@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åpne Bibelen</a> i Chrome eller nettleseren du bruker.</span></li><li><span>Åpne nettleserens meny, vanligvis tre prikker {svg} øverst til høyre.</span></li><li><span>Trykk på <strong>Installer og opprett snarvei</strong> (i noen nettlesere står det <strong>Legg til på startskjermen</strong>).</span></li><li><span>Velg <strong>Installer</strong>, ikke <strong>Opprett snarvei</strong>. Trykk så på <strong>Installer</strong> igjen.</span></li><li><span>Lampen vises sammen med de andre appene dine.</span></li>",
 "computerNote": "Den åpnes i sitt eget vindu, som en hvilken som helst annen app.",
 "computerInstalled": "Installert. Åpne My Quiet Bible sammen med de andre appene dine.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åpne Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klikk på installeringsikonet helt til høyre i adressefeltet, en skjerm med en pil <span class=\"nb\">{svg},</span> og deretter på <strong>Installer</strong>.</span></li><li><span>På en Mac med Safari: Klikk på <strong>Del</strong> øverst til høyre og deretter på <strong>Legg til i Dock</strong>.</span></li><li><span>Eller bare behold fanen. Den virker på samme måte og husker hvor du er.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åpne Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klikk på installeringsikonet helt til høyre i adressefeltet, en skjerm med en pil <span class=\"nb\">{svg},</span> og deretter på <strong>Installer</strong>.</span></li><li><span>Eller bare behold fanen. Den virker på samme måte og husker hvor du er.</span></li>",
 "ref": "Salme 119,105",
 "more": "Mer",
 "support": "Støtt arbeidet",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Aldri påkrevd. Ingenting forlater telefonen din med mindre du trykker på Del.</li><li>Hver krets har sin egen nøkkel. Bare medlemmene kan åpne det som er i den; ikke engang vi kan det.</li><li>Kretser krever en gratis innlogging, med en tilgangsnøkkel eller en kode på e-post.</li>",
 "listenH": "Lytt",
 "listenP": "Trykk på et vers og deretter på Lytt. Eller trykk på Les med i søkefeltet, så lyser hvert ord opp mens det blir lest. Ekte opplesere leser BSB, King James og Louis Segond. For bilen, kjøkkenet eller slitne øyne.",
-"orMac": "Den er for Mac. Eller, på hvilken som helst datamaskin, fra nettleseren:"
+"orMac": "På Windows eller Linux:",
+"macStore": "På en Mac:"
 }

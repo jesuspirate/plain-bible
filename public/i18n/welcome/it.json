@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Apri la Bibbia</a> in Chrome, o nel browser che usi.</span></li>\n            <li><span>Apri il menu del browser, di solito tre puntini {svg} in alto a destra.</span></li>\n            <li><span>Tocca <strong>Installa e crea scorciatoia</strong> (alcuni browser dicono <strong>Aggiungi a schermata Home</strong>).</span></li>\n            <li><span>Scegli <strong>Installa</strong>, non <strong>Crea scorciatoia</strong>. Poi tocca di nuovo <strong>Installa</strong>.</span></li>\n            <li><span>La lampada compare insieme alle altre app.</span></li>",
 "computerNote": "Si apre nella sua finestra, come qualsiasi altra app.",
 "computerInstalled": "Installata. Apri My Quiet Bible insieme alle altre app.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Apri la Bibbia</a> in Chrome o Edge.</span></li>\n            <li><span>Fai clic sull’icona di installazione all’estremità destra della barra degli indirizzi, uno schermo con una freccia <span class=\"nb\">{svg},</span> poi su <strong>Installa</strong>.</span></li>\n            <li><span>Su un Mac con Safari: fai clic su <strong>Condividi</strong> in alto a destra, poi su <strong>Aggiungi al Dock</strong>.</span></li>\n            <li><span>Oppure tieni semplicemente aperta la scheda. Funziona allo stesso modo e ricorda dove eri rimasto.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Apri la Bibbia</a> in Chrome o Edge.</span></li><li><span>Fai clic sull’icona di installazione all’estremità destra della barra degli indirizzi, uno schermo con una freccia <span class=\"nb\">{svg},</span> poi su <strong>Installa</strong>.</span></li><li><span>Oppure tieni semplicemente aperta la scheda. Funziona allo stesso modo e ricorda dove eri rimasto.</span></li>",
 "ref": "Salmo 119:105",
 "more": "Altro",
 "support": "Sostienila",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Mai obbligatorio. Niente lascia il tuo telefono se non tocchi Condividi.</li>\n              <li>Ogni cerchia ha la sua chiave. Solo i suoi membri possono aprire ciò che contiene; nemmeno noi possiamo.</li><li>Le cerchie richiedono un accesso gratuito, con una passkey o un codice inviato per email.</li>",
 "listenH": "Ascolta",
 "listenP": "Tocca un versetto, poi Ascolta. Oppure tocca Leggi seguendo nella barra di ricerca, e ogni parola si illumina mentre viene letta. Veri lettori leggono la BSB, la King James e la Louis Segond. Per l’auto, la cucina o gli occhi stanchi.",
-"orMac": "Questo è per Mac. Oppure, su qualsiasi computer, dal tuo browser:"
+"orMac": "Su Windows o Linux:",
+"macStore": "Su Mac:"
 }

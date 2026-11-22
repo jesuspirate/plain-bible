@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öffne die Bibel</a> in Chrome oder dem Browser, den du verwendest.</span></li><li><span>Öffne das Menü des Browsers, meist drei Punkte {svg} oben rechts.</span></li><li><span>Tippe auf <strong>Installieren und Verknüpfung erstellen</strong> (manche Browser sagen <strong>Zum Startbildschirm hinzufügen</strong>).</span></li><li><span>Wähle <strong>Installieren</strong>, nicht <strong>Verknüpfung erstellen</strong>. Tippe dann noch einmal auf <strong>Installieren</strong>.</span></li><li><span>Die Lampe erscheint bei deinen anderen Apps.</span></li>",
 "computerNote": "Sie öffnet sich in einem eigenen Fenster, wie jede andere App.",
 "computerInstalled": "Installiert. Öffne My Quiet Bible bei deinen anderen Apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öffne die Bibel</a> in Chrome oder Edge.</span></li><li><span>Klicke auf das Installationssymbol am rechten Ende der Adressleiste, einen Bildschirm mit einem Pfeil <span class=\"nb\">{svg},</span> und dann auf <strong>Installieren</strong>.</span></li><li><span>Auf einem Mac mit Safari: Klicke oben rechts auf <strong>Teilen</strong> und dann auf <strong>Zum Dock hinzufügen</strong>.</span></li><li><span>Oder behalte einfach den Tab. Er funktioniert genauso und merkt sich deine Stelle.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öffne die Bibel</a> in Chrome oder Edge.</span></li><li><span>Klicke auf das Installationssymbol am rechten Ende der Adressleiste, einen Bildschirm mit einem Pfeil <span class=\"nb\">{svg},</span> und dann auf <strong>Installieren</strong>.</span></li><li><span>Oder behalte einfach den Tab. Er funktioniert genauso und merkt sich deine Stelle.</span></li>",
 "ref": "Psalm 119,105",
 "more": "Mehr",
 "support": "Unterstützen",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nie erforderlich. Nichts verlässt dein Telefon, außer du tippst auf „Teilen“.</li><li>Jeder Kreis hat seinen eigenen Schlüssel. Nur seine Mitglieder können öffnen, was darin ist; nicht einmal wir.</li><li>Für Kreise brauchst du eine kostenlose Anmeldung, mit einem Passkey oder einem Code per E-Mail.</li>",
 "listenH": "Anhören",
 "listenP": "Tippe auf einen Vers und dann auf „Anhören“. Oder tippe in der Suchleiste auf „Mitlesen“, und jedes Wort leuchtet auf, während es gelesen wird. Echte Sprecher lesen die BSB, die King James und die Louis Segond. Für das Auto, die Küche oder müde Augen.",
-"orMac": "Das ist für den Mac. Oder, auf jedem Computer, über deinen Browser:"
+"orMac": "Unter Windows oder Linux:",
+"macStore": "Auf dem Mac:"
 }

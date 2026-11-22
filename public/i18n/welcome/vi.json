@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Mở Kinh Thánh</a> trong Chrome, hoặc trình duyệt bạn dùng.</span></li>\n            <li><span>Mở menu của trình duyệt, thường là ba chấm {svg} ở góc trên bên phải.</span></li>\n            <li><span>Chạm <strong>Cài đặt và tạo lối tắt</strong> (một số trình duyệt ghi là <strong>Thêm vào màn hình chính</strong>).</span></li>\n            <li><span>Chọn <strong>Cài đặt</strong>, không chọn <strong>Tạo lối tắt</strong>. Rồi chạm <strong>Cài đặt</strong> lần nữa.</span></li>\n            <li><span>Ngọn đèn sẽ xuất hiện cùng các ứng dụng khác của bạn.</span></li>",
 "computerNote": "Ứng dụng mở trong cửa sổ riêng, như mọi ứng dụng khác.",
 "computerInstalled": "Đã cài đặt. Hãy mở My Quiet Bible cùng các ứng dụng khác của bạn.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Mở Kinh Thánh</a> trong Chrome hoặc Edge.</span></li>\n            <li><span>Nhấp vào biểu tượng cài ứng dụng ở đầu bên phải thanh địa chỉ, một màn hình có mũi tên <span class=\"nb\">{svg},</span> rồi <strong>Cài đặt</strong>.</span></li>\n            <li><span>Trên Mac với Safari: nhấp <strong>Chia sẻ</strong> ở góc trên bên phải, rồi <strong>Thêm vào Dock</strong>.</span></li>\n            <li><span>Hoặc đơn giản là giữ thẻ này. Vẫn dùng như vậy, và nhớ chỗ bạn đọc.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Mở Kinh Thánh</a> trong Chrome hoặc Edge.</span></li><li><span>Nhấp vào biểu tượng cài ứng dụng ở đầu bên phải thanh địa chỉ, một màn hình có mũi tên <span class=\"nb\">{svg},</span> rồi <strong>Cài đặt</strong>.</span></li><li><span>Hoặc đơn giản là giữ thẻ này. Vẫn dùng như vậy, và nhớ chỗ bạn đọc.</span></li>",
 "ref": "Thi Thiên 119:105",
 "more": "Thêm",
 "support": "Ủng hộ",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Không bao giờ bắt buộc. Không gì rời khỏi điện thoại của bạn trừ khi bạn chạm Chia sẻ.</li>\n              <li>Mỗi nhóm có khóa riêng. Chỉ thành viên mới mở được những gì bên trong; ngay cả chúng tôi cũng không.</li><li>Nhóm cần đăng nhập miễn phí, bằng khóa truy cập hoặc mã gửi qua email.</li>",
 "listenH": "Nghe",
 "listenP": "Chạm vào một câu, rồi Nghe. Hoặc chạm Đọc theo trên thanh tìm kiếm, và từng chữ sáng lên khi được đọc. Người đọc thật đọc bản BSB, King James và Louis Segond. Cho lúc lái xe, trong bếp, hay khi mắt mỏi.",
-"orMac": "Đó là cho Mac. Hoặc, trên bất kỳ máy tính nào, từ trình duyệt:"
+"orMac": "Trên Windows hoặc Linux:",
+"macStore": "Trên Mac:"
 }

@@ -52,7 +52,7 @@
 "androidSteps": "<li><span>Chrome मा, वा तपाईंले प्रयोग गर्ने ब्राउजरमा <a href=\"../#/read\" data-open=\"\">बाइबल खोल्नुहोस्</a>।</span></li>\n            <li><span>ब्राउजरको मेनु खोल्नुहोस्, प्रायः माथि दायाँतिर तीनवटा थोप्ला {svg}।</span></li>\n            <li><span><strong>Install and create shortcut</strong> मा ट्याप गर्नुहोस् (कुनै ब्राउजरमा <strong>Add to Home screen</strong> लेखिएको हुन्छ)।</span></li>\n            <li><span><strong>Install</strong> छान्नुहोस्, <strong>Create shortcut</strong> होइन। त्यसपछि फेरि <strong>Install</strong> मा ट्याप गर्नुहोस्।</span></li>\n            <li><span>बत्ती तपाईंका अरू एपहरूसँगै देखा पर्छ।</span></li>",
 "computerNote": "यो अरू कुनै पनि एपजस्तै आफ्नै विन्डोमा खुल्छ।",
 "computerInstalled": "इन्स्टल भयो। My Quiet Bible आफ्ना अरू एपहरूसँगै खोल्नुहोस्।",
-"computerSteps": "<li><span>Chrome वा Edge मा <a href=\"../#/read\" data-open=\"\">बाइबल खोल्नुहोस्</a>।</span></li>\n            <li><span>ठेगाना बारको दायाँ छेउमा रहेको इन्स्टल आइकनमा क्लिक गर्नुहोस्, तीर भएको एउटा स्क्रिन <span class=\"nb\">{svg},</span> त्यसपछि <strong>Install</strong>।</span></li>\n            <li><span>Mac मा Safari सँग: माथि दायाँतिर <strong>Share</strong> मा क्लिक गर्नुहोस्, त्यसपछि <strong>Add to Dock</strong>।</span></li>\n            <li><span>वा केवल ट्याब खुला राख्नुहोस्। यो उस्तै चल्छ, र तपाईंको ठाउँ सम्झन्छ।</span></li>",
+"computerSteps": "<li><span>Chrome वा Edge मा <a href=\"../#/read\" data-open=\"\">बाइबल खोल्नुहोस्</a>।</span></li><li><span>ठेगाना बारको दायाँ छेउमा रहेको इन्स्टल आइकनमा क्लिक गर्नुहोस्, तीर भएको एउटा स्क्रिन <span class=\"nb\">{svg},</span> त्यसपछि <strong>Install</strong>।</span></li><li><span>वा केवल ट्याब खुला राख्नुहोस्। यो उस्तै चल्छ, र तपाईंको ठाउँ सम्झन्छ।</span></li>",
 "ref": "भजनसंग्रह 119:105",
 "more": "थप",
 "support": "सहयोग गर्नुहोस्",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>कहिल्यै अनिवार्य छैन। तपाईंले साझा गर्नुहोस् मा ट्याप नगरेसम्म तपाईंको फोनबाट केही पनि बाहिर जाँदैन।</li>\n              <li>हरेक समूहको आफ्नै साँचो हुन्छ। त्यसमा भएको कुरा त्यसका सदस्यहरूले मात्र खोल्न सक्छन्; हामीले पनि सक्दैनौँ।</li><li>मण्डलीहरूका लागि निःशुल्क साइन इन चाहिन्छ, पासकी वा इमेलमा पठाइएको कोडले.</li>",
 "listenH": "सुन्नुहोस्",
 "listenP": "कुनै पदमा ट्याप गर्नुहोस्, अनि सुन्नुहोस्. वा खोज पट्टीमा सँगै पढ्नुहोस् मा ट्याप गर्नुहोस्, र पढ्दै गर्दा हरेक शब्द चम्किन्छ. साँचो वाचकहरूले BSB, King James र Louis Segond पढ्छन्. गाडी, भान्सा वा थाकेका आँखाका लागि.",
-"orMac": "त्यो Mac का लागि हो. वा, कुनै पनि कम्प्युटरमा, आफ्नो ब्राउजरबाट:"
+"orMac": "Windows वा Linux मा:",
+"macStore": "Mac मा:"
 }

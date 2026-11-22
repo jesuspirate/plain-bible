@@ -52,7 +52,7 @@
 "androidSteps": "<li><span>在 Chrome 或你使用的瀏覽器中<a href=\"../#/read\" data-open=\"\">打開聖經</a>。</span></li>\n            <li><span>打開瀏覽器的選單，通常是右上角的三個點 {svg}。</span></li>\n            <li><span>點一下<strong>安裝並建立捷徑</strong>（有些瀏覽器會顯示為<strong>加入主畫面</strong>）。</span></li>\n            <li><span>選擇<strong>安裝</strong>，而不是<strong>建立捷徑</strong>。然後再點一下<strong>安裝</strong>。</span></li>\n            <li><span>燈的圖示就會和你的其他 App 一起出現。</span></li>",
 "computerNote": "它會像其他 App 一樣，在自己的視窗中打開。",
 "computerInstalled": "已安裝。在你的其他 App 中打開 My Quiet Bible 即可。",
-"computerSteps": "<li><span>在 Chrome 或 Edge 中<a href=\"../#/read\" data-open=\"\">打開聖經</a>。</span></li>\n            <li><span>按一下網址列右端的安裝圖示（一個帶箭頭的螢幕 <span class=\"nb\">{svg}），</span>然後按一下<strong>安裝</strong>。</span></li>\n            <li><span>在使用 Safari 的 Mac 上：按一下右上角的<strong>分享</strong>，然後按一下<strong>加入 Dock</strong>。</span></li>\n            <li><span>或者乾脆保留這個分頁。效果一樣，也會記住你讀到的位置。</span></li>",
+"computerSteps": "<li><span>在 Chrome 或 Edge 中<a href=\"../#/read\" data-open=\"\">打開聖經</a>。</span></li><li><span>按一下網址列右端的安裝圖示（一個帶箭頭的螢幕 <span class=\"nb\">{svg}），</span>然後按一下<strong>安裝</strong>。</span></li><li><span>或者乾脆保留這個分頁。效果一樣，也會記住你讀到的位置。</span></li>",
 "ref": "詩篇 119:105",
 "more": "更多",
 "support": "支持我們",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>從來不是必需的。除非你點一下「分享」，否則什麼都不會離開你的手機。</li>\n              <li>每個小組都有自己的金鑰。只有組員能打開其中的內容；連我們也不能。</li><li>小組需要免費登入，用密碼金鑰或透過電子郵件收到的驗證碼。</li>",
 "listenH": "收聽",
 "listenP": "輕點一節經文，再輕點「收聽」。或者輕點搜尋列裡的「跟讀」，讀到的每個字都會亮起來。BSB、King James 和 Louis Segond 由真人朗讀。適合在車裡、廚房裡，或眼睛疲倦的時候。",
-"orMac": "這是 Mac 版。或者在任何電腦上，從瀏覽器："
+"orMac": "在 Windows 或 Linux 上：",
+"macStore": "在 Mac 上："
 }

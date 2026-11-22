@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Abra a Bíblia</a> no Chrome, ou no navegador que você usa.</span></li>\n            <li><span>Abra o menu do navegador, geralmente três pontinhos {svg} no canto superior direito.</span></li>\n            <li><span>Toque em <strong>Instalar e criar atalho</strong> (alguns navegadores dizem <strong>Adicionar à tela inicial</strong>).</span></li>\n            <li><span>Escolha <strong>Instalar</strong>, não <strong>Criar atalho</strong>. Depois toque em <strong>Instalar</strong> de novo.</span></li>\n            <li><span>A lâmpada aparece junto com seus outros apps.</span></li>",
 "computerNote": "Ele abre na própria janela, como qualquer outro app.",
 "computerInstalled": "Instalado. Abra o My Quiet Bible junto com seus outros apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Abra a Bíblia</a> no Chrome ou no Edge.</span></li>\n            <li><span>Clique no ícone de instalação no lado direito da barra de endereço, uma tela com uma seta <span class=\"nb\">{svg},</span> depois em <strong>Instalar</strong>.</span></li>\n            <li><span>Num Mac com Safari: clique em <strong>Compartilhar</strong> no canto superior direito, depois em <strong>Adicionar ao Dock</strong>.</span></li>\n            <li><span>Ou simplesmente mantenha a aba aberta. Funciona do mesmo jeito e lembra onde você parou.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Abra a Bíblia</a> no Chrome ou no Edge.</span></li><li><span>Clique no ícone de instalação no lado direito da barra de endereço, uma tela com uma seta <span class=\"nb\">{svg},</span> depois em <strong>Instalar</strong>.</span></li><li><span>Ou simplesmente mantenha a aba aberta. Funciona do mesmo jeito e lembra onde você parou.</span></li>",
 "ref": "Salmo 119:105",
 "more": "Mais",
 "support": "Apoiar",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nunca é obrigatório. Nada sai do seu celular a menos que você toque em Compartilhar.</li>\n              <li>Cada círculo tem sua própria chave. Só os membros podem abrir o que há nele; nem nós podemos.</li><li>Os círculos precisam de um login gratuito, com uma chave de acesso ou um código enviado por e-mail.</li>",
 "listenH": "Ouvir",
 "listenP": "Toque num versículo e depois em Ouvir. Ou toque em Ler acompanhando na barra de busca, e cada palavra se acende enquanto é lida. Narradores de verdade leem a BSB, a King James e a Louis Segond. Para o carro, a cozinha ou os olhos cansados.",
-"orMac": "Este é para Mac. Ou, em qualquer computador, pelo seu navegador:"
+"orMac": "No Windows ou Linux:",
+"macStore": "No Mac:"
 }

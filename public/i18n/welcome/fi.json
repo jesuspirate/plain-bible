@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Avaa Raamattu</a> Chromessa tai käyttämässäsi selaimessa.</span></li>\n            <li><span>Avaa selaimen valikko, yleensä kolme pistettä {svg} oikeassa yläkulmassa.</span></li>\n            <li><span>Napauta <strong>Asenna ja luo pikakuvake</strong> (joissakin selaimissa lukee <strong>Lisää aloitusnäytölle</strong>).</span></li>\n            <li><span>Valitse <strong>Asenna</strong>, ei <strong>Luo pikakuvake</strong>. Napauta sitten uudelleen <strong>Asenna</strong>.</span></li>\n            <li><span>Lamppu ilmestyy muiden sovellustesi joukkoon.</span></li>",
 "computerNote": "Se avautuu omaan ikkunaansa kuten mikä tahansa sovellus.",
 "computerInstalled": "Asennettu. Avaa My Quiet Bible muiden sovellustesi joukosta.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Avaa Raamattu</a> Chromessa tai Edgessä.</span></li>\n            <li><span>Napsauta osoitepalkin oikeassa päässä olevaa asennuskuvaketta, näyttöä, jossa on nuoli <span class=\"nb\">{svg},</span> ja sitten <strong>Asenna</strong>.</span></li>\n            <li><span>Macissa Safarilla: napsauta oikeassa yläkulmassa <strong>Jaa</strong> ja sitten <strong>Lisää Dockiin</strong>.</span></li>\n            <li><span>Tai pidä vain välilehti auki. Se toimii samoin ja muistaa kohtasi.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Avaa Raamattu</a> Chromessa tai Edgessä.</span></li><li><span>Napsauta osoitepalkin oikeassa päässä olevaa asennuskuvaketta, näyttöä, jossa on nuoli <span class=\"nb\">{svg},</span> ja sitten <strong>Asenna</strong>.</span></li><li><span>Tai pidä vain välilehti auki. Se toimii samoin ja muistaa kohtasi.</span></li>",
 "ref": "Psalmi 119:105",
 "more": "Lisää",
 "support": "Tue",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ei koskaan pakollinen. Mikään ei lähde puhelimestasi, ellet napauta Jaa.</li>\n              <li>Jokaisella piirillä on oma avaimensa. Vain sen jäsenet voivat avata sen sisällön; emme edes me.</li><li>Piirit vaativat maksuttoman kirjautumisen, pääsyavaimella tai sähköpostiin lähetetyllä koodilla.</li>",
 "listenH": "Kuuntele",
 "listenP": "Napauta jaetta ja sitten Kuuntele. Tai napauta hakupalkin Lue mukana -kuvaketta, niin jokainen sana syttyy sitä luettaessa. Oikeat lukijat lukevat BSB:n, King Jamesin ja Louis Segondin. Autoon, keittiöön tai väsyneille silmille.",
-"orMac": "Se on Macille. Tai millä tahansa tietokoneella, selaimesta:"
+"orMac": "Windowsissa tai Linuxissa:",
+"macStore": "Macilla:"
 }

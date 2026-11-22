@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Mepee Baịbụl</a> na Chrome, ma ọ bụ ihe nchọgharị ị na-eji.</span></li><li><span>Mepee menu ihe nchọgharị ahụ, ọtụtụ mgbe ntụpọ atọ {svg} n’elu aka nri.</span></li><li><span>Pịa <strong>Install and create shortcut</strong> (ụfọdụ ihe nchọgharị na-ekwu <strong>Add to Home screen</strong>).</span></li><li><span>Họrọ <strong>Install</strong>, ọ bụghị <strong>Create shortcut</strong>. Wee pịa <strong>Install</strong> ọzọ.</span></li><li><span>Oriọna ahụ ga-apụta n’akụkụ ngwa gị ndị ọzọ.</span></li>",
 "computerNote": "Ọ na-emeghe na windo nke ya, dị ka ngwa ọ bụla ọzọ.",
 "computerInstalled": "Etinyela ya. Mepee My Quiet Bible n’akụkụ ngwa gị ndị ọzọ.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Mepee Baịbụl</a> na Chrome ma ọ bụ Edge.</span></li><li><span>Pịa akara ngosi ntinye dị na nsọtụ aka nri nke ogwe adreesị, ihuenyo nwere akụ <span class=\"nb\">{svg},</span> wee pịa <strong>Install</strong>.</span></li><li><span>Na Mac nwere Safari: pịa <strong>Share</strong> n’elu aka nri, wee pịa <strong>Add to Dock</strong>.</span></li><li><span>Ma ọ bụ hapụ taabụ ahụ. Ọ na-arụ ọrụ otu ahụ, na-echetakwa ebe i ruru.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Mepee Baịbụl</a> na Chrome ma ọ bụ Edge.</span></li><li><span>Pịa akara ngosi ntinye dị na nsọtụ aka nri nke ogwe adreesị, ihuenyo nwere akụ <span class=\"nb\">{svg},</span> wee pịa <strong>Install</strong>.</span></li><li><span>Ma ọ bụ hapụ taabụ ahụ. Ọ na-arụ ọrụ otu ahụ, na-echetakwa ebe i ruru.</span></li>",
 "ref": "Abụ Ọma 119:105",
 "more": "Ndị ọzọ",
 "support": "Kwado ya",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Ọ bụghị iwu ma ọlị. Ọ dịghị ihe na-apụ n’ekwentị gị ma ọ bụrụ na ị pịaghị Kesaa.</li><li>Otu ọ bụla nwere igodo nke ya. Ọ bụ naanị ndị otu ya nwere ike imeghe ihe dị n’ime ya; ọbụna anyị enweghị ike.</li><li>Okirikiri chọrọ ịbanye n’efu, site na igodo nbanye ma ọ bụ koodu ezitere na email.</li>",
 "listenH": "Gee ntị",
 "listenP": "Pịa amaokwu, mgbe ahụ Gee ntị. Ma ọ bụ pịa Gụkọọ n’ogwe ọchụchọ, okwu ọ bụla ga-enwu ka a na-agụ ya. Ezigbo ndị na-agụ na-agụ BSB, King James na Louis Segond. Maka ụgbọala, kichin, ma ọ bụ anya ike gwụrụ.",
-"orMac": "Nke ahụ bụ maka Mac. Ma ọ bụ, na kọmputa ọ bụla, site na ihe nchọgharị gị:"
+"orMac": "Na Windows ma ọ bụ Linux:",
+"macStore": "Na Mac:"
 }

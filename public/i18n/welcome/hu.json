@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Nyissa meg a Bibliát</a> a Chrome-ban vagy a használt böngészőben.</span></li>\n            <li><span>Nyissa meg a böngésző menüjét, általában a jobb felső sarokban lévő három pontot {svg}.</span></li>\n            <li><span>Koppintson a <strong>Telepítés és parancsikon létrehozása</strong> pontra (egyes böngészőkben <strong>Hozzáadás a kezdőképernyőhöz</strong>).</span></li>\n            <li><span>A <strong>Telepítés</strong> lehetőséget válassza, ne a <strong>Parancsikon létrehozása</strong> lehetőséget. Majd koppintson újra a <strong>Telepítés</strong> gombra.</span></li>\n            <li><span>A lámpás megjelenik a többi alkalmazása között.</span></li>",
 "computerNote": "Saját ablakban nyílik meg, mint bármely más alkalmazás.",
 "computerInstalled": "Telepítve. Nyissa meg a My Quiet Bible-t a többi alkalmazása között.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Nyissa meg a Bibliát</a> a Chrome-ban vagy az Edge-ben.</span></li>\n            <li><span>Kattintson a címsor jobb végén lévő telepítés ikonra, egy nyilas képernyőre <span class=\"nb\">{svg},</span> majd a <strong>Telepítés</strong> gombra.</span></li>\n            <li><span>Macen a Safarival: kattintson a jobb felső sarokban a <strong>Megosztás</strong>, majd a <strong>Hozzáadás a Dockhoz</strong> lehetőségre.</span></li>\n            <li><span>Vagy egyszerűen tartsa meg a lapot. Ugyanúgy működik, és megjegyzi, hol tartott.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Nyissa meg a Bibliát</a> a Chrome-ban vagy az Edge-ben.</span></li><li><span>Kattintson a címsor jobb végén lévő telepítés ikonra, egy nyilas képernyőre <span class=\"nb\">{svg},</span> majd a <strong>Telepítés</strong> gombra.</span></li><li><span>Vagy egyszerűen tartsa meg a lapot. Ugyanúgy működik, és megjegyzi, hol tartott.</span></li>",
 "ref": "Zsoltárok 119:105",
 "more": "Továbbiak",
 "support": "Támogatás",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Soha nem kötelező. Semmi sem hagyja el a telefonját, hacsak nem koppint a Megosztásra.</li>\n              <li>Minden körnek saját kulcsa van. Csak a tagjai nyithatják meg, ami benne van; még mi sem.</li><li>A körökhöz ingyenes bejelentkezés kell, jelkulccsal vagy e-mailben küldött kóddal.</li>",
 "listenH": "Meghallgatás",
 "listenP": "Koppintson egy versre, majd a Meghallgatás gombra. Vagy koppintson a keresősávban a Követő olvasás ikonra, és minden szó felvillan, ahogy elhangzik. Igazi felolvasók olvassák a BSB-t, a King Jamest és a Louis Segondot. Autóba, konyhába vagy fáradt szemnek.",
-"orMac": "Ez Macre való. Vagy bármely számítógépen, a böngészőből:"
+"orMac": "Windowson vagy Linuxon:",
+"macStore": "Macen:"
 }

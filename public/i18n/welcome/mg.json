@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Sokafy ny Baiboly</a> ao amin’ny Chrome, na ilay mpitety tranonkala ampiasainao.</span></li>\n            <li><span>Sokafy ny menion’ny mpitety tranonkala, matetika teboka telo {svg} eo ambony ankavanana.</span></li>\n            <li><span>Tsindrio ny <strong>Install and create shortcut</strong> (misy mpitety tranonkala milaza hoe <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Safidio ny <strong>Install</strong>, fa tsy ny <strong>Create shortcut</strong>. Avy eo tsindrio indray ny <strong>Install</strong>.</span></li>\n            <li><span>Hiseho miaraka amin’ireo rindrankajinao hafa ny jiro.</span></li>",
 "computerNote": "Misokatra amin’ny varavarankeliny manokana izy, toy ny rindrankajy hafa rehetra.",
 "computerInstalled": "Voapetraka. Sokafy miaraka amin’ireo rindrankajinao hafa ny My Quiet Bible.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Sokafy ny Baiboly</a> ao amin’ny Chrome na Edge.</span></li>\n            <li><span>Tsindrio ny sary fametrahana eo amin’ny farany ankavanan’ny tsipika adiresy, efijery misy zana-tsipika <span class=\"nb\">{svg},</span> avy eo ny <strong>Install</strong>.</span></li>\n            <li><span>Amin’ny Mac misy Safari: tsindrio ny <strong>Share</strong> eo ambony ankavanana, avy eo ny <strong>Add to Dock</strong>.</span></li>\n            <li><span>Na avelao fotsiny hisokatra ilay tabilao. Mitovy ihany ny fandehany, ary mitadidy ny toerana nijanonanao.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Sokafy ny Baiboly</a> ao amin’ny Chrome na Edge.</span></li><li><span>Tsindrio ny sary fametrahana eo amin’ny farany ankavanan’ny tsipika adiresy, efijery misy zana-tsipika <span class=\"nb\">{svg},</span> avy eo ny <strong>Install</strong>.</span></li><li><span>Na avelao fotsiny hisokatra ilay tabilao. Mitovy ihany ny fandehany, ary mitadidy ny toerana nijanonanao.</span></li>",
 "ref": "Salamo 119:105",
 "more": "Hafa koa",
 "support": "Manohana",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Tsy voatery mihitsy. Tsy misy miala amin’ny findainao raha tsy manindry ny Hizara ianao.</li>\n              <li>Samy manana ny lakileny ny tarika tsirairay. Ireo mpikambana ihany no afaka manokatra izay ao; na izahay aza tsy afaka.</li><li>Mila fidirana maimaim-poana ny faribolana, amin’ny lakile fidirana na kaody alefa amin’ny mailaka.</li>",
 "listenH": "Hihaino",
 "listenP": "Tsindrio ny andininy iray, avy eo Hihaino. Na tsindrio ny Hamaky miaraka ao amin’ny tsipika fikarohana, dia mirehitra ny teny tsirairay rehefa vakiana. Mpamaky tena izy no mamaky ny BSB, King James ary Louis Segond. Ho an’ny fiara, ny lakozia, na ny maso reraka.",
-"orMac": "Ho an’ny Mac izany. Na, amin’ny solosaina rehetra, avy amin’ny mpitety tranonkala:"
+"orMac": "Amin’ny Windows na Linux:",
+"macStore": "Amin’ny Mac:"
 }

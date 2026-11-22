@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otwórz Biblię</a> w Chrome lub przeglądarce, której używasz.</span></li><li><span>Otwórz menu przeglądarki, zwykle trzy kropki {svg} w prawym górnym rogu.</span></li><li><span>Stuknij <strong>Zainstaluj i utwórz skrót</strong> (niektóre przeglądarki piszą <strong>Dodaj do ekranu głównego</strong>).</span></li><li><span>Wybierz <strong>Zainstaluj</strong>, a nie <strong>Utwórz skrót</strong>. Potem stuknij ponownie <strong>Zainstaluj</strong>.</span></li><li><span>Lampa pojawi się wśród innych aplikacji.</span></li>",
 "computerNote": "Otwiera się we własnym oknie, jak każda inna aplikacja.",
 "computerInstalled": "Zainstalowano. Otwieraj My Quiet Bible razem z innymi aplikacjami.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otwórz Biblię</a> w Chrome lub Edge.</span></li><li><span>Kliknij ikonę instalacji na prawym końcu paska adresu, ekran ze strzałką <span class=\"nb\">{svg},</span> a potem <strong>Zainstaluj</strong>.</span></li><li><span>Na Macu w Safari: kliknij <strong>Udostępnij</strong> w prawym górnym rogu, a potem <strong>Dodaj do Docka</strong>.</span></li><li><span>Albo po prostu zostaw kartę. Działa tak samo i pamięta, gdzie skończono czytać.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otwórz Biblię</a> w Chrome lub Edge.</span></li><li><span>Kliknij ikonę instalacji na prawym końcu paska adresu, ekran ze strzałką <span class=\"nb\">{svg},</span> a potem <strong>Zainstaluj</strong>.</span></li><li><span>Albo po prostu zostaw kartę. Działa tak samo i pamięta, gdzie skończono czytać.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Więcej",
 "support": "Wesprzyj",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nigdy nie jest wymagany. Nic nie opuszcza twojego telefonu, dopóki nie stukniesz Udostępnij.</li><li>Każdy krąg ma własny klucz. Tylko jego członkowie mogą otworzyć to, co w nim jest; nawet my nie możemy.</li><li>Kręgi wymagają bezpłatnego logowania, kluczem dostępu lub kodem wysłanym e-mailem.</li>",
 "listenH": "Słuchaj",
 "listenP": "Dotknij wersetu, a potem Słuchaj. Albo dotknij Czytaj z podświetleniem na pasku wyszukiwania, a każde słowo rozświetli się podczas czytania. Prawdziwi lektorzy czytają BSB, King James i Louis Segond. Do auta, do kuchni albo dla zmęczonych oczu.",
-"orMac": "To dla Maca. Albo na dowolnym komputerze, z przeglądarki:"
+"orMac": "W systemie Windows lub Linux:",
+"macStore": "Na Macu:"
 }

@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Open de Bijbel</a> in Chrome, of de browser die je gebruikt.</span></li><li><span>Open het menu van de browser, meestal drie puntjes {svg} rechtsboven.</span></li><li><span>Tik op <strong>Installeren en snelkoppeling maken</strong> (sommige browsers zeggen <strong>Toevoegen aan startscherm</strong>).</span></li><li><span>Kies <strong>Installeren</strong>, niet <strong>Snelkoppeling maken</strong>. Tik dan nog eens op <strong>Installeren</strong>.</span></li><li><span>De lamp verschijnt bij je andere apps.</span></li>",
 "computerNote": "Hij opent in een eigen venster, zoals elke andere app.",
 "computerInstalled": "Geïnstalleerd. Open My Quiet Bible bij je andere apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Open de Bijbel</a> in Chrome of Edge.</span></li><li><span>Klik op het installatie-icoon aan de rechterkant van de adresbalk, een scherm met een pijl <span class=\"nb\">{svg},</span> en dan op <strong>Installeren</strong>.</span></li><li><span>Op een Mac met Safari: klik rechtsboven op <strong>Deel</strong> en dan op <strong>Voeg toe aan Dock</strong>.</span></li><li><span>Of houd gewoon het tabblad open. Dat werkt hetzelfde en onthoudt waar je was.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Open de Bijbel</a> in Chrome of Edge.</span></li><li><span>Klik op het installatie-icoon aan de rechterkant van de adresbalk, een scherm met een pijl <span class=\"nb\">{svg},</span> en dan op <strong>Installeren</strong>.</span></li><li><span>Of houd gewoon het tabblad open. Dat werkt hetzelfde en onthoudt waar je was.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Meer",
 "support": "Steun het",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Nooit verplicht. Niets verlaat je telefoon tenzij je op Delen tikt.</li><li>Elke kring heeft zijn eigen sleutel. Alleen de leden kunnen openen wat erin staat; zelfs wij niet.</li><li>Voor kringen heb je een gratis aanmelding nodig, met een toegangssleutel of een code per e-mail.</li>",
 "listenH": "Luisteren",
 "listenP": "Tik op een vers en dan op Luisteren. Of tik op Meelezen in de zoekbalk, en elk woord licht op terwijl het wordt voorgelezen. Echte stemmen lezen de BSB, de King James en de Louis Segond. Voor in de auto, de keuken, of voor vermoeide ogen.",
-"orMac": "Die is voor de Mac. Of, op elke computer, via je browser:"
+"orMac": "Op Windows of Linux:",
+"macStore": "Op een Mac:"
 }

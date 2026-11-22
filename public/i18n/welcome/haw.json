@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">E wehe i ka Baibala</a> ma Chrome, a i ʻole ka polokalamu kele āu e hoʻohana ai.</span></li>\n            <li><span>E wehe i ka papa koho o ka polokalamu kele, ʻo nā kiko ʻekolu {svg} ma luna ʻākau ka mea maʻamau.</span></li>\n            <li><span>E kaomi iā <strong>Install and create shortcut</strong> (ʻōlelo kekahi polokalamu kele <strong>Add to Home screen</strong>).</span></li>\n            <li><span>E koho iā <strong>Install</strong>, ʻaʻole ʻo <strong>Create shortcut</strong>. A laila e kaomi hou iā <strong>Install</strong>.</span></li>\n            <li><span>ʻIke ʻia ke kukui me kāu mau polokalamu ʻē aʻe.</span></li>",
 "computerNote": "Wehe ʻia i loko o kona puka aniani ponoʻī, e like me nā polokalamu ʻē aʻe.",
 "computerInstalled": "Ua hoʻokomo ʻia. E wehe iā My Quiet Bible me kāu mau polokalamu ʻē aʻe.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">E wehe i ka Baibala</a> ma Chrome a i ʻole Edge.</span></li>\n            <li><span>E kaomi i ka hōʻailona hoʻokomo ma ka ʻaoʻao ʻākau o ka pahu helu wahi, he pākū me ka pua <span class=\"nb\">{svg},</span> a laila ʻo <strong>Install</strong>.</span></li>\n            <li><span>Ma kahi Mac me Safari: e kaomi iā <strong>Share</strong> ma luna ʻākau, a laila ʻo <strong>Add to Dock</strong>.</span></li>\n            <li><span>A i ʻole e mālama wale i ka ʻaoʻao. Hana like nō ia, a hoʻomanaʻo i kou wahi.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">E wehe i ka Baibala</a> ma Chrome a i ʻole Edge.</span></li><li><span>E kaomi i ka hōʻailona hoʻokomo ma ka ʻaoʻao ʻākau o ka pahu helu wahi, he pākū me ka pua <span class=\"nb\">{svg},</span> a laila ʻo <strong>Install</strong>.</span></li><li><span>A i ʻole e mālama wale i ka ʻaoʻao. Hana like nō ia, a hoʻomanaʻo i kou wahi.</span></li>",
 "ref": "Halelū 119:105",
 "more": "Hou aku",
 "support": "Kākoʻo",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>ʻAʻole koi ʻia. ʻAʻohe mea e haʻalele i kou kelepona ke kaomi ʻole ʻoe iā Kaʻana.</li>\n              <li>Loaʻa i kēlā me kēia pōʻai kona kī ponoʻī. ʻO kona mau lālā wale nō ka mea hiki ke wehe i nā mea i loko; ʻaʻole hiki iā mākou.</li><li>Pono nā pōʻai i ke komo manuahi, me kahi kī komo a i ʻole kahi helu i hoʻouna ʻia ma ka leka uila.</li>",
 "listenH": "Hoʻolohe",
 "listenP": "Kaomi i kekahi paukū, a laila Hoʻolohe. A i ʻole, kaomi iā Heluhelu pū ma ka pahu ʻimi, a hoʻomālamalama ʻia kēlā me kēia hua ʻōlelo i ka heluhelu ʻana. Heluhelu nā mea heluhelu maoli i ka BSB, ka King James a me ka Louis Segond. No ke kaʻa, ka lumi kuke, a i ʻole nā maka luhi.",
-"orMac": "No Mac kēlā. A i ʻole, ma kekahi kamepiula, mai kāu polokalamu kele pūnaewele:"
+"orMac": "Ma Windows a i ʻole Linux:",
+"macStore": "Ma ka Mac:"
 }

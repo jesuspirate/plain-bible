@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ritingala Paipel</a> nan Chrome, de browser me komw kin doadoahngki.</span></li>\n            <li><span>Ritingala menu en browser, me kin iei kilel silimen {svg} pah palimaun.</span></li>\n            <li><span>Pedikih <strong>Install and create shortcut</strong> (ekei browser kin ndinda <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Pilada <strong>Install</strong>, kaidehn <strong>Create shortcut</strong>. Mwuri pedikih <strong>Install</strong> pwuhrehng.</span></li>\n            <li><span>Lamp pahn sansalda iangahki noumw app teikan.</span></li>",
 "computerNote": "E kin ritingala nan pein ah window, duwehte app teikan.",
 "computerInstalled": "Installihr. Ritingala My Quiet Bible iangahki noumw app teikan.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ritingala Paipel</a> nan Chrome de Edge.</span></li>\n            <li><span>Pedikih kilel en install ni imwin palimaun en address bar, mesen kompiuder ehu me ahneki kilel en ahl <span class=\"nb\">{svg},</span> mwuri <strong>Install</strong>.</span></li>\n            <li><span>Nan Mac me ahneki Safari: pedikih <strong>Share</strong> pah palimaun, mwuri <strong>Add to Dock</strong>.</span></li>\n            <li><span>De mweidohng tab en mihmihte. E kin doadoahk duwehte, oh tamataman wasa me komw lel ie.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ritingala Paipel</a> nan Chrome de Edge.</span></li><li><span>Pedikih kilel en install ni imwin palimaun en address bar, mesen kompiuder ehu me ahneki kilel en ahl <span class=\"nb\">{svg},</span> mwuri <strong>Install</strong>.</span></li><li><span>De mweidohng tab en mihmihte. E kin doadoahk duwehte, oh tamataman wasa me komw lel ie.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Tohtohsang",
 "support": "Sewese",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Sohte anahne. Sohte mehkot kin pedoisang noumw delepwohn ma komw sohte pedikih Nehne.</li>\n              <li>Pwihn koaros ahneki pein ah kih. Ihte towe kan kak ritingala dahme mihmi loale; pil kiht sohte kak.</li><li>Pwihn kan anahne pedolong ni sohte pweine, ki kih en pedolong de nempe me kadardar ni email.</li>",
 "listenH": "Rong",
 "listenP": "Doake iren pwe ehu, eri Rong. De doake Wadek iangahki nan ahn rapahki, oh lepin lokaia koaros kin marain ni ahn wadek. Sounwadek mehlel kan kin wadek BSB, King James oh Louis Segond. Ong nan sidohsa, nan kuhk, de mese me pwangadahr.",
-"orMac": "Met ong Mac. De, nan kompiuter koaros, sang ahmw browser:"
+"orMac": "Nan Windows de Linux:",
+"macStore": "Nan Mac:"
 }

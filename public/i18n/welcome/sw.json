@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Fungua Biblia</a> katika Chrome, au kivinjari unachotumia.</span></li><li><span>Fungua menyu ya kivinjari, kwa kawaida vitone vitatu {svg} juu kulia.</span></li><li><span>Gusa <strong>Install and create shortcut</strong> (baadhi ya vivinjari husema <strong>Add to Home screen</strong>).</span></li><li><span>Chagua <strong>Install</strong>, si <strong>Create shortcut</strong>. Kisha gusa <strong>Install</strong> tena.</span></li><li><span>Taa itaonekana pamoja na programu zako nyingine.</span></li>",
 "computerNote": "Inafunguka kwenye dirisha lake, kama programu nyingine yoyote.",
 "computerInstalled": "Imesakinishwa. Fungua My Quiet Bible pamoja na programu zako nyingine.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Fungua Biblia</a> katika Chrome au Edge.</span></li><li><span>Bofya aikoni ya kusakinisha upande wa kulia wa upau wa anwani, skrini yenye mshale <span class=\"nb\">{svg},</span> kisha <strong>Install</strong>.</span></li><li><span>Kwenye Mac yenye Safari: bofya <strong>Share</strong> juu kulia, kisha <strong>Add to Dock</strong>.</span></li><li><span>Au acha tu kichupo kikiwa wazi. Kinafanya kazi vivyo hivyo, na kinakumbuka ulipofika.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Fungua Biblia</a> katika Chrome au Edge.</span></li><li><span>Bofya aikoni ya kusakinisha upande wa kulia wa upau wa anwani, skrini yenye mshale <span class=\"nb\">{svg},</span> kisha <strong>Install</strong>.</span></li><li><span>Au acha tu kichupo kikiwa wazi. Kinafanya kazi vivyo hivyo, na kinakumbuka ulipofika.</span></li>",
 "ref": "Zaburi 119:105",
 "more": "Zaidi",
 "support": "Iunge mkono",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Si lazima kamwe. Hakuna kinachotoka kwenye simu yako usipogusa Shiriki.</li><li>Kila kikundi kina ufunguo wake. Ni wanachama wake tu wanaoweza kufungua kilichomo; hata sisi hatuwezi.</li><li>Miduara inahitaji kuingia bure, kwa ufunguo wa siri au msimbo unaotumwa kwa barua pepe.</li>",
 "listenH": "Sikiliza",
 "listenP": "Gusa mstari, kisha Sikiliza. Au gusa Soma ukifuatisha kwenye upau wa kutafuta, na kila neno linawaka linaposomwa. Wasomaji halisi wanasoma BSB, King James na Louis Segond. Kwa ajili ya gari, jikoni, au macho yaliyochoka.",
-"orMac": "Hiyo ni kwa Mac. Au, kwenye kompyuta yoyote, kutoka kivinjari chako:"
+"orMac": "Kwenye Windows au Linux:",
+"macStore": "Kwenye Mac:"
 }

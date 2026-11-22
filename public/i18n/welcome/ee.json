@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ʋu Biblia</a> le Chrome me, alo browser si nèzãna.</span></li><li><span>Ʋu browser la ƒe menu, zi geɖe kpo etɔ̃ {svg} le etame le ɖusime.</span></li><li><span>Zi <strong>Install and create shortcut</strong> dzi (browser aɖewo gblɔna be <strong>Add to Home screen</strong>).</span></li><li><span>Tia <strong>Install</strong>, menye <strong>Create shortcut</strong> o. Emegbe gazi <strong>Install</strong> dzi.</span></li><li><span>Akaɖi la adze kple wò dɔwɔnuƒomɔ bubuwo.</span></li>",
 "computerNote": "Eʋuna le eya ŋutɔ ƒe fesre me, abe dɔwɔnuƒomɔ bubu ɖe sia ɖe ene.",
 "computerInstalled": "Wode eme. Ʋu My Quiet Bible kple wò dɔwɔnuƒomɔ bubuwo.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ʋu Biblia</a> le Chrome alo Edge me.</span></li><li><span>Zi dedeeme ƒe dzesi si le adrɛs ƒe ati ƒe nuwuwu le ɖusime, ŋkume si dzi aŋutrɔ le <span class=\"nb\">{svg},</span> emegbe <strong>Install</strong>.</span></li><li><span>Le Mac si me Safari le dzi: zi <strong>Share</strong> si le etame le ɖusime dzi, emegbe <strong>Add to Dock</strong>.</span></li><li><span>Alo na tab la nanɔ ʋuʋu ko. Ewɔa dɔ nenema ke, eye wòɖoa ŋku afi si nèɖo la dzi.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ʋu Biblia</a> le Chrome alo Edge me.</span></li><li><span>Zi dedeeme ƒe dzesi si le adrɛs ƒe ati ƒe nuwuwu le ɖusime, ŋkume si dzi aŋutrɔ le <span class=\"nb\">{svg},</span> emegbe <strong>Install</strong>.</span></li><li><span>Alo na tab la nanɔ ʋuʋu ko. Ewɔa dɔ nenema ke, eye wòɖoa ŋku afi si nèɖo la dzi.</span></li>",
 "ref": "Psalmo 119:105",
 "more": "Bubuwo",
 "support": "Kpe ɖe eŋu",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Menye nu kpaɖii gbeɖe o. Naneke medzona le wò kalẽtefonu dzi ne mèzi Ma dzi o.</li><li>Habɔbɔ ɖe sia ɖe si eya ŋutɔ ƒe safui le. Eƒe habɔbɔmeviwo ɖeɖe ko ate ŋu aʋu nu si le eme; míawo gɔ̃ hã míate ŋui o.</li><li>Ƒuƒoƒowo bia be nàge ɖe eme femaxee, kple ʋuʋuɖedziƒoti alo kɔd si wodɔ to email dzi.</li>",
 "listenH": "Ɖo to",
 "listenP": "Ƒo kpe kpukpui aɖe, emegbe Ɖo to. Alo ƒo kpe Xlẽe kpli le didi ƒe ɖoƒe, eye nya ɖesiaɖe klẽna ne wole exlẽm. Nuxlẽla vavãwo xlẽa BSB, King James kple Louis Segond. Na ʋua me, dzodoƒe, alo ŋku siwo ɖeɖi.",
-"orMac": "Ema nye na Mac. Alo, le kɔmpiuta ɖesiaɖe dzi, tso wò browser me:"
+"orMac": "Le Windows alo Linux dzi:",
+"macStore": "Le Mac dzi:"
 }

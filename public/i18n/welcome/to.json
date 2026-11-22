@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Fakaava ʻa e Tohitapu</a> ʻi Chrome, pe ko e palausa ʻokú ke ngāueʻaki.</span></li>\n            <li><span>Fakaava ʻa e meniu ʻo e palausa, ko e fanga kiʻi poini ʻe tolu {svg} ʻi ʻolunga ki toʻomataʻu ʻi he lahi taha.</span></li>\n            <li><span>Lomiʻi ʻa e <strong>Install and create shortcut</strong> (ʻoku pehē ʻe he niʻihi palausa ko e <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Fili ʻa e <strong>Install</strong>, ʻo ʻikai ko e <strong>Create shortcut</strong>. Pea toe lomiʻi ʻa e <strong>Install</strong>.</span></li>\n            <li><span>ʻE hā ʻa e maama mo hoʻo ngaahi ʻapi kehe.</span></li>",
 "computerNote": "ʻOku ava ʻi hono matapā sioʻata pē ʻoʻona, hangē ha ʻapi kehe.",
 "computerInstalled": "Kuo fokotuʻu. Fakaava ʻa My Quiet Bible mo hoʻo ngaahi ʻapi kehe.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Fakaava ʻa e Tohitapu</a> ʻi Chrome pe Edge.</span></li>\n            <li><span>Lomiʻi ʻa e fakaʻilonga fokotuʻu ʻi he ngataʻanga toʻomataʻu ʻo e laine tuʻasila, ko ha sioʻata mo ha ngahau <span class=\"nb\">{svg},</span> pea ko e <strong>Install</strong>.</span></li>\n            <li><span>ʻI ha Mac mo Safari: lomiʻi ʻa e <strong>Share</strong> ʻi ʻolunga ki toʻomataʻu, pea ko e <strong>Add to Dock</strong>.</span></li>\n            <li><span>Pe tauhi pē ʻa e tab. ʻOku ngāue tatau pē, pea manatu ki ho potu.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Fakaava ʻa e Tohitapu</a> ʻi Chrome pe Edge.</span></li><li><span>Lomiʻi ʻa e fakaʻilonga fokotuʻu ʻi he ngataʻanga toʻomataʻu ʻo e laine tuʻasila, ko ha sioʻata mo ha ngahau <span class=\"nb\">{svg},</span> pea ko e <strong>Install</strong>.</span></li><li><span>Pe tauhi pē ʻa e tab. ʻOku ngāue tatau pē, pea manatu ki ho potu.</span></li>",
 "ref": "Saame 119:105",
 "more": "Lahi ange",
 "support": "Poupou",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>ʻIkai fiemaʻu ia. ʻOku ʻikai ha meʻa ʻe mavahe mei hoʻo telefoni kae ʻoua kuó ke lomiʻi ʻa e Vahevahe.</li>\n              <li>ʻOku ʻi he kulupu taki taha ʻa hono kī pē ʻoʻona. Ko hono kau mēmipa pē ʻe lava ʻo fakaava ʻa e meʻa ʻoku ʻi loto; ʻoku ʻikai lava ke mau fai ia.</li><li>ʻOku fiemaʻu ʻe he ngaahi kulupú ha hū taʻetotongi, ʻaki ha kī hū pe ha kouti ʻoku ʻave ʻi he ʻīmeili.</li>",
 "listenH": "Fanongo",
 "listenP": "Lomiʻi ha veesi, pea Fanongo. Pe lomiʻi ʻa e Lau fakataha ʻi he paʻa kumi, pea ʻoku ulo ʻa e foʻi lea taki taha ʻi hono lau. ʻOku lau ʻe he kau lau moʻoni ʻa e BSB, King James mo e Louis Segond. Ki he kaá, peitó, pe ngaahi mata kuo helaʻia.",
-"orMac": "Ko ia ki he Mac. Pe, ʻi ha komipiuta pē, mei hoʻo polosa:"
+"orMac": "ʻI he Windows pe Linux:",
+"macStore": "ʻI he Mac:"
 }

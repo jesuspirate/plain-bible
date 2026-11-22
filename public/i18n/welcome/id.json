@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buka Alkitab</a> di Chrome, atau browser yang Anda pakai.</span></li>\n            <li><span>Buka menu browser, biasanya tiga titik {svg} di kanan atas.</span></li>\n            <li><span>Ketuk <strong>Instal dan buat pintasan</strong> (beberapa browser menyebutnya <strong>Tambahkan ke layar utama</strong>).</span></li>\n            <li><span>Pilih <strong>Instal</strong>, bukan <strong>Buat pintasan</strong>. Lalu ketuk <strong>Instal</strong> lagi.</span></li>\n            <li><span>Lampu akan muncul bersama aplikasi Anda yang lain.</span></li>",
 "computerNote": "Aplikasi terbuka di jendelanya sendiri, seperti aplikasi lain.",
 "computerInstalled": "Terinstal. Buka My Quiet Bible bersama aplikasi Anda yang lain.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buka Alkitab</a> di Chrome atau Edge.</span></li>\n            <li><span>Klik ikon instal di ujung kanan bilah alamat, berupa layar dengan panah <span class=\"nb\">{svg},</span> lalu <strong>Instal</strong>.</span></li>\n            <li><span>Di Mac dengan Safari: klik <strong>Bagikan</strong> di kanan atas, lalu <strong>Tambah ke Dock</strong>.</span></li>\n            <li><span>Atau cukup biarkan tabnya terbuka. Cara kerjanya sama, dan tempat Anda membaca tetap diingat.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buka Alkitab</a> di Chrome atau Edge.</span></li><li><span>Klik ikon instal di ujung kanan bilah alamat, berupa layar dengan panah <span class=\"nb\">{svg},</span> lalu <strong>Instal</strong>.</span></li><li><span>Atau cukup biarkan tabnya terbuka. Cara kerjanya sama, dan tempat Anda membaca tetap diingat.</span></li>",
 "ref": "Mazmur 119:105",
 "more": "Lainnya",
 "support": "Dukung",
@@ -85,5 +85,6 @@
 "circlesTicks": "<li>Tidak pernah wajib. Tidak ada yang keluar dari ponsel Anda kecuali Anda mengetuk Bagikan.</li>\n              <li>Setiap lingkaran punya kuncinya sendiri. Hanya anggotanya yang bisa membuka isinya; bahkan kami pun tidak bisa.</li><li>Lingkaran memerlukan masuk gratis, dengan kunci sandi atau kode yang dikirim lewat email.</li>",
 "listenH": "Dengarkan",
 "listenP": "Ketuk sebuah ayat, lalu Dengarkan. Atau ketuk Baca bersama di bilah pencarian, dan setiap kata menyala saat dibacakan. Pembaca sungguhan membacakan BSB, King James, dan Louis Segond. Untuk di mobil, di dapur, atau mata yang lelah.",
-"orMac": "Itu untuk Mac. Atau, di komputer mana pun, dari browser Anda:"
+"orMac": "Di Windows atau Linux:",
+"macStore": "Di Mac:"
 }
