@@ -1359,9 +1359,7 @@
 "Click the chapter title, or press /": "Кликните наслов поглавља или притисните /",
 "Or pull down at the top of a chapter, then let go": "Или на врху поглавља повуците надоле па пустите",
 "Hold 🙏 to choose its skin tone": "Држите 🙏 да изаберете боју коже",
-"Then tap one:": "Затим додирните једно:",
 "Only the verses you picked": "Само изабрани стихови",
-"Reads on from there as the words light up": "Чита даље док се речи осветљавају",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Нема гласа за ову Библију на овом уређају: речи се осветљавају да можете да читате у тишини.",
 "That email address doesn’t look right.": "Та имејл адреса не изгледа исправно.",
 "It couldn’t be sent. Try again in a few minutes.": "Слање није успело. Покушајте поново за неколико минута.",
@@ -1390,6 +1388,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Користите апликацију као и обично, па додирните Заустави. Сваки корак се записује речима, ништа се не снима камером.",
 "Steps recorded: {n} ✓": "Снимљени кораци: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Шаље се уз то: верзија апликације, врста уређаја, његов језик, екран на ком сте били, снимљени кораци и свака грешка коју је апликација приметила. Ништа друго.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Прикажи малу икону „Прати читање” на десном крају траке за претрагу. Чита од стиха на врху екрана или од стиха који сте додирнули.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Икона „Прати читање” на десном крају чита од стиха на врху екрана."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Икона „Прати читање” на десном крају чита од стиха на врху екрана.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "У траци за претрагу, на десном крају: чита од врха екрана док речи светле.",
+"While it reads, tap any verse to read on from there.": "Док чита, додирните било који стих да настави одатле.",
+"Show the Read along icon in the search bar": "Прикажи икону „Прати читање” у траци за претрагу"
 }

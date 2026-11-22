@@ -1278,9 +1278,7 @@
 "Click the chapter title, or press /": "Kliko titullin e kapitullit, ose shtyp /",
 "Or pull down at the top of a chapter, then let go": "Ose në krye të një kapitulli tërhiq poshtë, pastaj lësho",
 "Hold 🙏 to choose its skin tone": "Mbaj shtypur 🙏 për të zgjedhur ngjyrën e lëkurës",
-"Then tap one:": "Pastaj prekni njërin:",
 "Only the verses you picked": "Vetëm vargjet e zgjedhura",
-"Reads on from there as the words light up": "Vazhdon leximin, fjalët ndriçohen",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Pa zë për këtë Bibël në këtë pajisje: fjalët ndriçohen që të lexoni në heshtje.",
 "That email address doesn’t look right.": "Kjo adresë email-i nuk duket e saktë.",
 "It couldn’t be sent. Try again in a few minutes.": "Nuk u dërgua dot. Provo sërish pas pak minutash.",
@@ -1309,6 +1307,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Përdore aplikacionin si zakonisht, pastaj prek Ndalo. Çdo hap shkruhet me fjalë, asgjë nuk filmohet.",
 "Steps recorded: {n} ✓": "Hapa të regjistruar: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Dërgohet bashkë: versioni i aplikacionit, lloji i pajisjes, gjuha e saj, ekrani ku ishe, hapat që regjistrove dhe çdo gabim që vuri re aplikacioni. Asgjë tjetër.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Shfaq një ikonë të vogël “Lexo duke ndjekur” në skajin e djathtë të shiritit të kërkimit. Lexon nga vargu në krye të ekranit, ose nga vargu që prekët.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lexo duke ndjekur” në skajin e djathtë lexon nga vargu në krye të ekranit."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lexo duke ndjekur” në skajin e djathtë lexon nga vargu në krye të ekranit.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Në shiritin e kërkimit, në skajin e djathtë: lexon nga maja e ekranit ndërsa fjalët ndriçohen.",
+"While it reads, tap any verse to read on from there.": "Gjatë leximit, prek çdo varg për të vazhduar prej andej.",
+"Show the Read along icon in the search bar": "Shfaq ikonën “Lexo duke ndjekur” në shiritin e kërkimit"
 }

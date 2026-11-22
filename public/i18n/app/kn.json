@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "ಅಧ್ಯಾಯದ ಶೀರ್ಷಿಕೆಯನ್ನು ಕ್ಲಿಕ್ ಮಾಡಿ, ಅಥವಾ / ಒತ್ತಿ",
 "Or pull down at the top of a chapter, then let go": "ಅಥವಾ ಅಧ್ಯಾಯದ ಮೇಲ್ಭಾಗದಲ್ಲಿ ಕೆಳಗೆ ಎಳೆದು ಬಿಡಿ",
 "Hold 🙏 to choose its skin tone": "ಚರ್ಮದ ಬಣ್ಣ ಆರಿಸಲು 🙏 ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
-"Then tap one:": "ನಂತರ ಒಂದನ್ನು ತಟ್ಟಿ:",
 "Only the verses you picked": "ಆರಿಸಿದ ವಚನಗಳು ಮಾತ್ರ",
-"Reads on from there as the words light up": "ಪದಗಳು ಬೆಳಗುತ್ತಾ ಮುಂದೆ ಓದುತ್ತದೆ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ಈ ಸಾಧನದಲ್ಲಿ ಈ ಬೈಬಲ್‌ಗೆ ಧ್ವನಿ ಇಲ್ಲ: ಪದಗಳು ಬೆಳಗುತ್ತವೆ, ನೀವು ಮೌನವಾಗಿ ಓದಬಹುದು.",
 "That email address doesn’t look right.": "ಈ ಇಮೇಲ್ ವಿಳಾಸ ಸರಿಯಾಗಿ ಕಾಣುತ್ತಿಲ್ಲ.",
 "It couldn’t be sent. Try again in a few minutes.": "ಕಳುಹಿಸಲು ಆಗಲಿಲ್ಲ. ಕೆಲವು ನಿಮಿಷಗಳ ನಂತರ ಮತ್ತೆ ಪ್ರಯತ್ನಿಸಿ.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ಎಂದಿನಂತೆ ಆ್ಯಪ್ ಬಳಸಿ, ನಂತರ ನಿಲ್ಲಿಸಿ ಒತ್ತಿ. ಪ್ರತಿ ಹಂತವನ್ನು ಬರೆದಿಡಲಾಗುತ್ತದೆ, ವೀಡಿಯೊ ಮಾಡಲಾಗುವುದಿಲ್ಲ.",
 "Steps recorded: {n} ✓": "ರೆಕಾರ್ಡ್ ಆದ ಹಂತಗಳು: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ಜೊತೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ: ಆ್ಯಪ್ ಆವೃತ್ತಿ, ಸಾಧನದ ಪ್ರಕಾರ, ಅದರ ಭಾಷೆ, ನೀವು ಇದ್ದ ಪರದೆ, ನೀವು ರೆಕಾರ್ಡ್ ಮಾಡಿದ ಹಂತಗಳು ಮತ್ತು ಆ್ಯಪ್ ಗಮನಿಸಿದ ಯಾವುದೇ ದೋಷ. ಬೇರೇನೂ ಇಲ್ಲ.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ಹುಡುಕು ಪಟ್ಟಿಯ ಬಲ ತುದಿಯಲ್ಲಿ ಒಂದು ಸಣ್ಣ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ತೋರಿಸಿ. ಇದು ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ, ಅಥವಾ ನೀವು ತಟ್ಟಿದ ವಚನದಿಂದ ಓದುತ್ತದೆ.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ಅದರ ಬಲ ತುದಿಯ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ ಓದುತ್ತದೆ."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ಅದರ ಬಲ ತುದಿಯ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ ಓದುತ್ತದೆ.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ಹುಡುಕು ಪಟ್ಟಿಯಲ್ಲಿ, ಅದರ ಬಲ ತುದಿಯಲ್ಲಿ: ಪದಗಳು ಬೆಳಗುತ್ತಿರುವಂತೆ ಪರದೆಯ ಮೇಲಿನಿಂದ ಓದುತ್ತದೆ.",
+"While it reads, tap any verse to read on from there.": "ಓದುತ್ತಿರುವಾಗ, ಅಲ್ಲಿಂದ ಓದಲು ಯಾವುದೇ ವಚನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.",
+"Show the Read along icon in the search bar": "ಹುಡುಕು ಪಟ್ಟಿಯಲ್ಲಿ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ತೋರಿಸಿ"
 }

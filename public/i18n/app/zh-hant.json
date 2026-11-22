@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "按一下章節標題，或按 /",
 "Or pull down at the top of a chapter, then let go": "或在章節頂端向下拉，然後放開",
 "Hold 🙏 to choose its skin tone": "按住 🙏 選擇膚色",
-"Then tap one:": "然後點其中一個：",
 "Only the verses you picked": "只讀你選的經節",
-"Reads on from there as the words light up": "一直讀下去，字詞逐個亮起",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "此裝置上這本聖經沒有語音：字詞會逐個亮起，方便你默讀。",
 "That email address doesn’t look right.": "這個電子郵件地址似乎不正確。",
 "It couldn’t be sent. Try again in a few minutes.": "無法傳送。請幾分鐘後再試。",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "像平常一樣使用 App,然後點「停止」。每一步都用文字記下,不錄影片。",
 "Steps recorded: {n} ✓": "已記錄步驟:{n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一同傳送:App 版本、裝置類型、語言、你所在的畫面、你記錄的步驟,以及 App 記錄到的錯誤。沒有別的。",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在搜尋列右端顯示一個小的「跟讀」圖示。它從螢幕頂部的經文讀起，或從你點過的經文讀起。",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的「跟讀」圖示從螢幕頂部的經文讀起。"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的「跟讀」圖示從螢幕頂部的經文讀起。",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "在搜尋列右端：從螢幕頂部讀起，字詞隨之亮起。",
+"While it reads, tap any verse to read on from there.": "朗讀時，點一下任何一節，就從那裡接著讀。",
+"Show the Read along icon in the search bar": "在搜尋列顯示「跟讀」圖示"
 }

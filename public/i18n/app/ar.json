@@ -1415,9 +1415,7 @@
 "Click the chapter title, or press /": "انقر عنوان الأصحاح، أو اضغط /",
 "Or pull down at the top of a chapter, then let go": "أو في أعلى الأصحاح، اسحب للأسفل ثم اترك",
 "Hold 🙏 to choose its skin tone": "اضغط مطولًا على 🙏 لاختيار لون البشرة",
-"Then tap one:": "ثم المس أحدهما:",
 "Only the verses you picked": "الآيات المختارة فقط",
-"Reads on from there as the words light up": "يتابع القراءة والكلمات تضيء",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "لا صوت لهذا الكتاب المقدس على هذا الجهاز: تضيء الكلمات لتقرأ بصمت.",
 "That email address doesn’t look right.": "يبدو أن عنوان البريد هذا غير صحيح.",
 "It couldn’t be sent. Try again in a few minutes.": "تعذّر الإرسال. حاول مرة أخرى بعد بضع دقائق.",
@@ -1446,6 +1444,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "استخدم التطبيق كالمعتاد، ثم اضغط «إيقاف». تُكتب كل خطوة كتابةً، ولا تُصوَّر.",
 "Steps recorded: {n} ✓": "الخطوات المسجلة: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "يُرسل معه: إصدار التطبيق ونوع الجهاز ولغته والشاشة التي كنت عليها والخطوات التي سجلتها وأي خطأ لاحظه التطبيق. لا شيء غير ذلك.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "إظهار أيقونة صغيرة «القراءة مع المتابعة» في طرف شريط البحث. تقرأ من الآية في أعلى الشاشة، أو من الآية التي لمستها.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "أيقونة «القراءة مع المتابعة» في طرفه تقرأ من الآية في أعلى الشاشة."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "أيقونة «القراءة مع المتابعة» في طرفه تقرأ من الآية في أعلى الشاشة.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "في شريط البحث، عند طرفه: يقرأ من أعلى الشاشة بينما تضيء الكلمات.",
+"While it reads, tap any verse to read on from there.": "أثناء القراءة، اضغط أي آية ليتابع القراءة من هناك.",
+"Show the Read along icon in the search bar": "إظهار أيقونة «القراءة مع المتابعة» في شريط البحث"
 }

@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "Klike sou tit chapit la, oswa peze /",
 "Or pull down at the top of a chapter, then let go": "Oswa anlè yon chapit, rale desann epi lage l",
 "Hold 🙏 to choose its skin tone": "Kenbe 🙏 pou chwazi koulè po a",
-"Then tap one:": "Apre sa touche youn:",
 "Only the verses you picked": "Sèlman vèsè ou chwazi yo",
-"Reads on from there as the words light up": "Kontinye li pandan mo yo limen",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Pa gen vwa pou Bib sa a sou aparèy sa a: mo yo limen pou ou ka li an silans.",
 "That email address doesn’t look right.": "Adrès imèl sa a pa sanble kòrèk.",
 "It couldn’t be sent. Try again in a few minutes.": "Li pa t ka voye. Eseye ankò nan kèk minit.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Sèvi ak app la jan ou abitye a, epi peze Kanpe. Chak etap ekri, yo pa filme anyen.",
 "Steps recorded: {n} ✓": "Etap ki anrejistre: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ale avè l: vèsyon app la, kalite aparèy la, lang li, ekran ou te ye a, etap ou te anrejistre yo ak nenpòt erè app la te remake. Anyen ankò.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montre yon ti ikòn “Li ansanm” nan bout dwat ba rechèch la. Li li apati vèsè ki anlè ekran an, oswa apati vèsè ou te touche a.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikòn “Li ansanm” ki nan bout dwat li a li apati vèsè ki anlè ekran an."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikòn “Li ansanm” ki nan bout dwat li a li apati vèsè ki anlè ekran an.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Nan ba rechèch la, nan bout dwat li: li li apati anlè ekran an pandan mo yo ap klere.",
+"While it reads, tap any verse to read on from there.": "Pandan l ap li, peze nenpòt vèsè pou l kontinye apati la.",
+"Show the Read along icon in the search bar": "Montre ikòn “Li ansanm” nan ba rechèch la"
 }

@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "అధ్యాయం శీర్షికపై క్లిక్ చేయండి, లేదా / నొక్కండి",
 "Or pull down at the top of a chapter, then let go": "లేదా అధ్యాయం పైభాగంలో కిందకు లాగి వదలండి",
 "Hold 🙏 to choose its skin tone": "చర్మం రంగు ఎంచుకోవడానికి 🙏ని నొక్కి పట్టుకోండి",
-"Then tap one:": "తర్వాత ఒకదాన్ని తట్టండి:",
 "Only the verses you picked": "ఎంచుకున్న వచనాలు మాత్రమే",
-"Reads on from there as the words light up": "పదాలు వెలుగుతూ చదువుతూ పోతుంది",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ఈ పరికరంలో ఈ బైబిల్‌కు స్వరం లేదు: పదాలు వెలుగుతాయి, మీరు మౌనంగా చదవవచ్చు.",
 "That email address doesn’t look right.": "ఈ ఇమెయిల్ చిరునామా సరైనదిగా కనిపించడం లేదు.",
 "It couldn’t be sent. Try again in a few minutes.": "పంపడం కాలేదు. కొన్ని నిమిషాల తర్వాత మళ్ళీ ప్రయత్నించండి.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ఎప్పటిలాగే యాప్ వాడండి, తర్వాత ఆపు నొక్కండి. ప్రతి దశ రాసి ఉంచబడుతుంది, వీడియో తీయబడదు.",
 "Steps recorded: {n} ✓": "రికార్డ్ అయిన దశలు: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "దానితో పాటు పంపబడేవి: యాప్ వెర్షన్, పరికరం రకం, దాని భాష, మీరు ఉన్న స్క్రీన్, మీరు రికార్డ్ చేసిన దశలు, యాప్ గమనించిన ఏ లోపమైనా. ఇంకేమీ కాదు.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "శోధన పట్టీ కుడి చివరన ఒక చిన్న “కలిసి చదువు” చిహ్నం చూపించు. ఇది తెర పైభాగంలోని వచనం నుండి, లేదా మీరు తాకిన వచనం నుండి చదువుతుంది.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "దాని కుడి చివరన ఉన్న “కలిసి చదువు” చిహ్నం తెర పైభాగంలోని వచనం నుండి చదువుతుంది."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "దాని కుడి చివరన ఉన్న “కలిసి చదువు” చిహ్నం తెర పైభాగంలోని వచనం నుండి చదువుతుంది.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "శోధన పట్టీలో, కుడి చివరన: పదాలు వెలుగుతుండగా తెర పైనుంచి చదువుతుంది.",
+"While it reads, tap any verse to read on from there.": "చదువుతున్నప్పుడు, అక్కడి నుంచి చదవడానికి ఏ వచనాన్నైనా నొక్కండి.",
+"Show the Read along icon in the search bar": "శోధన పట్టీలో “కలిసి చదువు” చిహ్నం చూపించు"
 }

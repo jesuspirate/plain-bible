@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "Kanikizani dzina la mutu, kapena dinani /",
 "Or pull down at the top of a chapter, then let go": "Kapena pamwamba pa mutu, kokani pansi kenako melekani",
 "Hold 🙏 to choose its skin tone": "Gwirani 🙏 kuti musankhe mtundu wa khungu",
-"Then tap one:": "Kenako dinani imodzi:",
 "Only the verses you picked": "Mavesi amene mwasankha okha",
-"Reads on from there as the words light up": "Imapitiriza pamene mawu akuwala",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Palibe mawu a Baibulo ili pa chipangizochi: mawu amawala kuti muwerenge mwakachetechete.",
 "That email address doesn’t look right.": "Imelo imeneyo sikuoneka ngati yolondola.",
 "It couldn’t be sent. Try again in a few minutes.": "Sizinatumizidwe. Yesaninso pakapita mphindi zochepa.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gwiritsani ntchito pulogalamu monga mwa nthawi zonse, kenako dinani Imani. Sitepe iliyonse imalembedwa, palibe kanema amene amajambulidwa.",
 "Steps recorded: {n} ✓": "Masitepe ojambulidwa: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Zimatumizidwa limodzi: mtundu wa pulogalamu, mtundu wa chipangizo, chilankhulo chake, sikirini yomwe munali, masitepe omwe munajambula, ndi cholakwika chilichonse chimene pulogalamu inaona. Palibe china.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onetsani kachizindikiro kakang’ono ka “Werengani motsatira” kumapeto kumanja kwa bala losakira. Kamawerenga kuyambira pa vesi lili pamwamba pa sikirini, kapena pa vesi limene mwakhudza.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kachizindikiro ka “Werengani motsatira” kumapeto kwake kumanja kamawerenga kuyambira pa vesi lili pamwamba pa sikirini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kachizindikiro ka “Werengani motsatira” kumapeto kwake kumanja kamawerenga kuyambira pa vesi lili pamwamba pa sikirini.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Mu bala losakira, kumapeto kwake kumanja: kamawerenga kuyambira pamwamba pa sikirini mawu akuwala.",
+"While it reads, tap any verse to read on from there.": "Ikamawerenga, dinani vesi lililonse kuti ipitirire kuchokera pamenepo.",
+"Show the Read along icon in the search bar": "Onetsani kachizindikiro ka “Werengani motsatira” mu bala losakira"
 }

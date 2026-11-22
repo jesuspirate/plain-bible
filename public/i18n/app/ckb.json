@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "کلیک لە ناونیشانی بەشەکە بکە، یان / دابگرە",
 "Or pull down at the top of a chapter, then let go": "یان لە سەرەوەی بەشێک، بۆ خوارەوە ڕابکێشە و بەری بدە",
 "Hold 🙏 to choose its skin tone": "🙏 دابگرە بۆ هەڵبژاردنی ڕەنگی پێست",
-"Then tap one:": "پاشان دەست لە یەکێکیان بدە:",
 "Only the verses you picked": "تەنها ئەو ئایەتانەی هەڵتبژاردوون",
-"Reads on from there as the words light up": "بەردەوام دەبێت و وشەکان ڕووناک دەبنەوە",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "لەسەر ئەم ئامێرە دەنگ بۆ ئەم کتێبی پیرۆزە نییە: وشەکان ڕووناک دەبنەوە بۆ ئەوەی بە بێدەنگی بخوێنیتەوە.",
 "That email address doesn’t look right.": "ئەم ئیمەیڵە ڕاست دیار نییە.",
 "It couldn’t be sent. Try again in a few minutes.": "نەنێردرا. دوای چەند خولەکێک دووبارە هەوڵ بدەوە.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ئەپەکە وەک هەمیشە بەکاربهێنە، پاشان «ڕاگرتن» دابگرە. هەر هەنگاوێک دەنووسرێت، وێنە ناگیرێت.",
 "Steps recorded: {n} ✓": "هەنگاوە تۆمارکراوەکان: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "لەگەڵیدا دەنێردرێت: وەشانی ئەپەکە، جۆری ئامێرەکە، زمانەکەی، ئەو شاشەیەی لێی بوویت، ئەو هەنگاوانەی تۆمارت کرد و هەر هەڵەیەک کە ئەپەکە بینیبێتی. هیچی تر.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ئایکۆنێکی بچووکی «خوێندنەوە لەگەڵیدا» لە کۆتایی شریتی گەڕانەکە پیشان بدە. لە ئایەتی سەرەوەی شاشەکەوە دەخوێنێتەوە، یان لەو ئایەتەی کە لێت دا.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ئایکۆنی «خوێندنەوە لەگەڵیدا» لە کۆتاییەکەیەوە لە ئایەتی سەرەوەی شاشەکەوە دەخوێنێتەوە."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ئایکۆنی «خوێندنەوە لەگەڵیدا» لە کۆتاییەکەیەوە لە ئایەتی سەرەوەی شاشەکەوە دەخوێنێتەوە.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "لە شریتی گەڕاندا، لە کۆتاییەکەی: لە سەرەوەی شاشەکەوە دەخوێنێتەوە کاتێک وشەکان ڕووناک دەبنەوە.",
+"While it reads, tap any verse to read on from there.": "لە کاتی خوێندنەوەدا، کرتە لە هەر ئایەتێک بکە بۆ ئەوەی لەوێوە بخوێنێتەوە.",
+"Show the Read along icon in the search bar": "ئایکۆنی «خوێندنەوە لەگەڵیدا» لە شریتی گەڕاندا پیشان بدە"
 }

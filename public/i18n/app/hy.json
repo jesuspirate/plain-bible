@@ -1278,9 +1278,7 @@
 "Click the chapter title, or press /": "Սեղմեք գլխի վերնագրին կամ սեղմեք /",
 "Or pull down at the top of a chapter, then let go": "Կամ գլխի վերևում քաշեք ներքև, ապա բաց թողեք",
 "Hold 🙏 to choose its skin tone": "Պահեք 🙏-ը՝ մաշկի երանգը ընտրելու համար",
-"Then tap one:": "Հետո հպեք մեկին․",
 "Only the verses you picked": "Միայն ընտրված համարները",
-"Reads on from there as the words light up": "Շարունակում է, բառերը լուսավորվում են",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Այս Աստվածաշնչի համար այս սարքում ձայն չկա․ բառերը լուսավորվում են, որ կարդաք լուռ։",
 "That email address doesn’t look right.": "Այս էլ. հասցեն ճիշտ չի թվում։",
 "It couldn’t be sent. Try again in a few minutes.": "Չհաջողվեց ուղարկել։ Փորձեք մի քանի րոպեից։",
@@ -1309,6 +1307,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Օգտագործեք հավելվածը սովորականի պես, հետո հպեք Կանգնեցնել։ Ամեն քայլ գրի է առնվում, ոչինչ չի տեսագրվում։",
 "Steps recorded: {n} ✓": "Գրանցված քայլեր՝ {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Հետը ուղարկվում է՝ հավելվածի տարբերակը, սարքի տեսակը, լեզուն, էկրանը, որտեղ էիք, գրանցված քայլերը և ցանկացած սխալ, որ հավելվածը նկատել է։ Ուրիշ ոչինչ։",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ցույց տալ փոքրիկ «Հետևել ընթերցանությանը» պատկերակ որոնման տողի աջ ծայրում։ Այն կարդում է էկրանի վերևի համարից կամ ձեր հպած համարից։",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Աջ ծայրի «Հետևել ընթերցանությանը» պատկերակը կարդում է էկրանի վերևի համարից։"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Աջ ծայրի «Հետևել ընթերցանությանը» պատկերակը կարդում է էկրանի վերևի համարից։",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Որոնման տողում, աջ ծայրում. կարդում է էկրանի վերևից, մինչ բառերը լուսավորվում են։",
+"While it reads, tap any verse to read on from there.": "Կարդալու ընթացքում հպեք ցանկացած համարի՝ այնտեղից շարունակելու համար։",
+"Show the Read along icon in the search bar": "Ցույց տալ «Հետևել ընթերցանությանը» պատկերակը որոնման տողում"
 }

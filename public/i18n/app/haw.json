@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "E kōmi i ke poʻo inoa o ka mokuna, a i ʻole e kaomi i ka /",
 "Or pull down at the top of a chapter, then let go": "A i ʻole ma luna o ka mokuna, e huki i lalo a laila e hoʻokuʻu",
 "Hold 🙏 to choose its skin tone": "E paʻa i ka 🙏 e koho i ke kala ʻili",
-"Then tap one:": "A laila kaomi i hoʻokahi:",
 "Only the verses you picked": "Nā paukū āu i koho ai wale nō",
-"Reads on from there as the words light up": "Hoʻomau ʻoiai e hoʻomālamalama ʻia nā huaʻōlelo",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ʻAʻohe leo no kēia Baibala ma kēia mea hana: hoʻomālamalama ʻia nā huaʻōlelo i hiki iā ʻoe ke heluhelu me ka hāmau.",
 "That email address doesn’t look right.": "ʻAʻole pololei ka leka uila.",
 "It couldn’t be sent. Try again in a few minutes.": "ʻAʻole hiki ke hoʻouna. E hoʻāʻo hou ma hope o kekahi mau minuke.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "E hoʻohana i ka app e like me ka mau, a laila kaomi iā Hoʻōki. Kākau ʻia kēlā me kēia kaʻina, ʻaʻole kiʻiʻoniʻoni ʻia.",
 "Steps recorded: {n} ✓": "Nā kaʻina i hoʻopaʻa ʻia: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Hoʻouna pū ʻia: ka mana o ka app, ke ʻano o ka mea hana, kāna ʻōlelo, ka pākū āu i nānā ai, nā kaʻina āu i hoʻopaʻa ai a me nā hewa i ʻike ʻia e ka app. ʻAʻohe mea ʻē aʻe.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Hōʻike i kahi kiʻi liʻiliʻi “Heluhelu pū” ma ka ʻaoʻao ʻākau o ka pahu huli. Heluhelu ia mai ka paukū ma luna o ka pakuhi, a i ʻole mai ka paukū āu i paʻi ai.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Heluhelu ke kiʻi “Heluhelu pū” ma kona ʻaoʻao ʻākau mai ka paukū ma luna o ka pakuhi."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Heluhelu ke kiʻi “Heluhelu pū” ma kona ʻaoʻao ʻākau mai ka paukū ma luna o ka pakuhi.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Ma ka pahu huli, ma kona ʻaoʻao ʻākau: heluhelu mai luna o ka pakuhi i ka hoʻomālamalama ʻana o nā huaʻōlelo.",
+"While it reads, tap any verse to read on from there.": "I kona heluhelu ʻana, kaomi i kekahi paukū e heluhelu ai mai laila aku.",
+"Show the Read along icon in the search bar": "Hōʻike i ke kiʻi “Heluhelu pū” ma ka pahu huli"
 }

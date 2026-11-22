@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "ਅਧਿਆਇ ਦੇ ਸਿਰਲੇਖ ’ਤੇ ਕਲਿੱਕ ਕਰੋ, ਜਾਂ / ਦਬਾਓ",
 "Or pull down at the top of a chapter, then let go": "ਜਾਂ ਅਧਿਆਇ ਦੇ ਉੱਪਰ ਹੇਠਾਂ ਖਿੱਚੋ, ਫਿਰ ਛੱਡ ਦਿਓ",
 "Hold 🙏 to choose its skin tone": "ਚਮੜੀ ਦਾ ਰੰਗ ਚੁਣਨ ਲਈ 🙏 ਦਬਾ ਕੇ ਰੱਖੋ",
-"Then tap one:": "ਫਿਰ ਇੱਕ ’ਤੇ ਟੈਪ ਕਰੋ:",
 "Only the verses you picked": "ਸਿਰਫ਼ ਚੁਣੀਆਂ ਆਇਤਾਂ",
-"Reads on from there as the words light up": "ਅੱਗੇ ਪੜ੍ਹਦਾ ਹੈ, ਸ਼ਬਦ ਚਮਕਦੇ ਹਨ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ਇਸ ਡਿਵਾਈਸ ’ਤੇ ਇਸ ਬਾਈਬਲ ਦੀ ਆਵਾਜ਼ ਨਹੀਂ: ਸ਼ਬਦ ਚਮਕਦੇ ਹਨ ਤਾਂ ਜੋ ਤੁਸੀਂ ਚੁੱਪ-ਚਾਪ ਪੜ੍ਹ ਸਕੋ।",
 "That email address doesn’t look right.": "ਇਹ ਈਮੇਲ ਪਤਾ ਠੀਕ ਨਹੀਂ ਲੱਗਦਾ।",
 "It couldn’t be sent. Try again in a few minutes.": "ਭੇਜਿਆ ਨਹੀਂ ਜਾ ਸਕਿਆ। ਕੁਝ ਮਿੰਟਾਂ ਬਾਅਦ ਮੁੜ ਕੋਸ਼ਿਸ਼ ਕਰੋ।",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ਆਮ ਵਾਂਗ ਐਪ ਵਰਤੋ, ਫਿਰ ਰੋਕੋ ਦਬਾਓ। ਹਰ ਕਦਮ ਲਿਖਿਆ ਜਾਂਦਾ ਹੈ, ਵੀਡੀਓ ਨਹੀਂ ਬਣਦੀ।",
 "Steps recorded: {n} ✓": "ਰਿਕਾਰਡ ਕੀਤੇ ਕਦਮ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ਨਾਲ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ: ਐਪ ਦਾ ਸੰਸਕਰਣ, ਡਿਵਾਈਸ ਦੀ ਕਿਸਮ, ਉਸਦੀ ਭਾਸ਼ਾ, ਜਿਸ ਸਕ੍ਰੀਨ ਤੇ ਤੁਸੀਂ ਸੀ, ਜੋ ਕਦਮ ਤੁਸੀਂ ਰਿਕਾਰਡ ਕੀਤੇ, ਅਤੇ ਐਪ ਨੇ ਜੋ ਵੀ ਗਲਤੀ ਵੇਖੀ। ਹੋਰ ਕੁਝ ਨਹੀਂ।",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ਖੋਜ ਪੱਟੀ ਦੇ ਸੱਜੇ ਸਿਰੇ ’ਤੇ ਇੱਕ ਛੋਟਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਦਿਖਾਓ। ਇਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ, ਜਾਂ ਤੁਹਾਡੀ ਛੂਹੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ਇਸਦੇ ਸੱਜੇ ਸਿਰੇ ਵਾਲਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ਇਸਦੇ ਸੱਜੇ ਸਿਰੇ ਵਾਲਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ਖੋਜ ਪੱਟੀ ਵਿੱਚ, ਸੱਜੇ ਸਿਰੇ ’ਤੇ: ਸ਼ਬਦਾਂ ਦੇ ਚਮਕਦਿਆਂ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
+"While it reads, tap any verse to read on from there.": "ਪੜ੍ਹਦੇ ਸਮੇਂ, ਉੱਥੋਂ ਅੱਗੇ ਪੜ੍ਹਨ ਲਈ ਕਿਸੇ ਵੀ ਆਇਤ ’ਤੇ ਟੈਪ ਕਰੋ।",
+"Show the Read along icon in the search bar": "ਖੋਜ ਪੱਟੀ ਵਿੱਚ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਦਿਖਾਓ"
 }

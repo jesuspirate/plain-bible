@@ -1380,9 +1380,7 @@
 "Click the chapter title, or press /": "Щёлкните название главы или нажмите /",
 "Or pull down at the top of a chapter, then let go": "Или вверху главы потяните вниз и отпустите",
 "Hold 🙏 to choose its skin tone": "Удерживайте 🙏, чтобы выбрать оттенок кожи",
-"Then tap one:": "Затем нажмите одну:",
 "Only the verses you picked": "Только выбранные стихи",
-"Reads on from there as the words light up": "Читает дальше, подсвечивая слова",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Для этой Библии на этом устройстве нет голоса: слова подсвечиваются, чтобы читать про себя.",
 "That email address doesn’t look right.": "Этот адрес почты выглядит неправильно.",
 "It couldn’t be sent. Try again in a few minutes.": "Не удалось отправить. Попробуйте снова через несколько минут.",
@@ -1411,6 +1409,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Пользуйтесь приложением как обычно, затем нажмите «Остановить». Каждый шаг записывается словами, ничего не снимается на видео.",
 "Steps recorded: {n} ✓": "Записано шагов: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Вместе с ним отправляется: версия приложения, тип устройства, его язык, экран, на котором вы были, записанные шаги и любая ошибка, замеченная приложением. Больше ничего.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Показывать маленький значок «Чтение с подсветкой» у правого края строки поиска. Он читает со стиха вверху экрана или со стиха, который вы коснулись.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Чтение с подсветкой» у её правого края читает со стиха вверху экрана."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Чтение с подсветкой» у её правого края читает со стиха вверху экрана.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "В строке поиска, у правого края: читает с верха экрана, а слова подсвечиваются.",
+"While it reads, tap any verse to read on from there.": "Во время чтения нажмите на любой стих, чтобы читать дальше с него.",
+"Show the Read along icon in the search bar": "Показывать значок «Чтение с подсветкой» в строке поиска"
 }

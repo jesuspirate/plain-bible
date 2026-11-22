@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "I-click ang titulo sa kapitulo, o pindota ang /",
 "Or pull down at the top of a chapter, then let go": "O sa ibabaw sa kapitulo, ibira paubos unya buhii",
 "Hold 🙏 to choose its skin tone": "Pindota og dugay ang 🙏 aron mopili sa kolor sa panit",
-"Then tap one:": "Unya i-tap ang usa:",
 "Only the verses you picked": "Ang mga bersikulo nga imong gipili lang",
-"Reads on from there as the words light up": "Mopadayon samtang mosiga ang mga pulong",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Walay tingog alang niini nga Biblia niini nga device: mosiga ang mga pulong aron makabasa ka nga hilom.",
 "That email address doesn’t look right.": "Morag dili husto kana nga email.",
 "It couldn’t be sent. Try again in a few minutes.": "Wala kini mapadala. Sulayi pag-usab sa pipila ka minuto.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gamita ang app sama sa naandan, unya i-tap ang Hunonga. Ang matag lakang isulat, dili i-video.",
 "Steps recorded: {n} ✓": "Mga lakang nga narekord: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Uban nga ipadala: ang bersyon sa app, klase sa device, ang pinulongan niini, ang screen nga imong gianhan, ang mga lakang nga imong girekord, ug bisan unsang sayop nga namatikdan sa app. Wala nay lain.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ang gamay nga icon nga “Dungan nga pagbasa” sa tuong tumoy sa search bar. Mobasa kini gikan sa bersikulo sa ibabaw sa screen, o gikan sa bersikulo nga imong gi-tap.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon nga “Dungan nga pagbasa” sa tuong tumoy niini mobasa gikan sa bersikulo sa ibabaw sa screen."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon nga “Dungan nga pagbasa” sa tuong tumoy niini mobasa gikan sa bersikulo sa ibabaw sa screen.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Sa search bar, sa tuong tumoy niini: mobasa gikan sa ibabaw sa screen samtang modan-ag ang mga pulong.",
+"While it reads, tap any verse to read on from there.": "Samtang mobasa kini, i-tap ang bisan unsang bersikulo aron mobasa gikan didto.",
+"Show the Read along icon in the search bar": "Ipakita ang icon nga “Dungan nga pagbasa” sa search bar"
 }

@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "ଅଧ୍ୟାୟ ଶୀର୍ଷକରେ କ୍ଲିକ୍ କରନ୍ତୁ, କିମ୍ବା / ଦବାନ୍ତୁ",
 "Or pull down at the top of a chapter, then let go": "କିମ୍ବା ଅଧ୍ୟାୟର ଆରମ୍ଭରେ ତଳକୁ ଟାଣନ୍ତୁ, ତା’ପରେ ଛାଡ଼ିଦିଅନ୍ତୁ",
 "Hold 🙏 to choose its skin tone": "ଚର୍ମର ରଙ୍ଗ ବାଛିବାକୁ 🙏 ଦବାଇ ରଖନ୍ତୁ",
-"Then tap one:": "ତା’ପରେ ଗୋଟିଏରେ ଟ୍ୟାପ କରନ୍ତୁ:",
 "Only the verses you picked": "କେବଳ ବଛା ପଦଗୁଡ଼ିକ",
-"Reads on from there as the words light up": "ପଢ଼ିଚାଲେ, ଶବ୍ଦଗୁଡ଼ିକ ଆଲୋକିତ ହୁଏ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ଏହି ଡିଭାଇସରେ ଏହି ବାଇବଲର ସ୍ୱର ନାହିଁ: ଶବ୍ଦଗୁଡ଼ିକ ଆଲୋକିତ ହୁଏ ଯେପରି ଆପଣ ନୀରବରେ ପଢ଼ିପାରିବେ।",
 "That email address doesn’t look right.": "ଏହି ଇମେଲ୍ ଠିକଣା ଠିକ୍ ଲାଗୁନାହିଁ।",
 "It couldn’t be sent. Try again in a few minutes.": "ପଠାଯାଇପାରିଲା ନାହିଁ। କିଛି ମିନିଟ୍ ପରେ ପୁଣି ଚେଷ୍ଟା କରନ୍ତୁ।",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ସାଧାରଣ ପରି ଆପ୍ ବ୍ୟବହାର କରନ୍ତୁ, ତା’ପରେ ବନ୍ଦ କରନ୍ତୁ ଦବାନ୍ତୁ। ପ୍ରତ୍ୟେକ ପଦକ୍ଷେପ ଲେଖାଯାଏ, ଭିଡିଓ ନିଆଯାଏ ନାହିଁ।",
 "Steps recorded: {n} ✓": "ରେକର୍ଡ ହୋଇଥିବା ପଦକ୍ଷେପ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ସାଙ୍ଗରେ ଯାଏ: ଆପ୍‌ର ସଂସ୍କରଣ, ଡିଭାଇସ୍‌ର ପ୍ରକାର, ଏହାର ଭାଷା, ଆପଣ ଥିବା ସ୍କ୍ରିନ୍, ଆପଣ ରେକର୍ଡ କରିଥିବା ପଦକ୍ଷେପ ଓ ଆପ୍ ଲକ୍ଷ୍ୟ କରିଥିବା ଯେକୌଣସି ତ୍ରୁଟି। ଆଉ କିଛି ନୁହେଁ।",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ସନ୍ଧାନ ବାରର ଡାହାଣ ମୁଣ୍ଡରେ ଏକ ଛୋଟ “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ଚିହ୍ନ ଦେଖାନ୍ତୁ। ଏହା ସ୍କ୍ରିନ୍ ଉପରର ପଦରୁ, କିମ୍ବା ଆପଣ ଛୁଇଁଥିବା ପଦରୁ ପଢ଼େ।",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ଏହାର ଡାହାଣ ମୁଣ୍ଡର “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ଚିହ୍ନ ସ୍କ୍ରିନ୍ ଉପରର ପଦରୁ ପଢ଼େ।"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ଏହାର ଡାହାଣ ମୁଣ୍ଡର “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ଚିହ୍ନ ସ୍କ୍ରିନ୍ ଉପରର ପଦରୁ ପଢ଼େ।",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ସନ୍ଧାନ ବାରରେ, ଡାହାଣ ମୁଣ୍ଡରେ: ଶବ୍ଦଗୁଡ଼ିକ ଜଳୁଥିବା ବେଳେ ସ୍କ୍ରିନ୍ ଉପରୁ ପଢ଼େ।",
+"While it reads, tap any verse to read on from there.": "ପଢ଼ୁଥିବା ବେଳେ, ସେଠାରୁ ପଢ଼ିବା ପାଇଁ ଯେକୌଣସି ପଦରେ ଟାପ୍ କରନ୍ତୁ।",
+"Show the Read along icon in the search bar": "ସନ୍ଧାନ ବାରରେ “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ଚିହ୍ନ ଦେଖାନ୍ତୁ"
 }

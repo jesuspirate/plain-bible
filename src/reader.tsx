@@ -16,7 +16,7 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { showTapHints } from './taphint'
@@ -234,7 +234,9 @@ export function Reader({ route }: { route: Route }) {
         if (r.top >= from && r.bottom <= to) { first = el; break }
       }
       if (!first) return
-      showTapHints([{ el: first, label: t('Tap a verse'), times: 3 }])
+      // Read along first, at the search field's end, then a verse for Listen.
+      const along = document.querySelector('.sb-along')
+      showTapHints([...(along ? [{ el: along, label: t('Read along') }] : []), { el: first, label: t('Tap a verse'), times: 3 }])
       glowAudioUntil = Date.now() + 60_000
     }
     addEventListener(VERSE_BAR_EVENT, on)
@@ -1387,15 +1389,14 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   onPray: (vs: number[]) => void
 }) {
   const { settings, update, byId, data } = useApp()
-  // Just after Try it now: the fingertip taps Listen, then Read along.
-  const listenBtn = useRef<HTMLButtonElement>(null), alongBtn = useRef<HTMLButtonElement>(null)
+  // Just after Try it now: the fingertip taps Listen.
+  const listenBtn = useRef<HTMLButtonElement>(null)
   useEffect(() => {
     if (Date.now() >= glowAudioUntil) return
     glowAudioUntil = 0
     // Once the bar has risen (and lifted the verse into view).
     const id = setTimeout(() => showTapHints([
       ...(listenBtn.current ? [{ el: listenBtn.current, label: t('Only the verses you picked') }] : []),
-      ...(alongBtn.current ? [{ el: alongBtn.current, label: t('Reads on from there as the words light up') }] : []),
     ]), 700)
     return () => clearTimeout(id)
   }, [])
@@ -1507,7 +1508,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
-            {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
+            {/* Listen: just these verses, then it stops. (Read along, in the search bar, goes on.) */}
             {canHear(version, spot.lang) && !settings.readSilent && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
@@ -1517,9 +1518,9 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               ? <button onClick={() => setAskShare(true)}><ShareIcon size={22} /><span>{t('Share')}</span></button>
               : <button onClick={shareOut}>{canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Share') : t('Link')}</span></button>}
           </div>
-          {/* The two things done from a verse, not to it: read on from here until X, and pray. */}
+          {/* Pray from this verse. (Read along lives in the search bar: while it
+              reads, tapping a verse reads on from there.) */}
           <div class="selbar-big">
-            <button ref={alongBtn} onClick={() => { startListening(spot, bibles[version]); onClose() }}><ReadIcon size={26} /><span>{t('Read along')}</span></button>
             <button class="selbar-pray-btn" onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
           </div>
         </>}

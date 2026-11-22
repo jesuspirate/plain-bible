@@ -975,8 +975,6 @@ p > button.link { padding: 0; text-decoration: underline; text-underline-offset:
   font: 600 16px/1.15 var(--sans); color: var(--text);
 }
 .selbar-big button svg { color: var(--accent); flex: none; }
-/* "Read along" is the longer word (FR « Lire en suivant »): it gets more of the row. */
-.selbar-big button:first-child { flex-grow: 1.5; }
 .selbar-big button span:last-child { min-width: 0; text-align: start; }
 .selbar-big button:active { transform: scale(.97); }
 @media (max-width: 400px) { .selbar-big button { font-size: 15px; gap: 6px; padding: 6px 8px; } }
@@ -1408,13 +1406,12 @@ body.selecting .continue { display: none; }
 @keyframes tap-label { from { opacity: 0; } }
 @media (prefers-reduced-motion: reduce) { .tap-label { animation: none; } }
 
-/* Audio in Settings: three small steps that show the real buttons. */
-.audio-steps { list-style: none; margin: 4px 0 0; padding: 0; display: flex; flex-direction: column; gap: 14px; }
-.audio-steps > li { display: flex; gap: 12px; align-items: flex-start; }
-.audio-steps .step-n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--chip); color: var(--accent); font: 700 15px/28px var(--sans); text-align: center; margin-top: 4px; }
-.audio-steps .step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
-.audio-steps .step-title { font-size: 18px; font-weight: 600; display: flex; align-items: center; gap: 8px; min-height: 36px; }
-.audio-steps .step-title svg { color: var(--accent); flex: none; }
+/* Audio in Settings: Read along and Listen, each drawn as it looks. */
+.audio-how { display: flex; flex-direction: column; gap: 12px; margin: 4px 0 0; }
+.audio-also { display: flex; align-items: center; gap: 8px; margin: -2px 0 6px; color: var(--muted); font-size: 15px; line-height: 1.35; }
+.audio-also svg { color: var(--accent); flex: none; }
+.audio-pick.audio-stack { flex-direction: column; align-items: flex-start; gap: 8px; }
+.audio-also.audio-first { margin: 10px 0 -4px; color: var(--text); font-weight: 600; font-size: 17px; }
 .audio-show .g-glyph { color: inherit; }
 .audio-pick { display: flex; align-items: center; gap: 12px; }
 .audio-pick .like-btn { flex: none; display: inline-flex; align-items: center; gap: 7px; min-height: 46px; padding: 6px 14px; border-radius: 16px; border: 1px solid var(--line);

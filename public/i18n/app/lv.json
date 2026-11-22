@@ -1359,9 +1359,7 @@
 "Click the chapter title, or press /": "Noklikšķiniet uz nodaļas virsraksta vai nospiediet /",
 "Or pull down at the top of a chapter, then let go": "Vai nodaļas augšā velciet uz leju un atlaidiet",
 "Hold 🙏 to choose its skin tone": "Turiet 🙏, lai izvēlētos ādas toni",
-"Then tap one:": "Tad pieskarieties vienai:",
 "Only the verses you picked": "Tikai izvēlētie panti",
-"Reads on from there as the words light up": "Lasa tālāk, vārdi iedegas",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Šai Bībelei šajā ierīcē nav balss: vārdi iedegas, lai varētu lasīt klusi.",
 "That email address doesn’t look right.": "Šī e-pasta adrese neizskatās pareiza.",
 "It couldn’t be sent. Try again in a few minutes.": "Neizdevās nosūtīt. Mēģiniet vēlreiz pēc dažām minūtēm.",
@@ -1390,6 +1388,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Lietojiet lietotni kā parasti, tad pieskarieties Apturēt. Katrs solis tiek pierakstīts vārdos, nekas netiek filmēts.",
 "Steps recorded: {n} ✓": "Ierakstītie soļi: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids, tās valoda, ekrāns, kurā bijāt, ierakstītie soļi un jebkura kļūda, ko lietotne pamanīja. Nekas cits.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Rādīt nelielu ikonu “Lasīt līdzi” meklēšanas joslas labajā galā. Tā lasa no panta ekrāna augšā vai no panta, kam pieskārāties.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lasīt līdzi” tās labajā galā lasa no panta ekrāna augšā."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lasīt līdzi” tās labajā galā lasa no panta ekrāna augšā.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Meklēšanas joslā, tās labajā galā: lasa no ekrāna augšas, kamēr vārdi iedegas.",
+"While it reads, tap any verse to read on from there.": "Kamēr tā lasa, pieskarieties jebkuram pantam, lai turpinātu no tā.",
+"Show the Read along icon in the search bar": "Rādīt ikonu “Lasīt līdzi” meklēšanas joslā"
 }

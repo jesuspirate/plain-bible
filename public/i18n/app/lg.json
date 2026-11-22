@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "Kona ku mutwe gw’essuula, oba nyiga /",
 "Or pull down at the top of a chapter, then let go": "Oba waggulu ku ssuula, wanula wansi olwo oteeke",
 "Hold 🙏 to choose its skin tone": "Kwata 🙏 okulonda langi y’olususu",
-"Then tap one:": "Oluvannyuma kwata ku emu:",
 "Only the verses you picked": "Ennyiriri z’olonze zokka",
-"Reads on from there as the words light up": "Egenda mu maaso ng’ebigambo byaka",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Tewali ddoboozi lya Baibuli eno ku kyuma kino: ebigambo byaka osobole okusoma mu kasirise.",
 "That email address doesn’t look right.": "Endagiriro ya email eyo terabika nga entuufu.",
 "It couldn’t be sent. Try again in a few minutes.": "Tekisobose kuweerezebwa. Gezaako nate oluvannyuma lw’eddakiika ntono.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Kozesa app nga bulijjo, oluvannyuma nyiga Yimiriza. Buli mutendera guwandiikibwa, tewali vidiyo ekwatibwa.",
 "Steps recorded: {n} ✓": "Emitendera egikwatiddwa: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ebiweerezebwa wamu nakyo: enkyusa ya app, ekika ky’ekyuma, olulimi lwakyo, olupapula lwe wabaddeko, emitendera gye wakwata, n’ensobi yonna app gye yalaba. Tewali kirala.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Laga akabonero akatono “Soma ng’ogoberera” ku nkomerero ya ddyo ey’omuwaatwa gw’okunoonya. Kasoma okuva ku lunyiriri oluli waggulu ku ssirini, oba okuva ku lunyiriri lw’okutte.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Akabonero “Soma ng’ogoberera” ku nkomerero yaagwo eya ddyo kasoma okuva ku lunyiriri oluli waggulu ku ssirini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Akabonero “Soma ng’ogoberera” ku nkomerero yaagwo eya ddyo kasoma okuva ku lunyiriri oluli waggulu ku ssirini.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Mu muwaatwa gw’okunoonya, ku nkomerero yaagwo eya ddyo: gusoma okuva waggulu ku ssirini ng’ebigambo bwe byaka.",
+"While it reads, tap any verse to read on from there.": "Bwe kiba kisoma, nyiga olunyiriri lwonna lusome okuva awo.",
+"Show the Read along icon in the search bar": "Laga akabonero “Soma ng’ogoberera” mu muwaatwa gw’okunoonya"
 }

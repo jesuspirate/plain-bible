@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "Danna kan babin, ko danna /",
 "Or pull down at the top of a chapter, then let go": "Ko a saman babi, ja ƙasa sannan ku saki",
 "Hold 🙏 to choose its skin tone": "Riƙe 🙏 don zaɓar launin fata",
-"Then tap one:": "Sa’an nan taɓa ɗaya:",
 "Only the verses you picked": "Ayoyin da ka zaɓa kawai",
-"Reads on from there as the words light up": "Yana ci gaba da karatu kalmomi na haskakawa",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Babu murya ga wannan Baibul a wannan na’ura: kalmomi suna haskakawa don ka karanta a zuci.",
 "That email address doesn’t look right.": "Wannan adireshin imel bai yi daidai ba.",
 "It couldn’t be sent. Try again in a few minutes.": "Ba a iya aikawa ba. Sake gwadawa bayan ’yan mintuna.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Yi amfani da manhajar kamar yadda ka saba, sannan ka taɓa Tsaya. Ana rubuta kowane mataki, ba a ɗaukar bidiyo.",
 "Steps recorded: {n} ✓": "Matakan da aka nada: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ana aikawa tare: sigar manhajar, irin na’urar, harshenta, allon da kake kai, matakan da ka nada, da duk wani kuskure da manhajar ta lura. Babu wani abu kuma.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Nuna ƙaramin alamar “Karanta tare” a ƙarshen dama na sandar bincike. Yana karantawa daga ayar da ke saman allo, ko daga ayar da ka taɓa.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Alamar “Karanta tare” a ƙarshen damansa tana karantawa daga ayar da ke saman allo."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Alamar “Karanta tare” a ƙarshen damansa tana karantawa daga ayar da ke saman allo.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "A sandar bincike, a ƙarshen damansa: yana karantawa daga saman allo yayin da kalmomi ke haskakawa.",
+"While it reads, tap any verse to read on from there.": "Yayin da yake karantawa, taɓa kowace aya don ya ci gaba daga nan.",
+"Show the Read along icon in the search bar": "Nuna alamar “Karanta tare” a sandar bincike"
 }

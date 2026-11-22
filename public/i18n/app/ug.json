@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "باب ماۋزۇسىنى چېكىڭ، ياكى / نى بېسىڭ",
 "Or pull down at the top of a chapter, then let go": "ياكى بابنىڭ بېشىدا تۆۋەنگە تارتىپ قويۇۋېتىڭ",
 "Hold 🙏 to choose its skin tone": "تېرە رەڭگىنى تاللاش ئۈچۈن 🙏 نى بېسىپ تۇرۇڭ",
-"Then tap one:": "ئاندىن بىرىنى چېكىڭ:",
 "Only the verses you picked": "پەقەت تاللانغان ئايەتلەر",
-"Reads on from there as the words light up": "سۆزلەر يورۇپ داۋاملىق ئوقۇيدۇ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "بۇ ئۈسكۈنىدە بۇ مۇقەددەس كىتابنىڭ ئاۋازى يوق: سۆزلەر يورۇيدۇ، ئىچىڭىزدە ئوقۇيالايسىز.",
 "That email address doesn’t look right.": "بۇ ئېلخەت ئادرېسى توغرا ئەمەستەك.",
 "It couldn’t be sent. Try again in a few minutes.": "ئەۋەتەلمىدى. بىر نەچچە مىنۇتتىن كېيىن قايتا سىناڭ.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ئەپنى ئادەتتىكىدەك ئىشلىتىپ، ئاندىن «توختىتىش» نى بېسىڭ. ھەر بىر قەدەم سۆز بىلەن يېزىلىدۇ، سىنغا ئېلىنمايدۇ.",
 "Steps recorded: {n} ✓": "خاتىرىلەنگەن قەدەملەر: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "بىللە ئەۋەتىلىدۇ: ئەپنىڭ نەشرى، ئۈسكۈنە تۈرى، تىلى، سىز تۇرغان بەت، خاتىرىلىگەن قەدەملىرىڭىز ۋە ئەپ بايقىغان خاتالىقلار. باشقا ھېچنېمە يوق.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ئىزدەش بالدىقىنىڭ ئۇچىدا كىچىك «ئەگىشىپ ئوقۇش» سىنبەلگىسىنى كۆرسىتىش. ئۇ ئېكران ئۈستىدىكى ئايەتتىن ياكى سىز تەگكەن ئايەتتىن باشلاپ ئوقۇيدۇ.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ئۇچىدىكى «ئەگىشىپ ئوقۇش» سىنبەلگىسى ئېكران ئۈستىدىكى ئايەتتىن باشلاپ ئوقۇيدۇ."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ئۇچىدىكى «ئەگىشىپ ئوقۇش» سىنبەلگىسى ئېكران ئۈستىدىكى ئايەتتىن باشلاپ ئوقۇيدۇ.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ئىزدەش بالدىقىدا، ئۇنىڭ ئۇچىدا: سۆزلەر يورۇغاندا ئېكراننىڭ ئۈستىدىن ئوقۇيدۇ.",
+"While it reads, tap any verse to read on from there.": "ئوقۇۋاتقاندا، شۇ يەردىن داۋاملاشتۇرۇش ئۈچۈن خالىغان ئايەتنى بېسىڭ.",
+"Show the Read along icon in the search bar": "ئىزدەش بالدىقىدا «ئەگىشىپ ئوقۇش» سىنبەلگىسىنى كۆرسىتىش"
 }

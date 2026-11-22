@@ -1275,9 +1275,7 @@
 "Click the chapter title, or press /": "Klicka på kapitelrubriken, eller tryck på /",
 "Or pull down at the top of a chapter, then let go": "Eller dra nedåt överst i ett kapitel och släpp",
 "Hold 🙏 to choose its skin tone": "Håll in 🙏 för att välja hudton",
-"Then tap one:": "Tryck sedan på en av dem:",
 "Only the verses you picked": "Bara de verser du valt",
-"Reads on from there as the words light up": "Läser vidare medan orden lyser upp",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Ingen röst för den här bibeln på den här enheten: orden lyser upp så att du kan läsa i tysthet.",
 "That email address doesn’t look right.": "Den e-postadressen ser inte rätt ut.",
 "It couldn’t be sent. Try again in a few minutes.": "Det gick inte att skicka. Försök igen om några minuter.",
@@ -1306,6 +1304,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Använd appen som vanligt och tryck sedan på Stoppa. Varje steg skrivs ned, inget filmas.",
 "Steps recorded: {n} ✓": "Inspelade steg: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Skickas med: appens version, typ av enhet, dess språk, skärmen du var på, stegen du spelade in och alla fel appen märkte. Inget annat.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Visa en liten ”Läs med”-ikon längst till höger i sökfältet. Den läser från versen högst upp på skärmen, eller från versen du tryckte på.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "”Läs med”-ikonen längst till höger läser från versen högst upp på skärmen."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "”Läs med”-ikonen längst till höger läser från versen högst upp på skärmen.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "I sökfältet, längst till höger: läser vidare från skärmens topp medan orden lyser upp.",
+"While it reads, tap any verse to read on from there.": "Medan den läser, tryck på en vers för att läsa vidare därifrån.",
+"Show the Read along icon in the search bar": "Visa ”Läs med”-ikonen i sökfältet"
 }
