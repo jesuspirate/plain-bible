@@ -45,14 +45,14 @@ function PrayButton() {
   )
 }
 
-/** Read along, if ticked under Audio: a small glass button just above 🙏,
- *  quieter than it. It reads on from the verse you picked, or else the verse
- *  at the top of the screen. While reading aloud it steps aside: the reading
- *  bar has the pause and the X. */
+/** Read along, if ticked under Audio: a plain icon at the right end of the
+ *  search field, no button of its own, so 🙏 keeps its corner. It reads on
+ *  from the verse you picked, or else the verse at the top of the screen.
+ *  While reading aloud the reading bar takes the field's place anyway. */
 function AlongButton() {
   return (
     <button type="button" class="sb-along" aria-label={t('Read along')} title={t('Read along')} onClick={readHere}>
-      <ReadIcon size={26} />
+      <ReadIcon size={24} />
     </button>
   )
 }
@@ -851,6 +851,7 @@ export function SearchBar({ here, mini, above }: {
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${shown}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
+          {!open && !mini && settings.alongButton && here && <AlongButton />}
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}
@@ -862,9 +863,7 @@ export function SearchBar({ here, mini, above }: {
         {/* Circles, then prayer, always one tap away just right of search.
             🙏 opens the glowing microphone over the page. */}
         {!open && SYNC_URL && <CirclesButton />}
-        {!open && (settings.alongButton && here && !aloud
-          ? <span class="sb-pray-spot"><AlongButton /><PrayButton /></span>
-          : <PrayButton />)}
+        {!open && <PrayButton />}
         {/* Pressing Cancel mustn't take the focus from the field first: on a
             Mac that hides the strip at the bottom, the bar drops under the
             pointer, and the click misses Cancel. */}
