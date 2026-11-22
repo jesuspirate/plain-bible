@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "章のタイトルをクリック、または / を押す",
 "Or pull down at the top of a chapter, then let go": "または章の一番上で下に引いて離す",
 "Hold 🙏 to choose its skin tone": "🙏 を長押しして肌の色を選ぶ",
-"Then tap one:": "次にどちらかをタップ：",
 "Only the verses you picked": "選んだ節だけ",
-"Reads on from there as the words light up": "言葉を光らせながら読み続けます",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。",
 "That email address doesn’t look right.": "そのメールアドレスは正しくないようです。",
 "It couldn’t be sent. Try again in a few minutes.": "送信できませんでした。数分後にもう一度お試しください。",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "いつもどおりアプリを使い、終わったら「停止」をタップします。操作は文字で記録され、動画は撮りません。",
 "Steps recorded: {n} ✓": "記録した手順:{n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一緒に送られるもの:アプリのバージョン、端末の種類、その言語、開いていた画面、記録した手順、アプリが記録したエラー。それ以外は何も送りません。",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "検索バーの右端に小さな「目で追って読む」アイコンを表示します。画面の一番上の節から、またはタップした節から読みます。",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "右端の「目で追って読む」アイコンで、画面の一番上の節から読みます。",
 "New here? Start here": "はじめての方はこちら",
 "Or use your email": "またはメールで",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "パスキーがない場合はメールで",
 "Free. Needed for Circles": "無料。サークルに必要です",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "サークルには無料のアカウントが必要です。「設定」→「アカウント」で、パスキーかメールのコードを使います。すぐに終わります。",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "サークルには無料のアカウントが必要です。パスキーがいちばん簡単です。Face ID、指紋、または画面ロックで使えます。パスワードは不要です。"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "サークルには無料のアカウントが必要です。パスキーがいちばん簡単です。Face ID、指紋、または画面ロックで使えます。パスワードは不要です。",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "検索バーの右端：言葉が光りながら、画面の一番上から読み進めます。",
+"While it reads, tap any verse to read on from there.": "読んでいる間に節をタップすると、そこから読み進めます。",
+"Show the Read along icon in the search bar": "検索バーに「目で追って読む」アイコンを表示"
 }

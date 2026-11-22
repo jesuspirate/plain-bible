@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Click wi sula, kata mul /",
 "Or pull down at the top of a chapter, then let go": "Kata e wi sula, ywe piny eka iwe",
 "Hold 🙏 to choose its skin tone": "Mak 🙏 mondo iyier rangi del",
-"Then tap one:": "Eka mul achiel:",
 "Only the verses you picked": "Ndiko mane iyiero kende",
-"Reads on from there as the words light up": "Dhi nyime gi somo ka weche ler",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Onge duol mar Muma ni e gimani: weche ler mondo isom ka ilingʼ.",
 "That email address doesn’t look right.": "Email no ok nenore ni kare.",
 "It couldn’t be sent. Try again in a few minutes.": "Ok onyal orore. Tem kendo bang’ dakika matin.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Ti gi app kaka isetiyogo, eka idi Chung’. Okang’ moro ka moro indiko, onge vidio ma imako.",
 "Steps recorded: {n} ✓": "Okenge mondiki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Oor kode: version mar app, kit gima itiyogo, dhok mare, skrin ma ne intie, okenge mane indiko, kod kosa moro amora ma app noneno. Onge gimoro machielo.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Nyis ranyisi matin mar “Som kiluwo” e giko mar korachwich mar kar manyo. Isomo chakre kuom ver manie wi skrin, kata ver ma ise mulo.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ranyisi mar “Som kiluwo” e giko mare mar korachwich isomo chakre kuom ver manie wi skrin.",
 "New here? Start here": "In ng’at manyien? Chak ka",
 "Or use your email": "Kata ti gi email mari",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Onge gi passkey? Ti gi email mari",
 "Free. Needed for Circles": "Nono. Dwarore ne Kanyakla",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Gidwaro akaunt ma nono: passkey kata kod e email, e Chenro → Akaunt. Kawo kinde matin.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kanyakla dwaro akaunt ma nono. Mayot moloyo en passkey: Face ID, lith lweti kata lock mar skrin mari. Onge password."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kanyakla dwaro akaunt ma nono. Mayot moloyo en passkey: Face ID, lith lweti kata lock mar skrin mari. Onge password.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "E kar manyo, e giko mare mar korachwich: isomo chakre ewi skrin ka weche ler.",
+"While it reads, tap any verse to read on from there.": "Kapod osomo, mul ver moro amora mondo osom chakre kanyo.",
+"Show the Read along icon in the search bar": "Nyis ranyisi mar “Som kiluwo” e kar manyo"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klik aha isi ahụ, ma ọ bụ pịa /",
 "Or pull down at the top of a chapter, then let go": "Ma ọ bụ n’elu isi, dọda ya ala wee hapụ ya",
 "Hold 🙏 to choose its skin tone": "Jide 🙏 ka ịhọrọ agba akpụkpọ ahụ",
-"Then tap one:": "Wee pịa otu:",
 "Only the verses you picked": "Naanị amaokwu ị họọrọ",
-"Reads on from there as the words light up": "Ọ na-agụ n’ihu ka okwu na-enwu",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Enweghị olu maka Baịbụl a na ngwaọrụ a: okwu na-enwu ka ị gụọ ya n’obi.",
 "That email address doesn’t look right.": "Adreesị email ahụ adịghị ka ọ dị mma.",
 "It couldn’t be sent. Try again in a few minutes.": "Enweghị ike izipu ya. Nwaa ọzọ n’ime nkeji ole na ole.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Jiri ngwa ahụ dịka ọ na-adị, wee pịa Kwụsị. A na-ede nzọụkwụ ọ bụla, a naghị ese vidiyo.",
 "Steps recorded: {n} ✓": "Nzọụkwụ edekọrọ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "E zipụrụ ya na ya: ụdị ngwa ahụ, ụdị ngwaọrụ, asụsụ ya, ihuenyo ị nọ na ya, nzọụkwụ i dekọrọ, na njehie ọ bụla ngwa ahụ hụrụ. Ọ dịghị ihe ọzọ.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Gosi obere akara “Gụkọọ” n’isi aka nri nke ogwe nchọta. Ọ na-agụ site n’amaokwu dị n’elu ihuenyo, ma ọ bụ site n’amaokwu ị metụrụ.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Akara “Gụkọọ” dị n’isi aka nri ya na-agụ site n’amaokwu dị n’elu ihuenyo.",
 "New here? Start here": "Ị bụ onye ọhụrụ? Malite ebe a",
 "Or use your email": "Ma ọ bụ jiri email gị",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Enweghị igodo nbanye? Jiri email gị",
 "Free. Needed for Circles": "N’efu. Ọ dị mkpa maka Otu",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ha chọrọ akaụntụ n’efu: igodo nbanye ma ọ bụ koodu site na email, na Ntọala → Akaụntụ. Ọ na-ewe naanị obere oge.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Otu chọrọ akaụntụ n'efu. Ọ kacha mfe site n’igodo nbanye: Face ID, mkpịsị aka ma ọ bụ mkpọchi ihuenyo gị. Enweghị okwuntughe."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Otu chọrọ akaụntụ n'efu. Ọ kacha mfe site n’igodo nbanye: Face ID, mkpịsị aka ma ọ bụ mkpọchi ihuenyo gị. Enweghị okwuntughe.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "N’ogwe nchọta, n’isi aka nri ya: ọ na-agụ site n’elu ihuenyo ka okwu na-enwu.",
+"While it reads, tap any verse to read on from there.": "Ka ọ na-agụ, pịa amaokwu ọ bụla ka ọ gaa n’ihu site ebe ahụ.",
+"Show the Read along icon in the search bar": "Gosi akara “Gụkọọ” n’ogwe nchọta"
 }

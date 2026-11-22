@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Alklaku la ĉapitrotitolon, aŭ premu /",
 "Or pull down at the top of a chapter, then let go": "Aŭ, ĉe la supro de ĉapitro, tiru malsupren kaj ellasu",
 "Hold 🙏 to choose its skin tone": "Tenu 🙏 por elekti ĝian haŭtkoloron",
-"Then tap one:": "Poste tuŝu unu:",
 "Only the verses you picked": "Nur la elektitaj versoj",
-"Reads on from there as the words light up": "Legas plu dum la vortoj eklumas",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Neniu voĉo por ĉi tiu Biblio en ĉi tiu aparato: la vortoj eklumas por silenta legado.",
 "That email address doesn’t look right.": "Tiu retadreso ne ŝajnas ĝusta.",
 "It couldn’t be sent. Try again in a few minutes.": "Ne eblis sendi. Reprovu post kelkaj minutoj.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Uzu la aplikaĵon kiel kutime, poste tuŝu Haltigi. Ĉiu paŝo estas skribata, ne filmata.",
 "Steps recorded: {n} ✓": "Registritaj paŝoj: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendata kune: la versio de la aplikaĵo, la speco de aparato, ĝia lingvo, la ekrano kie vi estis, la paŝoj kiujn vi registris kaj ĉiu eraro kiun la aplikaĵo rimarkis. Nenio alia.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montri malgrandan piktogramon “Kunlegi” ĉe la dekstra fino de la serĉa breto. Ĝi legas ekde la verso ĉe la supro de la ekrano, aŭ ekde la verso, kiun vi tuŝis.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "La piktogramo “Kunlegi” ĉe ĝia dekstra fino legas ekde la verso ĉe la supro de la ekrano.",
 "New here? Start here": "Nova ĉi tie? Komencu ĉi tie",
 "Or use your email": "Aŭ uzu vian retpoŝton",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Ĉu neniu pasŝlosilo? Uzu vian retpoŝton",
 "Free. Needed for Circles": "Senpage. Necesa por Rondoj",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ili bezonas senpagan konton: pasŝlosilon aŭ kodon per retpoŝto, en Agordoj → Konto. Daŭras nur momenton.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Rondoj bezonas senpagan konton. Plej facile per pasŝlosilo: Face ID, fingrospuro aŭ via ekranŝloso. Sen pasvorto."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Rondoj bezonas senpagan konton. Plej facile per pasŝlosilo: Face ID, fingrospuro aŭ via ekranŝloso. Sen pasvorto.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "En la serĉa breto, ĉe ĝia dekstra fino: legas ekde la supro de la ekrano dum la vortoj ekbrilas.",
+"While it reads, tap any verse to read on from there.": "Dum ĝi legas, tuŝetu ajnan verson por legi plu de tie.",
+"Show the Read along icon in the search bar": "Montri la piktogramon “Kunlegi” en la serĉa breto"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klik judul pasal, atau tekan /",
 "Or pull down at the top of a chapter, then let go": "Atau di atas pasal, tarik ke bawah lalu lepaskan",
 "Hold 🙏 to choose its skin tone": "Tahan 🙏 untuk memilih warna kulit",
-"Then tap one:": "Lalu ketuk salah satu:",
 "Only the verses you picked": "Hanya ayat yang Anda pilih",
-"Reads on from there as the words light up": "Terus membaca sementara kata-kata menyala",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Tidak ada suara untuk Alkitab ini di perangkat ini: kata-kata menyala agar Anda dapat membaca dalam hati.",
 "That email address doesn’t look right.": "Alamat email itu sepertinya tidak benar.",
 "It couldn’t be sent. Try again in a few minutes.": "Gagal mengirim. Coba lagi dalam beberapa menit.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Pakai aplikasi seperti biasa, lalu ketuk Berhenti. Setiap langkah dicatat dengan kata-kata, tidak direkam video.",
 "Steps recorded: {n} ✓": "Langkah terekam: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ikut terkirim: versi aplikasi, jenis perangkat, bahasanya, layar tempat Anda berada, langkah yang Anda rekam, dan setiap galat yang dicatat aplikasi. Tidak ada yang lain.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Tampilkan ikon kecil “Baca bersama” di ujung kanan bilah pencarian. Ikon ini membaca dari ayat di bagian atas layar, atau dari ayat yang Anda ketuk.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikon “Baca bersama” di ujung kanannya membaca dari ayat di bagian atas layar.",
 "New here? Start here": "Baru di sini? Mulai di sini",
 "Or use your email": "Atau pakai email Anda",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Tidak punya kunci sandi? Pakai email Anda",
 "Free. Needed for Circles": "Gratis. Diperlukan untuk Lingkaran",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Perlu akun gratis: kunci sandi atau kode lewat email, di Pengaturan → Akun. Hanya sebentar.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Lingkaran memerlukan akun gratis. Paling mudah dengan kunci sandi: Face ID, sidik jari, atau kunci layar Anda. Tanpa kata sandi."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Lingkaran memerlukan akun gratis. Paling mudah dengan kunci sandi: Face ID, sidik jari, atau kunci layar Anda. Tanpa kata sandi.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Di bilah pencarian, di ujung kanannya: membaca dari atas layar sambil kata-kata menyala.",
+"While it reads, tap any verse to read on from there.": "Saat membaca, ketuk ayat mana saja untuk melanjutkan dari sana.",
+"Show the Read along icon in the search bar": "Tampilkan ikon “Baca bersama” di bilah pencarian"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Kattints a fejezet címére, vagy nyomd meg a / gombot",
 "Or pull down at the top of a chapter, then let go": "Vagy a fejezet tetején húzd lefelé, majd engedd el",
 "Hold 🙏 to choose its skin tone": "Tartsd lenyomva a 🙏 gombot a bőrszín kiválasztásához",
-"Then tap one:": "Aztán koppintson az egyikre:",
 "Only the verses you picked": "Csak a kiválasztott versek",
-"Reads on from there as the words light up": "Továbbolvas, a szavak felvillannak",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Ehhez a Bibliához nincs hang ezen az eszközön: a szavak felvillannak, így csendben olvashat.",
 "That email address doesn’t look right.": "Ez az e-mail-cím nem tűnik helyesnek.",
 "It couldn’t be sent. Try again in a few minutes.": "Nem sikerült elküldeni. Próbálja újra néhány perc múlva.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Használja az alkalmazást a megszokott módon, majd koppintson a Leállítás gombra. Minden lépés szavakkal lesz leírva, semmi sem lesz felvéve videóra.",
 "Steps recorded: {n} ✓": "Rögzített lépések: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Vele együtt megy: az alkalmazás verziója, az eszköz típusa, nyelve, a képernyő, ahol volt, a rögzített lépések és minden hiba, amit az alkalmazás észlelt. Semmi más.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Egy kis „Követő olvasás” ikon megjelenítése a keresősáv jobb végén. A képernyő tetején lévő verstől olvas, vagy attól a verstől, amelyre koppintottál.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "A jobb végén lévő „Követő olvasás” ikon a képernyő tetején lévő verstől olvas.",
 "New here? Start here": "Új vagy itt? Itt kezdd",
 "Or use your email": "Vagy e-mail-címmel",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Nincs jelkulcsod? E-mail-címmel",
 "Free. Needed for Circles": "Ingyenes. A Körökhöz kell",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ingyenes fiók kell hozzájuk: jelkulcs vagy e-mailes kód, a Beállítások → Fiók alatt. Egy pillanat az egész.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "A körökhöz ingyenes fiók kell. Legegyszerűbb jelkulccsal: Face ID, ujjlenyomat vagy a képernyőzár. Jelszó nélkül."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "A körökhöz ingyenes fiók kell. Legegyszerűbb jelkulccsal: Face ID, ujjlenyomat vagy a képernyőzár. Jelszó nélkül.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "A keresősávban, a jobb végén: a képernyő tetejétől olvas, miközben a szavak felvillannak.",
+"While it reads, tap any verse to read on from there.": "Olvasás közben koppints bármelyik versre, hogy onnan folytassa.",
+"Show the Read along icon in the search bar": "A „Követő olvasás” ikon megjelenítése a keresősávban"
 }

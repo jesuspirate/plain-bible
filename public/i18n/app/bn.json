@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "অধ্যায়ের শিরোনামে ক্লিক করুন, অথবা / চাপুন",
 "Or pull down at the top of a chapter, then let go": "অথবা অধ্যায়ের শুরুতে নিচে টানুন, তারপর ছেড়ে দিন",
 "Hold 🙏 to choose its skin tone": "ত্বকের রং বাছতে 🙏 চেপে ধরে রাখুন",
-"Then tap one:": "তারপর একটিতে ট্যাপ করুন:",
 "Only the verses you picked": "শুধু বেছে নেওয়া পদগুলো",
-"Reads on from there as the words light up": "পড়ে চলে, শব্দগুলো আলোকিত হয়",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "এই ডিভাইসে এই বাইবেলের কণ্ঠ নেই: শব্দগুলো আলোকিত হয় যাতে আপনি নীরবে পড়তে পারেন।",
 "That email address doesn’t look right.": "এই ইমেইল ঠিকানাটি সঠিক মনে হচ্ছে না।",
 "It couldn’t be sent. Try again in a few minutes.": "পাঠানো যায়নি। কয়েক মিনিট পরে আবার চেষ্টা করুন।",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "স্বাভাবিকভাবে অ্যাপ ব্যবহার করুন, তারপর থামান চাপুন। প্রতিটি ধাপ লিখে রাখা হয়, ভিডিও করা হয় না।",
 "Steps recorded: {n} ✓": "রেকর্ড করা ধাপ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "সঙ্গে যায়: অ্যাপের সংস্করণ, ডিভাইসের ধরন, তার ভাষা, আপনি যে স্ক্রিনে ছিলেন, যে ধাপগুলো রেকর্ড করেছেন, এবং অ্যাপ যে ত্রুটি লক্ষ করেছে। আর কিছু নয়।",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "সার্চ বারের ডান প্রান্তে একটি ছোট “সঙ্গে পড়ুন” আইকন দেখান। এটি স্ক্রিনের উপরের পদ থেকে, বা আপনি যে পদে ছুঁয়েছেন সেখান থেকে পড়ে।",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "এর ডান প্রান্তের “সঙ্গে পড়ুন” আইকনটি স্ক্রিনের উপরের পদ থেকে পড়ে।",
 "New here? Start here": "নতুন? এখান থেকে শুরু করুন",
 "Or use your email": "অথবা আপনার ইমেল ব্যবহার করুন",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "পাসকী নেই? আপনার ইমেল ব্যবহার করুন",
 "Free. Needed for Circles": "বিনামূল্যে। সার্কেলের জন্য দরকার",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "এগুলোর জন্য বিনামূল্যের অ্যাকাউন্ট লাগে: পাসকী বা ইমেলে কোড, সেটিংস → অ্যাকাউন্ট-এ। এক মুহূর্ত লাগে।",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "সার্কেলের জন্য একটি বিনামূল্যের অ্যাকাউন্ট লাগে। পাসকী দিয়ে সবচেয়ে সহজ: Face ID, আঙুলের ছাপ বা আপনার স্ক্রিন লক। কোনো পাসওয়ার্ড নেই।"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "সার্কেলের জন্য একটি বিনামূল্যের অ্যাকাউন্ট লাগে। পাসকী দিয়ে সবচেয়ে সহজ: Face ID, আঙুলের ছাপ বা আপনার স্ক্রিন লক। কোনো পাসওয়ার্ড নেই।",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "সার্চ বারে, ডান প্রান্তে: শব্দগুলো আলোকিত হতে হতে স্ক্রিনের উপর থেকে পড়ে যায়।",
+"While it reads, tap any verse to read on from there.": "পড়ার সময়, সেখান থেকে পড়তে যেকোনো পদে ট্যাপ করুন।",
+"Show the Read along icon in the search bar": "সার্চ বারে “সঙ্গে পড়ুন” আইকন দেখান"
 }

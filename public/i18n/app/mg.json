@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Tsindrio ny lohatenin’ny toko, na tsindrio ny /",
 "Or pull down at the top of a chapter, then let go": "Na eo an-tampon’ny toko, sintony midina dia avelao",
 "Hold 🙏 to choose its skin tone": "Tazony ny 🙏 hisafidianana ny lokon-koditra",
-"Then tap one:": "Avy eo tsindrio ny iray:",
 "Only the verses you picked": "Ireo andininy nofidinao ihany",
-"Reads on from there as the words light up": "Manohy mamaky raha mamirapiratra ny teny",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Tsy misy feo ho an’ity Baiboly ity amin’ity fitaovana ity: mamirapiratra ny teny mba hamakianao mangina.",
 "That email address doesn’t look right.": "Toa tsy marina io adiresy mailaka io.",
 "It couldn’t be sent. Try again in a few minutes.": "Tsy lasa. Andramo indray afaka minitra vitsivitsy.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Ampiasao toy ny mahazatra ny app, dia tsindrio ny Hijanona. Soratana ny dingana tsirairay, tsy alaina horonantsary.",
 "Steps recorded: {n} ✓": "Dingana voaraikitra: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Alefa miaraka aminy: ny dikan’ny app, ny karazana fitaovana, ny fiteniny, ny efijery nisy anao, ireo dingana noraketinao ary izay hadisoana hitan’ny app. Tsy misy hafa.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Asehoy kisary kely “Hamaky miaraka” eo amin’ny farany havanana amin’ny tsipika fikarohana. Mamaky manomboka amin’ny andininy eo ambony amin’ny efijery, na amin’ny andininy notsindrianao.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ny kisary “Hamaky miaraka” eo amin’ny farany havanana dia mamaky manomboka amin’ny andininy eo ambony amin’ny efijery.",
 "New here? Start here": "Vao tonga eto? Manomboha eto",
 "Or use your email": "Na ampiasao ny mailakao",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Tsy manana lakile fidirana? Ampiasao ny mailakao",
 "Free. Needed for Circles": "Maimaim-poana. Ilaina amin’ny Tarika",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Mila kaonty maimaim-poana izy ireo: lakile fidirana na kaody amin’ny mailaka, ao amin’ny Fikirana → Kaonty. Fotoana fohy monja.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Mila kaonty maimaim-poana ny tarika. Mora indrindra amin’ny lakile fidirana: Face ID, dian-tondro na ny fanidiana efijery. Tsy misy tenimiafina."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Mila kaonty maimaim-poana ny tarika. Mora indrindra amin’ny lakile fidirana: Face ID, dian-tondro na ny fanidiana efijery. Tsy misy tenimiafina.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Ao amin’ny tsipika fikarohana, eo amin’ny farany havanana: mamaky manomboka eo ambony amin’ny efijery rehefa mamirapiratra ny teny.",
+"While it reads, tap any verse to read on from there.": "Rehefa mamaky izy, tsindrio izay andininy tianao mba hanohizany avy eo.",
+"Show the Read along icon in the search bar": "Asehoy ny kisary “Hamaky miaraka” ao amin’ny tsipika fikarohana"
 }

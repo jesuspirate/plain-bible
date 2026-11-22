@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "I-click ang pamagat ng kabanata, o pindutin ang /",
 "Or pull down at the top of a chapter, then let go": "O sa itaas ng kabanata, hilahin pababa at bitawan",
 "Hold 🙏 to choose its skin tone": "Pindutin nang matagal ang 🙏 para pumili ng kulay ng balat",
-"Then tap one:": "Saka i-tap ang isa:",
 "Only the verses you picked": "Ang mga talatang pinili mo lang",
-"Reads on from there as the words light up": "Nagpapatuloy habang umiilaw ang mga salita",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Walang boses para sa Bibliyang ito sa device na ito: umiilaw ang mga salita para makabasa ka nang tahimik.",
 "That email address doesn’t look right.": "Mukhang mali ang email na iyan.",
 "It couldn’t be sent. Try again in a few minutes.": "Hindi ito naipadala. Subukan muli makalipas ang ilang minuto.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gamitin ang app gaya ng dati, saka i-tap ang Ihinto. Isinusulat ang bawat hakbang, walang kinukuhang video.",
 "Steps recorded: {n} ✓": "Mga hakbang na na-record: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kasamang ipinapadala: ang bersyon ng app, uri ng device, wika nito, ang screen na kinaroroonan mo, ang mga hakbang na ni-record mo, at anumang error na napansin ng app. Wala nang iba.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ang maliit na icon na “Sabayang pagbasa” sa kanang dulo ng search bar. Bumabasa ito mula sa talata sa itaas ng screen, o mula sa talatang tinapik mo.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon na “Sabayang pagbasa” sa kanang dulo nito ay bumabasa mula sa talata sa itaas ng screen.",
 "New here? Start here": "Bago ka rito? Dito magsimula",
 "Or use your email": "O gamitin ang iyong email",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Walang passkey? Gamitin ang iyong email",
 "Free. Needed for Circles": "Libre. Kailangan para sa Mga Samahan",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Kailangan ng libreng account: passkey o code sa email, sa Mga Setting → Account. Sandali lang.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kailangan ng mga samahan ng libreng account. Pinakamadali gamit ang passkey: Face ID, fingerprint o ang screen lock mo. Walang password."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kailangan ng mga samahan ng libreng account. Pinakamadali gamit ang passkey: Face ID, fingerprint o ang screen lock mo. Walang password.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Sa search bar, sa kanang dulo nito: bumabasa mula sa itaas ng screen habang umiilaw ang mga salita.",
+"While it reads, tap any verse to read on from there.": "Habang nagbabasa, mag-tap ng kahit anong talata para magpatuloy mula roon.",
+"Show the Read along icon in the search bar": "Ipakita ang icon na “Sabayang pagbasa” sa search bar"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klikk på kapitteltittelen, eller trykk på /",
 "Or pull down at the top of a chapter, then let go": "Eller dra ned øvst i eit kapittel, og slepp",
 "Hold 🙏 to choose its skin tone": "Hald inne 🙏 for å velje hudfarge",
-"Then tap one:": "Trykk så på ein av dei:",
 "Only the verses you picked": "Berre versa du valde",
-"Reads on from there as the words light up": "Les vidare medan orda lyser opp",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Inga stemme for denne bibelen på denne eininga: orda lyser opp, så du kan lese i stille.",
 "That email address doesn’t look right.": "Den e-postadressa ser ikkje rett ut.",
 "It couldn’t be sent. Try again in a few minutes.": "Det kunne ikkje sendast. Prøv igjen om nokre minutt.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Bruk appen som vanleg, og trykk så på Stopp. Kvart steg vert skrive ned, ingenting vert filma.",
 "Steps recorded: {n} ✓": "Opptekne steg: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Vert sendt med: versjonen av appen, typen eining, språket, skjermen du var på, stega du tok opp og eventuelle feil appen merka. Ikkje noko anna.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Vis eit lite «Les med»-ikon i høgre ende av søkjefeltet. Det les frå verset øvst på skjermen, eller frå verset du trykte på.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "«Les med»-ikonet i høgre ende les frå verset øvst på skjermen.",
 "New here? Start here": "Ny her? Start her",
 "Or use your email": "Eller bruk e-posten din",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Ingen passnøkkel? Bruk e-posten din",
 "Free. Needed for Circles": "Gratis. Trengst for Krinsar",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Dei krev ein gratis konto: ein passnøkkel eller ein kode på e-post, under Innstillingar → Konto. Det tek eit augneblink.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krinsar treng ein gratis konto. Enklast med ein passnøkkel: Face ID, fingeravtrykk eller skjermlåsen. Inkje passord."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krinsar treng ein gratis konto. Enklast med ein passnøkkel: Face ID, fingeravtrykk eller skjermlåsen. Inkje passord.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "I søkjefeltet, i høgre ende: les vidare frå toppen av skjermen medan orda lyser opp.",
+"While it reads, tap any verse to read on from there.": "Medan det les, trykk på eit vers for å lese vidare derifrå.",
+"Show the Read along icon in the search bar": "Vis «Les med»-ikonet i søkjefeltet"
 }

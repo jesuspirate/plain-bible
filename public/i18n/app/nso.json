@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klika hlogo ya kgaolo, goba kgotla /",
 "Or pull down at the top of a chapter, then let go": "Goba ka godimo ga kgaolo, goga fase ke moka o lokolle",
 "Hold 🙏 to choose its skin tone": "Swara 🙏 go kgetha mmala wa letlalo",
-"Then tap one:": "Ke moka kgwatha e tee:",
 "Only the verses you picked": "Ditemana tšeo o di kgethilego fela",
-"Reads on from there as the words light up": "E tšwela pele mantšu a bonega",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Ga go na lentšu la Beibele ye mo sedirišweng se: mantšu a a bonega gore o bale o homotše.",
 "That email address doesn’t look right.": "Aterese yeo ya imeile ga e bonagale e nepagetše.",
 "It couldn’t be sent. Try again in a few minutes.": "Ga e a kgona go romelwa. Leka gape ka morago ga metsotso e mmalwa.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Šomiša app bjalo ka mehleng, ke moka o kgotle Emiša. Kgato ye nngwe le ye nngwe e a ngwalwa, ga go tšewe bidio.",
 "Steps recorded: {n} ✓": "Megato ye e rekhotilwego: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Go romelwa le yona: phetolelo ya app, mohuta wa sedirišwa, polelo ya sona, sekirini seo o bego o le go sona, megato yeo o e rekhotilego, le phošo efe goba efe yeo app e e lemogilego. Ga go se sengwe.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Bontšha seswantšhetšo se senyenyane sa “Bala o latela” mafelelong a ka go le letona a para ya go nyaka. Se bala go thoma temaneng ye e lego godimo ga sekirini, goba temaneng yeo o e kgwathilego.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Seswantšhetšo sa “Bala o latela” mafelelong a sona a ka go le letona se bala go thoma temaneng ye e lego godimo ga sekirini.",
 "New here? Start here": "O moswa? Thoma mo",
 "Or use your email": "Goba šomiša imeile ya gago",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Ga o na senotlelo sa go tsena? Šomiša imeile ya gago",
 "Free. Needed for Circles": "Mahala. Go a hlokega go Didikologo",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Di nyaka akhaonte ya mahala: senotlelo sa go tsena goba khoutu ka imeile, go Dipeakanyo → Akhaonte. Go tšea motsotswana fela.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Didikologo di nyaka akhaonte ya mahala. Go bonolo kudu ka senotlelo sa go tsena: Face ID, monwana goba senotlelo sa sekirini sa gago. Ga go phasewete."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Didikologo di nyaka akhaonte ya mahala. Go bonolo kudu ka senotlelo sa go tsena: Face ID, monwana goba senotlelo sa sekirini sa gago. Ga go phasewete.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Go para ya go nyaka, mafelelong a yona a ka go le letona: e bala go tloga godimo ga sekirini mantšu a bonega.",
+"While it reads, tap any verse to read on from there.": "Ge e bala, kgotla temana efe goba efe gore e tšwele pele go tloga moo.",
+"Show the Read along icon in the search bar": "Bontšha seswantšhetšo sa “Bala o latela” go para ya go nyaka"
 }

@@ -348,28 +348,28 @@ function RecordingPage() {
   </>
 }
 
-// How to listen, shown more than told: tap a verse, then one of the two
-// buttons drawn as they look on the verse's bar. Try it now closes Settings
-// and the tour's fingertip taps a verse in view, then the two buttons (taphint); the choice stays theirs.
+// Read along and Listen, shown more than told: each drawn as it looks
+// where you find it (the icon at the search field's end, Listen on a verse's
+// bar). Try it now closes Settings and the tour's fingertip taps the icon,
+// then a verse in view, then Listen (taphint); the choice stays theirs.
 function AudioHow() {
   const { settings, byId } = useApp()
   const route = useRoute()
   const version = route.path[0] === 'read' && byId.has(route.path[1]) ? route.path[1] : settings.version
   const hear = canHear(version, byId.get(version)?.lang)
   return <>
-    <ol class="audio-steps">
-      <li><span class="step-n">1</span><span class="step-body">
-        <span class="step-title"><Glyph kind="tap" />{t('Tap a verse')}</span>
-      </span></li>
-      <li><span class="step-n">2</span><span class="step-body">
-        <span class="step-title">{t('Then tap one:')}</span>
-        {/* The very buttons the verse's bar shows. */}
-        {hear && <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span><span class="what">{t('Only the verses you picked')}</span></span>}
-        <span class="audio-pick"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span><span class="what">{t('Reads on from there as the words light up')}</span></span>
-      </span></li>
-    </ol>
+    <div class="audio-how">
+      <span class="audio-pick audio-stack"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span>
+        <span class="what">{t('In the search bar, at its right end: reads on from the top of the screen as the words light up.')}</span></span>
+      <p class="audio-also"><Glyph kind="tap" />{t('While it reads, tap any verse to read on from there.')}</p>
+      {hear && <>
+        <p class="audio-also audio-first"><Glyph kind="tap" />{t('Tap a verse')}</p>
+        <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span>
+          <span class="what">{t('Only the verses you picked')}</span></span>
+      </>}
+    </div>
     {!hear && <p class="audio-note">{t('No voice for this Bible on this device: the words light up so you can read quietly.')}</p>}
-    {/* Doesn't pick a verse for you: it shows you where to tap. */}
+    {/* Doesn't start anything for you: it shows you where to tap. */}
     <button class="primary audio-show" onClick={showVerseBar}><Glyph kind="tap" /> {t('Try it now')}</button>
   </>
 }
@@ -453,12 +453,12 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     </div>
   </>
 
-  // Listening lives on a verse's bar, where people don't think to look: this
-  // page says so, and Show me opens that bar on a verse in view.
+  // Read along is the icon at the search field's end, Listen is on a verse's
+  // bar, where people don't think to look: this page shows both.
   if (page === 'audio') return <>
     <AudioHow />
     <div class="field"><span>{t('Read along')}</span>
-      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.')}</label>
+      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show the Read along icon in the search bar')}</label>
     </div>
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">

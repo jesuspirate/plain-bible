@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "روی عنوان فصل کلیک کنید، یا / را فشار دهید",
 "Or pull down at the top of a chapter, then let go": "یا در بالای فصل، به پایین بکشید و رها کنید",
 "Hold 🙏 to choose its skin tone": "🙏 را نگه دارید تا رنگ پوست را انتخاب کنید",
-"Then tap one:": "سپس یکی را بزنید:",
 "Only the verses you picked": "فقط آیه‌های انتخاب‌شده",
-"Reads on from there as the words light up": "ادامه می‌دهد و کلمه‌ها روشن می‌شوند",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "برای این کتاب‌مقدس روی این دستگاه صدایی نیست: کلمه‌ها روشن می‌شوند تا بی‌صدا بخوانید.",
 "That email address doesn’t look right.": "این نشانی ایمیل درست به نظر نمی‌رسد.",
 "It couldn’t be sent. Try again in a few minutes.": "ارسال نشد. چند دقیقه دیگر دوباره امتحان کنید.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "مثل همیشه از برنامه استفاده کنید، سپس «توقف» را بزنید. هر گام نوشته می‌شود، فیلم گرفته نمی‌شود.",
 "Steps recorded: {n} ✓": "گام‌های ضبط‌شده: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "همراه آن فرستاده می‌شود: نسخهٔ برنامه، نوع دستگاه، زبان آن، صفحه‌ای که در آن بودید، گام‌هایی که ضبط کردید و هر خطایی که برنامه دید. چیز دیگری نه.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "نمایش یک نماد کوچک «خواندن همراه» در انتهای نوار جستجو. از آیهٔ بالای صفحه، یا از آیه‌ای که لمس کرده‌اید، می‌خواند.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "نماد «خواندن همراه» در انتهای آن از آیهٔ بالای صفحه می‌خواند.",
 "New here? Start here": "تازه‌وارد هستید؟ از اینجا شروع کنید",
 "Or use your email": "یا از ایمیل خود استفاده کنید",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "گذرکلید ندارید؟ از ایمیل خود استفاده کنید",
 "Free. Needed for Circles": "رایگان. برای حلقه‌ها لازم است",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "به یک حساب رایگان نیاز دارند: گذرکلید یا کد ایمیلی، در تنظیمات ← حساب. لحظه‌ای بیشتر طول نمی‌کشد.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "حلقه‌ها به حسابی رایگان نیاز دارند. ساده‌ترین راه با گذرکلید: Face ID، اثر انگشت یا قفل صفحه. بدون گذرواژه."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "حلقه‌ها به حسابی رایگان نیاز دارند. ساده‌ترین راه با گذرکلید: Face ID، اثر انگشت یا قفل صفحه. بدون گذرواژه.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "در نوار جستجو، در انتهای آن: از بالای صفحه می‌خواند و کلمه‌ها روشن می‌شوند.",
+"While it reads, tap any verse to read on from there.": "هنگام خواندن، روی هر آیه بزنید تا از همان‌جا ادامه دهد.",
+"Show the Read along icon in the search bar": "نمایش نماد «خواندن همراه» در نوار جستجو"
 }

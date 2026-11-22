@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Nhấp vào tên chương, hoặc nhấn /",
 "Or pull down at the top of a chapter, then let go": "Hoặc ở đầu chương, kéo xuống rồi thả ra",
 "Hold 🙏 to choose its skin tone": "Giữ 🙏 để chọn màu da",
-"Then tap one:": "Rồi chạm vào một nút:",
 "Only the verses you picked": "Chỉ những câu bạn chọn",
-"Reads on from there as the words light up": "Đọc tiếp trong khi chữ sáng lên",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Không có giọng đọc cho Kinh Thánh này trên thiết bị này: chữ sáng lên để bạn đọc thầm.",
 "That email address doesn’t look right.": "Địa chỉ email đó có vẻ không đúng.",
 "It couldn’t be sent. Try again in a few minutes.": "Không gửi được. Hãy thử lại sau vài phút.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Dùng ứng dụng như thường lệ, rồi chạm Dừng. Mỗi bước được ghi bằng chữ, không quay phim.",
 "Steps recorded: {n} ✓": "Các bước đã ghi: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Gửi kèm: phiên bản ứng dụng, loại thiết bị, ngôn ngữ, màn hình bạn đang ở, các bước bạn đã ghi và mọi lỗi ứng dụng ghi nhận. Không gì khác.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Hiện một biểu tượng nhỏ “Đọc theo” ở đầu bên phải thanh tìm kiếm. Biểu tượng này đọc từ câu ở đầu màn hình, hoặc từ câu bạn đã chạm.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Biểu tượng “Đọc theo” ở đầu bên phải đọc từ câu ở đầu màn hình.",
 "New here? Start here": "Mới đến? Bắt đầu ở đây",
 "Or use your email": "Hoặc dùng email",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Không có mã khóa? Dùng email",
 "Free. Needed for Circles": "Miễn phí. Cần cho Nhóm",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Cần một tài khoản miễn phí: mã khóa hoặc mã qua email, trong Cài đặt → Tài khoản. Chỉ mất một lát.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Nhóm cần một tài khoản miễn phí. Dễ nhất là dùng mã khóa: Face ID, vân tay hoặc khóa màn hình. Không cần mật khẩu."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Nhóm cần một tài khoản miễn phí. Dễ nhất là dùng mã khóa: Face ID, vân tay hoặc khóa màn hình. Không cần mật khẩu.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Trong thanh tìm kiếm, ở đầu bên phải: đọc từ đầu màn hình trong khi các chữ sáng lên.",
+"While it reads, tap any verse to read on from there.": "Khi đang đọc, chạm vào câu nào cũng được để đọc tiếp từ đó.",
+"Show the Read along icon in the search bar": "Hiện biểu tượng “Đọc theo” trong thanh tìm kiếm"
 }

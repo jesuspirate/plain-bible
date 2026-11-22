@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "અધ્યાયના શીર્ષક પર ક્લિક કરો, અથવા / દબાવો",
 "Or pull down at the top of a chapter, then let go": "અથવા અધ્યાયની ટોચે નીચે ખેંચો, પછી છોડી દો",
 "Hold 🙏 to choose its skin tone": "ત્વચાનો રંગ પસંદ કરવા 🙏 દબાવી રાખો",
-"Then tap one:": "પછી એક પર ટૅપ કરો:",
 "Only the verses you picked": "ફક્ત પસંદ કરેલી કલમો",
-"Reads on from there as the words light up": "આગળ વાંચે છે, શબ્દો પ્રકાશિત થાય છે",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "આ ઉપકરણ પર આ બાઇબલનો અવાજ નથી: શબ્દો પ્રકાશિત થાય છે જેથી તમે મનમાં વાંચી શકો.",
 "That email address doesn’t look right.": "આ ઇમેઇલ સરનામું સાચું લાગતું નથી.",
 "It couldn’t be sent. Try again in a few minutes.": "મોકલી શકાયું નહીં. થોડી મિનિટ પછી ફરી પ્રયાસ કરો.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "હંમેશની જેમ ઍપ વાપરો, પછી બંધ કરો દબાવો. દરેક પગલું લખી લેવાય છે, વીડિયો નહીં.",
 "Steps recorded: {n} ✓": "રેકોર્ડ થયેલાં પગલાં: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "સાથે મોકલાય છે: ઍપનું સંસ્કરણ, ઉપકરણનો પ્રકાર, તેની ભાષા, તમે જે સ્ક્રીન પર હતા તે, તમે રેકોર્ડ કરેલાં પગલાં અને ઍપે નોંધેલી કોઈપણ ભૂલ. બીજું કંઈ નહીં.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "શોધ પટ્ટીના જમણા છેડે એક નાનું “સાથે વાંચો” ચિહ્ન બતાવો. તે સ્ક્રીનની ટોચની કલમથી, અથવા તમે ટેપ કરેલી કલમથી વાંચે છે.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "તેના જમણા છેડે આવેલું “સાથે વાંચો” ચિહ્ન સ્ક્રીનની ટોચની કલમથી વાંચે છે.",
 "New here? Start here": "નવા છો? અહીંથી શરૂ કરો",
 "Or use your email": "અથવા તમારો ઇમેઇલ વાપરો",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "પાસકી નથી? તમારો ઇમેઇલ વાપરો",
 "Free. Needed for Circles": "મફત. જૂથો માટે જરૂરી",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "એ માટે મફત એકાઉન્ટ જોઈએ: પાસકી અથવા ઇમેઇલથી કોડ, સેટિંગ્સ → એકાઉન્ટમાં. માત્ર એક ક્ષણ લાગે છે.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "જૂથો માટે મફત ખાતું જોઈએ. પાસકી સાથે સૌથી સરળ: Face ID, ફિંગરપ્રિન્ટ અથવા તમારું સ્ક્રીન લૉક. કોઈ પાસવર્ડ નહીં."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "જૂથો માટે મફત ખાતું જોઈએ. પાસકી સાથે સૌથી સરળ: Face ID, ફિંગરપ્રિન્ટ અથવા તમારું સ્ક્રીન લૉક. કોઈ પાસવર્ડ નહીં.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "શોધ પટ્ટીમાં, તેના જમણા છેડે: શબ્દો પ્રકાશિત થતાં સ્ક્રીનની ટોચથી વાંચે છે.",
+"While it reads, tap any verse to read on from there.": "વાંચતી વખતે, ત્યાંથી વાંચવા માટે કોઈપણ કલમ પર ટૅપ કરો.",
+"Show the Read along icon in the search bar": "શોધ પટ્ટીમાં “સાથે વાંચો” ચિહ્ન બતાવો"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klik på kapitlets titel, eller tryk på /",
 "Or pull down at the top of a chapter, then let go": "Eller træk ned øverst i et kapitel, og slip",
 "Hold 🙏 to choose its skin tone": "Hold 🙏 nede for at vælge hudfarve",
-"Then tap one:": "Tryk så på en af dem:",
 "Only the verses you picked": "Kun de valgte vers",
-"Reads on from there as the words light up": "Læser videre, mens ordene lyser op",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Ingen stemme til denne bibel på denne enhed: ordene lyser op, så du kan læse med i stilhed.",
 "That email address doesn’t look right.": "Den e-mailadresse ser ikke rigtig ud.",
 "It couldn’t be sent. Try again in a few minutes.": "Det kunne ikke sendes. Prøv igen om et par minutter.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Brug appen som du plejer, og tryk så på Stop. Hvert trin skrives ned, intet filmes.",
 "Steps recorded: {n} ✓": "Optagne trin: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendes med: appens version, typen af enhed, dens sprog, skærmen du var på, trinene du optog, og enhver fejl appen bemærkede. Intet andet.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Vis et lille “Læs med”-ikon i højre ende af søgefeltet. Det læser fra verset øverst på skærmen eller fra det vers, du trykkede på.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "“Læs med”-ikonet i højre ende læser fra verset øverst på skærmen.",
 "New here? Start here": "Ny her? Start her",
 "Or use your email": "Eller brug din e-mail",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Ingen adgangsnøgle? Brug din e-mail",
 "Free. Needed for Circles": "Gratis. Kræves til Kredse",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "De kræver en gratis konto: en adgangsnøgle eller en kode på e-mail, under Indstillinger → Konto. Det tager et øjeblik.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kredse kræver en gratis konto. Nemmest med en adgangsnøgle: Face ID, et fingeraftryk eller din skærmlås. Ingen adgangskode."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kredse kræver en gratis konto. Nemmest med en adgangsnøgle: Face ID, et fingeraftryk eller din skærmlås. Ingen adgangskode.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "I søgefeltet, i højre ende: læser videre fra toppen af skærmen, mens ordene lyser op.",
+"While it reads, tap any verse to read on from there.": "Mens den læser, kan du trykke på et vers for at læse videre derfra.",
+"Show the Read along icon in the search bar": "Vis “Læs med”-ikonet i søgefeltet"
 }

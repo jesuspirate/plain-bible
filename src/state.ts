@@ -76,6 +76,7 @@ export const DEFAULT_FONT_SIZE = 22
 export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}']
 
 const KEY = 'plain-bible:settings'
+const ALONG_ON = 'plain-bible:along-on'
 
 // The Bible a newcomer starts in, for languages with more than one: the
 // usual one, not whichever sorts first (for French that was the Ethiopian
@@ -120,6 +121,12 @@ export function loadSettings(): Partial<Settings> {
     if (s.font && !FONTS.some(f => f.id === s.font)) delete s.font
     // The fold turn was tried and dropped.
     if (s.turn === 'fold') s.turn = 'stack'
+    // Read along was off by default until its icon moved into the search
+    // field (#380). Switch it on once for everyone; untick it after and it stays off.
+    if (!localStorage.getItem(ALONG_ON)) {
+      if (s.alongButton === false) { s.alongButton = true; localStorage.setItem(KEY, JSON.stringify(s)) }
+      localStorage.setItem(ALONG_ON, '1')
+    }
     return s
   } catch { return {} }
 }

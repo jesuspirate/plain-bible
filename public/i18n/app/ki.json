@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Kĩrika rĩĩtwa rĩa gĩcunjĩ, kana ũhatĩrie /",
 "Or pull down at the top of a chapter, then let go": "Kana igũrũ wa gĩcunjĩ, kururia thĩ ũcoke ũrekie",
 "Hold 🙏 to choose its skin tone": "Nyiita 🙏 nĩguo ũthuure rangi ya gĩkonde",
-"Then tap one:": "Ũcooke ũhutie ĩmwe:",
 "Only the verses you picked": "Ndũhunju iria ũthuurĩte tu",
-"Reads on from there as the words light up": "Ĩthiaga na mbere ciugo igĩkũũka ũtheri",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Gũtirĩ mũgambo wa Bibilia ĩno kũrĩ kĩndũ gĩkĩ: ciugo nĩ ikũũkaga ũtheri nĩguo ũthome ũkirĩte.",
 "That email address doesn’t look right.": "Email ĩyo ndĩonekaga ta ĩrĩ njega.",
 "It couldn’t be sent. Try again in a few minutes.": "Ndĩngĩatũmirwo. Geria rĩngĩ thutha wa ndagĩka nini.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Hũthĩra app o ta ũrĩa ũhũthagĩra, ningĩ ũhutie Rũgamia. O kĩgĩnya nĩkĩandĩkagwo, gũtirĩ vidio ĩrutagwo.",
 "Steps recorded: {n} ✓": "Makinya marĩa marekodetwo: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Gĩtũmagwo hamwe: version ya app, mũthemba wa kĩndũ kĩu, rũthiomi rwakĩo, skrini ĩrĩa warĩ, makinya marĩa warekodire, na mahĩtia o mothe marĩa app yonire. Gũtirĩ kĩngĩ.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onania kamũhiano kanini ka “Thoma ũkĩrũmĩrĩra” mũthia wa mwena wa ũrĩo wa mũhari wa gũcaria. Gathomaga kuuma mũhari ũrĩa ũrĩ igũrũ wa skrini, kana mũhari ũrĩa wahutia.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Kamũhiano ka “Thoma ũkĩrũmĩrĩra” mũthia wa ũrĩo gathomaga kuuma mũhari ũrĩa ũrĩ igũrũ wa skrini.",
 "New here? Start here": "Wĩ mwerũ? Ambĩrĩria haha",
 "Or use your email": "Kana ũhũthĩre email yaku",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Ndũrĩ na passkey? Hũthĩra email yaku",
 "Free. Needed for Circles": "Cia tũhũ. Nĩ ibataranagio nĩ ũndũ wa Ikundi",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Nĩcibataraga akaunti ya tũhũ: passkey kana kodi na email, thĩinĩ wa Mĩtaratara → Akaunti. Nĩ kahinda kanini tu.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ikundi nĩ ciabatara akaunti ya tũhũ. Ũndũ ũrĩa mũhũthũ makĩria nĩ passkey: Face ID, kĩara kĩaku kana kĩhingo kĩa skrini yaku. Gũtirĩ password."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ikundi nĩ ciabatara akaunti ya tũhũ. Ũndũ ũrĩa mũhũthũ makĩria nĩ passkey: Face ID, kĩara kĩaku kana kĩhingo kĩa skrini yaku. Gũtirĩ password.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Mũhari-inĩ wa gũcaria, mũthia wa ũrĩo: gathomaga kuuma igũrũ wa skrini ciugo igĩkenga.",
+"While it reads, tap any verse to read on from there.": "Rĩrĩa ĩrathoma, hutia mũhari o wothe ĩthome kuuma hau.",
+"Show the Read along icon in the search bar": "Onania kamũhiano ka “Thoma ũkĩrũmĩrĩra” mũhari-inĩ wa gũcaria"
 }

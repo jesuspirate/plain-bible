@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "点按章节标题，或按 /",
 "Or pull down at the top of a chapter, then let go": "或在章节顶部向下拉，然后松开",
 "Hold 🙏 to choose its skin tone": "按住 🙏 选择肤色",
-"Then tap one:": "然后点其中一个：",
 "Only the verses you picked": "只读你选的经节",
-"Reads on from there as the words light up": "一直读下去，字词逐个亮起",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "此设备上这本圣经没有语音：字词会逐个亮起，方便你默读。",
 "That email address doesn’t look right.": "这个邮箱地址似乎不正确。",
 "It couldn’t be sent. Try again in a few minutes.": "无法发送。请几分钟后再试。",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "像平常一样使用应用,然后点“停止”。每一步都用文字记下,不录视频。",
 "Steps recorded: {n} ✓": "已记录步骤:{n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一同发送:应用版本、设备类型、语言、你所在的页面、你记录的步骤,以及应用记录到的错误。没有别的。",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在搜索栏右端显示一个小的“跟读”图标。它从屏幕顶部的经文读起，或从你点过的经文读起。",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的“跟读”图标从屏幕顶部的经文读起。",
 "New here? Start here": "新来的？从这里开始",
 "Or use your email": "或用电子邮件",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "没有通行密钥？用电子邮件",
 "Free. Needed for Circles": "免费。加入小组需要",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "小组需要一个免费账户：在“设置”→“账户”中使用通行密钥或电子邮件代码。只需片刻。",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "小组需要一个免费账户。用通行密钥最简单：Face ID、指纹或屏幕锁定即可。无需密码。"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "小组需要一个免费账户。用通行密钥最简单：Face ID、指纹或屏幕锁定即可。无需密码。",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "在搜索栏右端：从屏幕顶部读起，字词随之亮起。",
+"While it reads, tap any verse to read on from there.": "朗读时，轻点任意一节，就从那里接着读。",
+"Show the Read along icon in the search bar": "在搜索栏显示“跟读”图标"
 }

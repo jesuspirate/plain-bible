@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "ᏕᎨᏌᏗᏒ ᏚᏙᎥ ᎯᏯᏏᎳᏛ, ᎠᎴ / ᎯᏯᏏᎳᏛ",
 "Or pull down at the top of a chapter, then let go": "ᎠᎴ, ᏕᎨᏌᏗᏒ ᎦᏚᎢ, ᎡᎳᏗ ᎯᏯᏙᏗ, ᎿᏉ ᎯᏲᏍᏓ",
 "Hold 🙏 to choose its skin tone": "🙏 ᎯᏂᏴ ᎦᏚᎢᏛ ᎯᏯᏑᏰᏍᏗ",
-"Then tap one:": "ᎿᏉ ᏘᏍᏆᏂᎪᏗ ᏌᏉ:",
 "Only the verses you picked": "ᏘᏑᏰᏒ ᎤᏅᏍᏗ",
-"Reads on from there as the words light up": "ᎠᏂᎪᎵᏰᏍᎬ ᏧᏁᏢᏔᏅᏛ ᏓᏓᏍᏛᎦ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ᎥᏝ ᎧᏁᎬ ᏱᎩ ᎯᎠ ᎪᏪᎵ ᎦᎸᏉᏗ ᎯᎠ ᎪᏪᎵᏍᏗ: ᏧᏁᏢᏔᏅᏛ ᏓᏓᏍᏛᎦ, ᎤᏍᏆᏂᎩᏛ ᎯᎪᎵᏰᏗ.",
 "That email address doesn’t look right.": "ᎯᎠ ᎢᎺᎵ ᎥᏝ ᏚᏳᎪᏛ ᏱᎦᏰᎦ.",
 "It couldn’t be sent. Try again in a few minutes.": "ᎥᏝ ᏰᎵ ᏱᏅᏲᎢ. ᏔᎵᏁ ᎭᏓᏅᏖᏍᎬ ᏞᎦ.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ᎯᏁᎶᏗ app ᏂᏣᏛᏁᎲ ᎾᏍᎩᏯ, ᎿᏉ ᎯᏲᎯ ᎯᏂᏴ. ᏂᎦᏓ ᏧᏓᏅᏛ ᎪᏪᎳᏅ, ᎥᏝ ᏗᏟᎶᏍᏗ.",
 "Steps recorded: {n} ✓": "ᏧᏓᏅᏛ ᎠᏍᏆᏂᎪᏔᏅ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ᎢᏧᎳᎭ ᎤᏅᏲ: ᎾᏍᎩ app ᎤᏓᏁᎳᏛ, ᏄᏍᏛ ᎠᏓᏁᎳᏛ, ᎤᏤᎵ ᎦᏬᏂᎯᏍᏗ, ᎾᎿ ᏥᎨᏒ, ᏧᏓᏅᏛ ᏣᏍᏆᏂᎪᏔᏅ, ᎠᎴ ᎤᏲ app ᎤᎪᎲ. ᎥᏝ ᏅᏩᏓᎴ.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᏍᎦᏯ ᎢᏗᏢ.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᏍᎦᏯ ᎢᏗᏢ.",
 "New here? Start here": "ᎢᏤ ᏂᎯ? ᎠᏂ ᎴᏅᎲᎦ",
 "Or use your email": "ᎠᎴ ᏣᏤᎵ ᎢᎺᎵ ᏗᏂᏰᎸᏍᎨᏍᏗ",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "passkey Ꮭ ᏰᎭ? ᏣᏤᎵ ᎢᎺᎵ ᏗᏂᏰᎸᏍᎨᏍᏗ",
 "Free. Needed for Circles": "ᎠᏎᏉ. ᏓᏓᏡᎬ ᎤᎬᏩᎵ ᎠᏚᎵᏍᎪ",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ᎠᏎᏉ ᎠᎧᎤᏂ ᎠᏚᎵᏍᎪ: passkey ᎠᎴ ᎢᎺᎵ ᎪᏗ, ᏗᏛᏅᎢᏍᏗ → ᎠᎧᎤᏂ. ᏌᏉ ᎢᏳᏟᎶᏛ ᎤᏍᏗ.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ᏓᏓᏡᎬ ᎠᏎ ᎪᏪᎵ ᏂᎨᏒᎾ ᏧᎬᏩᎶᏗ. passkey ᎤᏍᏗ ᎤᎵᏏᎩ ᏂᎨᏒᎾ: Face ID, ᏧᏰᏌᏛ, ᎠᎴ ᏣᏤᎵ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ. Ꮭ ᎦᏁᎦ ᏚᏙᎥ."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ᏓᏓᏡᎬ ᎠᏎ ᎪᏪᎵ ᏂᎨᏒᎾ ᏧᎬᏩᎶᏗ. passkey ᎤᏍᏗ ᎤᎵᏏᎩ ᏂᎨᏒᎾ: Face ID, ᏧᏰᏌᏛ, ᎠᎴ ᏣᏤᎵ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ. Ꮭ ᎦᏁᎦ ᏚᏙᎥ.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᏍᎦᏯ ᎢᏗᏢ.",
+"While it reads, tap any verse to read on from there.": "ᎧᏃᎮᏛ ᎯᏯᏏᎳᏛ.",
+"Show the Read along icon in the search bar": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ”"
 }

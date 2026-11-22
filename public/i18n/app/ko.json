@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "장 제목을 클릭하거나 /를 누르세요",
 "Or pull down at the top of a chapter, then let go": "또는 장 맨 위에서 아래로 당겼다 놓으세요",
 "Hold 🙏 to choose its skin tone": "🙏를 길게 눌러 피부색을 고르세요",
-"Then tap one:": "그다음 하나를 누르세요:",
 "Only the verses you picked": "고른 절만",
-"Reads on from there as the words light up": "단어를 밝히며 계속 읽습니다",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "이 기기에는 이 성경의 음성이 없습니다. 단어가 밝아져 조용히 읽을 수 있습니다.",
 "That email address doesn’t look right.": "이메일 주소가 올바르지 않은 것 같습니다.",
 "It couldn’t be sent. Try again in a few minutes.": "보내지 못했습니다. 몇 분 후에 다시 시도해 주세요.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "평소처럼 앱을 사용한 뒤 정지를 누르세요. 각 단계는 글로 적히며 영상으로 찍지 않습니다.",
 "Steps recorded: {n} ✓": "기록된 단계: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "함께 보내지는 것: 앱 버전, 기기 종류, 언어, 보고 있던 화면, 기록한 단계, 앱이 발견한 오류. 그 외에는 없습니다.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "검색창 오른쪽 끝에 작은 ‘따라 읽기’ 아이콘을 보여 줍니다. 화면 맨 위 절부터, 또는 누른 절부터 읽습니다.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "오른쪽 끝의 ‘따라 읽기’ 아이콘은 화면 맨 위 절부터 읽습니다.",
 "New here? Start here": "처음이신가요? 여기서 시작하세요",
 "Or use your email": "또는 이메일 사용",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "패스키가 없나요? 이메일 사용",
 "Free. Needed for Circles": "무료. 모임에 필요해요",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "무료 계정이 필요해요: 설정 → 계정에서 패스키나 이메일 코드로요. 금방 끝나요.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "모임에는 무료 계정이 필요합니다. 패스키가 가장 쉽습니다. Face ID, 지문 또는 화면 잠금으로 됩니다. 암호는 필요 없습니다."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "모임에는 무료 계정이 필요합니다. 패스키가 가장 쉽습니다. Face ID, 지문 또는 화면 잠금으로 됩니다. 암호는 필요 없습니다.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "검색창 오른쪽 끝: 단어가 밝아지며 화면 맨 위부터 읽어 나갑니다.",
+"While it reads, tap any verse to read on from there.": "읽는 동안 아무 절이나 누르면 거기서부터 읽습니다.",
+"Show the Read along icon in the search bar": "검색창에 ‘따라 읽기’ 아이콘 보이기"
 }

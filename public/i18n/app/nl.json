@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klik op de hoofdstuktitel, of druk op /",
 "Or pull down at the top of a chapter, then let go": "Of trek bovenaan een hoofdstuk omlaag en laat los",
 "Hold 🙏 to choose its skin tone": "Houd 🙏 vast om de huidskleur te kiezen",
-"Then tap one:": "Tik dan op een van beide:",
 "Only the verses you picked": "Alleen de gekozen verzen",
-"Reads on from there as the words light up": "Leest verder terwijl de woorden oplichten",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Geen stem voor deze Bijbel op dit apparaat: de woorden lichten op, zodat je stil kunt meelezen.",
 "That email address doesn’t look right.": "Dat e-mailadres lijkt niet te kloppen.",
 "It couldn’t be sent. Try again in a few minutes.": "Versturen is niet gelukt. Probeer het over een paar minuten opnieuw.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gebruik de app zoals altijd en tik dan op Stoppen. Elke stap wordt in woorden opgeschreven, er wordt niets gefilmd.",
 "Steps recorded: {n} ✓": "Opgenomen stappen: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Meegestuurd: de versie van de app, het soort apparaat, de taal, het scherm waar je was, de stappen die je opnam en elke fout die de app opmerkte. Verder niets.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Een klein pictogram ‘Meelezen’ aan het rechteruiteinde van de zoekbalk tonen. Dat leest vanaf het vers bovenaan het scherm, of vanaf het vers dat je hebt aangetikt.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Het pictogram ‘Meelezen’ aan het rechteruiteinde leest vanaf het vers bovenaan het scherm.",
 "New here? Start here": "Nieuw hier? Begin hier",
 "Or use your email": "Of gebruik je e-mail",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Geen toegangssleutel? Gebruik je e-mail",
 "Free. Needed for Circles": "Gratis. Nodig voor Kringen",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Daarvoor heb je een gratis account nodig: een toegangssleutel of een code per e-mail, in Instellingen → Account. Het is zo gedaan.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kringen hebben een gratis account nodig. Het makkelijkst met een toegangssleutel: Face ID, een vingerafdruk of je schermvergrendeling. Geen wachtwoord."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kringen hebben een gratis account nodig. Het makkelijkst met een toegangssleutel: Face ID, een vingerafdruk of je schermvergrendeling. Geen wachtwoord.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "In de zoekbalk, aan het rechteruiteinde: leest vanaf de bovenkant van het scherm terwijl de woorden oplichten.",
+"While it reads, tap any verse to read on from there.": "Tik tijdens het lezen op een vers om vanaf daar verder te lezen.",
+"Show the Read along icon in the search bar": "Het pictogram ‘Meelezen’ in de zoekbalk tonen"
 }

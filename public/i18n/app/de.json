@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klicke auf den Kapiteltitel oder drücke /",
 "Or pull down at the top of a chapter, then let go": "Oder oben in einem Kapitel nach unten ziehen, dann loslassen",
 "Hold 🙏 to choose its skin tone": "Halte 🙏 gedrückt, um den Hautton zu wählen",
-"Then tap one:": "Dann eines davon antippen:",
 "Only the verses you picked": "Nur die gewählten Verse",
-"Reads on from there as the words light up": "Liest weiter, die Wörter leuchten auf",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Keine Stimme für diese Bibel auf diesem Gerät: Die Wörter leuchten auf, zum stillen Mitlesen.",
 "That email address doesn’t look right.": "Diese E-Mail-Adresse scheint nicht zu stimmen.",
 "It couldn’t be sent. Try again in a few minutes.": "Das Senden hat nicht geklappt. Versuche es in ein paar Minuten wieder.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Nutze die App wie gewohnt und tippe dann auf Stopp. Jeder Schritt wird aufgeschrieben, nicht gefilmt.",
 "Steps recorded: {n} ✓": "Aufgenommene Schritte: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Mitgesendet: die Version der App, die Art des Geräts, seine Sprache, die Seite, auf der du warst, die aufgenommenen Schritte und jeder Fehler, den die App bemerkt hat. Sonst nichts.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ein kleines Symbol „Mitlesen“ am rechten Ende der Suchleiste zeigen. Es liest ab dem Vers oben auf dem Bildschirm oder ab dem Vers, den du angetippt hast.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Das Symbol „Mitlesen“ am rechten Ende liest ab dem Vers oben auf dem Bildschirm.",
 "New here? Start here": "Neu hier? Hier anfangen",
 "Or use your email": "Oder deine E-Mail nutzen",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Kein Passkey? Deine E-Mail nutzen",
 "Free. Needed for Circles": "Kostenlos. Nötig für Kreise",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Dafür brauchst du ein kostenloses Konto: ein Passkey oder ein Code per E-Mail, unter Einstellungen → Konto. Es dauert nur einen Moment.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kreise brauchen ein kostenloses Konto. Am einfachsten mit einem Passkey: Face ID, Fingerabdruck oder deine Bildschirmsperre. Kein Passwort."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kreise brauchen ein kostenloses Konto. Am einfachsten mit einem Passkey: Face ID, Fingerabdruck oder deine Bildschirmsperre. Kein Passwort.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "In der Suchleiste, am rechten Ende: liest ab dem oberen Bildschirmrand weiter, während die Wörter aufleuchten.",
+"While it reads, tap any verse to read on from there.": "Während es liest, tippe auf einen Vers, um von dort weiterzulesen.",
+"Show the Read along icon in the search bar": "Das Symbol „Mitlesen“ in der Suchleiste zeigen"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Napsauta luvun otsikkoa tai paina /",
 "Or pull down at the top of a chapter, then let go": "Tai vedä luvun alussa alaspäin ja päästä irti",
 "Hold 🙏 to choose its skin tone": "Pidä 🙏 painettuna valitaksesi ihonvärin",
-"Then tap one:": "Napauta sitten jompaakumpaa:",
 "Only the verses you picked": "Vain valitsemasi jakeet",
-"Reads on from there as the words light up": "Jatkaa lukemista, sanat syttyvät",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Tälle Raamatulle ei ole ääntä tällä laitteella: sanat syttyvät, jotta voit lukea hiljaa.",
 "That email address doesn’t look right.": "Sähköpostiosoite ei näytä oikealta.",
 "It couldn’t be sent. Try again in a few minutes.": "Lähettäminen ei onnistunut. Yritä uudelleen muutaman minuutin päästä.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Käytä sovellusta tavalliseen tapaan ja napauta sitten Pysäytä. Jokainen vaihe kirjoitetaan sanoin, mitään ei kuvata.",
 "Steps recorded: {n} ✓": "Tallennetut vaiheet: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Mukana lähtee: sovelluksen versio, laitteen tyyppi, sen kieli, näkymä jossa olit, tallentamasi vaiheet ja kaikki sovelluksen huomaamat virheet. Ei mitään muuta.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Näytä pieni ”Lue mukana” -kuvake hakupalkin oikeassa reunassa. Se lukee näytön ylimmästä jakeesta tai napauttamastasi jakeesta alkaen.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Sen oikean reunan ”Lue mukana” -kuvake lukee näytön ylimmästä jakeesta alkaen.",
 "New here? Start here": "Uusi täällä? Aloita tästä",
 "Or use your email": "Tai käytä sähköpostiasi",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Ei pääsyavainta? Käytä sähköpostiasi",
 "Free. Needed for Circles": "Ilmainen. Tarvitaan Piireihin",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ne vaativat ilmaisen tilin: pääsyavaimen tai sähköpostikoodin, kohdassa Asetukset → Tili. Se käy hetkessä.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Piirit tarvitsevat ilmaisen tilin. Helpointa pääsyavaimella: Face ID, sormenjälki tai näytön lukitus. Ei salasanaa."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Piirit tarvitsevat ilmaisen tilin. Helpointa pääsyavaimella: Face ID, sormenjälki tai näytön lukitus. Ei salasanaa.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Hakupalkissa, sen oikeassa reunassa: lukee näytön ylälaidasta alkaen, ja sanat syttyvät.",
+"While it reads, tap any verse to read on from there.": "Kun se lukee, napauta mitä tahansa jaetta jatkaaksesi siitä.",
+"Show the Read along icon in the search bar": "Näytä ”Lue mukana” -kuvake hakupalkissa"
 }

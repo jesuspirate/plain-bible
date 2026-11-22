@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "အခန်းခေါင်းစဉ်ကို နှိပ်ပါ၊ သို့မဟုတ် / ကို နှိပ်ပါ",
 "Or pull down at the top of a chapter, then let go": "သို့မဟုတ် အခန်း၏ထိပ်တွင် အောက်သို့ဆွဲပြီး လွှတ်ပါ",
 "Hold 🙏 to choose its skin tone": "အသားအရောင်ရွေးရန် 🙏 ကို ဖိထားပါ",
-"Then tap one:": "ထို့နောက် တစ်ခုကို နှိပ်ပါ -",
 "Only the verses you picked": "ရွေးထားသော အခန်းငယ်များသာ",
-"Reads on from there as the words light up": "စကားလုံးများ လင်းလာစဉ် ဆက်ဖတ်သည်",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "ဤစက်တွင် ဤကျမ်းစာအတွက် အသံမရှိပါ။ စကားလုံးများ လင်းလာ၍ တိတ်တဆိတ် ဖတ်နိုင်သည်။",
 "That email address doesn’t look right.": "ဤအီးမေးလ်လိပ်စာ မှန်ပုံမပေါ်ပါ။",
 "It couldn’t be sent. Try again in a few minutes.": "မပို့နိုင်ပါ။ မိနစ်အနည်းငယ်အကြာတွင် ထပ်ကြိုးစားပါ။",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "အက်ပ်ကို ပုံမှန်အတိုင်း သုံးပြီး ရပ်ရန် ကို နှိပ်ပါ။ အဆင့်တိုင်းကို စာဖြင့် ရေးမှတ်သည်၊ ဗီဒီယို မရိုက်ပါ။",
 "Steps recorded: {n} ✓": "မှတ်တမ်းတင်ထားသော အဆင့်များ- {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "တွဲပို့သည်- အက်ပ်ဗားရှင်း၊ စက်အမျိုးအစား၊ ဘာသာစကား၊ သင်ရှိခဲ့သည့်မျက်နှာပြင်၊ သင်မှတ်တမ်းတင်ခဲ့သည့် အဆင့်များနှင့် အက်ပ်တွေ့ခဲ့သည့် အမှားများ။ အခြားဘာမျှမပါ။",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ရှာဖွေရေးဘား၏ ညာဘက်အစွန်တွင် “လိုက်ဖတ်ရန်” သင်္ကေတအသေးလေးကို ပြပါ။ ၎င်းသည် မျက်နှာပြင်ထိပ်ရှိ အခန်းငယ်မှ သို့မဟုတ် သင်နှိပ်ခဲ့သော အခန်းငယ်မှ ဖတ်ပေးသည်။",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "ညာဘက်အစွန်ရှိ “လိုက်ဖတ်ရန်” သင်္ကေတသည် မျက်နှာပြင်ထိပ်ရှိ အခန်းငယ်မှ ဖတ်ပေးသည်။",
 "New here? Start here": "အသစ်လား။ ဒီကနေ စပါ",
 "Or use your email": "သို့မဟုတ် သင့်အီးမေးလ်ကို သုံးပါ",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "လျှို့ဝှက်ကီး မရှိဘူးလား။ သင့်အီးမေးလ်ကို သုံးပါ",
 "Free. Needed for Circles": "အခမဲ့။ အသိုင်းအဝိုင်းများအတွက် လိုအပ်သည်",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "၎င်းတို့အတွက် အခမဲ့အကောင့် လိုသည်- လျှို့ဝှက်ကီး သို့မဟုတ် အီးမေးလ်ကုဒ်၊ ဆက်တင်များ → အကောင့် တွင်။ ခဏလေးသာ ကြာပါသည်။",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "အသိုင်းအဝိုင်းများအတွက် အခမဲ့အကောင့် လိုသည်။ လျှို့ဝှက်ကီးဖြင့် အလွယ်ဆုံး: Face ID၊ လက်ဗွေ သို့မဟုတ် သင့်ဖန်သားပြင်လော့ခ်။ စကားဝှက် မလိုပါ။"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "အသိုင်းအဝိုင်းများအတွက် အခမဲ့အကောင့် လိုသည်။ လျှို့ဝှက်ကီးဖြင့် အလွယ်ဆုံး: Face ID၊ လက်ဗွေ သို့မဟုတ် သင့်ဖန်သားပြင်လော့ခ်။ စကားဝှက် မလိုပါ။",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ရှာဖွေရေးဘား၏ ညာဘက်အစွန်တွင်- စကားလုံးများ လင်းလာစဉ် မျက်နှာပြင်ထိပ်မှ ဖတ်ပေးသည်။",
+"While it reads, tap any verse to read on from there.": "ဖတ်နေစဉ် မည်သည့်ကျမ်းချက်ကိုမဆို တို့လျှင် ထိုနေရာမှ ဆက်ဖတ်ပေးသည်။",
+"Show the Read along icon in the search bar": "ရှာဖွေရေးဘားတွင် “လိုက်ဖတ်ရန်” သင်္ကေတကို ပြပါ"
 }

@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "I-click ti titulo ti kapitulo, wenno pindoten ti /",
 "Or pull down at the top of a chapter, then let go": "Wenno iti ngato ti kapitulo, guyuden nga agpababa sa ibbatan",
 "Hold 🙏 to choose its skin tone": "Iggaman ti 🙏 tapno agpili iti kolor ti kudil",
-"Then tap one:": "Kalpasanna i-tap ti maysa:",
 "Only the verses you picked": "Dagiti laeng bersikulo a pinilim",
-"Reads on from there as the words light up": "Agtultuloy bayat nga agsilnag dagiti sasao",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Awan ti timek para iti daytoy a Biblia iti daytoy a device: agsilnag dagiti sasao tapno makabasaka a siuulimek.",
 "That email address doesn’t look right.": "Kasla saan nga husto dayta nga email.",
 "It couldn’t be sent. Try again in a few minutes.": "Saan a naipatulod. Padasem manen kalpasan ti sumagmamano a minuto.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Usaren ti app a kas iti kadawyan, sa i-tap ti Isardeng. Maisurat ti tunggal addang, saan a mavideo.",
 "Steps recorded: {n} ✓": "Dagiti narekord nga addang: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Mairaman a maipatulod: ti bersion ti app, kita ti device, ti pagsasaona, ti screen a nakaadaam, dagiti addang nga inrekordmo, ken aniaman a biddut a nadlaw ti app. Awanen ti sabali.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ti bassit nga icon a “Sabayan ti panagbasa” iti makannawan a murdong ti search bar. Basaenna manipud iti bersikulo iti ngato ti screen, wenno manipud iti bersikulo nga intapmo.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ti icon a “Sabayan ti panagbasa” iti makannawan a murdongna ket agbasa manipud iti bersikulo iti ngato ti screen.",
 "New here? Start here": "Baro ka ditoy? Mangrugi ditoy",
 "Or use your email": "Wenno usarem ti email-mo",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Awan passkey? Usarem ti email-mo",
 "Free. Needed for Circles": "Libre. Masapul para kadagiti Bunggoy",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Masapulda ti libre nga account: passkey wenno code iti email, iti Dagiti Setting → Account. Apagbiit laeng.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Dagiti bunggoy ket masapulda ti libre nga account. Kalakaan babaen ti passkey: Face ID, fingerprint wenno ti screen lock-mo. Awan ti password."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Dagiti bunggoy ket masapulda ti libre nga account. Kalakaan babaen ti passkey: Face ID, fingerprint wenno ti screen lock-mo. Awan ti password.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Iti search bar, iti makannawan a murdongna: agbasa manipud iti ngato ti screen bayat nga agsilnag dagiti sao.",
+"While it reads, tap any verse to read on from there.": "Bayat nga agbasbasa, i-tap ti aniaman a bersikulo tapno agtuloy manipud sadiay.",
+"Show the Read along icon in the search bar": "Ipakita ti icon a “Sabayan ti panagbasa” iti search bar"
 }

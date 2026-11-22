@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klik ta la ƒe tanya dzi, alo zi / dzi",
 "Or pull down at the top of a chapter, then let go": "Alo le ta aɖe ƒe tame, he ɖe anyi eye nàɖe asi le eŋu",
 "Hold 🙏 to choose its skin tone": "Lé 🙏 me ɖe asi be nàtia ŋutigbalẽ ƒe amakpɔkpɔ",
-"Then tap one:": "Emegbe ƒo asi ɖeka dzi:",
 "Only the verses you picked": "Kpukpui siwo nètia ko",
-"Reads on from there as the words light up": "Yia edzi xlẽm esime nyawo le klẽm",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Gbe meli na Biblia sia le mɔ̃ sia dzi o: nyawo klẽna ne nàxlẽe le dzi me.",
 "That email address doesn’t look right.": "Email adrɛs ma mele abe ɖe wòle eteƒe ene o.",
 "It couldn’t be sent. Try again in a few minutes.": "Womete ŋu ɖoe ɖa o. Gadze agbagba le miniti ʋɛ aɖewo megbe.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Zã app la abe ale si nèwɔnɛ ene, emegbe nàzi Tɔ te dzi. Woŋlɔa afɔɖeɖe ɖesiaɖe ɖi, womeɖea foto o.",
 "Steps recorded: {n} ✓": "Afɔɖeɖe siwo woŋlɔ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Woɖoe ɖa kpe ɖe eŋu: app la ƒe tɔtrɔ, mɔ̃a ƒomevi, eƒe gbe, axa si nèle, afɔɖeɖe siwo nèŋlɔ ɖi kple vodada ɖesiaɖe si app la kpɔ. Naneke bubu meli o.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ðe “Xlẽe kpli” dzesi sue aɖe fia le didiƒe ƒe ɖusime nuwuwu. Exlẽa tso kpukpui si le sikrin la tame, alo tso kpukpui si nèfia la gbɔ.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "“Xlẽe kpli” dzesi si le eƒe ɖusime nuwuwu xlẽa tso kpukpui si le sikrin la tame.",
 "New here? Start here": "Èva afi sia yeyee? Dze egɔme le afi sia",
 "Or use your email": "Alo zã wò email",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Safui ɣaɣla meli o? Zã wò email",
 "Free. Needed for Circles": "Femaxee. Ehiã na Habɔbɔwo",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Wohiã akɔnta femaxee: safui ɣaɣla alo kɔd le email dzi, le Ɖoɖowo → Akɔnta me. Ɣeyiɣi kpui aɖe ko wòxɔna.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Habɔbɔwo hiã akɔnta femaxee. Ebɔbɔ wu kple safui ɣaɣla: Face ID, asibidɛ ƒe dzesi alo wò mɔ̃ ƒe ŋkume ƒe safuinu. Nya ɣaɣla meli o."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Habɔbɔwo hiã akɔnta femaxee. Ebɔbɔ wu kple safui ɣaɣla: Face ID, asibidɛ ƒe dzesi alo wò mɔ̃ ƒe ŋkume ƒe safuinu. Nya ɣaɣla meli o.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Le didiƒe ƒe ɖusime nuwuwu: exlẽa tso sikrin la tame esime nyawo le keklẽm.",
+"While it reads, tap any verse to read on from there.": "Esime wòle xlẽxlẽm la, zi kpukpui ɖe sia ɖe dzi be wòaxlẽ tso afima.",
+"Show the Read along icon in the search bar": "Ðe “Xlẽe kpli” dzesi fia le didiƒe"
 }

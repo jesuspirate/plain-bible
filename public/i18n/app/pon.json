@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Click ilen irelaud, de pedikih /",
 "Or pull down at the top of a chapter, then let go": "De powe nan irelaud ehu, pwekipwekidi oh lusala",
 "Hold 🙏 to choose its skin tone": "Kolokol 🙏 pwe komw en pilada kalahr en kili",
-"Then tap one:": "Eri kesehdi ehu:",
 "Only the verses you picked": "Iretikis ko ke pilada ehu",
-"Reads on from there as the words light up": "Kin wadekpeseng ni lepin lokaia kan marain",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Sohte ngihl ong Paipel wet nan dipwisou wet: lepin lokaia kan kin marain pwe ke en wadek ni nennen.",
 "That email address doesn’t look right.": "Imeil wet sohte kin kasansalehda me pwung.",
 "It couldn’t be sent. Try again in a few minutes.": "Sohte kak kadaralahng. Song pahn mwurin minit kei.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Doadoahngki app duwehte me ke kin wia, eri ke nek Kanekehla. Kahdaipw koaros kin ntingdi, sohte kin video.",
 "Steps recorded: {n} ✓": "Kahdaipw me rekohdki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kin kadarala pahrekiong: version en app, soangen dipwisou, lokaia, screen me ke mi ie, kahdaipw kan me ke rekohdki, oh sapwung koaros me app kilangada. Sohte mehkot tohrohr.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kasansalehda kilel tikitik “Wadek iangahki” ni imwin palio maun en pwehl en rapahk. E kin wadek sang iretikin pohn sikirin, de sang iretik me ke pwoaiada.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Kilel “Wadek iangahki” ni imwin palio maun kin wadek sang iretikin pohn sikirin.",
 "New here? Start here": "Komw kapw? Tepida met",
 "Or use your email": "De doadoahngki noumw imeil",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Sohte kih en pedolong? Doadoahngki noumw imeil",
 "Free. Needed for Circles": "Ni mehlel. E anahne pwehki Pwihn kan",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Re anahne akaunt ni mehlel: kih en pedolong de kohd nan imeil, nan Koasoandi → Akaunt. E kin ahnsou malaulau te.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Pwihn kan anahne akaun ehu me sohte pweine. Kih en pedolong me mengeiou: Face ID, kilel en sondi de lok en noumw sikirihn. Sohte password."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Pwihn kan anahne akaun ehu me sohte pweine. Kih en pedolong me mengeiou: Face ID, kilel en sondi de lok en noumw sikirihn. Sohte password.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Nan pwehl en rapahk, ni imwin palio maun: e kin wadek sang pohn sikirin ni lokaia kan kin marain.",
+"While it reads, tap any verse to read on from there.": "Ni ah wadekwadek, pedikih iretik me ke men pwe en wadek sang wasao.",
+"Show the Read along icon in the search bar": "Kasansalehda kilel “Wadek iangahki” nan pwehl en rapahk"
 }

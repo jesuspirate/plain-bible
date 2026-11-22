@@ -1379,9 +1379,7 @@
 "Click the chapter title, or press /": "Kliknij tytuł rozdziału albo naciśnij /",
 "Or pull down at the top of a chapter, then let go": "Albo na początku rozdziału pociągnij w dół i puść",
 "Hold 🙏 to choose its skin tone": "Przytrzymaj 🙏, aby wybrać odcień skóry",
-"Then tap one:": "Potem dotknij jednego:",
 "Only the verses you picked": "Tylko wybrane wersety",
-"Reads on from there as the words light up": "Czyta dalej, podświetlając słowa",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Brak głosu dla tej Biblii na tym urządzeniu: słowa się podświetlają, by czytać po cichu.",
 "That email address doesn’t look right.": "Ten adres e-mail nie wygląda poprawnie.",
 "It couldn’t be sent. Try again in a few minutes.": "Nie udało się wysłać. Spróbuj ponownie za kilka minut.",
@@ -1410,7 +1408,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Używaj aplikacji jak zwykle, a potem dotknij Zatrzymaj. Każdy krok jest zapisywany słowami, nic nie jest filmowane.",
 "Steps recorded: {n} ✓": "Nagrane kroki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wysyłane razem: wersja aplikacji, rodzaj urządzenia, jego język, ekran, na którym byłeś, nagrane kroki i każdy błąd zauważony przez aplikację. Nic więcej.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Pokaż małą ikonę „Czytaj z podświetleniem” na prawym końcu paska wyszukiwania. Czyta od wersetu na górze ekranu albo od wersetu, który dotknięto.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Czytaj z podświetleniem” na jego prawym końcu czyta od wersetu na górze ekranu.",
 "New here? Start here": "Jesteś tu nowy? Zacznij tutaj",
 "Or use your email": "Albo użyj e-maila",
@@ -1424,5 +1421,8 @@
 "No passkey? Use your email": "Nie masz klucza dostępu? Użyj e-maila",
 "Free. Needed for Circles": "Bezpłatne. Potrzebne do Kręgów",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Potrzebują bezpłatnego konta: klucza dostępu lub kodu z e-maila, w Ustawienia → Konto. To chwila.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kręgi wymagają darmowego konta. Najprościej z kluczem dostępu: Face ID, odcisk palca lub blokada ekranu. Bez hasła."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kręgi wymagają darmowego konta. Najprościej z kluczem dostępu: Face ID, odcisk palca lub blokada ekranu. Bez hasła.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "W pasku wyszukiwania, na prawym końcu: czyta od góry ekranu, a słowa się podświetlają.",
+"While it reads, tap any verse to read on from there.": "Podczas czytania stuknij dowolny werset, aby czytać dalej od niego.",
+"Show the Read along icon in the search bar": "Pokaż ikonę „Czytaj z podświetleniem” w pasku wyszukiwania"
 }

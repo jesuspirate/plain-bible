@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "Klik ti no din so, anaa mia /",
 "Or pull down at the top of a chapter, then let go": "Anaa wɔ ti bi atifi, twe kɔ fam na gyae",
 "Hold 🙏 to choose its skin tone": "Mia 🙏 so kyɛ na yi honam kɔla",
-"Then tap one:": "Afei mia baako so:",
 "Only the verses you picked": "Nkyekyem a woapaw nko ara",
-"Reads on from there as the words light up": "Kɔ so kenkan bere a nsɛmfua rehyerɛn",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Nne biara nni hɔ ma Bible yi wɔ saa afiri yi so: nsɛmfua no hyerɛn sɛnea wobɛkenkan komm.",
 "That email address doesn’t look right.": "Saa email address no nte sɛ ɛyɛ pɛ.",
 "It couldn’t be sent. Try again in a few minutes.": "Entumi ammane. San bɔ mmɔden wɔ simma kakra akyi.",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Fa app no di dwuma sɛnea wo yɛ no daa, na afei mia Gyae. Wɔkyerɛw anammɔn biara, wɔnnye video.",
 "Steps recorded: {n} ✓": "Anammɔn a wɔarekɔd: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wɔde ka ho mane: app no version, afiri no su, ne kasa, screen a na wowɔ so, anammɔn a worekɔdee ne mfomso biara a app no huu. Biribi foforo biara nni hɔ.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kyerɛ “Kenkan ka ho” agyiraehyɛde ketewa bi wɔ nhwehwɛmu bɔɔ no nifa awiei. Ɛkenkan fi nkyekyem a ɛwɔ skrin no atifi, anaa nkyekyem a wode wo nsa kaa no so.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "“Kenkan ka ho” agyiraehyɛde a ɛwɔ ne nifa awiei no kenkan fi nkyekyem a ɛwɔ skrin no atifi.",
 "New here? Start here": "Woyɛ foforo? Fi ase wɔ ha",
 "Or use your email": "Anaa fa wo email di dwuma",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "Wonni passkey? Fa wo email di dwuma",
 "Free. Needed for Circles": "Ɛyɛ kwa. Ɛho hia ma Akuw",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ɛhia akawnt a ɛyɛ kwa: passkey anaa code wɔ email so, wɔ Nhyehyɛe → Akawnt mu. Ɛgye bere tiaa bi pɛ.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Akuw hia akawnt a wontua hwee. Passkey na ɛyɛ mmerɛw sen biara: Face ID, wo nsateaa anaa wo screen ano krado. Password biara nni hɔ."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Akuw hia akawnt a wontua hwee. Passkey na ɛyɛ mmerɛw sen biara: Face ID, wo nsateaa anaa wo screen ano krado. Password biara nni hɔ.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Wɔ nhwehwɛmu bɔɔ no mu, ne nifa awiei: ɛkenkan fi skrin no atifi bere a nsɛmfua no hyerɛn.",
+"While it reads, tap any verse to read on from there.": "Bere a ɛrekenkan no, mia nkyekyem biara so na ɛnkɔ so mfi hɔ.",
+"Show the Read along icon in the search bar": "Kyerɛ “Kenkan ka ho” agyiraehyɛde wɔ nhwehwɛmu bɔɔ no mu"
 }

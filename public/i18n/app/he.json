@@ -1278,9 +1278,7 @@
 "Click the chapter title, or press /": "לחצו על כותרת הפרק, או הקישו /",
 "Or pull down at the top of a chapter, then let go": "או, בראש פרק, משכו למטה ושחררו",
 "Hold 🙏 to choose its skin tone": "החזיקו את 🙏 כדי לבחור גוון עור",
-"Then tap one:": "ואז הקישו על אחד:",
 "Only the verses you picked": "רק הפסוקים שבחרתם",
-"Reads on from there as the words light up": "ממשיך לקרוא והמילים מוארות",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "אין קול לתרגום הזה במכשיר הזה: המילים מוארות כדי שתוכלו לקרוא בשקט.",
 "That email address doesn’t look right.": "כתובת הדוא״ל הזו לא נראית נכונה.",
 "It couldn’t be sent. Try again in a few minutes.": "לא ניתן היה לשלוח. נסו שוב בעוד כמה דקות.",
@@ -1309,7 +1307,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "השתמשו באפליקציה כרגיל, ואז הקישו על עצירה. כל צעד נכתב במילים, שום דבר לא מצולם.",
 "Steps recorded: {n} ✓": "צעדים שהוקלטו: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "נשלח יחד: גרסת האפליקציה, סוג המכשיר, השפה שלו, המסך שבו הייתם, הצעדים שהקלטתם וכל שגיאה שהאפליקציה הבחינה בה. שום דבר אחר.",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "הצגת סמל קטן „קריאה עם מעקב” בקצה שורת החיפוש. הוא קורא מהפסוק שבראש המסך, או מהפסוק שנגעת בו.",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך.",
 "New here? Start here": "חדשים כאן? התחילו כאן",
 "Or use your email": "או השתמשו בדוא״ל",
@@ -1323,5 +1320,8 @@
 "No passkey? Use your email": "אין מפתח גישה? השתמשו בדוא״ל",
 "Free. Needed for Circles": "חינם. נדרש למעגלים",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "הם דורשים חשבון חינמי: מפתח גישה או קוד בדוא״ל, בהגדרות ← חשבון. זה לוקח רגע.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "מעגלים דורשים חשבון חינמי. הכי פשוט עם מפתח גישה: Face ID, טביעת אצבע או נעילת המסך. בלי סיסמה."
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "מעגלים דורשים חשבון חינמי. הכי פשוט עם מפתח גישה: Face ID, טביעת אצבע או נעילת המסך. בלי סיסמה.",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "בשורת החיפוש, בקצה שלה: קורא מראש המסך בזמן שהמילים מוארות.",
+"While it reads, tap any verse to read on from there.": "בזמן הקריאה, הקישו על פסוק כלשהו כדי להמשיך משם.",
+"Show the Read along icon in the search bar": "הצגת הסמל „קריאה עם מעקב” בשורת החיפוש"
 }

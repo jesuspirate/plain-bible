@@ -1274,9 +1274,7 @@
 "Click the chapter title, or press /": "অধ্যায়ৰ শিৰোনামত ক্লিক কৰক, নাইবা / টিপক",
 "Or pull down at the top of a chapter, then let go": "নাইবা অধ্যায়ৰ আৰম্ভণিত তললৈ টানক, তাৰ পিছত এৰি দিয়ক",
 "Hold 🙏 to choose its skin tone": "ছালৰ ৰং বাছিবলৈ 🙏 টিপি ধৰি ৰাখক",
-"Then tap one:": "তাৰ পিছত এটাত টেপ কৰক:",
 "Only the verses you picked": "কেৱল বাছি লোৱা পদবোৰ",
-"Reads on from there as the words light up": "পঢ়ি যায়, শব্দবোৰ পোহৰ হয়",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "এই ডিভাইচত এই বাইবেলৰ মাত নাই: শব্দবোৰ পোহৰ হয়, যাতে আপুনি মনে মনে পঢ়িব পাৰে।",
 "That email address doesn’t look right.": "এই ইমেইল ঠিকনাটো শুদ্ধ যেন লগা নাই।",
 "It couldn’t be sent. Try again in a few minutes.": "পঠিয়াব পৰা নগ'ল। কেইমিনিটমান পিছত আকৌ চেষ্টা কৰক।",
@@ -1305,7 +1303,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "সদায়ৰ দৰে এপ ব্যৱহাৰ কৰক, তাৰ পিছত বন্ধ কৰক টিপক। প্ৰতিটো পদক্ষেপ লিখি ৰখা হয়, ভিডিঅ’ কৰা নহয়।",
 "Steps recorded: {n} ✓": "ৰেকৰ্ড কৰা পদক্ষেপ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "লগতে যায়: এপৰ সংস্কৰণ, ডিভাইচৰ প্ৰকাৰ, ইয়াৰ ভাষা, আপুনি থকা স্ক্ৰীণ, আপুনি ৰেকৰ্ড কৰা পদক্ষেপ আৰু এপে লক্ষ্য কৰা যিকোনো ত্ৰুটি। আন একো নহয়।",
-"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "সন্ধান বাৰৰ সোঁফালৰ মূৰত এটা সৰু “লগে লগে পঢ়ক” চিহ্ন দেখুৱাওক। ই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা, বা আপুনি টিপা পদৰ পৰা পঢ়ে।",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "ইয়াৰ সোঁফালৰ মূৰৰ “লগে লগে পঢ়ক” চিহ্নই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা পঢ়ে।",
 "New here? Start here": "নতুন নেকি? ইয়াৰ পৰা আৰম্ভ কৰক",
 "Or use your email": "নহলে আপোনাৰ ইমেইল ব্যৱহাৰ কৰক",
@@ -1319,5 +1316,8 @@
 "No passkey? Use your email": "পাছকী নাই? আপোনাৰ ইমেইল ব্যৱহাৰ কৰক",
 "Free. Needed for Circles": "বিনামূলীয়া। ছাৰ্কলৰ বাবে লাগে",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ইয়াৰ বাবে বিনামূলীয়া একাউণ্ট লাগে: পাছকী বা ইমেইলত ক'ড, ছেটিংছ → একাউণ্টত। এক মুহূৰ্ত লাগে।",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ছাৰ্কলৰ বাবে এটা বিনামূলীয়া একাউণ্ট লাগে। পাছকীৰে আটাইতকৈ সহজ: Face ID, আঙুলিৰ ছাপ বা আপোনাৰ স্ক্ৰীণ লক। কোনো পাছৱৰ্ড নালাগে।"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ছাৰ্কলৰ বাবে এটা বিনামূলীয়া একাউণ্ট লাগে। পাছকীৰে আটাইতকৈ সহজ: Face ID, আঙুলিৰ ছাপ বা আপোনাৰ স্ক্ৰীণ লক। কোনো পাছৱৰ্ড নালাগে।",
+"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "সন্ধান বাৰত, সোঁফালৰ মূৰত: শব্দবোৰ উজ্জ্বল হৈ থাকোঁতে স্ক্ৰীণৰ ওপৰৰ পৰা পঢ়ি যায়।",
+"While it reads, tap any verse to read on from there.": "পঢ়ি থাকোঁতে, তাৰ পৰা পঢ়িবলৈ যিকোনো পদত টিপক।",
+"Show the Read along icon in the search bar": "সন্ধান বাৰত “লগে লগে পঢ়ক” চিহ্ন দেখুৱাওক"
 }
