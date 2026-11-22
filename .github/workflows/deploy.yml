@@ -54,6 +54,7 @@ jobs:
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
           RESEND_API_KEY: ${{ secrets.RESEND_API_KEY }}
           STATS_KEY: ${{ secrets.STATS_KEY }}
+          STATS_EMAIL: ${{ secrets.STATS_EMAIL }}
           REPORT_EMAIL: ${{ secrets.REPORT_EMAIL }}
           APNS_KEY_ID: ${{ secrets.APNS_KEY_ID }}
           APNS_KEY_P8: ${{ secrets.APNS_KEY_P8 }}

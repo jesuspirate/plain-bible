@@ -34,17 +34,28 @@ echo "$out" >&2
 # Email sign-in: on once RESEND_API_KEY is a repository secret. EMAIL_SECRET
 # (the key for email fingerprints) is made once and then never changed, or
 # no one could sign in by email again.
+# Only when the list really came back and really lacks it: a failed list
+# once made a new one (2026-11-20) and every saved address stopped matching.
 secrets=$(npx wrangler secret list 2>/dev/null || echo '[]')
 if [ -n "${RESEND_API_KEY:-}" ]; then
   printf '%s' "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY >&2
-  if ! echo "$secrets" | grep -q '"EMAIL_SECRET"'; then
-    openssl rand -base64 32 | tr -d '\n' | npx wrangler secret put EMAIL_SECRET >&2
+  if echo "$secrets" | grep -q '"name"'; then
+    if ! echo "$secrets" | grep -q '"EMAIL_SECRET"'; then
+      openssl rand -base64 32 | tr -d '\n' | npx wrangler secret put EMAIL_SECRET >&2
+    fi
+  else
+    echo "Couldn't list the Worker's secrets; leaving EMAIL_SECRET as it is." >&2
   fi
 fi
 # The private numbers page (/stats?key=…): on once STATS_KEY is a
 # repository secret. Any long word works; it's the page's only lock.
 if [ -n "${STATS_KEY:-}" ]; then
   printf '%s' "$STATS_KEY" | npx wrangler secret put STATS_KEY >&2
+fi
+# One of the maker's own bookmarks under the numbers page's title: on once
+# STATS_EMAIL (the email he signs in to the app with) is a repository secret.
+if [ -n "${STATS_EMAIL:-}" ]; then
+  printf '%s' "$STATS_EMAIL" | npx wrangler secret put STATS_EMAIL >&2
 fi
 # Where report notices from circles go (default hello@, which the mail
 # forwarder may hold back): on once REPORT_EMAIL is a repository secret.
@@ -60,7 +71,7 @@ fi
 # Notifications for circles: the service's own key (VAPID), made here once
 # and kept only as a Worker secret. Never changed after, or every phone
 # would have to turn its notifications on again.
-if [ "$secrets" != '[]' ] && ! echo "$secrets" | grep -q '"VAPID_KEY"'; then
+if echo "$secrets" | grep -q '"name"' && ! echo "$secrets" | grep -q '"VAPID_KEY"'; then
   node -e 'const k=require("crypto").generateKeyPairSync("ec",{namedCurve:"P-256"}).privateKey.export({format:"jwk"});process.stdout.write(JSON.stringify(k))' \
     | npx wrangler secret put VAPID_KEY >&2
 fi

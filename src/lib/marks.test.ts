@@ -153,4 +153,13 @@ describe('colors by use', () => {
     expect(colorsByUse(['#123456', all[2]])[0].color).toBe(all[2])
     expect(colorsByUse(recent)).toHaveLength(PALETTE.length)
   })
+  it('leaves yellow out when asked (colored text on a light page), even if used last', () => {
+    const recent = afterUsing([], '#fff193')
+    const shown = colorsByUse(recent, true).map(p => p.color)
+    expect(shown).not.toContain('#fff193')
+    expect(shown).toHaveLength(PALETTE.length - 1)
+    expect(colorsByUse(recent, true)[0].color).not.toBe('#fff193')
+    // …unless the verse picked is already yellow: then it shows, so it can be marked.
+    expect(colorsByUse(recent, true, '#fff193').map(p => p.color)).toContain('#fff193')
+  })
 })

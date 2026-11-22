@@ -42,6 +42,8 @@ export interface Settings {
   follow: 'words' | 'verse'
   /** read along with no voice: the highlight moves through the words by itself */
   readSilent: boolean
+  /** a small Read along button just above 🙏 (off unless picked under Audio) */
+  alongButton: boolean
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'
   /** how the page turns when you swipe to another chapter: over the next one, or side by side */
@@ -74,6 +76,7 @@ export const DEFAULT_FONT_SIZE = 22
 export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}']
 
 const KEY = 'plain-bible:settings'
+const ALONG_ON = 'plain-bible:along-on'
 
 // The Bible a newcomer starts in, for languages with more than one: the
 // usual one, not whichever sorts first (for French that was the Ethiopian
@@ -87,7 +90,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => (t.lang === lang || t.lang.split('-')[0] === lang) && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, alongButton: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, shareStreaks: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -118,6 +121,12 @@ export function loadSettings(): Partial<Settings> {
     if (s.font && !FONTS.some(f => f.id === s.font)) delete s.font
     // The fold turn was tried and dropped.
     if (s.turn === 'fold') s.turn = 'stack'
+    // Read along was off by default until its icon moved into the search
+    // field (#380). Switch it on once for everyone; untick it after and it stays off.
+    if (!localStorage.getItem(ALONG_ON)) {
+      if (s.alongButton === false) { s.alongButton = true; localStorage.setItem(KEY, JSON.stringify(s)) }
+      localStorage.setItem(ALONG_ON, '1')
+    }
     return s
   } catch { return {} }
 }
@@ -153,7 +162,11 @@ export const takePrayNow = () => { const n = listenNow; listenNow = false; retur
 
 /** Open Settings (the sheet behind the button in the top right corner). */
 export const SETTINGS_EVENT = 'plain-bible:settings'
-export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
+let settingsAt: string | undefined
+/** With a page (say 'sync', Account), Settings open on it. */
+export const openSettings = (page?: string) => { settingsAt = page; window.dispatchEvent(new Event(SETTINGS_EVENT)) }
+/** Asked once by Settings as they open. */
+export const takeSettingsPage = () => { const p = settingsAt; settingsAt = undefined; return p }
 
 /** Open search (the bar at the bottom, or the round button in its place)
  *  with the keyboard up, as a tap on it does: from a tap on the chapter's
@@ -170,6 +183,10 @@ export const openSearch = () => window.dispatchEvent(new Event(SEARCH_EVENT))
 export const SHOW_VERSE_BAR = 'plain-bible:show-verse-bar'
 export const VERSE_BAR_EVENT = 'plain-bible:verse-bar'
 export const showVerseBar = () => window.dispatchEvent(new Event(SHOW_VERSE_BAR))
+/** The Read along button above 🙏: the reader starts reading along from the
+ *  verse you picked, or else the verse at the top of the screen. */
+export const READ_HERE_EVENT = 'plain-bible:read-here'
+export const readHere = () => window.dispatchEvent(new Event(READ_HERE_EVENT))
 export const TOUR_EVENT = 'plain-bible:tour'
 export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
 const TOUR = 'plain-bible:tour'

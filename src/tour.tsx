@@ -9,8 +9,10 @@ import { defaultSettings, loadSettings, markTourSeen as markSeen } from './state
 import { canHear } from './listen'
 import { inStoreApp, isIPhone } from './lib/install'
 import { nativeNotify } from './lib/nativeNotify'
+import { loadAccount } from './lib/sync'
+import { inFedi } from './lib/nostr'
 import { fine, Gesture, GESTURE_MS, Glyph, stillMotion, type Kind } from './gesture'
-import { ReadIcon, SpeakerIcon } from './icons'
+import { SpeakerIcon } from './icons'
 import './tour.css'
 
 
@@ -79,18 +81,23 @@ function steps(): Step[] {
     { title: t('Tap a verse'), find: verseInView, rows: [
         { glyph: 'tap', text: fine ? t('Click: highlight, note, bookmark') : t('Tap: highlight, note, bookmark') },
         { glyph: fine ? 'triple' : 'double', text: fine ? t('Triple click: quick highlight') : t('Double tap: quick highlight') },
-        // Listen and Read along live in that verse's bar, where people miss
-        // them: shown as they look there.
+        // Listen lives in that verse's bar, where people miss it: shown as
+        // it looks there. (Read along is on the Search step.)
         ...(hear ? [{ glyph: 'bar' } as Row] : []),
       ], moves: [{ kind: 'tap', row: 0, at: onNumber }, { kind: fine ? 'triple' : 'double', row: 1, at: onNumber }] },
-    { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap] },
+    { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap],
+      // Read along, if ticked under Audio, sits at the field's right end.
+      after: document.querySelector('.sb-along') ? t('The Read along icon at its right end reads on from the verse at the top of the screen.') + ' ' + t('While it reads, tap any verse to read on from there.') : undefined },
     // The two shortcuts to search (#236), lit on the chapter title they start from.
     { title: t('Open search'), find: onScreen('.reader article.chapter .chapter-title'), gap: fine ? undefined : 70, rows: [
         { glyph: 'tap', text: fine ? t('Click the chapter title, or press /') : t('Tap the chapter title') },
         ...(fine ? [] : [{ glyph: 'pull', text: t('Or pull down at the top of a chapter, then let go') } as Row]),
       ], after: t('After a search, open it again to go back to your last result.'),
       moves: fine ? [{ kind: 'tap', row: 0 }] : [{ kind: 'tap', row: 0 }, { kind: 'pull', row: 1 }] },
-    sync && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles'), moves: [tap] },
+    // Not signed in yet: one more sentence on how easy the free account is
+    // (Fedi signs in by itself with its Nostr key).
+    sync && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles'), moves: [tap],
+      after: !loadAccount() && !inFedi() ? t('They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.') : undefined },
     { title: t('Pray'), find: onScreen('.sb-pray'), rows: [
         { glyph: 'tap', text: t('Tap 🙏 to pray out loud and keep your prayer. It stays private.') },
         { glyph: 'hold', text: t('Hold 🙏 to choose its skin tone') },
@@ -196,7 +203,7 @@ export function Tour({ onClose }: { onClose: () => void }) {
             {step.rows.map((r, n) => (
               <li class={move?.row === n ? 'on' : undefined}>
                 {r.glyph === 'bar'
-                  ? <span class="tour-bar"><span><SpeakerIcon size={22} /> {t('Listen')}</span><span><ReadIcon size={24} /> {t('Read along')}</span></span>
+                  ? <span class="tour-bar"><span><SpeakerIcon size={22} /> {t('Listen')}</span></span>
                   : <><Glyph kind={r.glyph} /><span>{r.text}</span></>}
               </li>
             ))}

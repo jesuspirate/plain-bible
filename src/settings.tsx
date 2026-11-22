@@ -4,19 +4,20 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar } from './state'
+import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar, takeSettingsPage } from './state'
 import { canHear } from './listen'
 import { Glyph } from './gesture'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
-import { hasContent } from './lib/marks'
+import { hasContent, hlVars, yellowHidden } from './lib/marks'
 import { QUICK, draw, penAllowed } from './lib/pen'
 import { AccountSection } from './account'
+import { canSuggest, reopenReport, SuggestPage } from './suggest'
 import { Saved } from './saved'
 import { Search } from './search'
 import { Versions } from './versions'
@@ -124,15 +125,16 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
+type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest'
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Font and layout'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
+  suggest: N_('Report a problem'),
 }
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
-  const [page, setPage] = useState<Page>('home')
+  const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : (takeSettingsPage() as Page | undefined) ?? 'home')
   const back = () => setPage('home')
   return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : 1 }
 }
@@ -223,7 +225,7 @@ const PersonIcon = () => (
 
 /** Under Account: what it's for, when sync last ran, or what went wrong. */
 function syncNote(sync: ReturnType<typeof useApp>['sync']) {
-  if (!sync.account) return t('Sync your highlights and prayers')
+  if (!sync.account) return t('Free. Needed for Circles')
   if (sync.busy) return t('Syncing…')
   if (sync.error) return t('Couldn’t sync. Tap to see why')
   const at = sync.account.lastSync
@@ -346,28 +348,28 @@ function RecordingPage() {
   </>
 }
 
-// How to listen, shown more than told: tap a verse, then one of the two
-// buttons drawn as they look on the verse's bar. Try it now closes Settings
-// and the tour's fingertip taps a verse in view, then the two buttons (taphint); the choice stays theirs.
+// Read along and Listen, shown more than told: each drawn as it looks
+// where you find it (the icon at the search field's end, Listen on a verse's
+// bar). Try it now closes Settings and the tour's fingertip taps the icon,
+// then a verse in view, then Listen (taphint); the choice stays theirs.
 function AudioHow() {
   const { settings, byId } = useApp()
   const route = useRoute()
   const version = route.path[0] === 'read' && byId.has(route.path[1]) ? route.path[1] : settings.version
   const hear = canHear(version, byId.get(version)?.lang)
   return <>
-    <ol class="audio-steps">
-      <li><span class="step-n">1</span><span class="step-body">
-        <span class="step-title"><Glyph kind="tap" />{t('Tap a verse')}</span>
-      </span></li>
-      <li><span class="step-n">2</span><span class="step-body">
-        <span class="step-title">{t('Then tap one:')}</span>
-        {/* The very buttons the verse's bar shows. */}
-        {hear && <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span><span class="what">{t('Only the verses you picked')}</span></span>}
-        <span class="audio-pick"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span><span class="what">{t('Reads on from there as the words light up')}</span></span>
-      </span></li>
-    </ol>
+    <div class="audio-how">
+      <span class="audio-pick audio-stack"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span>
+        <span class="what">{t('In the search bar, at its right end: reads on from the top of the screen as the words light up.')}</span></span>
+      <p class="audio-also"><Glyph kind="tap" />{t('While it reads, tap any verse to read on from there.')}</p>
+      {hear && <>
+        <p class="audio-also audio-first"><Glyph kind="tap" />{t('Tap a verse')}</p>
+        <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span>
+          <span class="what">{t('Only the verses you picked')}</span></span>
+      </>}
+    </div>
     {!hear && <p class="audio-note">{t('No voice for this Bible on this device: the words light up so you can read quietly.')}</p>}
-    {/* Doesn't pick a verse for you: it shows you where to tap. */}
+    {/* Doesn't start anything for you: it shows you where to tap. */}
     <button class="primary audio-show" onClick={showVerseBar}><Glyph kind="tap" /> {t('Try it now')}</button>
   </>
 }
@@ -465,10 +467,13 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     </section>
   </div>
 
-  // Listening lives on a verse's bar, where people don't think to look: this
-  // page says so, and Show me opens that bar on a verse in view.
+  // Read along is the icon at the search field's end, Listen is on a verse's
+  // bar, where people don't think to look: this page shows both.
   if (page === 'audio') return <>
     <AudioHow />
+    <div class="field"><span>{t('Read along')}</span>
+      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show the Read along icon in the search bar')}</label>
+    </div>
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">
         {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}
@@ -483,6 +488,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'sync') return <AccountSection />
   if (page === 'language') return <LanguagePage />
   if (page === 'recording') return <RecordingPage />
+  if (page === 'suggest') return <SuggestPage onDone={() => setPage('home')} />
 
   if (page === 'data') return <>
     <DataTools />
@@ -557,6 +563,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
           {homeScreenHelps() && <Row icon={<AddHomeIcon size={24} />} label={isIPhone() || isAndroid() ? t('Put it on your Home Screen') : t('Install it as an app')}
             sub={t('Opens like an app, works offline')} onClick={openHomeScreen} />}
           <Row icon={<CompassIcon size={24} />} label={t('Take the tour')} sub={t('A one-minute look around the app')} onClick={openTour} />
+          {canSuggest() && <Row icon={<SuggestIcon size={24} />} label={t('Report a problem')} sub={t('Or send a suggestion')} onClick={() => setPage('suggest')} />}
           <Row icon={<InfoIcon size={24} />} label={t('About')} onClick={() => setPage('about')} />
         </div>
       </section>
@@ -601,8 +608,8 @@ function HlPreview() {
   }, [settings.penSlow, settings.highlight])
   return (
     <p class="hl-preview" aria-hidden="true" ref={box}>
-      <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
-      <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
+      <span class="pv hl" style={hlVars(yellowHidden(settings.highlight, settings.theme) ? '#dac6ff' : '#fff193')}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
+      <span class="pv hl" style={hlVars('#b3e487')}><span class="vt">{t('and the Word was God.')}</span></span>
     </p>
   )
 }

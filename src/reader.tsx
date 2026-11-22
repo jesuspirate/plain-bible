@@ -4,19 +4,19 @@ import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { afterUsing, colorsByUse, FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, setNote, tidy } from './lib/marks'
+import { afterUsing, colorsByUse, FoundNote, hlVars, lastColor, markKey, newNoteId, notesCovering, notesOf, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
 import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { showTapHints } from './taphint'
@@ -25,6 +25,7 @@ import { grow, keepCaretInView } from './lib/caret'
 import { QUICK, draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, takeWaiting } from './lib/pen'
 import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, useWide } from './lib/spread'
+import { tally } from './lib/tally'
 
 // After Try it now (Audio in Settings), the next verse bar shows which two
 // buttons are the audio ones: the fingertip taps each, with what it does.
@@ -81,6 +82,8 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => watchReading(), [])
   const turned = useRef(false)
   useEffect(() => { if (turned.current) dispatchEvent(new Event(TURN_EVENT)); turned.current = true }, [book, chapter])
+  // A chapter counts as read once it has stayed open half a minute (tally.ts).
+  useEffect(() => { const t = setTimeout(() => tally('ch'), 30_000); return () => clearTimeout(t) }, [book, chapter])
 
   // A version that isn't on the device can't open offline; it tries again
   // by itself once the connection is back.
@@ -231,11 +234,40 @@ export function Reader({ route }: { route: Route }) {
         if (r.top >= from && r.bottom <= to) { first = el; break }
       }
       if (!first) return
-      showTapHints([{ el: first, label: t('Tap a verse'), times: 3 }])
+      // Read along first, at the search field's end, then a verse for Listen.
+      const along = document.querySelector('.sb-along')
+      showTapHints([...(along ? [{ el: along, label: t('Read along') }] : []), { el: first, label: t('Tap a verse'), times: 3 }])
       glowAudioUntil = Date.now() + 60_000
     }
     addEventListener(VERSE_BAR_EVENT, on)
     return () => removeEventListener(VERSE_BAR_EVENT, on)
+  }, [])
+  // The Read along button above 🙏: from the verse you picked, else the verse
+  // a search or link landed on while it's still in view, else the first
+  // verse at the top of the screen (on a two-page book, of the pages open now).
+  const latest = useRef({ selected, target, version, book, chapter, bibles })
+  latest.current = { selected, target, version, book, chapter, bibles }
+  useEffect(() => {
+    const on = () => {
+      const { selected, target, version, book, chapter, bibles } = latest.current
+      const bible = bibles[version]
+      if (!bible) return
+      const from = headerBottom() + 12
+      const inView = (el: Element | null) => {
+        const r = el?.getBoundingClientRect()
+        return !!r && r.height > 0 && r.right > 0 && r.left < innerWidth && r.bottom > from && r.top < innerHeight - 90
+      }
+      let v = selected.length ? Math.min(...selected) : 0
+      if (!v && target && inView(document.getElementById('v' + target))) v = target
+      if (!v) for (const el of document.querySelectorAll('.reader article.chapter :is(.verse, .pv)[id]')) {
+        if (inView(el)) { v = +el.id.slice(1); break }
+      }
+      if (!v) v = 1
+      setSelected([])
+      startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible)
+    }
+    addEventListener(READ_HERE_EVENT, on)
+    return () => removeEventListener(READ_HERE_EVENT, on)
   }, [])
   // The verse the mouse last came to rest on (computers only): it keeps the ribbon.
   const [reading, setReading] = useState<number>()
@@ -499,6 +531,7 @@ export function Reader({ route }: { route: Route }) {
       if (had) delete next.b; else next.b = 1
       return { ...all, [key]: tidy(next as never) }
     })
+    if (!had) tally('bm')
     return !had
   }
   // Held still for half a second: bookmark (or unbookmark) the verse. While
@@ -1095,7 +1128,7 @@ export function Reader({ route }: { route: Route }) {
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v), onMouseDown: fine ? (e: MouseEvent) => { if (e.detail === 3) e.preventDefault() } : undefined }
       : { id: undefined, onClick: undefined, onMouseDown: undefined }
-    const hl = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
+    const hl = (v: number) => mark(v)?.c ? hlVars(mark(v)!.c!) : undefined
     const after = (v: number) => {
       if (live) return marksAfter(v)
       return <>
@@ -1318,7 +1351,7 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const current = colors.size === 1 && keys.every(k => marks[k]?.c) ? [...colors][0] : undefined
   const allBookmarked = keys.every(k => marks[k]?.b)
   const hasNote = notesCovering(marks, book, chapter, verses[0]).length > 0
-  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); setMarks(all => {
+  const apply = (patch: { c?: string | null; b?: 1 | null }) => { if (patch.c) penDown(keys); if (patch.b === 1) tally('bm'); setMarks(all => {
     const out = { ...all }, t = Date.now()
     for (const key of keys) {
       const next = { ...all[key], t } as Record<string, unknown>
@@ -1356,15 +1389,14 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   onPray: (vs: number[]) => void
 }) {
   const { settings, update, byId, data } = useApp()
-  // Just after Try it now: the fingertip taps Listen, then Read along.
-  const listenBtn = useRef<HTMLButtonElement>(null), alongBtn = useRef<HTMLButtonElement>(null)
+  // Just after Try it now: the fingertip taps Listen.
+  const listenBtn = useRef<HTMLButtonElement>(null)
   useEffect(() => {
     if (Date.now() >= glowAudioUntil) return
     glowAudioUntil = 0
     // Once the bar has risen (and lifted the verse into view).
     const id = setTimeout(() => showTapHints([
       ...(listenBtn.current ? [{ el: listenBtn.current, label: t('Only the verses you picked') }] : []),
-      ...(alongBtn.current ? [{ el: alongBtn.current, label: t('Reads on from there as the words light up') }] : []),
     ]), 700)
     return () => clearTimeout(id)
   }, [])
@@ -1377,7 +1409,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // One plain text with the link at its end, no separate title or url: the
   // Mac share sheet's Copy pasted the text and the link as two pieces, and
   // showed only the reference and the site, as if one verse went out.
-  const shareOut = () => canShare ? share({ text: `${quote}\n${link}` }) : copy(link)
+  const shareOut = () => { tally('sh'); return canShare ? share({ text: `${quote}\n${link}` }) : copy(link) }
 
   // Cmd+C / Ctrl+C copies the picked verses, like the Copy button, unless
   // you're typing somewhere or have dragged over some words to copy them.
@@ -1447,10 +1479,10 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           <button class="close-btn" aria-label={t('Clear selection')} onClick={onClose}><CloseIcon size={22} /></button>
         </div>
         <div class="swatches" role="radiogroup" aria-label={t('Highlight color')}>
-          {colorsByUse(settings.recentColors).map(p => (
+          {colorsByUse(settings.recentColors, undefined, current).map(p => (
             <button role="radio" aria-checked={current === p.color} aria-label={t(p.name)} class={'swatch' + (current === p.color ? ' on' : '')}
               style={{ background: p.color }} onClick={() => { if (current !== p.color) update({ recentColors: afterUsing(settings.recentColors, p.color) }); apply({ c: current === p.color ? null : p.color }); onClose() }}>
-              {current === p.color && <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>}
+              {current === p.color && <CheckMark />}
             </button>
           ))}
           {colors.size > 0 && <button class="swatch none" aria-label={t('Remove highlight')} onClick={() => { apply({ c: null }); onClose() }}>✕</button>}
@@ -1476,7 +1508,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
-            {/* Listen: just these verses, then it stops. (Read along, below, goes on.) */}
+            {/* Listen: just these verses, then it stops. (Read along, in the search bar, goes on.) */}
             {canHear(version, spot.lang) && !settings.readSilent && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
@@ -1486,9 +1518,9 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               ? <button onClick={() => setAskShare(true)}><ShareIcon size={22} /><span>{t('Share')}</span></button>
               : <button onClick={shareOut}>{canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Share') : t('Link')}</span></button>}
           </div>
-          {/* The two things done from a verse, not to it: read on from here until X, and pray. */}
+          {/* Pray from this verse. (Read along lives in the search bar: while it
+              reads, tapping a verse reads on from there.) */}
           <div class="selbar-big">
-            <button ref={alongBtn} onClick={() => { startListening(spot, bibles[version]); onClose() }}><ReadIcon size={26} /><span>{t('Read along')}</span></button>
             <button class="selbar-pray-btn" onClick={() => onPray(verses)}><span class="selbar-pray" aria-hidden="true">{'🙏' + settings.prayTone}</span><span>{t('Pray')}</span></button>
           </div>
         </>}
@@ -1678,3 +1710,6 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
     </>
   )
 }
+
+/** The tick on the color a verse already has: big and dark, easy to spot. */
+export const CheckMark = () => <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="#1a1a1a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" /></svg>

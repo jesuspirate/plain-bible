@@ -12,10 +12,10 @@ import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, inCircles, openCircles, openPrayer, readPath, SEARCH_EVENT, TONES, useApp } from './state'
+import { go, inCircles, openCircles, openPrayer, readHere, readPath, SEARCH_EVENT, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
-import { CircleIcon, CloseIcon } from './icons'
+import { CircleIcon, CloseIcon, ReadIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
@@ -42,6 +42,18 @@ function PrayButton() {
       </button>
       {picker}
     </>
+  )
+}
+
+/** Read along, if ticked under Audio: a plain icon at the right end of the
+ *  search field, no button of its own, so 🙏 keeps its corner. It reads on
+ *  from the verse you picked, or else the verse at the top of the screen.
+ *  While reading aloud the reading bar takes the field's place anyway. */
+function AlongButton() {
+  return (
+    <button type="button" class="sb-along" aria-label={t('Read along')} title={t('Read along')} onClick={readHere}>
+      <ReadIcon size={24} />
+    </button>
   )
 }
 
@@ -839,6 +851,7 @@ export function SearchBar({ here, mini, above }: {
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${shown}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
+          {!open && !mini && settings.alongButton && here && <AlongButton />}
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}

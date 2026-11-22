@@ -10,6 +10,8 @@ import type { AuthenticationResponseJSON, RegistrationResponseJSON } from '@simp
 import { send, vapidPublic, type Subscription, type Vapid } from './push'
 import { APNS_PREFIX, APNS_TOKEN, isApnsEnv, sendApns, type Apns } from './apns'
 import { checkNostrEvent, NOSTR_WRAP } from './nostr'
+import { plainBookName } from '../../src/lib/bookList'
+import { suggestionMail } from './suggest'
 
 export interface Env {
   DB: D1Database
@@ -33,6 +35,10 @@ export interface Env {
   APNS_KEY_ID?: string
   /** The private numbers page (/stats?key=…) is on when this is set. */
   STATS_KEY?: string
+  /** The maker's own sign-in email. When set, the numbers page shows one of
+   *  that account's bookmarks under its title, a new one each time. Only that
+   *  one account is ever read. */
+  STATS_EMAIL?: string
   /** Recorded Bible readings the app serves itself (/audio/…), when the
    *  account has R2 storage (scripts/deploy_sync.sh). */
   AUDIO?: R2Bucket
@@ -215,6 +221,20 @@ async function emailHash(env: Env, email: string) {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.EMAIL_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
   return b64url.encode(new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(email))))
 }
+/** On 2026-11-20 a deploy replaced EMAIL_SECRET by mistake, so addresses saved
+ *  before then stopped matching, and signing in by email made a new, empty
+ *  account instead. Such an account (made since then, with no passkey or Fedi
+ *  key) gives its address up when the person proves the address again from
+ *  their real account (Settings → Account → Change email). */
+const EMAIL_SECRET_RESET = Date.UTC(2026, 10, 20, 16, 59)
+async function strayEmailAccount(env: Env, userId: string) {
+  const [user, cred, nostr] = await Promise.all([
+    env.DB.prepare('SELECT created FROM users WHERE id = ?').bind(userId).first<{ created: number }>(),
+    env.DB.prepare('SELECT 1 FROM credentials WHERE user_id = ?').bind(userId).first(),
+    env.DB.prepare('SELECT 1 FROM nostr_keys WHERE user_id = ?').bind(userId).first(),
+  ])
+  return !!user && user.created >= EMAIL_SECRET_RESET && !cred && !nostr
+}
 const emailHint = (email: string) => { const [name, domain] = email.split('@'); return `${name[0]}•••@${domain}` }
 
 // The code email in the language the app is in (src/lib/sync.ts sends it).
@@ -266,6 +286,52 @@ async function tellMaker(env: Env, subject: string, text: string) {
   }).then(r => { if (!r.ok) console.error('maker email', r.status) }, e => console.error('maker email', e))
 }
 
+// ---------------------------------------------------------------------------
+// Suggestions: anyone, signed in or not, can write to the app's maker from
+// Settings. It's sent by email (to REPORT_EMAIL) and never stored. A reply
+// address only if the person types one, then Reply in the mail answers them.
+// The app adds its version, kind of device and language, nothing else.
+
+const SUGGEST_PER_HOUR = 5
+const SUGGEST_PER_DAY = 15
+const SUGGEST_ALL_PER_DAY = 300
+
+async function suggestRoute(req: Request, env: Env) {
+  if (!emailOn(env)) throw new HttpError(404, 'Suggestions aren’t set up yet.')
+  const made = suggestionMail(await readJson(req))
+  if (!made.ok) {
+    if (made.why === 'empty') throw new HttpError(400, 'Write something first.')
+    if (made.why === 'long') throw new HttpError(413, 'That’s a bit long. Please make it shorter.')
+    throw new HttpError(400, 'That email address doesn’t look right.')
+  }
+  const { mail } = made
+  const db = env.DB, now = Date.now(), ip = await ipKey(req)
+  const [here, all] = await Promise.all([
+    db.prepare('SELECT COUNT(*) AS n, COUNT(CASE WHEN at > ? THEN 1 END) AS h FROM suggest_sends WHERE ip = ? AND at > ?').bind(now - HOUR, ip, now - DAY).first<{ n: number; h: number }>(),
+    db.prepare('SELECT COUNT(*) AS n FROM suggest_sends WHERE at > ?').bind(now - DAY).first<{ n: number }>(),
+  ])
+  if ((here?.h ?? 0) >= SUGGEST_PER_HOUR || (here?.n ?? 0) >= SUGGEST_PER_DAY || (all?.n ?? 0) >= SUGGEST_ALL_PER_DAY) {
+    throw new HttpError(429, 'Too many messages for now. Please try again tomorrow.')
+  }
+  await db.batch([
+    db.prepare('DELETE FROM suggest_sends WHERE at < ?').bind(now - DAY),
+    db.prepare('INSERT INTO suggest_sends (ip, at) VALUES (?, ?)').bind(ip, now),
+  ])
+  const res = await fetch('https://api.resend.com/emails', {
+    method: 'POST',
+    headers: { Authorization: `Bearer ${env.RESEND_API_KEY}`, 'Content-Type': 'application/json' },
+    body: JSON.stringify({
+      from: env.EMAIL_FROM, to: [env.REPORT_EMAIL || 'hello@myquietbible.com'], subject: mail.subject, text: mail.text,
+      ...(mail.replyTo ? { reply_to: mail.replyTo } : {}),
+    }),
+  }).catch(() => null)
+  if (!res?.ok) {
+    console.error("report not sent", res?.status)
+    throw new HttpError(502, 'It couldn’t be sent. Try again in a few minutes.')
+  }
+  return json({ ok: true })
+}
+
 async function emailStart(req: Request, env: Env) {
   if (!emailOn(env)) throw new HttpError(404, 'Email sign-in isn’t set up yet.')
   const adding = req.headers.has('Authorization') ? await session(req, env) : null
@@ -312,7 +378,8 @@ async function emailVerify(req: Request, env: Env) {
   // Adding (or changing) the address of the signed-in account.
   if (row.user_id) {
     if (await session(req, env) !== row.user_id) throw new HttpError(400, expired)
-    if (owner && owner.user_id !== row.user_id) throw new HttpError(409, 'This email already signs in to another My Quiet Bible account.')
+    if (owner && owner.user_id !== row.user_id && !await strayEmailAccount(env, owner.user_id))
+      throw new HttpError(409, 'This email already signs in to another My Quiet Bible account.')
     await db.batch([
       db.prepare('DELETE FROM emails WHERE user_id = ?').bind(row.user_id),
       db.prepare('INSERT INTO emails (hash, user_id, hint, created) VALUES (?, ?, ?, ?)').bind(hash, row.user_id, hint, now),
@@ -1354,6 +1421,9 @@ export function isoWeek(d: Date) {
 // The app's languages (src/i18n.ts): an id like "de" or "zh-hant". Emails and
 // notifications have words in English, French and Spanish; the others read English.
 const LANGS = ['en', 'fr', 'es']
+const KEEPS = ['7', '30', '90']
+const TALLIES = ['pr', 'ch', 'sh', 'bm']
+const PLATFORMS: [string, string][] = [['ios', 'iPhone & iPad app'], ['mac', 'Mac app'], ['android', 'Android app'], ['fedi', 'In Fedi'], ['phone', 'Phone browser'], ['computer', 'Computer browser']]
 const isLang = (l: string | null | undefined): l is string => !!l && /^[a-z]{2,3}(-han[st])?$/.test(l)
 const langName = (l: string) => { try { return new Intl.DisplayNames(['en'], { type: 'language' }).of(l.replace(/-(han[st])$/, (_, x: string) => '-' + x[0].toUpperCase() + x.slice(1))) ?? l } catch { return l } }
 
@@ -1369,37 +1439,171 @@ async function helloRoute(req: Request, env: Env) {
   if (q.get('month') === '1') counts.push([day.slice(0, 7), 'month'])
   const lang = q.get('lang')
   if (isLang(lang)) counts.push([day, `lang:${lang}`])
-  await env.DB.batch(counts.map(([period, kind]) =>
-    env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, 1) ON CONFLICT (period, kind) DO UPDATE SET n = n + 1').bind(period, kind)))
+  // Since its first hello under this count, and still opening a week, a
+  // month, three months later (each told once by the device).
+  if (q.get('start') === '1') counts.push([day, 'start'])
+  for (const n of (q.get('kept') ?? '').split(',')) if (KEEPS.includes(n)) counts.push([day, `kept:${n}`])
+  const bible = q.get('bible'), on = q.get('on'), h = Number(q.get('h') ?? NaN), wd = Number(q.get('wd') ?? NaN)
+  if (bible && /^[A-Za-z0-9_-]{1,20}$/.test(bible)) counts.push([day, `bible:${bible}`])
+  if (on && PLATFORMS.some(([id]) => id === on)) counts.push([day, `on:${on}`])
+  if (Number.isInteger(h) && h >= 0 && h < 24) counts.push([day, `hour:${h}`])
+  if (Number.isInteger(wd) && wd >= 0 && wd < 7) counts.push([day, `wd:${wd}`])
+  // How many prayers, chapters, shares and bookmarks since the last hello.
+  const adds: [string, string, number][] = counts.map(([period, kind]) => [period, kind, 1])
+  for (const k of TALLIES) {
+    const n = Number(q.get(k) ?? 0)
+    if (Number.isInteger(n) && n > 0) adds.push([day, `total:${k}`, Math.min(n, 500)])
+  }
+  await env.DB.batch(adds.map(([period, kind, n]) =>
+    env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, ?) ON CONFLICT (period, kind) DO UPDATE SET n = n + excluded.n').bind(period, kind, n)))
   return json({ ok: true })
 }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
 
-const STATS_STYLE = `body{font:20px/1.5 Georgia,serif;max-width:44em;margin:0 auto;padding:24px 16px 48px;background:#faf8f3;color:#22211f}
-h1{font-size:1.5em}.grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(13em,1fr));gap:12px}
-.card{border:2px solid #d9cdb8;border-radius:14px;padding:14px 16px;background:#fff}
-.card b{display:block;font-size:2.4em;line-height:1.1}.card span{color:#6b6255;font-size:.85em}
-table{border-collapse:collapse;margin-top:12px;width:100%}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #e3dccf}
-td:first-child,th:first-child{text-align:left}p.note{color:#6b6255;font-size:.85em}
-input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #d9cdb8;width:100%;box-sizing:border-box;margin-top:10px}
-button{background:#8a5a2b;color:#fff;border-color:#8a5a2b;font-weight:bold;min-height:56px}p.error{color:#b3261e;font-weight:bold}
-.report{--red:#b3261e;border:2px solid var(--red);border-radius:14px;padding:14px 16px;background:#fff;color:#22211f;margin-bottom:16px;scroll-margin-top:16px}
-.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}.report .when{color:#6b6255;font-size:.85em;margin:0}
+// The maker's own page, dressed as the bridge of a quiet ship looking down on
+// the world (his idea): still stars and a planet's edge drawn with CSS alone
+// (no images, nothing fetched, nothing moving), calm console cards. Always
+// dark, with big bright text for easy reading.
+const STARS = [
+  ['12% 18%', '#ffffff', 1.3], ['27% 72%', '#cfe8ff', 1], ['41% 33%', '#ffffff', 1], ['58% 81%', '#ffe9c4', 1.2], ['66% 12%', '#ffffff', 1],
+  ['79% 47%', '#cfe8ff', 1.3], ['91% 76%', '#ffffff', 1], ['6% 58%', '#ffe9c4', 1], ['34% 91%', '#ffffff', 1], ['85% 22%', '#ffffff', 1],
+  ['50% 55%', '#cfe8ff', 1], ['19% 40%', '#ffffff', 1], ['72% 64%', '#ffffff', 1], ['96% 40%', '#cfe8ff', 1], ['3% 90%', '#ffffff', 1.2],
+// Faint on purpose: the stars sit far behind, the numbers come first.
+].map(([at, c, r]) => `radial-gradient(${r}px ${r}px at ${at},${c}55 98%,transparent)`).join(',')
+const STATS_STYLE = `html{background:${STARS},#05060f;background-size:240px 240px;background-attachment:fixed;color-scheme:dark}
+body{font:20px/1.5 system-ui,-apple-system,'Segoe UI',sans-serif;max-width:46em;margin:0 auto;padding:28px 16px 56px;color:#eef3ff;background:transparent;min-height:100vh}
+body:before,body:after{content:'';position:fixed;inset:0;z-index:-1;pointer-events:none}
+body:before{background:radial-gradient(ellipse 60% 40% at 85% 8%,#2a1d5244,transparent 70%)}
+body:after{background:radial-gradient(circle at 50% 100%,#0c2a4a 0,#0a1f38 58%,#4fa8e0aa 59.3%,#1d4f7a55 60.5%,transparent 66%) 50% calc(100% + 72vmax)/150vmax 150vmax no-repeat}
+h1{font-size:1.7em;line-height:1.15;margin:0 0 24px;letter-spacing:.05em;text-transform:uppercase;color:#bfe9f7;font-weight:600}
+.why{margin:-2px 0 10px}.own{display:block;padding:14px 0 4px}.own input{margin-top:8px;max-width:8em;display:block}.verse{margin:-14px 0 8px;font-size:1.05em;line-height:1.45}.verse a{color:#e9d6a8;text-decoration:none}.verse .t{font-style:italic;display:inline;font-size:1em;color:inherit;margin:0}.verse span{display:block;font-style:normal;font-size:.8em;color:#c9b88f;margin-top:4px}
+h2{font-size:1.05em;letter-spacing:.06em;text-transform:uppercase;color:#bfe9f7;margin:32px 0 12px;border-bottom:1px solid #9fd8f033;padding-bottom:6px}
+h2:before{content:'\\25B8  ';color:#e9d6a8}
+/* Tiles share each row; a short last row stretches, so no tile ever sits beside an empty gap. */
+.grid{display:flex;flex-wrap:wrap;gap:12px;margin-top:12px}.card b.long{font-size:1.7em;line-height:1.4}@media (max-width:480px){.card b.long{font-size:1.25em}}.grid>.card{flex:1 1 calc((100% - (var(--cols,3) - 1) * 12px) / var(--cols,3));min-width:8em;box-sizing:border-box}
+h3{font-size:.85em;letter-spacing:.06em;text-transform:uppercase;color:#9fc3d6;margin:20px 0 0;font-weight:600}
+.choose{margin-top:36px;border:2px solid #9fd8f040;border-radius:14px;padding:4px 16px 16px;background:#0a1226f2}.choose summary{cursor:pointer;font-weight:bold;color:#bfe9f7;padding:14px 0;font-size:1.1em}
+.pick{border:0;border-bottom:1px solid #9fd8f01f;margin:0;padding:12px 0;display:flex;flex-wrap:wrap;gap:8px;align-items:center}.pick legend{float:left;width:100%;padding:0 0 8px;font-size:1em}
+.pick label{flex:1 1 6em;display:flex;align-items:center;justify-content:center;gap:8px;min-height:46px;border:2px solid #9fd8f040;border-radius:12px;cursor:pointer;color:#b9c7e6}
+.pick label:has(input:checked){border-color:#e9d6a8;color:#fff;font-weight:bold;background:#e9d6a81f}.pick input[type=radio]{width:22px;height:22px;margin:0;accent-color:#e9d6a8}
+.card{border:2px solid #9fd8f040;border-radius:14px;padding:14px 16px;background:#0a1226f7}
+.card b{display:block;font-size:2.4em;line-height:1.1;color:#fff;font-variant-numeric:tabular-nums}.card span{color:#b9c7e6;font-size:.85em}
+table{border-collapse:collapse;margin-top:12px;width:100%;background:#0a1226f7;border-radius:12px}td,th{text-align:right;padding:6px 10px;border-bottom:1px solid #9fd8f026;font-variant-numeric:tabular-nums}
+th{color:#bfe9f7}td:first-child,th:first-child{text-align:left}p.note{color:#b9c7e6;font-size:.85em}
+input,button{font:inherit;font-size:1.1em;padding:12px 14px;border-radius:12px;border:2px solid #9fd8f066;width:100%;box-sizing:border-box;margin-top:10px;background:#0a1226;color:#eef3ff}
+button{background:#e9d6a8;color:#1a1408;border-color:#e9d6a8;font-weight:bold;min-height:56px;cursor:pointer}p.error{color:#ff8a80;font-weight:bold}
+.report{--red:#ff8a80;border:2px solid var(--red);border-radius:14px;padding:14px 16px;background:#1a0d18ee;color:#eef3ff;margin-bottom:16px;scroll-margin-top:16px}
+.report pre{white-space:pre-wrap;font:inherit;margin:8px 0}.report .when{color:#b9c7e6;font-size:.85em;margin:0}
 .report .acts{display:grid;grid-template-columns:1fr 1fr;gap:10px;align-items:stretch;margin-top:6px}
 .report .acts .bad{display:flex;flex-direction:column;gap:10px}.report .acts button{margin:0;height:100%}.report .acts .bad button{height:auto;flex:1 0 auto}
 .report button.del{background:transparent;color:var(--red);border-color:var(--red);font-weight:normal;font-size:1em}
 .report button.keep{font-size:1.2em}
 .report .ask{border:2px solid var(--red);border-radius:12px;padding:12px 14px;margin-top:6px}.report .ask p{margin:0 0 4px;font-weight:bold;font-size:1.1em}
-.report .ask small{display:block;color:#6b6255;margin-bottom:10px}
-@media (prefers-color-scheme:dark){body{background:#16161a;color:#e6e3dc}.card,input{background:#202026;color:#e6e3dc;border-color:#3a3630}.card span,p.note{color:#a8a092}td,th{border-color:#3a3630}
-.report{--red:#ff8a80;background:#202026;color:#e6e3dc}.report .when,.report .ask small{color:#a8a092}}`
-const statsPage = (body: string, status = 200) => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
-<meta name="robots" content="noindex"><title>Numbers · My Quiet Bible</title><style>${STATS_STYLE}</style></head><body><h1>My Quiet Bible in numbers</h1>${body}</body></html>`,
+.report .ask small{display:block;color:#b9c7e6;margin-bottom:10px}
+.mark{margin:20px 0 0;padding:14px 18px;border-left:3px solid #e9d6a8;background:#0a1226f2;border-radius:0 12px 12px 0;color:#f3e6c4;font-size:1.05em}`
+// Under the title, a word from God rather than about the maker: Acts 5:29,
+// or one of his own bookmarks (see myVerse).
+const ACTS_5_29 = '« Pierre et les apôtres répondirent: Il faut obéir à Dieu plutôt qu’aux hommes. »'
+const verseLine = (v: MyVerse | string) => typeof v === 'object'
+  ? `<p class="verse" lang="${esc(v.lang)}"><a href="${esc(v.href)}"><span class="t" id="vt">…</span><span>${esc(v.ref)}</span></a></p>
+<script>(()=>{const s=document.getElementById('vt'),a=s.parentNode,v=${JSON.stringify({ u: v.url, b: v.book, c: v.chapter, f: v.from, t: v.to })};
+const no=e=>{s.textContent=${JSON.stringify(ACTS_5_29)};a.href='https://myquietbible.com/#/read/LSG/Acts/5?v=29';a.lastChild.textContent='Actes 5:29 (LSG)';const w=document.getElementById('vwhy');w.textContent='Acts 5:29 shows because '+e+'.';w.hidden=false};
+fetch(v.u).then(r=>r.ok?r.json():Promise.reject('your Bible ('+v.u.split('/').pop()+') answered '+r.status)).then(d=>{const ch=(d.books[v.b]||[])[v.c-1]||[],w=[];for(let i=v.f;i<=v.t;i++)if(ch[i-1])w.push(ch[i-1].replace(/\{([^{}|]*)\|[^{}]*\}/g,'$1'));
+if(!w.length)return no(v.b+' '+v.c+':'+v.f+' isn’t in that Bible');s.textContent='« '+w.join(' ')+' »'}).catch(e=>no(typeof e==='string'?e:'your Bible couldn’t load here'))})()</script><p class="note why" id="vwhy" hidden></p>`
+  : `<p class="verse" lang="fr"><a href="https://myquietbible.com/#/read/LSG/Acts/5?v=29"><span class="t">${ACTS_5_29}</span><span>Actes 5:29 (LSG)</span></a></p>${v ? `<p class="note why">Acts 5:29 shows because ${esc(v)}.</p>` : ''}`
+interface MyVerse { lang: string; href: string; ref: string; url: string; book: string; chapter: number; from: number; to: number }
+/** One of the maker's bookmarks, picked at random each time the page opens,
+ *  in his own Bible. Read from the one account STATS_EMAIL signs in to, and
+ *  only its bookmarks; the words themselves are fetched by his browser from
+ *  the app's site, like the app does. Nothing set or nothing saved: none. */
+/** When it can't, a few words on why, shown small under Acts 5:29 (only
+ *  the maker sees this page), so a setup slip is easy to spot. */
+async function myVerse(env: Env): Promise<MyVerse | string> {
+  if (!env.STATS_EMAIL) return 'the STATS_EMAIL secret hasn’t reached the sync service yet'
+  if (!env.EMAIL_SECRET) return 'email sign-in is off on the sync service'
+  try {
+    // Forgiving about how the secret was typed: quotes, <>, "mailto:", spaces,
+    // and several addresses separated by commas or spaces (the first that
+    // belongs to an account with synced data wins).
+    const emails = env.STATS_EMAIL.toLowerCase().replace(/mailto:/g, '').split(/[\s,;<>"']+/).filter(e => e.includes('@'))
+    let row: { body: string } | null = null, known = false
+    for (const e of emails) {
+      const hash = await emailHash(env, e)
+      row = await env.DB.prepare('SELECT d.body FROM emails e JOIN data d ON d.user_id = e.user_id WHERE e.hash = ?').bind(hash).first<{ body: string }>()
+      if (row) break
+      known ||= !!(await env.DB.prepare('SELECT 1 FROM emails WHERE hash = ?').bind(hash).first())
+    }
+    if (!row) {
+      const shown = emails.map(emailHint).join(', ') || 'nothing that looks like an email'
+      return known ? 'the account with that email has nothing synced yet'
+        : `no account signs in with the STATS_EMAIL address (it reads as ${shown}; compare with the email shown in Settings → Account, or add that email there)`
+    }
+    const doc = JSON.parse(row.body) as { marks?: Record<string, { b?: 1; v?: string }>; settings?: { version?: unknown; language?: unknown } }
+    const keys = Object.entries(doc.marks ?? {}).filter(([, m]) => m?.b === 1).map(([k]) => k.split('.'))
+      .map(([book, c, v]) => ({ book, chapter: +c, verse: +v })).filter(k => /^\w+$/.test(k.book) && k.chapter > 0 && k.verse > 0)
+    if (!keys.length) return 'the account with that email has no synced bookmarks (is it the account your devices sync to?)'
+    // Bookmarks on neighbouring verses are one passage, as in Saved.
+    const has = new Set(keys.map(k => `${k.book}.${k.chapter}.${k.verse}`))
+    const starts = keys.filter(k => !has.has(`${k.book}.${k.chapter}.${k.verse - 1}`))
+    const pick = starts[Math.floor(Math.random() * starts.length)]
+    let to = pick.verse
+    while (has.has(`${pick.book}.${pick.chapter}.${to + 1}`) && to - pick.verse < 9) to++
+    const set = doc.settings ?? {}
+    const version = typeof set.version === 'string' && /^[\w-]+$/.test(set.version) ? set.version : 'LSG'
+    const lang = set.language === 'en' || set.language === 'es' || set.language === 'fr' ? set.language : version === 'LSG' ? 'fr' : 'en'
+    const verses = to > pick.verse ? `${pick.verse}-${to}` : `${pick.verse}`
+    return {
+      lang, book: pick.book, chapter: pick.chapter, from: pick.verse, to,
+      ref: `${plainBookName(pick.book, lang)} ${pick.chapter}:${verses} (${version})`,
+      href: `https://myquietbible.com/#/read/${version}/${pick.book}/${pick.chapter}?v=${pick.verse}${to > pick.verse ? `&e=${to}` : ''}`,
+      url: `https://myquietbible.com/data/bibles/${version}.json`,
+    }
+  } catch (e) { console.error('stats verse', e); return 'reading your bookmarks failed' }
+}
+const statsPage = (body: string, status = 200, verse: MyVerse | string = '') => new Response(`<!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex"><title>MQB Observatory</title><style>${STATS_STYLE}</style></head><body><h1>MQB Observatory</h1>${verseLine(verse)}${body}</body></html>`,
   // Never shown inside another site's frame, where a page could line its own
   // buttons up over "Say yes" or "Remove" once the word is typed in.
   { status, headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'no-store', 'X-Robots-Tag': 'noindex', 'Referrer-Policy': 'no-referrer',
     'Content-Security-Policy': "frame-ancestors 'none'", 'X-Frame-Options': 'DENY' } })
+
+/** One number on the numbers page. A tile at 0 stays out of the way unless
+ *  the maker asked to see it anyway (see chooser). */
+interface Tile { id: string; label: string; value: string; sub: string; zero?: boolean }
+/** Tiles that come and go together (a share of each Bible, say), shown or
+ *  hidden as one. */
+interface Group { id: string; title: string; tiles: Tile[] }
+interface Section { title: string; tiles: Tile[]; groups?: Group[] }
+/** Rows of even tiles: as few gaps in the last row as can be (4 tiles make
+ *  2 rows of 2, 7 make 4 and 3), so no tile sits alone under a full row. */
+const cols = (n: number) => n <= 3 ? n : [3, 4, 2].reduce((best, c) => (c - n % c) % c < (best - n % best) % best ? c : best)
+const gridHtml = (tiles: Tile[]) => `<div class="grid" style="--cols:${cols(tiles.length)}">${tiles.map(tileHtml).join('')}</div>`
+const tileHtml = (t: Tile) => `<div class="card">${esc(t.label)}<b${t.value.length > 6 ? ' class="long"' : ''}>${esc(t.value)}</b><span>${esc(t.sub)}</span></div>`
+type Layout = Map<string, string>
+const shows = (layout: Layout, id: string, zero: boolean) => layout.get(id) === 'show' || (!zero && layout.get(id) !== 'hide')
+function sectionHtml(sec: Section, layout: Layout) {
+  const isZero = (t: Tile) => !!t.zero || t.value === '0' || t.value === '0%'
+  const tiles = sec.tiles.filter(t => shows(layout, t.id, isZero(t)))
+  const groups = (sec.groups ?? []).filter(g => g.tiles.length && shows(layout, g.id, false))
+  if (!tiles.length && !groups.length) return ''
+  return `<h2>${esc(sec.title)}</h2>${tiles.length ? gridHtml(tiles) : ''}
+${groups.map(g => `<h3>${esc(g.title)}, last 30 days</h3>${gridHtml(g.tiles)}`).join('')}`
+}
+/** "Choose what shows": for each tile, Show (even at 0), Unless 0 (the
+ *  usual), or Hide. Big round choices, one row per tile. */
+function chooser(sections: Section[], layout: Layout, key: string) {
+  const row = (id: string, label: string) => {
+    const how = layout.get(id) ?? 'auto'
+    return `<fieldset class="pick"><legend>${esc(label)}</legend><input type="hidden" name="all" value="${esc(id)}">${([['show', 'Show'], ['auto', 'Unless 0'], ['hide', 'Hide']] as const)
+      .map(([v, l]) => `<label><input type="radio" name="how:${esc(id)}" value="${v}"${how === v ? ' checked' : ''}>${l}</label>`).join('')}</fieldset>`
+  }
+  return `<details class="choose"><summary>Choose what shows</summary><p class="note">Tiles at 0 stay out of the way. Choose Show to keep one in sight anyway, or Hide to put one away.</p><form method="post" action="/stats"><input type="hidden" name="key" value="${esc(key)}">
+${sections.map(sec => `<h3>${esc(sec.title)}</h3>${sec.tiles.map(t => row(t.id, t.label)).join('')}${(sec.groups ?? []).map(g => row(g.id, g.title)).join('')}`).join('')}
+<h3>Other</h3>${row('mark', 'Devices found, without an ad')}${row('table', 'Day by day table')}
+<label class="own">Your own family’s devices, left out of All devices ever<input type="number" name="own" min="0" max="99" inputmode="numeric" value="${esc(layout.get('own') ?? '0')}"></label>
+<button type="submit" name="act" value="layout">Save</button></form></details>`
+}
 
 /** Two strings equal, compared in the same time whatever they hold. */
 async function same(a: string, b: string) {
@@ -1441,6 +1645,15 @@ async function statsRoute(req: Request, env: Env) {
     if (res.meta.changes) await tellLeader(env, who)
   }
   if (who && act === 'lead-no') await env.DB.prepare('DELETE FROM door_leaders WHERE user_id = ? AND allowed IS NULL').bind(who).run()
+  // Which tiles show: Show, Hide, or the usual (unless 0), for each listed.
+  if (act === 'layout') {
+    const listed = sent!.getAll('all').map(String).filter(id => /^[a-z0-9-]{1,40}$/.test(id)).slice(0, 100)
+    const set = listed.map(id => [id, String(sent!.get(`how:${id}`) ?? '')] as const).filter(([, how]) => how === 'show' || how === 'hide')
+    // How many of the devices are the maker's own family's, left out of Lifetime.
+    const own = Math.min(99, Math.max(0, Math.floor(Number(sent!.get('own') ?? 0)) || 0))
+    await env.DB.batch([env.DB.prepare('DELETE FROM stats_layout'), ...[...set, ...(own ? [['own', String(own)] as const] : [])]
+      .map(([id, how]) => env.DB.prepare('INSERT OR REPLACE INTO stats_layout (id, how) VALUES (?, ?)').bind(id, how))])
+  }
   const leadAsks = (await env.DB.prepare('SELECT user_id, note, asked FROM door_leaders WHERE allowed IS NULL ORDER BY asked LIMIT 20')
     .all<{ user_id: string; note: string | null; asked: number }>()).results
   const leadList = leadAsks.length ? `<h2>Asking to lead an Open door circle</h2>
@@ -1466,7 +1679,7 @@ ${reportActs(r)}</div>`).join('')}` : ''
   const now = new Date(), day = now.toISOString().slice(0, 10)
   const week = Date.now() - 7 * DAY
   const count = (sql: string, ...args: unknown[]) => env.DB.prepare(sql).bind(...args).first<{ n: number }>().then(r => r?.n ?? 0)
-  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified, doors, doorsOpen, doorPeople] = await Promise.all([
+  const [rows, accounts, circles, newAccounts, activeCircles, shared, prayedWith, notified, doors, doorsOpen, doorPeople, hiddenRows] = await Promise.all([
     env.DB.prepare('SELECT period, kind, n FROM hello').all<{ period: string; kind: string; n: number }>(),
     count('SELECT COUNT(*) AS n FROM users'),
     count('SELECT COUNT(*) AS n FROM circles'),
@@ -1478,48 +1691,92 @@ ${reportActs(r)}</div>`).join('')}` : ''
     count('SELECT COUNT(*) AS n FROM circles WHERE leader IS NOT NULL'),
     count('SELECT COUNT(*) AS n FROM circles WHERE leader IS NOT NULL AND door_id IS NOT NULL'),
     count('SELECT COUNT(*) AS n FROM circle_members m JOIN circles c ON c.id = m.circle_id WHERE c.leader IS NOT NULL AND m.user_id != c.leader'),
+    env.DB.prepare('SELECT id, how FROM stats_layout').all<{ id: string; how: string }>(),
   ])
+  const layout: Layout = new Map(hiddenRows.results.map(r => [r.id, r.how]))
+  const own = Number(layout.get('own') ?? 0) || 0
   const get = (period: string, kind: string) => rows.results.find(r => r.period === period && r.kind === kind)?.n ?? 0
   const sum = (kind: string, from = '') => rows.results.filter(r => r.kind === kind && r.period >= from).reduce((a, r) => a + r.n, 0)
+  const ever = Math.max(0, sum('new') - own)
   const since30 = new Date(now.getTime() - 29 * DAY).toISOString().slice(0, 10)
-  const big: [string, number, string][] = [
-    ['Today', get(day, 'day'), 'devices opened the app'],
-    ['This week', get(isoWeek(now), 'week'), 'devices opened the app'],
-    ['This month', get(day.slice(0, 7), 'month'), 'devices opened the app'],
-    ['New in 30 days', sum('new', since30), 'devices opened it for the first time'],
-    ['All devices ever', sum('new'), 'counted since the count began'],
-    ['On a Home Screen today', get(day, 'home'), 'of today’s devices'],
-    ['Accounts', accounts, 'signed up to sync'],
-    ['New accounts', newAccounts, 'in the last 7 days'],
-    ['Circles', circles, 'made so far'],
-    ['Active circles', activeCircles, 'shared something in the last 7 days'],
-    ['Shared in circles', shared, 'verses, notes and prayers in the last 7 days'],
-    ['Prayed with', prayedWith, '🙏 on something shared, last 7 days'],
-    ['Notifications on', notified, 'accounts hearing from their circles'],
-  ]
   const since7 = new Date(now.getTime() - 6 * DAY).toISOString().slice(0, 10)
-  const door: [string, number, string][] = [
-    ['Open door circles', doors, `${doorsOpen} with the door open now`],
-    ['People in them', doorPeople, 'not counting the leaders'],
-    ['Came in', sum('door:join', since7), 'through an Open door link, last 7 days'],
-    ['Prayer requests', sum('door:ask', since7), 'sent to leaders, last 7 days'],
-    ['Prayed for', sum('door:prayed', since7), 'requests a leader prayed for, last 7 days'],
+  const n = (x: number) => x.toLocaleString('en')
+  const pct = (part: number, whole: number) => whole ? `${Math.round(100 * part / whole)}%` : '0%'
+  // Shares of the last 30 days' hellos: kind of device, Bible, app language.
+  const split = (prefix: string, name: (id: string) => string, keep = 6): Tile[] => {
+    const ids = [...new Set(rows.results.filter(r => r.kind.startsWith(prefix) && r.period >= since30).map(r => r.kind.slice(prefix.length)))]
+    const list = ids.map(id => [id, sum(prefix + id, since30)] as const).filter(([, x]) => x > 0).sort((a, b) => b[1] - a[1]).slice(0, keep)
+    const all = ids.reduce((a, id) => a + sum(prefix + id, since30), 0)
+    return list.map(([id, x]) => ({ id: '', label: name(id), value: pct(x, all), sub: `${n(x)} daily hellos` }))
+  }
+  // The busiest hour and day of the week for opening the app, last 30 days.
+  const busiest = (prefix: string, span: number) => {
+    let best = -1, top = 0
+    for (let i = 0; i < span; i++) { const x = sum(prefix + i, since30); if (x > top) { top = x; best = i } }
+    return best
+  }
+  const hour = busiest('hour:', 24), weekday = busiest('wd:', 7)
+  // Still opening N days after a device's first day under this count, out of
+  // the devices whose first day is at least N days ago.
+  const kept = (days: number, label: string): Tile => {
+    const before = new Date(now.getTime() - days * DAY).toISOString().slice(0, 10)
+    const old = rows.results.filter(r => r.kind === 'start' && r.period <= before).reduce((a, r) => a + r.n, 0)
+    const still = sum(`kept:${days}`)
+    return { id: `kept${days}`, label, value: pct(still, old), sub: `${n(still)} of ${n(old)} devices still opening it`, zero: !still }
+  }
+  const sections: Section[] = [
+    { title: 'Today', tiles: [
+      { id: 'today', label: 'Devices', value: n(get(day, 'day')), sub: 'opened the app today' },
+      { id: 'today-new', label: 'New devices', value: n(get(day, 'new')), sub: 'opened it for the first time today' },
+      { id: 'today-home', label: 'On a Home Screen', value: n(get(day, 'home')), sub: 'of today’s devices' },
+    ] },
+    { title: 'This week', tiles: [
+      { id: 'week', label: 'Devices', value: n(get(isoWeek(now), 'week')), sub: 'opened the app since Monday' },
+      { id: 'week-accounts', label: 'New accounts', value: n(newAccounts), sub: 'in the last 7 days' },
+      { id: 'week-active', label: 'Active circles', value: n(activeCircles), sub: 'shared something, last 7 days' },
+      { id: 'week-shared', label: 'Shared in circles', value: n(shared), sub: 'verses, notes and prayers, last 7 days' },
+      { id: 'week-prayed', label: 'Prayed with', value: n(prayedWith), sub: '🙏 on something shared, last 7 days' },
+      { id: 'week-door-in', label: 'Came in', value: n(sum('door:join', since7)), sub: 'through an Open door link, last 7 days' },
+      { id: 'week-door-ask', label: 'Prayer requests', value: n(sum('door:ask', since7)), sub: 'sent to Open door leaders, last 7 days' },
+      { id: 'week-door-prayed', label: 'Prayed for', value: n(sum('door:prayed', since7)), sub: 'requests a leader prayed for, last 7 days' },
+    ] },
+    { title: 'This month', tiles: [
+      { id: 'month', label: 'Devices', value: n(get(day.slice(0, 7), 'month')), sub: 'opened the app this month' },
+      { id: 'month-new', label: 'New in 30 days', value: n(sum('new', since30)), sub: 'devices opened it for the first time' },
+      { id: 'hour', label: 'Busiest hour', value: hour < 0 ? '' : `${hour % 12 || 12} ${hour < 12 ? 'AM' : 'PM'}`, sub: 'when most open it first each day', zero: hour < 0 },
+      { id: 'weekday', label: 'Busiest day', value: weekday < 0 ? '' : ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday'][weekday], sub: 'of the week, last 30 days', zero: weekday < 0 },
+    ], groups: [
+      { id: 'devices', title: 'Kind of device', tiles: split('on:', id => PLATFORMS.find(([p]) => p === id)?.[1] ?? id) },
+      { id: 'bibles', title: 'Bibles', tiles: split('bible:', id => id) },
+      { id: 'languages', title: 'App languages', tiles: split('lang:', langName) },
+    ] },
+    { title: 'Lifetime', tiles: [
+      { id: 'ever', label: 'All devices ever', value: n(ever), sub: own ? `since the count began, not counting your own ${n(own)}` : 'counted since the count began' },
+      { id: 'accounts', label: 'Accounts', value: n(accounts), sub: 'signed up to sync' },
+      { id: 'circles', label: 'Circles', value: n(circles), sub: 'made so far' },
+      { id: 'notified', label: 'Notifications on', value: n(notified), sub: 'accounts hearing from their circles' },
+      { id: 'doors', label: 'Open door circles', value: n(doors), sub: `${n(doorsOpen)} with the door open now` },
+      { id: 'door-people', label: 'People in them', value: n(doorPeople), sub: 'not counting the leaders' },
+      { id: 'total-pr', label: 'Prayers recorded', value: n(sum('total:pr')), sub: 'since this count began', zero: !sum('total:pr') },
+      { id: 'total-ch', label: 'Chapters read', value: n(sum('total:ch')), sub: 'open half a minute or more', zero: !sum('total:ch') },
+      { id: 'total-sh', label: 'Verses shared', value: n(sum('total:sh')), sub: 'outside the app or in circles', zero: !sum('total:sh') },
+      { id: 'total-bm', label: 'Bookmarks saved', value: n(sum('total:bm')), sub: 'since this count began', zero: !sum('total:bm') },
+      kept(7, 'Still opening after a week'),
+      kept(30, 'Still opening after a month'),
+      kept(90, 'Still opening after 3 months'),
+    ] },
   ]
-  const seen = [...new Set(rows.results.filter(r => r.kind.startsWith('lang:')).map(r => r.kind.slice(5)))]
-  const langs = [...new Set([...LANGS, ...seen])].map(l => [langName(l), sum(`lang:${l}`, since30)] as [string, number]).filter(([, n], i) => i < 3 || n > 0).sort((a, b) => b[1] - a[1])
-  const langTotal = langs.reduce((a, [, n]) => a + n, 0)
   const days = [...new Set(rows.results.filter(r => r.kind === 'day').map(r => r.period))].sort().reverse().slice(0, 30)
-  const cards = (list: [string, number, string][]) => list.map(([label, n, sub]) => `<div class="card">${esc(label)}<b>${n.toLocaleString('en')}</b><span>${esc(sub)}</span></div>`).join('')
-  return statsPage(`${reportList}${leadList}<div class="grid">
-${cards(big)}
-</div><h2>Open door circles</h2><div class="grid">
-${cards(door)}
-</div><h2>Languages, last 30 days</h2><div class="grid">
-${langs.map(([name, n]) => `<div class="card">${name}<b>${langTotal ? Math.round(100 * n / langTotal) : 0}%</b><span>${n.toLocaleString('en')} daily hellos</span></div>`).join('')}
-</div><h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
+  // A quiet word among the stars: every device here found the app on its
+  // own, with no ads and no social media. No target, no countdown.
+  const found = ever && layout.get('mark') !== 'hide' ? `${n(ever)} device${ever === 1 ? ' has' : 's have'} found My Quiet Bible, all without a single ad.` : ''
+  return statsPage(`${reportList}${leadList}${found ? `<p class="mark">\u2726 ${esc(found)}</p>` : ''}
+${sections.map(sec => sectionHtml(sec, layout)).join('')}
+${layout.get('table') === 'hide' ? '' : `<h2>Day by day</h2><table><tr><th>Day</th><th>Devices</th><th>New</th><th>Home Screen</th></tr>
 ${days.map(d => `<tr><td>${d}</td><td>${get(d, 'day')}</td><td>${get(d, 'new')}</td><td>${get(d, 'home')}</td></tr>`).join('')}
-</table><p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
-On the first day, every device already using the app counts as new. Days are in UTC.</p>`)
+</table>`}<p class="note">Each device says hello at most once a day, with no name, id or address, so these count devices, not people.
+On the first day, every device already using the app counts as new. Days are in UTC.</p>
+${chooser(sections, layout, key)}`, 200, await myVerse(env))
 }
 
 /** "You can lead an Open door circle now", on each device of theirs that
@@ -1614,6 +1871,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
 
   switch (key) {
     case 'GET /hello': return helloRoute(req, env)
+    case 'POST /suggest': return suggestRoute(req, env)
     case 'GET /stats': case 'POST /stats': return statsRoute(req, env)
     case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env), apns: !!apns(env) })
 

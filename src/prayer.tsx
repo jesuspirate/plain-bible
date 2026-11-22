@@ -26,6 +26,7 @@ import { DeviceLink } from './move'
 import { addDays, dayBefore, dayOf, loadDays, markDay, PRAY, streak } from './lib/streaks'
 import './prayer.css'
 import { locale, N_, t, tj, tn } from './i18n'
+import { tally } from './lib/tally'
 
 // paused: the phone locked, or the microphone stopped, mid-prayer. What was said is kept, and the next
 // tap carries on in the same prayer.
@@ -195,6 +196,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         const tie = tiedRef.current
         if (id) await prayers.append(id, part).catch(() => { id = undefined })
         if (id) await prayers.tie(id, tie).catch(() => {})
+        if (!id) tally('pr')
         if (!id) await prayers.put({ id: id = started.toString(36) + Math.random().toString(36).slice(2, 6), at: started, ...part, ...(tie.length ? { verse: tie[0], verses: tie, vrev: 1, vdirty: true } : {}) })
         markDay(PRAY, dayOf(started))
         navigator.storage?.persist?.().catch(() => {})
@@ -800,7 +802,7 @@ function PrayerSync({ onChange, onClose }: { onChange: () => void; onClose: () =
       </> : !signedIn ? <>
         <p class="muted">{t('To keep your prayers on all your devices, sign in first. They’re encrypted on this device before they leave it.')}</p>
         <p class="muted small">{t(LOCAL_ONLY)}</p>
-        <button class="pray-btn" onClick={() => { onClose(); openSettings() }}>{t('Go to Settings → Account')}</button>
+        <button class="pray-btn" onClick={() => { onClose(); openSettings('sync') }}>{t('Go to Settings → Account')}</button>
       </> : needCode ? <>
         <p class="muted">{t('This device can’t unlock your prayers by itself yet. Let one where they already sync allow it:')}</p>
         <AskApproval btn="pray-btn" onDone={() => { setNeedCode(false); setSyncing(true); act(async () => { if (await turnOnPrayerSync() === 'on') setMsg(t('Your prayers now sync with your other devices.')) })() }} />

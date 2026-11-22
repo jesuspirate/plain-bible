@@ -22,8 +22,12 @@ Searching happens on your device too.</p>
 
 <h2>Counting how many use it</h2>
 <p>Once a day, the app sends one small “hello” to our sync service, so we know how many devices use it.
-It carries no account, no id and no cookie, only four yes/no answers (is this the device's first hello,
-its first this week, its first this month, and is the app on its Home Screen) and the app's language. The service adds one to a few
+It carries no account, no id and no cookie. It holds a few yes/no answers (is this the device's first hello,
+its first this week, its first this month, and is the app on its Home Screen), the app's language, which Bible it opens in,
+what kind of device it is (iPhone or Mac app, Android app, Fedi, or a browser), the hour and weekday it was first opened that day,
+whether it still opens a week, a month or three months after its first hello, and how many prayers were recorded,
+chapters read, verses shared and bookmarks saved on it since the last hello. These are only numbers: never which prayer,
+chapter, verse or bookmark, and never what a prayer says. The service adds them to a few
 daily, weekly and monthly counters and keeps nothing else, not even your IP address. We can't tell
 one device from another, or who anyone is.</p>
 
@@ -56,6 +60,17 @@ The key is only in the link, so the service can't read it.</p>
 the recording of the chapter plays straight from its publisher's website, openbible.com. Like any website, it sees
 your IP address and which chapter was asked for. Nothing else is sent: no account, no id. Reading without
 listening, or listening with the phone's own voice, asks that website for nothing.</p>
+
+<h2>Reporting a problem or sending a suggestion</h2>
+<p>Settings → Report a problem lets anyone write to us. What you write is sent to us by email and is not
+stored by the sync service. With it go the app's version, the kind of device (for example "iPhone browser")
+and the app's language. A problem report also brings the screen you were on, its size and theme, the steps you
+recorded if you used Show what happens (described in words, such as which button you tapped; no picture is taken
+and nothing you type is kept), and the last few errors the app ran into since it opened, so we can find the cause.
+Anything private in the app's address is left out first: a circle invite's or device link's key, a code shown on
+screen, and the words of a search. Your email address goes with it only if
+you type it, so we can answer you. To stop the box being misused, the service keeps a scrambled fingerprint of
+the network address for one day (never the address itself), only to limit how many messages come from one place.</p>
 
 <h2>Contact</h2>
 <p>Questions: open an issue at <a href="https://github.com/jesuspirate/plain-bible/issues">github.com/jesuspirate/plain-bible</a>.</p>
