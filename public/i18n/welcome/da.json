@@ -30,7 +30,7 @@
 "offlineH": "Virker offline",
 "offlineP": "De bibler, du læser, bliver på din telefon. I et fly, i bjergene, i en kælder: Den åbner ved det vers, hvor du slap, helt uden forbindelse.",
 "marksH": "Markeringer, noter og bogmærker",
-"marksP": "Otte farver, en note til et vers eller til et helt afsnit, et bogmærkebånd til de steder, du vender tilbage til. Tag det med, du har gemt i en anden bibelapp.",
+"marksP": "Otte farver, en note til et vers eller til et helt afsnit, et bogmærkebånd til de steder, du vender tilbage til. Tag det med, du har gemt i en anden bibelapp. Markér et vers som med en overstregningstusch, eller farv dets bogstaver.",
 "devicesH": "Dine enheder, sammen",
 "devicesP": "Kun hvis du vil. Log ind med en adgangsnøgle eller en kode på e-mail, så følger dine markeringer, noter og indstillinger med dig. En anden enhed logger ind fra den første med ét link; intet at skrive.",
 "readingH": "Lavet til at læse i",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åbn Bibelen</a> i Chrome eller den browser, du bruger.</span></li><li><span>Åbn browserens menu, som regel tre prikker {svg} øverst til højre.</span></li><li><span>Tryk på <strong>Installer og opret genvej</strong> (nogle browsere skriver <strong>Føj til startskærm</strong>).</span></li><li><span>Vælg <strong>Installer</strong>, ikke <strong>Opret genvej</strong>. Tryk så på <strong>Installer</strong> igen.</span></li><li><span>Lampen vises sammen med dine andre apps.</span></li>",
 "computerNote": "Den åbner i sit eget vindue, ligesom enhver anden app.",
 "computerInstalled": "Installeret. Åbn My Quiet Bible sammen med dine andre apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åbn Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klik på installationsikonet i højre ende af adresselinjen, en skærm med en pil <span class=\"nb\">{svg},</span> og derefter på <strong>Installer</strong>.</span></li><li><span>På en Mac med Safari: Klik på <strong>Del</strong> øverst til højre og derefter på <strong>Føj til Dock</strong>.</span></li><li><span>Eller behold bare fanen. Den virker på samme måde og husker, hvor du er.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Åbn Bibelen</a> i Chrome eller Edge.</span></li><li><span>Klik på installationsikonet i højre ende af adresselinjen, en skærm med en pil <span class=\"nb\">{svg},</span> og derefter på <strong>Installer</strong>.</span></li><li><span>Eller behold bare fanen. Den virker på samme måde og husker, hvor du er.</span></li>",
 "ref": "Salme 119,105",
 "more": "Mere",
 "support": "Støt det",
@@ -82,7 +82,9 @@
 "circlesVerse": "»For hvor to eller tre er forsamlet i mit navn, dér er jeg midt iblandt dem.«",
 "circlesRef": "Matthæus 18,20",
 "circlesLong": "Når du har lyst, så opret en lille kreds til din familie eller nogle få venner. Del en bøn, et vers eller en note med ét tryk. De lytter, svarer med et ord eller med en 🙏, og hver især læser verset i sin egen bibel.",
-"circlesTicks": "<li>Aldrig et krav. Intet forlader din telefon, medmindre du trykker på Del.</li><li>Hver kreds har sin egen nøgle. Kun medlemmerne kan åbne det, der er i den; ikke engang vi kan.</li>",
+"circlesTicks": "<li>Aldrig et krav. Intet forlader din telefon, medmindre du trykker på Del.</li><li>Hver kreds har sin egen nøgle. Kun medlemmerne kan åbne det, der er i den; ikke engang vi kan.</li><li>Kredse kræver et gratis login med en adgangsnøgle eller en kode sendt på e-mail.</li>",
 "listenH": "Lyt",
-"listenP": "Tryk på et vers og derefter på Lyt, så læser din telefon kapitlet højt med sin egen stemme. Til bilen, køkkenet eller trætte øjne."
+"listenP": "Tryk på et vers og derefter på Lyt. Eller tryk på Læs med i søgefeltet, så lyser hvert ord op, mens det bliver læst. Rigtige oplæsere læser BSB, King James og Louis Segond. Til bilen, køkkenet eller trætte øjne.",
+"orMac": "På Windows eller Linux:",
+"macStore": "På en Mac:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Ɛyɛ adwuma a intanɛt nni hɔ",
 "offlineP": "Bible a wokenkan no tena wo fon so. Wɔ wimhyɛn mu, wɔ mmepɔ so, wɔ ɔdan ase: ɛbue wɔ nkyekyɛm a wogyae hɔ no so, a intanɛt biara nni hɔ.",
 "marksH": "Kɔla nsɛm, nkaeɛ ne agyiraehyɛde",
-"marksP": "Kɔla nwɔtwe, nkaeɛ wɔ nkyekyɛm anaa beaeɛ nyinaa so, agyiraehyɛde ma mmeae a wosan kɔ. Fa deɛ wokoraa wɔ Bible app foforo mu bra.",
+"marksP": "Kɔla nwɔtwe, nkaeɛ wɔ nkyekyɛm anaa beaeɛ nyinaa so, agyiraehyɛde ma mmeae a wosan kɔ. Fa deɛ wokoraa wɔ Bible app foforo mu bra. Hyɛ nkyekyem bi agyirae te sɛ highlighter, anaa fa kɔla hyɛ ne nkyerɛwde mu.",
 "devicesH": "W’afidie nyinaa bom",
 "devicesP": "Sɛ wopɛ nko ara. Fa passkey anaa code a wɔde mane wo wɔ email so kɔ mu, na wo kɔla nsɛm, wo nkaeɛ ne wo nhyehyɛe di w’akyi. Afidie a ɛtɔ so mmienu de link baako fi nea edi kan no so kɔ mu; biribiara nni hɔ a wobɛkyerɛw.",
 "readingH": "Wɔayɛ ama nkenkan",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Bue Bible no</a> wɔ Chrome mu, anaa browser a wode di dwuma.</span></li>\n            <li><span>Bue browser no menu, ɛtaa yɛ nsensanee mmiɛnsa {svg} wɔ soro nifa.</span></li>\n            <li><span>Mia <strong>Install and create shortcut</strong> (browser binom ka sɛ <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Yi <strong>Install</strong>, ɛnyɛ <strong>Create shortcut</strong>. Afei san mia <strong>Install</strong>.</span></li>\n            <li><span>Kanea no bɛda adi wɔ w’app foforo no ho.</span></li>",
 "computerNote": "Ɛbue wɔ ne window mu, te sɛ app foforo biara.",
 "computerInstalled": "Wɔde ahyɛ mu. Bue My Quiet Bible wɔ w’app foforo no ho.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Bue Bible no</a> wɔ Chrome anaa Edge mu.</span></li>\n            <li><span>Mia install icon a ɛwɔ address bar no nifa ano, screen a agyan wɔ so <span class=\"nb\">{svg},</span> afei <strong>Install</strong>.</span></li>\n            <li><span>Wɔ Mac a Safari wɔ so: mia <strong>Share</strong> wɔ soro nifa, afei <strong>Add to Dock</strong>.</span></li>\n            <li><span>Anaa ma tab no ntena hɔ kɛkɛ. Ɛyɛ adwuma saa ara, na ɛkae faako a wowɔ.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Bue Bible no</a> wɔ Chrome anaa Edge mu.</span></li><li><span>Mia install icon a ɛwɔ address bar no nifa ano, screen a agyan wɔ so <span class=\"nb\">{svg},</span> afei <strong>Install</strong>.</span></li><li><span>Anaa ma tab no ntena hɔ kɛkɛ. Ɛyɛ adwuma saa ara, na ɛkae faako a wowɔ.</span></li>",
 "ref": "Nnwom 119:105",
 "more": "Pii",
 "support": "Boa",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Na baabi a baanu anaa baasa ahyia wɔ me din mu no, ɛhɔ na mewɔ wɔn mfimfini.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Sɛ wopɛ a, yɛ kuw ketewa ma w’abusua anaa nnamfo kakra. Kyɛ mpaebɔ, nkyekyɛm anaa nkaeɛ wɔ mia baako so. Wɔtie, wɔde asɛm bi bua, anaa wɔde 🙏 bua, na obiara kenkan nkyekyɛm no wɔ ne Bible mu.",
-"circlesTicks": "<li>Ɛho nhia da. Biribiara mfi wo fon so gye sɛ wo mia Kyɛ.</li>\n              <li>Kuw biara wɔ ne safoa. Ne mufoɔ nko ara na wobetumi abue deɛ ɛwɔ mu; yɛn mpo yɛntumi.</li>",
+"circlesTicks": "<li>Ɛho nhia da. Biribiara mfi wo fon so gye sɛ wo mia Kyɛ.</li>\n              <li>Kuw biara wɔ ne safoa. Ne mufoɔ nko ara na wobetumi abue deɛ ɛwɔ mu; yɛn mpo yɛntumi.</li><li>Akuw hia sɛ wokɔ mu kwa, de passkey anaa koodu a wɔde email mena.</li>",
 "listenH": "Tie",
-"listenP": "Mia nkyekyɛm bi, afei Tie, na wo fon de ne nne kenkan ti no dennen. Ɛyɛ ma kaa mu, gyaade, anaa ani a abrɛ."
+"listenP": "Mia nkyekyem bi so, na afei Tie. Anaa mia Kenkan ka ho wɔ nhwehwɛ bar no so, na asɛmfua biara hyerɛn bere a wɔrekenkan no. Akenkanfo ankasa kenkan BSB, King James ne Louis Segond. Ma kar mu, mukaase, anaa aniwa a abrɛ.",
+"orMac": "Windows anaa Linux so:",
+"macStore": "Mac so:"
 }

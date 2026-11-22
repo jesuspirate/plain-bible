@@ -30,7 +30,7 @@
 "offlineH": "Gumagana offline",
 "offlineP": "Nananatili sa phone mo ang mga Bibliyang binabasa mo. Sa eroplano, sa bundok, sa silong: bumubukas ito sa talatang huli mong binasa, kahit walang anumang koneksiyon.",
 "marksH": "Mga highlight, tala at bookmark",
-"marksP": "Walong kulay, isang tala sa isang talata o sa buong bahagi, isang laso para sa mga lugar na binabalikan mo. Dalhin dito ang mga itinago mo sa ibang Bible app.",
+"marksP": "Walong kulay, isang tala sa isang talata o sa buong bahagi, isang laso para sa mga lugar na binabalikan mo. Dalhin dito ang mga itinago mo sa ibang Bible app. Markahan ang talata na parang highlighter, o kulayan ang mga titik nito.",
 "devicesH": "Ang mga device mo, magkakasama",
 "devicesP": "Kung gusto mo lang. Mag-sign in gamit ang passkey o code na ipinadala sa email, at susunod sa iyo ang mga highlight, tala at setting mo. Ang ikalawang device ay nagsa-sign in mula sa una gamit ang isang link; walang kailangang i-type.",
 "readingH": "Ginawa para sa pagbasa",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buksan ang Bibliya</a> sa Chrome, o sa browser na ginagamit mo.</span></li>\n            <li><span>Buksan ang menu ng browser, kadalasang tatlong tuldok {svg} sa kanang itaas.</span></li>\n            <li><span>I-tap ang <strong>I-install at gumawa ng shortcut</strong> (sa ilang browser, <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Piliin ang <strong>I-install</strong>, hindi ang <strong>Gumawa ng shortcut</strong>. Saka i-tap ulit ang <strong>I-install</strong>.</span></li>\n            <li><span>Lalabas ang ilawan kasama ng iba mong app.</span></li>",
 "computerNote": "Bumubukas ito sa sarili nitong window, gaya ng ibang app.",
 "computerInstalled": "Naka-install na. Buksan ang My Quiet Bible kasama ng iba mong app.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buksan ang Bibliya</a> sa Chrome o Edge.</span></li>\n            <li><span>I-click ang icon ng pag-install sa kanang dulo ng address bar, isang screen na may arrow <span class=\"nb\">{svg},</span> saka ang <strong>Install</strong>.</span></li>\n            <li><span>Sa Mac na may Safari: i-click ang <strong>Share</strong> sa kanang itaas, saka ang <strong>Add to Dock</strong>.</span></li>\n            <li><span>O panatilihin lang ang tab. Pareho itong gumagana, at natatandaan kung saan ka na.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buksan ang Bibliya</a> sa Chrome o Edge.</span></li><li><span>I-click ang icon ng pag-install sa kanang dulo ng address bar, isang screen na may arrow <span class=\"nb\">{svg},</span> saka ang <strong>Install</strong>.</span></li><li><span>O panatilihin lang ang tab. Pareho itong gumagana, at natatandaan kung saan ka na.</span></li>",
 "ref": "Awit 119:105",
 "more": "Iba pa",
 "support": "Suportahan",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Sapagkat kung saan nagkakatipon ang dalawa o tatlo sa aking pangalan, ako'y naroroon sa gitna nila.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Kung gusto mo, gumawa ng maliit na samahan para sa pamilya mo o ilang kaibigan. Ibahagi ang isang panalangin, talata o tala sa isang tap. Makikinig sila, sasagot ng isang salita, o tutugon ng 🙏, at babasahin ng bawat isa ang talata sa sarili nilang Bibliya.",
-"circlesTicks": "<li>Hindi kailanman sapilitan. Walang lumalabas sa phone mo maliban kung i-tap mo ang Ibahagi.</li>\n              <li>May sariling key ang bawat samahan. Ang mga kasapi lang nito ang makakabukas sa laman nito; kahit kami ay hindi.</li>",
+"circlesTicks": "<li>Hindi kailanman sapilitan. Walang lumalabas sa phone mo maliban kung i-tap mo ang Ibahagi.</li>\n              <li>May sariling key ang bawat samahan. Ang mga kasapi lang nito ang makakabukas sa laman nito; kahit kami ay hindi.</li><li>Kailangan ng mga circle ng libreng pag-sign in, gamit ang passkey o code na ipinadala sa email.</li>",
 "listenH": "Pakinggan",
-"listenP": "Mag-tap ng talata, saka ang Pakinggan, at babasahin nang malakas ng phone mo ang kabanata sa sarili nitong boses. Para sa kotse, sa kusina, o sa pagod na mga mata."
+"listenP": "I-tap ang isang talata, saka ang Pakinggan. O i-tap ang Sabayang pagbasa sa search bar, at umiilaw ang bawat salita habang binabasa. Totoong tagapagbasa ang bumabasa ng BSB, King James at Louis Segond. Para sa sasakyan, kusina, o pagod na mata.",
+"orMac": "Sa Windows o Linux:",
+"macStore": "Sa Mac:"
 }

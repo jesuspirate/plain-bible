@@ -30,7 +30,7 @@
 "offlineH": "Funktioniert offline",
 "offlineP": "Die Bibeln, die du liest, bleiben auf deinem Telefon. Im Flugzeug, in den Bergen, im Keller: Sie öffnet sich bei dem Vers, an dem du aufgehört hast, ganz ohne Verbindung.",
 "marksH": "Markierungen, Notizen und Lesezeichen",
-"marksP": "Acht Farben, eine Notiz zu einem Vers oder zu einem ganzen Abschnitt, ein Lesebändchen für die Stellen, zu denen du zurückkehrst. Bring mit, was du in einer anderen Bibel-App gesammelt hast.",
+"marksP": "Acht Farben, eine Notiz zu einem Vers oder zu einem ganzen Abschnitt, ein Lesebändchen für die Stellen, zu denen du zurückkehrst. Bring mit, was du in einer anderen Bibel-App gesammelt hast. Markiere einen Vers wie mit einem Textmarker oder färbe seine Buchstaben.",
 "devicesH": "Deine Geräte, gemeinsam",
 "devicesP": "Nur wenn du willst. Melde dich mit einem Passkey oder einem Code per E-Mail an, und deine Markierungen, Notizen und Einstellungen folgen dir. Ein zweites Gerät meldet sich mit einem Link vom ersten aus an; nichts zu tippen.",
 "readingH": "Zum Lesen gemacht",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öffne die Bibel</a> in Chrome oder dem Browser, den du verwendest.</span></li><li><span>Öffne das Menü des Browsers, meist drei Punkte {svg} oben rechts.</span></li><li><span>Tippe auf <strong>Installieren und Verknüpfung erstellen</strong> (manche Browser sagen <strong>Zum Startbildschirm hinzufügen</strong>).</span></li><li><span>Wähle <strong>Installieren</strong>, nicht <strong>Verknüpfung erstellen</strong>. Tippe dann noch einmal auf <strong>Installieren</strong>.</span></li><li><span>Die Lampe erscheint bei deinen anderen Apps.</span></li>",
 "computerNote": "Sie öffnet sich in einem eigenen Fenster, wie jede andere App.",
 "computerInstalled": "Installiert. Öffne My Quiet Bible bei deinen anderen Apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öffne die Bibel</a> in Chrome oder Edge.</span></li><li><span>Klicke auf das Installationssymbol am rechten Ende der Adressleiste, einen Bildschirm mit einem Pfeil <span class=\"nb\">{svg},</span> und dann auf <strong>Installieren</strong>.</span></li><li><span>Auf einem Mac mit Safari: Klicke oben rechts auf <strong>Teilen</strong> und dann auf <strong>Zum Dock hinzufügen</strong>.</span></li><li><span>Oder behalte einfach den Tab. Er funktioniert genauso und merkt sich deine Stelle.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öffne die Bibel</a> in Chrome oder Edge.</span></li><li><span>Klicke auf das Installationssymbol am rechten Ende der Adressleiste, einen Bildschirm mit einem Pfeil <span class=\"nb\">{svg},</span> und dann auf <strong>Installieren</strong>.</span></li><li><span>Oder behalte einfach den Tab. Er funktioniert genauso und merkt sich deine Stelle.</span></li>",
 "ref": "Psalm 119,105",
 "more": "Mehr",
 "support": "Unterstützen",
@@ -82,7 +82,9 @@
 "circlesVerse": "„Denn wo zwei oder drei versammelt sind in meinem Namen, da bin ich mitten unter ihnen.“",
 "circlesRef": "Matthäus 18,20",
 "circlesLong": "Wenn du möchtest, erstelle einen kleinen Kreis für deine Familie oder ein paar Freunde. Teile ein Gebet, einen Vers oder eine Notiz mit einem Tippen. Sie hören zu, antworten mit einem Wort oder mit einem 🙏, und jeder liest den Vers in seiner eigenen Bibel.",
-"circlesTicks": "<li>Nie erforderlich. Nichts verlässt dein Telefon, außer du tippst auf „Teilen“.</li><li>Jeder Kreis hat seinen eigenen Schlüssel. Nur seine Mitglieder können öffnen, was darin ist; nicht einmal wir.</li>",
+"circlesTicks": "<li>Nie erforderlich. Nichts verlässt dein Telefon, außer du tippst auf „Teilen“.</li><li>Jeder Kreis hat seinen eigenen Schlüssel. Nur seine Mitglieder können öffnen, was darin ist; nicht einmal wir.</li><li>Für Kreise brauchst du eine kostenlose Anmeldung, mit einem Passkey oder einem Code per E-Mail.</li>",
 "listenH": "Anhören",
-"listenP": "Tippe auf einen Vers und dann auf „Anhören“, und dein Telefon liest das Kapitel mit seiner eigenen Stimme vor. Für das Auto, die Küche oder müde Augen."
+"listenP": "Tippe auf einen Vers und dann auf „Anhören“. Oder tippe in der Suchleiste auf „Mitlesen“, und jedes Wort leuchtet auf, während es gelesen wird. Echte Sprecher lesen die BSB, die King James und die Louis Segond. Für das Auto, die Küche oder müde Augen.",
+"orMac": "Unter Windows oder Linux:",
+"macStore": "Auf dem Mac:"
 }

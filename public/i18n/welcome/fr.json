@@ -42,7 +42,7 @@
 "offlineH": "Elle marche hors ligne",
 "offlineP": "Les Bibles que vous lisez restent sur votre téléphone. En avion, à la montagne, dans une cave : elle s’ouvre sur le verset où vous vous étiez arrêté, sans aucune connexion.",
 "marksH": "Surlignages, notes et signets",
-"marksP": "Huit couleurs, une note sur un verset ou sur tout un passage, un signet pour les endroits où vous revenez. Apportez ce que vous gardiez dans une autre application biblique.",
+"marksP": "Huit couleurs, une note sur un verset ou sur tout un passage, un signet pour les endroits où vous revenez. Apportez ce que vous gardiez dans une autre application biblique. Surlignez un verset comme au feutre, ou colorez ses lettres.",
 "devicesH": "Tous vos appareils",
 "devicesP": "Seulement si vous le voulez. Connectez-vous avec une clé d’accès ou un code reçu par e-mail, et vos surlignages, notes et réglages vous suivent. Un deuxième appareil se connecte depuis le premier avec un seul lien ; rien à taper.",
 "readingH": "Faite pour lire",
@@ -64,7 +64,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open>Ouvrez la Bible</a> dans Chrome, ou le navigateur que vous utilisez.</span></li><li><span>Ouvrez le menu du navigateur, souvent trois points {svg} en haut à droite.</span></li><li><span>Touchez <strong>Installer et créer un raccourci</strong> (certains navigateurs disent <strong>Ajouter à l’écran d’accueil</strong>).</span></li><li><span>Choisissez <strong>Installer</strong>, pas <strong>Créer un raccourci</strong>. Puis touchez de nouveau <strong>Installer</strong>.</span></li><li><span>La lampe apparaît avec vos autres applications.</span></li>",
 "computerNote": "Elle s’ouvre dans sa propre fenêtre, comme n’importe quelle application.",
 "computerInstalled": "Installée. Ouvrez My Quiet Bible avec vos autres applications.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open>Ouvrez la Bible</a> dans Chrome ou Edge.</span></li><li><span>Cliquez sur l’icône d’installation au bout de la barre d’adresse, un écran avec une flèche <span class=\"nb\">{svg},</span> puis sur <strong>Installer</strong>.</span></li><li><span>Sur un Mac avec Safari : cliquez sur <strong>Partager</strong> en haut à droite, puis sur <strong>Ajouter au Dock</strong>.</span></li><li><span>Ou gardez simplement l’onglet. Il marche de la même façon et se souvient de votre page.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open>Ouvrez la Bible</a> dans Chrome ou Edge.</span></li><li><span>Cliquez sur l’icône d’installation au bout de la barre d’adresse, un écran avec une flèche <span class=\"nb\">{svg},</span> puis sur <strong>Installer</strong>.</span></li><li><span>Ou gardez simplement l’onglet. Il marche de la même façon et se souvient de votre page.</span></li>",
 "closing": "Ta parole est une lampe à mes pieds, Et une lumière sur mon sentier.",
 "ref": "Psaume 119:105",
 "more": "Plus",
@@ -95,7 +95,9 @@
 "circlesVerse": "« Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d’eux. »",
 "circlesRef": "Matthieu 18:20",
 "circlesLong": "Quand vous le voulez, créez un petit cercle pour votre famille ou quelques amis. Partagez une prière, un verset ou une note d’un seul geste. Ils écoutent, répondent d’un mot ou d’un 🙏, et chacun lit le verset dans sa propre Bible.",
-"circlesTicks": "<li>Jamais obligatoire. Rien ne quitte votre téléphone tant que vous ne touchez pas Partager.</li><li>Chaque cercle a sa propre clé. Seuls ses membres peuvent ouvrir ce qu’il contient ; nous non plus, nous ne le pouvons pas.</li>",
+"circlesTicks": "<li>Jamais obligatoire. Rien ne quitte votre téléphone tant que vous ne touchez pas Partager.</li><li>Chaque cercle a sa propre clé. Seuls ses membres peuvent ouvrir ce qu’il contient ; nous non plus, nous ne le pouvons pas.</li><li>Les cercles demandent une connexion gratuite, avec une clé d’accès ou un code envoyé par e-mail.</li>",
 "listenH": "Écouter",
-"listenP": "Touchez un verset, puis Écouter, et votre téléphone lit le chapitre à voix haute, avec sa propre voix. Pour la voiture, la cuisine, ou les yeux fatigués."
+"listenP": "Touchez un verset, puis Écouter. Ou touchez Lire en suivant dans la barre de recherche : chaque mot s’allume pendant la lecture. De vrais lecteurs lisent la BSB, la King James et la Louis Segond. Pour la voiture, la cuisine, ou les yeux fatigués.",
+"orMac": "Sur Windows ou Linux :",
+"macStore": "Sur Mac :"
 }

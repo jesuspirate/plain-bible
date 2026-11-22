@@ -30,7 +30,7 @@
 "offlineH": "Offline is működik",
 "offlineP": "Az olvasott Bibliák a telefonján maradnak. Repülőn, a hegyekben, egy pincében: annál a versnél nyílik meg, ahol abbahagyta, kapcsolat nélkül is.",
 "marksH": "Kiemelések, jegyzetek és könyvjelzők",
-"marksP": "Nyolc szín, jegyzet egy vershez vagy egy egész szakaszhoz, szalag azokhoz a helyekhez, ahová visszatér. Hozza át, amit egy másik bibliaalkalmazásban gyűjtött.",
+"marksP": "Nyolc szín, jegyzet egy vershez vagy egy egész szakaszhoz, szalag azokhoz a helyekhez, ahová visszatér. Hozza át, amit egy másik bibliaalkalmazásban gyűjtött. Jelöljön ki egy verset szövegkiemelővel, vagy színezze ki a betűit.",
 "devicesH": "Eszközei együtt",
 "devicesP": "Csak ha szeretné. Jelentkezzen be jelkulccsal vagy e-mailben kapott kóddal, és kiemelései, jegyzetei és beállításai követik Önt. A második eszköz egyetlen linkkel jelentkezik be az elsőről; semmit sem kell begépelni.",
 "readingH": "Olvasásra készült",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Nyissa meg a Bibliát</a> a Chrome-ban vagy a használt böngészőben.</span></li>\n            <li><span>Nyissa meg a böngésző menüjét, általában a jobb felső sarokban lévő három pontot {svg}.</span></li>\n            <li><span>Koppintson a <strong>Telepítés és parancsikon létrehozása</strong> pontra (egyes böngészőkben <strong>Hozzáadás a kezdőképernyőhöz</strong>).</span></li>\n            <li><span>A <strong>Telepítés</strong> lehetőséget válassza, ne a <strong>Parancsikon létrehozása</strong> lehetőséget. Majd koppintson újra a <strong>Telepítés</strong> gombra.</span></li>\n            <li><span>A lámpás megjelenik a többi alkalmazása között.</span></li>",
 "computerNote": "Saját ablakban nyílik meg, mint bármely más alkalmazás.",
 "computerInstalled": "Telepítve. Nyissa meg a My Quiet Bible-t a többi alkalmazása között.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Nyissa meg a Bibliát</a> a Chrome-ban vagy az Edge-ben.</span></li>\n            <li><span>Kattintson a címsor jobb végén lévő telepítés ikonra, egy nyilas képernyőre <span class=\"nb\">{svg},</span> majd a <strong>Telepítés</strong> gombra.</span></li>\n            <li><span>Macen a Safarival: kattintson a jobb felső sarokban a <strong>Megosztás</strong>, majd a <strong>Hozzáadás a Dockhoz</strong> lehetőségre.</span></li>\n            <li><span>Vagy egyszerűen tartsa meg a lapot. Ugyanúgy működik, és megjegyzi, hol tartott.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Nyissa meg a Bibliát</a> a Chrome-ban vagy az Edge-ben.</span></li><li><span>Kattintson a címsor jobb végén lévő telepítés ikonra, egy nyilas képernyőre <span class=\"nb\">{svg},</span> majd a <strong>Telepítés</strong> gombra.</span></li><li><span>Vagy egyszerűen tartsa meg a lapot. Ugyanúgy működik, és megjegyzi, hol tartott.</span></li>",
 "ref": "Zsoltárok 119:105",
 "more": "Továbbiak",
 "support": "Támogatás",
@@ -82,7 +82,9 @@
 "circlesVerse": "„Mert ahol ketten vagy hárman összegyűlnek az én nevemben, ott vagyok közöttük.”",
 "circlesRef": "Máté 18:20",
 "circlesLong": "Ha szeretné, hozzon létre egy kis kört a családjának vagy néhány barátjának. Osszon meg egy imát, egy verset vagy egy jegyzetet egyetlen koppintással. Ők meghallgatják, válaszolnak egy szóval vagy egy 🙏 jellel, és mindenki a saját Bibliájában olvassa a verset.",
-"circlesTicks": "<li>Soha nem kötelező. Semmi sem hagyja el a telefonját, hacsak nem koppint a Megosztásra.</li>\n              <li>Minden körnek saját kulcsa van. Csak a tagjai nyithatják meg, ami benne van; még mi sem.</li>",
+"circlesTicks": "<li>Soha nem kötelező. Semmi sem hagyja el a telefonját, hacsak nem koppint a Megosztásra.</li>\n              <li>Minden körnek saját kulcsa van. Csak a tagjai nyithatják meg, ami benne van; még mi sem.</li><li>A körökhöz ingyenes bejelentkezés kell, jelkulccsal vagy e-mailben küldött kóddal.</li>",
 "listenH": "Meghallgatás",
-"listenP": "Koppintson egy versre, majd a Meghallgatás gombra, és a telefon a saját hangján felolvassa a fejezetet. Autóba, konyhába vagy fáradt szemeknek."
+"listenP": "Koppintson egy versre, majd a Meghallgatás gombra. Vagy koppintson a keresősávban a Követő olvasás ikonra, és minden szó felvillan, ahogy elhangzik. Igazi felolvasók olvassák a BSB-t, a King Jamest és a Louis Segondot. Autóba, konyhába vagy fáradt szemnek.",
+"orMac": "Windowson vagy Linuxon:",
+"macStore": "Macen:"
 }

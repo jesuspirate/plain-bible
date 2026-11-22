@@ -30,7 +30,7 @@
 "offlineH": "Ó ń ṣiṣẹ́ láìsí ayélujára",
 "offlineP": "Àwọn Bíbélì tí ẹ ń kà máa ń wà lórí fóònù yín. Nínú ọkọ̀ òfuurufú, lórí òkè, nínú ilé ìsàlẹ̀: ó máa ṣí sí ẹsẹ tí ẹ dúró sí, láìsí ìsopọ̀ kankan.",
 "marksH": "Àmì àwọ̀, àkọsílẹ̀ àti àmì ìwé",
-"marksP": "Àwọ̀ mẹ́jọ, àkọsílẹ̀ lórí ẹsẹ kan tàbí lórí abala kan lódindi, okùn fún àwọn ibi tí ẹ máa ń padà sí. Ẹ mú ohun tí ẹ tọ́jú sínú áàpù Bíbélì mìíràn wá.",
+"marksP": "Àwọ̀ mẹ́jọ, àkọsílẹ̀ lórí ẹsẹ kan tàbí lórí abala kan lódindi, okùn fún àwọn ibi tí ẹ máa ń padà sí. Ẹ mú ohun tí ẹ tọ́jú sínú áàpù Bíbélì mìíràn wá. Sàmì sí ẹsẹ kan bíi pẹ̀lú kálàmù àmì, tàbí fi àwọ̀ sí àwọn lẹ́tà rẹ̀.",
 "devicesH": "Àwọn ẹ̀rọ yín, papọ̀",
 "devicesP": "Tí ẹ bá fẹ́ nìkan. Ẹ wọlé pẹ̀lú kọ́kọ́rọ́ ìwọlé tàbí kóòdù tí a fi ránṣẹ́ sí ímeèlì, àwọn àmì àwọ̀, àkọsílẹ̀ àti ètò yín yóò sì tẹ̀lé yín. Ẹ̀rọ kejì máa ń wọlé láti ẹ̀rọ àkọ́kọ́ pẹ̀lú ìlujá kan; kò sí nǹkan láti tẹ.",
 "readingH": "A ṣe é fún kíkà",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ẹ ṣí Bíbélì</a> nínú Chrome, tàbí aṣàwákiri tí ẹ ń lò.</span></li><li><span>Ẹ ṣí mẹ́nù aṣàwákiri, tí ó sábà máa ń jẹ́ àmì mẹ́ta {svg} ní òkè ọ̀tún.</span></li><li><span>Ẹ tẹ <strong>Install and create shortcut</strong> (àwọn aṣàwákiri kan máa ń sọ pé <strong>Add to Home screen</strong>).</span></li><li><span>Ẹ yan <strong>Install</strong>, kì í ṣe <strong>Create shortcut</strong>. Lẹ́yìn náà ẹ tún tẹ <strong>Install</strong>.</span></li><li><span>Fìtílà náà yóò hàn pẹ̀lú àwọn áàpù yín mìíràn.</span></li>",
 "computerNote": "Ó ń ṣí nínú fèrèsé tirẹ̀, bí áàpù mìíràn.",
 "computerInstalled": "A ti fi sórí ẹ̀rọ. Ẹ ṣí My Quiet Bible pẹ̀lú àwọn áàpù yín mìíràn.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ẹ ṣí Bíbélì</a> nínú Chrome tàbí Edge.</span></li><li><span>Ẹ tẹ àmì ìfisórí-ẹ̀rọ ní òpin ọ̀tún ọ̀pá àdírẹ́sì, ojú-ẹ̀rọ kan pẹ̀lú ọfà <span class=\"nb\">{svg},</span> lẹ́yìn náà <strong>Install</strong>.</span></li><li><span>Lórí Mac pẹ̀lú Safari: ẹ tẹ <strong>Share</strong> ní òkè ọ̀tún, lẹ́yìn náà <strong>Add to Dock</strong>.</span></li><li><span>Tàbí ẹ kàn fi táàbù náà sílẹ̀. Ó ń ṣiṣẹ́ bákan náà, ó sì ń rántí ibi tí ẹ dé.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ẹ ṣí Bíbélì</a> nínú Chrome tàbí Edge.</span></li><li><span>Ẹ tẹ àmì ìfisórí-ẹ̀rọ ní òpin ọ̀tún ọ̀pá àdírẹ́sì, ojú-ẹ̀rọ kan pẹ̀lú ọfà <span class=\"nb\">{svg},</span> lẹ́yìn náà <strong>Install</strong>.</span></li><li><span>Tàbí ẹ kàn fi táàbù náà sílẹ̀. Ó ń ṣiṣẹ́ bákan náà, ó sì ń rántí ibi tí ẹ dé.</span></li>",
 "ref": "Sáàmù 119:105",
 "more": "Síwájú sí i",
 "support": "Ẹ ṣètìlẹ́yìn",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Nítorí níbi tí ẹni méjì tàbí mẹ́ta bá kó ara wọn jọ ní orúkọ mi, níbẹ̀ ni èmi wà ní àárín wọn.”",
 "circlesRef": "Mátíù 18:20",
 "circlesLong": "Nígbà tí ẹ bá fẹ́, ẹ ṣẹ̀dá ẹgbẹ́ kékeré kan fún ẹbí yín tàbí àwọn ọ̀rẹ́ díẹ̀. Ẹ pín àdúrà, ẹsẹ tàbí àkọsílẹ̀ pẹ̀lú ìfọwọ́kàn kan. Wọn yóò gbọ́, wọn yóò fèsì pẹ̀lú ọ̀rọ̀ kan, tàbí pẹ̀lú 🙏, olúkúlùkù yóò sì ka ẹsẹ náà nínú Bíbélì tirẹ̀.",
-"circlesTicks": "<li>Kò pọn dandan rárá. Kò sí ohun tí yóò kúrò lórí fóònù yín àyàfi tí ẹ bá tẹ Pín.</li><li>Ẹgbẹ́ kọ̀ọ̀kan ní kọ́kọ́rọ́ tirẹ̀. Àwọn ọmọ ẹgbẹ́ nìkan ló lè ṣí ohun tí ó wà nínú rẹ̀; kódà àwa kò lè ṣí i.</li>",
+"circlesTicks": "<li>Kò pọn dandan rárá. Kò sí ohun tí yóò kúrò lórí fóònù yín àyàfi tí ẹ bá tẹ Pín.</li><li>Ẹgbẹ́ kọ̀ọ̀kan ní kọ́kọ́rọ́ tirẹ̀. Àwọn ọmọ ẹgbẹ́ nìkan ló lè ṣí ohun tí ó wà nínú rẹ̀; kódà àwa kò lè ṣí i.</li><li>Àwọn àyíká nílò ìwọlé ọ̀fẹ́, pẹ̀lú kọ́kọ́rọ́ ìwọlé tàbí kóòdù tí a fi ránṣẹ́ sí ímeèlì.</li>",
 "listenH": "Gbọ́",
-"listenP": "Ẹ tẹ ẹsẹ kan, lẹ́yìn náà Gbọ́, fóònù yín yóò sì ka orí náà sókè pẹ̀lú ohùn tirẹ̀. Fún inú mọ́tò, ilé ìdáná, tàbí ojú tí ó ti rẹ̀."
+"listenP": "Tẹ ẹsẹ kan, lẹ́yìn náà Gbọ́. Tàbí tẹ Kà á pẹ̀lú nínú ọ̀pá ìwádìí, gbogbo ọ̀rọ̀ á sì tàn bí wọ́n ṣe ń kà á. Àwọn olùkàwé gidi ló ń ka BSB, King James àti Louis Segond. Fún inú ọkọ̀, ilé ìdáná, tàbí ojú tó ti rẹ̀.",
+"orMac": "Lórí Windows tàbí Linux:",
+"macStore": "Lórí Mac:"
 }

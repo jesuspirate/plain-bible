@@ -30,7 +30,7 @@
 "offlineH": "Agandar offline",
 "offlineP": "Agtalinaed iti phone-mo dagiti Biblia a basbasaem. Iti eroplano, iti bantay, iti sirok ti balay: aglukat daytoy iti bersikulo a nagsardengam, uray awan pulos ti koneksion.",
 "marksH": "Dagiti highlight, nota ken bookmark",
-"marksP": "Walo a kolor, maysa a nota iti maysa a bersikulo wenno iti intero a paset, maysa a sinta para kadagiti lugar a sublisublim. Iyakar ditoy dagiti indulinmo iti sabali a Bible app.",
+"marksP": "Walo a kolor, maysa a nota iti maysa a bersikulo wenno iti intero a paset, maysa a sinta para kadagiti lugar a sublisublim. Iyakar ditoy dagiti indulinmo iti sabali a Bible app. Markaan ti bersikulo a kas iti highlighter, wenno kolorantayo dagiti letrana.",
 "devicesH": "Dagiti device-mo, agkakadua",
 "devicesP": "No kayatmo laeng. Ag-sign in babaen ti passkey wenno code a naipatulod iti email, ket suroten dagiti highlight, nota ken setting-mo. Ti maikadua a device ket ag-sign in manipud iti umuna babaen ti maysa a link; awan ti i-type.",
 "readingH": "Naaramid para iti panagbasa",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Lukatan ti Biblia</a> iti Chrome, wenno iti browser nga us-usarem.</span></li>\n            <li><span>Lukatam ti menu ti browser, masansan a tallo a tuldek {svg} iti ngato a kannawan.</span></li>\n            <li><span>I-tap ti <strong>Install and create shortcut</strong> (kuna ti dadduma a browser ti <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Pilien ti <strong>Install</strong>, saan a ti <strong>Create shortcut</strong>. Sa i-tap manen ti <strong>Install</strong>.</span></li>\n            <li><span>Agparang ti pagsilawan a kadua dagiti sabali nga app-mo.</span></li>",
 "computerNote": "Aglukat daytoy iti bukodna a window, a kas iti sabali nga app.",
 "computerInstalled": "Nai-install. Lukatam ti My Quiet Bible a kadua dagiti sabali nga app-mo.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Lukatan ti Biblia</a> iti Chrome wenno Edge.</span></li>\n            <li><span>I-click ti icon ti panag-install iti kannawan a murdong ti address bar, maysa a screen nga addaan pana <span class=\"nb\">{svg},</span> sa ti <strong>Install</strong>.</span></li>\n            <li><span>Iti Mac nga addaan Safari: i-click ti <strong>Share</strong> iti ngato a kannawan, sa ti <strong>Add to Dock</strong>.</span></li>\n            <li><span>Wenno ibati laeng ti tab. Agpada ti panagandarna, ket malagipna ti ayanmo.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Lukatan ti Biblia</a> iti Chrome wenno Edge.</span></li><li><span>I-click ti icon ti panag-install iti kannawan a murdong ti address bar, maysa a screen nga addaan pana <span class=\"nb\">{svg},</span> sa ti <strong>Install</strong>.</span></li><li><span>Wenno ibati laeng ti tab. Agpada ti panagandarna, ket malagipna ti ayanmo.</span></li>",
 "ref": "Salmo 119:105",
 "more": "Ad-adu pay",
 "support": "Suportaran",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Ta no sadino ti pagtitiponan ti dua wenno tallo iti naganko, addaak sadiay iti tengngada.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "No kayatmo, agaramid iti bassit a bunggoy para iti pamiliam wenno sumagmamano a gayyem. Ibingay ti maysa a kararag, bersikulo wenno nota iti maysa a tap. Dumngegda, sumungbatda iti maysa a sao, wenno sumungbatda iti 🙏, ket tunggal maysa basaenna ti bersikulo iti bukodna a Biblia.",
-"circlesTicks": "<li>Saan a pulos a pilit. Awan ti rummuar iti phone-mo malaksid no i-tap-mo ti Ibingay.</li>\n              <li>Tunggal bunggoy ket addaan bukodna a tulbek. Dagiti laeng kamengna ti makalukat iti linaonna; uray dakami ket saan.</li>",
+"circlesTicks": "<li>Saan a pulos a pilit. Awan ti rummuar iti phone-mo malaksid no i-tap-mo ti Ibingay.</li>\n              <li>Tunggal bunggoy ket addaan bukodna a tulbek. Dagiti laeng kamengna ti makalukat iti linaonna; uray dakami ket saan.</li><li>Dagiti circle ket agkasapulan iti libre a panag-sign in, babaen ti passkey wenno code a naipatulod iti email.</li>",
 "listenH": "Denggen",
-"listenP": "I-tap ti maysa a bersikulo, sa ti Denggen, ket basaen a napigsa ti phone-mo ti kapitulo iti bukodna a timek. Para iti lugan, iti kusina, wenno kadagiti nabannog a mata."
+"listenP": "I-tap ti maysa a bersikulo, kalpasanna ti Denggen. Wenno i-tap ti Sabayan ti panagbasa iti search bar, ket aglawag ti tunggal sao bayat ti pannakabasana. Pudno nga agbasbasa ti mangbasa iti BSB, King James ken Louis Segond. Para iti lugan, kusina, wenno nabannog a mata.",
+"orMac": "Iti Windows wenno Linux:",
+"macStore": "Iti Mac:"
 }

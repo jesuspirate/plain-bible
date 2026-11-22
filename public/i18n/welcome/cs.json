@@ -30,7 +30,7 @@
 "offlineH": "Funguje offline",
 "offlineP": "Bible, které čtete, zůstávají ve vašem telefonu. V letadle, na horách, ve sklepě: otevře se na verši, kde jste skončili, úplně bez připojení.",
 "marksH": "Zvýraznění, poznámky a záložky",
-"marksP": "Osm barev, poznámka k verši nebo k celému úryvku, stužka pro místa, ke kterým se vracíte. Přeneste si, co máte uložené v jiné biblické aplikaci.",
+"marksP": "Osm barev, poznámka k verši nebo k celému úryvku, stužka pro místa, ke kterým se vracíte. Přeneste si, co máte uložené v jiné biblické aplikaci. Označte verš jako zvýrazňovačem, nebo obarvěte jeho písmena.",
 "devicesH": "Vaše zařízení pohromadě",
 "devicesP": "Jen pokud chcete. Přihlaste se přístupovým klíčem nebo kódem z e-mailu a vaše zvýraznění, poznámky a nastavení vás budou následovat. Druhé zařízení se přihlásí z prvního jedním odkazem; nic se nepíše.",
 "readingH": "Stvořeno ke čtení",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otevřete Bibli</a> v Chromu nebo v prohlížeči, který používáte.</span></li><li><span>Otevřete nabídku prohlížeče, obvykle tři tečky {svg} vpravo nahoře.</span></li><li><span>Klepněte na <strong>Nainstalovat a vytvořit zkratku</strong> (některé prohlížeče uvádějí <strong>Přidat na plochu</strong>).</span></li><li><span>Zvolte <strong>Nainstalovat</strong>, ne <strong>Vytvořit zkratku</strong>. Pak znovu klepněte na <strong>Nainstalovat</strong>.</span></li><li><span>Lampa se objeví mezi ostatními aplikacemi.</span></li>",
 "computerNote": "Otevírá se ve vlastním okně jako každá jiná aplikace.",
 "computerInstalled": "Nainstalováno. My Quiet Bible otevřete mezi ostatními aplikacemi.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otevřete Bibli</a> v Chromu nebo Edgi.</span></li><li><span>Klikněte na ikonu instalace na pravém konci adresního řádku, obrazovku se šipkou <span class=\"nb\">{svg},</span> a pak na <strong>Nainstalovat</strong>.</span></li><li><span>Na Macu se Safari: klikněte vpravo nahoře na <strong>Sdílet</strong> a pak na <strong>Přidat do Docku</strong>.</span></li><li><span>Nebo si jednoduše nechte panel otevřený. Funguje stejně a pamatuje si, kde jste skončili.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otevřete Bibli</a> v Chromu nebo Edgi.</span></li><li><span>Klikněte na ikonu instalace na pravém konci adresního řádku, obrazovku se šipkou <span class=\"nb\">{svg},</span> a pak na <strong>Nainstalovat</strong>.</span></li><li><span>Nebo si jednoduše nechte panel otevřený. Funguje stejně a pamatuje si, kde jste skončili.</span></li>",
 "ref": "Žalm 119:105",
 "more": "Více",
 "support": "Podpořit",
@@ -82,7 +82,9 @@
 "circlesVerse": "„Neboť kde jsou dva nebo tři shromážděni ve jménu mém, tam jsem já uprostřed nich.“",
 "circlesRef": "Matouš 18:20",
 "circlesLong": "Když budete chtít, vytvořte malý kruh pro rodinu nebo pár přátel. Jedním klepnutím sdílejte modlitbu, verš nebo poznámku. Oni poslouchají, odpovídají slovem nebo 🙏 a každý čte verš ve své vlastní Bibli.",
-"circlesTicks": "<li>Nikdy to není povinné. Nic neopustí váš telefon, dokud neklepnete na Sdílet.</li><li>Každý kruh má svůj vlastní klíč. Jeho obsah mohou otevřít jen jeho členové; ani my ne.</li>",
+"circlesTicks": "<li>Nikdy to není povinné. Nic neopustí váš telefon, dokud neklepnete na Sdílet.</li><li>Každý kruh má svůj vlastní klíč. Jeho obsah mohou otevřít jen jeho členové; ani my ne.</li><li>Kruhy vyžadují bezplatné přihlášení, přístupovým klíčem nebo kódem zaslaným e-mailem.</li>",
 "listenH": "Poslouchejte",
-"listenP": "Klepněte na verš a pak na Poslechnout a telefon vám kapitolu přečte nahlas svým vlastním hlasem. Do auta, do kuchyně nebo pro unavené oči."
+"listenP": "Klepněte na verš a pak na Poslechnout. Nebo klepněte na Čtení se zvýrazněním v liště hledání a každé slovo se rozsvítí, když zazní. Skuteční předčítači čtou BSB, King James a Louis Segond. Do auta, do kuchyně nebo pro unavené oči.",
+"orMac": "Ve Windows nebo Linuxu:",
+"macStore": "Na Macu:"
 }

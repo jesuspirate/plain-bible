@@ -30,7 +30,7 @@
 "offlineH": "Gobbraghey ass-linney",
 "offlineP": "Ta ny Biblyn t’ou lhaih fuirraght er dty chellvane. Er etlan, ayns ny sleityn, ayns shamyr fo-halloo: t’ee fosley er y rann raad haag oo jeh, gyn kiangley erbee.",
 "marksH": "Soilshaghyn, noatyn as cowraghyn-lioar",
-"marksP": "Hoght daahyn, noat er rann ny er raad slane, rebban son ny ynnydyn t’ou cheet back huc. Cur lhiat ny ren oo freayll ayns app Bible elley.",
+"marksP": "Hoght daahyn, noat er rann ny er raad slane, rebban son ny ynnydyn t’ou cheet back huc. Cur lhiat ny ren oo freayll ayns app Bible elley. Cowree rann myr lesh pen soilshey, ny daaghee ny lettyryn echey.",
 "devicesH": "Dty ghreieyn, cooidjagh",
 "devicesP": "Ynrican my sailt. Gow stiagh lesh passkey ny coad currit er post-L, as ta dty hoilshaghyn, noatyn as reaghyssyn geiyrt ort. Ta nah ghreie goll stiagh veih’n chied fer lesh un kiangley; veg dy scrieu.",
 "readingH": "Jeant son lhaih",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Foshil y Vible</a> ayns Chrome, ny yn frowser t’ou ymmydey.</span></li>\n            <li><span>Foshil menu y frowser, tree pointyn {svg} heose er y laue yesh dy mennick.</span></li>\n            <li><span>Bean rish <strong>Install and create shortcut</strong> (ta frowseryn ennagh gra <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Reih <strong>Install</strong>, cha nee <strong>Create shortcut</strong>. Eisht bean rish <strong>Install</strong> reesht.</span></li>\n            <li><span>Hig y lampey marish dty apps elley.</span></li>",
 "computerNote": "T’ee fosley ayns e uinnag hene, myr app erbee elley.",
 "computerInstalled": "Currit stiagh. Foshil My Quiet Bible marish dty apps elley.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Foshil y Vible</a> ayns Chrome ny Edge.</span></li>\n            <li><span>Click er jalloo y chur-stiagh ec kione yesh barr yn enmys, scaileen lesh sythe <span class=\"nb\">{svg},</span> eisht <strong>Install</strong>.</span></li>\n            <li><span>Er Mac lesh Safari: click er <strong>Share</strong> heose er y laue yesh, eisht <strong>Add to Dock</strong>.</span></li>\n            <li><span>Ny freill y tab foshlit. T’eh gobbraghey myr shen neesht, as t’eh cooinaghtyn dty ynnyd.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Foshil y Vible</a> ayns Chrome ny Edge.</span></li><li><span>Click er jalloo y chur-stiagh ec kione yesh barr yn enmys, scaileen lesh sythe <span class=\"nb\">{svg},</span> eisht <strong>Install</strong>.</span></li><li><span>Ny freill y tab foshlit. T’eh gobbraghey myr shen neesht, as t’eh cooinaghtyn dty ynnyd.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Tooilley",
 "support": "Cooney lesh",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Son raad ta jees ny troor er nyn jaglym cooidjagh ayns m’ennym, ta mish ayns shen ayns y vean oc.”",
 "circlesRef": "Mian 18:20",
 "circlesLong": "Tra sailt, jean kiarkyl beg son dty lught-thie ny beggan caarjyn. Rheynn padjer, rann ny noat lesh un vean. T’ad clashtyn, freggyrt lesh fockle, ny lesh 🙏, as ta dagh fer jeu lhaih y rann ayns e Vible hene.",
-"circlesTicks": "<li>Cha nel eh eignit rieau. Cha nel veg faagail dty chellvane mannagh vel oo bentyn rish Rheynn.</li>\n              <li>Ta eochair hene ec dagh kiarkyl. Cha nod agh ny oltyn eh y fosley ny t’ayn; cha nod shinyn hene eer.</li>",
+"circlesTicks": "<li>Cha nel eh eignit rieau. Cha nel veg faagail dty chellvane mannagh vel oo bentyn rish Rheynn.</li>\n              <li>Ta eochair hene ec dagh kiarkyl. Cha nod agh ny oltyn eh y fosley ny t’ayn; cha nod shinyn hene eer.</li><li>Shegin da kirkylyn çheet stiagh nastee, lesh ard-ochill ny coad currit ec post-l.</li>",
 "listenH": "Clasht",
-"listenP": "Bean rish rann, eisht Clasht, as ta dty chellvane lhaih yn caibil magh ard lesh e choraa hene. Son y gleashtan, y cheshtaney, ny sooillyn skee."
+"listenP": "Bwoaill rish rann, as eisht Clasht. Ny bwoaill rish Lhaih marish ayns barr y tooilley, as soilshee dagh fockle myr t’eh lhaiht. Ta lhaihderyn firrinagh lhaih yn BSB, yn King James as yn Louis Segond. Son y ghleashtan, y chishtey, ny sooillyn skee.",
+"orMac": "Er Windows ny Linux:",
+"macStore": "Er Mac:"
 }

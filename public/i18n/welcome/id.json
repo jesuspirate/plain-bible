@@ -30,7 +30,7 @@
 "offlineH": "Berfungsi offline",
 "offlineP": "Alkitab yang Anda baca tetap tersimpan di ponsel Anda. Di pesawat, di pegunungan, di ruang bawah tanah: aplikasi terbuka di ayat terakhir yang Anda baca, tanpa koneksi sama sekali.",
 "marksH": "Sorotan, catatan, dan penanda",
-"marksP": "Delapan warna, catatan pada satu ayat atau seluruh perikop, pita untuk tempat yang sering Anda kunjungi lagi. Bawa juga apa yang Anda simpan di aplikasi Alkitab lain.",
+"marksP": "Delapan warna, catatan pada satu ayat atau seluruh perikop, pita untuk tempat yang sering Anda kunjungi lagi. Bawa juga apa yang Anda simpan di aplikasi Alkitab lain. Tandai ayat seperti dengan stabilo, atau warnai hurufnya.",
 "devicesH": "Perangkat Anda, bersatu",
 "devicesP": "Hanya jika Anda mau. Masuk dengan kunci sandi atau kode yang dikirim lewat email, dan sorotan, catatan, serta pengaturan Anda ikut ke mana pun. Perangkat kedua masuk dari perangkat pertama dengan satu tautan; tidak perlu mengetik apa pun.",
 "readingH": "Dibuat untuk membaca",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buka Alkitab</a> di Chrome, atau browser yang Anda pakai.</span></li>\n            <li><span>Buka menu browser, biasanya tiga titik {svg} di kanan atas.</span></li>\n            <li><span>Ketuk <strong>Instal dan buat pintasan</strong> (beberapa browser menyebutnya <strong>Tambahkan ke layar utama</strong>).</span></li>\n            <li><span>Pilih <strong>Instal</strong>, bukan <strong>Buat pintasan</strong>. Lalu ketuk <strong>Instal</strong> lagi.</span></li>\n            <li><span>Lampu akan muncul bersama aplikasi Anda yang lain.</span></li>",
 "computerNote": "Aplikasi terbuka di jendelanya sendiri, seperti aplikasi lain.",
 "computerInstalled": "Terinstal. Buka My Quiet Bible bersama aplikasi Anda yang lain.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buka Alkitab</a> di Chrome atau Edge.</span></li>\n            <li><span>Klik ikon instal di ujung kanan bilah alamat, berupa layar dengan panah <span class=\"nb\">{svg},</span> lalu <strong>Instal</strong>.</span></li>\n            <li><span>Di Mac dengan Safari: klik <strong>Bagikan</strong> di kanan atas, lalu <strong>Tambah ke Dock</strong>.</span></li>\n            <li><span>Atau cukup biarkan tabnya terbuka. Cara kerjanya sama, dan tempat Anda membaca tetap diingat.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Buka Alkitab</a> di Chrome atau Edge.</span></li><li><span>Klik ikon instal di ujung kanan bilah alamat, berupa layar dengan panah <span class=\"nb\">{svg},</span> lalu <strong>Instal</strong>.</span></li><li><span>Atau cukup biarkan tabnya terbuka. Cara kerjanya sama, dan tempat Anda membaca tetap diingat.</span></li>",
 "ref": "Mazmur 119:105",
 "more": "Lainnya",
 "support": "Dukung",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Sebab di mana dua atau tiga orang berkumpul dalam Nama-Ku, di situ Aku ada di tengah-tengah mereka.”",
 "circlesRef": "Matius 18:20",
 "circlesLong": "Jika Anda mau, buatlah lingkaran kecil untuk keluarga atau beberapa teman. Bagikan doa, ayat, atau catatan dengan satu ketukan. Mereka mendengarkan, membalas dengan sepatah kata, atau menjawab dengan 🙏, dan masing-masing membaca ayat itu di Alkitab mereka sendiri.",
-"circlesTicks": "<li>Tidak pernah wajib. Tidak ada yang keluar dari ponsel Anda kecuali Anda mengetuk Bagikan.</li>\n              <li>Setiap lingkaran punya kuncinya sendiri. Hanya anggotanya yang bisa membuka isinya; bahkan kami pun tidak bisa.</li>",
+"circlesTicks": "<li>Tidak pernah wajib. Tidak ada yang keluar dari ponsel Anda kecuali Anda mengetuk Bagikan.</li>\n              <li>Setiap lingkaran punya kuncinya sendiri. Hanya anggotanya yang bisa membuka isinya; bahkan kami pun tidak bisa.</li><li>Lingkaran memerlukan masuk gratis, dengan kunci sandi atau kode yang dikirim lewat email.</li>",
 "listenH": "Dengarkan",
-"listenP": "Ketuk ayat, lalu Dengarkan, dan ponsel Anda membacakan pasal itu dengan suaranya sendiri. Untuk di mobil, di dapur, atau saat mata lelah."
+"listenP": "Ketuk sebuah ayat, lalu Dengarkan. Atau ketuk Baca bersama di bilah pencarian, dan setiap kata menyala saat dibacakan. Pembaca sungguhan membacakan BSB, King James, dan Louis Segond. Untuk di mobil, di dapur, atau mata yang lelah.",
+"orMac": "Di Windows atau Linux:",
+"macStore": "Di Mac:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Radi bez interneta",
 "offlineP": "Biblije koje čitate ostaju na vašem telefonu. U avionu, u planinama, u podrumu: otvara se na retku gdje ste stali, bez ikakve veze.",
 "marksH": "Isticanja, bilješke i knjižne oznake",
-"marksP": "Osam boja, bilješka uz redak ili uz cijeli odlomak, vrpca za mjesta kojima se vraćate. Prenesite ono što ste sačuvali u drugoj biblijskoj aplikaciji.",
+"marksP": "Osam boja, bilješka uz redak ili uz cijeli odlomak, vrpca za mjesta kojima se vraćate. Prenesite ono što ste sačuvali u drugoj biblijskoj aplikaciji. Označite redak kao markerom ili obojite njegova slova.",
 "devicesH": "Vaši uređaji, zajedno",
 "devicesP": "Samo ako to želite. Prijavite se pristupnim ključem ili kôdom poslanim e-poštom, i vaša isticanja, bilješke i postavke prate vas. Drugi uređaj prijavljuje se s prvoga jednom poveznicom; ništa ne treba upisivati.",
 "readingH": "Stvorena za čitanje",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otvorite Bibliju</a> u Chromeu ili pregledniku koji koristite.</span></li><li><span>Otvorite izbornik preglednika, obično tri točke {svg} gore desno.</span></li><li><span>Dodirnite <strong>Instaliraj i izradi prečac</strong> (neki preglednici kažu <strong>Dodaj na početni zaslon</strong>).</span></li><li><span>Odaberite <strong>Instaliraj</strong>, a ne <strong>Izradi prečac</strong>. Zatim ponovno dodirnite <strong>Instaliraj</strong>.</span></li><li><span>Svjetiljka se pojavljuje uz vaše druge aplikacije.</span></li>",
 "computerNote": "Otvara se u vlastitom prozoru, kao svaka druga aplikacija.",
 "computerInstalled": "Instalirano. Otvorite My Quiet Bible uz svoje druge aplikacije.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otvorite Bibliju</a> u Chromeu ili Edgeu.</span></li><li><span>Kliknite ikonu za instalaciju na desnom kraju adresne trake, zaslon sa strelicom <span class=\"nb\">{svg},</span> zatim <strong>Instaliraj</strong>.</span></li><li><span>Na Macu sa Safarijem: kliknite <strong>Dijeli</strong> gore desno, zatim <strong>Dodaj u Dock</strong>.</span></li><li><span>Ili jednostavno zadržite karticu. Radi jednako i pamti gdje ste stali.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Otvorite Bibliju</a> u Chromeu ili Edgeu.</span></li><li><span>Kliknite ikonu za instalaciju na desnom kraju adresne trake, zaslon sa strelicom <span class=\"nb\">{svg},</span> zatim <strong>Instaliraj</strong>.</span></li><li><span>Ili jednostavno zadržite karticu. Radi jednako i pamti gdje ste stali.</span></li>",
 "ref": "Psalam 119,105",
 "more": "Više",
 "support": "Podržite",
@@ -82,7 +82,9 @@
 "circlesVerse": "„Jer gdje su dvojica ili trojica sabrana u moje ime, ondje sam i ja među njima.”",
 "circlesRef": "Matej 18,20",
 "circlesLong": "Kad poželite, napravite mali krug za svoju obitelj ili nekoliko prijatelja. Podijelite molitvu, redak ili bilješku jednim dodirom. Oni slušaju, odgovaraju riječju ili s 🙏, a svatko čita redak u svojoj Bibliji.",
-"circlesTicks": "<li>Nikad obavezno. Ništa ne napušta vaš telefon ako ne dodirnete Podijeli.</li><li>Svaki krug ima vlastiti ključ. Samo njegovi članovi mogu otvoriti ono što je u njemu; čak ni mi ne možemo.</li>",
+"circlesTicks": "<li>Nikad obavezno. Ništa ne napušta vaš telefon ako ne dodirnete Podijeli.</li><li>Svaki krug ima vlastiti ključ. Samo njegovi članovi mogu otvoriti ono što je u njemu; čak ni mi ne možemo.</li><li>Krugovi traže besplatnu prijavu, pristupnim ključem ili kodom poslanim e-poštom.</li>",
 "listenH": "Slušajte",
-"listenP": "Dodirnite redak, zatim Slušaj, i vaš telefon čita poglavlje naglas svojim glasom. Za vožnju, za kuhinju ili za umorne oči."
+"listenP": "Dodirnite redak, zatim Slušaj. Ili dodirnite Prati čitanje u traci za pretraživanje i svaka riječ zasvijetli dok se čita. Pravi čitači čitaju BSB, King James i Louis Segond. Za auto, kuhinju ili umorne oči.",
+"orMac": "Na Windowsima ili Linuxu:",
+"macStore": "Na Macu:"
 }

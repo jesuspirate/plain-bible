@@ -30,7 +30,7 @@
 "offlineH": "Werkt offline",
 "offlineP": "De Bijbels die je leest, blijven op je telefoon. In het vliegtuig, in de bergen, in een kelder: hij opent bij het vers waar je gebleven was, helemaal zonder verbinding.",
 "marksH": "Markeringen, notities en bladwijzers",
-"marksP": "Acht kleuren, een notitie bij een vers of bij een heel gedeelte, een leeslint voor de plekken waar je naar terugkeert. Neem mee wat je in een andere Bijbel-app had bewaard.",
+"marksP": "Acht kleuren, een notitie bij een vers of bij een heel gedeelte, een leeslint voor de plekken waar je naar terugkeert. Neem mee wat je in een andere Bijbel-app had bewaard. Markeer een vers als met een markeerstift, of kleur de letters zelf.",
 "devicesH": "Je apparaten, samen",
 "devicesP": "Alleen als je dat wilt. Log in met een toegangssleutel of een code per e-mail, en je markeringen, notities en instellingen gaan met je mee. Een tweede apparaat logt vanaf het eerste in met één link; niets te typen.",
 "readingH": "Gemaakt om te lezen",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Open de Bijbel</a> in Chrome, of de browser die je gebruikt.</span></li><li><span>Open het menu van de browser, meestal drie puntjes {svg} rechtsboven.</span></li><li><span>Tik op <strong>Installeren en snelkoppeling maken</strong> (sommige browsers zeggen <strong>Toevoegen aan startscherm</strong>).</span></li><li><span>Kies <strong>Installeren</strong>, niet <strong>Snelkoppeling maken</strong>. Tik dan nog eens op <strong>Installeren</strong>.</span></li><li><span>De lamp verschijnt bij je andere apps.</span></li>",
 "computerNote": "Hij opent in een eigen venster, zoals elke andere app.",
 "computerInstalled": "Geïnstalleerd. Open My Quiet Bible bij je andere apps.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Open de Bijbel</a> in Chrome of Edge.</span></li><li><span>Klik op het installatie-icoon aan de rechterkant van de adresbalk, een scherm met een pijl <span class=\"nb\">{svg},</span> en dan op <strong>Installeren</strong>.</span></li><li><span>Op een Mac met Safari: klik rechtsboven op <strong>Deel</strong> en dan op <strong>Voeg toe aan Dock</strong>.</span></li><li><span>Of houd gewoon het tabblad open. Dat werkt hetzelfde en onthoudt waar je was.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Open de Bijbel</a> in Chrome of Edge.</span></li><li><span>Klik op het installatie-icoon aan de rechterkant van de adresbalk, een scherm met een pijl <span class=\"nb\">{svg},</span> en dan op <strong>Installeren</strong>.</span></li><li><span>Of houd gewoon het tabblad open. Dat werkt hetzelfde en onthoudt waar je was.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Meer",
 "support": "Steun het",
@@ -82,7 +82,9 @@
 "circlesVerse": "‘Want waar twee of drie in Mijn Naam bijeengekomen zijn, daar ben Ik in hun midden.’",
 "circlesRef": "Mattheüs 18:20",
 "circlesLong": "Als je wilt, maak je een kleine kring voor je familie of een paar vrienden. Deel een gebed, een vers of een notitie met één tik. Zij luisteren, antwoorden met een woord of met een 🙏, en ieder leest het vers in zijn eigen Bijbel.",
-"circlesTicks": "<li>Nooit verplicht. Niets verlaat je telefoon tenzij je op Delen tikt.</li><li>Elke kring heeft zijn eigen sleutel. Alleen de leden kunnen openen wat erin staat; zelfs wij niet.</li>",
+"circlesTicks": "<li>Nooit verplicht. Niets verlaat je telefoon tenzij je op Delen tikt.</li><li>Elke kring heeft zijn eigen sleutel. Alleen de leden kunnen openen wat erin staat; zelfs wij niet.</li><li>Voor kringen heb je een gratis aanmelding nodig, met een toegangssleutel of een code per e-mail.</li>",
 "listenH": "Luisteren",
-"listenP": "Tik op een vers en dan op Luisteren, en je telefoon leest het hoofdstuk voor met zijn eigen stem. Voor in de auto, in de keuken of voor vermoeide ogen."
+"listenP": "Tik op een vers en dan op Luisteren. Of tik op Meelezen in de zoekbalk, en elk woord licht op terwijl het wordt voorgelezen. Echte stemmen lezen de BSB, de King James en de Louis Segond. Voor in de auto, de keuken, of voor vermoeide ogen.",
+"orMac": "Op Windows of Linux:",
+"macStore": "Op een Mac:"
 }

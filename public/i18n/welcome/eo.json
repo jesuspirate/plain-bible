@@ -30,7 +30,7 @@
 "offlineH": "Funkcias eksterrete",
 "offlineP": "La Biblioj, kiujn vi legas, restas en via telefono. En aviadilo, en la montoj, en kelo: ĝi malfermiĝas ĉe la verso, kie vi haltis, tute sen konekto.",
 "marksH": "Emfazoj, notoj kaj legosignoj",
-"marksP": "Ok koloroj, noto pri verso aŭ pri tuta teksto, rubando por la lokoj, al kiuj vi revenas. Alportu tion, kion vi konservis en alia Biblia aplikaĵo.",
+"marksP": "Ok koloroj, noto pri verso aŭ pri tuta teksto, rubando por la lokoj, al kiuj vi revenas. Alportu tion, kion vi konservis en alia Biblia aplikaĵo. Marku verson kiel per markilo, aŭ kolorigu ĝiajn literojn.",
 "devicesH": "Viaj aparatoj, kune",
 "devicesP": "Nur se vi volas. Ensalutu per pasŝlosilo aŭ kodo senditaj retpoŝte, kaj viaj emfazoj, notoj kaj agordoj sekvas vin. Dua aparato ensalutas el la unua per unu ligilo; nenio por tajpi.",
 "readingH": "Farita por legado",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Malfermu la Biblion</a> en Chrome, aŭ la retumilo, kiun vi uzas.</span></li>\n            <li><span>Malfermu la menuon de la retumilo, kutime tri punktoj {svg} supre dekstre.</span></li>\n            <li><span>Tuŝetu <strong>Instali kaj krei ŝparvojon</strong> (kelkaj retumiloj diras <strong>Aldoni al hejmekrano</strong>).</span></li>\n            <li><span>Elektu <strong>Instali</strong>, ne <strong>Krei ŝparvojon</strong>. Poste tuŝetu <strong>Instali</strong> denove.</span></li>\n            <li><span>La lampo aperas kun viaj aliaj aplikaĵoj.</span></li>",
 "computerNote": "Ĝi malfermiĝas en propra fenestro, kiel ajna alia aplikaĵo.",
 "computerInstalled": "Instalita. Malfermu My Quiet Bible kun viaj aliaj aplikaĵoj.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Malfermu la Biblion</a> en Chrome aŭ Edge.</span></li>\n            <li><span>Alklaku la instalan piktogramon ĉe la dekstra fino de la adresbreto, ekranon kun sago <span class=\"nb\">{svg},</span> poste <strong>Instali</strong>.</span></li>\n            <li><span>En Mac kun Safari: alklaku <strong>Kunhavigi</strong> supre dekstre, poste <strong>Aldoni al Doko</strong>.</span></li>\n            <li><span>Aŭ simple tenu la langeton. Ĝi funkcias same kaj memoras vian lokon.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Malfermu la Biblion</a> en Chrome aŭ Edge.</span></li><li><span>Alklaku la instalan piktogramon ĉe la dekstra fino de la adresbreto, ekranon kun sago <span class=\"nb\">{svg},</span> poste <strong>Instali</strong>.</span></li><li><span>Aŭ simple tenu la langeton. Ĝi funkcias same kaj memoras vian lokon.</span></li>",
 "ref": "Psalmo 119:105",
 "more": "Pli",
 "support": "Subteni ĝin",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Ĉar kie du aŭ tri estas kunvenintaj en mia nomo, tie mi estas meze de ili.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Kiam vi volas, kreu malgrandan rondon por via familio aŭ kelkaj amikoj. Kunhavigu preĝon, verson aŭ noton per unu tuŝeto. Ili aŭskultas, respondas per vorto aŭ per 🙏, kaj ĉiu legas la verson en sia propra Biblio.",
-"circlesTicks": "<li>Neniam deviga. Nenio forlasas vian telefonon, krom se vi tuŝetas Kunhavigi.</li>\n              <li>Ĉiu rondo havas sian propran ŝlosilon. Nur ĝiaj membroj povas malfermi tion, kio estas en ĝi; eĉ ne ni.</li>",
+"circlesTicks": "<li>Neniam deviga. Nenio forlasas vian telefonon, krom se vi tuŝetas Kunhavigi.</li>\n              <li>Ĉiu rondo havas sian propran ŝlosilon. Nur ĝiaj membroj povas malfermi tion, kio estas en ĝi; eĉ ne ni.</li><li>Rondoj bezonas senpagan ensaluton, per pasŝlosilo aŭ per kodo sendita retpoŝte.</li>",
 "listenH": "Aŭskulti",
-"listenP": "Tuŝetu verson, poste Aŭskulti, kaj via telefono laŭtlegas la ĉapitron per sia propra voĉo. Por la aŭto, la kuirejo aŭ lacaj okuloj."
+"listenP": "Tuŝu verson, poste Aŭskulti. Aŭ tuŝu Kunlegi en la serĉa breto, kaj ĉiu vorto lumiĝas dum oni legas ĝin. Veraj legantoj legas la BSB, la King James kaj la Louis Segond. Por la aŭto, la kuirejo aŭ lacaj okuloj.",
+"orMac": "Ĉe Windows aŭ Linukso:",
+"macStore": "Ĉe Mac:"
 }

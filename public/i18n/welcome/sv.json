@@ -30,7 +30,7 @@
 "offlineH": "Fungerar offline",
 "offlineP": "Biblarna du läser stannar på din telefon. På ett flyg, i fjällen, i en källare: den öppnas vid versen där du slutade, helt utan anslutning.",
 "marksH": "Markeringar, anteckningar och bokmärken",
-"marksP": "Åtta färger, en anteckning till en vers eller ett helt avsnitt, ett bokmärkesband för ställena du återvänder till. Ta med dig det du sparat i en annan bibelapp.",
+"marksP": "Åtta färger, en anteckning till en vers eller ett helt avsnitt, ett bokmärkesband för ställena du återvänder till. Ta med dig det du sparat i en annan bibelapp. Markera en vers som med en överstrykningspenna, eller färga dess bokstäver.",
 "devicesH": "Dina enheter, tillsammans",
 "devicesP": "Bara om du vill. Logga in med en lösennyckel eller en kod via mejl, så följer dina markeringar, anteckningar och inställningar med dig. En andra enhet loggar in från den första med en länk; inget att skriva.",
 "readingH": "Gjord för att läsa",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öppna Bibeln</a> i Chrome eller webbläsaren du använder.</span></li><li><span>Öppna webbläsarens meny, oftast tre prickar {svg} uppe till höger.</span></li><li><span>Tryck på <strong>Installera och skapa genväg</strong> (i vissa webbläsare står det <strong>Lägg till på startskärmen</strong>).</span></li><li><span>Välj <strong>Installera</strong>, inte <strong>Skapa genväg</strong>. Tryck sedan på <strong>Installera</strong> igen.</span></li><li><span>Lampan visas bland dina andra appar.</span></li>",
 "computerNote": "Den öppnas i ett eget fönster, som vilken annan app som helst.",
 "computerInstalled": "Installerad. Öppna My Quiet Bible bland dina andra appar.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öppna Bibeln</a> i Chrome eller Edge.</span></li><li><span>Klicka på installationssymbolen längst till höger i adressfältet, en skärm med en pil <span class=\"nb\">{svg},</span> och sedan på <strong>Installera</strong>.</span></li><li><span>På en Mac med Safari: klicka på <strong>Dela</strong> uppe till höger och sedan på <strong>Lägg till i Dock</strong>.</span></li><li><span>Eller behåll bara fliken. Den fungerar likadant och kommer ihåg var du är.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Öppna Bibeln</a> i Chrome eller Edge.</span></li><li><span>Klicka på installationssymbolen längst till höger i adressfältet, en skärm med en pil <span class=\"nb\">{svg},</span> och sedan på <strong>Installera</strong>.</span></li><li><span>Eller behåll bara fliken. Den fungerar likadant och kommer ihåg var du är.</span></li>",
 "ref": "Psalm 119:105",
 "more": "Mer",
 "support": "Stöd arbetet",
@@ -82,7 +82,9 @@
 "circlesVerse": "”Ty där två eller tre är samlade i mitt namn, där är jag mitt ibland dem.”",
 "circlesRef": "Matteus 18:20",
 "circlesLong": "När du vill kan du skapa en liten krets för din familj eller några vänner. Dela en bön, en vers eller en anteckning med ett tryck. De lyssnar, svarar med ett ord eller med en 🙏, och var och en läser versen i sin egen bibel.",
-"circlesTicks": "<li>Aldrig ett krav. Inget lämnar din telefon om du inte trycker på Dela.</li><li>Varje krets har sin egen nyckel. Bara dess medlemmar kan öppna det som finns i den; inte ens vi kan det.</li>",
+"circlesTicks": "<li>Aldrig ett krav. Inget lämnar din telefon om du inte trycker på Dela.</li><li>Varje krets har sin egen nyckel. Bara dess medlemmar kan öppna det som finns i den; inte ens vi kan det.</li><li>Kretsar kräver en gratis inloggning, med en nyckel eller en kod via e-post.</li>",
 "listenH": "Lyssna",
-"listenP": "Tryck på en vers och sedan på Lyssna, så läser telefonen upp kapitlet med sin egen röst. För bilen, köket eller trötta ögon."
+"listenP": "Tryck på en vers och sedan på Lyssna. Eller tryck på Läs med i sökfältet, så lyser varje ord upp medan det läses. Riktiga uppläsare läser BSB, King James och Louis Segond. För bilen, köket eller trötta ögon.",
+"orMac": "På Windows eller Linux:",
+"macStore": "På en Mac:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Ekola awatali mutimbagano",
 "offlineP": "Baibuli z’osoma zisigala ku ssimu yo. Mu nnyonyi, ku nsozi, mu kisenge wansi: eggukira ku lunyiriri we wakoma, awatali mutimbagano n’akatono.",
 "marksH": "Langi, obuwandiiko n’obubonero",
-"marksP": "Langi munaana, akawandiiko ku lunyiriri oba ku kitundu kyonna, akabonero ku bifo by’oddayo. Leeta bye wakuuma mu app endala eya Baibuli.",
+"marksP": "Langi munaana, akawandiiko ku lunyiriri oba ku kitundu kyonna, akabonero ku bifo by’oddayo. Leeta bye wakuuma mu app endala eya Baibuli. Lamba olunyiriri ng’okozesa ekkalaamu ey’okumulisa, oba ssa langi ku nnukuta zaalwo.",
 "devicesH": "Ebyuma byo, wamu",
 "devicesP": "Bw’oba oyagala kyokka. Yingira ne passkey oba koodi eweerezeddwa ku email, era langi zo, obuwandiiko n’ensengeka bikugoberera. Ekyuma eky’okubiri kiyingira okuva ku kisooka ne link emu; tewali kya kuwandiika.",
 "readingH": "Ekoleddwa okusoma",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ggulawo Baibuli</a> mu Chrome, oba browser gy’okozesa.</span></li>\n            <li><span>Ggulawo menu ya browser, emirundi mingi obutonnyeze busatu {svg} waggulu ku ddyo.</span></li>\n            <li><span>Nyiga <strong>Install and create shortcut</strong> (browser ezimu ziwandiika <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Londa <strong>Install</strong>, so si <strong>Create shortcut</strong>. Olwo onyige <strong>Install</strong> nate.</span></li>\n            <li><span>Ettaala erabika wamu n’app zo endala.</span></li>",
 "computerNote": "Eggukira mu ddirisa lyayo, nga app endala yonna.",
 "computerInstalled": "Eteekeddwamu. Ggulawo My Quiet Bible wamu n’app zo endala.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ggulawo Baibuli</a> mu Chrome oba Edge.</span></li>\n            <li><span>Nyiga akabonero k’okuteekamu ku nkomerero ya ddyo ey’akatale k’endagiriro, essirini eriko akasaale <span class=\"nb\">{svg},</span> olwo <strong>Install</strong>.</span></li>\n            <li><span>Ku Mac ne Safari: nyiga <strong>Share</strong> waggulu ku ddyo, olwo <strong>Add to Dock</strong>.</span></li>\n            <li><span>Oba kuuma tab eyo bw’etyo. Ekola mu ngeri y’emu, era ejjukira w’obadde.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ggulawo Baibuli</a> mu Chrome oba Edge.</span></li><li><span>Nyiga akabonero k’okuteekamu ku nkomerero ya ddyo ey’akatale k’endagiriro, essirini eriko akasaale <span class=\"nb\">{svg},</span> olwo <strong>Install</strong>.</span></li><li><span>Oba kuuma tab eyo bw’etyo. Ekola mu ngeri y’emu, era ejjukira w’obadde.</span></li>",
 "ref": "Zabbuli 119:105",
 "more": "Ebirala",
 "support": "Giyambe",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Kubanga awali babiri oba basatu abakuŋŋaanye mu linnya lyange, nange ndi awo wakati mu bo.”",
 "circlesRef": "Matayo 18:20",
 "circlesLong": "Bw’oyagala, kola ekibinja ekitono eky’ab’omu maka go oba mikwano gyo mitono. Gabana essaala, olunyiriri oba akawandiiko n’okunyiga okumu. Bawuliriza, baddamu n’ekigambo, oba baddamu ne 🙏, era buli omu asoma olunyiriri mu Baibuli ye.",
-"circlesTicks": "<li>Si kya buwaze. Tewali kiva ku ssimu yo okuggyako ng’onyize Gabana.</li>\n              <li>Buli kibinja kirina ekisumuluzo kyakyo. Ab’omu kibinja bokka be basobola okuggulawo ebikirimu; wadde ffe tetusobola.</li>",
+"circlesTicks": "<li>Si kya buwaze. Tewali kiva ku ssimu yo okuggyako ng’onyize Gabana.</li>\n              <li>Buli kibinja kirina ekisumuluzo kyakyo. Ab’omu kibinja bokka be basobola okuggulawo ebikirimu; wadde ffe tetusobola.</li><li>Enkuŋŋaana zeetaaga okuyingira okw’obwereere, n’ekisumuluzo oba koodi eweerezebwa ku email.</li>",
 "listenH": "Wuliriza",
-"listenP": "Nyiga olunyiriri, olwo Wuliriza, era essimu yo esoma essuula mu ddoboozi lyayo. Ku lw’emmotoka, effumbiro, oba amaaso agakooye."
+"listenP": "Kwata ku lunyiriri, oluvannyuma Wuliriza. Oba kwata ku Soma ng’ogoberera mu bbaala y’okunoonya, buli kigambo kimulisibwa nga kisomebwa. Abasomi ab’amazima basoma BSB, King James ne Louis Segond. Ku lw’emmotoka, mu ffumbiro, oba amaaso amakoowu.",
+"orMac": "Ku Windows oba Linux:",
+"macStore": "Ku Mac:"
 }

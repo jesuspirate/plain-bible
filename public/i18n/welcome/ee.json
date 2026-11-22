@@ -30,7 +30,7 @@
 "offlineH": "Ewɔa dɔ internet manɔmee",
 "offlineP": "Biblia siwo nèxlẽna la nɔa wò kalẽtefonu dzi. Le yameʋu me, le towo dzi, le anyigbatexɔ me: eʋuna ɖe kpukpui si gbɔ nètɔ te ɖo, kadodo aɖeke manɔmee.",
 "marksH": "Amadedewo, nuŋlɔɖiwo kple agbalẽdzesiwo",
-"marksP": "Amakpɔkpɔ enyi, nuŋlɔɖi le kpukpui aɖe alo akpa blibo aɖe ŋu, ka na teƒe siwo nègbugbɔna yina. Tsɔ nu siwo nèdzra ɖo ɖe Biblia dɔwɔnuƒomɔ bubu me va.",
+"marksP": "Amakpɔkpɔ enyi, nuŋlɔɖi le kpukpui aɖe alo akpa blibo aɖe ŋu, ka na teƒe siwo nègbugbɔna yina. Tsɔ nu siwo nèdzra ɖo ɖe Biblia dɔwɔnuƒomɔ bubu me va. De dzesi kpukpui aɖe abe kple kpeƒoti klẽ ene, alo do amadede eƒe agbalẽŋɔŋlɔwo.",
 "devicesH": "Wò dɔwɔnuwo, ɖekae",
 "devicesP": "Ne èdii ko. Ge ɖe eme kple safui ɣaɣla alo kɔd si woɖo ɖe email dzi, eye wò amadedewo, nuŋlɔɖiwo kple ɖoɖowo akplɔ wò ɖo. Dɔwɔnu evelia gena ɖe eme tso gbãtɔ dzi kple kadodo ɖeka; naneke meli nàŋlɔ o.",
 "readingH": "Wowɔe na nuxexlẽ",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ʋu Biblia</a> le Chrome me, alo browser si nèzãna.</span></li><li><span>Ʋu browser la ƒe menu, zi geɖe kpo etɔ̃ {svg} le etame le ɖusime.</span></li><li><span>Zi <strong>Install and create shortcut</strong> dzi (browser aɖewo gblɔna be <strong>Add to Home screen</strong>).</span></li><li><span>Tia <strong>Install</strong>, menye <strong>Create shortcut</strong> o. Emegbe gazi <strong>Install</strong> dzi.</span></li><li><span>Akaɖi la adze kple wò dɔwɔnuƒomɔ bubuwo.</span></li>",
 "computerNote": "Eʋuna le eya ŋutɔ ƒe fesre me, abe dɔwɔnuƒomɔ bubu ɖe sia ɖe ene.",
 "computerInstalled": "Wode eme. Ʋu My Quiet Bible kple wò dɔwɔnuƒomɔ bubuwo.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ʋu Biblia</a> le Chrome alo Edge me.</span></li><li><span>Zi dedeeme ƒe dzesi si le adrɛs ƒe ati ƒe nuwuwu le ɖusime, ŋkume si dzi aŋutrɔ le <span class=\"nb\">{svg},</span> emegbe <strong>Install</strong>.</span></li><li><span>Le Mac si me Safari le dzi: zi <strong>Share</strong> si le etame le ɖusime dzi, emegbe <strong>Add to Dock</strong>.</span></li><li><span>Alo na tab la nanɔ ʋuʋu ko. Ewɔa dɔ nenema ke, eye wòɖoa ŋku afi si nèɖo la dzi.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Ʋu Biblia</a> le Chrome alo Edge me.</span></li><li><span>Zi dedeeme ƒe dzesi si le adrɛs ƒe ati ƒe nuwuwu le ɖusime, ŋkume si dzi aŋutrɔ le <span class=\"nb\">{svg},</span> emegbe <strong>Install</strong>.</span></li><li><span>Alo na tab la nanɔ ʋuʋu ko. Ewɔa dɔ nenema ke, eye wòɖoa ŋku afi si nèɖo la dzi.</span></li>",
 "ref": "Psalmo 119:105",
 "more": "Bubuwo",
 "support": "Kpe ɖe eŋu",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Elabena afi si ame eve alo etɔ̃ ƒo ƒu ɖo le nye ŋkɔ me la, mele afima le wo dome.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Ne èdi la, wɔ habɔbɔ sue aɖe na wò ƒometɔwo alo xɔlɔ̃ ʋɛ aɖewo. Ma gbedodoɖa, kpukpui alo nuŋlɔɖi kple zizi ɖeka. Woɖoa to, woɖoa eŋu kple nya ɖeka, alo kple 🙏, eye wo dometɔ ɖe sia ɖe xlẽa kpukpui la le eya ŋutɔ ƒe Biblia me.",
-"circlesTicks": "<li>Menye nu kpaɖii gbeɖe o. Naneke medzona le wò kalẽtefonu dzi ne mèzi Ma dzi o.</li><li>Habɔbɔ ɖe sia ɖe si eya ŋutɔ ƒe safui le. Eƒe habɔbɔmeviwo ɖeɖe ko ate ŋu aʋu nu si le eme; míawo gɔ̃ hã míate ŋui o.</li>",
+"circlesTicks": "<li>Menye nu kpaɖii gbeɖe o. Naneke medzona le wò kalẽtefonu dzi ne mèzi Ma dzi o.</li><li>Habɔbɔ ɖe sia ɖe si eya ŋutɔ ƒe safui le. Eƒe habɔbɔmeviwo ɖeɖe ko ate ŋu aʋu nu si le eme; míawo gɔ̃ hã míate ŋui o.</li><li>Ƒuƒoƒowo bia be nàge ɖe eme femaxee, kple ʋuʋuɖedziƒoti alo kɔd si wodɔ to email dzi.</li>",
 "listenH": "Ɖo to",
-"listenP": "Zi kpukpui aɖe dzi, emegbe Ɖo to, eye wò kalẽtefonu axlẽ ta la kple gbe sesĩe le eya ŋutɔ ƒe gbe me. Na ʋu me, dzodoƒe, alo ŋku siwo ɖe fu."
+"listenP": "Ƒo kpe kpukpui aɖe, emegbe Ɖo to. Alo ƒo kpe Xlẽe kpli le didi ƒe ɖoƒe, eye nya ɖesiaɖe klẽna ne wole exlẽm. Nuxlẽla vavãwo xlẽa BSB, King James kple Louis Segond. Na ʋua me, dzodoƒe, alo ŋku siwo ɖeɖi.",
+"orMac": "Le Windows alo Linux dzi:",
+"macStore": "Le Mac dzi:"
 }

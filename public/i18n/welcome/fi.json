@@ -30,7 +30,7 @@
 "offlineH": "Toimii ilman yhteyttä",
 "offlineP": "Lukemasi Raamatut pysyvät puhelimessasi. Lentokoneessa, tuntureilla, kellarissa: se avautuu siihen jakeeseen, johon jäit, ilman mitään yhteyttä.",
 "marksH": "Korostukset, muistiinpanot ja kirjanmerkit",
-"marksP": "Kahdeksan väriä, muistiinpano jakeeseen tai koko kohtaan, nauha paikkoihin, joihin palaat. Tuo mukanasi se, mitä säilytit toisessa raamattusovelluksessa.",
+"marksP": "Kahdeksan väriä, muistiinpano jakeeseen tai koko kohtaan, nauha paikkoihin, joihin palaat. Tuo mukanasi se, mitä säilytit toisessa raamattusovelluksessa. Korosta jae kuin korostuskynällä tai väritä sen kirjaimet.",
 "devicesH": "Laitteesi yhdessä",
 "devicesP": "Vain jos haluat. Kirjaudu pääsyavaimella tai sähköpostiin lähetetyllä koodilla, niin korostuksesi, muistiinpanosi ja asetuksesi seuraavat sinua. Toinen laite kirjautuu ensimmäisestä yhdellä linkillä; mitään ei tarvitse kirjoittaa.",
 "readingH": "Tehty lukemista varten",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Avaa Raamattu</a> Chromessa tai käyttämässäsi selaimessa.</span></li>\n            <li><span>Avaa selaimen valikko, yleensä kolme pistettä {svg} oikeassa yläkulmassa.</span></li>\n            <li><span>Napauta <strong>Asenna ja luo pikakuvake</strong> (joissakin selaimissa lukee <strong>Lisää aloitusnäytölle</strong>).</span></li>\n            <li><span>Valitse <strong>Asenna</strong>, ei <strong>Luo pikakuvake</strong>. Napauta sitten uudelleen <strong>Asenna</strong>.</span></li>\n            <li><span>Lamppu ilmestyy muiden sovellustesi joukkoon.</span></li>",
 "computerNote": "Se avautuu omaan ikkunaansa kuten mikä tahansa sovellus.",
 "computerInstalled": "Asennettu. Avaa My Quiet Bible muiden sovellustesi joukosta.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Avaa Raamattu</a> Chromessa tai Edgessä.</span></li>\n            <li><span>Napsauta osoitepalkin oikeassa päässä olevaa asennuskuvaketta, näyttöä, jossa on nuoli <span class=\"nb\">{svg},</span> ja sitten <strong>Asenna</strong>.</span></li>\n            <li><span>Macissa Safarilla: napsauta oikeassa yläkulmassa <strong>Jaa</strong> ja sitten <strong>Lisää Dockiin</strong>.</span></li>\n            <li><span>Tai pidä vain välilehti auki. Se toimii samoin ja muistaa kohtasi.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Avaa Raamattu</a> Chromessa tai Edgessä.</span></li><li><span>Napsauta osoitepalkin oikeassa päässä olevaa asennuskuvaketta, näyttöä, jossa on nuoli <span class=\"nb\">{svg},</span> ja sitten <strong>Asenna</strong>.</span></li><li><span>Tai pidä vain välilehti auki. Se toimii samoin ja muistaa kohtasi.</span></li>",
 "ref": "Psalmi 119:105",
 "more": "Lisää",
 "support": "Tue",
@@ -82,7 +82,9 @@
 "circlesVerse": "”Sillä missä kaksi tai kolme on koolla minun nimessäni, siellä minä olen heidän keskellään.”",
 "circlesRef": "Matteus 18:20",
 "circlesLong": "Kun haluat, perusta pieni piiri perheellesi tai muutamalle ystävälle. Jaa rukous, jae tai muistiinpano yhdellä napautuksella. He kuuntelevat, vastaavat sanalla tai 🙏-merkillä, ja jokainen lukee jakeen omasta Raamatustaan.",
-"circlesTicks": "<li>Ei koskaan pakollinen. Mikään ei lähde puhelimestasi, ellet napauta Jaa.</li>\n              <li>Jokaisella piirillä on oma avaimensa. Vain sen jäsenet voivat avata sen sisällön; emme edes me.</li>",
+"circlesTicks": "<li>Ei koskaan pakollinen. Mikään ei lähde puhelimestasi, ellet napauta Jaa.</li>\n              <li>Jokaisella piirillä on oma avaimensa. Vain sen jäsenet voivat avata sen sisällön; emme edes me.</li><li>Piirit vaativat maksuttoman kirjautumisen, pääsyavaimella tai sähköpostiin lähetetyllä koodilla.</li>",
 "listenH": "Kuuntele",
-"listenP": "Napauta jaetta ja sitten Kuuntele, niin puhelimesi lukee luvun ääneen omalla äänellään. Autoon, keittiöön tai väsyneille silmille."
+"listenP": "Napauta jaetta ja sitten Kuuntele. Tai napauta hakupalkin Lue mukana -kuvaketta, niin jokainen sana syttyy sitä luettaessa. Oikeat lukijat lukevat BSB:n, King Jamesin ja Louis Segondin. Autoon, keittiöön tai väsyneille silmille.",
+"orMac": "Windowsissa tai Linuxissa:",
+"macStore": "Macilla:"
 }

@@ -173,6 +173,9 @@ async function applyLang(l: Lang, remember: boolean) {
 const ua = navigator.userAgent
 const iOS = /iPhone|iPad|iPod/.test(ua) || (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1)
 const android = /Android/i.test(ua)
+// On a Mac, the App Store is the way: the browser steps are for Windows and Linux.
+const mac = !iOS && /Mac/.test(navigator.platform || ua)
+if (mac) for (const el of $$('.not-mac')) el.hidden = true
 // The section's heading and the line under it follow the device picked.
 let panel = 'iphone'
 function installHead() {

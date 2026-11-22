@@ -30,7 +30,7 @@
 "offlineH": "Hana me ka pili ʻole",
 "offlineP": "Noho nā Baibala āu e heluhelu ai ma kou kelepona. Ma ka mokulele, ma uka, i loko o ka lumi lalo: wehe ʻia ma ka paukū āu i haʻalele ai, me ka pili ʻole i ka pūnaewele.",
 "marksH": "Nā kaha kala, nā manaʻo kākau a me nā kaha ʻaoʻao",
-"marksP": "ʻEwalu kala, he manaʻo kākau ma kekahi paukū a ma kekahi māhele holoʻokoʻa paha, he lipine no nā wahi āu e hoʻi pinepine ai. E lawe mai i nā mea āu i mālama ai ma kekahi polokalamu Baibala ʻē aʻe.",
+"marksP": "ʻEwalu kala, he manaʻo kākau ma kekahi paukū a ma kekahi māhele holoʻokoʻa paha, he lipine no nā wahi āu e hoʻi pinepine ai. E lawe mai i nā mea āu i mālama ai ma kekahi polokalamu Baibala ʻē aʻe. Kaha i kekahi paukū me he peni hoʻomālamalama lā, a i ʻole e hoʻokala i kona mau hua.",
 "devicesH": "Kou mau mīkini, pū",
 "devicesP": "Inā makemake ʻoe wale nō. E komo me kahi kī komo a me kahi helu i hoʻouna ʻia ma ka leka uila paha, a e hahai nā kaha kala, nā manaʻo kākau a me nā hoʻonohonoho iā ʻoe. Komo ka mīkini ʻelua mai ka mīkini mua me hoʻokahi loulou; ʻaʻohe mea e kikokiko ai.",
 "readingH": "Hana ʻia no ka heluhelu",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">E wehe i ka Baibala</a> ma Chrome, a i ʻole ka polokalamu kele āu e hoʻohana ai.</span></li>\n            <li><span>E wehe i ka papa koho o ka polokalamu kele, ʻo nā kiko ʻekolu {svg} ma luna ʻākau ka mea maʻamau.</span></li>\n            <li><span>E kaomi iā <strong>Install and create shortcut</strong> (ʻōlelo kekahi polokalamu kele <strong>Add to Home screen</strong>).</span></li>\n            <li><span>E koho iā <strong>Install</strong>, ʻaʻole ʻo <strong>Create shortcut</strong>. A laila e kaomi hou iā <strong>Install</strong>.</span></li>\n            <li><span>ʻIke ʻia ke kukui me kāu mau polokalamu ʻē aʻe.</span></li>",
 "computerNote": "Wehe ʻia i loko o kona puka aniani ponoʻī, e like me nā polokalamu ʻē aʻe.",
 "computerInstalled": "Ua hoʻokomo ʻia. E wehe iā My Quiet Bible me kāu mau polokalamu ʻē aʻe.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">E wehe i ka Baibala</a> ma Chrome a i ʻole Edge.</span></li>\n            <li><span>E kaomi i ka hōʻailona hoʻokomo ma ka ʻaoʻao ʻākau o ka pahu helu wahi, he pākū me ka pua <span class=\"nb\">{svg},</span> a laila ʻo <strong>Install</strong>.</span></li>\n            <li><span>Ma kahi Mac me Safari: e kaomi iā <strong>Share</strong> ma luna ʻākau, a laila ʻo <strong>Add to Dock</strong>.</span></li>\n            <li><span>A i ʻole e mālama wale i ka ʻaoʻao. Hana like nō ia, a hoʻomanaʻo i kou wahi.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">E wehe i ka Baibala</a> ma Chrome a i ʻole Edge.</span></li><li><span>E kaomi i ka hōʻailona hoʻokomo ma ka ʻaoʻao ʻākau o ka pahu helu wahi, he pākū me ka pua <span class=\"nb\">{svg},</span> a laila ʻo <strong>Install</strong>.</span></li><li><span>A i ʻole e mālama wale i ka ʻaoʻao. Hana like nō ia, a hoʻomanaʻo i kou wahi.</span></li>",
 "ref": "Halelū 119:105",
 "more": "Hou aku",
 "support": "Kākoʻo",
@@ -82,7 +82,9 @@
 "circlesVerse": "“No ka mea, ma kahi e ʻākoakoa ai nā mea ʻelua a ʻekolu paha ma koʻu inoa, malaila nō wau i waena o lākou.”",
 "circlesRef": "Mataio 18:20",
 "circlesLong": "Ke makemake ʻoe, e hana i pōʻai liʻiliʻi no kou ʻohana a no kekahi mau hoaaloha paha. E kaʻana i kekahi pule, paukū a manaʻo kākau paha me hoʻokahi kaomi. Hoʻolohe lākou, pane mai me kekahi huaʻōlelo, a i ʻole pane mai me ka 🙏, a heluhelu kēlā me kēia i ka paukū ma kāna Baibala ponoʻī.",
-"circlesTicks": "<li>ʻAʻole koi ʻia. ʻAʻohe mea e haʻalele i kou kelepona ke kaomi ʻole ʻoe iā Kaʻana.</li>\n              <li>Loaʻa i kēlā me kēia pōʻai kona kī ponoʻī. ʻO kona mau lālā wale nō ka mea hiki ke wehe i nā mea i loko; ʻaʻole hiki iā mākou.</li>",
+"circlesTicks": "<li>ʻAʻole koi ʻia. ʻAʻohe mea e haʻalele i kou kelepona ke kaomi ʻole ʻoe iā Kaʻana.</li>\n              <li>Loaʻa i kēlā me kēia pōʻai kona kī ponoʻī. ʻO kona mau lālā wale nō ka mea hiki ke wehe i nā mea i loko; ʻaʻole hiki iā mākou.</li><li>Pono nā pōʻai i ke komo manuahi, me kahi kī komo a i ʻole kahi helu i hoʻouna ʻia ma ka leka uila.</li>",
 "listenH": "Hoʻolohe",
-"listenP": "E kaomi i kekahi paukū, a laila ʻo Hoʻolohe, a heluhelu leo nui kou kelepona i ka mokuna me kona leo ponoʻī. No ke kaʻa, ka lumi kuke, a i ʻole nā maka luhi."
+"listenP": "Kaomi i kekahi paukū, a laila Hoʻolohe. A i ʻole, kaomi iā Heluhelu pū ma ka pahu ʻimi, a hoʻomālamalama ʻia kēlā me kēia hua ʻōlelo i ka heluhelu ʻana. Heluhelu nā mea heluhelu maoli i ka BSB, ka King James a me ka Louis Segond. No ke kaʻa, ka lumi kuke, a i ʻole nā maka luhi.",
+"orMac": "Ma Windows a i ʻole Linux:",
+"macStore": "Ma ka Mac:"
 }

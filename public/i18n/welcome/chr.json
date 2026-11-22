@@ -30,7 +30,7 @@
 "offlineH": "Ꮭ Internet ᏱᎩ ᎾᏍᏉ ᎠᏛᏁᎪ",
 "offlineP": "ᎦᎸᏉᏗᏳ ᏗᎪᏪᎵ ᏣᎪᎵᏰᏍᎪ ᏣᏤᎵ ᏗᎦᏬᏂᎯᏍᏗ ᎠᏂ ᎡᏍᏗ. ᏧᎾᏙᎴᎰᎯ ᏗᏍᏆᏂᎪᏗ, ᏙᏓᎸ, ᎦᏙᎯ ᎭᏫᏂ: ᎧᏃᎮᏛ ᏣᏲᎯᏍᏔᏅ ᎠᏍᏚᎢᏍᎪ, Ꮭ Internet ᏱᎩ.",
 "marksH": "ᎤᏁᏍᏔᏅ, ᎪᏪᎳᏅ ᎠᎴ ᎤᏰᎸᏛ",
-"marksP": "ᏧᏁᎵ ᏧᏁᏍᏓᎳ, ᎪᏪᎳᏅ ᎧᏃᎮᏛ ᎠᎴ ᏂᎦᏛ ᎧᏃᎮᏛ, ᎤᏰᎸᏛ ᎾᎿ ᏗᏣᎷᏨᎯ. ᏐᎢ app ᏣᏍᏆᏂᎪᏛ ᎠᏂ ᎯᏘᏃᎦ.",
+"marksP": "ᏧᏁᎵ ᏧᏁᏍᏓᎳ, ᎪᏪᎳᏅ ᎧᏃᎮᏛ ᎠᎴ ᏂᎦᏛ ᎧᏃᎮᏛ, ᎤᏰᎸᏛ ᎾᎿ ᏗᏣᎷᏨᎯ. ᏐᎢ app ᏣᏍᏆᏂᎪᏛ ᎠᏂ ᎯᏘᏃᎦ. ᎰᏪᎸᎦ ᎯᏯᏅᎥᎦ ᎦᎦᏛ ᎠᏓᎪᎵᏰᏗ ᎾᏍᎩᏯ, ᎠᎴ ᎯᏢᏍᎦ ᏗᎪᏪᎵ.",
 "devicesH": "ᏣᏤᎵ ᏗᎦᏬᏂᎯᏍᏗ, ᎢᏧᎳ",
 "devicesP": "ᎢᏳᏃ ᏱᏣᏚᎵᎭ ᎤᏩᏒ. passkey ᎠᎴ ᎢᎺᎵ ᎪᏗ ᎬᏗ ᏫᏣᏴᎵ, ᎠᎴ ᏣᏤᎵ ᎤᏁᏍᏔᏅ, ᎪᏪᎳᏅ ᎠᎴ ᏗᏛᏅᎢᏍᏗ ᏓᎨᏣᏍᏓᏩᏗᏙᎵ. ᏔᎵᏁ ᏗᎦᏬᏂᎯᏍᏗ ᏌᏉ ᎦᎵᏓᏍᏔᏅ ᎬᏗ ᎤᏴᎯᏍᏗᏍᎪ; Ꮭ ᎪᎱᏍᏗ ᎯᏬᏪᎳᏗ.",
 "readingH": "ᎪᎵᏰᏗ ᎤᏬᏢᏅ",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span>Chrome ᎠᎴ ᏣᏁᏉᏤᎰ ᎠᏓᏃᏣᎵᏍᎩ ᎾᎿ <a href=\"../#/read\" data-open=\"\">ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎯᏍᏚᎢ</a>.</span></li>\n            <li><span>ᎠᏓᏃᏣᎵᏍᎩ menu ᎯᏍᏚᎢ, ᎤᏣᏘ ᏦᎢ ᏗᏓᏁᏍᏗᏍᎩ {svg} ᎦᏚᎢ ᎠᎦᏘᏏ.</span></li>\n            <li><span><strong>Install and create shortcut</strong> ᎯᏯᏏᎳᏛ (ᎢᎸᏍᎩ ᎠᏓᏃᏣᎵᏍᎩ <strong>Add to Home screen</strong> ᏂᎦᏪᎭ).</span></li>\n            <li><span><strong>Install</strong> ᎯᏑᏰᏍᏓ, Ꮭ <strong>Create shortcut</strong> ᏱᎩ. ᎿᏉ ᏔᎵᏁ <strong>Install</strong> ᎯᏯᏏᎳᏛ.</span></li>\n            <li><span>ᎢᎦᎦᏛ ᏐᎢ ᏣᏤᎵ app ᎢᏧᎳᎭ ᏓᎦᎾᏄᎪᏥ.</span></li>",
 "computerNote": "ᎤᏩᏒ ᎤᏤᎵ ᏗᎦᏚᏗ ᎠᏍᏚᎢᏍᎪ, ᏐᎢ app ᎾᏍᎩᏯ.",
 "computerInstalled": "ᎤᏯᎣᏅ. My Quiet Bible ᎯᏍᏚᎢ ᏐᎢ ᏣᏤᎵ app ᎢᏧᎳᎭ.",
-"computerSteps": "<li><span>Chrome ᎠᎴ Edge ᎾᎿ <a href=\"../#/read\" data-open=\"\">ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎯᏍᏚᎢ</a>.</span></li>\n            <li><span>ᎠᏯᎣᏍᏗ ᎤᏰᎸᏛ ᎯᏯᏏᎳᏛ ᎠᎦᏘᏏ ᎢᏗᏢ, ᏗᎦᎪᏩᏛᏗ ᎦᏂ ᎤᏪᎭ <span class=\"nb\">{svg},</span> ᎿᏉ <strong>Install</strong>.</span></li>\n            <li><span>Mac ᎠᎴ Safari: <strong>Share</strong> ᎦᏚᎢ ᎠᎦᏘᏏ ᎯᏯᏏᎳᏛ, ᎿᏉ <strong>Add to Dock</strong>.</span></li>\n            <li><span>ᎠᎴ ᎾᏍᎩᏉ ᎯᏍᏆᏂᎪᏓ. ᎾᏍᎩᏯ ᎠᏛᏁᎪ, ᎠᎴ ᏣᏤᎵ ᎤᏃᏢ ᎠᏅᏓᏗᏍᎪ.</span></li>",
+"computerSteps": "<li><span>Chrome ᎠᎴ Edge ᎾᎿ <a href=\"../#/read\" data-open=\"\">ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎯᏍᏚᎢ</a>.</span></li><li><span>ᎠᏯᎣᏍᏗ ᎤᏰᎸᏛ ᎯᏯᏏᎳᏛ ᎠᎦᏘᏏ ᎢᏗᏢ, ᏗᎦᎪᏩᏛᏗ ᎦᏂ ᎤᏪᎭ <span class=\"nb\">{svg},</span> ᎿᏉ <strong>Install</strong>.</span></li><li><span>ᎠᎴ ᎾᏍᎩᏉ ᎯᏍᏆᏂᎪᏓ. ᎾᏍᎩᏯ ᎠᏛᏁᎪ, ᎠᎴ ᏣᏤᎵ ᎤᏃᏢ ᎠᏅᏓᏗᏍᎪ.</span></li>",
 "ref": "ᏗᎧᏃᎩᏍᏗ 119:105",
 "more": "ᎤᏟ",
 "support": "ᏍᏆᏍᏕᎸ",
@@ -82,7 +82,9 @@
 "circlesVerse": "“ᎾᎿᏰᏃ ᏔᎵ ᎠᎴ ᏦᎢ ᏓᏂᎳᏫᎥ ᏓᏆᏙᎥ ᎬᏗᏍᎬᎢ, ᎾᎿ ᎠᏴ ᎠᏰᎵ ᎨᎥᎢ.”",
 "circlesRef": "ᎹᏚ 18:20",
 "circlesLong": "ᏱᏣᏚᎵᎭ, ᎤᏍᏗ ᏓᏓᏡᎬ ᎯᏲᏢ ᏕᏣᏓᏘᎾᎥ ᎠᎴ ᎢᎸᏍᎩ ᏗᏣᎵᎢ. ᏌᏉ ᎯᏯᏏᎳᏛ ᎠᏓᏙᎵᏍᏙᏗ, ᎧᏃᎮᏛ ᎠᎴ ᎪᏪᎳᏅ ᎯᏁᏗ. ᎠᎾᏛᎩᏍᎪ, ᏌᏉ ᎧᏁᏨ ᎠᏂᏁᏤᎰ, ᎠᎴ 🙏 ᎬᏗ ᎠᏂᏁᏤᎰ, ᎠᎴ ᏑᏓᎴᎩ ᎤᏩᏒ ᎤᏤᎵ ᎦᎸᏉᏗᏳ ᎪᏪᎵ ᎧᏃᎮᏛ ᎠᎪᎵᏰᏍᎪ.",
-"circlesTicks": "<li>Ꮭ ᎢᎸᎯᏳ ᏯᏚᎵᏍᎪ. Ꮭ ᎪᎱᏍᏗ ᏣᏤᎵ ᏗᎦᏬᏂᎯᏍᏗ ᏯᏄᎪᎪ ᎯᏁᏗ Ꮭ ᏱᏣᏯᏏᎳᏛ.</li>\n              <li>ᏂᎦᎥ ᏓᏓᏡᎬ ᎤᏩᏒ ᎤᏤᎵ ᎠᏍᏚᎢᏍᏙᏗ. ᎾᎿ ᎠᏁᎯ ᎤᏅᏒ ᏰᎵ ᏓᏂᏍᏚᎢᏍᏗ; Ꮭ ᎾᏍᏉ ᎠᏴ ᏰᎵ.</li>",
+"circlesTicks": "<li>Ꮭ ᎢᎸᎯᏳ ᏯᏚᎵᏍᎪ. Ꮭ ᎪᎱᏍᏗ ᏣᏤᎵ ᏗᎦᏬᏂᎯᏍᏗ ᏯᏄᎪᎪ ᎯᏁᏗ Ꮭ ᏱᏣᏯᏏᎳᏛ.</li>\n              <li>ᏂᎦᎥ ᏓᏓᏡᎬ ᎤᏩᏒ ᎤᏤᎵ ᎠᏍᏚᎢᏍᏙᏗ. ᎾᎿ ᎠᏁᎯ ᎤᏅᏒ ᏰᎵ ᏓᏂᏍᏚᎢᏍᏗ; Ꮭ ᎾᏍᏉ ᎠᏴ ᏰᎵ.</li><li>ᏚᏓᏓᏟᏴᏛ ᏓᏂᏂᏴᏍᎪ ᎠᏎᏉ ᏗᏴᏍᏗ, ᎠᏍᏚᏗ ᎬᏗ ᎠᎴ ᎪᏪᎵ ᎠᏆᏛᏅ ᎠᏓᏁᏟᏴᏍᏔᏅ.</li>",
 "listenH": "ᎯᏛᎦ",
-"listenP": "ᎧᏃᎮᏛ ᎯᏯᏏᎳᏛ, ᎿᏉ ᎯᏛᎦ, ᎠᎴ ᏣᏤᎵ ᏗᎦᏬᏂᎯᏍᏗ ᎤᏩᏒ ᎤᏤᎵ ᎧᏁᎬ ᎬᏗ ᏕᎨᏌᏗᏒ ᎠᏍᏓᏯ ᏓᎪᎵᏰᏍᏔᏂ. ᎦᎵᏇᎦ, ᎠᏓᏁᏍᏛ, ᎠᎴ ᎤᏯᏪᏐᎸ ᏗᎦᏙᎵ ᎤᎾᏤᎵ."
+"listenP": "ᎯᏃᎮᏍᎩ ᏌᏉ ᎯᏯᏅᎥᎦ, ᎿᏉᏃ ᎯᏛᎦ. ᎠᎴ ᎯᏯᏅᎥᎦ ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ ᎭᏩᏛ ᏗᏟᎶᏍᏔᏅ ᎤᎵᏍᏛ, ᏂᎦᏓᏃ ᎧᏁᏢᏍᏗ ᎦᎦᏛ ᎠᎪᎵᏰᏍᎬ. ᏚᏳᎪᏛ ᎠᏂᎪᎵᏯᏍᎩ ᎠᏂᎪᎵᏰᏍᎪ BSB, King James ᎠᎴ Louis Segond. ᏐᏈᎵ ᏧᎳᏏᏕᏂ, ᎦᏁᏍᏙᏗᏱ, ᎠᎴ ᏗᎦᏙᎵ ᎤᏕᏯᏔᏁᎸ.",
+"orMac": "Windows ᎠᎴ Linux ᎾᎿᎢ:",
+"macStore": "Mac ᎾᎿᎢ:"
 }

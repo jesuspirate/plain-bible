@@ -30,7 +30,7 @@
 "offlineH": "Mache san entènèt",
 "offlineP": "Bib ou li yo rete sou telefòn ou. Nan avyon, nan mòn, nan yon sousòl: li louvri sou vèsè kote ou te kite a, san okenn koneksyon.",
 "marksH": "Souliyaj, nòt ak makè",
-"marksP": "Uit koulè, yon nòt sou yon vèsè oswa sou tout yon pasaj, yon riban pou kote ou toujou retounen. Pote sa ou te kenbe nan yon lòt aplikasyon Bib.",
+"marksP": "Uit koulè, yon nòt sou yon vèsè oswa sou tout yon pasaj, yon riban pou kote ou toujou retounen. Pote sa ou te kenbe nan yon lòt aplikasyon Bib. Make yon vèsè tankou ak yon makè, oswa bay lèt li yo koulè.",
 "devicesH": "Aparèy ou yo, ansanm",
 "devicesP": "Sèlman si ou vle. Konekte ak yon kle aksè oswa ak yon kòd yo voye pa imèl, epi souliyaj, nòt ak paramèt ou yo swiv ou. Yon dezyèm aparèy konekte apati premye a ak yon sèl lyen; anyen pou tape.",
 "readingH": "Fèt pou li",
@@ -52,7 +52,7 @@
 "androidSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Louvri Bib la</a> nan Chrome, oswa nan navigatè ou sèvi a.</span></li>\n            <li><span>Louvri meni navigatè a, anjeneral twa pwen {svg} anlè adwat.</span></li>\n            <li><span>Peze <strong>Install and create shortcut</strong> (gen kèk navigatè ki di <strong>Add to Home screen</strong>).</span></li>\n            <li><span>Chwazi <strong>Install</strong>, pa <strong>Create shortcut</strong>. Apre sa, peze <strong>Install</strong> ankò.</span></li>\n            <li><span>Lanp lan ap parèt ak lòt aplikasyon ou yo.</span></li>",
 "computerNote": "Li louvri nan pwòp fenèt li, tankou nenpòt lòt aplikasyon.",
 "computerInstalled": "Enstale. Louvri My Quiet Bible ak lòt aplikasyon ou yo.",
-"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Louvri Bib la</a> nan Chrome oswa Edge.</span></li>\n            <li><span>Klike sou ikòn enstalasyon an nan bout dwat ba adrès la, yon ekran ak yon flèch <span class=\"nb\">{svg},</span> epi <strong>Install</strong>.</span></li>\n            <li><span>Sou yon Mac ak Safari: klike sou <strong>Share</strong> anlè adwat, epi <strong>Add to Dock</strong>.</span></li>\n            <li><span>Oswa tou senpleman kite onglè a louvri. Li mache menm jan an, epi li sonje kote ou te ye.</span></li>",
+"computerSteps": "<li><span><a href=\"../#/read\" data-open=\"\">Louvri Bib la</a> nan Chrome oswa Edge.</span></li><li><span>Klike sou ikòn enstalasyon an nan bout dwat ba adrès la, yon ekran ak yon flèch <span class=\"nb\">{svg},</span> epi <strong>Install</strong>.</span></li><li><span>Oswa tou senpleman kite onglè a louvri. Li mache menm jan an, epi li sonje kote ou te ye.</span></li>",
 "ref": "Sòm 119:105",
 "more": "Plis",
 "support": "Sipòte l",
@@ -82,7 +82,9 @@
 "circlesVerse": "“Paske, kote de osinon twa moun reyini ansanm nan non mwen, mwen la nan mitan yo.”",
 "circlesRef": "Matye 18:20",
 "circlesLong": "Lè ou vle, kreye yon ti sèk pou fanmi ou oswa kèk zanmi. Pataje yon lapriyè, yon vèsè oswa yon nòt ak yon sèl peze. Yo koute, yo reponn ak yon mo, oswa ak yon 🙏, epi chak moun li vèsè a nan pwòp Bib pa yo.",
-"circlesTicks": "<li>Li pa janm obligatwa. Anyen pa kite telefòn ou si ou pa peze Pataje.</li>\n              <li>Chak sèk gen pwòp kle pa l. Se sèlman manm li yo ki ka louvri sa ki ladan l; menm nou menm nou pa kapab.</li>",
+"circlesTicks": "<li>Li pa janm obligatwa. Anyen pa kite telefòn ou si ou pa peze Pataje.</li>\n              <li>Chak sèk gen pwòp kle pa l. Se sèlman manm li yo ki ka louvri sa ki ladan l; menm nou menm nou pa kapab.</li><li>Sèk yo mande yon koneksyon gratis, ak yon kle aksè oswa yon kòd yo voye pa imèl.</li>",
 "listenH": "Koute",
-"listenP": "Peze yon vèsè, epi Koute, epi telefòn ou li chapit la awotvwa ak pwòp vwa li. Pou machin nan, kizin nan, oswa je ki fatige."
+"listenP": "Touche yon vèsè, apre sa Koute. Oswa touche Li ansanm nan ba rechèch la, epi chak mo limen pandan y ap li l. Vrè lektè li BSB a, King James la ak Louis Segond lan. Pou machin nan, kizin nan, oswa je ki fatige.",
+"orMac": "Sou Windows oswa Linux:",
+"macStore": "Sou yon Mac:"
 }
