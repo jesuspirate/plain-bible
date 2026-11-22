@@ -47,7 +47,7 @@ if [ -n "${RESEND_API_KEY:-}" ]; then
     echo "Couldn't list the Worker's secrets; leaving EMAIL_SECRET as it is." >&2
   fi
 fi
-# The private numbers page (/stats?key=…): on once STATS_KEY is a
+# The private numbers page (/stats, or myquietbible.com/stats/): on once STATS_KEY is a
 # repository secret. Any long word works; it's the page's only lock.
 if [ -n "${STATS_KEY:-}" ]; then
   printf '%s' "$STATS_KEY" | npx wrangler secret put STATS_KEY >&2

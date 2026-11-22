@@ -60,6 +60,19 @@ jobs:
           APNS_KEY_P8: ${{ secrets.APNS_KEY_P8 }}
         run: bash scripts/deploy_sync.sh >> "$GITHUB_ENV"
       - run: npm run build
+      # An easy address for the private numbers page (the MQB Observatory):
+      # myquietbible.com/stats/ goes straight on to /stats on the sync service,
+      # which still asks for the word. The sync address is in the app already.
+      - name: Easy address for the numbers page
+        if: env.VITE_SYNC_URL != ''
+        run: |
+          mkdir -p dist/stats
+          cat > dist/stats/index.html <<HTML
+          <!doctype html><html lang="en"><head><meta charset="utf-8"><meta name="robots" content="noindex">
+          <meta name="viewport" content="width=device-width, initial-scale=1"><title>MQB Observatory</title>
+          <meta http-equiv="refresh" content="0; url=$VITE_SYNC_URL/stats"><script>location.replace('$VITE_SYNC_URL/stats')</script></head>
+          <body style="font: 22px system-ui; padding: 24px"><a href="$VITE_SYNC_URL/stats">Open the MQB Observatory</a></body></html>
+          HTML
       # Lets the iOS app (ios/) use this site's passkeys and open its links.
       # Turns on once the APPLE_TEAM_ID repository variable is set.
       - name: Apple app site association
@@ -71,7 +84,7 @@ jobs:
           cat > dist/.well-known/apple-app-site-association <<JSON
           {"webcredentials":{"apps":["$APP_ID"]},
            "applinks":{"details":[{"appIDs":["$APP_ID"],"components":[
-             {"/":"/support/*","exclude":true},{"/":"/welcome/*","exclude":true},{"/":"/privacy.html","exclude":true},{"/":"/*"}]}]}}
+             {"/":"/support/*","exclude":true},{"/":"/welcome/*","exclude":true},{"/":"/stats/*","exclude":true},{"/":"/privacy.html","exclude":true},{"/":"/*"}]}]}}
           JSON
           python3 -m json.tool dist/.well-known/apple-app-site-association
       # Links the Play Store app to this site (android/README.md).
