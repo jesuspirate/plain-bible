@@ -1297,7 +1297,6 @@
 "A suggestion": "Rũtaaro",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Kũrĩ kĩndũ gĩtarutaga wĩra? Uga kĩrĩa gĩkĩkire. Gĩthiĩ o ro ũguo kũrĩ mũndũ ũrĩa ũthondekaga My Quiet Bible.",
 "What went wrong?": "Nĩ kĩĩ kĩũrĩte?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onania kabatani kanini ka “Thoma ũkĩrũmĩrĩra” igũrũ wa 🙏. Gathomaga kuuma mũhari ũrĩa ũrĩ igũrũ wa skrini, kana mũhari ũrĩa wahutia.",
 "Recording": "Nĩkũrekodi",
 "Hide the steps": "Hitha makinya",
 "See the steps": "Rora makinya",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Hũthĩra app o ta ũrĩa ũhũthagĩra, ningĩ ũhutie Rũgamia. O kĩgĩnya nĩkĩandĩkagwo, gũtirĩ vidio ĩrutagwo.",
 "Steps recorded: {n} ✓": "Makinya marĩa marekodetwo: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Gĩtũmagwo hamwe: version ya app, mũthemba wa kĩndũ kĩu, rũthiomi rwakĩo, skrini ĩrĩa warĩ, makinya marĩa warekodire, na mahĩtia o mothe marĩa app yonire. Gũtirĩ kĩngĩ.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onania kamũhiano kanini ka “Thoma ũkĩrũmĩrĩra” mũthia wa mwena wa ũrĩo wa mũhari wa gũcaria. Gathomaga kuuma mũhari ũrĩa ũrĩ igũrũ wa skrini, kana mũhari ũrĩa wahutia.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kamũhiano ka “Thoma ũkĩrũmĩrĩra” mũthia wa ũrĩo gathomaga kuuma mũhari ũrĩa ũrĩ igũrũ wa skrini.",
 "New here? Start here": "Wĩ mwerũ? Ambĩrĩria haha",
 "Or use your email": "Kana ũhũthĩre email yaku",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Nĩ cia tũhũ na ti ũndũ wa kũringĩrĩrio. Toonya nĩguo ũingĩre Ikundi na ũige maũndũ marĩa wonanirie, ndũmĩrĩri, mĩtaratara na mahooya maku thĩinĩ wa indo ciaku ciothe.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Nĩguo tu, nĩwatoonya.",
 "Now you can make a circle, or join one from a link someone sends you.": "Rĩu no ũthondeke gĩkundi, kana ũingĩre kĩmwe na link ĩrĩa mũndũ agũtũmĩra.",
 "No passkey? Use your email": "Ndũrĩ na passkey? Hũthĩra email yaku",
+"Free. Needed for Circles": "Cia tũhũ. Nĩ ibataranagio nĩ ũndũ wa Ikundi",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Nĩcibataraga akaunti ya tũhũ: passkey kana kodi na email, thĩinĩ wa Mĩtaratara → Akaunti. Nĩ kahinda kanini tu.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ikundi nĩ ciabatara akaunti ya tũhũ. Ũndũ ũrĩa mũhũthũ makĩria nĩ passkey: Face ID, kĩara kĩaku kana kĩhingo kĩa skrini yaku. Gũtirĩ password.",
-"Free. Needed for Circles": "Cia tũhũ. Nĩ ibataranagio nĩ ũndũ wa Ikundi"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ikundi nĩ ciabatara akaunti ya tũhũ. Ũndũ ũrĩa mũhũthũ makĩria nĩ passkey: Face ID, kĩara kĩaku kana kĩhingo kĩa skrini yaku. Gũtirĩ password."
 }

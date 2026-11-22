@@ -1437,7 +1437,6 @@
 "A suggestion": "اقتراح",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "هل هناك شيء لا يعمل؟ أخبرنا بما حدث. يصل مباشرة إلى الشخص الذي يصنع My Quiet Bible.",
 "What went wrong?": "ما الذي حدث خطأ؟",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "إظهار زر صغير «القراءة مع المتابعة» فوق 🙏 مباشرة. يقرأ من الآية في أعلى الشاشة، أو من الآية التي لمستها.",
 "Recording": "جارٍ التسجيل",
 "Hide the steps": "إخفاء الخطوات",
 "See the steps": "عرض الخطوات",
@@ -1446,6 +1445,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "استخدم التطبيق كالمعتاد، ثم اضغط «إيقاف». تُكتب كل خطوة كتابةً، ولا تُصوَّر.",
 "Steps recorded: {n} ✓": "الخطوات المسجلة: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "يُرسل معه: إصدار التطبيق ونوع الجهاز ولغته والشاشة التي كنت عليها والخطوات التي سجلتها وأي خطأ لاحظه التطبيق. لا شيء غير ذلك.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "إظهار أيقونة صغيرة «القراءة مع المتابعة» في طرف شريط البحث. تقرأ من الآية في أعلى الشاشة، أو من الآية التي لمستها.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "أيقونة «القراءة مع المتابعة» في طرفه تقرأ من الآية في أعلى الشاشة.",
 "New here? Start here": "جديد هنا؟ ابدأ من هنا",
 "Or use your email": "أو استخدم بريدك الإلكتروني",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "مجاني واختياري. سجّل الدخول لتنضم إلى الدوائر وتحتفظ بتظليلاتك وملاحظاتك وإعداداتك وصلواتك على كل أجهزتك.",
@@ -1456,7 +1457,7 @@
 "That’s it, you’re in.": "هذا كل شيء، لقد دخلت.",
 "Now you can make a circle, or join one from a link someone sends you.": "يمكنك الآن إنشاء دائرة، أو الانضمام إلى دائرة برابط يرسله إليك أحدهم.",
 "No passkey? Use your email": "لا تملك مفتاح مرور؟ استخدم بريدك الإلكتروني",
+"Free. Needed for Circles": "مجاني. مطلوب للدوائر",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "تحتاج إلى حساب مجاني: مفتاح مرور أو رمز بالبريد الإلكتروني، في الإعدادات ← الحساب. لا يستغرق سوى لحظة.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "تحتاج الدوائر إلى حساب مجاني. الأسهل بمفتاح مرور: Face ID أو بصمة الإصبع أو قفل الشاشة. بلا كلمة سر.",
-"Free. Needed for Circles": "مجاني. مطلوب للدوائر"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "تحتاج الدوائر إلى حساب مجاني. الأسهل بمفتاح مرور: Face ID أو بصمة الإصبع أو قفل الشاشة. بلا كلمة سر."
 }

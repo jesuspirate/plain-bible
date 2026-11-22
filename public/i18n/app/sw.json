@@ -1297,7 +1297,6 @@
 "A suggestion": "Pendekezo",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Kuna kitu hakifanyi kazi? Eleza kilichotokea. Kinamfikia moja kwa moja mtu anayetengeneza My Quiet Bible.",
 "What went wrong?": "Nini kimeharibika?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onyesha kitufe kidogo cha “Soma ukifuatisha” juu kabisa ya 🙏. Kinasoma kuanzia mstari ulio juu ya skrini, au mstari uliougusa.",
 "Recording": "Inarekodi",
 "Hide the steps": "Ficha hatua",
 "See the steps": "Tazama hatua",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Tumia programu kama kawaida, kisha gusa Simamisha. Kila hatua inaandikwa kwa maneno, hakuna video inayorekodiwa.",
 "Steps recorded: {n} ✓": "Hatua zilizorekodiwa: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kinachotumwa pamoja: toleo la programu, aina ya kifaa, lugha yake, skrini uliyokuwa, hatua ulizorekodi na hitilafu yoyote iliyoonwa na programu. Hakuna kingine.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onyesha aikoni ndogo ya “Soma ukifuatisha” mwisho wa kulia wa upau wa kutafuta. Inasoma kuanzia mstari ulio juu ya skrini, au mstari uliougusa.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Aikoni ya “Soma ukifuatisha” mwisho wake wa kulia inasoma kuanzia mstari ulio juu ya skrini.",
 "New here? Start here": "Mgeni hapa? Anza hapa",
 "Or use your email": "Au tumia barua pepe yako",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bure na kwa hiari. Ingia ili ujiunge na Vikundi na kuweka alama, maelezo, mipangilio na maombi yako kwenye vifaa vyako vyote.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Ndiyo hivyo, umeingia.",
 "Now you can make a circle, or join one from a link someone sends you.": "Sasa unaweza kuunda kikundi, au kujiunga na kimoja kwa kiungo ambacho mtu anakutumia.",
 "No passkey? Use your email": "Huna ufunguo wa siri? Tumia barua pepe yako",
+"Free. Needed for Circles": "Bure. Inahitajika kwa Vikundi",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Vinahitaji akaunti ya bure: ufunguo wa siri au msimbo kwa barua pepe, katika Mipangilio → Akaunti. Ni kwa muda mfupi tu.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Vikundi vinahitaji akaunti ya bure. Njia rahisi ni ufunguo wa siri: Face ID, alama ya kidole au kufuli ya skrini yako. Hakuna nenosiri.",
-"Free. Needed for Circles": "Bure. Inahitajika kwa Vikundi"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Vikundi vinahitaji akaunti ya bure. Njia rahisi ni ufunguo wa siri: Face ID, alama ya kidole au kufuli ya skrini yako. Hakuna nenosiri."
 }

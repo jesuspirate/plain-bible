@@ -1297,7 +1297,6 @@
 "A suggestion": "Coyrle",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Nagh vel red ennagh gobbragh? Insh cre haghyr. T’eh goll dy jeeragh gys y pheiagh ta jannoo My Quiet Bible.",
 "What went wrong?": "Cre va neuchiart?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Taishbyn cramp beg “Lhaih marish” ec 🙏. Lhaihee eh veih yn vers ec mullagh y scrieen, ny veih yn vers v’ou bentyn rish.",
 "Recording": "Recortys",
 "Hide the steps": "Follaghey ny kemmyn",
 "See the steps": "Jeeagh er ny kemmyn",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Jean ymmyd jeh’n app myr kinjagh, as eisht bwoaill er Scuirr. Ta dagh kem scruit sheese, cha nel eh filmit.",
 "Steps recorded: {n} ✓": "Kemmyn recortit: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Currit marish: lhieggan yn app, sorch y chialg, y chengey eck, y scrane va oo er, ny kemmyn recortee oo as marranys erbee honnick yn app. Veg elley.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Taishbyn cowrey beg “Lhaih marish” ec kione yesh y varr shirrey. Lhaihee eh veih yn vers ec mullagh y scrieen, ny veih yn vers v’ou bentyn rish.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ta’n cowrey “Lhaih marish” ec y kione yesh lhaih veih yn vers ec mullagh y scrieen.",
 "New here? Start here": "Noa ayns shoh? Toshee ayns shoh",
 "Or use your email": "Ny jean ymmyd jeh dty phost-L",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Nastee as myr bailt. Cur stiagh oo hene dy gholl stiagh ayns Kiarkylyn as dy reayll dty yeeaghaghyn, noteyn, reaghyssyn as padjeryn er dty chooid ooilley.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Shen eh, t’ou stiagh.",
 "Now you can make a circle, or join one from a link someone sends you.": "Nish oddys oo kiarkyl y yannoo, ny goll stiagh ayn er kiangley ta peiagh ennagh cur dhyt.",
 "No passkey? Use your email": "Gyn passkey? Jean ymmyd jeh dty phost-L",
+"Free. Needed for Circles": "Nastee. Feme er son Kiarkylyn",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ta feme oc er coontey nastee: passkey ny coad er post-L, ayns Reaghyssyn → Coontey. Cha nel eh agh tammylt.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ta feme ec kiarkylyn er coontey nastee. Sheer aashag lesh passkey: Face ID, cowrey-mair ny glass dty scaileen. Gyn fockle-follit.",
-"Free. Needed for Circles": "Nastee. Feme er son Kiarkylyn"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ta feme ec kiarkylyn er coontey nastee. Sheer aashag lesh passkey: Face ID, cowrey-mair ny glass dty scaileen. Gyn fockle-follit."
 }

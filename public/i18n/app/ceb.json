@@ -1297,7 +1297,6 @@
 "A suggestion": "Usa ka sugyot",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Naay dili molihok? Isulti kon unsay nahitabo. Diretso kini sa tawo nga naghimo sa My Quiet Bible.",
 "What went wrong?": "Unsay sayop?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ang gamay nga buton nga “Dungan nga pagbasa” sa ibabaw mismo sa 🙏. Mobasa kini gikan sa bersikulo sa ibabaw sa screen, o gikan sa bersikulo nga imong gi-tap.",
 "Recording": "Nagrekord",
 "Hide the steps": "Itago ang mga lakang",
 "See the steps": "Tan-awa ang mga lakang",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gamita ang app sama sa naandan, unya i-tap ang Hunonga. Ang matag lakang isulat, dili i-video.",
 "Steps recorded: {n} ✓": "Mga lakang nga narekord: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Uban nga ipadala: ang bersyon sa app, klase sa device, ang pinulongan niini, ang screen nga imong gianhan, ang mga lakang nga imong girekord, ug bisan unsang sayop nga namatikdan sa app. Wala nay lain.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ang gamay nga icon nga “Dungan nga pagbasa” sa tuong tumoy sa search bar. Mobasa kini gikan sa bersikulo sa ibabaw sa screen, o gikan sa bersikulo nga imong gi-tap.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon nga “Dungan nga pagbasa” sa tuong tumoy niini mobasa gikan sa bersikulo sa ibabaw sa screen.",
 "New here? Start here": "Bag-o ka diri? Sugdi diri",
 "Or use your email": "O gamita ang imong email",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Libre ug opsyonal. Pag-sign in aron makaapil sa Mga Pundok ug mapabilin ang imong mga highlight, nota, setting ug mga pag-ampo sa tanan nimong device.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Mao ra kana, nakasulod ka na.",
 "Now you can make a circle, or join one from a link someone sends you.": "Karon makahimo ka og pundok, o makaapil sa usa pinaagi sa link nga gipadala kanimo.",
 "No passkey? Use your email": "Walay passkey? Gamita ang imong email",
+"Free. Needed for Circles": "Libre. Kinahanglan para sa Mga Pundok",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Kinahanglan og libre nga account: passkey o code sa email, sa Mga Setting → Account. Kadiyot ra.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ang mga pundok nagkinahanglan og libreng account. Labing sayon gamit ang passkey: Face ID, fingerprint o ang imong screen lock. Walay password.",
-"Free. Needed for Circles": "Libre. Kinahanglan para sa Mga Pundok"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ang mga pundok nagkinahanglan og libreng account. Labing sayon gamit ang passkey: Face ID, fingerprint o ang imong screen lock. Walay password."
 }

@@ -1297,7 +1297,6 @@
 "A suggestion": "Một góp ý",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Có gì đó không chạy? Hãy kể chuyện gì đã xảy ra. Nó đến thẳng người làm ra My Quiet Bible.",
 "What went wrong?": "Có gì sai?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Hiện một nút nhỏ “Đọc theo” ngay trên 🙏. Nút này đọc từ câu ở đầu màn hình, hoặc từ câu bạn đã chạm.",
 "Recording": "Đang ghi",
 "Hide the steps": "Ẩn các bước",
 "See the steps": "Xem các bước",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Dùng ứng dụng như thường lệ, rồi chạm Dừng. Mỗi bước được ghi bằng chữ, không quay phim.",
 "Steps recorded: {n} ✓": "Các bước đã ghi: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Gửi kèm: phiên bản ứng dụng, loại thiết bị, ngôn ngữ, màn hình bạn đang ở, các bước bạn đã ghi và mọi lỗi ứng dụng ghi nhận. Không gì khác.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Hiện một biểu tượng nhỏ “Đọc theo” ở đầu bên phải thanh tìm kiếm. Biểu tượng này đọc từ câu ở đầu màn hình, hoặc từ câu bạn đã chạm.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Biểu tượng “Đọc theo” ở đầu bên phải đọc từ câu ở đầu màn hình.",
 "New here? Start here": "Mới đến? Bắt đầu ở đây",
 "Or use your email": "Hoặc dùng email",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Miễn phí và không bắt buộc. Đăng nhập để tham gia Nhóm và giữ đánh dấu, ghi chú, cài đặt và lời cầu nguyện trên mọi thiết bị của bạn.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Vậy là xong, bạn đã vào.",
 "Now you can make a circle, or join one from a link someone sends you.": "Giờ bạn có thể lập một nhóm, hoặc tham gia một nhóm bằng liên kết ai đó gửi cho bạn.",
 "No passkey? Use your email": "Không có mã khóa? Dùng email",
+"Free. Needed for Circles": "Miễn phí. Cần cho Nhóm",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Cần một tài khoản miễn phí: mã khóa hoặc mã qua email, trong Cài đặt → Tài khoản. Chỉ mất một lát.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Nhóm cần một tài khoản miễn phí. Dễ nhất là dùng mã khóa: Face ID, vân tay hoặc khóa màn hình. Không cần mật khẩu.",
-"Free. Needed for Circles": "Miễn phí. Cần cho Nhóm"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Nhóm cần một tài khoản miễn phí. Dễ nhất là dùng mã khóa: Face ID, vân tay hoặc khóa màn hình. Không cần mật khẩu."
 }

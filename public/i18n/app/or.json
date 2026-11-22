@@ -1297,7 +1297,6 @@
 "A suggestion": "ଏକ ପରାମର୍ଶ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "କିଛି କାମ କରୁନାହିଁ କି? କ'ଣ ହେଲା କୁହନ୍ତୁ। ଏହା ସିଧାସଳଖ My Quiet Bible ତିଆରି କରୁଥିବା ବ୍ୟକ୍ତିଙ୍କ ପାଖକୁ ଯାଏ।",
 "What went wrong?": "କ'ଣ ଭୁଲ ହେଲା?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 ର ଠିକ୍ ଉପରେ ଏକ ଛୋଟ “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ବଟନ୍ ଦେଖାନ୍ତୁ। ଏହା ସ୍କ୍ରିନ୍ ଉପରର ପଦରୁ, କିମ୍ବା ଆପଣ ଛୁଇଁଥିବା ପଦରୁ ପଢ଼େ।",
 "Recording": "ରେକର୍ଡ ହେଉଛି",
 "Hide the steps": "ପଦକ୍ଷେପଗୁଡ଼ିକ ଲୁଚାନ୍ତୁ",
 "See the steps": "ପଦକ୍ଷେପଗୁଡ଼ିକ ଦେଖନ୍ତୁ",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ସାଧାରଣ ପରି ଆପ୍ ବ୍ୟବହାର କରନ୍ତୁ, ତା’ପରେ ବନ୍ଦ କରନ୍ତୁ ଦବାନ୍ତୁ। ପ୍ରତ୍ୟେକ ପଦକ୍ଷେପ ଲେଖାଯାଏ, ଭିଡିଓ ନିଆଯାଏ ନାହିଁ।",
 "Steps recorded: {n} ✓": "ରେକର୍ଡ ହୋଇଥିବା ପଦକ୍ଷେପ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ସାଙ୍ଗରେ ଯାଏ: ଆପ୍‌ର ସଂସ୍କରଣ, ଡିଭାଇସ୍‌ର ପ୍ରକାର, ଏହାର ଭାଷା, ଆପଣ ଥିବା ସ୍କ୍ରିନ୍, ଆପଣ ରେକର୍ଡ କରିଥିବା ପଦକ୍ଷେପ ଓ ଆପ୍ ଲକ୍ଷ୍ୟ କରିଥିବା ଯେକୌଣସି ତ୍ରୁଟି। ଆଉ କିଛି ନୁହେଁ।",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ସନ୍ଧାନ ବାରର ଡାହାଣ ମୁଣ୍ଡରେ ଏକ ଛୋଟ “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ଚିହ୍ନ ଦେଖାନ୍ତୁ। ଏହା ସ୍କ୍ରିନ୍ ଉପରର ପଦରୁ, କିମ୍ବା ଆପଣ ଛୁଇଁଥିବା ପଦରୁ ପଢ଼େ।",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ଏହାର ଡାହାଣ ମୁଣ୍ଡର “ସାଙ୍ଗରେ ପଢ଼ନ୍ତୁ” ଚିହ୍ନ ସ୍କ୍ରିନ୍ ଉପରର ପଦରୁ ପଢ଼େ।",
 "New here? Start here": "ନୂଆ କି? ଏଠାରୁ ଆରମ୍ଭ କରନ୍ତୁ",
 "Or use your email": "କିମ୍ବା ଆପଣଙ୍କ ଇମେଲ୍ ବ୍ୟବହାର କରନ୍ତୁ",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ମାଗଣା ଓ ଇଚ୍ଛାଧୀନ। ସର୍କଲରେ ଯୋଗ ଦେବା ଏବଂ ଆପଣଙ୍କ ହାଇଲାଇଟ୍, ନୋଟ୍, ସେଟିଂସ ଓ ପ୍ରାର୍ଥନା ସବୁ ଡିଭାଇସରେ ରଖିବା ପାଇଁ ସାଇନ୍ ଇନ୍ କରନ୍ତୁ।",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "ବାସ୍, ଆପଣ ଭିତରେ।",
 "Now you can make a circle, or join one from a link someone sends you.": "ଏବେ ଆପଣ ଏକ ସର୍କଲ ତିଆରି କରିପାରିବେ, କିମ୍ବା କେହି ପଠାଇଥିବା ଲିଙ୍କରେ ଗୋଟିଏରେ ଯୋଗ ଦେଇପାରିବେ।",
 "No passkey? Use your email": "ପାସକୀ ନାହିଁ? ଆପଣଙ୍କ ଇମେଲ୍ ବ୍ୟବହାର କରନ୍ତୁ",
+"Free. Needed for Circles": "ମାଗଣା। ସର୍କଲ ପାଇଁ ଦରକାର",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ଏଥିପାଇଁ ମାଗଣା ଆକାଉଣ୍ଟ ଦରକାର: ପାସକୀ କିମ୍ବା ଇମେଲରେ କୋଡ୍, ସେଟିଂସ → ଆକାଉଣ୍ଟରେ। କ୍ଷଣିକ ଲାଗେ।",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ସର୍କଲ ପାଇଁ ଏକ ମାଗଣା ଆକାଉଣ୍ଟ ଦରକାର। ପାସକୀ ସହିତ ସବୁଠାରୁ ସହଜ: Face ID, ଆଙ୍ଗୁଠି ଚିହ୍ନ ବା ଆପଣଙ୍କ ସ୍କ୍ରିନ୍ ଲକ୍। କୌଣସି ପାସୱାର୍ଡ ନାହିଁ।",
-"Free. Needed for Circles": "ମାଗଣା। ସର୍କଲ ପାଇଁ ଦରକାର"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ସର୍କଲ ପାଇଁ ଏକ ମାଗଣା ଆକାଉଣ୍ଟ ଦରକାର। ପାସକୀ ସହିତ ସବୁଠାରୁ ସହଜ: Face ID, ଆଙ୍ଗୁଠି ଚିହ୍ନ ବା ଆପଣଙ୍କ ସ୍କ୍ରିନ୍ ଲକ୍। କୌଣସି ପାସୱାର୍ଡ ନାହିଁ।"
 }

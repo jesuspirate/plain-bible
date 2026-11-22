@@ -221,6 +221,20 @@ async function emailHash(env: Env, email: string) {
   const key = await crypto.subtle.importKey('raw', new TextEncoder().encode(env.EMAIL_SECRET), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign'])
   return b64url.encode(new Uint8Array(await crypto.subtle.sign('HMAC', key, new TextEncoder().encode(email))))
 }
+/** On 2026-11-20 a deploy replaced EMAIL_SECRET by mistake, so addresses saved
+ *  before then stopped matching, and signing in by email made a new, empty
+ *  account instead. Such an account (made since then, with no passkey or Fedi
+ *  key) gives its address up when the person proves the address again from
+ *  their real account (Settings → Account → Change email). */
+const EMAIL_SECRET_RESET = Date.UTC(2026, 10, 20, 16, 59)
+async function strayEmailAccount(env: Env, userId: string) {
+  const [user, cred, nostr] = await Promise.all([
+    env.DB.prepare('SELECT created FROM users WHERE id = ?').bind(userId).first<{ created: number }>(),
+    env.DB.prepare('SELECT 1 FROM credentials WHERE user_id = ?').bind(userId).first(),
+    env.DB.prepare('SELECT 1 FROM nostr_keys WHERE user_id = ?').bind(userId).first(),
+  ])
+  return !!user && user.created >= EMAIL_SECRET_RESET && !cred && !nostr
+}
 const emailHint = (email: string) => { const [name, domain] = email.split('@'); return `${name[0]}•••@${domain}` }
 
 // The code email in the language the app is in (src/lib/sync.ts sends it).
@@ -364,7 +378,8 @@ async function emailVerify(req: Request, env: Env) {
   // Adding (or changing) the address of the signed-in account.
   if (row.user_id) {
     if (await session(req, env) !== row.user_id) throw new HttpError(400, expired)
-    if (owner && owner.user_id !== row.user_id) throw new HttpError(409, 'This email already signs in to another My Quiet Bible account.')
+    if (owner && owner.user_id !== row.user_id && !await strayEmailAccount(env, owner.user_id))
+      throw new HttpError(409, 'This email already signs in to another My Quiet Bible account.')
     await db.batch([
       db.prepare('DELETE FROM emails WHERE user_id = ?').bind(row.user_id),
       db.prepare('INSERT INTO emails (hash, user_id, hint, created) VALUES (?, ?, ?, ?)').bind(hash, row.user_id, hint, now),

@@ -1300,7 +1300,6 @@
 "A suggestion": "Një sugjerim",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Diçka nuk punon? Thuaj çfarë ndodhi. Shkon drejt e te personi që bën My Quiet Bible.",
 "What went wrong?": "Çfarë shkoi keq?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Shfaq një buton të vogël “Lexo duke ndjekur” mu sipër 🙏. Lexon nga vargu në krye të ekranit, ose nga vargu që prekët.",
 "Recording": "Po regjistrohet",
 "Hide the steps": "Fshih hapat",
 "See the steps": "Shih hapat",
@@ -1309,6 +1308,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Përdore aplikacionin si zakonisht, pastaj prek Ndalo. Çdo hap shkruhet me fjalë, asgjë nuk filmohet.",
 "Steps recorded: {n} ✓": "Hapa të regjistruar: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Dërgohet bashkë: versioni i aplikacionit, lloji i pajisjes, gjuha e saj, ekrani ku ishe, hapat që regjistrove dhe çdo gabim që vuri re aplikacioni. Asgjë tjetër.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Shfaq një ikonë të vogël “Lexo duke ndjekur” në skajin e djathtë të shiritit të kërkimit. Lexon nga vargu në krye të ekranit, ose nga vargu që prekët.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lexo duke ndjekur” në skajin e djathtë lexon nga vargu në krye të ekranit.",
 "New here? Start here": "I ri këtu? Fillo këtu",
 "Or use your email": "Ose përdor email-in",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Falas dhe sipas dëshirës. Hyr për t’u bashkuar me Rrethet dhe për të pasur theksimet, shënimet, cilësimet dhe lutjet në të gjitha pajisjet.",
@@ -1319,7 +1320,7 @@
 "That’s it, you’re in.": "Kaq ishte, je brenda.",
 "Now you can make a circle, or join one from a link someone sends you.": "Tani mund të krijosh një rreth, ose të bashkohesh me një përmes një lidhjeje që të dërgon dikush.",
 "No passkey? Use your email": "Pa çelës kalimi? Përdor email-in",
+"Free. Needed for Circles": "Falas. Duhet për Rrethet",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Duhet një llogari falas: çelës kalimi ose kod me email, te Cilësimet → Llogaria. Merr vetëm një çast.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Rrethet kërkojnë një llogari falas. Më e lehta me një çelës kalimi: Face ID, gjurmë gishti ose kyçja e ekranit. Pa fjalëkalim.",
-"Free. Needed for Circles": "Falas. Duhet për Rrethet"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Rrethet kërkojnë një llogari falas. Më e lehta me një çelës kalimi: Face ID, gjurmë gishti ose kyçja e ekranit. Pa fjalëkalim."
 }

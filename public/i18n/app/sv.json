@@ -1297,7 +1297,6 @@
 "A suggestion": "Ett förslag",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Fungerar något inte? Berätta vad som hände. Det går direkt till personen som gör My Quiet Bible.",
 "What went wrong?": "Vad gick fel?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Visa en liten ”Läs med”-knapp precis ovanför 🙏. Den läser från versen högst upp på skärmen, eller från versen du tryckte på.",
 "Recording": "Spelar in",
 "Hide the steps": "Dölj stegen",
 "See the steps": "Se stegen",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Använd appen som vanligt och tryck sedan på Stoppa. Varje steg skrivs ned, inget filmas.",
 "Steps recorded: {n} ✓": "Inspelade steg: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Skickas med: appens version, typ av enhet, dess språk, skärmen du var på, stegen du spelade in och alla fel appen märkte. Inget annat.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Visa en liten ”Läs med”-ikon längst till höger i sökfältet. Den läser från versen högst upp på skärmen, eller från versen du tryckte på.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "”Läs med”-ikonen längst till höger läser från versen högst upp på skärmen.",
 "New here? Start here": "Ny här? Börja här",
 "Or use your email": "Eller använd din e-post",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratis och frivilligt. Logga in för att gå med i Kretsar och ha dina markeringar, anteckningar, inställningar och böner på alla dina enheter.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Klart, du är inne.",
 "Now you can make a circle, or join one from a link someone sends you.": "Nu kan du skapa en krets, eller gå med i en via en länk som någon skickar dig.",
 "No passkey? Use your email": "Ingen lösennyckel? Använd din e-post",
+"Free. Needed for Circles": "Gratis. Behövs för Kretsar",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "De kräver ett gratis konto: en lösennyckel eller en kod via e-post, under Inställningar → Konto. Det tar ett ögonblick.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kretsar kräver ett gratiskonto. Enklast med en lösennyckel: Face ID, ett fingeravtryck eller ditt skärmlås. Inget lösenord.",
-"Free. Needed for Circles": "Gratis. Behövs för Kretsar"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kretsar kräver ett gratiskonto. Enklast med en lösennyckel: Face ID, ett fingeravtryck eller ditt skärmlås. Inget lösenord."
 }

@@ -458,7 +458,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'audio') return <>
     <AudioHow />
     <div class="field"><span>{t('Read along')}</span>
-      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.')}</label>
+      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.')}</label>
     </div>
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">

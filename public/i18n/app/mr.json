@@ -1297,7 +1297,6 @@
 "A suggestion": "एक सूचना",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "काही चालत नाही का? काय झाले ते सांगा. ते थेट My Quiet Bible बनवणाऱ्या व्यक्तीकडे जाते.",
 "What went wrong?": "काय चुकले?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 च्या अगदी वर एक लहान “सोबत वाचा” बटण दाखवा. ते स्क्रीनच्या वरच्या वचनापासून, किंवा तुम्ही टॅप केलेल्या वचनापासून वाचते.",
 "Recording": "रेकॉर्ड होत आहे",
 "Hide the steps": "पायऱ्या लपवा",
 "See the steps": "पायऱ्या पाहा",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "नेहमीप्रमाणे ॲप वापरा, मग थांबवा दाबा. प्रत्येक पायरी लिहून ठेवली जाते, व्हिडिओ घेतला जात नाही.",
 "Steps recorded: {n} ✓": "रेकॉर्ड केलेल्या पायऱ्या: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "सोबत पाठवले जाते: ॲपची आवृत्ती, उपकरणाचा प्रकार, त्याची भाषा, तुम्ही ज्या स्क्रीनवर होता ती, तुम्ही रेकॉर्ड केलेल्या पायऱ्या आणि ॲपला आढळलेली कोणतीही त्रुटी. दुसरे काही नाही.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "शोध पट्टीच्या उजव्या टोकाला एक लहान “सोबत वाचा” चिन्ह दाखवा. ते स्क्रीनच्या वरच्या वचनापासून, किंवा तुम्ही टॅप केलेल्या वचनापासून वाचते.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "तिच्या उजव्या टोकावरचे “सोबत वाचा” चिन्ह स्क्रीनच्या वरच्या वचनापासून वाचते.",
 "New here? Start here": "नवीन आहात? इथून सुरुवात करा",
 "Or use your email": "किंवा तुमचा ईमेल वापरा",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "मोफत आणि ऐच्छिक. गटांमध्ये सामील होण्यासाठी आणि तुमचे हायलाइट, नोंदी, सेटिंग्ज आणि प्रार्थना सर्व डिव्हाइसवर ठेवण्यासाठी साइन इन करा.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "बस, तुम्ही आत आलात.",
 "Now you can make a circle, or join one from a link someone sends you.": "आता तुम्ही गट तयार करू शकता, किंवा कोणी पाठवलेल्या लिंकने एखाद्या गटात सामील होऊ शकता.",
 "No passkey? Use your email": "पासकी नाही? तुमचा ईमेल वापरा",
+"Free. Needed for Circles": "मोफत. गटांसाठी आवश्यक",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "त्यांसाठी मोफत खाते लागते: पासकी किंवा ईमेलने कोड, सेटिंग्ज → खाते मध्ये. फक्त एक क्षण लागतो.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "गटांसाठी विनामूल्य खाते लागते. पासकीने सर्वात सोपे: Face ID, फिंगरप्रिंट किंवा तुमचे स्क्रीन लॉक. पासवर्ड नाही.",
-"Free. Needed for Circles": "मोफत. गटांसाठी आवश्यक"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "गटांसाठी विनामूल्य खाते लागते. पासकीने सर्वात सोपे: Face ID, फिंगरप्रिंट किंवा तुमचे स्क्रीन लॉक. पासवर्ड नाही."
 }

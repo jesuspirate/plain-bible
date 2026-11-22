@@ -1300,7 +1300,6 @@
 "A suggestion": "Առաջարկ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Ինչ-որ բան չի՞ աշխատում։ Պատմեք, թե ինչ պատահեց։ Այն ուղիղ գնում է My Quiet Bible-ը ստեղծողին։",
 "What went wrong?": "Ի՞նչն էր սխալ։",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ցույց տալ փոքրիկ «Հետևել ընթերցանությանը» կոճակ հենց 🙏-ի վերևում։ Այն կարդում է էկրանի վերևի համարից կամ ձեր հպած համարից։",
 "Recording": "Գրանցվում է",
 "Hide the steps": "Թաքցնել քայլերը",
 "See the steps": "Տեսնել քայլերը",
@@ -1309,6 +1308,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Օգտագործեք հավելվածը սովորականի պես, հետո հպեք Կանգնեցնել։ Ամեն քայլ գրի է առնվում, ոչինչ չի տեսագրվում։",
 "Steps recorded: {n} ✓": "Գրանցված քայլեր՝ {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Հետը ուղարկվում է՝ հավելվածի տարբերակը, սարքի տեսակը, լեզուն, էկրանը, որտեղ էիք, գրանցված քայլերը և ցանկացած սխալ, որ հավելվածը նկատել է։ Ուրիշ ոչինչ։",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ցույց տալ փոքրիկ «Հետևել ընթերցանությանը» պատկերակ որոնման տողի աջ ծայրում։ Այն կարդում է էկրանի վերևի համարից կամ ձեր հպած համարից։",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Աջ ծայրի «Հետևել ընթերցանությանը» պատկերակը կարդում է էկրանի վերևի համարից։",
 "New here? Start here": "Նո՞ր եք այստեղ։ Սկսեք այստեղից",
 "Or use your email": "Կամ օգտագործեք էլ. փոստը",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Անվճար և ըստ ցանկության։ Մուտք գործեք՝ Շրջանակներին միանալու և ընդգծումները, նշումները, կարգավորումներն ու աղոթքները բոլոր սարքերում պահելու համար։",
@@ -1319,7 +1320,7 @@
 "That’s it, you’re in.": "Վերջ, դուք ներսում եք։",
 "Now you can make a circle, or join one from a link someone sends you.": "Այժմ կարող եք ստեղծել շրջանակ կամ միանալ մեկին՝ ձեզ ուղարկված հղումով։",
 "No passkey? Use your email": "Մուտքի բանալի չունե՞ք։ Օգտագործեք էլ. փոստը",
+"Free. Needed for Circles": "Անվճար։ Պետք է Շրջանակների համար",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Դրանց համար պետք է անվճար հաշիվ՝ մուտքի բանալի կամ կոդ էլ. փոստով, Կարգավորումներ → Հաշիվ բաժնում։ Մի պահ է տևում։",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Շրջանակների համար անվճար հաշիվ է պետք։ Ամենահեշտը՝ մուտքի բանալիով․ Face ID, մատնահետք կամ էկրանի կողպում։ Առանց գաղտնաբառի։",
-"Free. Needed for Circles": "Անվճար։ Պետք է Շրջանակների համար"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Շրջանակների համար անվճար հաշիվ է պետք։ Ամենահեշտը՝ մուտքի բանալիով․ Face ID, մատնահետք կամ էկրանի կողպում։ Առանց գաղտնաբառի։"
 }

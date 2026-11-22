@@ -1297,7 +1297,6 @@
 "A suggestion": "ఒక సూచన",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "ఏదైనా పని చేయడం లేదా? ఏమి జరిగిందో చెప్పండి. ఇది నేరుగా My Quiet Bible తయారు చేసే వ్యక్తికి చేరుతుంది.",
 "What went wrong?": "ఏమి తప్పు జరిగింది?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 పైనే ఒక చిన్న “కలిసి చదువు” బటన్ చూపించు. ఇది తెర పైభాగంలోని వచనం నుండి, లేదా మీరు తాకిన వచనం నుండి చదువుతుంది.",
 "Recording": "రికార్డ్ అవుతోంది",
 "Hide the steps": "దశలను దాచు",
 "See the steps": "దశలను చూడండి",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ఎప్పటిలాగే యాప్ వాడండి, తర్వాత ఆపు నొక్కండి. ప్రతి దశ రాసి ఉంచబడుతుంది, వీడియో తీయబడదు.",
 "Steps recorded: {n} ✓": "రికార్డ్ అయిన దశలు: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "దానితో పాటు పంపబడేవి: యాప్ వెర్షన్, పరికరం రకం, దాని భాష, మీరు ఉన్న స్క్రీన్, మీరు రికార్డ్ చేసిన దశలు, యాప్ గమనించిన ఏ లోపమైనా. ఇంకేమీ కాదు.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "శోధన పట్టీ కుడి చివరన ఒక చిన్న “కలిసి చదువు” చిహ్నం చూపించు. ఇది తెర పైభాగంలోని వచనం నుండి, లేదా మీరు తాకిన వచనం నుండి చదువుతుంది.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "దాని కుడి చివరన ఉన్న “కలిసి చదువు” చిహ్నం తెర పైభాగంలోని వచనం నుండి చదువుతుంది.",
 "New here? Start here": "కొత్తవారా? ఇక్కడ మొదలుపెట్టండి",
 "Or use your email": "లేదా మీ ఈమెయిల్ వాడండి",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ఉచితం, ఐచ్ఛికం. సర్కిల్‌లలో చేరడానికి, మీ హైలైట్‌లు, నోట్స్, సెట్టింగ్‌లు, ప్రార్థనలు అన్ని పరికరాల్లో ఉంచుకోవడానికి సైన్ ఇన్ చేయండి.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "అంతే, మీరు లోపలికి వచ్చేశారు.",
 "Now you can make a circle, or join one from a link someone sends you.": "ఇప్పుడు మీరు ఒక సర్కిల్ సృష్టించవచ్చు, లేదా ఎవరైనా పంపిన లింక్‌తో ఒకదానిలో చేరవచ్చు.",
 "No passkey? Use your email": "పాస్-కీ లేదా? మీ ఈమెయిల్ వాడండి",
+"Free. Needed for Circles": "ఉచితం. సర్కిల్‌లకు అవసరం",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "వీటికి ఉచిత ఖాతా కావాలి: పాస్-కీ లేదా ఈమెయిల్ కోడ్, సెట్టింగ్‌లు → ఖాతా లో. ఒక్క క్షణం చాలు.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "సర్కిల్‌లకు ఉచిత ఖాతా కావాలి. పాస్-కీతో చాలా సులభం: Face ID, వేలిముద్ర లేదా మీ స్క్రీన్ లాక్. పాస్‌వర్డ్ అవసరం లేదు.",
-"Free. Needed for Circles": "ఉచితం. సర్కిల్‌లకు అవసరం"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "సర్కిల్‌లకు ఉచిత ఖాతా కావాలి. పాస్-కీతో చాలా సులభం: Face ID, వేలిముద్ర లేదా మీ స్క్రీన్ లాక్. పాస్‌వర్డ్ అవసరం లేదు."
 }

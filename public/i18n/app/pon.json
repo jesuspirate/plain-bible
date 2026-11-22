@@ -1297,7 +1297,6 @@
 "A suggestion": "Kaweid ehu",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Mie mehkot me sohte kin doadoahk? Kasalehda dahme wiawi. E kin kohla ong aramas me wiahda My Quiet Bible.",
 "What went wrong?": "Dahme sapwung?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kasansalehda pwatin kisin “Wadek iangahki” powe 🙏. E kin wadek sang iretikin pohn sikirin, de sang iretik me ke pwoaiada.",
 "Recording": "Kin rekohdki",
 "Hide the steps": "Ekila kahdaipw kan",
 "See the steps": "Kilang kahdaipw kan",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Doadoahngki app duwehte me ke kin wia, eri ke nek Kanekehla. Kahdaipw koaros kin ntingdi, sohte kin video.",
 "Steps recorded: {n} ✓": "Kahdaipw me rekohdki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kin kadarala pahrekiong: version en app, soangen dipwisou, lokaia, screen me ke mi ie, kahdaipw kan me ke rekohdki, oh sapwung koaros me app kilangada. Sohte mehkot tohrohr.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kasansalehda kilel tikitik “Wadek iangahki” ni imwin palio maun en pwehl en rapahk. E kin wadek sang iretikin pohn sikirin, de sang iretik me ke pwoaiada.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kilel “Wadek iangahki” ni imwin palio maun kin wadek sang iretikin pohn sikirin.",
 "New here? Start here": "Komw kapw? Tepida met",
 "Or use your email": "De doadoahngki noumw imeil",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Ni mehlel oh sohte kehus. Pedolong pwe komw en iang Pwihn kan oh kolokol noumw mehkan me kasansalda, nting, koasoandi oh kapakap nan noumw dipwisou koaros.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Ih te, komw pedolongehr.",
 "Now you can make a circle, or join one from a link someone sends you.": "Met komw kak wiahda pwihn ehu, de iang ehu ni link me emen kadarala komwi.",
 "No passkey? Use your email": "Sohte kih en pedolong? Doadoahngki noumw imeil",
+"Free. Needed for Circles": "Ni mehlel. E anahne pwehki Pwihn kan",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Re anahne akaunt ni mehlel: kih en pedolong de kohd nan imeil, nan Koasoandi → Akaunt. E kin ahnsou malaulau te.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Pwihn kan anahne akaun ehu me sohte pweine. Kih en pedolong me mengeiou: Face ID, kilel en sondi de lok en noumw sikirihn. Sohte password.",
-"Free. Needed for Circles": "Ni mehlel. E anahne pwehki Pwihn kan"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Pwihn kan anahne akaun ehu me sohte pweine. Kih en pedolong me mengeiou: Face ID, kilel en sondi de lok en noumw sikirihn. Sohte password."
 }

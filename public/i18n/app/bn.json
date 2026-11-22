@@ -1297,7 +1297,6 @@
 "A suggestion": "একটি পরামর্শ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "কিছু কাজ করছে না? কী হয়েছে বলুন। এটি সরাসরি My Quiet Bible যিনি বানান তাঁর কাছে যায়।",
 "What went wrong?": "কী ভুল হয়েছে?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏-এর ঠিক উপরে একটি ছোট “সঙ্গে পড়ুন” বোতাম দেখান। এটি স্ক্রিনের উপরের পদ থেকে, বা আপনি যে পদে ছুঁয়েছেন সেখান থেকে পড়ে।",
 "Recording": "রেকর্ড হচ্ছে",
 "Hide the steps": "ধাপগুলো লুকান",
 "See the steps": "ধাপগুলো দেখুন",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "স্বাভাবিকভাবে অ্যাপ ব্যবহার করুন, তারপর থামান চাপুন। প্রতিটি ধাপ লিখে রাখা হয়, ভিডিও করা হয় না।",
 "Steps recorded: {n} ✓": "রেকর্ড করা ধাপ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "সঙ্গে যায়: অ্যাপের সংস্করণ, ডিভাইসের ধরন, তার ভাষা, আপনি যে স্ক্রিনে ছিলেন, যে ধাপগুলো রেকর্ড করেছেন, এবং অ্যাপ যে ত্রুটি লক্ষ করেছে। আর কিছু নয়।",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "সার্চ বারের ডান প্রান্তে একটি ছোট “সঙ্গে পড়ুন” আইকন দেখান। এটি স্ক্রিনের উপরের পদ থেকে, বা আপনি যে পদে ছুঁয়েছেন সেখান থেকে পড়ে।",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "এর ডান প্রান্তের “সঙ্গে পড়ুন” আইকনটি স্ক্রিনের উপরের পদ থেকে পড়ে।",
 "New here? Start here": "নতুন? এখান থেকে শুরু করুন",
 "Or use your email": "অথবা আপনার ইমেল ব্যবহার করুন",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "বিনামূল্যে ও ঐচ্ছিক। সার্কেলে যোগ দিতে এবং আপনার হাইলাইট, নোট, সেটিংস ও প্রার্থনা সব ডিভাইসে রাখতে সাইন ইন করুন।",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "ব্যস, আপনি ঢুকে গেছেন।",
 "Now you can make a circle, or join one from a link someone sends you.": "এখন আপনি একটি সার্কেল বানাতে পারেন, বা কারও পাঠানো লিংক দিয়ে কোনো সার্কেলে যোগ দিতে পারেন।",
 "No passkey? Use your email": "পাসকী নেই? আপনার ইমেল ব্যবহার করুন",
+"Free. Needed for Circles": "বিনামূল্যে। সার্কেলের জন্য দরকার",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "এগুলোর জন্য বিনামূল্যের অ্যাকাউন্ট লাগে: পাসকী বা ইমেলে কোড, সেটিংস → অ্যাকাউন্ট-এ। এক মুহূর্ত লাগে।",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "সার্কেলের জন্য একটি বিনামূল্যের অ্যাকাউন্ট লাগে। পাসকী দিয়ে সবচেয়ে সহজ: Face ID, আঙুলের ছাপ বা আপনার স্ক্রিন লক। কোনো পাসওয়ার্ড নেই।",
-"Free. Needed for Circles": "বিনামূল্যে। সার্কেলের জন্য দরকার"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "সার্কেলের জন্য একটি বিনামূল্যের অ্যাকাউন্ট লাগে। পাসকী দিয়ে সবচেয়ে সহজ: Face ID, আঙুলের ছাপ বা আপনার স্ক্রিন লক। কোনো পাসওয়ার্ড নেই।"
 }

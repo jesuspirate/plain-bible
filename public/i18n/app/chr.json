@@ -1297,7 +1297,6 @@
 "A suggestion": "ᎠᏓᏅᏖᏗ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "ᎦᏙ ᎥᏝ ᏱᎦᎸᏫᏍᏓᏁᎰ? ᎯᏃᎲᎦ ᎦᏙ ᏄᎵᏍᏔᏅ. ᏚᏳᎪᏛ ᎤᏪᏅᏍᏗ ᎾᏍᎩ My Quiet Bible ᎤᏬᏢᏅᎯ.",
 "What went wrong?": "ᎦᏙ ᎤᏍᏗ ᎤᏲ ᏄᎵᏍᏔᏅ?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” 🙏 ᎦᏚᎢ.",
 "Recording": "ᎠᏍᏆᏂᎪᏗᏍᎬ",
 "Hide the steps": "ᎯᏍᎦᏯ ᏧᏓᏅᏛ",
 "See the steps": "ᎯᎦᏔ ᏧᏓᏅᏛ",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ᎯᏁᎶᏗ app ᏂᏣᏛᏁᎲ ᎾᏍᎩᏯ, ᎿᏉ ᎯᏲᎯ ᎯᏂᏴ. ᏂᎦᏓ ᏧᏓᏅᏛ ᎪᏪᎳᏅ, ᎥᏝ ᏗᏟᎶᏍᏗ.",
 "Steps recorded: {n} ✓": "ᏧᏓᏅᏛ ᎠᏍᏆᏂᎪᏔᏅ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ᎢᏧᎳᎭ ᎤᏅᏲ: ᎾᏍᎩ app ᎤᏓᏁᎳᏛ, ᏄᏍᏛ ᎠᏓᏁᎳᏛ, ᎤᏤᎵ ᎦᏬᏂᎯᏍᏗ, ᎾᎿ ᏥᎨᏒ, ᏧᏓᏅᏛ ᏣᏍᏆᏂᎪᏔᏅ, ᎠᎴ ᎤᏲ app ᎤᎪᎲ. ᎥᏝ ᏅᏩᏓᎴ.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᏍᎦᏯ ᎢᏗᏢ.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "“ᎯᎪᎵᏯ ᎯᏍᏓᏩᏚᎦ” ᎠᏂᏍᎦᏯ ᎢᏗᏢ.",
 "New here? Start here": "ᎢᏤ ᏂᎯ? ᎠᏂ ᎴᏅᎲᎦ",
 "Or use your email": "ᎠᎴ ᏣᏤᎵ ᎢᎺᎵ ᏗᏂᏰᎸᏍᎨᏍᏗ",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ᎠᏎᏉ ᎠᎴ ᏣᏚᎵᏍᎬᏉ. ᏫᏴᎵ ᏓᏓᏡᎬ ᏨᏴᏍᏗ ᎠᎴ ᏣᏤᎵ ᏗᎪᏪᎵ, ᏗᏛᏅᎢᏍᏗ ᎠᎴ ᏗᏓᏙᎵᏍᏗ ᏂᎦᏛ ᏗᏟᎶᏍᏗ ᏧᎾᏓᎴᏅᏛ.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "ᎾᏍᎩᏉ, ᏫᏣᏴᎸ.",
 "Now you can make a circle, or join one from a link someone sends you.": "ᎪᎯ ᏣᏓᏡᎬ ᏰᎵ ᏣᏬᏢᏗ, ᎠᎴ ᏌᏉ ᏰᎵ ᏫᏴᎵᏍᏗ ᎤᎵᏍᏓᏴᏗ ᎩᎶ ᏣᏅᏁᎸᎯ.",
 "No passkey? Use your email": "passkey Ꮭ ᏰᎭ? ᏣᏤᎵ ᎢᎺᎵ ᏗᏂᏰᎸᏍᎨᏍᏗ",
+"Free. Needed for Circles": "ᎠᏎᏉ. ᏓᏓᏡᎬ ᎤᎬᏩᎵ ᎠᏚᎵᏍᎪ",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ᎠᏎᏉ ᎠᎧᎤᏂ ᎠᏚᎵᏍᎪ: passkey ᎠᎴ ᎢᎺᎵ ᎪᏗ, ᏗᏛᏅᎢᏍᏗ → ᎠᎧᎤᏂ. ᏌᏉ ᎢᏳᏟᎶᏛ ᎤᏍᏗ.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ᏓᏓᏡᎬ ᎠᏎ ᎪᏪᎵ ᏂᎨᏒᎾ ᏧᎬᏩᎶᏗ. passkey ᎤᏍᏗ ᎤᎵᏏᎩ ᏂᎨᏒᎾ: Face ID, ᏧᏰᏌᏛ, ᎠᎴ ᏣᏤᎵ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ. Ꮭ ᎦᏁᎦ ᏚᏙᎥ.",
-"Free. Needed for Circles": "ᎠᏎᏉ. ᏓᏓᏡᎬ ᎤᎬᏩᎵ ᎠᏚᎵᏍᎪ"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ᏓᏓᏡᎬ ᎠᏎ ᎪᏪᎵ ᏂᎨᏒᎾ ᏧᎬᏩᎶᏗ. passkey ᎤᏍᏗ ᎤᎵᏏᎩ ᏂᎨᏒᎾ: Face ID, ᏧᏰᏌᏛ, ᎠᎴ ᏣᏤᎵ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ. Ꮭ ᎦᏁᎦ ᏚᏙᎥ."
 }

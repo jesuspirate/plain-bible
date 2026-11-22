@@ -1297,7 +1297,6 @@
 "A suggestion": "建議",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "有什麼不正常嗎?說說發生了什麼。它會直接送到製作 My Quiet Bible 的人手中。",
 "What went wrong?": "哪裡出錯了?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在 🙏 正上方顯示一個小的「跟讀」按鈕。它從螢幕頂部的經文讀起，或從你點過的經文讀起。",
 "Recording": "正在記錄",
 "Hide the steps": "隱藏步驟",
 "See the steps": "查看步驟",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "像平常一樣使用 App,然後點「停止」。每一步都用文字記下,不錄影片。",
 "Steps recorded: {n} ✓": "已記錄步驟:{n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一同傳送:App 版本、裝置類型、語言、你所在的畫面、你記錄的步驟,以及 App 記錄到的錯誤。沒有別的。",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在搜尋列右端顯示一個小的「跟讀」圖示。它從螢幕頂部的經文讀起，或從你點過的經文讀起。",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的「跟讀」圖示從螢幕頂部的經文讀起。",
 "New here? Start here": "新來的？從這裡開始",
 "Or use your email": "或用電子郵件",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "免費，可選。登入後可以加入小組，並在所有裝置上保留你的標記、筆記、設定和禱告。",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "就這樣，你已登入。",
 "Now you can make a circle, or join one from a link someone sends you.": "現在你可以建立一個小組，或透過別人寄給你的連結加入。",
 "No passkey? Use your email": "沒有通行密鑰？用電子郵件",
+"Free. Needed for Circles": "免費。加入小組需要",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "小組需要一個免費帳號：在「設定」→「帳號」中使用通行密鑰或電子郵件代碼。只需片刻。",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "小組需要一個免費帳號。用通行密鑰最簡單：Face ID、指紋或螢幕鎖定即可。不需要密碼。",
-"Free. Needed for Circles": "免費。加入小組需要"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "小組需要一個免費帳號。用通行密鑰最簡單：Face ID、指紋或螢幕鎖定即可。不需要密碼。"
 }

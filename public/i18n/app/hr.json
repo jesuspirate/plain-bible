@@ -1381,7 +1381,6 @@
 "A suggestion": "Prijedlog",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Nešto ne radi? Recite što se dogodilo. Ide izravno osobi koja izrađuje My Quiet Bible.",
 "What went wrong?": "Što nije u redu?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Prikaži mali gumb „Prati čitanje” odmah iznad 🙏. Čita od retka na vrhu zaslona ili od retka koji ste dodirnuli.",
 "Recording": "Snima se",
 "Hide the steps": "Sakrij korake",
 "See the steps": "Pogledaj korake",
@@ -1390,6 +1389,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Koristite aplikaciju kao inače, a zatim dodirnite Zaustavi. Svaki korak se zapisuje riječima, ništa se ne snima kamerom.",
 "Steps recorded: {n} ✓": "Snimljeni koraci: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Šalje se uz to: verzija aplikacije, vrsta uređaja, njegov jezik, zaslon na kojem ste bili, snimljeni koraci i svaka greška koju je aplikacija primijetila. Ništa drugo.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Prikaži malu ikonu „Prati čitanje” na desnom kraju trake za pretraživanje. Čita od retka na vrhu zaslona ili od retka koji ste dodirnuli.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Prati čitanje” na desnom kraju čita od retka na vrhu zaslona.",
 "New here? Start here": "Novi ste? Počnite ovdje",
 "Or use your email": "Ili upotrijebite e-poštu",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Besplatno i neobavezno. Prijavite se da biste se pridružili Krugovima i imali označke, bilješke, postavke i molitve na svim uređajima.",
@@ -1400,7 +1401,7 @@
 "That’s it, you’re in.": "To je sve, prijavljeni ste.",
 "Now you can make a circle, or join one from a link someone sends you.": "Sada možete stvoriti krug ili se pridružiti jednome putem poveznice koju vam netko pošalje.",
 "No passkey? Use your email": "Nemate pristupni ključ? Upotrijebite e-poštu",
+"Free. Needed for Circles": "Besplatno. Potrebno za Krugove",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Za njih treba besplatan račun: pristupni ključ ili kôd e-poštom, u Postavke → Račun. Traje tren.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krugovi trebaju besplatan račun. Najlakše s pristupnim ključem: Face ID, otisak prsta ili zaključavanje zaslona. Bez lozinke.",
-"Free. Needed for Circles": "Besplatno. Potrebno za Krugove"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krugovi trebaju besplatan račun. Najlakše s pristupnim ključem: Face ID, otisak prsta ili zaključavanje zaslona. Bez lozinke."
 }

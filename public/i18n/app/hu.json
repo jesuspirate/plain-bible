@@ -1297,7 +1297,6 @@
 "A suggestion": "Javaslat",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Valami nem működik? Írja le, mi történt. Egyenesen ahhoz jut, aki a My Quiet Bible-t készíti.",
 "What went wrong?": "Mi ment félre?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Egy kis „Követő olvasás” gomb megjelenítése közvetlenül a 🙏 fölött. A képernyő tetején lévő verstől olvas, vagy attól a verstől, amelyre koppintottál.",
 "Recording": "Rögzítés",
 "Hide the steps": "Lépések elrejtése",
 "See the steps": "Lépések megtekintése",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Használja az alkalmazást a megszokott módon, majd koppintson a Leállítás gombra. Minden lépés szavakkal lesz leírva, semmi sem lesz felvéve videóra.",
 "Steps recorded: {n} ✓": "Rögzített lépések: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Vele együtt megy: az alkalmazás verziója, az eszköz típusa, nyelve, a képernyő, ahol volt, a rögzített lépések és minden hiba, amit az alkalmazás észlelt. Semmi más.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Egy kis „Követő olvasás” ikon megjelenítése a keresősáv jobb végén. A képernyő tetején lévő verstől olvas, vagy attól a verstől, amelyre koppintottál.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "A jobb végén lévő „Követő olvasás” ikon a képernyő tetején lévő verstől olvas.",
 "New here? Start here": "Új vagy itt? Itt kezdd",
 "Or use your email": "Vagy e-mail-címmel",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Ingyenes és nem kötelező. Jelentkezz be, hogy csatlakozhass Körökhöz, és kiemeléseid, jegyzeteid, beállításaid és imáid minden eszközödön meglegyenek.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Ennyi, bent vagy.",
 "Now you can make a circle, or join one from a link someone sends you.": "Most létrehozhatsz egy kört, vagy csatlakozhatsz egyhez egy linkkel, amelyet valaki elküld neked.",
 "No passkey? Use your email": "Nincs jelkulcsod? E-mail-címmel",
+"Free. Needed for Circles": "Ingyenes. A Körökhöz kell",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ingyenes fiók kell hozzájuk: jelkulcs vagy e-mailes kód, a Beállítások → Fiók alatt. Egy pillanat az egész.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "A körökhöz ingyenes fiók kell. Legegyszerűbb jelkulccsal: Face ID, ujjlenyomat vagy a képernyőzár. Jelszó nélkül.",
-"Free. Needed for Circles": "Ingyenes. A Körökhöz kell"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "A körökhöz ingyenes fiók kell. Legegyszerűbb jelkulccsal: Face ID, ujjlenyomat vagy a képernyőzár. Jelszó nélkül."
 }

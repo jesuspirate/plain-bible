@@ -1402,7 +1402,6 @@
 "A suggestion": "Пропозиція",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Щось не працює? Розкажіть, що сталося. Це потрапить прямо до того, хто робить My Quiet Bible.",
 "What went wrong?": "Що пішло не так?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Показувати маленьку кнопку «Читання з підсвічуванням» просто над 🙏. Вона читає з вірша вгорі екрана або з вірша, якого ви торкнулися.",
 "Recording": "Іде запис",
 "Hide the steps": "Сховати кроки",
 "See the steps": "Переглянути кроки",
@@ -1411,6 +1410,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Користуйтеся застосунком як завжди, потім натисніть «Зупинити». Кожен крок записується словами, нічого не знімається на відео.",
 "Steps recorded: {n} ✓": "Записано кроків: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Разом надсилається: версія застосунку, тип пристрою, його мова, екран, на якому ви були, записані кроки та будь-яка помилка, яку помітив застосунок. Більше нічого.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Показувати маленький значок «Читання з підсвічуванням» біля правого краю рядка пошуку. Він читає з вірша вгорі екрана або з вірша, якого ви торкнулися.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Читання з підсвічуванням» біля його правого краю читає з вірша вгорі екрана.",
 "New here? Start here": "Ви тут уперше? Почніть тут",
 "Or use your email": "Або увійти через ел. пошту",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Безкоштовно й за бажанням. Увійдіть, щоб приєднуватися до Кіл і мати виділення, нотатки, параметри й молитви на всіх своїх пристроях.",
@@ -1421,7 +1422,7 @@
 "That’s it, you’re in.": "От і все, ви увійшли.",
 "Now you can make a circle, or join one from a link someone sends you.": "Тепер можна створити коло або приєднатися до нього за посиланням, яке вам надішлють.",
 "No passkey? Use your email": "Немає ключа доступу? Увійти через ел. пошту",
+"Free. Needed for Circles": "Безкоштовно. Потрібно для Кіл",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Для них потрібен безкоштовний обліковий запис: ключ доступу або код ел. поштою, у Параметри → Обліковий запис. Це хвилинна справа.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Для кіл потрібен безкоштовний обліковий запис. Найпростіше з ключем доступу: Face ID, відбиток пальця або блокування екрана. Без пароля.",
-"Free. Needed for Circles": "Безкоштовно. Потрібно для Кіл"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Для кіл потрібен безкоштовний обліковий запис. Найпростіше з ключем доступу: Face ID, відбиток пальця або блокування екрана. Без пароля."
 }

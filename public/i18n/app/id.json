@@ -1297,7 +1297,6 @@
 "A suggestion": "Saran",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Ada yang tidak berfungsi? Ceritakan apa yang terjadi. Langsung sampai ke orang yang membuat My Quiet Bible.",
 "What went wrong?": "Apa yang salah?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Tampilkan tombol kecil “Baca bersama” tepat di atas 🙏. Tombol ini membaca dari ayat di bagian atas layar, atau dari ayat yang Anda ketuk.",
 "Recording": "Merekam",
 "Hide the steps": "Sembunyikan langkah",
 "See the steps": "Lihat langkah",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Pakai aplikasi seperti biasa, lalu ketuk Berhenti. Setiap langkah dicatat dengan kata-kata, tidak direkam video.",
 "Steps recorded: {n} ✓": "Langkah terekam: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ikut terkirim: versi aplikasi, jenis perangkat, bahasanya, layar tempat Anda berada, langkah yang Anda rekam, dan setiap galat yang dicatat aplikasi. Tidak ada yang lain.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Tampilkan ikon kecil “Baca bersama” di ujung kanan bilah pencarian. Ikon ini membaca dari ayat di bagian atas layar, atau dari ayat yang Anda ketuk.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikon “Baca bersama” di ujung kanannya membaca dari ayat di bagian atas layar.",
 "New here? Start here": "Baru di sini? Mulai di sini",
 "Or use your email": "Atau pakai email Anda",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratis dan opsional. Masuk untuk bergabung dengan Lingkaran dan menyimpan sorotan, catatan, pengaturan, dan doa Anda di semua perangkat.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Selesai, Anda sudah masuk.",
 "Now you can make a circle, or join one from a link someone sends you.": "Sekarang Anda bisa membuat lingkaran, atau bergabung lewat tautan yang dikirim seseorang.",
 "No passkey? Use your email": "Tidak punya kunci sandi? Pakai email Anda",
+"Free. Needed for Circles": "Gratis. Diperlukan untuk Lingkaran",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Perlu akun gratis: kunci sandi atau kode lewat email, di Pengaturan → Akun. Hanya sebentar.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Lingkaran memerlukan akun gratis. Paling mudah dengan kunci sandi: Face ID, sidik jari, atau kunci layar Anda. Tanpa kata sandi.",
-"Free. Needed for Circles": "Gratis. Diperlukan untuk Lingkaran"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Lingkaran memerlukan akun gratis. Paling mudah dengan kunci sandi: Face ID, sidik jari, atau kunci layar Anda. Tanpa kata sandi."
 }

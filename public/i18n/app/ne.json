@@ -1297,7 +1297,6 @@
 "A suggestion": "एउटा सुझाव",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "केही चलिरहेको छैन? के भयो भन्नुहोस्। यो सिधै My Quiet Bible बनाउने व्यक्तिकहाँ पुग्छ।",
 "What went wrong?": "के बिग्रियो?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 को ठीक माथि एउटा सानो “सँगै पढ्नुहोस्” बटन देखाउनुहोस्। यसले स्क्रिनको माथिको पदबाट, वा तपाईंले छोएको पदबाट पढ्छ।",
 "Recording": "रेकर्ड हुँदैछ",
 "Hide the steps": "चरणहरू लुकाउनुहोस्",
 "See the steps": "चरणहरू हेर्नुहोस्",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "सधैँझैँ एप चलाउनुहोस्, अनि रोक्नुहोस् थिच्नुहोस्। हरेक चरण लेखिन्छ, भिडियो खिचिँदैन।",
 "Steps recorded: {n} ✓": "रेकर्ड गरिएका चरण: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "सँगै पठाइन्छ: एपको संस्करण, उपकरणको प्रकार, यसको भाषा, तपाईं भएको स्क्रिन, तपाईंले रेकर्ड गरेका चरणहरू र एपले देखेको कुनै पनि त्रुटि। अरू केही होइन।",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "खोज पट्टीको दायाँ छेउमा एउटा सानो “सँगै पढ्नुहोस्” चिह्न देखाउनुहोस्। यसले स्क्रिनको माथिको पदबाट, वा तपाईंले छोएको पदबाट पढ्छ।",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "यसको दायाँ छेउको “सँगै पढ्नुहोस्” चिह्नले स्क्रिनको माथिको पदबाट पढ्छ।",
 "New here? Start here": "नयाँ हुनुहुन्छ? यहाँबाट सुरु गर्नुहोस्",
 "Or use your email": "वा आफ्नो इमेल प्रयोग गर्नुहोस्",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "निःशुल्क र ऐच्छिक। समूहहरूमा सामेल हुन र आफ्ना हाइलाइट, टिपोट, सेटिङ र प्रार्थनाहरू सबै उपकरणमा राख्न साइन इन गर्नुहोस्।",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "यत्ति हो, तपाईं भित्र हुनुहुन्छ।",
 "Now you can make a circle, or join one from a link someone sends you.": "अब तपाईं समूह बनाउन सक्नुहुन्छ, वा कसैले पठाएको लिङ्कबाट कुनै समूहमा सामेल हुन सक्नुहुन्छ।",
 "No passkey? Use your email": "पासकी छैन? आफ्नो इमेल प्रयोग गर्नुहोस्",
+"Free. Needed for Circles": "निःशुल्क। समूहहरूका लागि चाहिन्छ",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "यिनका लागि निःशुल्क खाता चाहिन्छ: पासकी वा इमेलबाट कोड, सेटिङ → खाता मा। एकछिन मात्र लाग्छ।",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "समूहहरूलाई निःशुल्क खाता चाहिन्छ। पासकीसँग सबैभन्दा सजिलो: Face ID, औंठाछाप वा तपाईंको स्क्रिन लक। पासवर्ड चाहिँदैन।",
-"Free. Needed for Circles": "निःशुल्क। समूहहरूका लागि चाहिन्छ"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "समूहहरूलाई निःशुल्क खाता चाहिन्छ। पासकीसँग सबैभन्दा सजिलो: Face ID, औंठाछाप वा तपाईंको स्क्रिन लक। पासवर्ड चाहिँदैन।"
 }

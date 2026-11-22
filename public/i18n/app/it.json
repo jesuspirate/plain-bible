@@ -1297,7 +1297,6 @@
 "A suggestion": "Un suggerimento",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Qualcosa non funziona? Racconta cosa è successo. Arriva direttamente alla persona che fa My Quiet Bible.",
 "What went wrong?": "Cosa non ha funzionato?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mostra un piccolo pulsante «Leggi seguendo» proprio sopra 🙏. Legge dal versetto in cima allo schermo, o dal versetto che hai toccato.",
 "Recording": "Registrazione in corso",
 "Hide the steps": "Nascondi i passaggi",
 "See the steps": "Vedi i passaggi",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Usa l’app come sempre, poi tocca Interrompi. Ogni passaggio viene scritto a parole, nulla viene filmato.",
 "Steps recorded: {n} ✓": "Passaggi registrati: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Inviato insieme: la versione dell’app, il tipo di dispositivo, la lingua, la schermata in cui eri, i passaggi registrati e qualsiasi errore notato dall’app. Nient’altro.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mostra una piccola icona «Leggi seguendo» all’estremità destra della barra di ricerca. Legge dal versetto in cima allo schermo, o dal versetto che hai toccato.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "L’icona «Leggi seguendo» all’estremità destra legge dal versetto in cima allo schermo.",
 "New here? Start here": "Nuovo qui? Inizia da qui",
 "Or use your email": "Oppure usa la tua email",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratis e facoltativo. Accedi per unirti alle Cerchie e avere evidenziazioni, note, impostazioni e preghiere su tutti i tuoi dispositivi.",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "Fatto, sei dentro.",
 "Now you can make a circle, or join one from a link someone sends you.": "Ora puoi creare una cerchia, o entrare in una con un link che qualcuno ti manda.",
 "No passkey? Use your email": "Niente passkey? Usa la tua email",
+"Free. Needed for Circles": "Gratis. Serve per le Cerchie",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Serve un account gratuito: una passkey o un codice via email, in Impostazioni → Account. Basta un attimo.",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Le cerchie richiedono un account gratuito. Più semplice con una passkey: Face ID, un’impronta o il blocco schermo. Nessuna password.",
-"Free. Needed for Circles": "Gratis. Serve per le Cerchie"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Le cerchie richiedono un account gratuito. Più semplice con una passkey: Face ID, un’impronta o il blocco schermo. Nessuna password."
 }

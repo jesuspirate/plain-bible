@@ -1297,7 +1297,6 @@
 "A suggestion": "এটা পৰামৰ্শ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "কিবা কাম কৰা নাই নেকি? কি হ'ল কওক। ই পোনপটীয়াকৈ My Quiet Bible বনোৱা মানুহজনৰ ওচৰলৈ যায়।",
 "What went wrong?": "কি ভুল হ'ল?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏-ৰ ঠিক ওপৰত এটা সৰু “লগে লগে পঢ়ক” বুটাম দেখুৱাওক। ই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা, বা আপুনি টিপা পদৰ পৰা পঢ়ে।",
 "Recording": "ৰেকৰ্ড হৈ আছে",
 "Hide the steps": "পদক্ষেপবোৰ লুকুৱাওক",
 "See the steps": "পদক্ষেপবোৰ চাওক",
@@ -1306,6 +1305,8 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "সদায়ৰ দৰে এপ ব্যৱহাৰ কৰক, তাৰ পিছত বন্ধ কৰক টিপক। প্ৰতিটো পদক্ষেপ লিখি ৰখা হয়, ভিডিঅ’ কৰা নহয়।",
 "Steps recorded: {n} ✓": "ৰেকৰ্ড কৰা পদক্ষেপ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "লগতে যায়: এপৰ সংস্কৰণ, ডিভাইচৰ প্ৰকাৰ, ইয়াৰ ভাষা, আপুনি থকা স্ক্ৰীণ, আপুনি ৰেকৰ্ড কৰা পদক্ষেপ আৰু এপে লক্ষ্য কৰা যিকোনো ত্ৰুটি। আন একো নহয়।",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "সন্ধান বাৰৰ সোঁফালৰ মূৰত এটা সৰু “লগে লগে পঢ়ক” চিহ্ন দেখুৱাওক। ই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা, বা আপুনি টিপা পদৰ পৰা পঢ়ে।",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ইয়াৰ সোঁফালৰ মূৰৰ “লগে লগে পঢ়ক” চিহ্নই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা পঢ়ে।",
 "New here? Start here": "নতুন নেকি? ইয়াৰ পৰা আৰম্ভ কৰক",
 "Or use your email": "নহলে আপোনাৰ ইমেইল ব্যৱহাৰ কৰক",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "বিনামূলীয়া আৰু ঐচ্ছিক। ছাৰ্কলত যোগ দিবলৈ আৰু আপোনাৰ হাইলাইট, টোকা, ছেটিংছ আৰু প্ৰাৰ্থনা সকলো ডিভাইচত ৰাখিবলৈ ছাইন ইন কৰক।",
@@ -1316,7 +1317,7 @@
 "That’s it, you’re in.": "হ'ল, আপুনি সোমাল।",
 "Now you can make a circle, or join one from a link someone sends you.": "এতিয়া আপুনি এটা ছাৰ্কল বনাব পাৰে, বা কোনোবাই পঠিওৱা লিংকেৰে এটা ছাৰ্কলত যোগ দিব পাৰে।",
 "No passkey? Use your email": "পাছকী নাই? আপোনাৰ ইমেইল ব্যৱহাৰ কৰক",
+"Free. Needed for Circles": "বিনামূলীয়া। ছাৰ্কলৰ বাবে লাগে",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ইয়াৰ বাবে বিনামূলীয়া একাউণ্ট লাগে: পাছকী বা ইমেইলত ক'ড, ছেটিংছ → একাউণ্টত। এক মুহূৰ্ত লাগে।",
-"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ছাৰ্কলৰ বাবে এটা বিনামূলীয়া একাউণ্ট লাগে। পাছকীৰে আটাইতকৈ সহজ: Face ID, আঙুলিৰ ছাপ বা আপোনাৰ স্ক্ৰীণ লক। কোনো পাছৱৰ্ড নালাগে।",
-"Free. Needed for Circles": "বিনামূলীয়া। ছাৰ্কলৰ বাবে লাগে"
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ছাৰ্কলৰ বাবে এটা বিনামূলীয়া একাউণ্ট লাগে। পাছকীৰে আটাইতকৈ সহজ: Face ID, আঙুলিৰ ছাপ বা আপোনাৰ স্ক্ৰীণ লক। কোনো পাছৱৰ্ড নালাগে।"
 }
