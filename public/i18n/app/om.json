@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Gareewwan herrega bilisaa barbaadu. Passkey wajjin salphaa dha: Face ID, ashaboo quba keetii ykn cufaa iskiriinii keetii. Jechi icciitii hin barbaachisu.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Sarara barbaachaa keessatti, dhuma isaa mirgaa irratti: jechoonni yeroo ibsan gubbaa iskiriinii irraa dubbisa.",
 "While it reads, tap any verse to read on from there.": "Yeroo dubbisu, achii itti fufuuf lakkoofsa kamiyyuu tuqi.",
-"Show the Read along icon in the search bar": "Mallattoo “Hordofii dubbisi” sarara barbaachaa keessatti agarsiisi"
+"Show the Read along icon in the search bar": "Mallattoo “Hordofii dubbisi” sarara barbaachaa keessatti agarsiisi",
+"Words on the page": "Jechoota fuula irra",
+"Turning pages": "Fuula garagalchuu",
+"On screen": "Iskiriinii irratti",
+"Extras": "Dabalata"
 }

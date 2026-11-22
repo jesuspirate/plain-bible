@@ -1322,5 +1322,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Οι κύκλοι χρειάζονται δωρεάν λογαριασμό. Το πιο εύκολο, με κλειδί πρόσβασης: Face ID, δακτυλικό αποτύπωμα ή το κλείδωμα οθόνης σας. Χωρίς συνθηματικό.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Στη γραμμή αναζήτησης, στη δεξιά άκρη: διαβάζει από την κορυφή της οθόνης καθώς φωτίζονται οι λέξεις.",
 "While it reads, tap any verse to read on from there.": "Όσο διαβάζει, αγγίξτε οποιοδήποτε εδάφιο για να συνεχίσει από εκεί.",
-"Show the Read along icon in the search bar": "Εμφάνιση του εικονιδίου «Ανάγνωση με παρακολούθηση» στη γραμμή αναζήτησης"
+"Show the Read along icon in the search bar": "Εμφάνιση του εικονιδίου «Ανάγνωση με παρακολούθηση» στη γραμμή αναζήτησης",
+"Words on the page": "Το κείμενο στη σελίδα",
+"Turning pages": "Γύρισμα σελίδας",
+"On screen": "Στην οθόνη",
+"Extras": "Επιπλέον"
 }

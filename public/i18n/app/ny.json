@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Magulu amafuna akaunti yaulere. Zosavuta ndi passkey: Face ID, chala kapena loko ya sikirini yanu. Palibe mawu achinsinsi.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Mu bala losakira, kumapeto kwake kumanja: kamawerenga kuyambira pamwamba pa sikirini mawu akuwala.",
 "While it reads, tap any verse to read on from there.": "Ikamawerenga, dinani vesi lililonse kuti ipitirire kuchokera pamenepo.",
-"Show the Read along icon in the search bar": "Onetsani kachizindikiro ka “Werengani motsatira” mu bala losakira"
+"Show the Read along icon in the search bar": "Onetsani kachizindikiro ka “Werengani motsatira” mu bala losakira",
+"Words on the page": "Mawu patsamba",
+"Turning pages": "Kutembenuza masamba",
+"On screen": "Pa sikirini",
+"Extras": "Zina"
 }

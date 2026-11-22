@@ -1322,5 +1322,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Rrethet kërkojnë një llogari falas. Më e lehta me një çelës kalimi: Face ID, gjurmë gishti ose kyçja e ekranit. Pa fjalëkalim.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Në shiritin e kërkimit, në skajin e djathtë: lexon nga maja e ekranit ndërsa fjalët ndriçohen.",
 "While it reads, tap any verse to read on from there.": "Gjatë leximit, prek çdo varg për të vazhduar prej andej.",
-"Show the Read along icon in the search bar": "Shfaq ikonën “Lexo duke ndjekur” në shiritin e kërkimit"
+"Show the Read along icon in the search bar": "Shfaq ikonën “Lexo duke ndjekur” në shiritin e kërkimit",
+"Words on the page": "Teksti në faqe",
+"Turning pages": "Kthimi i faqeve",
+"On screen": "Në ekran",
+"Extras": "Shtesë"
 }

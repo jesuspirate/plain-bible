@@ -1424,5 +1424,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Для кіл потрібен безкоштовний обліковий запис. Найпростіше з ключем доступу: Face ID, відбиток пальця або блокування екрана. Без пароля.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "У рядку пошуку, біля правого краю: читає з верху екрана, а слова підсвічуються.",
 "While it reads, tap any verse to read on from there.": "Під час читання торкніться будь-якого вірша, щоб читати далі з нього.",
-"Show the Read along icon in the search bar": "Показувати значок «Читання з підсвічуванням» у рядку пошуку"
+"Show the Read along icon in the search bar": "Показувати значок «Читання з підсвічуванням» у рядку пошуку",
+"Words on the page": "Текст на сторінці",
+"Turning pages": "Гортання сторінок",
+"On screen": "На екрані",
+"Extras": "Додатково"
 }

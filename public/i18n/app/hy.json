@@ -1322,5 +1322,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Շրջանակների համար անվճար հաշիվ է պետք։ Ամենահեշտը՝ մուտքի բանալիով․ Face ID, մատնահետք կամ էկրանի կողպում։ Առանց գաղտնաբառի։",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Որոնման տողում, աջ ծայրում. կարդում է էկրանի վերևից, մինչ բառերը լուսավորվում են։",
 "While it reads, tap any verse to read on from there.": "Կարդալու ընթացքում հպեք ցանկացած համարի՝ այնտեղից շարունակելու համար։",
-"Show the Read along icon in the search bar": "Ցույց տալ «Հետևել ընթերցանությանը» պատկերակը որոնման տողում"
+"Show the Read along icon in the search bar": "Ցույց տալ «Հետևել ընթերցանությանը» պատկերակը որոնման տողում",
+"Words on the page": "Բառերը էջի վրա",
+"Turning pages": "Էջերի թերթում",
+"On screen": "Էկրանին",
+"Extras": "Լրացուցիչ"
 }

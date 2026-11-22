@@ -1424,5 +1424,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Для кругов нужен бесплатный аккаунт. Проще всего с ключом доступа: Face ID, отпечаток пальца или блокировка экрана. Без пароля.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "В строке поиска, у правого края: читает с верха экрана, а слова подсвечиваются.",
 "While it reads, tap any verse to read on from there.": "Во время чтения нажмите на любой стих, чтобы читать дальше с него.",
-"Show the Read along icon in the search bar": "Показывать значок «Чтение с подсветкой» в строке поиска"
+"Show the Read along icon in the search bar": "Показывать значок «Чтение с подсветкой» в строке поиска",
+"Words on the page": "Текст на странице",
+"Turning pages": "Перелистывание",
+"On screen": "На экране",
+"Extras": "Дополнительно"
 }

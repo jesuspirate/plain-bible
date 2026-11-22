@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "အသိုင်းအဝိုင်းများအတွက် အခမဲ့အကောင့် လိုသည်။ လျှို့ဝှက်ကီးဖြင့် အလွယ်ဆုံး: Face ID၊ လက်ဗွေ သို့မဟုတ် သင့်ဖန်သားပြင်လော့ခ်။ စကားဝှက် မလိုပါ။",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ရှာဖွေရေးဘား၏ ညာဘက်အစွန်တွင်- စကားလုံးများ လင်းလာစဉ် မျက်နှာပြင်ထိပ်မှ ဖတ်ပေးသည်။",
 "While it reads, tap any verse to read on from there.": "ဖတ်နေစဉ် မည်သည့်ကျမ်းချက်ကိုမဆို တို့လျှင် ထိုနေရာမှ ဆက်ဖတ်ပေးသည်။",
-"Show the Read along icon in the search bar": "ရှာဖွေရေးဘားတွင် “လိုက်ဖတ်ရန်” သင်္ကေတကို ပြပါ"
+"Show the Read along icon in the search bar": "ရှာဖွေရေးဘားတွင် “လိုက်ဖတ်ရန်” သင်္ကေတကို ပြပါ",
+"Words on the page": "စာမျက်နှာပေါ်ရှိ စကားလုံးများ",
+"Turning pages": "စာမျက်နှာလှန်ခြင်း",
+"On screen": "မျက်နှာပြင်ပေါ်တွင်",
+"Extras": "အပိုများ"
 }

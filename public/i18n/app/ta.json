@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "வட்டங்களுக்கு இலவசக் கணக்கு தேவை. கடவுச்சாவியுடன் மிக எளிது: Face ID, கைரேகை அல்லது உங்கள் திரைப் பூட்டு. கடவுச்சொல் இல்லை.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "தேடல் பட்டையில், வலது முனையில்: சொற்கள் ஒளிர, திரையின் மேலிருந்து வாசிக்கும்.",
 "While it reads, tap any verse to read on from there.": "வாசிக்கும்போது, அங்கிருந்து தொடர எந்த வசனத்தையும் தட்டவும்.",
-"Show the Read along icon in the search bar": "தேடல் பட்டையில் “உடன் வாசி” குறியைக் காட்டு"
+"Show the Read along icon in the search bar": "தேடல் பட்டையில் “உடன் வாசி” குறியைக் காட்டு",
+"Words on the page": "பக்கத்தில் உள்ள சொற்கள்",
+"Turning pages": "பக்கம் புரட்டுதல்",
+"On screen": "திரையில்",
+"Extras": "கூடுதல்"
 }

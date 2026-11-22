@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Mapoka anoda account isina mubhadharo. Zviri nyore nepasskey: Face ID, munwe kana kiyi yechidzitiro chenyu. Hapana pasiwedhi.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Mubhawa rekutsvaga, kumagumo aro kurudyi: kanoverenga kubva pamusoro pechiratidziro mazwi achipenya.",
 "While it reads, tap any verse to read on from there.": "Pachiri kuverenga, baya ndima ipi neipi kuti ienderere mberi kubva ipapo.",
-"Show the Read along icon in the search bar": "Ratidza kamucherechedzo ka “Verenga uchitevera” mubhawa rekutsvaga"
+"Show the Read along icon in the search bar": "Ratidza kamucherechedzo ka “Verenga uchitevera” mubhawa rekutsvaga",
+"Words on the page": "Mazwi ari papeji",
+"Turning pages": "Kutendeuka mapeji",
+"On screen": "Pachidzitiro",
+"Extras": "Zvimwe"
 }

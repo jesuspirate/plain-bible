@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Piirit tarvitsevat ilmaisen tilin. Helpointa pääsyavaimella: Face ID, sormenjälki tai näytön lukitus. Ei salasanaa.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Hakupalkissa, sen oikeassa reunassa: lukee näytön ylälaidasta alkaen, ja sanat syttyvät.",
 "While it reads, tap any verse to read on from there.": "Kun se lukee, napauta mitä tahansa jaetta jatkaaksesi siitä.",
-"Show the Read along icon in the search bar": "Näytä ”Lue mukana” -kuvake hakupalkissa"
+"Show the Read along icon in the search bar": "Näytä ”Lue mukana” -kuvake hakupalkissa",
+"Words on the page": "Teksti sivulla",
+"Turning pages": "Sivun kääntäminen",
+"On screen": "Näytöllä",
+"Extras": "Lisät"
 }

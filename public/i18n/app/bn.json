@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "সার্কেলের জন্য একটি বিনামূল্যের অ্যাকাউন্ট লাগে। পাসকী দিয়ে সবচেয়ে সহজ: Face ID, আঙুলের ছাপ বা আপনার স্ক্রিন লক। কোনো পাসওয়ার্ড নেই।",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "সার্চ বারে, ডান প্রান্তে: শব্দগুলো আলোকিত হতে হতে স্ক্রিনের উপর থেকে পড়ে যায়।",
 "While it reads, tap any verse to read on from there.": "পড়ার সময়, সেখান থেকে পড়তে যেকোনো পদে ট্যাপ করুন।",
-"Show the Read along icon in the search bar": "সার্চ বারে “সঙ্গে পড়ুন” আইকন দেখান"
+"Show the Read along icon in the search bar": "সার্চ বারে “সঙ্গে পড়ুন” আইকন দেখান",
+"Words on the page": "পাতার লেখা",
+"Turning pages": "পাতা ওল্টানো",
+"On screen": "স্ক্রিনে",
+"Extras": "অতিরিক্ত"
 }

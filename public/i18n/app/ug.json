@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "چەمبەرلەرگە ھەقسىز ھېسابات كېرەك. ئەڭ ئاسىنى ئۆتۈش ئاچقۇچى: Face ID، بارماق ئىزى ياكى ئېكران قۇلۇپى. پارول كەتمەيدۇ.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ئىزدەش بالدىقىدا، ئۇنىڭ ئۇچىدا: سۆزلەر يورۇغاندا ئېكراننىڭ ئۈستىدىن ئوقۇيدۇ.",
 "While it reads, tap any verse to read on from there.": "ئوقۇۋاتقاندا، شۇ يەردىن داۋاملاشتۇرۇش ئۈچۈن خالىغان ئايەتنى بېسىڭ.",
-"Show the Read along icon in the search bar": "ئىزدەش بالدىقىدا «ئەگىشىپ ئوقۇش» سىنبەلگىسىنى كۆرسىتىش"
+"Show the Read along icon in the search bar": "ئىزدەش بالدىقىدا «ئەگىشىپ ئوقۇش» سىنبەلگىسىنى كۆرسىتىش",
+"Words on the page": "بەتتىكى سۆزلەر",
+"Turning pages": "بەت ئۆرۈش",
+"On screen": "ئېكراندا",
+"Extras": "قوشۇمچە"
 }

@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "サークルには無料のアカウントが必要です。パスキーがいちばん簡単です。Face ID、指紋、または画面ロックで使えます。パスワードは不要です。",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "検索バーの右端：言葉が光りながら、画面の一番上から読み進めます。",
 "While it reads, tap any verse to read on from there.": "読んでいる間に節をタップすると、そこから読み進めます。",
-"Show the Read along icon in the search bar": "検索バーに「目で追って読む」アイコンを表示"
+"Show the Read along icon in the search bar": "検索バーに「目で追って読む」アイコンを表示",
+"Words on the page": "ページの文字",
+"Turning pages": "ページめくり",
+"On screen": "画面の表示",
+"Extras": "その他"
 }

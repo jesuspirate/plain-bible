@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "بازنەکان هەژمارێکی بێبەرامبەریان پێویستە. ئاسانترین ڕێگا بە پاسکی: Face ID، پەنجەمۆر یان قوفڵی شاشە. بێ وشەی نهێنی.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "لە شریتی گەڕاندا، لە کۆتاییەکەی: لە سەرەوەی شاشەکەوە دەخوێنێتەوە کاتێک وشەکان ڕووناک دەبنەوە.",
 "While it reads, tap any verse to read on from there.": "لە کاتی خوێندنەوەدا، کرتە لە هەر ئایەتێک بکە بۆ ئەوەی لەوێوە بخوێنێتەوە.",
-"Show the Read along icon in the search bar": "ئایکۆنی «خوێندنەوە لەگەڵیدا» لە شریتی گەڕاندا پیشان بدە"
+"Show the Read along icon in the search bar": "ئایکۆنی «خوێندنەوە لەگەڵیدا» لە شریتی گەڕاندا پیشان بدە",
+"Words on the page": "وشەکان لەسەر لاپەڕە",
+"Turning pages": "هەڵدانەوەی لاپەڕە",
+"On screen": "لەسەر شاشە",
+"Extras": "زیادە"
 }

@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "సర్కిల్‌లకు ఉచిత ఖాతా కావాలి. పాస్-కీతో చాలా సులభం: Face ID, వేలిముద్ర లేదా మీ స్క్రీన్ లాక్. పాస్‌వర్డ్ అవసరం లేదు.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "శోధన పట్టీలో, కుడి చివరన: పదాలు వెలుగుతుండగా తెర పైనుంచి చదువుతుంది.",
 "While it reads, tap any verse to read on from there.": "చదువుతున్నప్పుడు, అక్కడి నుంచి చదవడానికి ఏ వచనాన్నైనా నొక్కండి.",
-"Show the Read along icon in the search bar": "శోధన పట్టీలో “కలిసి చదువు” చిహ్నం చూపించు"
+"Show the Read along icon in the search bar": "శోధన పట్టీలో “కలిసి చదువు” చిహ్నం చూపించు",
+"Words on the page": "పేజీలోని పదాలు",
+"Turning pages": "పేజీ తిప్పడం",
+"On screen": "తెరపై",
+"Extras": "అదనపువి"
 }

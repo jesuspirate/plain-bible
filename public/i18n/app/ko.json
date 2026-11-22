@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "모임에는 무료 계정이 필요합니다. 패스키가 가장 쉽습니다. Face ID, 지문 또는 화면 잠금으로 됩니다. 암호는 필요 없습니다.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "검색창 오른쪽 끝: 단어가 밝아지며 화면 맨 위부터 읽어 나갑니다.",
 "While it reads, tap any verse to read on from there.": "읽는 동안 아무 절이나 누르면 거기서부터 읽습니다.",
-"Show the Read along icon in the search bar": "검색창에 ‘따라 읽기’ 아이콘 보이기"
+"Show the Read along icon in the search bar": "검색창에 ‘따라 읽기’ 아이콘 보이기",
+"Words on the page": "페이지의 글자",
+"Turning pages": "페이지 넘기기",
+"On screen": "화면 표시",
+"Extras": "기타"
 }

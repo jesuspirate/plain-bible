@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "समूहहरूलाई निःशुल्क खाता चाहिन्छ। पासकीसँग सबैभन्दा सजिलो: Face ID, औंठाछाप वा तपाईंको स्क्रिन लक। पासवर्ड चाहिँदैन।",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "खोज पट्टीमा, दायाँ छेउमा: शब्दहरू चम्किँदै गर्दा स्क्रिनको माथिबाट पढ्छ।",
 "While it reads, tap any verse to read on from there.": "पढ्दै गर्दा, त्यहाँबाट पढ्न कुनै पनि पद थिच्नुहोस्।",
-"Show the Read along icon in the search bar": "खोज पट्टीमा “सँगै पढ्नुहोस्” चिह्न देखाउनुहोस्"
+"Show the Read along icon in the search bar": "खोज पट्टीमा “सँगै पढ्नुहोस्” चिह्न देखाउनुहोस्",
+"Words on the page": "पानामा शब्दहरू",
+"Turning pages": "पाना पल्टाउने",
+"On screen": "स्क्रिनमा",
+"Extras": "थप"
 }

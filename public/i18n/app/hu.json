@@ -1319,5 +1319,9 @@
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "A körökhöz ingyenes fiók kell. Legegyszerűbb jelkulccsal: Face ID, ujjlenyomat vagy a képernyőzár. Jelszó nélkül.",
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "A keresősávban, a jobb végén: a képernyő tetejétől olvas, miközben a szavak felvillannak.",
 "While it reads, tap any verse to read on from there.": "Olvasás közben koppints bármelyik versre, hogy onnan folytassa.",
-"Show the Read along icon in the search bar": "A „Követő olvasás” ikon megjelenítése a keresősávban"
+"Show the Read along icon in the search bar": "A „Követő olvasás” ikon megjelenítése a keresősávban",
+"Words on the page": "Szöveg az oldalon",
+"Turning pages": "Lapozás",
+"On screen": "A képernyőn",
+"Extras": "Egyebek"
 }
