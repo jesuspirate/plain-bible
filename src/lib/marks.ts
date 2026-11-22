@@ -57,10 +57,12 @@ export const PALETTE: { color: string; name: string }[] = [
 
 /** "Colored text" highlights: the letters themselves take the color. The
  *  pale highlight colors can't be read as letters on a light page, so each has
- *  a deeper ink for light and sepia pages (at least 5:1 contrast on sepia) and
+ *  a deeper ink for light and sepia pages (at least 4.5:1 contrast on sepia) and
  *  a bright one for dark pages. Other colors fall back to a mix in CSS. */
 const INK: Record<string, [string, string]> = {
-  '#fff193': ['#7d5a00', '#ffe066'],
+  // Yellow isn't offered for colored text on light pages (yellowHidden);
+  // verses already yellow show there in the orange ink, which reads well.
+  '#fff193': ['#9a4606', '#ffe066'],
   '#b3e487': ['#2a6b15', '#a8e27c'],
   '#cae1fe': ['#1d5bb8', '#9fc8ff'],
   '#80cbc4': ['#0b6e66', '#74d4c9'],
