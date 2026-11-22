@@ -155,7 +155,11 @@ export const takePrayNow = () => { const n = listenNow; listenNow = false; retur
 
 /** Open Settings (the sheet behind the button in the top right corner). */
 export const SETTINGS_EVENT = 'plain-bible:settings'
-export const openSettings = () => window.dispatchEvent(new Event(SETTINGS_EVENT))
+let settingsAt: string | undefined
+/** With a page (say 'sync', Account), Settings open on it. */
+export const openSettings = (page?: string) => { settingsAt = page; window.dispatchEvent(new Event(SETTINGS_EVENT)) }
+/** Asked once by Settings as they open. */
+export const takeSettingsPage = () => { const p = settingsAt; settingsAt = undefined; return p }
 
 /** Open search (the bar at the bottom, or the round button in its place)
  *  with the keyboard up, as a tap on it does: from a tap on the chapter's

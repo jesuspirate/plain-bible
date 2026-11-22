@@ -4,7 +4,7 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar } from './state'
+import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar, takeSettingsPage } from './state'
 import { canHear } from './listen'
 import { Glyph } from './gesture'
 import { DataTools } from './import'
@@ -134,7 +134,7 @@ const PAGE_TITLE: Record<Page, string> = {
 
 /** Where you are in Settings: the first page, or one page in. */
 function useSettingsNav() {
-  const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : 'home')
+  const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : (takeSettingsPage() as Page | undefined) ?? 'home')
   const back = () => setPage('home')
   return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : 1 }
 }
@@ -225,7 +225,7 @@ const PersonIcon = () => (
 
 /** Under Account: what it's for, when sync last ran, or what went wrong. */
 function syncNote(sync: ReturnType<typeof useApp>['sync']) {
-  if (!sync.account) return t('Sync your highlights and prayers')
+  if (!sync.account) return t('Free. Needed for Circles')
   if (sync.busy) return t('Syncing…')
   if (sync.error) return t('Couldn’t sync. Tap to see why')
   const at = sync.account.lastSync

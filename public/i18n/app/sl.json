@@ -571,7 +571,6 @@
 "About": "O aplikaciji",
 "Language": "Jezik",
 "Close settings": "Zapri nastavitve",
-"Sync your highlights and prayers": "Sinhroniziraj označbe in molitve",
 "Couldn’t sync. Tap to see why": "Sinhronizacija ni uspela. Tapnite, da vidite zakaj",
 "Bible": "Sveto pismo",
 "Back to {version}": "Nazaj na {version}",
@@ -1412,5 +1411,18 @@
 "Steps recorded: {n} ✓": "Posneti koraki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Poslano zraven: različica aplikacije, vrsta naprave, njen jezik, zaslon, na katerem ste bili, posnete korake in vsaka napaka, ki jo je aplikacija opazila. Nič drugega.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Prikaži majhno ikono »Sledi branju« na desnem koncu iskalne vrstice. Bere od vrstice na vrhu zaslona ali od vrstice, ki ste se je dotaknili.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona »Sledi branju« na njenem desnem koncu bere od vrstice na vrhu zaslona."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona »Sledi branju« na njenem desnem koncu bere od vrstice na vrhu zaslona.",
+"New here? Start here": "Ste novi? Začnite tukaj",
+"Or use your email": "Ali uporabite e-pošto",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Brezplačno in neobvezno. Prijavite se, da se pridružite Krogom in imate označbe, zapiske, nastavitve in molitve na vseh napravah.",
+"Pick one way in:": "Izberite en način:",
+"Passkey": "Ključ za dostop",
+"Email": "E-pošta",
+"We email you a 6-digit code. New here? It makes your account.": "Po e-pošti vam pošljemo 6-mestno kodo. Ste novi? Ustvari vam račun.",
+"That’s it, you’re in.": "To je vse, prijavljeni ste.",
+"Now you can make a circle, or join one from a link someone sends you.": "Zdaj lahko ustvarite krog ali se pridružite enemu prek povezave, ki vam jo kdo pošlje.",
+"No passkey? Use your email": "Nimate ključa za dostop? Uporabite e-pošto",
+"Free. Needed for Circles": "Brezplačno. Potrebno za Kroge",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Zanje potrebujete brezplačen račun: ključ za dostop ali kodo po e-pošti, v Nastavitve → Račun. Traja le trenutek.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krogi potrebujejo brezplačen račun. Najlažje s ključem za dostop: Face ID, prstni odtis ali zaklep zaslona. Brez gesla."
 }

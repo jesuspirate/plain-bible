@@ -506,7 +506,6 @@
 "About": "Om",
 "Language": "Språk",
 "Close settings": "Lukk innstillingane",
-"Sync your highlights and prayers": "Synkroniser markeringane og bønene dine",
 "Couldn’t sync. Tap to see why": "Kunne ikkje synkronisere. Trykk for å sjå kvifor",
 "Bible": "Bibel",
 "Back to {version}": "Tilbake til {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Opptekne steg: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Vert sendt med: versjonen av appen, typen eining, språket, skjermen du var på, stega du tok opp og eventuelle feil appen merka. Ikkje noko anna.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Vis eit lite «Les med»-ikon i høgre ende av søkjefeltet. Det les frå verset øvst på skjermen, eller frå verset du trykte på.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "«Les med»-ikonet i høgre ende les frå verset øvst på skjermen."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "«Les med»-ikonet i høgre ende les frå verset øvst på skjermen.",
+"New here? Start here": "Ny her? Start her",
+"Or use your email": "Eller bruk e-posten din",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratis og valfritt. Logg inn for å bli med i Krinsar og ha markeringar, notat, innstillingar og bøner på alle einingane dine.",
+"Pick one way in:": "Vel éin måte å kome inn på:",
+"Passkey": "Passnøkkel",
+"Email": "E-post",
+"We email you a 6-digit code. New here? It makes your account.": "Vi sender deg ein sekssifra kode på e-post. Ny her? Han opprettar kontoen din.",
+"That’s it, you’re in.": "Det var det, du er inne.",
+"Now you can make a circle, or join one from a link someone sends you.": "No kan du lage ein krins, eller bli med i ein via ei lenkje nokon sender deg.",
+"No passkey? Use your email": "Ingen passnøkkel? Bruk e-posten din",
+"Free. Needed for Circles": "Gratis. Trengst for Krinsar",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Dei krev ein gratis konto: ein passnøkkel eller ein kode på e-post, under Innstillingar → Konto. Det tek eit augneblink.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krinsar treng ein gratis konto. Enklast med ein passnøkkel: Face ID, fingeravtrykk eller skjermlåsen. Inkje passord."
 }

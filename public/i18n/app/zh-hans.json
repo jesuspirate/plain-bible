@@ -506,7 +506,6 @@
 "About": "关于",
 "Language": "语言",
 "Close settings": "关闭设置",
-"Sync your highlights and prayers": "同步你的高亮和祷告",
 "Couldn’t sync. Tap to see why": "无法同步。轻点查看原因",
 "Bible": "圣经",
 "Back to {version}": "回到{version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "已记录步骤:{n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一同发送:应用版本、设备类型、语言、你所在的页面、你记录的步骤,以及应用记录到的错误。没有别的。",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在搜索栏右端显示一个小的“跟读”图标。它从屏幕顶部的经文读起，或从你点过的经文读起。",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的“跟读”图标从屏幕顶部的经文读起。"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的“跟读”图标从屏幕顶部的经文读起。",
+"New here? Start here": "新来的？从这里开始",
+"Or use your email": "或用电子邮件",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "免费，可选。登录后可以加入小组，并在所有设备上保留你的标记、笔记、设置和祷告。",
+"Pick one way in:": "选一种方式进入：",
+"Passkey": "通行密钥",
+"Email": "电子邮件",
+"We email you a 6-digit code. New here? It makes your account.": "我们会用电子邮件发给你一个 6 位数代码。新来的？它会为你创建账户。",
+"That’s it, you’re in.": "就这样，你已登录。",
+"Now you can make a circle, or join one from a link someone sends you.": "现在你可以建立一个小组，或通过别人发给你的链接加入。",
+"No passkey? Use your email": "没有通行密钥？用电子邮件",
+"Free. Needed for Circles": "免费。加入小组需要",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "小组需要一个免费账户：在“设置”→“账户”中使用通行密钥或电子邮件代码。只需片刻。",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "小组需要一个免费账户。用通行密钥最简单：Face ID、指纹或屏幕锁定即可。无需密码。"
 }

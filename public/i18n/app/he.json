@@ -506,7 +506,6 @@
 "About": "אודות",
 "Language": "שפה",
 "Close settings": "סגירת ההגדרות",
-"Sync your highlights and prayers": "סנכרון ההדגשות והתפילות שלך",
 "Couldn’t sync. Tap to see why": "הסנכרון נכשל. הקשה תראה למה",
 "Bible": "כתבי הקודש",
 "Back to {version}": "חזרה אל {version}",
@@ -1311,5 +1310,18 @@
 "Steps recorded: {n} ✓": "צעדים שהוקלטו: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "נשלח יחד: גרסת האפליקציה, סוג המכשיר, השפה שלו, המסך שבו הייתם, הצעדים שהקלטתם וכל שגיאה שהאפליקציה הבחינה בה. שום דבר אחר.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "הצגת סמל קטן „קריאה עם מעקב” בקצה שורת החיפוש. הוא קורא מהפסוק שבראש המסך, או מהפסוק שנגעת בו.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך.",
+"New here? Start here": "חדשים כאן? התחילו כאן",
+"Or use your email": "או השתמשו בדוא״ל",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "חינם ולא חובה. היכנסו כדי להצטרף למעגלים ולשמור את ההדגשות, ההערות, ההגדרות והתפילות בכל המכשירים שלכם.",
+"Pick one way in:": "בחרו דרך אחת להיכנס:",
+"Passkey": "מפתח גישה",
+"Email": "דוא״ל",
+"We email you a 6-digit code. New here? It makes your account.": "נשלח לכם בדוא״ל קוד בן 6 ספרות. חדשים כאן? הוא פותח לכם חשבון.",
+"That’s it, you’re in.": "זהו, נכנסתם.",
+"Now you can make a circle, or join one from a link someone sends you.": "עכשיו אפשר ליצור מעגל, או להצטרף לאחד דרך קישור שמישהו שולח לכם.",
+"No passkey? Use your email": "אין מפתח גישה? השתמשו בדוא״ל",
+"Free. Needed for Circles": "חינם. נדרש למעגלים",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "הם דורשים חשבון חינמי: מפתח גישה או קוד בדוא״ל, בהגדרות ← חשבון. זה לוקח רגע.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "מעגלים דורשים חשבון חינמי. הכי פשוט עם מפתח גישה: Face ID, טביעת אצבע או נעילת המסך. בלי סיסמה."
 }

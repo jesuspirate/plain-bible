@@ -506,7 +506,6 @@
 "About": "ਇਸ ਬਾਰੇ",
 "Language": "ਭਾਸ਼ਾ",
 "Close settings": "ਸੈਟਿੰਗਾਂ ਬੰਦ ਕਰੋ",
-"Sync your highlights and prayers": "ਆਪਣੀਆਂ ਹਾਈਲਾਈਟਾਂ ਅਤੇ ਪ੍ਰਾਰਥਨਾਵਾਂ ਸਿੰਕ ਕਰੋ",
 "Couldn’t sync. Tap to see why": "ਸਿੰਕ ਨਹੀਂ ਹੋ ਸਕਿਆ। ਕਾਰਨ ਦੇਖਣ ਲਈ ਟੈਪ ਕਰੋ",
 "Bible": "ਬਾਈਬਲ",
 "Back to {version}": "{version} ’ਤੇ ਵਾਪਸ ਜਾਓ",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "ਰਿਕਾਰਡ ਕੀਤੇ ਕਦਮ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ਨਾਲ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ: ਐਪ ਦਾ ਸੰਸਕਰਣ, ਡਿਵਾਈਸ ਦੀ ਕਿਸਮ, ਉਸਦੀ ਭਾਸ਼ਾ, ਜਿਸ ਸਕ੍ਰੀਨ ਤੇ ਤੁਸੀਂ ਸੀ, ਜੋ ਕਦਮ ਤੁਸੀਂ ਰਿਕਾਰਡ ਕੀਤੇ, ਅਤੇ ਐਪ ਨੇ ਜੋ ਵੀ ਗਲਤੀ ਵੇਖੀ। ਹੋਰ ਕੁਝ ਨਹੀਂ।",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ਖੋਜ ਪੱਟੀ ਦੇ ਸੱਜੇ ਸਿਰੇ ’ਤੇ ਇੱਕ ਛੋਟਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਦਿਖਾਓ। ਇਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ, ਜਾਂ ਤੁਹਾਡੀ ਛੂਹੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ਇਸਦੇ ਸੱਜੇ ਸਿਰੇ ਵਾਲਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ਇਸਦੇ ਸੱਜੇ ਸਿਰੇ ਵਾਲਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
+"New here? Start here": "ਨਵੇਂ ਹੋ? ਇੱਥੋਂ ਸ਼ੁਰੂ ਕਰੋ",
+"Or use your email": "ਜਾਂ ਆਪਣੀ ਈਮੇਲ ਵਰਤੋ",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ਮੁਫ਼ਤ ਅਤੇ ਮਰਜ਼ੀ ਨਾਲ। ਸਮੂਹਾਂ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋਣ ਅਤੇ ਆਪਣੀਆਂ ਹਾਈਲਾਈਟਾਂ, ਨੋਟਸ, ਸੈਟਿੰਗਾਂ ਅਤੇ ਪ੍ਰਾਰਥਨਾਵਾਂ ਸਾਰੀਆਂ ਡਿਵਾਈਸਾਂ ’ਤੇ ਰੱਖਣ ਲਈ ਸਾਈਨ ਇਨ ਕਰੋ।",
+"Pick one way in:": "ਅੰਦਰ ਆਉਣ ਦਾ ਇੱਕ ਤਰੀਕਾ ਚੁਣੋ:",
+"Passkey": "ਪਾਸਕੀ",
+"Email": "ਈਮੇਲ",
+"We email you a 6-digit code. New here? It makes your account.": "ਅਸੀਂ ਤੁਹਾਨੂੰ ਈਮੇਲ ’ਤੇ 6 ਅੰਕਾਂ ਦਾ ਕੋਡ ਭੇਜਦੇ ਹਾਂ। ਨਵੇਂ ਹੋ? ਉਹੀ ਤੁਹਾਡਾ ਖਾਤਾ ਬਣਾ ਦਿੰਦਾ ਹੈ।",
+"That’s it, you’re in.": "ਬੱਸ, ਤੁਸੀਂ ਅੰਦਰ ਹੋ।",
+"Now you can make a circle, or join one from a link someone sends you.": "ਹੁਣ ਤੁਸੀਂ ਇੱਕ ਸਮੂਹ ਬਣਾ ਸਕਦੇ ਹੋ, ਜਾਂ ਕਿਸੇ ਦੇ ਭੇਜੇ ਲਿੰਕ ਨਾਲ ਕਿਸੇ ਸਮੂਹ ਵਿੱਚ ਸ਼ਾਮਲ ਹੋ ਸਕਦੇ ਹੋ।",
+"No passkey? Use your email": "ਪਾਸਕੀ ਨਹੀਂ? ਆਪਣੀ ਈਮੇਲ ਵਰਤੋ",
+"Free. Needed for Circles": "ਮੁਫ਼ਤ। ਸਮੂਹਾਂ ਲਈ ਲੋੜੀਂਦਾ",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ਇਨ੍ਹਾਂ ਲਈ ਮੁਫ਼ਤ ਖਾਤਾ ਚਾਹੀਦਾ ਹੈ: ਪਾਸਕੀ ਜਾਂ ਈਮੇਲ ਰਾਹੀਂ ਕੋਡ, ਸੈਟਿੰਗਾਂ → ਖਾਤਾ ਵਿੱਚ। ਬੱਸ ਇੱਕ ਪਲ ਲੱਗਦਾ ਹੈ।",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ਸਮੂਹਾਂ ਲਈ ਇੱਕ ਮੁਫ਼ਤ ਖਾਤਾ ਚਾਹੀਦਾ ਹੈ। ਪਾਸਕੀ ਨਾਲ ਸਭ ਤੋਂ ਸੌਖਾ: Face ID, ਫ਼ਿੰਗਰਪ੍ਰਿੰਟ ਜਾਂ ਤੁਹਾਡਾ ਸਕ੍ਰੀਨ ਲਾਕ। ਕੋਈ ਪਾਸਵਰਡ ਨਹੀਂ।"
 }

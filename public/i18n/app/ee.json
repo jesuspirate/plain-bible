@@ -506,7 +506,6 @@
 "About": "Ku ɖe eŋu",
 "Language": "Gbe",
 "Close settings": "Tu ɖoɖowo",
-"Sync your highlights and prayers": "Wɔ wò amadedewo kple gbedodoɖawo ɖeka",
 "Couldn’t sync. Tap to see why": "Mete ŋu wɔe ɖeka o. Zi edzi nàkpɔ susu si ta",
 "Bible": "Biblia",
 "Back to {version}": "Gbugbɔ yi {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Afɔɖeɖe siwo woŋlɔ: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Woɖoe ɖa kpe ɖe eŋu: app la ƒe tɔtrɔ, mɔ̃a ƒomevi, eƒe gbe, axa si nèle, afɔɖeɖe siwo nèŋlɔ ɖi kple vodada ɖesiaɖe si app la kpɔ. Naneke bubu meli o.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ðe “Xlẽe kpli” dzesi sue aɖe fia le didiƒe ƒe ɖusime nuwuwu. Exlẽa tso kpukpui si le sikrin la tame, alo tso kpukpui si nèfia la gbɔ.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "“Xlẽe kpli” dzesi si le eƒe ɖusime nuwuwu xlẽa tso kpukpui si le sikrin la tame."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "“Xlẽe kpli” dzesi si le eƒe ɖusime nuwuwu xlẽa tso kpukpui si le sikrin la tame.",
+"New here? Start here": "Èva afi sia yeyee? Dze egɔme le afi sia",
+"Or use your email": "Alo zã wò email",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Femaxee eye menye dzizizi o. Ge ɖe eme be nàge ɖe Habɔbɔwo me eye nàkpɔ wò dzesiwo, nuŋlɔɖiwo, ɖoɖowo kple gbedodoɖaawo le wò mɔ̃wo katã dzi.",
+"Pick one way in:": "Tia mɔ ɖeka si dzi nàto age ɖe eme:",
+"Passkey": "Safui ɣaɣla",
+"Email": "Email",
+"We email you a 6-digit code. New here? It makes your account.": "Míaɖo kɔd si me xexlẽdzesi 6 le na wò le email dzi. Èva afi sia yeyee? Ewɔa wò akɔnta.",
+"That’s it, you’re in.": "Esia koe, ège ɖe eme.",
+"Now you can make a circle, or join one from a link someone sends you.": "Fifia àte ŋu awɔ habɔbɔ, alo age ɖe ɖeka me to kadodo si ame aɖe ɖo ɖe wò la dzi.",
+"No passkey? Use your email": "Safui ɣaɣla meli o? Zã wò email",
+"Free. Needed for Circles": "Femaxee. Ehiã na Habɔbɔwo",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Wohiã akɔnta femaxee: safui ɣaɣla alo kɔd le email dzi, le Ɖoɖowo → Akɔnta me. Ɣeyiɣi kpui aɖe ko wòxɔna.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Habɔbɔwo hiã akɔnta femaxee. Ebɔbɔ wu kple safui ɣaɣla: Face ID, asibidɛ ƒe dzesi alo wò mɔ̃ ƒe ŋkume ƒe safuinu. Nya ɣaɣla meli o."
 }

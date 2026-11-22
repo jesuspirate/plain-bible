@@ -506,7 +506,6 @@
 "About": "درباره",
 "Language": "زبان",
 "Close settings": "بستن تنظیمات",
-"Sync your highlights and prayers": "همگام‌سازی برجسته‌سازی‌ها و دعاهایتان",
 "Couldn’t sync. Tap to see why": "همگام‌سازی انجام نشد. برای دیدن دلیل ضربه بزنید",
 "Bible": "کتاب‌مقدس",
 "Back to {version}": "بازگشت به {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "گام‌های ضبط‌شده: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "همراه آن فرستاده می‌شود: نسخهٔ برنامه، نوع دستگاه، زبان آن، صفحه‌ای که در آن بودید، گام‌هایی که ضبط کردید و هر خطایی که برنامه دید. چیز دیگری نه.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "نمایش یک نماد کوچک «خواندن همراه» در انتهای نوار جستجو. از آیهٔ بالای صفحه، یا از آیه‌ای که لمس کرده‌اید، می‌خواند.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "نماد «خواندن همراه» در انتهای آن از آیهٔ بالای صفحه می‌خواند."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "نماد «خواندن همراه» در انتهای آن از آیهٔ بالای صفحه می‌خواند.",
+"New here? Start here": "تازه‌وارد هستید؟ از اینجا شروع کنید",
+"Or use your email": "یا از ایمیل خود استفاده کنید",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "رایگان و اختیاری. وارد شوید تا به حلقه‌ها بپیوندید و هایلایت‌ها، یادداشت‌ها، تنظیمات و دعاهایتان در همهٔ دستگاه‌هایتان باشد.",
+"Pick one way in:": "یک راه ورود را انتخاب کنید:",
+"Passkey": "گذرکلید",
+"Email": "ایمیل",
+"We email you a 6-digit code. New here? It makes your account.": "یک کد ۶ رقمی برایتان ایمیل می‌کنیم. تازه‌وارد هستید؟ همان کد حسابتان را می‌سازد.",
+"That’s it, you’re in.": "همین بود، وارد شدید.",
+"Now you can make a circle, or join one from a link someone sends you.": "حالا می‌توانید حلقه‌ای بسازید، یا با پیوندی که کسی برایتان می‌فرستد به یکی بپیوندید.",
+"No passkey? Use your email": "گذرکلید ندارید؟ از ایمیل خود استفاده کنید",
+"Free. Needed for Circles": "رایگان. برای حلقه‌ها لازم است",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "به یک حساب رایگان نیاز دارند: گذرکلید یا کد ایمیلی، در تنظیمات ← حساب. لحظه‌ای بیشتر طول نمی‌کشد.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "حلقه‌ها به حسابی رایگان نیاز دارند. ساده‌ترین راه با گذرکلید: Face ID، اثر انگشت یا قفل صفحه. بدون گذرواژه."
 }

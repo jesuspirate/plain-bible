@@ -506,7 +506,6 @@
 "About": "Mpo na biso",
 "Language": "Lokota",
 "Close settings": "Kanga bibongiseli",
-"Sync your highlights and prayers": "Kokanisa langi mpe mabondeli na yo",
 "Couldn’t sync. Tap to see why": "Ekokani te. Finá mpo na koyeba ntina",
 "Bible": "Biblia",
 "Back to {version}": "Zonga na {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Matambe oyo bakangi: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Etindamaka elongo: version ya application, lolenge ya esaleli, monoko na yango, ecran oyo ozalaki, matambe oyo okangaki mpe libunga nyonso oyo application emonaki. Eloko mosusu te.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Lakisa elembo moke “Tánga elongo” na nsuka ya mobali ya esika ya koluka. Etángaka banda vɛrsɛ oyo ezali likoló ya écran, to vɛrsɛ oyo osimbi.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Elembo “Tánga elongo” na nsuka na yango ya mobali etángaka banda vɛrsɛ oyo ezali likoló ya écran."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Elembo “Tánga elongo” na nsuka na yango ya mobali etángaka banda vɛrsɛ oyo ezali likoló ya écran.",
+"New here? Start here": "Ozali sika? Bandá awa",
+"Or use your email": "To salelá imɛli na yo",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Ofele mpe na bolingi na yo. Kɔtá mpo na kokɔta na Masanga mpe kobatela makomi oyei, maloba, bibongiseli mpe mabondeli na yo na bisaleli na yo nyonso.",
+"Pick one way in:": "Pɔsɔlá nzela moko ya kokɔta:",
+"Passkey": "Passkey",
+"Email": "Imɛli",
+"We email you a 6-digit code. New here? It makes your account.": "Tokotindela yo kɔdi ya mituya 6 na imɛli. Ozali sika? Yango ekosala kɔnti na yo.",
+"That’s it, you’re in.": "Ezali bongo, okɔti.",
+"Now you can make a circle, or join one from a link someone sends you.": "Sikawa okoki kosala lisanga, to kokɔta na moko na nzela ya lien oyo moto atindeli yo.",
+"No passkey? Use your email": "Ozali na passkey te? Salelá imɛli na yo",
+"Free. Needed for Circles": "Ofele. Esengeli mpo na Masanga",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Esengeli kɔnti ya ofele: passkey to kɔdi na imɛli, na Bibongiseli → Kɔnti. Ezali kaka mwa ntango moke.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Masanga esɛngaka kɔnti ya ofele. Pɛtɛɛ na passkey: Face ID, elembo ya mosapi to kokanga ya ekrani na yo. Mot de passe te."
 }

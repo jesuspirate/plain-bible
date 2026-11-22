@@ -506,7 +506,6 @@
 "About": "அறிமுகம்",
 "Language": "மொழி",
 "Close settings": "அமைப்புகளை மூடு",
-"Sync your highlights and prayers": "உங்கள் ஹைலைட்களையும் ஜெபங்களையும் ஒத்திசை",
 "Couldn’t sync. Tap to see why": "ஒத்திசைக்க முடியவில்லை. காரணத்தைப் பார்க்கத் தட்டவும்",
 "Bible": "வேதாகமம்",
 "Back to {version}": "{version} க்குத் திரும்பு",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "பதிவான படிகள்: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "கூடவே அனுப்பப்படுவது: செயலியின் பதிப்பு, சாதனத்தின் வகை, அதன் மொழி, நீங்கள் இருந்த திரை, நீங்கள் பதிவுசெய்த படிகள், செயலி கண்ட எந்தப் பிழையும். வேறு எதுவும் இல்லை.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "தேடல் பட்டையின் வலது முனையில் ஒரு சிறிய “உடன் வாசி” குறியைக் காட்டு. அது திரையின் மேலுள்ள வசனத்திலிருந்து, அல்லது நீங்கள் தொட்ட வசனத்திலிருந்து வாசிக்கும்.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "அதன் வலது முனையிலுள்ள “உடன் வாசி” குறி திரையின் மேலுள்ள வசனத்திலிருந்து வாசிக்கும்."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "அதன் வலது முனையிலுள்ள “உடன் வாசி” குறி திரையின் மேலுள்ள வசனத்திலிருந்து வாசிக்கும்.",
+"New here? Start here": "புதியவரா? இங்கே தொடங்குங்கள்",
+"Or use your email": "அல்லது உங்கள் மின்னஞ்சலைப் பயன்படுத்துங்கள்",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "இலவசம், விருப்பத்தேர்வு. வட்டங்களில் சேரவும், உங்கள் சிறப்பம்சங்கள், குறிப்புகள், அமைப்புகள், ஜெபங்களை எல்லா சாதனங்களிலும் வைத்திருக்கவும் உள்நுழையுங்கள்.",
+"Pick one way in:": "உள்ளே வர ஒரு வழியைத் தேர்ந்தெடுங்கள்:",
+"Passkey": "கடவுச்சாவி",
+"Email": "மின்னஞ்சல்",
+"We email you a 6-digit code. New here? It makes your account.": "உங்களுக்கு 6 இலக்கக் குறியீட்டை மின்னஞ்சலில் அனுப்புகிறோம். புதியவரா? அதுவே உங்கள் கணக்கை உருவாக்கும்.",
+"That’s it, you’re in.": "அவ்வளவுதான், நீங்கள் உள்ளே வந்துவிட்டீர்கள்.",
+"Now you can make a circle, or join one from a link someone sends you.": "இப்போது நீங்கள் ஒரு வட்டத்தை உருவாக்கலாம், அல்லது ஒருவர் அனுப்பும் இணைப்பின் மூலம் ஒன்றில் சேரலாம்.",
+"No passkey? Use your email": "கடவுச்சாவி இல்லையா? உங்கள் மின்னஞ்சலைப் பயன்படுத்துங்கள்",
+"Free. Needed for Circles": "இலவசம். வட்டங்களுக்குத் தேவை",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "இவற்றுக்கு இலவசக் கணக்கு தேவை: கடவுச்சாவி அல்லது மின்னஞ்சல் குறியீடு, அமைப்புகள் → கணக்கு இல். ஒரு கணம்தான் ஆகும்.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "வட்டங்களுக்கு இலவசக் கணக்கு தேவை. கடவுச்சாவியுடன் மிக எளிது: Face ID, கைரேகை அல்லது உங்கள் திரைப் பூட்டு. கடவுச்சொல் இல்லை."
 }

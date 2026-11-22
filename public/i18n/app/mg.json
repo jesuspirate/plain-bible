@@ -506,7 +506,6 @@
 "About": "Mombamomba",
 "Language": "Fiteny",
 "Close settings": "Hanidy ny fikirana",
-"Sync your highlights and prayers": "Ampifanaraho ny fanasongadinana sy ny vavakao",
 "Couldn’t sync. Tap to see why": "Tsy nety ny fampifanarahana. Tsindrio raha hahafantatra ny antony",
 "Bible": "Baiboly",
 "Back to {version}": "Hiverina any amin’ny {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Dingana voaraikitra: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Alefa miaraka aminy: ny dikan’ny app, ny karazana fitaovana, ny fiteniny, ny efijery nisy anao, ireo dingana noraketinao ary izay hadisoana hitan’ny app. Tsy misy hafa.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Asehoy kisary kely “Hamaky miaraka” eo amin’ny farany havanana amin’ny tsipika fikarohana. Mamaky manomboka amin’ny andininy eo ambony amin’ny efijery, na amin’ny andininy notsindrianao.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ny kisary “Hamaky miaraka” eo amin’ny farany havanana dia mamaky manomboka amin’ny andininy eo ambony amin’ny efijery."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ny kisary “Hamaky miaraka” eo amin’ny farany havanana dia mamaky manomboka amin’ny andininy eo ambony amin’ny efijery.",
+"New here? Start here": "Vao tonga eto? Manomboha eto",
+"Or use your email": "Na ampiasao ny mailakao",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Maimaim-poana sady tsy voatery. Midira mba hiditra amin’ny Tarika sy hitazona ny marika, naoty, fikirana ary vavaka ataonao amin’ny fitaovanao rehetra.",
+"Pick one way in:": "Misafidiana fomba iray hidirana:",
+"Passkey": "Lakile fidirana",
+"Email": "Mailaka",
+"We email you a 6-digit code. New here? It makes your account.": "Mandefa kaody misy isa 6 aminao amin’ny mailaka izahay. Vao tonga eto? Izy no mamorona ny kaontinao.",
+"That’s it, you’re in.": "Izay ihany, tafiditra ianao.",
+"Now you can make a circle, or join one from a link someone sends you.": "Afaka mamorona tarika ianao izao, na miditra amin’ny iray amin’ny alalan’ny rohy alefan’olona aminao.",
+"No passkey? Use your email": "Tsy manana lakile fidirana? Ampiasao ny mailakao",
+"Free. Needed for Circles": "Maimaim-poana. Ilaina amin’ny Tarika",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Mila kaonty maimaim-poana izy ireo: lakile fidirana na kaody amin’ny mailaka, ao amin’ny Fikirana → Kaonty. Fotoana fohy monja.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Mila kaonty maimaim-poana ny tarika. Mora indrindra amin’ny lakile fidirana: Face ID, dian-tondro na ny fanidiana efijery. Tsy misy tenimiafina."
 }

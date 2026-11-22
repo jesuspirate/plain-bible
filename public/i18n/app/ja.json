@@ -506,7 +506,6 @@
 "About": "このアプリについて",
 "Language": "言語",
 "Close settings": "設定を閉じる",
-"Sync your highlights and prayers": "ハイライトと祈りを同期",
 "Couldn’t sync. Tap to see why": "同期できませんでした。タップして理由を表示",
 "Bible": "聖書",
 "Back to {version}": "{version} に戻る",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "記録した手順:{n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一緒に送られるもの:アプリのバージョン、端末の種類、その言語、開いていた画面、記録した手順、アプリが記録したエラー。それ以外は何も送りません。",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "検索バーの右端に小さな「目で追って読む」アイコンを表示します。画面の一番上の節から、またはタップした節から読みます。",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端の「目で追って読む」アイコンで、画面の一番上の節から読みます。"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端の「目で追って読む」アイコンで、画面の一番上の節から読みます。",
+"New here? Start here": "はじめての方はこちら",
+"Or use your email": "またはメールで",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "無料で、任意です。サインインすると、サークルに参加でき、ハイライト、メモ、設定、祈りをすべての端末でそろえられます。",
+"Pick one way in:": "入る方法をひとつ選んでください：",
+"Passkey": "パスキー",
+"Email": "メール",
+"We email you a 6-digit code. New here? It makes your account.": "6桁のコードをメールでお送りします。はじめての方も、そのコードでアカウントができます。",
+"That’s it, you’re in.": "これで完了です。",
+"Now you can make a circle, or join one from a link someone sends you.": "サークルを作ったり、送られてきたリンクから参加したりできます。",
+"No passkey? Use your email": "パスキーがない場合はメールで",
+"Free. Needed for Circles": "無料。サークルに必要です",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "サークルには無料のアカウントが必要です。「設定」→「アカウント」で、パスキーかメールのコードを使います。すぐに終わります。",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "サークルには無料のアカウントが必要です。パスキーがいちばん簡単です。Face ID、指紋、または画面ロックで使えます。パスワードは不要です。"
 }

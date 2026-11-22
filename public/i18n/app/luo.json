@@ -506,7 +506,6 @@
 "About": "Kuom app ni",
 "Language": "Dhok",
 "Close settings": "Lor chenro",
-"Sync your highlights and prayers": "Riw rangi mari kod lemo mari",
 "Couldn’t sync. Tap to see why": "Riwo ok otimore. Mul mondo ine gimomiyo",
 "Bible": "Muma",
 "Back to {version}": "Dok e {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Okenge mondiki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Oor kode: version mar app, kit gima itiyogo, dhok mare, skrin ma ne intie, okenge mane indiko, kod kosa moro amora ma app noneno. Onge gimoro machielo.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Nyis ranyisi matin mar “Som kiluwo” e giko mar korachwich mar kar manyo. Isomo chakre kuom ver manie wi skrin, kata ver ma ise mulo.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ranyisi mar “Som kiluwo” e giko mare mar korachwich isomo chakre kuom ver manie wi skrin."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ranyisi mar “Som kiluwo” e giko mare mar korachwich isomo chakre kuom ver manie wi skrin.",
+"New here? Start here": "In ng’at manyien? Chak ka",
+"Or use your email": "Kata ti gi email mari",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Nono kendo ok ochuni. Donji mondo idonji e Kanyakla kendo ikan gik ma isemiyo ler, ndiko, chenro gi lamo mari e gige duto.",
+"Pick one way in:": "Yier yo achiel mar donjo:",
+"Passkey": "Passkey",
+"Email": "Email",
+"We email you a 6-digit code. New here? It makes your account.": "Wabiro orni kod mar namba 6 e email. In ng’at manyien? Ema chweyo akaunt mari.",
+"That’s it, you’re in.": "Mano kende, isedonjo.",
+"Now you can make a circle, or join one from a link someone sends you.": "Koro inyalo chweyo kanyakla, kata donjo e achiel kokalo e link ma ng’ato oori.",
+"No passkey? Use your email": "Onge gi passkey? Ti gi email mari",
+"Free. Needed for Circles": "Nono. Dwarore ne Kanyakla",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Gidwaro akaunt ma nono: passkey kata kod e email, e Chenro → Akaunt. Kawo kinde matin.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kanyakla dwaro akaunt ma nono. Mayot moloyo en passkey: Face ID, lith lweti kata lock mar skrin mari. Onge password."
 }

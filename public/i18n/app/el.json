@@ -506,7 +506,6 @@
 "About": "Πληροφορίες",
 "Language": "Γλώσσα",
 "Close settings": "Κλείσιμο ρυθμίσεων",
-"Sync your highlights and prayers": "Συγχρονίστε τις επισημάνσεις και τις προσευχές σας",
 "Couldn’t sync. Tap to see why": "Ο συγχρονισμός απέτυχε. Αγγίξτε για να δείτε γιατί",
 "Bible": "Αγία Γραφή",
 "Back to {version}": "Επιστροφή σε {version}",
@@ -1310,5 +1309,18 @@
 "Steps recorded: {n} ✓": "Καταγεγραμμένα βήματα: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Στέλνονται μαζί: η έκδοση της εφαρμογής, το είδος της συσκευής, η γλώσσα της, η οθόνη όπου ήσασταν, τα βήματα που καταγράψατε και κάθε σφάλμα που εντόπισε η εφαρμογή. Τίποτε άλλο.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Εμφάνιση ενός μικρού εικονιδίου «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη της γραμμής αναζήτησης. Διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης ή από το εδάφιο που πατήσατε.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Το εικονίδιο «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Το εικονίδιο «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης.",
+"New here? Start here": "Νέος εδώ; Ξεκινήστε εδώ",
+"Or use your email": "Ή χρησιμοποιήστε το email σας",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Δωρεάν και προαιρετικό. Συνδεθείτε για να μπείτε σε Κύκλους και να έχετε επισημάνσεις, σημειώσεις, ρυθμίσεις και προσευχές σε όλες τις συσκευές σας.",
+"Pick one way in:": "Διαλέξτε έναν τρόπο εισόδου:",
+"Passkey": "Κλειδί πρόσβασης",
+"Email": "Email",
+"We email you a 6-digit code. New here? It makes your account.": "Σας στέλνουμε με email έναν 6ψήφιο κωδικό. Νέος εδώ; Δημιουργεί τον λογαριασμό σας.",
+"That’s it, you’re in.": "Αυτό ήταν, μπήκατε.",
+"Now you can make a circle, or join one from a link someone sends you.": "Τώρα μπορείτε να φτιάξετε έναν κύκλο ή να μπείτε σε έναν με έναν σύνδεσμο που σας στέλνει κάποιος.",
+"No passkey? Use your email": "Χωρίς κλειδί πρόσβασης; Χρησιμοποιήστε το email σας",
+"Free. Needed for Circles": "Δωρεάν. Χρειάζεται για τους Κύκλους",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Χρειάζονται δωρεάν λογαριασμό: κλειδί πρόσβασης ή κωδικό με email, στις Ρυθμίσεις → Λογαριασμός. Παίρνει μια στιγμή.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Οι κύκλοι χρειάζονται δωρεάν λογαριασμό. Το πιο εύκολο, με κλειδί πρόσβασης: Face ID, δακτυλικό αποτύπωμα ή το κλείδωμα οθόνης σας. Χωρίς συνθηματικό."
 }

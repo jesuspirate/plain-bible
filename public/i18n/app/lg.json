@@ -506,7 +506,6 @@
 "About": "Ebikwata ku app",
 "Language": "Olulimi",
 "Close settings": "Ggalawo ensengeka",
-"Sync your highlights and prayers": "Kwataganya langi zo n’essaala zo",
 "Couldn’t sync. Tap to see why": "Tekisobose kukwataganya. Nyiga olabe ensonga",
 "Bible": "Baibuli",
 "Back to {version}": "Ddayo ku {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Emitendera egikwatiddwa: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ebiweerezebwa wamu nakyo: enkyusa ya app, ekika ky’ekyuma, olulimi lwakyo, olupapula lwe wabaddeko, emitendera gye wakwata, n’ensobi yonna app gye yalaba. Tewali kirala.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Laga akabonero akatono “Soma ng’ogoberera” ku nkomerero ya ddyo ey’omuwaatwa gw’okunoonya. Kasoma okuva ku lunyiriri oluli waggulu ku ssirini, oba okuva ku lunyiriri lw’okutte.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Akabonero “Soma ng’ogoberera” ku nkomerero yaagwo eya ddyo kasoma okuva ku lunyiriri oluli waggulu ku ssirini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Akabonero “Soma ng’ogoberera” ku nkomerero yaagwo eya ddyo kasoma okuva ku lunyiriri oluli waggulu ku ssirini.",
+"New here? Start here": "Oli mupya? Tandikira wano",
+"Or use your email": "Oba kozesa email yo",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bwereere era si kya buwaze. Yingira oyingire mu Bibinja, era okuume ebyo by’olaze, ebiwandiiko, ensengeka n’essaala zo ku byuma byo byonna.",
+"Pick one way in:": "Londa engeri emu ey’okuyingira:",
+"Passkey": "Passkey",
+"Email": "Email",
+"We email you a 6-digit code. New here? It makes your account.": "Tukuweereza koodi ya nnamba 6 ku email. Oli mupya? Y’ekola akawunti yo.",
+"That’s it, you’re in.": "Ekyo kyokka, oyingidde.",
+"Now you can make a circle, or join one from a link someone sends you.": "Kati osobola okutonda ekibinja, oba okwegatta ku kimu ng’oyita mu link omuntu gy’akuweereza.",
+"No passkey? Use your email": "Tolina passkey? Kozesa email yo",
+"Free. Needed for Circles": "Bwereere. Kyetaagisa ku Bibinja",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Byetaaga akawunti ey’obwereere: passkey oba koodi ku email, mu Nsengeka → Akawunti. Kitwala kaseera katono.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ebibinja byetaaga akawunti ey'obwereere. Ekyangu ennyo ye passkey: Face ID, olugalo lwo oba ekisiba ky’essirini yo. Tewali kigambo kya kuyingira."
 }

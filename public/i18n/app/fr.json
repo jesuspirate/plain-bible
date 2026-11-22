@@ -506,7 +506,6 @@
 "About": "À propos",
 "Language": "Langue",
 "Close settings": "Fermer les réglages",
-"Sync your highlights and prayers": "Synchroniser vos surlignages et vos prières",
 "Couldn’t sync. Tap to see why": "Échec de la synchronisation. Touchez pour savoir pourquoi",
 "Bible": "Bible",
 "Back to {version}": "Revenir à {version}",
@@ -1142,5 +1141,18 @@
 "Steps recorded: {n} ✓": "Étapes enregistrées : {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Envoyé avec : la version de l’app, le type d’appareil, sa langue, l’écran où vous étiez, les étapes enregistrées et toute erreur relevée par l’app. Rien d’autre.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Afficher une petite icône « Lire en suivant » au bout à droite de la barre de recherche. Elle lit à partir du verset en haut de l’écran, ou du verset touché.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "L’icône « Lire en suivant », au bout à droite, lit à partir du verset en haut de l’écran."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "L’icône « Lire en suivant », au bout à droite, lit à partir du verset en haut de l’écran.",
+"New here? Start here": "Nouveau ici ? Commencez ici",
+"Or use your email": "Ou utiliser votre e-mail",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratuit et facultatif. Connectez-vous pour rejoindre les Cercles et garder vos surlignages, notes, réglages et prières sur tous vos appareils.",
+"Pick one way in:": "Choisir une façon d’entrer :",
+"Passkey": "Clé d’accès",
+"Email": "E-mail",
+"We email you a 6-digit code. New here? It makes your account.": "Nous vous envoyons un code à 6 chiffres par e-mail. Nouveau ici ? Il crée votre compte.",
+"That’s it, you’re in.": "C’est tout, vous êtes connecté.",
+"Now you can make a circle, or join one from a link someone sends you.": "Vous pouvez maintenant créer un cercle, ou en rejoindre un grâce à un lien qu’on vous envoie.",
+"No passkey? Use your email": "Pas de clé d’accès ? Utiliser votre e-mail",
+"Free. Needed for Circles": "Gratuit. Nécessaire pour les Cercles",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ils demandent un compte gratuit : une clé d’accès ou un code par e-mail, dans Réglages → Compte. C’est l’affaire d’un instant.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Les cercles demandent un compte gratuit. Le plus simple : une clé d’accès. Face ID, une empreinte ou le verrouillage de votre écran. Pas de mot de passe."
 }

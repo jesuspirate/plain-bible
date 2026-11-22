@@ -506,7 +506,6 @@
 "About": "Za pulogalamuyi",
 "Language": "Chilankhulo",
 "Close settings": "Tsekani zokonda",
-"Sync your highlights and prayers": "Gwirizanitsani zowunikira ndi mapemphero anu",
 "Couldn’t sync. Tap to see why": "Sizinagwirizane. Dinani kuti muone chifukwa",
 "Bible": "Baibulo",
 "Back to {version}": "Bwererani ku {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Masitepe ojambulidwa: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Zimatumizidwa limodzi: mtundu wa pulogalamu, mtundu wa chipangizo, chilankhulo chake, sikirini yomwe munali, masitepe omwe munajambula, ndi cholakwika chilichonse chimene pulogalamu inaona. Palibe china.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onetsani kachizindikiro kakang’ono ka “Werengani motsatira” kumapeto kumanja kwa bala losakira. Kamawerenga kuyambira pa vesi lili pamwamba pa sikirini, kapena pa vesi limene mwakhudza.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kachizindikiro ka “Werengani motsatira” kumapeto kwake kumanja kamawerenga kuyambira pa vesi lili pamwamba pa sikirini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kachizindikiro ka “Werengani motsatira” kumapeto kwake kumanja kamawerenga kuyambira pa vesi lili pamwamba pa sikirini.",
+"New here? Start here": "Ndinu watsopano? Yambani apa",
+"Or use your email": "Kapena gwiritsani ntchito imelo yanu",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Zaulere ndipo si zokakamiza. Lowani kuti mulowe m’Magulu ndi kusunga zomwe mwaunikira, zolemba, zokonda ndi mapemphero anu pazipangizo zanu zonse.",
+"Pick one way in:": "Sankhani njira imodzi yolowera:",
+"Passkey": "Passkey",
+"Email": "Imelo",
+"We email you a 6-digit code. New here? It makes your account.": "Tikutumizirani khodi ya manambala 6 pa imelo. Ndinu watsopano? Imeneyo imapanga akaunti yanu.",
+"That’s it, you’re in.": "Basi, mwalowa.",
+"Now you can make a circle, or join one from a link someone sends you.": "Tsopano mutha kupanga gulu, kapena kulowa m’gulu kudzera pa ulalo umene wina wakutumizirani.",
+"No passkey? Use your email": "Mulibe passkey? Gwiritsani ntchito imelo yanu",
+"Free. Needed for Circles": "Zaulere. Zofunika pa Magulu",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Amafuna akaunti yaulere: passkey kapena khodi pa imelo, mu Zokonda → Akaunti. Zimatenga kanthawi kochepa.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Magulu amafuna akaunti yaulere. Zosavuta ndi passkey: Face ID, chala kapena loko ya sikirini yanu. Palibe mawu achinsinsi."
 }

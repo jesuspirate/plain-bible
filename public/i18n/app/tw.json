@@ -506,7 +506,6 @@
 "About": "Ɛfa ho",
 "Language": "Kasa",
 "Close settings": "To nhyehyɛe mu",
-"Sync your highlights and prayers": "Bɔ wo kɔla nsɛm ne wo mpaebɔ ho sync",
 "Couldn’t sync. Tap to see why": "Sync no anyɛ yie. Mia na hu deɛ enti",
 "Bible": "Bible",
 "Back to {version}": "San kɔ {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Anammɔn a wɔarekɔd: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wɔde ka ho mane: app no version, afiri no su, ne kasa, screen a na wowɔ so, anammɔn a worekɔdee ne mfomso biara a app no huu. Biribi foforo biara nni hɔ.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kyerɛ “Kenkan ka ho” agyiraehyɛde ketewa bi wɔ nhwehwɛmu bɔɔ no nifa awiei. Ɛkenkan fi nkyekyem a ɛwɔ skrin no atifi, anaa nkyekyem a wode wo nsa kaa no so.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "“Kenkan ka ho” agyiraehyɛde a ɛwɔ ne nifa awiei no kenkan fi nkyekyem a ɛwɔ skrin no atifi."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "“Kenkan ka ho” agyiraehyɛde a ɛwɔ ne nifa awiei no kenkan fi nkyekyem a ɛwɔ skrin no atifi.",
+"New here? Start here": "Woyɛ foforo? Fi ase wɔ ha",
+"Or use your email": "Anaa fa wo email di dwuma",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Ɛyɛ kwa, na ɛnyɛ nhyɛ. Wura mu na woaka Akuw ho, na wo nsensanee, nsɛm a woakyerɛw, nhyehyɛe ne mpaebɔ nyɛ pɛ wɔ wo mfiri nyinaa so.",
+"Pick one way in:": "Paw ɔkwan baako a wobɛfa so awura mu:",
+"Passkey": "Passkey",
+"Email": "Email",
+"We email you a 6-digit code. New here? It makes your account.": "Yɛde code a ɛwɔ nɔma 6 bɛbrɛ wo wɔ email so. Woyɛ foforo? Ɛno na ɛbɔ wo akawnt.",
+"That’s it, you’re in.": "Ɛno ara ne no, woawura mu.",
+"Now you can make a circle, or join one from a link someone sends you.": "Afei wobɛtumi abɔ kuw, anaa woaka bi ho denam link a obi de bɛbrɛ wo so.",
+"No passkey? Use your email": "Wonni passkey? Fa wo email di dwuma",
+"Free. Needed for Circles": "Ɛyɛ kwa. Ɛho hia ma Akuw",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ɛhia akawnt a ɛyɛ kwa: passkey anaa code wɔ email so, wɔ Nhyehyɛe → Akawnt mu. Ɛgye bere tiaa bi pɛ.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Akuw hia akawnt a wontua hwee. Passkey na ɛyɛ mmerɛw sen biara: Face ID, wo nsateaa anaa wo screen ano krado. Password biara nni hɔ."
 }

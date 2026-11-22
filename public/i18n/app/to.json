@@ -506,7 +506,6 @@
 "About": "Fekauʻaki",
 "Language": "Lea",
 "Close settings": "Tāpuni ʻa e ngaahi fokotuʻutuʻu",
-"Sync your highlights and prayers": "Fakatatau hoʻo ngaahi fakalanu mo e lotu",
 "Couldn’t sync. Tap to see why": "Naʻe ʻikai lava ʻo fakatatau. Lomiʻi ke sio ki he ʻuhingá",
 "Bible": "Tohitapu",
 "Back to {version}": "Foki ki he {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Ngaahi sitepu kuo hiki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ʻOku fekau fakataha mo ia: ko e paaki ʻo e app, faʻahinga meʻangāué, hono leá, ko e sikilini naʻá ke ʻi aí, ko e ngaahi sitepu naʻá ke hikí, mo ha fehalaaki pē naʻe sio ki ai ʻa e app. ʻIkai ha meʻa kehe.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Fakahā ha kiʻi fakaʻilonga “Lau fakataha” ʻi he ngataʻanga toʻomataʻu ʻo e konga kumi. ʻOku ne lau mei he veesi ʻi ʻolunga ʻo e sikilini, pe mei he veesi naʻá ke lomiʻi.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ʻOku lau ʻe he fakaʻilonga “Lau fakataha” ʻi hono ngataʻanga toʻomataʻu mei he veesi ʻi ʻolunga ʻo e sikilini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ʻOku lau ʻe he fakaʻilonga “Lau fakataha” ʻi hono ngataʻanga toʻomataʻu mei he veesi ʻi ʻolunga ʻo e sikilini.",
+"New here? Start here": "Foʻou heni? Kamata heni",
+"Or use your email": "Pe ngāueʻaki hoʻo ʻīmeili",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Taʻetotongi pea ʻoku ʻikai fakamālohi. Hū ki loto ke kau ki he Ngaahi Kulupu pea tauhi hoʻo ngaahi fakamamafa, fakamatala, fokotuʻutuʻu mo e ngaahi lotu ʻi hoʻo ngaahi meʻangāue kotoa.",
+"Pick one way in:": "Fili ha founga ʻe taha ke hū ai:",
+"Passkey": "Kī hū",
+"Email": "ʻĪmeili",
+"We email you a 6-digit code. New here? It makes your account.": "Te mau ʻīmeili atu ha kouti fika ʻe 6. Foʻou heni? Ko ia ʻe ngaohi hoʻo ʻakauni.",
+"That’s it, you’re in.": "Ko ia pē, kuo ke hū.",
+"Now you can make a circle, or join one from a link someone sends you.": "Te ke lava he taimí ni ʻo ngaohi ha kulupu, pe kau ki ha taha ʻaki ha link ʻoku fekau atu ʻe ha taha.",
+"No passkey? Use your email": "ʻIkai ha kī hū? Ngāueʻaki hoʻo ʻīmeili",
+"Free. Needed for Circles": "Taʻetotongi. ʻOku fiemaʻu ki he Ngaahi Kulupu",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ʻOku fiemaʻu ha ʻakauni taʻetotongi: kī hū pe kouti ʻi he ʻīmeili, ʻi he Ngaahi Fokotuʻutuʻu → ʻAkauni. Ko ha kiʻi taimi pē.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ʻOku fiemaʻu ʻe he ngaahi kulupú ha ʻakauni taʻetotongi. Faingofua taha ʻaki ha kī hū: Face ID, ha tāmuʻa tuhu pe ko e loka ʻo hoʻo sikalini. ʻIkai ha lea fufū."
 }

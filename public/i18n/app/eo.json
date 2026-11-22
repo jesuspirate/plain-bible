@@ -506,7 +506,6 @@
 "About": "Pri",
 "Language": "Lingvo",
 "Close settings": "Fermi agordojn",
-"Sync your highlights and prayers": "Sinkronigi viajn emfazojn kaj preĝojn",
 "Couldn’t sync. Tap to see why": "Ne eblis sinkronigi. Tuŝetu por vidi kial",
 "Bible": "Biblio",
 "Back to {version}": "Reen al {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Registritaj paŝoj: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendata kune: la versio de la aplikaĵo, la speco de aparato, ĝia lingvo, la ekrano kie vi estis, la paŝoj kiujn vi registris kaj ĉiu eraro kiun la aplikaĵo rimarkis. Nenio alia.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montri malgrandan piktogramon “Kunlegi” ĉe la dekstra fino de la serĉa breto. Ĝi legas ekde la verso ĉe la supro de la ekrano, aŭ ekde la verso, kiun vi tuŝis.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "La piktogramo “Kunlegi” ĉe ĝia dekstra fino legas ekde la verso ĉe la supro de la ekrano."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "La piktogramo “Kunlegi” ĉe ĝia dekstra fino legas ekde la verso ĉe la supro de la ekrano.",
+"New here? Start here": "Nova ĉi tie? Komencu ĉi tie",
+"Or use your email": "Aŭ uzu vian retpoŝton",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Senpage kaj laŭvole. Ensalutu por aliĝi al Rondoj kaj havi viajn emfazojn, notojn, agordojn kaj preĝojn en ĉiuj viaj aparatoj.",
+"Pick one way in:": "Elektu unu manieron eniri:",
+"Passkey": "Pasŝlosilo",
+"Email": "Retpoŝto",
+"We email you a 6-digit code. New here? It makes your account.": "Ni retpoŝtas al vi 6-ciferan kodon. Nova ĉi tie? Ĝi kreas vian konton.",
+"That’s it, you’re in.": "Jen ĉio, vi estas ene.",
+"Now you can make a circle, or join one from a link someone sends you.": "Nun vi povas krei rondon, aŭ aliĝi al iu per ligilo, kiun iu sendas al vi.",
+"No passkey? Use your email": "Ĉu neniu pasŝlosilo? Uzu vian retpoŝton",
+"Free. Needed for Circles": "Senpage. Necesa por Rondoj",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ili bezonas senpagan konton: pasŝlosilon aŭ kodon per retpoŝto, en Agordoj → Konto. Daŭras nur momenton.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Rondoj bezonas senpagan konton. Plej facile per pasŝlosilo: Face ID, fingrospuro aŭ via ekranŝloso. Sen pasvorto."
 }

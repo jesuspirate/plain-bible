@@ -506,7 +506,6 @@
 "About": "Nípa",
 "Language": "Èdè",
 "Close settings": "Pa ètò dé",
-"Sync your highlights and prayers": "Ṣiṣẹ́pọ̀ àwọn àmì àwọ̀ àti àdúrà yín",
 "Couldn’t sync. Tap to see why": "Ìṣiṣẹ́pọ̀ kò ṣeé ṣe. Ẹ tẹ̀ ẹ́ láti rí ìdí",
 "Bible": "Bíbélì",
 "Back to {version}": "Padà sí {version}",
@@ -1307,5 +1306,18 @@
 "Steps recorded: {n} ✓": "Àwọn ìgbésẹ̀ tí a gbà sílẹ̀: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ohun tí a fi ránṣẹ́ pẹ̀lú rẹ̀: ẹ̀dà áàpù, irú ẹ̀rọ, èdè rẹ̀, ojú-ìwé tí o wà, àwọn ìgbésẹ̀ tí o gbà sílẹ̀, àti àṣìṣe èyíkéyìí tí áàpù ṣàkíyèsí. Kò sí nǹkan mìíràn.",
 "Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Fi àmì kékeré “Kà á pẹ̀lú” hàn ní òpin ọ̀tún ọ̀pá ìwádìí. Ó ń kà láti ẹsẹ tó wà lókè ojú ìbòjú, tàbí láti ẹsẹ tí o fọwọ́ kàn.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Àmì “Kà á pẹ̀lú” ní òpin ọ̀tún rẹ̀ ń kà láti ẹsẹ tó wà lókè ojú ìbòjú."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Àmì “Kà á pẹ̀lú” ní òpin ọ̀tún rẹ̀ ń kà láti ẹsẹ tó wà lókè ojú ìbòjú.",
+"New here? Start here": "Ẹ jẹ́ tuntun? Ẹ bẹ̀rẹ̀ níbí",
+"Or use your email": "Tàbí ẹ lo ímeèlì yín",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Ọ̀fẹ́ ni, kò sì pọn dandan. Ẹ wọlé láti dara pọ̀ mọ́ Àwọn ẹgbẹ́, kí ẹ sì máa rí àwọn àmì, àkọsílẹ̀, ètò àti àdúrà yín lórí gbogbo ẹ̀rọ yín.",
+"Pick one way in:": "Ẹ yan ọ̀nà kan láti wọlé:",
+"Passkey": "Kọ́kọ́rọ́ ìwọlé",
+"Email": "Ímeèlì",
+"We email you a 6-digit code. New here? It makes your account.": "A ó fi kóòdù oní-nọ́ńbà 6 ránṣẹ́ sí ímeèlì yín. Ẹ jẹ́ tuntun? Òun ni yóò ṣí àkáǹtì yín.",
+"That’s it, you’re in.": "Ìyẹn nìkan ni, ẹ ti wọlé.",
+"Now you can make a circle, or join one from a link someone sends you.": "Ní báyìí ẹ lè ṣẹ̀dá ẹgbẹ́ kan, tàbí ẹ dara pọ̀ mọ́ ọ̀kan nípasẹ̀ ìjápọ̀ tí ẹnìkan fi ránṣẹ́ sí yín.",
+"No passkey? Use your email": "Kò sí kọ́kọ́rọ́ ìwọlé? Ẹ lo ímeèlì yín",
+"Free. Needed for Circles": "Ọ̀fẹ́. Ó pọn dandan fún Àwọn ẹgbẹ́",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Wọ́n nílò àkáǹtì ọ̀fẹ́: kọ́kọ́rọ́ ìwọlé tàbí kóòdù lórí ímeèlì, nínú Ètò → Àkáǹtì. Ìṣẹ́jú kan péré ni.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Àwọn ẹgbẹ́ nílò àkáǹtì ọ̀fẹ́. Ó rọrùn jù pẹ̀lú kọ́kọ́rọ́ ìwọlé: Face ID, ìka ọwọ́ tàbí títìpa ojú-ẹ̀rọ yín. Kò sí ọ̀rọ̀ aṣínà."
 }
