@@ -1298,7 +1298,6 @@
 "A suggestion": "Wata shawara",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Wani abu baya aiki? Faɗi abin da ya faru. Yana zuwa kai tsaye ga wanda ke yin My Quiet Bible.",
 "What went wrong?": "Me ya lalace?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Nuna ƙaramin maɓallin “Karanta tare” kai tsaye sama da 🙏. Yana karantawa daga ayar da ke saman allo, ko daga ayar da ka taɓa.",
 "Recording": "Ana nadi",
 "Hide the steps": "Ɓoye matakan",
 "See the steps": "Duba matakan",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Nuna abin da ke faruwa",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Yi amfani da manhajar kamar yadda ka saba, sannan ka taɓa Tsaya. Ana rubuta kowane mataki, ba a ɗaukar bidiyo.",
 "Steps recorded: {n} ✓": "Matakan da aka nada: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ana aikawa tare: sigar manhajar, irin na’urar, harshenta, allon da kake kai, matakan da ka nada, da duk wani kuskure da manhajar ta lura. Babu wani abu kuma."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ana aikawa tare: sigar manhajar, irin na’urar, harshenta, allon da kake kai, matakan da ka nada, da duk wani kuskure da manhajar ta lura. Babu wani abu kuma.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Nuna ƙaramin alamar “Karanta tare” a ƙarshen dama na sandar bincike. Yana karantawa daga ayar da ke saman allo, ko daga ayar da ka taɓa.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Alamar “Karanta tare” a ƙarshen damansa tana karantawa daga ayar da ke saman allo."
 }

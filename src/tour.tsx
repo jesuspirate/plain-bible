@@ -83,7 +83,9 @@ function steps(): Step[] {
         // them: shown as they look there.
         ...(hear ? [{ glyph: 'bar' } as Row] : []),
       ], moves: [{ kind: 'tap', row: 0, at: onNumber }, { kind: fine ? 'triple' : 'double', row: 1, at: onNumber }] },
-    { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap] },
+    { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap],
+      // Read along, if ticked under Audio, sits at the field's right end.
+      after: settings.alongButton && document.querySelector('.sb-along') ? t('The Read along icon at its right end reads on from the verse at the top of the screen.') : undefined },
     // The two shortcuts to search (#236), lit on the chapter title they start from.
     { title: t('Open search'), find: onScreen('.reader article.chapter .chapter-title'), gap: fine ? undefined : 70, rows: [
         { glyph: 'tap', text: fine ? t('Click the chapter title, or press /') : t('Tap the chapter title') },

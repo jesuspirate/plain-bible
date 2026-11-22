@@ -1301,7 +1301,6 @@
 "A suggestion": "Μια πρόταση",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Κάτι δεν λειτουργεί; Πείτε τι συνέβη. Πηγαίνει κατευθείαν σε αυτόν που φτιάχνει το My Quiet Bible.",
 "What went wrong?": "Τι πήγε στραβά;",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Εμφάνιση ενός μικρού κουμπιού «Ανάγνωση με παρακολούθηση» ακριβώς πάνω από το 🙏. Διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης ή από το εδάφιο που πατήσατε.",
 "Recording": "Γίνεται καταγραφή",
 "Hide the steps": "Απόκρυψη των βημάτων",
 "See the steps": "Δείτε τα βήματα",
@@ -1309,5 +1308,7 @@
 "Show what happens": "Δείξτε τι συμβαίνει",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Χρησιμοποιήστε την εφαρμογή όπως πάντα και μετά πατήστε Διακοπή. Κάθε βήμα γράφεται με λέξεις, δεν βιντεοσκοπείται.",
 "Steps recorded: {n} ✓": "Καταγεγραμμένα βήματα: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Στέλνονται μαζί: η έκδοση της εφαρμογής, το είδος της συσκευής, η γλώσσα της, η οθόνη όπου ήσασταν, τα βήματα που καταγράψατε και κάθε σφάλμα που εντόπισε η εφαρμογή. Τίποτε άλλο."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Στέλνονται μαζί: η έκδοση της εφαρμογής, το είδος της συσκευής, η γλώσσα της, η οθόνη όπου ήσασταν, τα βήματα που καταγράψατε και κάθε σφάλμα που εντόπισε η εφαρμογή. Τίποτε άλλο.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Εμφάνιση ενός μικρού εικονιδίου «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη της γραμμής αναζήτησης. Διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης ή από το εδάφιο που πατήσατε.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Το εικονίδιο «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης."
 }

@@ -1298,7 +1298,6 @@
 "A suggestion": "Yon sijesyon",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Gen yon bagay ki pa mache? Di sa k te pase. Li ale dirèkteman bay moun ki fè My Quiet Bible la.",
 "What went wrong?": "Kisa ki pa t mache?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montre yon ti bouton “Li ansanm” jis anlè 🙏. Li li apati vèsè ki anlè ekran an, oswa apati vèsè ou te touche a.",
 "Recording": "Ap anrejistre",
 "Hide the steps": "Kache etap yo",
 "See the steps": "Wè etap yo",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Montre sa k ap pase",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Sèvi ak app la jan ou abitye a, epi peze Kanpe. Chak etap ekri, yo pa filme anyen.",
 "Steps recorded: {n} ✓": "Etap ki anrejistre: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ale avè l: vèsyon app la, kalite aparèy la, lang li, ekran ou te ye a, etap ou te anrejistre yo ak nenpòt erè app la te remake. Anyen ankò."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ale avè l: vèsyon app la, kalite aparèy la, lang li, ekran ou te ye a, etap ou te anrejistre yo ak nenpòt erè app la te remake. Anyen ankò.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montre yon ti ikòn “Li ansanm” nan bout dwat ba rechèch la. Li li apati vèsè ki anlè ekran an, oswa apati vèsè ou te touche a.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikòn “Li ansanm” ki nan bout dwat li a li apati vèsè ki anlè ekran an."
 }

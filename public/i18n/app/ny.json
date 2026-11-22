@@ -1298,7 +1298,6 @@
 "A suggestion": "Lingaliro",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Pali china chomwe sichikugwira ntchito? Nenani zomwe zinachitika. Zimapita molunjika kwa munthu amene amapanga My Quiet Bible.",
 "What went wrong?": "Chalakwika nchiyani?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onetsani kabatani kakang’ono ka “Werengani motsatira” pamwamba pa 🙏. Kamawerenga kuyambira pa vesi lili pamwamba pa sikirini, kapena pa vesi limene mwakhudza.",
 "Recording": "Ikujambulidwa",
 "Hide the steps": "Bisani masitepe",
 "See the steps": "Onani masitepe",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Sonyezani zomwe zikuchitika",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gwiritsani ntchito pulogalamu monga mwa nthawi zonse, kenako dinani Imani. Sitepe iliyonse imalembedwa, palibe kanema amene amajambulidwa.",
 "Steps recorded: {n} ✓": "Masitepe ojambulidwa: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Zimatumizidwa limodzi: mtundu wa pulogalamu, mtundu wa chipangizo, chilankhulo chake, sikirini yomwe munali, masitepe omwe munajambula, ndi cholakwika chilichonse chimene pulogalamu inaona. Palibe china."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Zimatumizidwa limodzi: mtundu wa pulogalamu, mtundu wa chipangizo, chilankhulo chake, sikirini yomwe munali, masitepe omwe munajambula, ndi cholakwika chilichonse chimene pulogalamu inaona. Palibe china.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Onetsani kachizindikiro kakang’ono ka “Werengani motsatira” kumapeto kumanja kwa bala losakira. Kamawerenga kuyambira pa vesi lili pamwamba pa sikirini, kapena pa vesi limene mwakhudza.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kachizindikiro ka “Werengani motsatira” kumapeto kwake kumanja kamawerenga kuyambira pa vesi lili pamwamba pa sikirini."
 }

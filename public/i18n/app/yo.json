@@ -1298,7 +1298,6 @@
 "A suggestion": "Àbá kan",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Ṣé nǹkan kan kò ṣiṣẹ́? Sọ ohun tó ṣẹlẹ̀. Ó lọ tààrà sọ́dọ̀ ẹni tó ń ṣe My Quiet Bible.",
 "What went wrong?": "Kí ló ṣàṣìṣe?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Fi bọ́tìnnì kékeré “Kà á pẹ̀lú” hàn lókè 🙏 gan-an. Ó ń kà láti ẹsẹ tó wà lókè ojú ìbòjú, tàbí láti ẹsẹ tí o fọwọ́ kàn.",
 "Recording": "Ó ń gba sílẹ̀",
 "Hide the steps": "Fi àwọn ìgbésẹ̀ pamọ́",
 "See the steps": "Wo àwọn ìgbésẹ̀",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Fi ohun tó ń ṣẹlẹ̀ hàn",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Lo áàpù bí o ṣe máa ń lò ó, lẹ́yìn náà tẹ Dá dúró. A máa ń kọ ìgbésẹ̀ kọ̀ọ̀kan sílẹ̀, a kì í ya fídíò.",
 "Steps recorded: {n} ✓": "Àwọn ìgbésẹ̀ tí a gbà sílẹ̀: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ohun tí a fi ránṣẹ́ pẹ̀lú rẹ̀: ẹ̀dà áàpù, irú ẹ̀rọ, èdè rẹ̀, ojú-ìwé tí o wà, àwọn ìgbésẹ̀ tí o gbà sílẹ̀, àti àṣìṣe èyíkéyìí tí áàpù ṣàkíyèsí. Kò sí nǹkan mìíràn."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ohun tí a fi ránṣẹ́ pẹ̀lú rẹ̀: ẹ̀dà áàpù, irú ẹ̀rọ, èdè rẹ̀, ojú-ìwé tí o wà, àwọn ìgbésẹ̀ tí o gbà sílẹ̀, àti àṣìṣe èyíkéyìí tí áàpù ṣàkíyèsí. Kò sí nǹkan mìíràn.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Fi àmì kékeré “Kà á pẹ̀lú” hàn ní òpin ọ̀tún ọ̀pá ìwádìí. Ó ń kà láti ẹsẹ tó wà lókè ojú ìbòjú, tàbí láti ẹsẹ tí o fọwọ́ kàn.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Àmì “Kà á pẹ̀lú” ní òpin ọ̀tún rẹ̀ ń kà láti ẹsẹ tó wà lókè ojú ìbòjú."
 }

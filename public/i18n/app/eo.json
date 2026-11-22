@@ -1298,7 +1298,6 @@
 "A suggestion": "Sugesto",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Ĉu io ne funkcias? Diru, kio okazis. Ĝi iras rekte al la persono, kiu faras My Quiet Bible.",
 "What went wrong?": "Kio misiris?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montri malgrandan butonon “Kunlegi” tuj super 🙏. Ĝi legas ekde la verso ĉe la supro de la ekrano, aŭ ekde la verso, kiun vi tuŝis.",
 "Recording": "Registrante",
 "Hide the steps": "Kaŝi la paŝojn",
 "See the steps": "Vidi la paŝojn",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Montri kio okazas",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Uzu la aplikaĵon kiel kutime, poste tuŝu Haltigi. Ĉiu paŝo estas skribata, ne filmata.",
 "Steps recorded: {n} ✓": "Registritaj paŝoj: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendata kune: la versio de la aplikaĵo, la speco de aparato, ĝia lingvo, la ekrano kie vi estis, la paŝoj kiujn vi registris kaj ĉiu eraro kiun la aplikaĵo rimarkis. Nenio alia."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendata kune: la versio de la aplikaĵo, la speco de aparato, ĝia lingvo, la ekrano kie vi estis, la paŝoj kiujn vi registris kaj ĉiu eraro kiun la aplikaĵo rimarkis. Nenio alia.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Montri malgrandan piktogramon “Kunlegi” ĉe la dekstra fino de la serĉa breto. Ĝi legas ekde la verso ĉe la supro de la ekrano, aŭ ekde la verso, kiun vi tuŝis.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "La piktogramo “Kunlegi” ĉe ĝia dekstra fino legas ekde la verso ĉe la supro de la ekrano."
 }

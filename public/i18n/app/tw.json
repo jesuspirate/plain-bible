@@ -1298,7 +1298,6 @@
 "A suggestion": "Nyansapɛ bi",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Biribi nyɛ adwuma? Ka nea esii. Ɛkɔ tee kɔ onipa a ɔyɛ My Quiet Bible no nkyɛn.",
 "What went wrong?": "Dɛn na ɛkɔɔ basaa?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kyerɛ “Kenkan ka ho” bɔtɔm ketewa bi wɔ 🙏 atifi pɛɛ. Ɛkenkan fi nkyekyem a ɛwɔ skrin no atifi, anaa nkyekyem a wode wo nsa kaa no so.",
 "Recording": "Ɛrekɔd",
 "Hide the steps": "Fa anammɔn no sie",
 "See the steps": "Hwɛ anammɔn no",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Kyerɛ deɛ ɛrekɔ so",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Fa app no di dwuma sɛnea wo yɛ no daa, na afei mia Gyae. Wɔkyerɛw anammɔn biara, wɔnnye video.",
 "Steps recorded: {n} ✓": "Anammɔn a wɔarekɔd: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wɔde ka ho mane: app no version, afiri no su, ne kasa, screen a na wowɔ so, anammɔn a worekɔdee ne mfomso biara a app no huu. Biribi foforo biara nni hɔ."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wɔde ka ho mane: app no version, afiri no su, ne kasa, screen a na wowɔ so, anammɔn a worekɔdee ne mfomso biara a app no huu. Biribi foforo biara nni hɔ.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Kyerɛ “Kenkan ka ho” agyiraehyɛde ketewa bi wɔ nhwehwɛmu bɔɔ no nifa awiei. Ɛkenkan fi nkyekyem a ɛwɔ skrin no atifi, anaa nkyekyem a wode wo nsa kaa no so.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "“Kenkan ka ho” agyiraehyɛde a ɛwɔ ne nifa awiei no kenkan fi nkyekyem a ɛwɔ skrin no atifi."
 }

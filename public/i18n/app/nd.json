@@ -1298,7 +1298,6 @@
 "A suggestion": "Umbono",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Kukhona okungasebenziyo? Tshela okwenzakeleyo. Kuya ngqo kumuntu owenza i-My Quiet Bible.",
 "What went wrong?": "Kuyini okonakeleyo?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Tshengisa inkinobho encane ethi “Bala ulandela” ngaphezu kwe-🙏. Ibala kusukela evesini eliphezulu kusikrini, kumbe evesini oliqhwebileyo.",
 "Recording": "Kuyaqoshwa",
 "Hide the steps": "Fihla izinyathelo",
 "See the steps": "Bona izinyathelo",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Tshengisa okwenzakalayo",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Sebenzisa i-app njengokwejwayelekileyo, ubusutshaya u-Misa. Isinyathelo ngasinye siyabhalwa, akuthathwa vidiyo.",
 "Steps recorded: {n} ✓": "Izinyathelo eziqoshiweyo: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kuthunyelwa kanye lakho: inguqulo ye-app, uhlobo lwesigaba, ulimi lwaso, isikrini obukuso, izinyathelo oziqophileyo, lanoma yiliphi iphutha i-app elibonileyo. Akukho okunye."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kuthunyelwa kanye lakho: inguqulo ye-app, uhlobo lwesigaba, ulimi lwaso, isikrini obukuso, izinyathelo oziqophileyo, lanoma yiliphi iphutha i-app elibonileyo. Akukho okunye.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Tshengisa uphawu oluncane oluthi “Bala ulandela” ekucineni kwesokudla somugqa wokudinga. Lubala kusukela evesini eliphezulu kusikrini, kumbe evesini oliqhwebileyo.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Uphawu oluthi “Bala ulandela” ekucineni kwalo kwesokudla lubala kusukela evesini eliphezulu kusikrini."
 }

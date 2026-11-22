@@ -1298,7 +1298,6 @@
 "A suggestion": "Likanisi",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Eloko moko ezali kosala te? Lobá oyo esalemaki. Ekendaka mbala moko epai ya moto oyo asalaka My Quiet Bible.",
 "What went wrong?": "Nini ebebaki?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Lakisa bouton moke “Tánga elongo” likoló ya 🙏. Etángaka banda vɛrsɛ oyo ezali likoló ya écran, to vɛrsɛ oyo osimbi.",
 "Recording": "Ezali kokanga",
 "Hide the steps": "Bomba matambe",
 "See the steps": "Tala matambe",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Monisa oyo ezali kosalema",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Salelá application lokola momesano, sima finá Telemisa. Litambe moko na moko ekomamaka, bazwaka video te.",
 "Steps recorded: {n} ✓": "Matambe oyo bakangi: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Etindamaka elongo: version ya application, lolenge ya esaleli, monoko na yango, ecran oyo ozalaki, matambe oyo okangaki mpe libunga nyonso oyo application emonaki. Eloko mosusu te."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Etindamaka elongo: version ya application, lolenge ya esaleli, monoko na yango, ecran oyo ozalaki, matambe oyo okangaki mpe libunga nyonso oyo application emonaki. Eloko mosusu te.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Lakisa elembo moke “Tánga elongo” na nsuka ya mobali ya esika ya koluka. Etángaka banda vɛrsɛ oyo ezali likoló ya écran, to vɛrsɛ oyo osimbi.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Elembo “Tánga elongo” na nsuka na yango ya mobali etángaka banda vɛrsɛ oyo ezali likoló ya écran."
 }

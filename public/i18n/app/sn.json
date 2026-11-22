@@ -1298,7 +1298,6 @@
 "A suggestion": "Zano",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Pane chisiri kushanda? Taura zvakaitika. Zvinoenda zvakananga kumunhu anogadzira My Quiet Bible.",
 "What went wrong?": "Chii chakakanganisika?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ratidza bhatani diki re “Verenga uchitevera” pamusoro pe 🙏. Rinoverenga kubva pandima iri pamusoro pechiratidziro, kana kubva pandima yawabata.",
 "Recording": "Kurikurekodha",
 "Hide the steps": "Viga matanho",
 "See the steps": "Ona matanho",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Ratidza zviri kuitika",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Shandisa app sezvaunogara uchiita, wobva wabaya Mira. Danho rimwe nerimwe rinonyorwa, hapana vhidhiyo inotorwa.",
 "Steps recorded: {n} ✓": "Matanho akarekodhwa: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Zvinotumirwa pamwe nazvo: shanduro yeapp, rudzi rwemuchina, mutauro wawo, skrini yawanga uri, matanho awarekodha, uye chikanganiso chipi nechipi chakaonekwa neapp. Hapana chimwe."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Zvinotumirwa pamwe nazvo: shanduro yeapp, rudzi rwemuchina, mutauro wawo, skrini yawanga uri, matanho awarekodha, uye chikanganiso chipi nechipi chakaonekwa neapp. Hapana chimwe.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ratidza kamucherechedzo kadiki ka “Verenga uchitevera” kumagumo kurudyi kwebhawa rekutsvaga. Kanoverenga kubva pandima iri pamusoro pechiratidziro, kana kubva pandima yawabata.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kamucherechedzo ka “Verenga uchitevera” kumagumo aro kurudyi kanoverenga kubva pandima iri pamusoro pechiratidziro."
 }

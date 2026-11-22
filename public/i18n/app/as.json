@@ -1298,7 +1298,6 @@
 "A suggestion": "এটা পৰামৰ্শ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "কিবা কাম কৰা নাই নেকি? কি হ'ল কওক। ই পোনপটীয়াকৈ My Quiet Bible বনোৱা মানুহজনৰ ওচৰলৈ যায়।",
 "What went wrong?": "কি ভুল হ'ল?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏-ৰ ঠিক ওপৰত এটা সৰু “লগে লগে পঢ়ক” বুটাম দেখুৱাওক। ই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা, বা আপুনি টিপা পদৰ পৰা পঢ়ে।",
 "Recording": "ৰেকৰ্ড হৈ আছে",
 "Hide the steps": "পদক্ষেপবোৰ লুকুৱাওক",
 "See the steps": "পদক্ষেপবোৰ চাওক",
@@ -1306,5 +1305,7 @@
 "Show what happens": "কি হয় দেখুৱাওক",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "সদায়ৰ দৰে এপ ব্যৱহাৰ কৰক, তাৰ পিছত বন্ধ কৰক টিপক। প্ৰতিটো পদক্ষেপ লিখি ৰখা হয়, ভিডিঅ’ কৰা নহয়।",
 "Steps recorded: {n} ✓": "ৰেকৰ্ড কৰা পদক্ষেপ: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "লগতে যায়: এপৰ সংস্কৰণ, ডিভাইচৰ প্ৰকাৰ, ইয়াৰ ভাষা, আপুনি থকা স্ক্ৰীণ, আপুনি ৰেকৰ্ড কৰা পদক্ষেপ আৰু এপে লক্ষ্য কৰা যিকোনো ত্ৰুটি। আন একো নহয়।"
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "লগতে যায়: এপৰ সংস্কৰণ, ডিভাইচৰ প্ৰকাৰ, ইয়াৰ ভাষা, আপুনি থকা স্ক্ৰীণ, আপুনি ৰেকৰ্ড কৰা পদক্ষেপ আৰু এপে লক্ষ্য কৰা যিকোনো ত্ৰুটি। আন একো নহয়।",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "সন্ধান বাৰৰ সোঁফালৰ মূৰত এটা সৰু “লগে লগে পঢ়ক” চিহ্ন দেখুৱাওক। ই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা, বা আপুনি টিপা পদৰ পৰা পঢ়ে।",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ইয়াৰ সোঁফালৰ মূৰৰ “লগে লগে পঢ়ক” চিহ্নই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা পঢ়ে।"
 }

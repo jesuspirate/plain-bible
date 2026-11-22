@@ -1298,7 +1298,6 @@
 "A suggestion": "Yaada",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Wanti hin hojjenne jiraa? Maal akka ta’e himi. Kallattiin nama My Quiet Bible hojjetu bira ga’a.",
 "What went wrong?": "Maaltu dogoggore?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Qabduu xiqqoo “Hordofii dubbisi” 🙏 gubbaa irratti agarsiisi. Lakkoofsa gubbaa iskiriinii irraa, ykn lakkoofsa ati tuqxe irraa dubbisa.",
 "Recording": "Galmeessaa jira",
 "Hide the steps": "Tarkaanfiiwwan dhoksi",
 "See the steps": "Tarkaanfiiwwan ilaali",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Waan ta’u agarsiisi",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Akkuma yeroo hunda appicha fayyadami, sana booda Dhaabi tuqi. Tarkaanfiin hundi ni barreeffama, viidiyoon hin waraabamu.",
 "Steps recorded: {n} ✓": "Tarkaanfiiwwan galmaa’an: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Waliin ergama: gosa appichaa, akaakuu meeshaa, afaan isaa, fuula irra turte, tarkaanfiiwwan galmeessite fi dogoggora appichi hubate kamiyyuu. Kan biraa homtuu hin jiru."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Waliin ergama: gosa appichaa, akaakuu meeshaa, afaan isaa, fuula irra turte, tarkaanfiiwwan galmeessite fi dogoggora appichi hubate kamiyyuu. Kan biraa homtuu hin jiru.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mallattoo xiqqoo “Hordofii dubbisi” dhuma mirgaa sarara barbaacha irratti agarsiisi. Lakkoofsa gubbaa iskiriinii irraa, ykn lakkoofsa ati tuqxe irraa dubbisa.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Mallattoon “Hordofii dubbisi” dhuma isaa mirgaa irratti jiru lakkoofsa gubbaa iskiriinii irraa dubbisa."
 }

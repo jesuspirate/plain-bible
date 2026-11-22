@@ -1298,7 +1298,6 @@
 "A suggestion": "Uma sugestão",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Algo não funciona? Conte o que aconteceu. Vai direto para a pessoa que faz o My Quiet Bible.",
 "What went wrong?": "O que deu errado?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mostrar um pequeno botão “Ler acompanhando” logo acima de 🙏. Ele lê a partir do versículo no topo da tela, ou do versículo que você tocou.",
 "Recording": "Gravando",
 "Hide the steps": "Ocultar os passos",
 "See the steps": "Ver os passos",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Mostrar o que acontece",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Use o app como sempre e depois toque em Parar. Cada passo é anotado por escrito, nada é filmado.",
 "Steps recorded: {n} ✓": "Passos gravados: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Vai junto: a versão do app, o tipo de aparelho, o idioma, a tela em que você estava, os passos que gravou e qualquer erro que o app notou. Nada mais."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Vai junto: a versão do app, o tipo de aparelho, o idioma, a tela em que você estava, os passos que gravou e qualquer erro que o app notou. Nada mais.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mostrar um pequeno ícone “Ler acompanhando” na ponta direita da barra de busca. Ele lê a partir do versículo no topo da tela, ou do versículo que você tocou.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "O ícone “Ler acompanhando” na ponta direita lê a partir do versículo no topo da tela."
 }

@@ -1298,7 +1298,6 @@
 "A suggestion": "Susu aɖe",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Nane mele dɔ wɔm oa? Gblɔ nusi dzɔ. Eyi tẽ ɖe ame si wɔa My Quiet Bible gbɔ.",
 "What went wrong?": "Nukae gblẽ?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ðe “Xlẽe kpli” bɔtɔ sue aɖe fia le 🙏 tame tututu. Exlẽa tso kpukpui si le sikrin la tame, alo tso kpukpui si nèfia la gbɔ.",
 "Recording": "Ele ŋɔŋlɔm",
 "Hide the steps": "Ɣla afɔɖeɖeawo",
 "See the steps": "Kpɔ afɔɖeɖeawo",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Ɖe nusi dzɔna fia",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Zã app la abe ale si nèwɔnɛ ene, emegbe nàzi Tɔ te dzi. Woŋlɔa afɔɖeɖe ɖesiaɖe ɖi, womeɖea foto o.",
 "Steps recorded: {n} ✓": "Afɔɖeɖe siwo woŋlɔ: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Woɖoe ɖa kpe ɖe eŋu: app la ƒe tɔtrɔ, mɔ̃a ƒomevi, eƒe gbe, axa si nèle, afɔɖeɖe siwo nèŋlɔ ɖi kple vodada ɖesiaɖe si app la kpɔ. Naneke bubu meli o."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Woɖoe ɖa kpe ɖe eŋu: app la ƒe tɔtrɔ, mɔ̃a ƒomevi, eƒe gbe, axa si nèle, afɔɖeɖe siwo nèŋlɔ ɖi kple vodada ɖesiaɖe si app la kpɔ. Naneke bubu meli o.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ðe “Xlẽe kpli” dzesi sue aɖe fia le didiƒe ƒe ɖusime nuwuwu. Exlẽa tso kpukpui si le sikrin la tame, alo tso kpukpui si nèfia la gbɔ.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "“Xlẽe kpli” dzesi si le eƒe ɖusime nuwuwu xlẽa tso kpukpui si le sikrin la tame."
 }

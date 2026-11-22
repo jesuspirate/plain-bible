@@ -1298,7 +1298,6 @@
 "A suggestion": "Et forslag",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Fungerer noe ikke? Fortell hva som skjedde. Det går rett til personen som lager My Quiet Bible.",
 "What went wrong?": "Hva gikk galt?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Vis en liten «Les med»-knapp rett over 🙏. Den leser fra verset øverst på skjermen, eller fra verset du trykket på.",
 "Recording": "Tar opp",
 "Hide the steps": "Skjul trinnene",
 "See the steps": "Se trinnene",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Vis hva som skjer",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Bruk appen som vanlig, og trykk så på Stopp. Hvert trinn skrives ned, ingenting filmes.",
 "Steps recorded: {n} ✓": "Opptatte trinn: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendes med: appens versjon, typen enhet, språket, skjermen du var på, trinnene du tok opp og eventuelle feil appen merket. Ikke noe annet."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendes med: appens versjon, typen enhet, språket, skjermen du var på, trinnene du tok opp og eventuelle feil appen merket. Ikke noe annet.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Vis et lite «Les med»-ikon i høyre ende av søkefeltet. Det leser fra verset øverst på skjermen, eller fra verset du trykket på.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "«Les med»-ikonet i høyre ende leser fra verset øverst på skjermen."
 }

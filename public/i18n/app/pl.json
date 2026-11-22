@@ -1403,7 +1403,6 @@
 "A suggestion": "Sugestia",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Coś nie działa? Opisz, co się stało. Trafia prosto do osoby, która tworzy My Quiet Bible.",
 "What went wrong?": "Co poszło nie tak?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Pokaż mały przycisk „Czytaj z podświetleniem” tuż nad 🙏. Czyta od wersetu na górze ekranu albo od wersetu, który dotknięto.",
 "Recording": "Nagrywanie",
 "Hide the steps": "Ukryj kroki",
 "See the steps": "Zobacz kroki",
@@ -1411,5 +1410,7 @@
 "Show what happens": "Pokaż, co się dzieje",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Używaj aplikacji jak zwykle, a potem dotknij Zatrzymaj. Każdy krok jest zapisywany słowami, nic nie jest filmowane.",
 "Steps recorded: {n} ✓": "Nagrane kroki: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wysyłane razem: wersja aplikacji, rodzaj urządzenia, jego język, ekran, na którym byłeś, nagrane kroki i każdy błąd zauważony przez aplikację. Nic więcej."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wysyłane razem: wersja aplikacji, rodzaj urządzenia, jego język, ekran, na którym byłeś, nagrane kroki i każdy błąd zauważony przez aplikację. Nic więcej.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Pokaż małą ikonę „Czytaj z podświetleniem” na prawym końcu paska wyszukiwania. Czyta od wersetu na górze ekranu albo od wersetu, który dotknięto.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Czytaj z podświetleniem” na jego prawym końcu czyta od wersetu na górze ekranu."
 }

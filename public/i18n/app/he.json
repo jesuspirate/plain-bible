@@ -1302,7 +1302,6 @@
 "A suggestion": "הצעה",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "משהו לא עובד? ספרו מה קרה. זה מגיע ישירות לאדם שעושה את My Quiet Bible.",
 "What went wrong?": "מה השתבש?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "הצגת כפתור קטן „קריאה עם מעקב” ממש מעל 🙏. הוא קורא מהפסוק שבראש המסך, או מהפסוק שנגעת בו.",
 "Recording": "מקליטים",
 "Hide the steps": "הסתרת הצעדים",
 "See the steps": "הצגת הצעדים",
@@ -1310,5 +1309,7 @@
 "Show what happens": "להראות מה קורה",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "השתמשו באפליקציה כרגיל, ואז הקישו על עצירה. כל צעד נכתב במילים, שום דבר לא מצולם.",
 "Steps recorded: {n} ✓": "צעדים שהוקלטו: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "נשלח יחד: גרסת האפליקציה, סוג המכשיר, השפה שלו, המסך שבו הייתם, הצעדים שהקלטתם וכל שגיאה שהאפליקציה הבחינה בה. שום דבר אחר."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "נשלח יחד: גרסת האפליקציה, סוג המכשיר, השפה שלו, המסך שבו הייתם, הצעדים שהקלטתם וכל שגיאה שהאפליקציה הבחינה בה. שום דבר אחר.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "הצגת סמל קטן „קריאה עם מעקב” בקצה שורת החיפוש. הוא קורא מהפסוק שבראש המסך, או מהפסוק שנגעת בו.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך."
 }

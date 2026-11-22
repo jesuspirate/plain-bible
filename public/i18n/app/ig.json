@@ -1298,7 +1298,6 @@
 "A suggestion": "Aro",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Ihe anaghị arụ ọrụ? Kọọ ihe mere. Ọ na-aga ozugbo n’aka onye na-eme My Quiet Bible.",
 "What went wrong?": "Gịnị mebiri?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Gosi obere bọtịnụ “Gụkọọ” n’elu 🙏. Ọ na-agụ site n’amaokwu dị n’elu ihuenyo, ma ọ bụ site n’amaokwu ị metụrụ.",
 "Recording": "Na-edekọ",
 "Hide the steps": "Zoo nzọụkwụ ndị ahụ",
 "See the steps": "Hụ nzọụkwụ ndị ahụ",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Gosi ihe na-eme",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Jiri ngwa ahụ dịka ọ na-adị, wee pịa Kwụsị. A na-ede nzọụkwụ ọ bụla, a naghị ese vidiyo.",
 "Steps recorded: {n} ✓": "Nzọụkwụ edekọrọ: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "E zipụrụ ya na ya: ụdị ngwa ahụ, ụdị ngwaọrụ, asụsụ ya, ihuenyo ị nọ na ya, nzọụkwụ i dekọrọ, na njehie ọ bụla ngwa ahụ hụrụ. Ọ dịghị ihe ọzọ."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "E zipụrụ ya na ya: ụdị ngwa ahụ, ụdị ngwaọrụ, asụsụ ya, ihuenyo ị nọ na ya, nzọụkwụ i dekọrọ, na njehie ọ bụla ngwa ahụ hụrụ. Ọ dịghị ihe ọzọ.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Gosi obere akara “Gụkọọ” n’isi aka nri nke ogwe nchọta. Ọ na-agụ site n’amaokwu dị n’elu ihuenyo, ma ọ bụ site n’amaokwu ị metụrụ.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Akara “Gụkọọ” dị n’isi aka nri ya na-agụ site n’amaokwu dị n’elu ihuenyo."
 }

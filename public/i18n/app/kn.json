@@ -1298,7 +1298,6 @@
 "A suggestion": "ಒಂದು ಸಲಹೆ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "ಏನಾದರೂ ಕೆಲಸ ಮಾಡುತ್ತಿಲ್ಲವೇ? ಏನಾಯಿತು ಎಂದು ಹೇಳಿ. ಇದು ನೇರವಾಗಿ My Quiet Bible ಮಾಡುವವರಿಗೆ ತಲುಪುತ್ತದೆ.",
 "What went wrong?": "ಏನು ತಪ್ಪಾಯಿತು?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 ಮೇಲೆಯೇ ಒಂದು ಸಣ್ಣ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಬಟನ್ ತೋರಿಸಿ. ಇದು ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ, ಅಥವಾ ನೀವು ತಟ್ಟಿದ ವಚನದಿಂದ ಓದುತ್ತದೆ.",
 "Recording": "ರೆಕಾರ್ಡ್ ಆಗುತ್ತಿದೆ",
 "Hide the steps": "ಹಂತಗಳನ್ನು ಮರೆಮಾಡಿ",
 "See the steps": "ಹಂತಗಳನ್ನು ನೋಡಿ",
@@ -1306,5 +1305,7 @@
 "Show what happens": "ಏನಾಗುತ್ತದೆ ಎಂದು ತೋರಿಸಿ",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ಎಂದಿನಂತೆ ಆ್ಯಪ್ ಬಳಸಿ, ನಂತರ ನಿಲ್ಲಿಸಿ ಒತ್ತಿ. ಪ್ರತಿ ಹಂತವನ್ನು ಬರೆದಿಡಲಾಗುತ್ತದೆ, ವೀಡಿಯೊ ಮಾಡಲಾಗುವುದಿಲ್ಲ.",
 "Steps recorded: {n} ✓": "ರೆಕಾರ್ಡ್ ಆದ ಹಂತಗಳು: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ಜೊತೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ: ಆ್ಯಪ್ ಆವೃತ್ತಿ, ಸಾಧನದ ಪ್ರಕಾರ, ಅದರ ಭಾಷೆ, ನೀವು ಇದ್ದ ಪರದೆ, ನೀವು ರೆಕಾರ್ಡ್ ಮಾಡಿದ ಹಂತಗಳು ಮತ್ತು ಆ್ಯಪ್ ಗಮನಿಸಿದ ಯಾವುದೇ ದೋಷ. ಬೇರೇನೂ ಇಲ್ಲ."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ಜೊತೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ: ಆ್ಯಪ್ ಆವೃತ್ತಿ, ಸಾಧನದ ಪ್ರಕಾರ, ಅದರ ಭಾಷೆ, ನೀವು ಇದ್ದ ಪರದೆ, ನೀವು ರೆಕಾರ್ಡ್ ಮಾಡಿದ ಹಂತಗಳು ಮತ್ತು ಆ್ಯಪ್ ಗಮನಿಸಿದ ಯಾವುದೇ ದೋಷ. ಬೇರೇನೂ ಇಲ್ಲ.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ಹುಡುಕು ಪಟ್ಟಿಯ ಬಲ ತುದಿಯಲ್ಲಿ ಒಂದು ಸಣ್ಣ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ತೋರಿಸಿ. ಇದು ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ, ಅಥವಾ ನೀವು ತಟ್ಟಿದ ವಚನದಿಂದ ಓದುತ್ತದೆ.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ಅದರ ಬಲ ತುದಿಯ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ ಓದುತ್ತದೆ."
 }
