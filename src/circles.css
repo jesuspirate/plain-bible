@@ -194,3 +194,4 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 /* Small circle | Open door: the two halves fill the row, nothing left over. */
 .c-kind-pick { border-radius: 12px; margin: 0 0 10px; }
 .c-kind-pick button { flex: 1; min-height: 46px; font: 600 16px var(--sans); }
+.c-email { display: block; min-height: 46px; margin: 6px 0 0; padding: 6px 0; font: 600 16px var(--sans); }
