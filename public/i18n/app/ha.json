@@ -506,7 +506,6 @@
 "About": "Game da",
 "Language": "Harshe",
 "Close settings": "Rufe saituna",
-"Sync your highlights and prayers": "Daidaita alamomin launinku da addu’o’inku",
 "Couldn’t sync. Tap to see why": "Ba a iya daidaitawa ba. Taɓa don ganin dalili",
 "Bible": "Littafi Mai Tsarki",
 "Back to {version}": "Koma zuwa {version}",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Nuna abin da ke faruwa",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Yi amfani da manhajar kamar yadda ka saba, sannan ka taɓa Tsaya. Ana rubuta kowane mataki, ba a ɗaukar bidiyo.",
 "Steps recorded: {n} ✓": "Matakan da aka nada: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ana aikawa tare: sigar manhajar, irin na’urar, harshenta, allon da kake kai, matakan da ka nada, da duk wani kuskure da manhajar ta lura. Babu wani abu kuma."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ana aikawa tare: sigar manhajar, irin na’urar, harshenta, allon da kake kai, matakan da ka nada, da duk wani kuskure da manhajar ta lura. Babu wani abu kuma.",
+"New here? Start here": "Sababbi ne? Fara a nan",
+"Or use your email": "Ko yi amfani da imel ɗinku",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Kyauta ne kuma ba dole ba. Shiga don ku shiga Ƙungiyoyi kuma ku riƙe alamominku, bayananku, saitunanku da addu’o’inku a duk na’urorinku.",
+"Pick one way in:": "Zaɓi hanya ɗaya ta shiga:",
+"Passkey": "Maɓallin shiga",
+"Email": "Imel",
+"We email you a 6-digit code. New here? It makes your account.": "Za mu aiko muku da lamba mai lambobi 6 ta imel. Sababbi ne? Ita ce za ta buɗe muku asusu.",
+"That’s it, you’re in.": "Shi ke nan, kun shiga.",
+"Now you can make a circle, or join one from a link someone sends you.": "Yanzu kuna iya ƙirƙirar ƙungiya, ko ku shiga ɗaya ta hanyar haɗin da wani ya aiko muku.",
+"No passkey? Use your email": "Babu maɓallin shiga? Yi amfani da imel ɗinku",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Suna buƙatar asusu kyauta: maɓallin shiga ko lamba ta imel, a Saituna → Asusu. Ɗan lokaci kaɗan ne.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Ƙungiyoyi suna buƙatar asusu kyauta. Mafi sauƙi da maɓallin shiga: Face ID, zanen yatsa ko makullin allonku. Babu kalmar sirri.",
+"Free. Needed for Circles": "Kyauta. Ana buƙata don Ƙungiyoyi"
 }

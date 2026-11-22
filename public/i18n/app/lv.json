@@ -558,7 +558,6 @@
 "About": "Par",
 "Language": "Valoda",
 "Close settings": "Aizvērt iestatījumus",
-"Sync your highlights and prayers": "Sinhronizēt izcēlumus un lūgšanas",
 "Couldn’t sync. Tap to see why": "Neizdevās sinhronizēt. Pieskarieties, lai uzzinātu, kāpēc",
 "Bible": "Bībele",
 "Back to {version}": "Atpakaļ uz {version}",
@@ -1390,5 +1389,18 @@
 "Show what happens": "Parādīt, kas notiek",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Lietojiet lietotni kā parasti, tad pieskarieties Apturēt. Katrs solis tiek pierakstīts vārdos, nekas netiek filmēts.",
 "Steps recorded: {n} ✓": "Ierakstītie soļi: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids, tās valoda, ekrāns, kurā bijāt, ierakstītie soļi un jebkura kļūda, ko lietotne pamanīja. Nekas cits."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids, tās valoda, ekrāns, kurā bijāt, ierakstītie soļi un jebkura kļūda, ko lietotne pamanīja. Nekas cits.",
+"New here? Start here": "Šeit pirmo reizi? Sāciet šeit",
+"Or use your email": "Vai izmantojiet e-pastu",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bez maksas un pēc izvēles. Pierakstieties, lai pievienotos Lokiem un turētu izcēlumus, piezīmes, iestatījumus un lūgšanas visās savās ierīcēs.",
+"Pick one way in:": "Izvēlieties vienu veidu:",
+"Passkey": "Piekļuves atslēga",
+"Email": "E-pasts",
+"We email you a 6-digit code. New here? It makes your account.": "Mēs nosūtīsim jums 6 ciparu kodu pa e-pastu. Šeit pirmo reizi? Tas izveido jūsu kontu.",
+"That’s it, you’re in.": "Tas arī viss, jūs esat iekšā.",
+"Now you can make a circle, or join one from a link someone sends you.": "Tagad varat izveidot loku vai pievienoties kādam, izmantojot saiti, ko kāds jums atsūta.",
+"No passkey? Use your email": "Nav piekļuves atslēgas? Izmantojiet e-pastu",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Tiem vajag bezmaksas kontu: piekļuves atslēgu vai kodu pa e-pastu, sadaļā Iestatījumi → Konts. Tas aizņem mirkli.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Lokiem vajag bezmaksas kontu. Visvieglāk ar piekļuves atslēgu: Face ID, pirksta nospiedums vai ekrāna bloķēšana. Bez paroles.",
+"Free. Needed for Circles": "Bez maksas. Vajadzīgs Lokiem"
 }

@@ -506,7 +506,6 @@
 "About": "Om",
 "Language": "Språk",
 "Close settings": "Lukk innstillinger",
-"Sync your highlights and prayers": "Synkroniser markeringer og bønner",
 "Couldn’t sync. Tap to see why": "Kunne ikke synkronisere. Trykk for å se hvorfor",
 "Bible": "Bibel",
 "Back to {version}": "Tilbake til {version}",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Vis hva som skjer",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Bruk appen som vanlig, og trykk så på Stopp. Hvert trinn skrives ned, ingenting filmes.",
 "Steps recorded: {n} ✓": "Opptatte trinn: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendes med: appens versjon, typen enhet, språket, skjermen du var på, trinnene du tok opp og eventuelle feil appen merket. Ikke noe annet."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Sendes med: appens versjon, typen enhet, språket, skjermen du var på, trinnene du tok opp og eventuelle feil appen merket. Ikke noe annet.",
+"New here? Start here": "Ny her? Start her",
+"Or use your email": "Eller bruk e-posten din",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratis og valgfritt. Logg inn for å bli med i Kretser og ha markeringer, notater, innstillinger og bønner på alle enhetene dine.",
+"Pick one way in:": "Velg én måte å komme inn på:",
+"Passkey": "Passnøkkel",
+"Email": "E-post",
+"We email you a 6-digit code. New here? It makes your account.": "Vi sender deg en sekssifret kode på e-post. Ny her? Den oppretter kontoen din.",
+"That’s it, you’re in.": "Det var det, du er inne.",
+"Now you can make a circle, or join one from a link someone sends you.": "Nå kan du lage en krets, eller bli med i en via en lenke noen sender deg.",
+"No passkey? Use your email": "Ingen passnøkkel? Bruk e-posten din",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "De krever en gratis konto: en passnøkkel eller en kode på e-post, under Innstillinger → Konto. Det tar et øyeblikk.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kretser trenger en gratis konto. Enklest med en passnøkkel: Face ID, et fingeravtrykk eller skjermlåsen din. Ingen passord.",
+"Free. Needed for Circles": "Gratis. Trengs for Kretser"
 }

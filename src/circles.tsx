@@ -17,13 +17,13 @@ import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { PrayerVerse, verseLabel, versesOf } from './lib/prayerVerses'
 import { chapterSize, inYourBible, readerVersions, Shown } from './lib/passage'
 import { renumbered, toStandard } from './lib/versification'
-import { loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
+import { emailSignInOn, loadAccount, noPasskey, prepareSignIn, register, signIn, SYNC_URL } from './lib/sync'
 import { inFedi, nostrSignIn } from './lib/nostr'
 import { AskApproval } from './approve'
 import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
-import { go, openCircles, readPath, Route, ShareRequest, useApp } from './state'
+import { go, openCircles, openSettings, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookIcon, BookmarkIcon, NoteIcon } from './icons'
@@ -142,6 +142,7 @@ export function CirclesPage({ route }: { route: Route }) {
 /** Make an account or sign in, here, with a passkey. No email, no password. */
 function SignIn({ joining }: { joining?: boolean }) {
   const { sync } = useApp()
+  const nav = useNav()
   const [working, setWorking] = useState('')
   const [msg, setMsg] = useState('')
   useEffect(() => { if (navigator.onLine !== false) prepareSignIn() }, [])
@@ -159,11 +160,14 @@ function SignIn({ joining }: { joining?: boolean }) {
   return (
     <div class="c-card">
       <p class="small">{joining ? t('To join, make a free account with a passkey: your phone unlocks it with Face ID, a fingerprint or your screen lock. No email, no password.')
+        : emailSignInOn() ? t('Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.')
         : t('Circles need a free account with a passkey: your phone unlocks it with Face ID, a fingerprint or your screen lock. No email, no password.')}</p>
       <div class="c-row">
         <button class="c-btn primary" disabled={!!working} onClick={act('create', () => register())}>{working === 'create' ? t('Waiting for passkey…') : t('Create account')}</button>
         <button class="c-btn" disabled={!!working} onClick={act('login', signIn)}>{working === 'login' ? t('Waiting for passkey…') : t('I have one: sign in')}</button>
       </div>
+      {/* An email code works for circles too: Settings → Account shows how. */}
+      {!joining && emailSignInOn() && <button class="link c-email" onClick={() => { nav.away(); openSettings('sync') }}>{t('No passkey? Use your email')}</button>}
       {msg && <p class="note small">{msg}</p>}
     </div>
   )

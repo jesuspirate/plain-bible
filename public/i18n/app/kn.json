@@ -506,7 +506,6 @@
 "About": "ಕುರಿತು",
 "Language": "ಭಾಷೆ",
 "Close settings": "ಸೆಟ್ಟಿಂಗ್‌ಗಳನ್ನು ಮುಚ್ಚಿ",
-"Sync your highlights and prayers": "ನಿಮ್ಮ ಹೈಲೈಟ್‌ಗಳು ಮತ್ತು ಪ್ರಾರ್ಥನೆಗಳನ್ನು ಸಿಂಕ್ ಮಾಡಿ",
 "Couldn’t sync. Tap to see why": "ಸಿಂಕ್ ಆಗಲಿಲ್ಲ. ಕಾರಣ ನೋಡಲು ಟ್ಯಾಪ್ ಮಾಡಿ",
 "Bible": "ಬೈಬಲ್",
 "Back to {version}": "{version} ಗೆ ಹಿಂತಿರುಗಿ",
@@ -1306,5 +1305,18 @@
 "Show what happens": "ಏನಾಗುತ್ತದೆ ಎಂದು ತೋರಿಸಿ",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ಎಂದಿನಂತೆ ಆ್ಯಪ್ ಬಳಸಿ, ನಂತರ ನಿಲ್ಲಿಸಿ ಒತ್ತಿ. ಪ್ರತಿ ಹಂತವನ್ನು ಬರೆದಿಡಲಾಗುತ್ತದೆ, ವೀಡಿಯೊ ಮಾಡಲಾಗುವುದಿಲ್ಲ.",
 "Steps recorded: {n} ✓": "ರೆಕಾರ್ಡ್ ಆದ ಹಂತಗಳು: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ಜೊತೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ: ಆ್ಯಪ್ ಆವೃತ್ತಿ, ಸಾಧನದ ಪ್ರಕಾರ, ಅದರ ಭಾಷೆ, ನೀವು ಇದ್ದ ಪರದೆ, ನೀವು ರೆಕಾರ್ಡ್ ಮಾಡಿದ ಹಂತಗಳು ಮತ್ತು ಆ್ಯಪ್ ಗಮನಿಸಿದ ಯಾವುದೇ ದೋಷ. ಬೇರೇನೂ ಇಲ್ಲ."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ಜೊತೆಗೆ ಕಳುಹಿಸಲಾಗುತ್ತದೆ: ಆ್ಯಪ್ ಆವೃತ್ತಿ, ಸಾಧನದ ಪ್ರಕಾರ, ಅದರ ಭಾಷೆ, ನೀವು ಇದ್ದ ಪರದೆ, ನೀವು ರೆಕಾರ್ಡ್ ಮಾಡಿದ ಹಂತಗಳು ಮತ್ತು ಆ್ಯಪ್ ಗಮನಿಸಿದ ಯಾವುದೇ ದೋಷ. ಬೇರೇನೂ ಇಲ್ಲ.",
+"New here? Start here": "ಹೊಸಬರೇ? ಇಲ್ಲಿಂದ ಆರಂಭಿಸಿ",
+"Or use your email": "ಅಥವಾ ನಿಮ್ಮ ಇಮೇಲ್ ಬಳಸಿ",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ಉಚಿತ ಮತ್ತು ಐಚ್ಛಿಕ. ಬಳಗಗಳಿಗೆ ಸೇರಲು ಮತ್ತು ನಿಮ್ಮ ಹೈಲೈಟ್‌ಗಳು, ಟಿಪ್ಪಣಿಗಳು, ಸೆಟ್ಟಿಂಗ್‌ಗಳು ಮತ್ತು ಪ್ರಾರ್ಥನೆಗಳನ್ನು ಎಲ್ಲಾ ಸಾಧನಗಳಲ್ಲಿ ಇರಿಸಲು ಸೈನ್ ಇನ್ ಮಾಡಿ.",
+"Pick one way in:": "ಒಳಗೆ ಬರಲು ಒಂದು ದಾರಿಯನ್ನು ಆರಿಸಿ:",
+"Passkey": "ಪಾಸ್‌ಕೀ",
+"Email": "ಇಮೇಲ್",
+"We email you a 6-digit code. New here? It makes your account.": "ನಾವು ನಿಮಗೆ ಇಮೇಲ್‌ನಲ್ಲಿ 6 ಅಂಕಿಯ ಕೋಡ್ ಕಳುಹಿಸುತ್ತೇವೆ. ಹೊಸಬರೇ? ಅದೇ ನಿಮ್ಮ ಖಾತೆಯನ್ನು ರಚಿಸುತ್ತದೆ.",
+"That’s it, you’re in.": "ಅಷ್ಟೇ, ನೀವು ಒಳಗೆ ಬಂದಿರಿ.",
+"Now you can make a circle, or join one from a link someone sends you.": "ಈಗ ನೀವು ಬಳಗವನ್ನು ರಚಿಸಬಹುದು, ಅಥವಾ ಯಾರಾದರೂ ಕಳುಹಿಸಿದ ಲಿಂಕ್‌ನಿಂದ ಒಂದಕ್ಕೆ ಸೇರಬಹುದು.",
+"No passkey? Use your email": "ಪಾಸ್‌ಕೀ ಇಲ್ಲವೇ? ನಿಮ್ಮ ಇಮೇಲ್ ಬಳಸಿ",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ಇವುಗಳಿಗೆ ಉಚಿತ ಖಾತೆ ಬೇಕು: ಪಾಸ್‌ಕೀ ಅಥವಾ ಇಮೇಲ್ ಕೋಡ್, ಸೆಟ್ಟಿಂಗ್‌ಗಳು → ಖಾತೆ ಯಲ್ಲಿ. ಒಂದು ಕ್ಷಣ ಸಾಕು.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ಬಳಗಗಳಿಗೆ ಉಚಿತ ಖಾತೆ ಬೇಕು. ಪಾಸ್‌ಕೀ ಅತ್ಯಂತ ಸುಲಭ: Face ID, ಬೆರಳಚ್ಚು ಅಥವಾ ನಿಮ್ಮ ಸ್ಕ್ರೀನ್ ಲಾಕ್. ಪಾಸ್‌ವರ್ಡ್ ಬೇಡ.",
+"Free. Needed for Circles": "ಉಚಿತ. ಬಳಗಗಳಿಗೆ ಬೇಕು"
 }

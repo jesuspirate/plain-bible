@@ -506,7 +506,6 @@
 "About": "Waa'ee",
 "Language": "Afaan",
 "Close settings": "Qindaa'ina cufi",
-"Sync your highlights and prayers": "Halluu fi kadhannaawwan kee walsimsiisi",
 "Couldn’t sync. Tap to see why": "Walsimsiisuun hin danda'amne. Sababa isaa arguuf tuqi",
 "Bible": "Macaafa Qulqulluu",
 "Back to {version}": "Gara {version} tti deebi'i",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Waan ta’u agarsiisi",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Akkuma yeroo hunda appicha fayyadami, sana booda Dhaabi tuqi. Tarkaanfiin hundi ni barreeffama, viidiyoon hin waraabamu.",
 "Steps recorded: {n} ✓": "Tarkaanfiiwwan galmaa’an: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Waliin ergama: gosa appichaa, akaakuu meeshaa, afaan isaa, fuula irra turte, tarkaanfiiwwan galmeessite fi dogoggora appichi hubate kamiyyuu. Kan biraa homtuu hin jiru."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Waliin ergama: gosa appichaa, akaakuu meeshaa, afaan isaa, fuula irra turte, tarkaanfiiwwan galmeessite fi dogoggora appichi hubate kamiyyuu. Kan biraa homtuu hin jiru.",
+"New here? Start here": "Haaraa dhaa? Asii jalqabi",
+"Or use your email": "Ykn imeelii kee fayyadami",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bilisaa fi fedhiidhaan. Gareewwan seenuu fi mallattoo, yaadannoo, qindaa'ina fi kadhannaa kee meeshaalee kee hunda irratti qabachuuf seeni.",
+"Pick one way in:": "Karaa seensaa tokko filadhu:",
+"Passkey": "Passkey",
+"Email": "Imeelii",
+"We email you a 6-digit code. New here? It makes your account.": "Koodii lakkoofsa 6 qabu imeeliin siif ergina. Haaraa dhaa? Inni herrega kee uuma.",
+"That’s it, you’re in.": "Kanuma, seenteetta.",
+"Now you can make a circle, or join one from a link someone sends you.": "Amma garee uumuu, ykn liinkii namni siif erguun tokkotti makamuu dandeessa.",
+"No passkey? Use your email": "Passkey hin qabduu? Imeelii kee fayyadami",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Herrega bilisaa barbaadu: passkey ykn koodii imeeliin, Qindaa'ina → Herrega keessatti. Yeroo xiqqoo qofa fudhata.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Gareewwan herrega bilisaa barbaadu. Passkey wajjin salphaa dha: Face ID, ashaboo quba keetii ykn cufaa iskiriinii keetii. Jechi icciitii hin barbaachisu.",
+"Free. Needed for Circles": "Bilisaa. Gareewwaniif barbaachisa"
 }

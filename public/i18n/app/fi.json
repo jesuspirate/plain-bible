@@ -506,7 +506,6 @@
 "About": "Tietoja",
 "Language": "Kieli",
 "Close settings": "Sulje asetukset",
-"Sync your highlights and prayers": "Synkronoi korostuksesi ja rukouksesi",
 "Couldn’t sync. Tap to see why": "Synkronointi epäonnistui. Katso syy napauttamalla",
 "Bible": "Raamattu",
 "Back to {version}": "Takaisin: {version}",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Näytä mitä tapahtuu",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Käytä sovellusta tavalliseen tapaan ja napauta sitten Pysäytä. Jokainen vaihe kirjoitetaan sanoin, mitään ei kuvata.",
 "Steps recorded: {n} ✓": "Tallennetut vaiheet: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Mukana lähtee: sovelluksen versio, laitteen tyyppi, sen kieli, näkymä jossa olit, tallentamasi vaiheet ja kaikki sovelluksen huomaamat virheet. Ei mitään muuta."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Mukana lähtee: sovelluksen versio, laitteen tyyppi, sen kieli, näkymä jossa olit, tallentamasi vaiheet ja kaikki sovelluksen huomaamat virheet. Ei mitään muuta.",
+"New here? Start here": "Uusi täällä? Aloita tästä",
+"Or use your email": "Tai käytä sähköpostiasi",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Ilmainen ja vapaaehtoinen. Kirjaudu, niin voit liittyä Piireihin ja pitää korostukset, muistiinpanot, asetukset ja rukoukset kaikilla laitteillasi.",
+"Pick one way in:": "Valitse yksi tapa:",
+"Passkey": "Pääsyavain",
+"Email": "Sähköposti",
+"We email you a 6-digit code. New here? It makes your account.": "Lähetämme sinulle 6-numeroisen koodin sähköpostilla. Uusi täällä? Se luo tilisi.",
+"That’s it, you’re in.": "Siinä kaikki, olet sisällä.",
+"Now you can make a circle, or join one from a link someone sends you.": "Nyt voit perustaa piirin tai liittyä sellaiseen linkillä, jonka joku lähettää sinulle.",
+"No passkey? Use your email": "Ei pääsyavainta? Käytä sähköpostiasi",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Ne vaativat ilmaisen tilin: pääsyavaimen tai sähköpostikoodin, kohdassa Asetukset → Tili. Se käy hetkessä.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Piirit tarvitsevat ilmaisen tilin. Helpointa pääsyavaimella: Face ID, sormenjälki tai näytön lukitus. Ei salasanaa.",
+"Free. Needed for Circles": "Ilmainen. Tarvitaan Piireihin"
 }

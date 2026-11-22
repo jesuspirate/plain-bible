@@ -13,6 +13,7 @@ import { addDays, DAYS_EVENT, loadDays } from './lib/streaks'
 import { latestPlace, ownPlace, PLACE_EVENT, takePlace } from './lib/place'
 import { DeviceLink, PasteMove } from './move'
 import { EnterDeviceCode } from './devicecode'
+import { showTapHints } from './taphint'
 import { KeyBackup } from './approve'
 import { DownloadEverything } from './exporter'
 import { inFedi, nostrPubkey, nostrSignIn } from './lib/nostr'
@@ -437,6 +438,8 @@ function NostrKeyList({ list, token, canRemove, busy, onChange }: {
 
 /** Settings → Account, all on one page: signed out, the ways in; signed in,
  *  who you are, sync, and the account's own buttons, as cards. */
+const SIGNIN_HINT = 'plain-bible:signin-hint'
+
 export function AccountSection() {
   const { sync } = useApp()
   const [msg, setMsg] = useState('')
@@ -448,6 +451,25 @@ export function AccountSection() {
   useEffect(() => { if (acct) accountInfo(acct.token).then(setInfo).catch(() => {}) }, [acct?.token, msg])
   useEffect(() => { if (!acct && SYNC_URL && navigator.onLine !== false) prepareSignIn() }, [acct?.token])
   useEffect(() => { if (SYNC_URL && navigator.onLine !== false) checkEmailSignIn().then(setEmailOn).catch(() => {}) }, [])
+  // The first few times someone opens this page signed out, the tour's soft
+  // fingertip shows the two ways in on the real buttons (taphint). It goes at
+  // the first touch.
+  useEffect(() => {
+    if (acct || !email || inFedi() || !sync.enabled) return
+    let shown = 0
+    try { shown = +(localStorage.getItem(SIGNIN_HINT) ?? 0) } catch { return }
+    if (shown >= 3) return
+    const timer = setTimeout(() => {
+      const seen = (el: Element | null) => { const r = el?.getBoundingClientRect(); return !!r && r.height > 0 && r.top > 0 && r.bottom < innerHeight - 90 }
+      const steps = ([[document.querySelector('.signin-new'), t('New here? Start here')],
+        [document.querySelector('.signin-way input[type=email]'), t('Or use your email')]] as const)
+        .filter(([el]) => seen(el)).map(([el, label]) => ({ el: el!, label }))
+      if (!steps.length) return
+      try { localStorage.setItem(SIGNIN_HINT, String(shown + 1)) } catch { /* ignore */ }
+      showTapHints(steps)
+    }, 700)
+    return () => clearTimeout(timer)
+  }, [acct?.token, email])
   if (!sync.enabled) return null
   const passkeys = typeof PublicKeyCredential !== 'undefined'
   // Only inside Fedi, which has the person's Nostr key but no passkeys.
@@ -541,7 +563,8 @@ export function AccountSection() {
   if (!acct) {
     // A passkey first: nothing to wait for and no mail to lose. Email codes
     // are the way in for people without one, or on a browser without passkeys.
-    if (email) return (
+    // Fedi signs in with its Nostr key: the plain page, as it was.
+    if (email && fedi) return (
       <div class="account">
         <p class="muted">{t('Optional. Keep your highlights, notes, settings and prayers the same on all your devices.')}{' '}
           {passkeys ? t('Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.')
@@ -555,6 +578,38 @@ export function AccountSection() {
           <p class="muted small">{t('No passkey? We can email you a code instead. New here? The same code makes your account.')}</p>
         </>}
         <EmailCode onToken={sync.signedIn} />
+        <details class="account-more">
+          <summary>{t('Signed in on another device?')}</summary>
+          <EnterDeviceCode />
+        </details>
+        {(msg || sync.error) && <p class="note">{msg || sync.error}</p>}
+      </div>
+    )
+    // Shown more than told, like Audio: two small steps with the real
+    // buttons in them, a passkey or an email code, and what comes after.
+    if (email) return (
+      <div class="account">
+        <p class="muted">{t('Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.')}</p>
+        <ol class="audio-steps signin-steps">
+          <li><span class="step-n">1</span><span class="step-body">
+            <span class="step-title">{t('Pick one way in:')}</span>
+            {passkeys && <div class="signin-way">
+              <span class="way-name"><KeyIcon size={22} />{t('Passkey')}<span class="what">{t('Face ID, a fingerprint or your screen lock')}</span></span>
+              <div class="row wrap">
+                <button class="primary" disabled={!!working} onClick={login}>{working === 'login' ? t('Waiting for passkey…') : t('Sign in with a passkey')}</button>
+                <button class="signin-new" disabled={!!working} onClick={create}>{working === 'create' ? t('Waiting for passkey…') : t('New account with a passkey')}</button>
+              </div>
+            </div>}
+            <div class="signin-way">
+              <span class="way-name"><MailIcon size={22} />{t('Email')}<span class="what">{t('We email you a 6-digit code. New here? It makes your account.')}</span></span>
+              <EmailCode onToken={sync.signedIn} />
+            </div>
+          </span></li>
+          <li><span class="step-n">2</span><span class="step-body">
+            <span class="step-title">{t('That’s it, you’re in.')}</span>
+            <span class="what">{t('Now you can make a circle, or join one from a link someone sends you.')}</span>
+          </span></li>
+        </ol>
         <details class="account-more">
           <summary>{t('Signed in on another device?')}</summary>
           <EnterDeviceCode />

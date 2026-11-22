@@ -506,7 +506,6 @@
 "About": "ᎯᎠ ᎾᏍᎩ",
 "Language": "ᎦᏬᏂᎯᏍᏗ",
 "Close settings": "ᏗᏛᏅᎢᏍᏗ ᎯᏍᏚ",
-"Sync your highlights and prayers": "ᏣᏤᎵ ᎤᏁᏍᏔᏅ ᎠᎴ ᎠᏓᏙᎵᏍᏙᏗ ᏚᏓᏁᏟᏴᏍᏓ",
 "Couldn’t sync. Tap to see why": "Ꮭ ᏰᎵ ᏱᏚᏓᏁᏟᏴᏒ. ᎯᏯᏏᎳᏛ ᎦᏙᏃ ᎢᏳᏍᏗ ᎯᎦᏙᎥᏍᏗ",
 "Bible": "ᎦᎸᏉᏗᏳ ᎪᏪᎵ",
 "Back to {version}": "{version} ᏗᎤᏨ",
@@ -1306,5 +1305,18 @@
 "Show what happens": "ᎬᏂᎨᏒ ᏂᏴᏁᎸ ᏄᎵᏍᏔᏂᏙᎲ",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ᎯᏁᎶᏗ app ᏂᏣᏛᏁᎲ ᎾᏍᎩᏯ, ᎿᏉ ᎯᏲᎯ ᎯᏂᏴ. ᏂᎦᏓ ᏧᏓᏅᏛ ᎪᏪᎳᏅ, ᎥᏝ ᏗᏟᎶᏍᏗ.",
 "Steps recorded: {n} ✓": "ᏧᏓᏅᏛ ᎠᏍᏆᏂᎪᏔᏅ: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ᎢᏧᎳᎭ ᎤᏅᏲ: ᎾᏍᎩ app ᎤᏓᏁᎳᏛ, ᏄᏍᏛ ᎠᏓᏁᎳᏛ, ᎤᏤᎵ ᎦᏬᏂᎯᏍᏗ, ᎾᎿ ᏥᎨᏒ, ᏧᏓᏅᏛ ᏣᏍᏆᏂᎪᏔᏅ, ᎠᎴ ᎤᏲ app ᎤᎪᎲ. ᎥᏝ ᏅᏩᏓᎴ."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ᎢᏧᎳᎭ ᎤᏅᏲ: ᎾᏍᎩ app ᎤᏓᏁᎳᏛ, ᏄᏍᏛ ᎠᏓᏁᎳᏛ, ᎤᏤᎵ ᎦᏬᏂᎯᏍᏗ, ᎾᎿ ᏥᎨᏒ, ᏧᏓᏅᏛ ᏣᏍᏆᏂᎪᏔᏅ, ᎠᎴ ᎤᏲ app ᎤᎪᎲ. ᎥᏝ ᏅᏩᏓᎴ.",
+"New here? Start here": "ᎢᏤ ᏂᎯ? ᎠᏂ ᎴᏅᎲᎦ",
+"Or use your email": "ᎠᎴ ᏣᏤᎵ ᎢᎺᎵ ᏗᏂᏰᎸᏍᎨᏍᏗ",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ᎠᏎᏉ ᎠᎴ ᏣᏚᎵᏍᎬᏉ. ᏫᏴᎵ ᏓᏓᏡᎬ ᏨᏴᏍᏗ ᎠᎴ ᏣᏤᎵ ᏗᎪᏪᎵ, ᏗᏛᏅᎢᏍᏗ ᎠᎴ ᏗᏓᏙᎵᏍᏗ ᏂᎦᏛ ᏗᏟᎶᏍᏗ ᏧᎾᏓᎴᏅᏛ.",
+"Pick one way in:": "ᏌᏉ ᎦᏅᏅ ᏫᏴᎵᏍᏗ ᏑᏰᏍᎨᏍᏗ:",
+"Passkey": "Passkey",
+"Email": "ᎢᎺᎵ",
+"We email you a 6-digit code. New here? It makes your account.": "6 ᏗᏎᏍᏗ ᎪᏗ ᏴᎦᏨᏅᎵ ᎢᎺᎵ. ᎢᏤ ᏂᎯ? ᎾᏍᎩ ᏣᏤᎵ ᎠᎧᎤᏂ ᎤᏬᏢᏗ.",
+"That’s it, you’re in.": "ᎾᏍᎩᏉ, ᏫᏣᏴᎸ.",
+"Now you can make a circle, or join one from a link someone sends you.": "ᎪᎯ ᏣᏓᏡᎬ ᏰᎵ ᏣᏬᏢᏗ, ᎠᎴ ᏌᏉ ᏰᎵ ᏫᏴᎵᏍᏗ ᎤᎵᏍᏓᏴᏗ ᎩᎶ ᏣᏅᏁᎸᎯ.",
+"No passkey? Use your email": "passkey Ꮭ ᏰᎭ? ᏣᏤᎵ ᎢᎺᎵ ᏗᏂᏰᎸᏍᎨᏍᏗ",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ᎠᏎᏉ ᎠᎧᎤᏂ ᎠᏚᎵᏍᎪ: passkey ᎠᎴ ᎢᎺᎵ ᎪᏗ, ᏗᏛᏅᎢᏍᏗ → ᎠᎧᎤᏂ. ᏌᏉ ᎢᏳᏟᎶᏛ ᎤᏍᏗ.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "ᏓᏓᏡᎬ ᎠᏎ ᎪᏪᎵ ᏂᎨᏒᎾ ᏧᎬᏩᎶᏗ. passkey ᎤᏍᏗ ᎤᎵᏏᎩ ᏂᎨᏒᎾ: Face ID, ᏧᏰᏌᏛ, ᎠᎴ ᏣᏤᎵ ᎦᎶᎯᏍᏗ ᎠᏍᏚᏗ. Ꮭ ᎦᏁᎦ ᏚᏙᎥ.",
+"Free. Needed for Circles": "ᎠᏎᏉ. ᏓᏓᏡᎬ ᎤᎬᏩᎵ ᎠᏚᎵᏍᎪ"
 }

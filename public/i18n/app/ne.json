@@ -506,7 +506,6 @@
 "About": "बारेमा",
 "Language": "भाषा",
 "Close settings": "सेटिङ बन्द गर्नुहोस्",
-"Sync your highlights and prayers": "आफ्ना हाइलाइट र प्रार्थनाहरू सिंक गर्नुहोस्",
 "Couldn’t sync. Tap to see why": "सिंक हुन सकेन। कारण हेर्न थिच्नुहोस्",
 "Bible": "बाइबल",
 "Back to {version}": "{version} मा फर्कनुहोस्",
@@ -1306,5 +1305,18 @@
 "Show what happens": "के हुन्छ देखाउनुहोस्",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "सधैँझैँ एप चलाउनुहोस्, अनि रोक्नुहोस् थिच्नुहोस्। हरेक चरण लेखिन्छ, भिडियो खिचिँदैन।",
 "Steps recorded: {n} ✓": "रेकर्ड गरिएका चरण: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "सँगै पठाइन्छ: एपको संस्करण, उपकरणको प्रकार, यसको भाषा, तपाईं भएको स्क्रिन, तपाईंले रेकर्ड गरेका चरणहरू र एपले देखेको कुनै पनि त्रुटि। अरू केही होइन।"
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "सँगै पठाइन्छ: एपको संस्करण, उपकरणको प्रकार, यसको भाषा, तपाईं भएको स्क्रिन, तपाईंले रेकर्ड गरेका चरणहरू र एपले देखेको कुनै पनि त्रुटि। अरू केही होइन।",
+"New here? Start here": "नयाँ हुनुहुन्छ? यहाँबाट सुरु गर्नुहोस्",
+"Or use your email": "वा आफ्नो इमेल प्रयोग गर्नुहोस्",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "निःशुल्क र ऐच्छिक। समूहहरूमा सामेल हुन र आफ्ना हाइलाइट, टिपोट, सेटिङ र प्रार्थनाहरू सबै उपकरणमा राख्न साइन इन गर्नुहोस्।",
+"Pick one way in:": "भित्र आउने एउटा तरिका छान्नुहोस्:",
+"Passkey": "पासकी",
+"Email": "इमेल",
+"We email you a 6-digit code. New here? It makes your account.": "हामी तपाईंलाई इमेलमा ६ अङ्कको कोड पठाउँछौँ। नयाँ हुनुहुन्छ? त्यसैले तपाईंको खाता बनाउँछ।",
+"That’s it, you’re in.": "यत्ति हो, तपाईं भित्र हुनुहुन्छ।",
+"Now you can make a circle, or join one from a link someone sends you.": "अब तपाईं समूह बनाउन सक्नुहुन्छ, वा कसैले पठाएको लिङ्कबाट कुनै समूहमा सामेल हुन सक्नुहुन्छ।",
+"No passkey? Use your email": "पासकी छैन? आफ्नो इमेल प्रयोग गर्नुहोस्",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "यिनका लागि निःशुल्क खाता चाहिन्छ: पासकी वा इमेलबाट कोड, सेटिङ → खाता मा। एकछिन मात्र लाग्छ।",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "समूहहरूलाई निःशुल्क खाता चाहिन्छ। पासकीसँग सबैभन्दा सजिलो: Face ID, औंठाछाप वा तपाईंको स्क्रिन लक। पासवर्ड चाहिँदैन।",
+"Free. Needed for Circles": "निःशुल्क। समूहहरूका लागि चाहिन्छ"
 }

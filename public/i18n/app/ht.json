@@ -506,7 +506,6 @@
 "About": "Konsènan",
 "Language": "Lang",
 "Close settings": "Fèmen paramèt yo",
-"Sync your highlights and prayers": "Senkronize souliyaj ak lapriyè ou yo",
 "Couldn’t sync. Tap to see why": "Senkronizasyon an pa mache. Peze pou wè poukisa",
 "Bible": "Bib",
 "Back to {version}": "Retounen nan {version}",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Montre sa k ap pase",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Sèvi ak app la jan ou abitye a, epi peze Kanpe. Chak etap ekri, yo pa filme anyen.",
 "Steps recorded: {n} ✓": "Etap ki anrejistre: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ale avè l: vèsyon app la, kalite aparèy la, lang li, ekran ou te ye a, etap ou te anrejistre yo ak nenpòt erè app la te remake. Anyen ankò."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Ale avè l: vèsyon app la, kalite aparèy la, lang li, ekran ou te ye a, etap ou te anrejistre yo ak nenpòt erè app la te remake. Anyen ankò.",
+"New here? Start here": "Ou fèk vini? Kòmanse la a",
+"Or use your email": "Oswa sèvi ak imèl ou",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Gratis epi si ou vle. Konekte pou w ka antre nan Sèk yo epi kenbe make, nòt, paramèt ak priyè ou sou tout aparèy ou.",
+"Pick one way in:": "Chwazi yon fason pou antre:",
+"Passkey": "Kle aksè",
+"Email": "Imèl",
+"We email you a 6-digit code. New here? It makes your account.": "Nou voye yon kòd 6 chif ba ou pa imèl. Ou fèk vini? Li kreye kont ou.",
+"That’s it, you’re in.": "Se tout, ou antre.",
+"Now you can make a circle, or join one from a link someone sends you.": "Kounye a ou ka kreye yon sèk, oswa antre nan youn ak yon lyen yon moun voye ba ou.",
+"No passkey? Use your email": "Pa gen kle aksè? Sèvi ak imèl ou",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Yo bezwen yon kont gratis: yon kle aksè oswa yon kòd pa imèl, nan Paramèt → Kont. Sa pran yon ti moman.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Sèk yo bezwen yon kont gratis. Pi fasil ak yon kle aksè: Face ID, anprent dwèt ou oswa fèmen ekran ou. Pa gen modpas.",
+"Free. Needed for Circles": "Gratis. Li nesesè pou Sèk yo"
 }

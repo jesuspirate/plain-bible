@@ -506,7 +506,6 @@
 "About": "ھەققىدە",
 "Language": "تىل",
 "Close settings": "تەڭشەكنى تاقاش",
-"Sync your highlights and prayers": "گەۋدىلەندۈرۈش ۋە دۇئالىرىڭىزنى ماس قەدەملەش",
 "Couldn’t sync. Tap to see why": "ماس قەدەملىيەلمىدى. سەۋەبىنى كۆرۈش ئۈچۈن بېسىڭ",
 "Bible": "مۇقەددەس كالام",
 "Back to {version}": "{version} غا قايتىش",
@@ -1306,5 +1305,18 @@
 "Show what happens": "نېمە بولىدىغانلىقىنى كۆرسىتىش",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ئەپنى ئادەتتىكىدەك ئىشلىتىپ، ئاندىن «توختىتىش» نى بېسىڭ. ھەر بىر قەدەم سۆز بىلەن يېزىلىدۇ، سىنغا ئېلىنمايدۇ.",
 "Steps recorded: {n} ✓": "خاتىرىلەنگەن قەدەملەر: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "بىللە ئەۋەتىلىدۇ: ئەپنىڭ نەشرى، ئۈسكۈنە تۈرى، تىلى، سىز تۇرغان بەت، خاتىرىلىگەن قەدەملىرىڭىز ۋە ئەپ بايقىغان خاتالىقلار. باشقا ھېچنېمە يوق."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "بىللە ئەۋەتىلىدۇ: ئەپنىڭ نەشرى، ئۈسكۈنە تۈرى، تىلى، سىز تۇرغان بەت، خاتىرىلىگەن قەدەملىرىڭىز ۋە ئەپ بايقىغان خاتالىقلار. باشقا ھېچنېمە يوق.",
+"New here? Start here": "يېڭىمۇ؟ بۇ يەردىن باشلاڭ",
+"Or use your email": "ياكى ئېلخېتىڭىزنى ئىشلىتىڭ",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "ھەقسىز ۋە ئىختىيارى. چەمبەرلەرگە قوشۇلۇش ۋە بەلگە، خاتىرە، تەڭشەك ۋە دۇئالىرىڭىزنى بارلىق ئۈسكۈنىلىرىڭىزدە ساقلاش ئۈچۈن كىرىڭ.",
+"Pick one way in:": "كىرىشنىڭ بىر يولىنى تاللاڭ:",
+"Passkey": "ئۆتۈش ئاچقۇچى",
+"Email": "ئېلخەت",
+"We email you a 6-digit code. New here? It makes your account.": "سىزگە 6 خانىلىق كودنى ئېلخەت ئارقىلىق ئەۋەتىمىز. يېڭىمۇ؟ ئۇ ھېساباتىڭىزنى قۇرىدۇ.",
+"That’s it, you’re in.": "بولدى، كىردىڭىز.",
+"Now you can make a circle, or join one from a link someone sends you.": "ئەمدى چەمبەر قۇرالايسىز، ياكى بىرى ئەۋەتكەن ئۇلانما ئارقىلىق بىرىگە قوشۇلالايسىز.",
+"No passkey? Use your email": "ئۆتۈش ئاچقۇچىڭىز يوقمۇ؟ ئېلخېتىڭىزنى ئىشلىتىڭ",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "ئۇلارغا ھەقسىز ھېسابات كېرەك: ئۆتۈش ئاچقۇچى ياكى ئېلخەت كودى، تەڭشەك ← ھېسابات دا. بىر دەملا ۋاقىت كېتىدۇ.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "چەمبەرلەرگە ھەقسىز ھېسابات كېرەك. ئەڭ ئاسىنى ئۆتۈش ئاچقۇچى: Face ID، بارماق ئىزى ياكى ئېكران قۇلۇپى. پارول كەتمەيدۇ.",
+"Free. Needed for Circles": "ھەقسىز. چەمبەرلەر ئۈچۈن كېرەك"
 }

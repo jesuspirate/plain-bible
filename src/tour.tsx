@@ -9,6 +9,8 @@ import { defaultSettings, loadSettings, markTourSeen as markSeen } from './state
 import { canHear } from './listen'
 import { inStoreApp, isIPhone } from './lib/install'
 import { nativeNotify } from './lib/nativeNotify'
+import { loadAccount } from './lib/sync'
+import { inFedi } from './lib/nostr'
 import { fine, Gesture, GESTURE_MS, Glyph, stillMotion, type Kind } from './gesture'
 import { ReadIcon, SpeakerIcon } from './icons'
 import './tour.css'
@@ -90,7 +92,10 @@ function steps(): Step[] {
         ...(fine ? [] : [{ glyph: 'pull', text: t('Or pull down at the top of a chapter, then let go') } as Row]),
       ], after: t('After a search, open it again to go back to your last result.'),
       moves: fine ? [{ kind: 'tap', row: 0 }] : [{ kind: 'tap', row: 0 }, { kind: 'pull', row: 1 }] },
-    sync && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles'), moves: [tap] },
+    // Not signed in yet: one more sentence on how easy the free account is
+    // (Fedi signs in by itself with its Nostr key).
+    sync && { title: t('Circles'), body: t('Share verses and prayers with a few people you trust, like your family or a small prayer group.'), find: onScreen('.sb-circles'), moves: [tap],
+      after: !loadAccount() && !inFedi() ? t('They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.') : undefined },
     { title: t('Pray'), find: onScreen('.sb-pray'), rows: [
         { glyph: 'tap', text: t('Tap 🙏 to pray out loud and keep your prayer. It stays private.') },
         { glyph: 'hold', text: t('Hold 🙏 to choose its skin tone') },

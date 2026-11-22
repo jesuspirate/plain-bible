@@ -571,7 +571,6 @@
 "About": "Informacje",
 "Language": "Język",
 "Close settings": "Zamknij ustawienia",
-"Sync your highlights and prayers": "Synchronizuj zakreślenia i modlitwy",
 "Couldn’t sync. Tap to see why": "Nie udało się zsynchronizować. Stuknij, aby zobaczyć dlaczego",
 "Bible": "Biblia",
 "Back to {version}": "Wróć do {version}",
@@ -1411,5 +1410,18 @@
 "Show what happens": "Pokaż, co się dzieje",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Używaj aplikacji jak zwykle, a potem dotknij Zatrzymaj. Każdy krok jest zapisywany słowami, nic nie jest filmowane.",
 "Steps recorded: {n} ✓": "Nagrane kroki: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wysyłane razem: wersja aplikacji, rodzaj urządzenia, jego język, ekran, na którym byłeś, nagrane kroki i każdy błąd zauważony przez aplikację. Nic więcej."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wysyłane razem: wersja aplikacji, rodzaj urządzenia, jego język, ekran, na którym byłeś, nagrane kroki i każdy błąd zauważony przez aplikację. Nic więcej.",
+"New here? Start here": "Jesteś tu nowy? Zacznij tutaj",
+"Or use your email": "Albo użyj e-maila",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bezpłatne i opcjonalne. Zaloguj się, aby dołączyć do Kręgów i mieć zakreślenia, notatki, ustawienia i modlitwy na wszystkich urządzeniach.",
+"Pick one way in:": "Wybierz jeden sposób:",
+"Passkey": "Klucz dostępu",
+"Email": "E-mail",
+"We email you a 6-digit code. New here? It makes your account.": "Wyślemy ci e-mailem 6-cyfrowy kod. Jesteś tu nowy? Kod założy ci konto.",
+"That’s it, you’re in.": "Gotowe, jesteś w środku.",
+"Now you can make a circle, or join one from a link someone sends you.": "Teraz możesz założyć krąg albo dołączyć do kręgu przez link, który ktoś ci wyśle.",
+"No passkey? Use your email": "Nie masz klucza dostępu? Użyj e-maila",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Potrzebują bezpłatnego konta: klucza dostępu lub kodu z e-maila, w Ustawienia → Konto. To chwila.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kręgi wymagają darmowego konta. Najprościej z kluczem dostępu: Face ID, odcisk palca lub blokada ekranu. Bez hasła.",
+"Free. Needed for Circles": "Bezpłatne. Potrzebne do Kręgów"
 }

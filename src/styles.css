@@ -1457,3 +1457,15 @@ body.selecting .continue { display: none; }
 .steps-pill .steps-dot { animation: steps-dot 2s ease-in-out infinite; }
 @keyframes steps-dot { 50% { opacity: .35; } }
 @media (prefers-reduced-motion: reduce) { .steps-pill .steps-dot { animation: none; } }
+
+/* Account, signed out: the two ways in, each a soft card with its real buttons. */
+.signin-steps { margin-bottom: 18px; }
+.signin-way { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); }
+.signin-way .way-name { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font: 600 17px/1.25 var(--sans); }
+.signin-way .way-name svg { color: var(--accent); flex: none; }
+.signin-way .what { flex-basis: 100%; font-weight: 400; }
+.signin-steps .what { font-size: 15px; color: var(--muted); }
+.signin-way .row { margin: 0; }
+.signin-way .email-code { margin-top: 0; }
+.signin-way button { min-height: 46px; }
+.signin-way .row button { flex: 1 1 100%; }

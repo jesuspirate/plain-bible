@@ -571,7 +571,6 @@
 "About": "O aplikaci",
 "Language": "Jazyk",
 "Close settings": "Zavřít nastavení",
-"Sync your highlights and prayers": "Synchronizovat zvýraznění a modlitby",
 "Couldn’t sync. Tap to see why": "Synchronizace se nezdařila. Klepnutím zjistíte proč",
 "Bible": "Bible",
 "Back to {version}": "Zpět na {version}",
@@ -1411,5 +1410,18 @@
 "Show what happens": "Ukázat, co se děje",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Používejte aplikaci jako obvykle, pak klepněte na Zastavit. Každý krok se zapíše slovy, nic se nenatáčí.",
 "Steps recorded: {n} ✓": "Zaznamenané kroky: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Posílá se s tím: verze aplikace, druh zařízení, jeho jazyk, obrazovka, na které jste byli, zaznamenané kroky a každá chyba, kterou aplikace zaznamenala. Nic jiného."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Posílá se s tím: verze aplikace, druh zařízení, jeho jazyk, obrazovka, na které jste byli, zaznamenané kroky a každá chyba, kterou aplikace zaznamenala. Nic jiného.",
+"New here? Start here": "Jste tu nově? Začněte zde",
+"Or use your email": "Nebo použít e-mail",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Zdarma a nepovinné. Přihlaste se, abyste se mohli přidat do Kruhů a mít zvýraznění, poznámky, nastavení a modlitby na všech zařízeních.",
+"Pick one way in:": "Vyberte jeden způsob:",
+"Passkey": "Přístupový klíč",
+"Email": "E-mail",
+"We email you a 6-digit code. New here? It makes your account.": "Pošleme vám e-mailem 6místný kód. Jste tu nově? Vytvoří vám účet.",
+"That’s it, you’re in.": "To je vše, jste přihlášeni.",
+"Now you can make a circle, or join one from a link someone sends you.": "Teď můžete založit kruh, nebo se přidat k jinému přes odkaz, který vám někdo pošle.",
+"No passkey? Use your email": "Nemáte přístupový klíč? Použít e-mail",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Potřebují bezplatný účet: přístupový klíč nebo kód e-mailem, v Nastavení → Účet. Zabere to chvilku.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kruhy potřebují bezplatný účet. Nejjednodušší je přístupový klíč: Face ID, otisk prstu nebo zámek obrazovky. Žádné heslo.",
+"Free. Needed for Circles": "Zdarma. Potřebné pro Kruhy"
 }

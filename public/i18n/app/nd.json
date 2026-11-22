@@ -506,7 +506,6 @@
 "About": "Mayelana",
 "Language": "Ulimi",
 "Close settings": "Vala izilungiselelo",
-"Sync your highlights and prayers": "Vumelanisa okugqanyisiweyo lemikhuleko yenu",
 "Couldn’t sync. Tap to see why": "Akuvumelaniswanga. Thintani ukuze libone isizatho",
 "Bible": "IBhayibhili",
 "Back to {version}": "Buyela ku-{version}",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Tshengisa okwenzakalayo",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Sebenzisa i-app njengokwejwayelekileyo, ubusutshaya u-Misa. Isinyathelo ngasinye siyabhalwa, akuthathwa vidiyo.",
 "Steps recorded: {n} ✓": "Izinyathelo eziqoshiweyo: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kuthunyelwa kanye lakho: inguqulo ye-app, uhlobo lwesigaba, ulimi lwaso, isikrini obukuso, izinyathelo oziqophileyo, lanoma yiliphi iphutha i-app elibonileyo. Akukho okunye."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kuthunyelwa kanye lakho: inguqulo ye-app, uhlobo lwesigaba, ulimi lwaso, isikrini obukuso, izinyathelo oziqophileyo, lanoma yiliphi iphutha i-app elibonileyo. Akukho okunye.",
+"New here? Start here": "Lilitsha? Qalani lapha",
+"Or use your email": "Kumbe sebenzisani i-imeyili yenu",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Kumahala futhi akusibo ubulungiswa. Ngenani ukuze lingene kuMaqembu, ligcine okugqamisileyo, amabala, izilungiselelo lemikhuleko yenu kuzo zonke izinto zenu.",
+"Pick one way in:": "Khethani indlela eyodwa yokungena:",
+"Passkey": "I-passkey",
+"Email": "I-imeyili",
+"We email you a 6-digit code. New here? It makes your account.": "Silithumelela ikhodi yezinombolo ezi-6 nge-imeyili. Lilitsha? Yiyo ezayenza i-akhawunti yenu.",
+"That’s it, you’re in.": "Yikho lokho, selingenile.",
+"Now you can make a circle, or join one from a link someone sends you.": "Khathesi lingenza iqembu, kumbe lingene kwelinye ngelinki elithunyelwe ngomunye.",
+"No passkey? Use your email": "Alila-passkey? Sebenzisani i-imeyili yenu",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Adinga i-akhawunti yamahala: i-passkey kumbe ikhodi nge-imeyili, ku-Izilungiselelo → I-akhawunti. Kuthatha isikhatshana nje.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Amaqembu adinga i-akhawunti yamahala. Kulula nge-passkey: Face ID, umunwe kumbe ukhiye wesikrini senu. Akulaphasiwedi.",
+"Free. Needed for Circles": "Kumahala. Kuyadingeka kuMaqembu"
 }

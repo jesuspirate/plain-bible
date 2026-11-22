@@ -506,7 +506,6 @@
 "About": "Giới thiệu",
 "Language": "Ngôn ngữ",
 "Close settings": "Đóng cài đặt",
-"Sync your highlights and prayers": "Đồng bộ phần tô sáng và lời cầu nguyện của bạn",
 "Couldn’t sync. Tap to see why": "Không thể đồng bộ. Chạm để xem lý do",
 "Bible": "Kinh Thánh",
 "Back to {version}": "Quay lại {version}",
@@ -1306,5 +1305,18 @@
 "Show what happens": "Cho thấy điều xảy ra",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Dùng ứng dụng như thường lệ, rồi chạm Dừng. Mỗi bước được ghi bằng chữ, không quay phim.",
 "Steps recorded: {n} ✓": "Các bước đã ghi: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Gửi kèm: phiên bản ứng dụng, loại thiết bị, ngôn ngữ, màn hình bạn đang ở, các bước bạn đã ghi và mọi lỗi ứng dụng ghi nhận. Không gì khác."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Gửi kèm: phiên bản ứng dụng, loại thiết bị, ngôn ngữ, màn hình bạn đang ở, các bước bạn đã ghi và mọi lỗi ứng dụng ghi nhận. Không gì khác.",
+"New here? Start here": "Mới đến? Bắt đầu ở đây",
+"Or use your email": "Hoặc dùng email",
+"Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Miễn phí và không bắt buộc. Đăng nhập để tham gia Nhóm và giữ đánh dấu, ghi chú, cài đặt và lời cầu nguyện trên mọi thiết bị của bạn.",
+"Pick one way in:": "Chọn một cách để vào:",
+"Passkey": "Mã khóa",
+"Email": "Email",
+"We email you a 6-digit code. New here? It makes your account.": "Chúng tôi gửi email cho bạn một mã 6 chữ số. Mới đến? Mã đó tạo tài khoản cho bạn.",
+"That’s it, you’re in.": "Vậy là xong, bạn đã vào.",
+"Now you can make a circle, or join one from a link someone sends you.": "Giờ bạn có thể lập một nhóm, hoặc tham gia một nhóm bằng liên kết ai đó gửi cho bạn.",
+"No passkey? Use your email": "Không có mã khóa? Dùng email",
+"They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Cần một tài khoản miễn phí: mã khóa hoặc mã qua email, trong Cài đặt → Tài khoản. Chỉ mất một lát.",
+"Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Nhóm cần một tài khoản miễn phí. Dễ nhất là dùng mã khóa: Face ID, vân tay hoặc khóa màn hình. Không cần mật khẩu.",
+"Free. Needed for Circles": "Miễn phí. Cần cho Nhóm"
 }
