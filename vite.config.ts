@@ -97,7 +97,8 @@ export default defineConfig({
         // Nor is the QR drawing, which only the support page loads, and only once Bitcoin is set up there.
         globIgnores: ['share.png', '**/qrcode-*.js'],
         // /welcome and /support without the slash are the site's redirects to the pages, not ones the app should answer for.
-        navigateFallbackDenylist: [/\/welcome$/, /\/support$/],
+        // Nor is /stats, the easy address for the private numbers page (.github/workflows/deploy.yml).
+        navigateFallbackDenylist: [/\/welcome$/, /\/support$/, /\/stats\/?$/],
         runtimeCaching: [
           {
             // Bibles you open, or save from the Versions page, stay available offline,
