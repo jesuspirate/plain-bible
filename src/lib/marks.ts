@@ -84,10 +84,21 @@ function oldLast() {
 }
 /** The palette with the colors you used most recently first, newest on the
  *  left; colors never used keep their usual order after them. */
-export function colorsByUse(recent: string[] | undefined) {
+export function colorsByUse(recent: string[] | undefined, noYellow = yellowHidden()) {
   const order = recent?.length ? recent : [oldLast() ?? '']
   const used = order.map(c => PALETTE.find(p => p.color === c)).filter(p => !!p) as typeof PALETTE
-  return [...used, ...PALETTE.filter(p => !used.includes(p))]
+  const all = [...used, ...PALETTE.filter(p => !used.includes(p))]
+  return noYellow ? all.filter(p => p.color !== YELLOW) : all
+}
+const YELLOW = '#fff193'
+/** Yellow letters can't be read on a light or sepia page, so with Colored
+ *  text highlights there yellow isn't offered (verses already yellow keep it). */
+export function yellowHidden(hl?: string, theme?: string) {
+  if (typeof document === 'undefined') return false
+  hl ??= document.documentElement.dataset.hl
+  theme ??= document.documentElement.dataset.theme
+  if (hl !== 'text') return false
+  return theme === 'light' || theme === 'sepia' || (theme === 'system' && !matchMedia('(prefers-color-scheme: dark)').matches)
 }
 /** The color last used, for double-tap highlighting. */
 export const lastColor = (recent: string[] | undefined) => colorsByUse(recent)[0].color
