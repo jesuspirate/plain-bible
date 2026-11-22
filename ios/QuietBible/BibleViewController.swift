@@ -97,11 +97,9 @@ final class BibleViewController: UIViewController, WKNavigationDelegate, WKUIDel
         let mic = PrayerMicBridge()
         config.userContentController.addUserScript(PrayerMicBridge.script)
         config.userContentController.addScriptMessageHandler(mic, contentWorld: .page, name: PrayerMicBridge.name)
-        // The screen stays on while praying or listening (AwakeBridge.swift). Not on a Mac.
-        if let awakeScript = AwakeBridge.script {
-            config.userContentController.addUserScript(awakeScript)
-            config.userContentController.add(awake, contentWorld: .page, name: AwakeBridge.name)
-        }
+        // The screen stays on while praying or listening (AwakeBridge.swift).
+        config.userContentController.addUserScript(AwakeBridge.script)
+        config.userContentController.add(awake, contentWorld: .page, name: AwakeBridge.name)
 
         // Behave exactly like the app on an iPhone Home Screen (no "Add to
         // Home Screen" tips, the keyboard's mic for voice search).

@@ -13,14 +13,21 @@ import WebKit
 /// while the page holds at least one lock, back off as soon as it lets go,
 /// when the app goes to the background, or when the page reloads.
 ///
-/// Not on a Mac: a Mac doesn't auto-lock the way a phone does, and the Mac
-/// app keeps the page's own behaviour, untouched.
+/// On a Mac (the iPad app running there) that switch isn't enough: Apple's
+/// forums report the display still turns off and locks, which paused a
+/// prayer too. There the app also holds a "keep the display on" activity
+/// with the system (`ProcessInfo.beginActivity`, display sleep only),
+/// started and ended with the page's lock like the switch. It changes
+/// nothing about how the page runs (not the 1.2.8 never-pause setting).
 final class AwakeBridge: NSObject, WKScriptMessageHandler {
     static let name = "awake"
-    static var script: WKUserScript? {
-        ProcessInfo.processInfo.isiOSAppOnMac ? nil
-            : WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: true)
-    }
+    static let script = WKUserScript(source: js, injectionTime: .atDocumentStart, forMainFrameOnly: true)
+
+    /// Foundation's NSActivityIdleDisplaySleepDisabled. The iOS SDK leaves
+    /// the name out, but on a Mac the app runs on the Mac's Foundation,
+    /// which honours it; on an iPhone it isn't used.
+    private static let displayOn = ProcessInfo.ActivityOptions(rawValue: 1 << 40)
+    private var activity: NSObjectProtocol?
 
     /// The page's held locks, by number.
     private var held = Set<Int>()
@@ -58,6 +65,13 @@ final class AwakeBridge: NSObject, WKScriptMessageHandler {
         let on = !held.isEmpty
         if UIApplication.shared.isIdleTimerDisabled != on {
             UIApplication.shared.isIdleTimerDisabled = on
+        }
+        guard ProcessInfo.processInfo.isiOSAppOnMac else { return }
+        if on, activity == nil {
+            activity = ProcessInfo.processInfo.beginActivity(options: Self.displayOn, reason: "Praying or listening")
+        } else if !on, let activity {
+            ProcessInfo.processInfo.endActivity(activity)
+            self.activity = nil
         }
     }
 
