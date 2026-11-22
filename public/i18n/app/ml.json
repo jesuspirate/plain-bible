@@ -1298,7 +1298,6 @@
 "A suggestion": "ഒരു നിർദ്ദേശം",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "എന്തെങ്കിലും പ്രവർത്തിക്കുന്നില്ലേ? എന്താണ് സംഭവിച്ചതെന്ന് പറയുക. ഇത് നേരിട്ട് My Quiet Bible ഉണ്ടാക്കുന്നയാളിലേക്ക് എത്തുന്നു.",
 "What went wrong?": "എന്താണ് തെറ്റിയത്?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 ന് തൊട്ടുമുകളിൽ ഒരു ചെറിയ “കൂടെ വായിക്കുക” ബട്ടൺ കാണിക്കുക. സ്ക്രീനിന്റെ മുകളിലെ വാക്യം മുതൽ, അല്ലെങ്കിൽ നിങ്ങൾ തൊട്ട വാക്യം മുതൽ ഇത് വായിക്കുന്നു.",
 "Recording": "റെക്കോർഡ് ചെയ്യുന്നു",
 "Hide the steps": "ഘട്ടങ്ങൾ മറയ്ക്കുക",
 "See the steps": "ഘട്ടങ്ങൾ കാണുക",
@@ -1306,5 +1305,7 @@
 "Show what happens": "എന്ത് സംഭവിക്കുന്നു എന്ന് കാണിക്കുക",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "പതിവുപോലെ ആപ്പ് ഉപയോഗിക്കുക, തുടർന്ന് നിർത്തുക ടാപ്പ് ചെയ്യുക. ഓരോ ഘട്ടവും എഴുതിവെക്കുന്നു, വീഡിയോ എടുക്കുന്നില്ല.",
 "Steps recorded: {n} ✓": "റെക്കോർഡ് ചെയ്ത ഘട്ടങ്ങൾ: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ഒപ്പം അയയ്ക്കുന്നത്: ആപ്പിന്റെ പതിപ്പ്, ഉപകരണത്തിന്റെ തരം, അതിന്റെ ഭാഷ, നിങ്ങൾ ഉണ്ടായിരുന്ന സ്ക്രീൻ, നിങ്ങൾ റെക്കോർഡ് ചെയ്ത ഘട്ടങ്ങൾ, ആപ്പ് ശ്രദ്ധിച്ച ഏത് പിശകും. മറ്റൊന്നുമില്ല."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ഒപ്പം അയയ്ക്കുന്നത്: ആപ്പിന്റെ പതിപ്പ്, ഉപകരണത്തിന്റെ തരം, അതിന്റെ ഭാഷ, നിങ്ങൾ ഉണ്ടായിരുന്ന സ്ക്രീൻ, നിങ്ങൾ റെക്കോർഡ് ചെയ്ത ഘട്ടങ്ങൾ, ആപ്പ് ശ്രദ്ധിച്ച ഏത് പിശകും. മറ്റൊന്നുമില്ല.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "തിരയൽ ബാറിന്റെ വലത്തേ അറ്റത്ത് ഒരു ചെറിയ “കൂടെ വായിക്കുക” ചിഹ്നം കാണിക്കുക. സ്ക്രീനിന്റെ മുകളിലെ വാക്യം മുതൽ, അല്ലെങ്കിൽ നിങ്ങൾ തൊട്ട വാക്യം മുതൽ ഇത് വായിക്കുന്നു.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "അതിന്റെ വലത്തേ അറ്റത്തുള്ള “കൂടെ വായിക്കുക” ചിഹ്നം സ്ക്രീനിന്റെ മുകളിലെ വാക്യം മുതൽ വായിക്കുന്നു."
 }

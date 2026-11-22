@@ -1298,7 +1298,6 @@
 "A suggestion": "Isang mungkahi",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "May hindi gumagana? Sabihin kung ano ang nangyari. Diretso ito sa taong gumagawa ng My Quiet Bible.",
 "What went wrong?": "Ano ang nagkamali?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ang maliit na button na “Sabayang pagbasa” sa ibabaw mismo ng 🙏. Bumabasa ito mula sa talata sa itaas ng screen, o mula sa talatang tinapik mo.",
 "Recording": "Nagre-record",
 "Hide the steps": "Itago ang mga hakbang",
 "See the steps": "Tingnan ang mga hakbang",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Ipakita ang nangyayari",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Gamitin ang app gaya ng dati, saka i-tap ang Ihinto. Isinusulat ang bawat hakbang, walang kinukuhang video.",
 "Steps recorded: {n} ✓": "Mga hakbang na na-record: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kasamang ipinapadala: ang bersyon ng app, uri ng device, wika nito, ang screen na kinaroroonan mo, ang mga hakbang na ni-record mo, at anumang error na napansin ng app. Wala nang iba."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kasamang ipinapadala: ang bersyon ng app, uri ng device, wika nito, ang screen na kinaroroonan mo, ang mga hakbang na ni-record mo, at anumang error na napansin ng app. Wala nang iba.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Ipakita ang maliit na icon na “Sabayang pagbasa” sa kanang dulo ng search bar. Bumabasa ito mula sa talata sa itaas ng screen, o mula sa talatang tinapik mo.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon na “Sabayang pagbasa” sa kanang dulo nito ay bumabasa mula sa talata sa itaas ng screen."
 }

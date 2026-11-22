@@ -1298,7 +1298,6 @@
 "A suggestion": "ਇੱਕ ਸੁਝਾਅ",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "ਕੁਝ ਕੰਮ ਨਹੀਂ ਕਰ ਰਿਹਾ? ਦੱਸੋ ਕੀ ਹੋਇਆ। ਇਹ ਸਿੱਧਾ My Quiet Bible ਬਣਾਉਣ ਵਾਲੇ ਵਿਅਕਤੀ ਕੋਲ ਜਾਂਦਾ ਹੈ।",
 "What went wrong?": "ਕੀ ਗਲਤ ਹੋਇਆ?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 ਦੇ ਬਿਲਕੁਲ ਉੱਪਰ ਇੱਕ ਛੋਟਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਬਟਨ ਦਿਖਾਓ। ਇਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ, ਜਾਂ ਤੁਹਾਡੀ ਛੂਹੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
 "Recording": "ਰਿਕਾਰਡ ਹੋ ਰਿਹਾ ਹੈ",
 "Hide the steps": "ਕਦਮ ਲੁਕਾਓ",
 "See the steps": "ਕਦਮ ਵੇਖੋ",
@@ -1306,5 +1305,7 @@
 "Show what happens": "ਦਿਖਾਓ ਕੀ ਹੁੰਦਾ ਹੈ",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "ਆਮ ਵਾਂਗ ਐਪ ਵਰਤੋ, ਫਿਰ ਰੋਕੋ ਦਬਾਓ। ਹਰ ਕਦਮ ਲਿਖਿਆ ਜਾਂਦਾ ਹੈ, ਵੀਡੀਓ ਨਹੀਂ ਬਣਦੀ।",
 "Steps recorded: {n} ✓": "ਰਿਕਾਰਡ ਕੀਤੇ ਕਦਮ: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ਨਾਲ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ: ਐਪ ਦਾ ਸੰਸਕਰਣ, ਡਿਵਾਈਸ ਦੀ ਕਿਸਮ, ਉਸਦੀ ਭਾਸ਼ਾ, ਜਿਸ ਸਕ੍ਰੀਨ ਤੇ ਤੁਸੀਂ ਸੀ, ਜੋ ਕਦਮ ਤੁਸੀਂ ਰਿਕਾਰਡ ਕੀਤੇ, ਅਤੇ ਐਪ ਨੇ ਜੋ ਵੀ ਗਲਤੀ ਵੇਖੀ। ਹੋਰ ਕੁਝ ਨਹੀਂ।"
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "ਨਾਲ ਭੇਜਿਆ ਜਾਂਦਾ ਹੈ: ਐਪ ਦਾ ਸੰਸਕਰਣ, ਡਿਵਾਈਸ ਦੀ ਕਿਸਮ, ਉਸਦੀ ਭਾਸ਼ਾ, ਜਿਸ ਸਕ੍ਰੀਨ ਤੇ ਤੁਸੀਂ ਸੀ, ਜੋ ਕਦਮ ਤੁਸੀਂ ਰਿਕਾਰਡ ਕੀਤੇ, ਅਤੇ ਐਪ ਨੇ ਜੋ ਵੀ ਗਲਤੀ ਵੇਖੀ। ਹੋਰ ਕੁਝ ਨਹੀਂ।",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ਖੋਜ ਪੱਟੀ ਦੇ ਸੱਜੇ ਸਿਰੇ ’ਤੇ ਇੱਕ ਛੋਟਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਦਿਖਾਓ। ਇਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ, ਜਾਂ ਤੁਹਾਡੀ ਛੂਹੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ਇਸਦੇ ਸੱਜੇ ਸਿਰੇ ਵਾਲਾ “ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ” ਚਿੰਨ੍ਹ ਸਕ੍ਰੀਨ ਦੇ ਉੱਪਰਲੀ ਆਇਤ ਤੋਂ ਪੜ੍ਹਦਾ ਹੈ।"
 }

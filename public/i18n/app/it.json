@@ -1298,7 +1298,6 @@
 "A suggestion": "Un suggerimento",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Qualcosa non funziona? Racconta cosa è successo. Arriva direttamente alla persona che fa My Quiet Bible.",
 "What went wrong?": "Cosa non ha funzionato?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mostra un piccolo pulsante «Leggi seguendo» proprio sopra 🙏. Legge dal versetto in cima allo schermo, o dal versetto che hai toccato.",
 "Recording": "Registrazione in corso",
 "Hide the steps": "Nascondi i passaggi",
 "See the steps": "Vedi i passaggi",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Mostra cosa succede",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Usa l’app come sempre, poi tocca Interrompi. Ogni passaggio viene scritto a parole, nulla viene filmato.",
 "Steps recorded: {n} ✓": "Passaggi registrati: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Inviato insieme: la versione dell’app, il tipo di dispositivo, la lingua, la schermata in cui eri, i passaggi registrati e qualsiasi errore notato dall’app. Nient’altro."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Inviato insieme: la versione dell’app, il tipo di dispositivo, la lingua, la schermata in cui eri, i passaggi registrati e qualsiasi errore notato dall’app. Nient’altro.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Mostra una piccola icona «Leggi seguendo» all’estremità destra della barra di ricerca. Legge dal versetto in cima allo schermo, o dal versetto che hai toccato.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "L’icona «Leggi seguendo» all’estremità destra legge dal versetto in cima allo schermo."
 }

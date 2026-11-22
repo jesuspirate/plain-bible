@@ -1382,7 +1382,6 @@
 "A suggestion": "Предлог",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Нешто не ради? Реците шта се догодило. Иде директно особи која прави My Quiet Bible.",
 "What went wrong?": "Шта није у реду?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Прикажи мало дугме „Прати читање” одмах изнад 🙏. Чита од стиха на врху екрана или од стиха који сте додирнули.",
 "Recording": "Снимање",
 "Hide the steps": "Сакриј кораке",
 "See the steps": "Погледај кораке",
@@ -1390,5 +1389,7 @@
 "Show what happens": "Покажи шта се дешава",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Користите апликацију као и обично, па додирните Заустави. Сваки корак се записује речима, ништа се не снима камером.",
 "Steps recorded: {n} ✓": "Снимљени кораци: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Шаље се уз то: верзија апликације, врста уређаја, његов језик, екран на ком сте били, снимљени кораци и свака грешка коју је апликација приметила. Ништа друго."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Шаље се уз то: верзија апликације, врста уређаја, његов језик, екран на ком сте били, снимљени кораци и свака грешка коју је апликација приметила. Ништа друго.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Прикажи малу икону „Прати читање” на десном крају траке за претрагу. Чита од стиха на врху екрана или од стиха који сте додирнули.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Икона „Прати читање” на десном крају чита од стиха на врху екрана."
 }

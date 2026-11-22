@@ -1298,7 +1298,6 @@
 "A suggestion": "Coyrle",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Nagh vel red ennagh gobbragh? Insh cre haghyr. T’eh goll dy jeeragh gys y pheiagh ta jannoo My Quiet Bible.",
 "What went wrong?": "Cre va neuchiart?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Taishbyn cramp beg “Lhaih marish” ec 🙏. Lhaihee eh veih yn vers ec mullagh y scrieen, ny veih yn vers v’ou bentyn rish.",
 "Recording": "Recortys",
 "Hide the steps": "Follaghey ny kemmyn",
 "See the steps": "Jeeagh er ny kemmyn",
@@ -1306,5 +1305,7 @@
 "Show what happens": "Soilshaghey cre ta taghyrt",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Jean ymmyd jeh’n app myr kinjagh, as eisht bwoaill er Scuirr. Ta dagh kem scruit sheese, cha nel eh filmit.",
 "Steps recorded: {n} ✓": "Kemmyn recortit: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Currit marish: lhieggan yn app, sorch y chialg, y chengey eck, y scrane va oo er, ny kemmyn recortee oo as marranys erbee honnick yn app. Veg elley."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Currit marish: lhieggan yn app, sorch y chialg, y chengey eck, y scrane va oo er, ny kemmyn recortee oo as marranys erbee honnick yn app. Veg elley.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Taishbyn cowrey beg “Lhaih marish” ec kione yesh y varr shirrey. Lhaihee eh veih yn vers ec mullagh y scrieen, ny veih yn vers v’ou bentyn rish.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ta’n cowrey “Lhaih marish” ec y kione yesh lhaih veih yn vers ec mullagh y scrieen."
 }

@@ -1298,7 +1298,6 @@
 "A suggestion": "အကြံပြုချက်",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "တစ်ခုခု အလုပ်မလုပ်ဘူးလား။ ဘာဖြစ်ခဲ့သလဲ ပြောပါ။ My Quiet Bible ကို ပြုလုပ်သူထံ တိုက်ရိုက်ရောက်ပါသည်။",
 "What went wrong?": "ဘာမှားသွားသလဲ။",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 ၏ အပေါ်တွင် “လိုက်ဖတ်ရန်” ခလုတ်အသေးလေးကို ပြပါ။ ၎င်းသည် မျက်နှာပြင်ထိပ်ရှိ အခန်းငယ်မှ သို့မဟုတ် သင်နှိပ်ခဲ့သော အခန်းငယ်မှ ဖတ်ပေးသည်။",
 "Recording": "မှတ်တမ်းတင်နေသည်",
 "Hide the steps": "အဆင့်များကို ဖျောက်ရန်",
 "See the steps": "အဆင့်များကို ကြည့်ရန်",
@@ -1306,5 +1305,7 @@
 "Show what happens": "ဖြစ်ပျက်ပုံကို ပြရန်",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "အက်ပ်ကို ပုံမှန်အတိုင်း သုံးပြီး ရပ်ရန် ကို နှိပ်ပါ။ အဆင့်တိုင်းကို စာဖြင့် ရေးမှတ်သည်၊ ဗီဒီယို မရိုက်ပါ။",
 "Steps recorded: {n} ✓": "မှတ်တမ်းတင်ထားသော အဆင့်များ- {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "တွဲပို့သည်- အက်ပ်ဗားရှင်း၊ စက်အမျိုးအစား၊ ဘာသာစကား၊ သင်ရှိခဲ့သည့်မျက်နှာပြင်၊ သင်မှတ်တမ်းတင်ခဲ့သည့် အဆင့်များနှင့် အက်ပ်တွေ့ခဲ့သည့် အမှားများ။ အခြားဘာမျှမပါ။"
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "တွဲပို့သည်- အက်ပ်ဗားရှင်း၊ စက်အမျိုးအစား၊ ဘာသာစကား၊ သင်ရှိခဲ့သည့်မျက်နှာပြင်၊ သင်မှတ်တမ်းတင်ခဲ့သည့် အဆင့်များနှင့် အက်ပ်တွေ့ခဲ့သည့် အမှားများ။ အခြားဘာမျှမပါ။",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "ရှာဖွေရေးဘား၏ ညာဘက်အစွန်တွင် “လိုက်ဖတ်ရန်” သင်္ကေတအသေးလေးကို ပြပါ။ ၎င်းသည် မျက်နှာပြင်ထိပ်ရှိ အခန်းငယ်မှ သို့မဟုတ် သင်နှိပ်ခဲ့သော အခန်းငယ်မှ ဖတ်ပေးသည်။",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ညာဘက်အစွန်ရှိ “လိုက်ဖတ်ရန်” သင်္ကေတသည် မျက်နှာပြင်ထိပ်ရှိ အခန်းငယ်မှ ဖတ်ပေးသည်။"
 }

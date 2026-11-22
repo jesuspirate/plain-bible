@@ -1298,7 +1298,6 @@
 "A suggestion": "એક સૂચન",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "કંઈક કામ નથી કરતું? શું થયું તે કહો. તે સીધું My Quiet Bible બનાવનાર વ્યક્તિ પાસે જાય છે.",
 "What went wrong?": "શું ખોટું થયું?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "🙏 ની બરાબર ઉપર એક નાનું “સાથે વાંચો” બટન બતાવો. તે સ્ક્રીનની ટોચની કલમથી, અથવા તમે ટેપ કરેલી કલમથી વાંચે છે.",
 "Recording": "રેકોર્ડ થઈ રહ્યું છે",
 "Hide the steps": "પગલાં છુપાવો",
 "See the steps": "પગલાં જુઓ",
@@ -1306,5 +1305,7 @@
 "Show what happens": "શું થાય છે તે બતાવો",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "હંમેશની જેમ ઍપ વાપરો, પછી બંધ કરો દબાવો. દરેક પગલું લખી લેવાય છે, વીડિયો નહીં.",
 "Steps recorded: {n} ✓": "રેકોર્ડ થયેલાં પગલાં: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "સાથે મોકલાય છે: ઍપનું સંસ્કરણ, ઉપકરણનો પ્રકાર, તેની ભાષા, તમે જે સ્ક્રીન પર હતા તે, તમે રેકોર્ડ કરેલાં પગલાં અને ઍપે નોંધેલી કોઈપણ ભૂલ. બીજું કંઈ નહીં."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "સાથે મોકલાય છે: ઍપનું સંસ્કરણ, ઉપકરણનો પ્રકાર, તેની ભાષા, તમે જે સ્ક્રીન પર હતા તે, તમે રેકોર્ડ કરેલાં પગલાં અને ઍપે નોંધેલી કોઈપણ ભૂલ. બીજું કંઈ નહીં.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "શોધ પટ્ટીના જમણા છેડે એક નાનું “સાથે વાંચો” ચિહ્ન બતાવો. તે સ્ક્રીનની ટોચની કલમથી, અથવા તમે ટેપ કરેલી કલમથી વાંચે છે.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "તેના જમણા છેડે આવેલું “સાથે વાંચો” ચિહ્ન સ્ક્રીનની ટોચની કલમથી વાંચે છે."
 }

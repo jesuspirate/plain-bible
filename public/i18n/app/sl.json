@@ -1403,7 +1403,6 @@
 "A suggestion": "Predlog",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Nekaj ne deluje? Povejte, kaj se je zgodilo. Gre naravnost k osebi, ki ustvarja My Quiet Bible.",
 "What went wrong?": "Kaj je šlo narobe?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Prikaži majhen gumb »Sledi branju« tik nad 🙏. Bere od vrstice na vrhu zaslona ali od vrstice, ki ste se je dotaknili.",
 "Recording": "Snemanje",
 "Hide the steps": "Skrij korake",
 "See the steps": "Poglej korake",
@@ -1411,5 +1410,7 @@
 "Show what happens": "Pokaži, kaj se zgodi",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Uporabljajte aplikacijo kot običajno, nato tapnite Ustavi. Vsak korak se zapiše z besedami, nič se ne snema.",
 "Steps recorded: {n} ✓": "Posneti koraki: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Poslano zraven: različica aplikacije, vrsta naprave, njen jezik, zaslon, na katerem ste bili, posnete korake in vsaka napaka, ki jo je aplikacija opazila. Nič drugega."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Poslano zraven: različica aplikacije, vrsta naprave, njen jezik, zaslon, na katerem ste bili, posnete korake in vsaka napaka, ki jo je aplikacija opazila. Nič drugega.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Prikaži majhno ikono »Sledi branju« na desnem koncu iskalne vrstice. Bere od vrstice na vrhu zaslona ali od vrstice, ki ste se je dotaknili.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona »Sledi branju« na njenem desnem koncu bere od vrstice na vrhu zaslona."
 }

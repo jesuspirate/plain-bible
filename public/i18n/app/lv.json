@@ -1382,7 +1382,6 @@
 "A suggestion": "Ieteikums",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Kaut kas nedarbojas? Pastāstiet, kas notika. Tas nonāk tieši pie tā, kurš veido My Quiet Bible.",
 "What went wrong?": "Kas nogāja greizi?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Rādīt nelielu pogu “Lasīt līdzi” tieši virs 🙏. Tā lasa no panta ekrāna augšā vai no panta, kam pieskārāties.",
 "Recording": "Notiek ieraksts",
 "Hide the steps": "Paslēpt soļus",
 "See the steps": "Skatīt soļus",
@@ -1390,5 +1389,7 @@
 "Show what happens": "Parādīt, kas notiek",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Lietojiet lietotni kā parasti, tad pieskarieties Apturēt. Katrs solis tiek pierakstīts vārdos, nekas netiek filmēts.",
 "Steps recorded: {n} ✓": "Ierakstītie soļi: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids, tās valoda, ekrāns, kurā bijāt, ierakstītie soļi un jebkura kļūda, ko lietotne pamanīja. Nekas cits."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids, tās valoda, ekrāns, kurā bijāt, ierakstītie soļi un jebkura kļūda, ko lietotne pamanīja. Nekas cits.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Rādīt nelielu ikonu “Lasīt līdzi” meklēšanas joslas labajā galā. Tā lasa no panta ekrāna augšā vai no panta, kam pieskārāties.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lasīt līdzi” tās labajā galā lasa no panta ekrāna augšā."
 }

@@ -1403,7 +1403,6 @@
 "A suggestion": "Предложение",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Что-то не работает? Расскажите, что случилось. Это попадёт прямо к тому, кто делает My Quiet Bible.",
 "What went wrong?": "Что пошло не так?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Показывать маленькую кнопку «Чтение с подсветкой» прямо над 🙏. Она читает со стиха вверху экрана или со стиха, который вы коснулись.",
 "Recording": "Идёт запись",
 "Hide the steps": "Скрыть шаги",
 "See the steps": "Посмотреть шаги",
@@ -1411,5 +1410,7 @@
 "Show what happens": "Показать, что происходит",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Пользуйтесь приложением как обычно, затем нажмите «Остановить». Каждый шаг записывается словами, ничего не снимается на видео.",
 "Steps recorded: {n} ✓": "Записано шагов: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Вместе с ним отправляется: версия приложения, тип устройства, его язык, экран, на котором вы были, записанные шаги и любая ошибка, замеченная приложением. Больше ничего."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Вместе с ним отправляется: версия приложения, тип устройства, его язык, экран, на котором вы были, записанные шаги и любая ошибка, замеченная приложением. Больше ничего.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Показывать маленький значок «Чтение с подсветкой» у правого края строки поиска. Он читает со стиха вверху экрана или со стиха, который вы коснулись.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Чтение с подсветкой» у её правого края читает со стиха вверху экрана."
 }

@@ -1298,7 +1298,6 @@
 "A suggestion": "建議",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "有什麼不正常嗎?說說發生了什麼。它會直接送到製作 My Quiet Bible 的人手中。",
 "What went wrong?": "哪裡出錯了?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在 🙏 正上方顯示一個小的「跟讀」按鈕。它從螢幕頂部的經文讀起，或從你點過的經文讀起。",
 "Recording": "正在記錄",
 "Hide the steps": "隱藏步驟",
 "See the steps": "查看步驟",
@@ -1306,5 +1305,7 @@
 "Show what happens": "示範發生了什麼",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "像平常一樣使用 App,然後點「停止」。每一步都用文字記下,不錄影片。",
 "Steps recorded: {n} ✓": "已記錄步驟:{n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一同傳送:App 版本、裝置類型、語言、你所在的畫面、你記錄的步驟,以及 App 記錄到的錯誤。沒有別的。"
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "一同傳送:App 版本、裝置類型、語言、你所在的畫面、你記錄的步驟,以及 App 記錄到的錯誤。沒有別的。",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "在搜尋列右端顯示一個小的「跟讀」圖示。它從螢幕頂部的經文讀起，或從你點過的經文讀起。",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "右端的「跟讀」圖示從螢幕頂部的經文讀起。"
 }

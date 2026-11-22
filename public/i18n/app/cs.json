@@ -1403,7 +1403,6 @@
 "A suggestion": "Návrh",
 "Something not working? Say what happened. It goes straight to the person who makes My Quiet Bible.": "Něco nefunguje? Napište, co se stalo. Jde to přímo k tomu, kdo dělá My Quiet Bible.",
 "What went wrong?": "Co se pokazilo?",
-"Show a small Read along button just above 🙏. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Zobrazit malé tlačítko „Čtení se zvýrazněním“ těsně nad 🙏. Čte od verše nahoře na obrazovce, nebo od verše, na který jste klepli.",
 "Recording": "Nahrává se",
 "Hide the steps": "Skrýt kroky",
 "See the steps": "Zobrazit kroky",
@@ -1411,5 +1410,7 @@
 "Show what happens": "Ukázat, co se děje",
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Používejte aplikaci jako obvykle, pak klepněte na Zastavit. Každý krok se zapíše slovy, nic se nenatáčí.",
 "Steps recorded: {n} ✓": "Zaznamenané kroky: {n} ✓",
-"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Posílá se s tím: verze aplikace, druh zařízení, jeho jazyk, obrazovka, na které jste byli, zaznamenané kroky a každá chyba, kterou aplikace zaznamenala. Nic jiného."
+"Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Posílá se s tím: verze aplikace, druh zařízení, jeho jazyk, obrazovka, na které jste byli, zaznamenané kroky a každá chyba, kterou aplikace zaznamenala. Nic jiného.",
+"Show a small Read along icon at the right end of the search bar. It reads on from the verse at the top of the screen, or from the verse you tapped.": "Zobrazit malou ikonu „Čtení se zvýrazněním“ na pravém konci vyhledávacího pole. Čte od verše nahoře na obrazovce, nebo od verše, na který jste klepli.",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Čtení se zvýrazněním“ na jeho pravém konci čte od verše nahoře na obrazovce."
 }
