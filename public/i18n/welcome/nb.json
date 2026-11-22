@@ -30,7 +30,7 @@
 "offlineH": "Virker uten nett",
 "offlineP": "Biblene du leser, blir på telefonen din. På et fly, på fjellet, i en kjeller: Den åpnes ved verset der du slapp, helt uten tilkobling.",
 "marksH": "Markeringer, notater og bokmerker",
-"marksP": "Åtte farger, et notat til et vers eller til et helt avsnitt, et bokmerkebånd for stedene du vender tilbake til. Ta med deg det du har lagret i en annen bibelapp.",
+"marksP": "Åtte farger, et notat til et vers eller til et helt avsnitt, et bokmerkebånd for stedene du vender tilbake til. Ta med deg det du har lagret i en annen bibelapp. Merk et vers som med en merkepenn, eller farg bokstavene.",
 "devicesH": "Enhetene dine, sammen",
 "devicesP": "Bare hvis du vil. Logg på med en passnøkkel eller en kode på e-post, så følger markeringene, notatene og innstillingene dine med deg. En annen enhet logger på fra den første med én lenke; ingenting å skrive.",
 "readingH": "Laget for lesing",
@@ -82,7 +82,8 @@
 "circlesVerse": "«For der to eller tre er samlet i mitt navn, der er jeg midt iblant dem.»",
 "circlesRef": "Matteus 18,20",
 "circlesLong": "Når du vil, kan du lage en liten krets for familien din eller noen få venner. Del en bønn, et vers eller et notat med ett trykk. De lytter, svarer med et ord eller med en 🙏, og hver og en leser verset i sin egen bibel.",
-"circlesTicks": "<li>Aldri påkrevd. Ingenting forlater telefonen din med mindre du trykker på Del.</li><li>Hver krets har sin egen nøkkel. Bare medlemmene kan åpne det som er i den; ikke engang vi kan det.</li>",
+"circlesTicks": "<li>Aldri påkrevd. Ingenting forlater telefonen din med mindre du trykker på Del.</li><li>Hver krets har sin egen nøkkel. Bare medlemmene kan åpne det som er i den; ikke engang vi kan det.</li><li>Kretser krever en gratis innlogging, med en tilgangsnøkkel eller en kode på e-post.</li>",
 "listenH": "Lytt",
-"listenP": "Trykk på et vers og deretter på Lytt, så leser telefonen kapitlet høyt med sin egen stemme. For bilen, kjøkkenet eller slitne øyne."
+"listenP": "Trykk på et vers og deretter på Lytt. Eller trykk på Les med i søkefeltet, så lyser hvert ord opp mens det blir lest. Ekte opplesere leser BSB, King James og Louis Segond. For bilen, kjøkkenet eller slitne øyne.",
+"orMac": "Den er for Mac. Eller, på hvilken som helst datamaskin, fra nettleseren:"
 }

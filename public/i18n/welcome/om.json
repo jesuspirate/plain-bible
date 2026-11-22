@@ -30,7 +30,7 @@
 "offlineH": "Interneetii malee hojjeta",
 "offlineP": "Macaafni Qulqulluun ati dubbistu bilbila kee irra tura. Xiyyaara keessatti, gaarran irratti, mana jalaa keessatti: caqasa itti dhiifte irratti banama, interneetii tokko malee.",
 "marksH": "Halluu, yaadannoowwan fi mallattoowwan",
-"marksP": "Halluu saddeet, yaadannoo caqasa ykn kutaa guutuu irratti, mallattoo bakkeewwan itti deebitu. Waan appii Macaafa Qulqulluu biraa keessatti olkaa'atte fidi.",
+"marksP": "Halluu saddeet, yaadannoo caqasa ykn kutaa guutuu irratti, mallattoo bakkeewwan itti deebitu. Waan appii Macaafa Qulqulluu biraa keessatti olkaa'atte fidi. Lakkoofsa akka qalama ifaatiin mallatteessi, ykn qubeewwan isaa halluu godhi.",
 "devicesH": "Meeshaalee kee, waliin",
 "devicesP": "Yoo barbaadde qofa. Passkey ykn koodii imeeliin ergameen seeni, halluu, yaadannoowwan fi qindaa'inni kee si hordofu. Meeshaan lammaffaan liinkii tokkoon isa jalqabaa irraa seena; wanti barreeffamu hin jiru.",
 "readingH": "Dubbisuuf kan hojjetame",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Bakka namoonni lama ykn sadii maqaa kootiin walitti qabaman hundatti ani isaan gidduu nan jiraa.”",
 "circlesRef": "Maatewos 18:20",
 "circlesLong": "Yeroo barbaaddu, maatii keetiif ykn hiriyoota muraasaaf garee xiqqaa uumi. Kadhannaa, caqasa ykn yaadannoo tuqaa tokkoon qoodi. Isaan ni dhaggeeffatu, jechaan deebisu, ykn 🙏 tiin deebisu, tokkoon tokkoon isaanii caqasa Macaafa Qulqulluu isaanii keessatti dubbisu.",
-"circlesTicks": "<li>Gonkumaa dirqama miti. Hanga Qoodi tuqxutti wanti bilbila kee irraa ba'u hin jiru.</li>\n              <li>Gareen tokkoon tokkoon furtuu mataa isaa qaba. Waan keessa jiru kan banuu danda'an miseensota isaa qofa; nuti illee hin dandeenyu.</li>",
+"circlesTicks": "<li>Gonkumaa dirqama miti. Hanga Qoodi tuqxutti wanti bilbila kee irraa ba'u hin jiru.</li>\n              <li>Gareen tokkoon tokkoon furtuu mataa isaa qaba. Waan keessa jiru kan banuu danda'an miseensota isaa qofa; nuti illee hin dandeenyu.</li><li>Marsaawwan seensa bilisaa barbaadu, furtuu seensaa ykn koodii imeeliin ergameen.</li>",
 "listenH": "Dhaggeeffadhu",
-"listenP": "Caqasa tuqi, achiis Dhaggeeffadhu, bilbilli kee sagalee mataa isaatiin boqonnaa sagaleen dubbisa. Konkolaataaf, kushinaaf, ykn ija dadhabeef."
+"listenP": "Lakkoofsa tokko tuqi, achiis Dhaggeeffadhu. Yookaan sarara barbaacha irratti Hordofii dubbisi tuqi, jechi hundinuu yeroo dubbifamu ni ifa. Dubbistoonni dhugaa BSB, King James fi Louis Segond ni dubbisu. Konkolaataaf, kushiinaaf, ykn ija dadhabeef.",
+"orMac": "Kun Mac’f. Yookaan, kompiitara kamiinuu, barbaadduu kee irraa:"
 }

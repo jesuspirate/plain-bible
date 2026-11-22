@@ -30,7 +30,7 @@
 "offlineH": "Inafanya kazi bila mtandao",
 "offlineP": "Biblia unazosoma zinabaki kwenye simu yako. Ndani ya ndege, milimani, chini ya ardhi: inafunguka kwenye mstari ulipoishia, bila mtandao wowote.",
 "marksH": "Alama za rangi, madokezo na alamisho",
-"marksP": "Rangi nane, dokezo kwenye mstari au kifungu kizima, utepe kwa mahali unaporudi. Leta ulichohifadhi kwenye programu nyingine ya Biblia.",
+"marksP": "Rangi nane, dokezo kwenye mstari au kifungu kizima, utepe kwa mahali unaporudi. Leta ulichohifadhi kwenye programu nyingine ya Biblia. Weka alama mstari kama kwa kalamu ya kuangazia, au tia rangi herufi zake.",
 "devicesH": "Vifaa vyako, pamoja",
 "devicesP": "Ukitaka tu. Ingia kwa ufunguo wa siri au msimbo unaotumwa kwa barua pepe, na alama zako za rangi, madokezo na mipangilio vitakufuata. Kifaa cha pili kinaingia kutoka kwa cha kwanza kwa kiungo kimoja; hakuna cha kuandika.",
 "readingH": "Imetengenezwa kwa kusoma",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Kwa kuwa walipo wawili watatu wamekusanyika kwa jina langu, nami nipo papo hapo katikati yao.”",
 "circlesRef": "Mathayo 18:20",
 "circlesLong": "Unapotaka, unda kikundi kidogo kwa ajili ya familia yako au marafiki wachache. Shiriki ombi, mstari au dokezo kwa mguso mmoja. Wanasikiliza, wanajibu kwa neno, au kwa 🙏, na kila mmoja anasoma mstari katika Biblia yake mwenyewe.",
-"circlesTicks": "<li>Si lazima kamwe. Hakuna kinachotoka kwenye simu yako usipogusa Shiriki.</li><li>Kila kikundi kina ufunguo wake. Ni wanachama wake tu wanaoweza kufungua kilichomo; hata sisi hatuwezi.</li>",
+"circlesTicks": "<li>Si lazima kamwe. Hakuna kinachotoka kwenye simu yako usipogusa Shiriki.</li><li>Kila kikundi kina ufunguo wake. Ni wanachama wake tu wanaoweza kufungua kilichomo; hata sisi hatuwezi.</li><li>Miduara inahitaji kuingia bure, kwa ufunguo wa siri au msimbo unaotumwa kwa barua pepe.</li>",
 "listenH": "Sikiliza",
-"listenP": "Gusa mstari, kisha Sikiliza, na simu yako itasoma sura kwa sauti yake yenyewe. Kwa ajili ya gari, jikoni, au macho yaliyochoka."
+"listenP": "Gusa mstari, kisha Sikiliza. Au gusa Soma ukifuatisha kwenye upau wa kutafuta, na kila neno linawaka linaposomwa. Wasomaji halisi wanasoma BSB, King James na Louis Segond. Kwa ajili ya gari, jikoni, au macho yaliyochoka.",
+"orMac": "Hiyo ni kwa Mac. Au, kwenye kompyuta yoyote, kutoka kivinjari chako:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Molihok offline",
 "offlineP": "Ang mga Biblia nga imong gibasa magpabilin sa imong phone. Sa eroplano, sa bukid, sa silong: maabli kini sa bersikulo diin ka mihunong, bisan walay koneksiyon.",
 "marksH": "Mga highlight, nota ug bookmark",
-"marksP": "Walo ka kolor, usa ka nota sa usa ka bersikulo o sa tibuok tudling, usa ka laso para sa mga dapit nga imong balik-balikan. Dad-a dinhi ang imong gitipigan sa laing Bible app.",
+"marksP": "Walo ka kolor, usa ka nota sa usa ka bersikulo o sa tibuok tudling, usa ka laso para sa mga dapit nga imong balik-balikan. Dad-a dinhi ang imong gitipigan sa laing Bible app. Markahi ang bersikulo sama sa highlighter, o kolori ang mga letra niini.",
 "devicesH": "Ang imong mga device, magkauban",
 "devicesP": "Kon gusto lang nimo. Mag-sign in gamit ang passkey o code nga gipadala sa email, ug mosunod kanimo ang imong mga highlight, nota ug setting. Ang ikaduhang device mag-sign in gikan sa una gamit ang usa ka link; walay i-type.",
 "readingH": "Gihimo para sa pagbasa",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Kay diin gani may duha o tulo nga nanagkatigom sa akong ngalan, atua ako sa ilang taliwala.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Kon gusto nimo, paghimo og gamay nga pundok para sa imong pamilya o pipila ka higala. Ipaambit ang usa ka pag-ampo, bersikulo o nota sa usa ka tap. Maminaw sila, motubag og usa ka pulong, o motubag og 🙏, ug ang matag usa mobasa sa bersikulo sa ilang kaugalingong Biblia.",
-"circlesTicks": "<li>Dili gyud pinugos. Walay mogawas sa imong phone gawas kon i-tap nimo ang Ipaambit.</li>\n              <li>Ang matag pundok adunay kaugalingong yawe. Ang mga sakop lang niini ang makaabli sa sulod niini; bisan kami dili.</li>",
+"circlesTicks": "<li>Dili gyud pinugos. Walay mogawas sa imong phone gawas kon i-tap nimo ang Ipaambit.</li>\n              <li>Ang matag pundok adunay kaugalingong yawe. Ang mga sakop lang niini ang makaabli sa sulod niini; bisan kami dili.</li><li>Ang mga circle nagkinahanglan og libre nga pag-sign in, gamit ang passkey o code nga gipadala sa email.</li>",
 "listenH": "Paminaw",
-"listenP": "I-tap ang usa ka bersikulo, unya ang Paminaw, ug basahon sa kusog sa imong phone ang kapitulo sa kaugalingon niining tingog. Para sa sakyanan, sa kusina, o sa gikapoy nga mga mata."
+"listenP": "I-tap ang usa ka bersikulo, unya Paminaw. O i-tap ang Dungan nga pagbasa sa search bar, ug ang matag pulong mosiga samtang gibasa. Tinuod nga mga magbabasa ang mobasa sa BSB, King James ug Louis Segond. Para sa sakyanan, kusina, o kapoy nga mata.",
+"orMac": "Kana para sa Mac. O, sa bisan unsang computer, gikan sa imong browser:"
 }

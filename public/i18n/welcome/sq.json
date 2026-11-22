@@ -30,7 +30,7 @@
 "offlineH": "Funksionon pa internet",
 "offlineP": "Biblat që lexoni mbeten në telefonin tuaj. Në avion, në male, në bodrum: hapet te vargu ku e latë, pa asnjë lidhje.",
 "marksH": "Theksime, shënime dhe faqeshënues",
-"marksP": "Tetë ngjyra, një shënim për një varg ose për një pjesë të tërë, një shirit për vendet ku ktheheni. Sillni atë që keni ruajtur në një aplikacion tjetër të Biblës.",
+"marksP": "Tetë ngjyra, një shënim për një varg ose për një pjesë të tërë, një shirit për vendet ku ktheheni. Sillni atë që keni ruajtur në një aplikacion tjetër të Biblës. Shënojeni një varg si me shënues, ose ngjyrosni shkronjat e tij.",
 "devicesH": "Pajisjet tuaja, bashkë",
 "devicesP": "Vetëm nëse e dëshironi. Identifikohuni me një çelës kalimi ose me një kod të dërguar me email, dhe theksimet, shënimet e cilësimet ju ndjekin. Një pajisje e dytë identifikohet nga e para me një lidhje; asgjë për të shkruar.",
 "readingH": "E bërë për lexim",
@@ -82,7 +82,8 @@
 "circlesVerse": "«Sepse, ku janë dy ose tre të mbledhur në emrin tim, aty jam unë në mes tyre.»",
 "circlesRef": "Mateu 18:20",
 "circlesLong": "Kur të doni, krijoni një rreth të vogël për familjen tuaj ose për disa miq. Ndani një lutje, një varg ose një shënim me një prekje. Ata dëgjojnë, përgjigjen me një fjalë ose me një 🙏, dhe secili e lexon vargun në Biblën e vet.",
-"circlesTicks": "<li>Kurrë e detyrueshme. Asgjë nuk largohet nga telefoni juaj nëse nuk prekni Ndaj.</li><li>Çdo rreth ka çelësin e vet. Vetëm anëtarët e tij mund të hapin atë që ka brenda; as ne nuk mundemi.</li>",
+"circlesTicks": "<li>Kurrë e detyrueshme. Asgjë nuk largohet nga telefoni juaj nëse nuk prekni Ndaj.</li><li>Çdo rreth ka çelësin e vet. Vetëm anëtarët e tij mund të hapin atë që ka brenda; as ne nuk mundemi.</li><li>Rrethet kërkojnë hyrje falas, me çelës kalimi ose me kod që vjen me email.</li>",
 "listenH": "Dëgjo",
-"listenP": "Prekni një varg, pastaj Dëgjo, dhe telefoni juaj e lexon kapitullin me zë me zërin e vet. Për makinën, për kuzhinën ose për sytë e lodhur."
+"listenP": "Prekni një varg, pastaj Dëgjo. Ose prekni Lexo duke ndjekur te shiriti i kërkimit, dhe çdo fjalë ndizet ndërsa lexohet. Lexues të vërtetë lexojnë BSB, King James dhe Louis Segond. Për makinën, kuzhinën ose sytë e lodhur.",
+"orMac": "Ky është për Mac. Ose, në çdo kompjuter, nga shfletuesi:"
 }

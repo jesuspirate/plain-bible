@@ -30,7 +30,7 @@
 "offlineH": "Funziona offline",
 "offlineP": "Le Bibbie che leggi restano sul telefono. In aereo, in montagna, in una cantina: si apre sul versetto dove eri rimasto, senza alcuna connessione.",
 "marksH": "Evidenziazioni, note e segnalibri",
-"marksP": "Otto colori, una nota su un versetto o su un intero brano, un nastro per i punti a cui torni. Porta con te ciò che avevi conservato in un’altra app della Bibbia.",
+"marksP": "Otto colori, una nota su un versetto o su un intero brano, un nastro per i punti a cui torni. Porta con te ciò che avevi conservato in un’altra app della Bibbia. Evidenzia un versetto come con un evidenziatore, oppure colora le sue lettere.",
 "devicesH": "I tuoi dispositivi, insieme",
 "devicesP": "Solo se lo vuoi. Accedi con una passkey o con un codice inviato via email, e le tue evidenziazioni, note e impostazioni ti seguono. Un secondo dispositivo accede dal primo con un solo link; niente da digitare.",
 "readingH": "Fatta per leggere",
@@ -82,7 +82,8 @@
 "circlesVerse": "«Poiché dove due o tre sono riuniti nel mio nome, lì sono io in mezzo a loro.»",
 "circlesRef": "Matteo 18:20",
 "circlesLong": "Quando vuoi, crea una piccola cerchia per la tua famiglia o per qualche amico. Condividi una preghiera, un versetto o una nota con un tocco. Loro ascoltano, rispondono con una parola o con un 🙏, e ognuno legge il versetto nella propria Bibbia.",
-"circlesTicks": "<li>Mai obbligatorio. Niente lascia il tuo telefono se non tocchi Condividi.</li>\n              <li>Ogni cerchia ha la sua chiave. Solo i suoi membri possono aprire ciò che contiene; nemmeno noi possiamo.</li>",
+"circlesTicks": "<li>Mai obbligatorio. Niente lascia il tuo telefono se non tocchi Condividi.</li>\n              <li>Ogni cerchia ha la sua chiave. Solo i suoi membri possono aprire ciò che contiene; nemmeno noi possiamo.</li><li>Le cerchie richiedono un accesso gratuito, con una passkey o un codice inviato per email.</li>",
 "listenH": "Ascolta",
-"listenP": "Tocca un versetto, poi Ascolta, e il telefono legge il capitolo ad alta voce con la sua voce. Per l’auto, la cucina o gli occhi stanchi."
+"listenP": "Tocca un versetto, poi Ascolta. Oppure tocca Leggi seguendo nella barra di ricerca, e ogni parola si illumina mentre viene letta. Veri lettori leggono la BSB, la King James e la Louis Segond. Per l’auto, la cucina o gli occhi stanchi.",
+"orMac": "Questo è per Mac. Oppure, su qualsiasi computer, dal tuo browser:"
 }

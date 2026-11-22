@@ -30,7 +30,7 @@
 "offlineH": "Radi bez interneta",
 "offlineP": "Biblije koje čitate ostaju na vašem telefonu. U avionu, u planinama, u podrumu: otvara se na retku gdje ste stali, bez ikakve veze.",
 "marksH": "Isticanja, bilješke i knjižne oznake",
-"marksP": "Osam boja, bilješka uz redak ili uz cijeli odlomak, vrpca za mjesta kojima se vraćate. Prenesite ono što ste sačuvali u drugoj biblijskoj aplikaciji.",
+"marksP": "Osam boja, bilješka uz redak ili uz cijeli odlomak, vrpca za mjesta kojima se vraćate. Prenesite ono što ste sačuvali u drugoj biblijskoj aplikaciji. Označite redak kao markerom ili obojite njegova slova.",
 "devicesH": "Vaši uređaji, zajedno",
 "devicesP": "Samo ako to želite. Prijavite se pristupnim ključem ili kôdom poslanim e-poštom, i vaša isticanja, bilješke i postavke prate vas. Drugi uređaj prijavljuje se s prvoga jednom poveznicom; ništa ne treba upisivati.",
 "readingH": "Stvorena za čitanje",
@@ -82,7 +82,8 @@
 "circlesVerse": "„Jer gdje su dvojica ili trojica sabrana u moje ime, ondje sam i ja među njima.”",
 "circlesRef": "Matej 18,20",
 "circlesLong": "Kad poželite, napravite mali krug za svoju obitelj ili nekoliko prijatelja. Podijelite molitvu, redak ili bilješku jednim dodirom. Oni slušaju, odgovaraju riječju ili s 🙏, a svatko čita redak u svojoj Bibliji.",
-"circlesTicks": "<li>Nikad obavezno. Ništa ne napušta vaš telefon ako ne dodirnete Podijeli.</li><li>Svaki krug ima vlastiti ključ. Samo njegovi članovi mogu otvoriti ono što je u njemu; čak ni mi ne možemo.</li>",
+"circlesTicks": "<li>Nikad obavezno. Ništa ne napušta vaš telefon ako ne dodirnete Podijeli.</li><li>Svaki krug ima vlastiti ključ. Samo njegovi članovi mogu otvoriti ono što je u njemu; čak ni mi ne možemo.</li><li>Krugovi traže besplatnu prijavu, pristupnim ključem ili kodom poslanim e-poštom.</li>",
 "listenH": "Slušajte",
-"listenP": "Dodirnite redak, zatim Slušaj, i vaš telefon čita poglavlje naglas svojim glasom. Za vožnju, za kuhinju ili za umorne oči."
+"listenP": "Dodirnite redak, zatim Slušaj. Ili dodirnite Prati čitanje u traci za pretraživanje i svaka riječ zasvijetli dok se čita. Pravi čitači čitaju BSB, King James i Louis Segond. Za auto, kuhinju ili umorne oči.",
+"orMac": "To je za Mac. Ili, na bilo kojem računalu, iz preglednika:"
 }

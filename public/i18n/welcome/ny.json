@@ -30,7 +30,7 @@
 "offlineH": "Imagwira ntchito popanda intaneti",
 "offlineP": "Mabaibulo amene mumawerenga amakhala pa foni yanu. M'ndege, kumapiri, m'chipinda chapansi: imatseguka pa vesi pamene munasiyira, popanda intaneti iliyonse.",
 "marksH": "Zowunikira, zolemba ndi zizindikiro",
-"marksP": "Mitundu isanu ndi itatu, cholemba pa vesi kapena pa ndime yonse, riboni ya malo amene mumabwererako. Bweretsani zimene munasunga mu pulogalamu ina ya Baibulo.",
+"marksP": "Mitundu isanu ndi itatu, cholemba pa vesi kapena pa ndime yonse, riboni ya malo amene mumabwererako. Bweretsani zimene munasunga mu pulogalamu ina ya Baibulo. Chongani vesi ngati ndi cholembera chowala, kapena kongoletsani zilembo zake ndi mtundu.",
 "devicesH": "Zipangizo zanu, pamodzi",
 "devicesP": "Ngati mukufuna kokha. Lowani ndi passkey kapena ndi khodi yotumizidwa pa imelo, ndipo zowunikira, zolemba ndi zokonda zanu zimakutsatani. Chipangizo chachiwiri chimalowa kuchokera choyamba ndi linki imodzi; palibe cholemba.",
 "readingH": "Zopangidwira kuwerenga",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Pakuti kumene kuli awiri kapena atatu osonkhanidwa m'dzina langa, ndiri komweko pakati pao.”",
 "circlesRef": "Mateyu 18:20",
 "circlesLong": "Mukafuna, pangani kagulu kakang'ono ka banja lanu kapena anzanu ochepa. Gawanani pemphero, vesi kapena cholemba ndi kudina kamodzi. Iwo amamvetsera, amayankha ndi mawu, kapena amayankha ndi 🙏, ndipo aliyense amawerenga vesi m'Baibulo lake.",
-"circlesTicks": "<li>Sikofunika nthawi zonse. Palibe chimene chimachoka pa foni yanu pokhapokha mutadina Gawanani.</li>\n              <li>Gulu lililonse lili ndi kiyi yake. Mamembala ake okha ndi amene angatsegule zimene zili mmenemo; ngakhale ife sitingathe.</li>",
+"circlesTicks": "<li>Sikofunika nthawi zonse. Palibe chimene chimachoka pa foni yanu pokhapokha mutadina Gawanani.</li>\n              <li>Gulu lililonse lili ndi kiyi yake. Mamembala ake okha ndi amene angatsegule zimene zili mmenemo; ngakhale ife sitingathe.</li><li>Magulu amafuna kulowa kwaulere, ndi kiyi yolowera kapena khodi yotumizidwa pa imelo.</li>",
 "listenH": "Mverani",
-"listenP": "Dinani vesi, kenako Mverani, ndipo foni yanu imawerenga mutu mokweza ndi mawu ake. Kwa m'galimoto, kukhitchini, kapena maso otopa."
+"listenP": "Dinani vesi, kenako Mverani. Kapena dinani Werengani motsatira pa bala lofufuzira, ndipo liwu lililonse limawala likamawerengedwa. Owerenga enieni amawerenga BSB, King James ndi Louis Segond. Kwa galimoto, kukhitchini, kapena maso otopa.",
+"orMac": "Imeneyo ndi ya Mac. Kapena, pa kompyuta iliyonse, kuchokera pa msakatuli wanu:"
 }

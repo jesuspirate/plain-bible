@@ -30,7 +30,7 @@
 "offlineH": "Esalaka kozanga Internet",
 "offlineP": "Babiblia oyo otángaka etikalaka na telefone na yo. Na mpepo, na bangomba, na ndako ya nse: efungwamaka na vɛrsɛ epai otikaki, ata Internet ezali soko moke te.",
 "marksH": "Langi, noti mpe bilembo",
-"marksP": "Langi mwambe, noti na vɛrsɛ to na eteni mobimba, elembo mpo na bisika ozongelaka. Memá awa oyo obombaki na application mosusu ya Biblia.",
+"marksP": "Langi mwambe, noti na vɛrsɛ to na eteni mobimba, elembo mpo na bisika ozongelaka. Memá awa oyo obombaki na application mosusu ya Biblia. Tyá vɛrsɛ elembo lokola na sitilo, to pakolá balɛtɛlɛ na yango langi.",
 "devicesH": "Bisaleli na yo, elongo",
 "devicesP": "Kaka soki olingi. Kɔtá na passkey to na kɔdi oyo etindami na imɛli, mpe langi, noti mpe bibongiseli na yo ekolanda yo. Esaleli ya mibale ekɔtaka uta na ya liboso na lien moko; eloko ya kokoma te.",
 "readingH": "Esalemi mpo na kotánga",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Mpo esika bato mibale to misato basangani na nkombo na ngai, ngai nazali wana kati na bango.”",
 "circlesRef": "Matai 18:20",
 "circlesLong": "Ntango olingi, salá lisanga moke mpo na libota na yo to baninga moke. Kabolá libondeli, vɛrsɛ to noti na kofina mbala moko. Bango bayokaka, bazongisaka liloba moko, to bayanolaka na 🙏, mpe moto na moto atángaka vɛrsɛ na Biblia na ye moko.",
-"circlesTicks": "<li>Esɛngami ata mokolo moko te. Eloko moko te ebimaka na telefone na yo soki ofini Kabolá te.</li>\n              <li>Lisanga moko na moko ezali na lifungola na yango. Kaka bato na yango bakoki kofungola oyo ezali kati; ata biso te.</li>",
+"circlesTicks": "<li>Esɛngami ata mokolo moko te. Eloko moko te ebimaka na telefone na yo soki ofini Kabolá te.</li>\n              <li>Lisanga moko na moko ezali na lifungola na yango. Kaka bato na yango bakoki kofungola oyo ezali kati; ata biso te.</li><li>Bazingi esengaka kokɔta ya ofele, na fungola ya kokɔta to kode oyo batindi na email.</li>",
 "listenH": "Yoká",
-"listenP": "Finá vɛrsɛ, sima Yoká, mpe telefone na yo ekotánga mokapo na mongongo na yango. Mpo na motuka, kuku, to miso oyo elɛmbi."
+"listenP": "Bɛtá vɛrsɛ moko, sima Yoká. To bɛtá Tánga elongo na molɔngɔ ya boluki, mpe liloba nyonso ekongɛngɛ ntango bazali kotánga yango. Batángi ya solo batángaka BSB, King James mpe Louis Segond. Mpo na motuka, kuku, to miso oyo elɛmbi.",
+"orMac": "Wana ezali mpo na Mac. To, na ordinatɛ nyonso, na navigatɛ na yo:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Verkar fråkopla",
 "offlineP": "Biblane du les, vert verande på telefonen din. På eit fly, på fjellet, i ein kjellar: han opnar seg ved verset der du slapp, heilt utan tilkopling.",
 "marksH": "Markeringar, notat og bokmerke",
-"marksP": "Åtte fargar, eit notat til eit vers eller til ein heil tekst, eit bokmerkeband for stadene du vender tilbake til. Ta med deg det du har teke vare på i ein annan bibelapp.",
+"marksP": "Åtte fargar, eit notat til eit vers eller til ein heil tekst, eit bokmerkeband for stadene du vender tilbake til. Ta med deg det du har teke vare på i ein annan bibelapp. Merk eit vers som med ein merkepenn, eller farg bokstavane.",
 "devicesH": "Einingane dine, saman",
 "devicesP": "Berre om du vil. Logg inn med ein passnøkkel eller ein kode på e-post, så følgjer markeringane, notata og innstillingane dine med deg. Ei anna eining loggar inn frå den første med éi lenkje; ingenting å skrive.",
 "readingH": "Laga for lesing",
@@ -82,7 +82,8 @@
 "circlesVerse": "«For der to eller tre er samla i mitt namn, der er eg midt iblant dei.»",
 "circlesRef": "Matteus 18:20",
 "circlesLong": "Når du vil, kan du lage ein liten krins for familien din eller nokre få vener. Del ei bøn, eit vers eller eit notat med eitt trykk. Dei lyttar, svarar med eit ord eller med ein 🙏, og kvar og ein les verset i sin eigen bibel.",
-"circlesTicks": "<li>Aldri påkravd. Ingenting forlèt telefonen din utan at du trykkjer på Del.</li>\n              <li>Kvar krins har sin eigen nøkkel. Berre medlemmene kan opne det som er i han; ikkje ein gong vi kan det.</li>",
+"circlesTicks": "<li>Aldri påkravd. Ingenting forlèt telefonen din utan at du trykkjer på Del.</li>\n              <li>Kvar krins har sin eigen nøkkel. Berre medlemmene kan opne det som er i han; ikkje ein gong vi kan det.</li><li>Krinsar krev ei gratis innlogging, med ein tilgangsnøkkel eller ein kode på e-post.</li>",
 "listenH": "Lytt",
-"listenP": "Trykk på eit vers og så på Lytt, så les telefonen kapittelet høgt med si eiga stemme. For bilen, kjøkenet eller trøytte auge."
+"listenP": "Trykk på eit vers og så på Lytt. Eller trykk på Les med i søkjefeltet, så lyser kvart ord opp medan det vert lese. Ekte opplesarar les BSB, King James og Louis Segond. For bilen, kjøkenet eller trøytte auge.",
+"orMac": "Den er for Mac. Eller, på kva datamaskin som helst, frå nettlesaren:"
 }

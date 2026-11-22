@@ -30,7 +30,7 @@
 "offlineH": "Darbojas bezsaistē",
 "offlineP": "Bībeles, ko lasāt, paliek jūsu tālrunī. Lidmašīnā, kalnos, pagrabā: tā atveras pie panta, kur apstājāties, bez jebkāda savienojuma.",
 "marksH": "Izcēlumi, piezīmes un grāmatzīmes",
-"marksP": "Astoņas krāsas, piezīme pie panta vai pie vesela fragmenta, lentīte vietām, pie kurām atgriežaties. Pārnesiet to, ko glabājāt citā Bībeles lietotnē.",
+"marksP": "Astoņas krāsas, piezīme pie panta vai pie vesela fragmenta, lentīte vietām, pie kurām atgriežaties. Pārnesiet to, ko glabājāt citā Bībeles lietotnē. Iezīmējiet pantu kā ar marķieri vai iekrāsojiet tā burtus.",
 "devicesH": "Jūsu ierīces kopā",
 "devicesP": "Tikai tad, ja vēlaties. Pierakstieties ar piekļuves atslēgu vai pa e-pastu nosūtītu kodu, un jūsu izcēlumi, piezīmes un iestatījumi sekos jums. Otra ierīce pierakstās no pirmās ar vienu saiti; nekas nav jāraksta.",
 "readingH": "Veidota lasīšanai",
@@ -82,7 +82,8 @@
 "circlesVerse": "„Jo, kur divi vai trīs ir sapulcējušies Manā Vārdā, tur Es esmu viņu vidū.”",
 "circlesRef": "Mateja 18:20",
 "circlesLong": "Kad vēlaties, izveidojiet nelielu loku savai ģimenei vai dažiem draugiem. Kopīgojiet lūgšanu, pantu vai piezīmi ar vienu pieskārienu. Viņi klausās, atbild ar vārdu vai ar 🙏, un katrs lasa pantu savā Bībelē.",
-"circlesTicks": "<li>Nekad nav obligāti. Nekas neatstāj jūsu tālruni, ja vien nepieskaraties Kopīgot.</li>\n              <li>Katram lokam ir sava atslēga. Tikai tā dalībnieki var atvērt to, kas tajā ir; pat mēs ne.</li>",
+"circlesTicks": "<li>Nekad nav obligāti. Nekas neatstāj jūsu tālruni, ja vien nepieskaraties Kopīgot.</li>\n              <li>Katram lokam ir sava atslēga. Tikai tā dalībnieki var atvērt to, kas tajā ir; pat mēs ne.</li><li>Lokiem vajag bezmaksas pierakstīšanos ar piekļuves atslēgu vai e-pastā sūtītu kodu.</li>",
 "listenH": "Klausīties",
-"listenP": "Pieskarieties pantam, tad Klausīties, un tālrunis nolasa nodaļu skaļi savā balsī. Braucienam, virtuvei vai nogurušām acīm."
+"listenP": "Pieskarieties pantam, tad Klausīties. Vai meklēšanas joslā pieskarieties Lasīt līdzi, un katrs vārds iedegas, kad to nolasa. Īsti lasītāji lasa BSB, King James un Louis Segond. Mašīnai, virtuvei vai nogurušām acīm.",
+"orMac": "Tas ir Mac datoram. Vai jebkurā datorā, no pārlūka:"
 }

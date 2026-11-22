@@ -30,7 +30,7 @@
 "offlineH": "Kusebenza kungela-inthanethi",
 "offlineP": "AmaBhayibhili elibalayo ahlala efonini yenu. Endizeni, ezintabeni, ngaphansi komhlaba: kuvuleka evesini elayima kulo, kungelaxhumano lakancane.",
 "marksH": "Okugqanyisiweyo, amanothi lezimpawu",
-"marksP": "Imibala eyisitshiyagalombili, inothi evesini kumbe esiqephini sonke, uphawu lwezindawo elibuyela kuzo. Lethani lokho elakugcina kwenye i-app yeBhayibhili.",
+"marksP": "Imibala eyisitshiyagalombili, inothi evesini kumbe esiqephini sonke, uphawu lwezindawo elibuyela kuzo. Lethani lokho elakugcina kwenye i-app yeBhayibhili. Phawula ivesi njengokungathi ngepeni elikhanyisayo, kumbe ufake imibala ezinhlamvwini zalo.",
 "devicesH": "Amadivayisi enu, ndawonye",
 "devicesP": "Nxa lifuna kuphela. Ngenani nge-passkey kumbe ngekhodi ethunyelwe nge-imeyili, njalo okugqanyisiweyo, amanothi lezilungiselelo zenu kuyalilandela. Idivayisi yesibili ingena ivela kweyokuqala ngelinki eyodwa; akulalutho lokuthayipha.",
 "readingH": "Kwenzelwe ukubala",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Ngoba lapho ababili kumbe abathathu ababuthene khona ebizweni lami, ngikhona phakathi kwabo.”",
 "circlesRef": "UMathewu 18:20",
 "circlesLong": "Nxa lifuna, yenzani iqembu elincane lemuli yenu kumbe abangane abalutshwana. Yabelanani ngomkhuleko, ivesi kumbe inothi ngokuthinta kanye. Bayalalela, baphendule ngelizwi, kumbe baphendule nge-🙏, njalo ngulowo lalowo ubala ivesi eBhayibhilini lakhe.",
-"circlesTicks": "<li>Akudingeki lanini. Akulalutho oluphuma efonini yenu ngaphandle kokuthi lithinte Yabelana.</li>\n              <li>Iqembu ngalinye lilokhiye walo. Ngamalunga alo kuphela angavula okukulo; lathi asikwenelisi.</li>",
+"circlesTicks": "<li>Akudingeki lanini. Akulalutho oluphuma efonini yenu ngaphandle kokuthi lithinte Yabelana.</li>\n              <li>Iqembu ngalinye lilokhiye walo. Ngamalunga alo kuphela angavula okukulo; lathi asikwenelisi.</li><li>Amaqembu adinga ukungena mahala, ngesikhiya sokungena kumbe ikhodi ethunyelwe nge-email.</li>",
 "listenH": "Lalela",
-"listenP": "Thintani ivesi, lapho-ke Lalela, njalo ifoni yenu izabala isahluko ngelizwi layo. Okwasemotweni, ekhitshini, kumbe amehlo adiniweyo."
+"listenP": "Thinta ivesi, ubusuthinte Lalela. Kumbe uthinte Bala ulandela emgqeni wokudinga, njalo ilizwi ngalinye liyakhanya lisabalwa. Abafundi beqiniso babala iBSB, iKing James leLouis Segond. Okwemota, ekhitshini, kumbe amehlo adiniweyo.",
+"orMac": "Lokho ngokweMac. Kumbe, kunoma yiyiphi ikhompyutha, kusukela kubhrawuza yakho:"
 }

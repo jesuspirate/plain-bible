@@ -30,7 +30,7 @@
 "offlineH": "Mache san entènèt",
 "offlineP": "Bib ou li yo rete sou telefòn ou. Nan avyon, nan mòn, nan yon sousòl: li louvri sou vèsè kote ou te kite a, san okenn koneksyon.",
 "marksH": "Souliyaj, nòt ak makè",
-"marksP": "Uit koulè, yon nòt sou yon vèsè oswa sou tout yon pasaj, yon riban pou kote ou toujou retounen. Pote sa ou te kenbe nan yon lòt aplikasyon Bib.",
+"marksP": "Uit koulè, yon nòt sou yon vèsè oswa sou tout yon pasaj, yon riban pou kote ou toujou retounen. Pote sa ou te kenbe nan yon lòt aplikasyon Bib. Make yon vèsè tankou ak yon makè, oswa bay lèt li yo koulè.",
 "devicesH": "Aparèy ou yo, ansanm",
 "devicesP": "Sèlman si ou vle. Konekte ak yon kle aksè oswa ak yon kòd yo voye pa imèl, epi souliyaj, nòt ak paramèt ou yo swiv ou. Yon dezyèm aparèy konekte apati premye a ak yon sèl lyen; anyen pou tape.",
 "readingH": "Fèt pou li",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Paske, kote de osinon twa moun reyini ansanm nan non mwen, mwen la nan mitan yo.”",
 "circlesRef": "Matye 18:20",
 "circlesLong": "Lè ou vle, kreye yon ti sèk pou fanmi ou oswa kèk zanmi. Pataje yon lapriyè, yon vèsè oswa yon nòt ak yon sèl peze. Yo koute, yo reponn ak yon mo, oswa ak yon 🙏, epi chak moun li vèsè a nan pwòp Bib pa yo.",
-"circlesTicks": "<li>Li pa janm obligatwa. Anyen pa kite telefòn ou si ou pa peze Pataje.</li>\n              <li>Chak sèk gen pwòp kle pa l. Se sèlman manm li yo ki ka louvri sa ki ladan l; menm nou menm nou pa kapab.</li>",
+"circlesTicks": "<li>Li pa janm obligatwa. Anyen pa kite telefòn ou si ou pa peze Pataje.</li>\n              <li>Chak sèk gen pwòp kle pa l. Se sèlman manm li yo ki ka louvri sa ki ladan l; menm nou menm nou pa kapab.</li><li>Sèk yo mande yon koneksyon gratis, ak yon kle aksè oswa yon kòd yo voye pa imèl.</li>",
 "listenH": "Koute",
-"listenP": "Peze yon vèsè, epi Koute, epi telefòn ou li chapit la awotvwa ak pwòp vwa li. Pou machin nan, kizin nan, oswa je ki fatige."
+"listenP": "Touche yon vèsè, apre sa Koute. Oswa touche Li ansanm nan ba rechèch la, epi chak mo limen pandan y ap li l. Vrè lektè li BSB a, King James la ak Louis Segond lan. Pou machin nan, kizin nan, oswa je ki fatige.",
+"orMac": "Sa a se pou Mac. Oswa, sou nenpòt òdinatè, nan navigatè w la:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Funciona offline",
 "offlineP": "As Bíblias que você lê ficam no seu celular. No avião, no interior, num porão: ele abre no versículo onde você parou, sem nenhuma conexão.",
 "marksH": "Destaques, notas e marcadores",
-"marksP": "Oito cores, uma nota num versículo ou numa passagem inteira, uma fita para os lugares aos quais você sempre volta. Traga o que você guardou em outro app da Bíblia.",
+"marksP": "Oito cores, uma nota num versículo ou numa passagem inteira, uma fita para os lugares aos quais você sempre volta. Traga o que você guardou em outro app da Bíblia. Marque um versículo como com marca-texto, ou pinte as suas letras.",
 "devicesH": "Seus dispositivos, juntos",
 "devicesP": "Só se você quiser. Entre com uma chave-senha ou com um código enviado por e-mail, e seus destaques, notas e ajustes acompanham você. Um segundo dispositivo entra a partir do primeiro com um só link; nada para digitar.",
 "readingH": "Feito para a leitura",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Porque, onde estiverem dois ou três reunidos em meu nome, aí estou eu no meio deles.”",
 "circlesRef": "Mateus 18:20",
 "circlesLong": "Quando você quiser, crie um pequeno círculo para sua família ou alguns amigos. Compartilhe uma oração, um versículo ou uma nota com um toque. Eles ouvem, respondem com uma palavra ou com um 🙏, e cada um lê o versículo na sua própria Bíblia.",
-"circlesTicks": "<li>Nunca é obrigatório. Nada sai do seu celular a menos que você toque em Compartilhar.</li>\n              <li>Cada círculo tem sua própria chave. Só os membros podem abrir o que há nele; nem nós podemos.</li>",
+"circlesTicks": "<li>Nunca é obrigatório. Nada sai do seu celular a menos que você toque em Compartilhar.</li>\n              <li>Cada círculo tem sua própria chave. Só os membros podem abrir o que há nele; nem nós podemos.</li><li>Os círculos precisam de um login gratuito, com uma chave de acesso ou um código enviado por e-mail.</li>",
 "listenH": "Ouvir",
-"listenP": "Toque em um versículo, depois em Ouvir, e seu celular lê o capítulo em voz alta com a própria voz. Para o carro, a cozinha ou os olhos cansados."
+"listenP": "Toque num versículo e depois em Ouvir. Ou toque em Ler acompanhando na barra de busca, e cada palavra se acende enquanto é lida. Narradores de verdade leem a BSB, a King James e a Louis Segond. Para o carro, a cozinha ou os olhos cansados.",
+"orMac": "Este é para Mac. Ou, em qualquer computador, pelo seu navegador:"
 }

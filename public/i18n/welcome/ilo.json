@@ -30,7 +30,7 @@
 "offlineH": "Agandar offline",
 "offlineP": "Agtalinaed iti phone-mo dagiti Biblia a basbasaem. Iti eroplano, iti bantay, iti sirok ti balay: aglukat daytoy iti bersikulo a nagsardengam, uray awan pulos ti koneksion.",
 "marksH": "Dagiti highlight, nota ken bookmark",
-"marksP": "Walo a kolor, maysa a nota iti maysa a bersikulo wenno iti intero a paset, maysa a sinta para kadagiti lugar a sublisublim. Iyakar ditoy dagiti indulinmo iti sabali a Bible app.",
+"marksP": "Walo a kolor, maysa a nota iti maysa a bersikulo wenno iti intero a paset, maysa a sinta para kadagiti lugar a sublisublim. Iyakar ditoy dagiti indulinmo iti sabali a Bible app. Markaan ti bersikulo a kas iti highlighter, wenno kolorantayo dagiti letrana.",
 "devicesH": "Dagiti device-mo, agkakadua",
 "devicesP": "No kayatmo laeng. Ag-sign in babaen ti passkey wenno code a naipatulod iti email, ket suroten dagiti highlight, nota ken setting-mo. Ti maikadua a device ket ag-sign in manipud iti umuna babaen ti maysa a link; awan ti i-type.",
 "readingH": "Naaramid para iti panagbasa",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Ta no sadino ti pagtitiponan ti dua wenno tallo iti naganko, addaak sadiay iti tengngada.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "No kayatmo, agaramid iti bassit a bunggoy para iti pamiliam wenno sumagmamano a gayyem. Ibingay ti maysa a kararag, bersikulo wenno nota iti maysa a tap. Dumngegda, sumungbatda iti maysa a sao, wenno sumungbatda iti 🙏, ket tunggal maysa basaenna ti bersikulo iti bukodna a Biblia.",
-"circlesTicks": "<li>Saan a pulos a pilit. Awan ti rummuar iti phone-mo malaksid no i-tap-mo ti Ibingay.</li>\n              <li>Tunggal bunggoy ket addaan bukodna a tulbek. Dagiti laeng kamengna ti makalukat iti linaonna; uray dakami ket saan.</li>",
+"circlesTicks": "<li>Saan a pulos a pilit. Awan ti rummuar iti phone-mo malaksid no i-tap-mo ti Ibingay.</li>\n              <li>Tunggal bunggoy ket addaan bukodna a tulbek. Dagiti laeng kamengna ti makalukat iti linaonna; uray dakami ket saan.</li><li>Dagiti circle ket agkasapulan iti libre a panag-sign in, babaen ti passkey wenno code a naipatulod iti email.</li>",
 "listenH": "Denggen",
-"listenP": "I-tap ti maysa a bersikulo, sa ti Denggen, ket basaen a napigsa ti phone-mo ti kapitulo iti bukodna a timek. Para iti lugan, iti kusina, wenno kadagiti nabannog a mata."
+"listenP": "I-tap ti maysa a bersikulo, kalpasanna ti Denggen. Wenno i-tap ti Sabayan ti panagbasa iti search bar, ket aglawag ti tunggal sao bayat ti pannakabasana. Pudno nga agbasbasa ti mangbasa iti BSB, King James ken Louis Segond. Para iti lugan, kusina, wenno nabannog a mata.",
+"orMac": "Para iti Mac dayta. Wenno, iti aniaman a computer, manipud iti browser-mo:"
 }

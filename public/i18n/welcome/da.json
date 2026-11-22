@@ -30,7 +30,7 @@
 "offlineH": "Virker offline",
 "offlineP": "De bibler, du læser, bliver på din telefon. I et fly, i bjergene, i en kælder: Den åbner ved det vers, hvor du slap, helt uden forbindelse.",
 "marksH": "Markeringer, noter og bogmærker",
-"marksP": "Otte farver, en note til et vers eller til et helt afsnit, et bogmærkebånd til de steder, du vender tilbage til. Tag det med, du har gemt i en anden bibelapp.",
+"marksP": "Otte farver, en note til et vers eller til et helt afsnit, et bogmærkebånd til de steder, du vender tilbage til. Tag det med, du har gemt i en anden bibelapp. Markér et vers som med en overstregningstusch, eller farv dets bogstaver.",
 "devicesH": "Dine enheder, sammen",
 "devicesP": "Kun hvis du vil. Log ind med en adgangsnøgle eller en kode på e-mail, så følger dine markeringer, noter og indstillinger med dig. En anden enhed logger ind fra den første med ét link; intet at skrive.",
 "readingH": "Lavet til at læse i",
@@ -82,7 +82,8 @@
 "circlesVerse": "»For hvor to eller tre er forsamlet i mit navn, dér er jeg midt iblandt dem.«",
 "circlesRef": "Matthæus 18,20",
 "circlesLong": "Når du har lyst, så opret en lille kreds til din familie eller nogle få venner. Del en bøn, et vers eller en note med ét tryk. De lytter, svarer med et ord eller med en 🙏, og hver især læser verset i sin egen bibel.",
-"circlesTicks": "<li>Aldrig et krav. Intet forlader din telefon, medmindre du trykker på Del.</li><li>Hver kreds har sin egen nøgle. Kun medlemmerne kan åbne det, der er i den; ikke engang vi kan.</li>",
+"circlesTicks": "<li>Aldrig et krav. Intet forlader din telefon, medmindre du trykker på Del.</li><li>Hver kreds har sin egen nøgle. Kun medlemmerne kan åbne det, der er i den; ikke engang vi kan.</li><li>Kredse kræver et gratis login med en adgangsnøgle eller en kode sendt på e-mail.</li>",
 "listenH": "Lyt",
-"listenP": "Tryk på et vers og derefter på Lyt, så læser din telefon kapitlet højt med sin egen stemme. Til bilen, køkkenet eller trætte øjne."
+"listenP": "Tryk på et vers og derefter på Lyt. Eller tryk på Læs med i søgefeltet, så lyser hvert ord op, mens det bliver læst. Rigtige oplæsere læser BSB, King James og Louis Segond. Til bilen, køkkenet eller trætte øjne.",
+"orMac": "Den er til Mac. Eller, på enhver computer, fra din browser:"
 }

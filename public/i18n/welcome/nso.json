@@ -30,7 +30,7 @@
 "offlineH": "E šoma ntle le inthanete",
 "offlineP": "Dibeibele tšeo o di balago di dula mogaleng wa gago. Ka sefofaneng, dithabeng, ka fase ga ntlo: e bulega temaneng yeo o emišitšego go yona, ntle le kgokagano le gatee.",
 "marksH": "Maswao a mebala, dingwalo le maswao a matlakala",
-"marksP": "Mebala ye seswai, sengwalo temaneng goba temeng ka moka, lentšenyana la mafelo ao o boelago go ona. Tliša seo o se bolokilego go app ye nngwe ya Beibele.",
+"marksP": "Mebala ye seswai, sengwalo temaneng goba temeng ka moka, lentšenyana la mafelo ao o boelago go ona. Tliša seo o se bolokilego go app ye nngwe ya Beibele. Swaya temana bjalo ka ka pene ya go bonegiša, goba o kgabiše ditlhaka tša yona ka mmala.",
 "devicesH": "Didirišwa tša gago, mmogo",
 "devicesP": "Fela ge o nyaka. Tsena ka senotlelo sa go tsena goba ka khoutu ye e romelwago ka imeile, gomme maswao a gago a mebala, dingwalo le dipeakanyo di a go latela. Sedirišwa sa bobedi se tsena go tšwa go sa mathomo ka linki e tee; ga go se sa go tlanywa.",
 "readingH": "E diretšwe go bala",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Gobane moo ba babedi goba ba bararo ba kgobokanego ka leina la ka, ke gona gare ga bona.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Ge o nyaka, dira sedikologo se senyenyane sa lapa la gago goba bagwera ba mmalwa. Abelana thapelo, temana goba sengwalo ka go kgotla gatee. Ba a theeletša, ba araba ka lentšu, goba ba araba ka 🙏, gomme yo mongwe le yo mongwe o bala temana ka Beibeleng ya gagwe.",
-"circlesTicks": "<li>Ga se gapeletšo le gatee. Ga go se se tlogelago mogala wa gago ge o sa kgotle Abelana.</li>\n              <li>Sedikologo se sengwe le se sengwe se na le senotlelo sa sona. Ke maloko a sona fela ao a ka bulago seo se lego go sona; le rena ga re kgone.</li>",
+"circlesTicks": "<li>Ga se gapeletšo le gatee. Ga go se se tlogelago mogala wa gago ge o sa kgotle Abelana.</li>\n              <li>Sedikologo se sengwe le se sengwe se na le senotlelo sa sona. Ke maloko a sona fela ao a ka bulago seo se lego go sona; le rena ga re kgone.</li><li>Didikadikwe di nyaka go tsena ga mahala, ka senotlelo sa go tsena goba khoutu ye e romelwago ka imeile.</li>",
 "listenH": "Theeletša",
-"listenP": "Kgotla temana, ke moka Theeletša, gomme mogala wa gago o balela kgaolo godimo ka lentšu la wona. Bakeng sa ka koloing, ka moraleng, goba mahlo a lapilego."
+"listenP": "Kgoma temana, ka morago Theeletša. Goba kgoma Bala o latela ka go bara ya go nyaka, gomme lentšu le lengwe le le lengwe le a bonega ge le balwa. Babadi ba nnete ba bala BSB, King James le Louis Segond. Bakeng sa koloi, khitšhing, goba mahlo a lapilego.",
+"orMac": "Seo ke sa Mac. Goba, khomphutheng efe goba efe, go tšwa go bratšara ya gago:"
 }

@@ -30,7 +30,7 @@
 "offlineH": "Inoshanda pasina Indaneti",
 "offlineP": "Mabhaibheri amunoverenga anosara pafoni yenyu. Mundege, mumakomo, pasi pevhu: inovhurika pandima pamakasiira, pasina kubatana zvachose.",
 "marksH": "Zvakapendwa, zvinyorwa nezviratidzo",
-"marksP": "Mavara masere, chinyorwa pandima kana pachikamu chose, ribhoni renzvimbo dzamunodzokera. Unzai zvamakachengeta mune imwe app yeBhaibheri.",
+"marksP": "Mavara masere, chinyorwa pandima kana pachikamu chose, ribhoni renzvimbo dzamunodzokera. Unzai zvamakachengeta mune imwe app yeBhaibheri. Ratidza ndima sepeni inovheneka, kana kuti pendesa mavara ayo.",
 "devicesH": "Midziyo yenyu, pamwe chete",
 "devicesP": "Chete kana muchida. Pindai nepasskey kana nekodhi inotumirwa neemail, uye zvakapendwa, zvinyorwa nemarongero enyu zvinokuteverai. Mudziyo wechipiri unopinda kubva pane wekutanga nelink imwe; hapana chekunyora.",
 "readingH": "Yakagadzirirwa kuverenga",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Nokuti apo vaviri kana vatatu vakaungana pamwe chete muzita rangu, ndiripo pakati pavo.”",
 "circlesRef": "Mateu 18:20",
 "circlesLong": "Kana muchida, gadzirai boka diki remhuri yenyu kana shamwari shoma. Goverai munamato, ndima kana chinyorwa nekubaya kamwe chete. Vanoteerera, vanopindura neshoko, kana kupindura ne🙏, uye mumwe nemumwe anoverenga ndima muBhaibheri rake.",
-"circlesTicks": "<li>Hazvimbomanikidzwi. Hapana chinobva pafoni yenyu kunze kwekunge mabaya Govera.</li>\n              <li>Boka rimwe nerimwe rine kiyi yaro. Nhengo dzaro chete ndidzo dzinogona kuvhura zviri mariri; kunyange isu hatigoni.</li>",
+"circlesTicks": "<li>Hazvimbomanikidzwi. Hapana chinobva pafoni yenyu kunze kwekunge mabaya Govera.</li>\n              <li>Boka rimwe nerimwe rine kiyi yaro. Nhengo dzaro chete ndidzo dzinogona kuvhura zviri mariri; kunyange isu hatigoni.</li><li>Mapoka anoda kupinda mahara, nekiyi yekupinda kana kodhi inotumirwa ne-email.</li>",
 "listenH": "Teerera",
-"listenP": "Bayai ndima, mozoti Teerera, uye foni yenyu inoverenga chitsauko zvinonzwika neinzwi rayo. Mumotokari, mukicheni, kana kana maziso aneta."
+"listenP": "Baya ndima, wozoti Teerera. Kana kuti baya Verenga uchitevera pabhawa rekutsvaga, uye shoko rimwe nerimwe rinovheneka richiverengwa. Vaverengi chaivo vanoverenga BSB, King James naLouis Segond. Kwemota, mukicheni, kana maziso aneta.",
+"orMac": "Iyoyo ndeyeMac. Kana kuti, pakombiyuta ipi zvayo, kubva pabrowser yako:"
 }

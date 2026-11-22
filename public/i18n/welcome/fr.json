@@ -42,7 +42,7 @@
 "offlineH": "Elle marche hors ligne",
 "offlineP": "Les Bibles que vous lisez restent sur votre téléphone. En avion, à la montagne, dans une cave : elle s’ouvre sur le verset où vous vous étiez arrêté, sans aucune connexion.",
 "marksH": "Surlignages, notes et signets",
-"marksP": "Huit couleurs, une note sur un verset ou sur tout un passage, un signet pour les endroits où vous revenez. Apportez ce que vous gardiez dans une autre application biblique.",
+"marksP": "Huit couleurs, une note sur un verset ou sur tout un passage, un signet pour les endroits où vous revenez. Apportez ce que vous gardiez dans une autre application biblique. Surlignez un verset comme au feutre, ou colorez ses lettres.",
 "devicesH": "Tous vos appareils",
 "devicesP": "Seulement si vous le voulez. Connectez-vous avec une clé d’accès ou un code reçu par e-mail, et vos surlignages, notes et réglages vous suivent. Un deuxième appareil se connecte depuis le premier avec un seul lien ; rien à taper.",
 "readingH": "Faite pour lire",
@@ -95,7 +95,8 @@
 "circlesVerse": "« Car là où deux ou trois sont assemblés en mon nom, je suis au milieu d’eux. »",
 "circlesRef": "Matthieu 18:20",
 "circlesLong": "Quand vous le voulez, créez un petit cercle pour votre famille ou quelques amis. Partagez une prière, un verset ou une note d’un seul geste. Ils écoutent, répondent d’un mot ou d’un 🙏, et chacun lit le verset dans sa propre Bible.",
-"circlesTicks": "<li>Jamais obligatoire. Rien ne quitte votre téléphone tant que vous ne touchez pas Partager.</li><li>Chaque cercle a sa propre clé. Seuls ses membres peuvent ouvrir ce qu’il contient ; nous non plus, nous ne le pouvons pas.</li>",
+"circlesTicks": "<li>Jamais obligatoire. Rien ne quitte votre téléphone tant que vous ne touchez pas Partager.</li><li>Chaque cercle a sa propre clé. Seuls ses membres peuvent ouvrir ce qu’il contient ; nous non plus, nous ne le pouvons pas.</li><li>Les cercles demandent une connexion gratuite, avec une clé d’accès ou un code envoyé par e-mail.</li>",
 "listenH": "Écouter",
-"listenP": "Touchez un verset, puis Écouter, et votre téléphone lit le chapitre à voix haute, avec sa propre voix. Pour la voiture, la cuisine, ou les yeux fatigués."
+"listenP": "Touchez un verset, puis Écouter. Ou touchez Lire en suivant dans la barre de recherche : chaque mot s’allume pendant la lecture. De vrais lecteurs lisent la BSB, la King James et la Louis Segond. Pour la voiture, la cuisine, ou les yeux fatigués.",
+"orMac": "C’est pour Mac. Ou, sur n’importe quel ordinateur, depuis votre navigateur :"
 }

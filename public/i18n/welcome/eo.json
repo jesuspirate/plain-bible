@@ -30,7 +30,7 @@
 "offlineH": "Funkcias eksterrete",
 "offlineP": "La Biblioj, kiujn vi legas, restas en via telefono. En aviadilo, en la montoj, en kelo: ĝi malfermiĝas ĉe la verso, kie vi haltis, tute sen konekto.",
 "marksH": "Emfazoj, notoj kaj legosignoj",
-"marksP": "Ok koloroj, noto pri verso aŭ pri tuta teksto, rubando por la lokoj, al kiuj vi revenas. Alportu tion, kion vi konservis en alia Biblia aplikaĵo.",
+"marksP": "Ok koloroj, noto pri verso aŭ pri tuta teksto, rubando por la lokoj, al kiuj vi revenas. Alportu tion, kion vi konservis en alia Biblia aplikaĵo. Marku verson kiel per markilo, aŭ kolorigu ĝiajn literojn.",
 "devicesH": "Viaj aparatoj, kune",
 "devicesP": "Nur se vi volas. Ensalutu per pasŝlosilo aŭ kodo senditaj retpoŝte, kaj viaj emfazoj, notoj kaj agordoj sekvas vin. Dua aparato ensalutas el la unua per unu ligilo; nenio por tajpi.",
 "readingH": "Farita por legado",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Ĉar kie du aŭ tri estas kunvenintaj en mia nomo, tie mi estas meze de ili.”",
 "circlesRef": "Mateo 18:20",
 "circlesLong": "Kiam vi volas, kreu malgrandan rondon por via familio aŭ kelkaj amikoj. Kunhavigu preĝon, verson aŭ noton per unu tuŝeto. Ili aŭskultas, respondas per vorto aŭ per 🙏, kaj ĉiu legas la verson en sia propra Biblio.",
-"circlesTicks": "<li>Neniam deviga. Nenio forlasas vian telefonon, krom se vi tuŝetas Kunhavigi.</li>\n              <li>Ĉiu rondo havas sian propran ŝlosilon. Nur ĝiaj membroj povas malfermi tion, kio estas en ĝi; eĉ ne ni.</li>",
+"circlesTicks": "<li>Neniam deviga. Nenio forlasas vian telefonon, krom se vi tuŝetas Kunhavigi.</li>\n              <li>Ĉiu rondo havas sian propran ŝlosilon. Nur ĝiaj membroj povas malfermi tion, kio estas en ĝi; eĉ ne ni.</li><li>Rondoj bezonas senpagan ensaluton, per pasŝlosilo aŭ per kodo sendita retpoŝte.</li>",
 "listenH": "Aŭskulti",
-"listenP": "Tuŝetu verson, poste Aŭskulti, kaj via telefono laŭtlegas la ĉapitron per sia propra voĉo. Por la aŭto, la kuirejo aŭ lacaj okuloj."
+"listenP": "Tuŝu verson, poste Aŭskulti. Aŭ tuŝu Kunlegi en la serĉa breto, kaj ĉiu vorto lumiĝas dum oni legas ĝin. Veraj legantoj legas la BSB, la King James kaj la Louis Segond. Por la aŭto, la kuirejo aŭ lacaj okuloj.",
+"orMac": "Tio estas por Mac. Aŭ, en ajna komputilo, el via retumilo:"
 }

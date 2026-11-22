@@ -30,7 +30,7 @@
 "offlineH": "E kin doadoahk ni sohte intanet",
 "offlineP": "Paipel kan me komw kin wadek kin mihmihte nan noumw delepwohn. Nan sompihr, pohn nahna kan, nan pere pah: e kin ritingala ni iretik me komw kanekehla ie, ni sohte intanet.",
 "marksH": "Kasansal kan, nting kan oh kilel kan",
-"marksP": "Kalahr waluh, nting ehu pohn iretik ehu de pohn pali ehu pwon, ripen ehu pwehn wasa kan me komw kin pwurpwurdo ie. Wahdo mehkan me komw kolokol nan app en Paipel teikan.",
+"marksP": "Kalahr waluh, nting ehu pohn iretik ehu de pohn pali ehu pwon, ripen ehu pwehn wasa kan me komw kin pwurpwurdo ie. Wahdo mehkan me komw kolokol nan app en Paipel teikan. Kilelehki iren pwe ehu duwehte pen marain, de kalaudehki ah lepin nting kan.",
 "devicesH": "Noumw dipwisou kan, pena",
 "devicesP": "Ma komw men ihte. Pedolong ki kih en pedolong de nempe me kadardohng komwi nan email, oh noumw kasansal kan, nting kan oh koasoandi kan pahn idawehnkomwi. Dipwisou keriau kin pedolong sang keieu ki link ehu; sohte mehkot me komw pahn ntingihedi.",
 "readingH": "Wiahda pwehn wadek",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Pwe wasa me aramas riemen de silimen pokonpene ie ni ei mwar, I pahn mih nanpwungarail.”",
 "circlesRef": "Madiu 18:20",
 "circlesLong": "Ni ahnsou me komw men, wiahda pwihn tikitik ehu pwehn noumw peneinei de kompoakepahmw malaulau. Nehne kapakap ehu, iretik ehu de nting ehu ki pedikih pak ehu. Irail kin rong, sapengki lokaia ehu, de sapengki 🙏, oh emenemen kin wadek iretik nan pein ah Paipel.",
-"circlesTicks": "<li>Sohte anahne. Sohte mehkot kin pedoisang noumw delepwohn ma komw sohte pedikih Nehne.</li>\n              <li>Pwihn koaros ahneki pein ah kih. Ihte towe kan kak ritingala dahme mihmi loale; pil kiht sohte kak.</li>",
+"circlesTicks": "<li>Sohte anahne. Sohte mehkot kin pedoisang noumw delepwohn ma komw sohte pedikih Nehne.</li>\n              <li>Pwihn koaros ahneki pein ah kih. Ihte towe kan kak ritingala dahme mihmi loale; pil kiht sohte kak.</li><li>Pwihn kan anahne pedolong ni sohte pweine, ki kih en pedolong de nempe me kadardar ni email.</li>",
 "listenH": "Rong",
-"listenP": "Pedikih iretik ehu, mwuri Rong, oh noumw delepwohn pahn wadek irelaud ngihl laud ki pein ah ngihl. Pwehn nan sidohsa, nan imwen kuk, de pwehn mese me pwangla."
+"listenP": "Doake iren pwe ehu, eri Rong. De doake Wadek iangahki nan ahn rapahki, oh lepin lokaia koaros kin marain ni ahn wadek. Sounwadek mehlel kan kin wadek BSB, King James oh Louis Segond. Ong nan sidohsa, nan kuhk, de mese me pwangadahr.",
+"orMac": "Met ong Mac. De, nan kompiuter koaros, sang ahmw browser:"
 }

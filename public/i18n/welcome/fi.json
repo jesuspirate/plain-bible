@@ -30,7 +30,7 @@
 "offlineH": "Toimii ilman yhteyttä",
 "offlineP": "Lukemasi Raamatut pysyvät puhelimessasi. Lentokoneessa, tuntureilla, kellarissa: se avautuu siihen jakeeseen, johon jäit, ilman mitään yhteyttä.",
 "marksH": "Korostukset, muistiinpanot ja kirjanmerkit",
-"marksP": "Kahdeksan väriä, muistiinpano jakeeseen tai koko kohtaan, nauha paikkoihin, joihin palaat. Tuo mukanasi se, mitä säilytit toisessa raamattusovelluksessa.",
+"marksP": "Kahdeksan väriä, muistiinpano jakeeseen tai koko kohtaan, nauha paikkoihin, joihin palaat. Tuo mukanasi se, mitä säilytit toisessa raamattusovelluksessa. Korosta jae kuin korostuskynällä tai väritä sen kirjaimet.",
 "devicesH": "Laitteesi yhdessä",
 "devicesP": "Vain jos haluat. Kirjaudu pääsyavaimella tai sähköpostiin lähetetyllä koodilla, niin korostuksesi, muistiinpanosi ja asetuksesi seuraavat sinua. Toinen laite kirjautuu ensimmäisestä yhdellä linkillä; mitään ei tarvitse kirjoittaa.",
 "readingH": "Tehty lukemista varten",
@@ -82,7 +82,8 @@
 "circlesVerse": "”Sillä missä kaksi tai kolme on koolla minun nimessäni, siellä minä olen heidän keskellään.”",
 "circlesRef": "Matteus 18:20",
 "circlesLong": "Kun haluat, perusta pieni piiri perheellesi tai muutamalle ystävälle. Jaa rukous, jae tai muistiinpano yhdellä napautuksella. He kuuntelevat, vastaavat sanalla tai 🙏-merkillä, ja jokainen lukee jakeen omasta Raamatustaan.",
-"circlesTicks": "<li>Ei koskaan pakollinen. Mikään ei lähde puhelimestasi, ellet napauta Jaa.</li>\n              <li>Jokaisella piirillä on oma avaimensa. Vain sen jäsenet voivat avata sen sisällön; emme edes me.</li>",
+"circlesTicks": "<li>Ei koskaan pakollinen. Mikään ei lähde puhelimestasi, ellet napauta Jaa.</li>\n              <li>Jokaisella piirillä on oma avaimensa. Vain sen jäsenet voivat avata sen sisällön; emme edes me.</li><li>Piirit vaativat maksuttoman kirjautumisen, pääsyavaimella tai sähköpostiin lähetetyllä koodilla.</li>",
 "listenH": "Kuuntele",
-"listenP": "Napauta jaetta ja sitten Kuuntele, niin puhelimesi lukee luvun ääneen omalla äänellään. Autoon, keittiöön tai väsyneille silmille."
+"listenP": "Napauta jaetta ja sitten Kuuntele. Tai napauta hakupalkin Lue mukana -kuvaketta, niin jokainen sana syttyy sitä luettaessa. Oikeat lukijat lukevat BSB:n, King Jamesin ja Louis Segondin. Autoon, keittiöön tai väsyneille silmille.",
+"orMac": "Se on Macille. Tai millä tahansa tietokoneella, selaimesta:"
 }

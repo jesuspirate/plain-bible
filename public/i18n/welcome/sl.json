@@ -30,7 +30,7 @@
 "offlineH": "Deluje brez povezave",
 "offlineP": "Sveta pisma, ki jih berete, ostanejo v telefonu. Na letalu, v hribih, v kleti: odpre se pri vrstici, kjer ste ostali, povsem brez povezave.",
 "marksH": "Označbe, opombe in zaznamki",
-"marksP": "Osem barv, opomba k vrstici ali celemu odlomku, trak za mesta, h katerim se vračate. Prenesite, kar ste shranili v drugi svetopisemski aplikaciji.",
+"marksP": "Osem barv, opomba k vrstici ali celemu odlomku, trak za mesta, h katerim se vračate. Prenesite, kar ste shranili v drugi svetopisemski aplikaciji. Označite vrstico kot z označevalcem ali pobarvajte njene črke.",
 "devicesH": "Vaše naprave skupaj",
 "devicesP": "Samo če to želite. Prijavite se s ključem za dostop ali s kodo po e-pošti in vaše označbe, opombe in nastavitve vam sledijo. Druga naprava se prijavi s prve z eno povezavo; ničesar ni treba vpisovati.",
 "readingH": "Narejeno za branje",
@@ -82,7 +82,8 @@
 "circlesVerse": "„Kjer sta namreč dva ali so trije zbrani v mojem imenu, tam sem jaz sredi med njimi.“",
 "circlesRef": "Matej 18:20",
 "circlesLong": "Ko želite, ustvarite majhen krog za družino ali nekaj prijateljev. Z enim dotikom delite molitev, vrstico ali opombo. Oni poslušajo, odgovorijo z besedo ali s 🙏, vsak pa vrstico bere v svojem Svetem pismu.",
-"circlesTicks": "<li>Nikoli ni obvezno. Nič ne zapusti vašega telefona, dokler ne tapnete Deli.</li><li>Vsak krog ima svoj ključ. Kar je v njem, lahko odprejo samo njegovi člani; niti mi ne.</li>",
+"circlesTicks": "<li>Nikoli ni obvezno. Nič ne zapusti vašega telefona, dokler ne tapnete Deli.</li><li>Vsak krog ima svoj ključ. Kar je v njem, lahko odprejo samo njegovi člani; niti mi ne.</li><li>Krogi zahtevajo brezplačno prijavo, s ključem za dostop ali kodo po e-pošti.</li>",
 "listenH": "Poslušajte",
-"listenP": "Tapnite vrstico, nato Poslušaj, in telefon bo poglavje prebral na glas s svojim glasom. Za avto, kuhinjo ali utrujene oči."
+"listenP": "Tapnite vrstico, nato Poslušaj. Ali pa v iskalni vrstici tapnite Sledi branju in vsaka beseda zasveti, ko je prebrana. Pravi bralci berejo BSB, King James in Louis Segond. Za avto, kuhinjo ali utrujene oči.",
+"orMac": "To je za Mac. Ali pa na katerem koli računalniku, iz brskalnika:"
 }

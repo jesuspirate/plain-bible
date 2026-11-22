@@ -30,7 +30,7 @@
 "offlineH": "Działa offline",
 "offlineP": "Biblie, które czytasz, zostają w telefonie. W samolocie, w górach, w piwnicy: otwiera się na wersecie, na którym skończono, zupełnie bez połączenia.",
 "marksH": "Zakreślenia, notatki i zakładki",
-"marksP": "Osiem kolorów, notatka do wersetu lub całego fragmentu, wstążka dla miejsc, do których wracasz. Przenieś to, co masz zapisane w innej aplikacji biblijnej.",
+"marksP": "Osiem kolorów, notatka do wersetu lub całego fragmentu, wstążka dla miejsc, do których wracasz. Przenieś to, co masz zapisane w innej aplikacji biblijnej. Zaznacz werset jak zakreślaczem albo pokoloruj jego litery.",
 "devicesH": "Twoje urządzenia razem",
 "devicesP": "Tylko jeśli chcesz. Zaloguj się kluczem dostępu lub kodem z e-maila, a twoje zakreślenia, notatki i ustawienia pójdą za tobą. Drugie urządzenie loguje się z pierwszego jednym linkiem; nic nie trzeba wpisywać.",
 "readingH": "Stworzona do czytania",
@@ -82,7 +82,8 @@
 "circlesVerse": "„Bo gdzie są dwaj albo trzej zebrani w imię moje, tam jestem pośród nich”.",
 "circlesRef": "Mateusza 18:20",
 "circlesLong": "Kiedy zechcesz, utwórz mały krąg dla rodziny lub kilku przyjaciół. Udostępnij modlitwę, werset lub notatkę jednym stuknięciem. Oni słuchają, odpowiadają słowem albo 🙏, a każdy czyta werset we własnej Biblii.",
-"circlesTicks": "<li>Nigdy nie jest wymagany. Nic nie opuszcza twojego telefonu, dopóki nie stukniesz Udostępnij.</li><li>Każdy krąg ma własny klucz. Tylko jego członkowie mogą otworzyć to, co w nim jest; nawet my nie możemy.</li>",
+"circlesTicks": "<li>Nigdy nie jest wymagany. Nic nie opuszcza twojego telefonu, dopóki nie stukniesz Udostępnij.</li><li>Każdy krąg ma własny klucz. Tylko jego członkowie mogą otworzyć to, co w nim jest; nawet my nie możemy.</li><li>Kręgi wymagają bezpłatnego logowania, kluczem dostępu lub kodem wysłanym e-mailem.</li>",
 "listenH": "Słuchaj",
-"listenP": "Stuknij werset, a potem Słuchaj, a telefon przeczyta rozdział na głos własnym głosem. Do samochodu, do kuchni albo dla zmęczonych oczu."
+"listenP": "Dotknij wersetu, a potem Słuchaj. Albo dotknij Czytaj z podświetleniem na pasku wyszukiwania, a każde słowo rozświetli się podczas czytania. Prawdziwi lektorzy czytają BSB, King James i Louis Segond. Do auta, do kuchni albo dla zmęczonych oczu.",
+"orMac": "To dla Maca. Albo na dowolnym komputerze, z przeglądarki:"
 }

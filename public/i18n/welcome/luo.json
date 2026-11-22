@@ -30,7 +30,7 @@
 "offlineH": "Tiyo ka onge intanet",
 "offlineP": "Muma ma isomo dong’ e simu mari. E ndege, e gode, e od ma piny: yawore e ndiko kama ne iweyoe, maonge intanet kata matin.",
 "marksH": "Rangi, paro kod alama",
-"marksP": "Rangi aboro, paro e ndiko kata e bath ndiko duto, alama ne kuonde ma idwogoe. Kel gik ma ne ikano e app machielo mar Muma.",
+"marksP": "Rangi aboro, paro e ndiko kata e bath ndiko duto, alama ne kuonde ma idwogoe. Kel gik ma ne ikano e app machielo mar Muma. Ket ranyisi e ndiko kaka gi kalam mar rieny, kata ket rangi e nyukta mage.",
 "devicesH": "Gigi, kanyakla",
 "devicesP": "Mana ka idwaro. Donj gi passkey kata kod mooroni e email, to rangi mari, paro kod chenro luwi. Gir mar ariyo donjo kowuok e mokwongo gi link achiel; onge gima indiko.",
 "readingH": "Olos ne somo",
@@ -82,7 +82,8 @@
 "circlesVerse": "“Nikech kama ji ariyo kata adek ochokore e nyinga, to an bende an e diergi.”",
 "circlesRef": "Mathayo 18:20",
 "circlesLong": "Ka idwaro, los kanyakla matin ne joodi kata osiepe manok. Pog lamo, ndiko kata paro gi mul achiel. Giwinjo, gidwoko gi wach, kata gidwoko gi 🙏, kendo ng’ato ka ng’ato somo ndiko e Muma mare.",
-"circlesTicks": "<li>Ok ochuno ngang’. Onge gima wuok e simu mari ka ok imulo Pog.</li>\n              <li>Kanyakla ka kanyakla nigi rayaw mare. Jogo man e iye kende ema nyalo yawo gima ni e iye; kata wan ok wanyal.</li>",
+"circlesTicks": "<li>Ok ochuno ngang’. Onge gima wuok e simu mari ka ok imulo Pog.</li>\n              <li>Kanyakla ka kanyakla nigi rayaw mare. Jogo man e iye kende ema nyalo yawo gima ni e iye; kata wan ok wanyal.</li><li>Sirni dwaro donjo nono, gi rayaw mar donjo kata kod ma ioro e email.</li>",
 "listenH": "Winj",
-"listenP": "Mul ndiko, eka Winj, kendo simu mari somo sula gi duol mare. Ne gari, jikon, kata wenge mool."
+"listenP": "Mul ndiko achiel, eka Winj. Kata mul Som kiluwo e bar mar manyo, kendo wach ka wach rieny ka isome. Josomo madier somo BSB, King James gi Louis Segond. Ne gari, jikon, kata wenge mool.",
+"orMac": "Mano en mar Mac. Kata, e kompiuta moro amora, kowuok e browser mari:"
 }
