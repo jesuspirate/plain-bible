@@ -344,6 +344,12 @@ main.with-bar { padding-bottom: 120px; }
 .sb-along:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
 /* The "Continue at…" card sits where it would be: it waits until that's answered. */
 .sb:has(> .continue) .sb-along { display: none; }
+/* On a computer or a tablet the page runs down behind the bar, so above 🙏
+   it sat on the words (or on the edge of the open book). There it waits
+   beside 🙏 instead, in the strip under the page. Phones keep it above. */
+@media (min-width: 760px) and (min-height: 600px) {
+  .sb-along { left: calc(100% + 10px); bottom: 3px; margin-left: 0; }
+}
 .sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
 /* Buttons you can press and hold (hold.tsx): no text selection, no callout, no scrolling away. */
