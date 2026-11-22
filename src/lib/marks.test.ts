@@ -159,5 +159,7 @@ describe('colors by use', () => {
     expect(shown).not.toContain('#fff193')
     expect(shown).toHaveLength(PALETTE.length - 1)
     expect(colorsByUse(recent, true)[0].color).not.toBe('#fff193')
+    // …unless the verse picked is already yellow: then it shows, so it can be marked.
+    expect(colorsByUse(recent, true, '#fff193').map(p => p.color)).toContain('#fff193')
   })
 })

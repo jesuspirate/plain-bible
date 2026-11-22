@@ -4,7 +4,7 @@ import { ComponentChildren } from 'preact'
 import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/hooks'
 import { Bible } from './lib/data'
 import { afterUsing, colorsByUse, compareKeys, hasContent, Mark, Marks, notesOf, PALETTE, parseKey, tidy } from './lib/marks'
-import { NotesSheet, NotesTarget, verseRanges } from './reader'
+import { CheckMark, NotesSheet, NotesTarget, verseRanges } from './reader'
 import { BookmarkIcon, EditIcon, HighlightIcon, NoteIcon, TrashIcon } from './icons'
 import { bookName } from './lib/books'
 import { plain } from './lib/text'
@@ -330,9 +330,11 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
               {active && recolor === id && (
                 <div class="saved-palette">
                   <div class="swatches">
-                    {colorsByUse(settings.recentColors).map(p => (
-                      <button class={'swatch' + (p.color === r.color ? ' on' : '')} style={{ background: p.color }} aria-label={t(p.name)}
-                        onClick={() => { if (p.color !== r.color) update({ recentColors: afterUsing(settings.recentColors, p.color) }); change(r.keys, { c: p.color }); setRecolor(undefined) }} />
+                    {colorsByUse(settings.recentColors, undefined, r.color).map(p => (
+                      <button class={'swatch' + (p.color === r.color ? ' on' : '')} style={{ background: p.color }} aria-label={t(p.name)} aria-pressed={p.color === r.color}
+                        onClick={() => { if (p.color !== r.color) update({ recentColors: afterUsing(settings.recentColors, p.color) }); change(r.keys, { c: p.color }); setRecolor(undefined) }}>
+                        {p.color === r.color && <CheckMark />}
+                      </button>
                     ))}
                   </div>
                   <button class="saved-remove" onClick={() => { change(r.keys, { c: undefined }, t('Highlight on {ref} removed.', { ref })); setRecolor(undefined) }}>

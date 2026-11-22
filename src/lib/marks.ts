@@ -86,11 +86,12 @@ function oldLast() {
 }
 /** The palette with the colors you used most recently first, newest on the
  *  left; colors never used keep their usual order after them. */
-export function colorsByUse(recent: string[] | undefined, noYellow = yellowHidden()) {
+export function colorsByUse(recent: string[] | undefined, noYellow = yellowHidden(), keep?: string) {
   const order = recent?.length ? recent : [oldLast() ?? '']
   const used = order.map(c => PALETTE.find(p => p.color === c)).filter(p => !!p) as typeof PALETTE
   const all = [...used, ...PALETTE.filter(p => !used.includes(p))]
-  return noYellow ? all.filter(p => p.color !== YELLOW) : all
+  // A verse already yellow still shows yellow, marked, so you can see it and change it.
+  return noYellow ? all.filter(p => p.color !== YELLOW || p.color === keep) : all
 }
 const YELLOW = '#fff193'
 /** Yellow letters can't be read on a light or sepia page, so with Colored
