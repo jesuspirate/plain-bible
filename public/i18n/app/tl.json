@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Gawing nata-tap ang mga salitang may tag (KJV, BSB, mga tekstong Hebreo at Griyego)",
 "Show the numbers inline": "Ipakita ang mga numero sa loob ng teksto",
 "Search bar": "Search bar",
-"Phone on its side": "Nakatagilid na phone",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Habang nagbabasa nang nakatagilid ang phone, dudulas paalis ang mga tsinek mo rito para mapuno ng mga salita ang screen. Mag-scroll nang kaunti pataas, o i-tap ang itaas na gilid, para ibalik ito.",
 "Top bar": "Itaas na bar",
 "Prayer and Circles buttons": "Mga button ng Panalangin at Samahan",
 "Show the bars": "Ipakita ang mga bar",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Mag-swipe pakaliwa o pakanan para pumunta sa susunod o naunang kabanata.",
 "Tap a verse": "Mag-tap ng talata",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "I-type ang mga salitang naaalala mo, o isang talata gaya ng Juan 3:16. I-tap din dito para pumili ng aklat at kabanata.",
-"Open search": "Buksan ang paghahanap",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Ibahagi ang mga talata at panalangin sa ilang taong pinagkakatiwalaan mo, gaya ng pamilya mo o isang maliit na grupo ng panalangin.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "I-tap ang 🙏 para manalangin nang malakas at itago ang panalangin mo. Mananatili itong pribado.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Pagkatapos mong pumunta sa ibang lugar, i-tap dito para bumalik sa binabasa mo.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "I-triple click: mabilis na highlight",
 "Tap the chapter title": "I-tap ang pamagat ng kabanata",
 "Click the chapter title, or press /": "I-click ang pamagat ng kabanata, o pindutin ang /",
-"Or pull down at the top of a chapter, then let go": "O sa itaas ng kabanata, hilahin pababa at bitawan",
 "Hold 🙏 to choose its skin tone": "Pindutin nang matagal ang 🙏 para pumili ng kulay ng balat",
 "Only the verses you picked": "Ang mga talatang pinili mo lang",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Walang boses para sa Bibliyang ito sa device na ito: umiilaw ang mga salita para makabasa ka nang tahimik.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Mga salita sa pahina",
 "Turning pages": "Paglipat ng pahina",
 "On screen": "Sa screen",
-"Extras": "Iba pa"
+"Extras": "Iba pa",
+"Pull down at the top of a chapter, then let go": "Sa itaas ng kabanata, hilahin pababa at bitawan",
+"Other ways to open search": "Iba pang paraan ng pagbukas ng paghahanap",
+"You can also press / to open it.": "Puwede mo ring pindutin ang / para buksan ito.",
+"Listen: hear the verses you picked": "Pakinggan: pakinggan ang mga talatang pinili mo",
+"Hide while the phone is on its side": "Itago kapag nakatagilid ang telepono",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Lumalayo ang mga naka-tsek habang nagbabasa ka pababa ng pahina, para mapuno ng salita ang screen. Mag-scroll nang kaunti pataas, o i-tap ang itaas na gilid, para ibalik ang mga ito."
 }

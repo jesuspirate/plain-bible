@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Rendre touchables les mots balisés (KJV, BSB, textes hébreux et grecs)",
 "Show the numbers inline": "Afficher les numéros dans le texte",
 "Search bar": "Barre de recherche",
-"Phone on its side": "Téléphone à l’horizontale",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Quand vous lisez le téléphone à l’horizontale, ce que vous cochez ici s’efface pour que le texte remplisse l’écran. Remontez un peu, ou touchez le bord du haut, pour le faire revenir.",
 "Top bar": "Barre du haut",
 "Prayer and Circles buttons": "Boutons Prier et Cercles",
 "Show the bars": "Afficher les barres",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Glissez vers la gauche ou la droite pour passer au chapitre suivant ou précédent.",
 "Tap a verse": "Toucher un verset",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Tapez les mots dont vous vous souvenez, ou un passage comme Jean 3:16. Touchez ici aussi pour choisir un livre et un chapitre.",
-"Open search": "Ouvrir la recherche",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Partagez des versets et des prières avec quelques personnes de confiance, comme votre famille ou un petit groupe de prière.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Touchez 🙏 pour prier à voix haute et garder votre prière. Elle reste privée.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Après être allé ailleurs, touchez ici pour revenir là où vous lisiez.",
@@ -1107,7 +1104,6 @@
 "Triple click: quick highlight": "Triple clic : surlignage rapide",
 "Tap the chapter title": "Touchez le titre du chapitre",
 "Click the chapter title, or press /": "Cliquez sur le titre du chapitre, ou appuyez sur /",
-"Or pull down at the top of a chapter, then let go": "Ou, en haut d’un chapitre, tirez vers le bas, puis relâchez",
 "Hold 🙏 to choose its skin tone": "Maintenez 🙏 pour choisir sa couleur de peau",
 "Only the verses you picked": "Seulement les versets choisis",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Pas de voix pour cette Bible sur cet appareil : les mots s’allument pour lire en silence.",
@@ -1158,5 +1154,11 @@
 "Words on the page": "Le texte sur la page",
 "Turning pages": "Tourner les pages",
 "On screen": "À l’écran",
-"Extras": "En plus"
+"Extras": "En plus",
+"Pull down at the top of a chapter, then let go": "En haut d’un chapitre, tirez vers le bas, puis relâchez",
+"Other ways to open search": "Autres façons d’ouvrir la recherche",
+"You can also press / to open it.": "Vous pouvez aussi appuyer sur / pour l’ouvrir.",
+"Listen: hear the verses you picked": "Écouter : entendre les versets choisis",
+"Hide while the phone is on its side": "Masquer quand le téléphone est à l’horizontale",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ce que vous cochez s’efface quand vous descendez dans la page, pour que le texte remplisse l’écran. Remontez un peu, ou touchez le bord du haut, pour le faire revenir."
 }

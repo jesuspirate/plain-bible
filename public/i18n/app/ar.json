@@ -639,8 +639,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "جعل الكلمات الموسومة قابلة للضغط (KJV وBSB والنصوص العبرية واليونانية)",
 "Show the numbers inline": "إظهار الأرقام داخل النص",
 "Search bar": "شريط البحث",
-"Phone on its side": "الهاتف بالوضع الأفقي",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "أثناء القراءة والهاتف بالوضع الأفقي، يختفي ما تحدده هنا لتملأ الكلمات الشاشة. مرّر للأعلى قليلًا، أو اضغط الحافة العلوية، لإعادته.",
 "Top bar": "الشريط العلوي",
 "Prayer and Circles buttons": "زرّا الصلاة والدوائر",
 "Show the bars": "إظهار الأشرطة",
@@ -947,7 +945,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "اسحب لليسار أو لليمين للانتقال إلى الأصحاح التالي أو السابق.",
 "Tap a verse": "اضغط آية",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "اكتب كلمات تتذكرها، أو مقطعًا مثل يوحنا 3:16. واضغط هنا أيضًا لاختيار سفر وأصحاح.",
-"Open search": "فتح البحث",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "شارك الآيات والصلوات مع أشخاص قليلين تثق بهم، مثل عائلتك أو مجموعة صلاة صغيرة.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "اضغط 🙏 لتصلّي بصوت مسموع وتحتفظ بصلاتك. تبقى خاصة.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "بعد الانتقال إلى مكان آخر، اضغط هنا للعودة إلى حيث كنت تقرأ.",
@@ -1412,7 +1409,6 @@
 "Triple click: quick highlight": "ثلاث نقرات: تمييز سريع",
 "Tap the chapter title": "اضغط عنوان الأصحاح",
 "Click the chapter title, or press /": "انقر عنوان الأصحاح، أو اضغط /",
-"Or pull down at the top of a chapter, then let go": "أو في أعلى الأصحاح، اسحب للأسفل ثم اترك",
 "Hold 🙏 to choose its skin tone": "اضغط مطولًا على 🙏 لاختيار لون البشرة",
 "Only the verses you picked": "الآيات المختارة فقط",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "لا صوت لهذا الكتاب المقدس على هذا الجهاز: تضيء الكلمات لتقرأ بصمت.",
@@ -1463,5 +1459,11 @@
 "Words on the page": "الكلمات على الصفحة",
 "Turning pages": "تقليب الصفحات",
 "On screen": "على الشاشة",
-"Extras": "إضافات"
+"Extras": "إضافات",
+"Pull down at the top of a chapter, then let go": "في أعلى الأصحاح، اسحب للأسفل ثم اترك",
+"Other ways to open search": "طرق أخرى لفتح البحث",
+"You can also press / to open it.": "يمكنك أيضًا الضغط على / لفتحه.",
+"Listen: hear the verses you picked": "استماع: اسمع الآيات التي اخترتها",
+"Hide while the phone is on its side": "إخفاء عندما يكون الهاتف على جانبه",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "تختفي العناصر المحددة وأنت تقرأ نزولًا في الصفحة، ليملأ النص الشاشة. مرّر للأعلى قليلًا، أو اضغط على الحافة العليا، لإعادتها."
 }

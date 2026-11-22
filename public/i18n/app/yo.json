@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Jẹ́ kí a lè tẹ àwọn ọ̀rọ̀ tí a sàmì sí (KJV, BSB, ìwé Hébérù àti Gíríìkì)",
 "Show the numbers inline": "Fi àwọn nọ́mbà hàn láàárín ọ̀rọ̀",
 "Search bar": "Ọ̀pá wíwá",
-"Phone on its side": "Fóònù ní ìdùbúlẹ̀",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Nígbà tí ẹ bá ń kà pẹ̀lú fóònù ní ìdùbúlẹ̀, ohun tí ẹ yàn níbí yóò yọ̀ kúrò kí ọ̀rọ̀ lè kún ojú-ẹ̀rọ. Ẹ yí i padà sókè díẹ̀, tàbí ẹ tẹ etí òkè, láti mú un padà.",
 "Top bar": "Ọ̀pá òkè",
 "Prayer and Circles buttons": "Bọ́tìnnì Àdúrà àti Àwọn ẹgbẹ́",
 "Show the bars": "Fi àwọn ọ̀pá hàn",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Ẹ fà á sí òsì tàbí ọ̀tún láti lọ sí orí tó kàn tàbí ti tẹ́lẹ̀.",
 "Tap a verse": "Tẹ ẹsẹ kan",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Ẹ tẹ àwọn ọ̀rọ̀ tí ẹ rántí, tàbí abala kan bí i Jòhánù 3:16. Ẹ tẹ ibí pẹ̀lú láti yan ìwé àti orí.",
-"Open search": "Ṣí wíwá",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Ẹ pín ẹsẹ àti àdúrà pẹ̀lú àwọn díẹ̀ tí ẹ fọkàn tán, bí i ẹbí yín tàbí ẹgbẹ́ àdúrà kékeré kan.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Ẹ tẹ 🙏 láti gbàdúrà sókè kí ẹ sì tọ́jú àdúrà yín. Ó máa wà ní àṣírí.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Lẹ́yìn tí ẹ bá lọ síbòmíràn, ẹ tẹ ibí láti padà sí ibi tí ẹ ti ń kà.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Tẹ̀ àsin lẹ́ẹ̀mẹ́ta: sàmì àwọ̀ kíákíá",
 "Tap the chapter title": "Tẹ àkọlé orí",
 "Click the chapter title, or press /": "Tẹ àsin lórí àkọlé orí, tàbí tẹ /",
-"Or pull down at the top of a chapter, then let go": "Tàbí ní òkè orí kan, fà á sísàlẹ̀, lẹ́yìn náà fi sílẹ̀",
 "Hold 🙏 to choose its skin tone": "Di 🙏 mú láti yan àwọ̀ ara",
 "Only the verses you picked": "Àwọn ẹsẹ tí o yàn nìkan",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Kò sí ohùn fún Bíbélì yìí lórí ẹ̀rọ yìí: àwọn ọ̀rọ̀ á máa tàn kí o lè kà á ní ìdákẹ́jẹ́ẹ́.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Ọ̀rọ̀ lójú ìwé",
 "Turning pages": "Yíyí ojú ìwé padà",
 "On screen": "Lójú ìbòjú",
-"Extras": "Àfikún"
+"Extras": "Àfikún",
+"Pull down at the top of a chapter, then let go": "Ní òkè orí kan, fà á sísàlẹ̀, lẹ́yìn náà fi sílẹ̀",
+"Other ways to open search": "Àwọn ọ̀nà mìíràn láti ṣí wíwá",
+"You can also press / to open it.": "O tún lè tẹ / láti ṣí i.",
+"Listen: hear the verses you picked": "Gbọ́: gbọ́ àwọn ẹsẹ tí o yàn",
+"Hide while the phone is on its side": "Fi pamọ́ nígbà tí fóònù bá dùbúlẹ̀",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Àwọn ohun tí o sàmì sí máa ń kúrò bí o ṣe ń kà sísàlẹ̀ ojú-ìwé, kí ọ̀rọ̀ lè kún ojú iboju. Yí sókè díẹ̀, tàbí tẹ etí òkè, láti mú wọn padà."
 }

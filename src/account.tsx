@@ -590,7 +590,7 @@ export function AccountSection() {
     if (email) return (
       <div class="account">
         <p class="muted">{t('Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.')}</p>
-        <ol class="audio-steps signin-steps">
+        <ol class="signin-steps">
           <li><span class="step-n">1</span><span class="step-body">
             <span class="step-title">{t('Pick one way in:')}</span>
             {passkeys && <div class="signin-way">

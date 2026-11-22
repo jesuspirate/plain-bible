@@ -4,9 +4,9 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useRef, useState } from 'preact/hooks'
-import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar, takeSettingsPage } from './state'
+import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar, showSearchWays, takeSettingsPage } from './state'
 import { canHear } from './listen'
-import { Glyph } from './gesture'
+import { fine, Glyph } from './gesture'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
 import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
@@ -374,6 +374,23 @@ function AudioHow() {
   </>
 }
 
+// The search bar is the one way in the tour shows. The others are here, each
+// with its gesture, and Try it now lets the fingertip show them on the real
+// chapter title (taphint).
+function SearchWays() {
+  return <div class="search-ways">
+    <h3>{t('Other ways to open search')}</h3>
+    {fine
+      ? <p class="audio-also"><Glyph kind="tap" />{t('Click the chapter title, or press /')}</p>
+      : <>
+          <p class="audio-also"><Glyph kind="tap" />{t('Tap the chapter title')}</p>
+          <p class="audio-also"><Glyph kind="pull" />{t('Pull down at the top of a chapter, then let go')}</p>
+        </>}
+    <p class="audio-note">{t('After a search, open it again to go back to your last result.')}</p>
+    <button class="primary audio-show" onClick={showSearchWays}><Glyph kind="tap" /> {t('Try it now')}</button>
+  </div>
+}
+
 function SettingsBody({ nav }: { nav: SettingsNav }) {
   const { page, setPage } = nav
   const { settings, update, catalog, marks, sync } = useApp()
@@ -445,10 +462,11 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     </section>}
     <section class="set-group">
       <h2 class="set-kicker">{t('On screen')}</h2>
-      <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}</div>
-      <div class="field"><span>{t('Phone on its side')}</span>
+      <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}
+        <SearchWays /></div>
+      <div class="field"><span>{t('Hide while the phone is on its side')}</span>
         <div class="col">
-          <span class="muted small">{t('While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.')}</span>
+          <span class="muted small">{t('Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.')}</span>
           {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
             <label class="check"><input type="checkbox" checked={settings.sideways.includes(a)}
               onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} /> {label}</label>

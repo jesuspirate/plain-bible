@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Mi weche mondik alama obed ma inyalo mulo (KJV, BSB, ndiko mag Hibru kod Grik)",
 "Show the numbers inline": "Nyis nambe e ndiko",
 "Search bar": "Bar mar manyo",
-"Phone on its side": "Simu ma onindo",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Ka isomo ka simu onindo, gik ma iyiero ka biro pondo mondo weche opong skrin. Rieny malo matin, kata mul tok malo, mondo gidwog.",
 "Top bar": "Bar mar malo",
 "Prayer and Circles buttons": "Button mag Lamo kod Kanyakla",
 "Show the bars": "Nyis bar",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Rieny korachiel kata korachwich mondo idhi e sula maluwo kata mokalo.",
 "Tap a verse": "Mul ndiko",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Ndik weche ma iparo, kata ndiko kaka Johana 3:16. Mul ka bende mondo iyier buk gi sula.",
-"Open search": "Yaw manyo",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Pog ndiko kod lemo gi ji manok ma igeno, kaka joodi kata kanyakla matin mar lamo.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Mul 🙏 mondo ilam gi duol kendo ikan lamo mari. Dong’ mopondo.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Ka isedhi kamachielo, mul ka mondo idog kama ne isomoe.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Click nyadidek: rangi mapiyo",
 "Tap the chapter title": "Mul wi sula",
 "Click the chapter title, or press /": "Click wi sula, kata mul /",
-"Or pull down at the top of a chapter, then let go": "Kata e wi sula, ywe piny eka iwe",
 "Hold 🙏 to choose its skin tone": "Mak 🙏 mondo iyier rangi del",
 "Only the verses you picked": "Ndiko mane iyiero kende",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Onge duol mar Muma ni e gimani: weche ler mondo isom ka ilingʼ.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Weche e ite",
 "Turning pages": "Lokruok ite",
 "On screen": "E skrin",
-"Extras": "Moko mamedo"
+"Extras": "Moko mamedo",
+"Pull down at the top of a chapter, then let go": "E wi sula, ywe piny eka iwe",
+"Other ways to open search": "Yore mamoko mag yawo manyo",
+"You can also press / to open it.": "Inyalo bende diyo / mondo iyawe.",
+"Listen: hear the verses you picked": "Winj: winj ndigo misetiero",
+"Hide while the phone is on its side": "Pand ka simu onindo e bathe",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Gik ma iseketo ranyisi biro oko ka isomo kidhi piny e ite, mondo weche opong skrin. Dhi malo matin, kata gwar tung malo, mondo odwogi."
 }

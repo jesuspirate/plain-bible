@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "タグ付きの語をタップできるようにする（KJV、BSB、ヘブライ語とギリシャ語の本文）",
 "Show the numbers inline": "本文中に番号を表示",
 "Search bar": "検索バー",
-"Phone on its side": "電話を横向きにしたとき",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "電話を横向きにして読むと、ここでチェックした項目が隠れ、画面いっぱいに本文が表示されます。少し上にスクロールするか、画面の上端をタップすると、元に戻ります。",
 "Top bar": "上部のバー",
 "Prayer and Circles buttons": "「祈る」と「サークル」のボタン",
 "Show the bars": "バーを表示",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "左右にスワイプすると、次の章や前の章に移動します。",
 "Tap a verse": "節をタップする",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "覚えている言葉や、ヨハネ 3:16 のような箇所を入力してください。ここをタップして書と章を選ぶこともできます。",
-"Open search": "検索を開く",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "家族や小さな祈りの集まりなど、信頼できる数人と聖句や祈りを分かち合えます。",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "🙏 をタップすると、声に出して祈り、その祈りを保存できます。祈りは非公開です。",
 "After you jump somewhere else, tap here to go back to where you were reading.": "別の場所に移動したあと、ここをタップすると読んでいた場所に戻れます。",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "トリプルクリック：すばやくハイライト",
 "Tap the chapter title": "章のタイトルをタップ",
 "Click the chapter title, or press /": "章のタイトルをクリック、または / を押す",
-"Or pull down at the top of a chapter, then let go": "または章の一番上で下に引いて離す",
 "Hold 🙏 to choose its skin tone": "🙏 を長押しして肌の色を選ぶ",
 "Only the verses you picked": "選んだ節だけ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "この端末ではこの聖書に音声がありません。言葉が光るので、黙読でついて行けます。",
@@ -1323,5 +1319,11 @@
 "Words on the page": "ページの文字",
 "Turning pages": "ページめくり",
 "On screen": "画面の表示",
-"Extras": "その他"
+"Extras": "その他",
+"Pull down at the top of a chapter, then let go": "章の一番上で下に引いて離す",
+"Other ways to open search": "検索を開くほかの方法",
+"You can also press / to open it.": "/ キーでも開けます。",
+"Listen: hear the verses you picked": "聞く：選んだ節を聞く",
+"Hide while the phone is on its side": "スマホを横にしているときに隠す",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "チェックしたものは、ページを下へ読み進めると隠れ、文字が画面いっぱいになります。少し上へスクロールするか上端をタップすると戻ります。"
 }

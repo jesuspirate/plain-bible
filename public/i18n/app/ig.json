@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Mee ka a pịa okwu nwere akara (KJV, BSB, ederede Hibru na Grik)",
 "Show the numbers inline": "Gosi nọmba n’ime ederede",
 "Search bar": "Ogwe nchọ",
-"Phone on its side": "Ekwentị dina n’akụkụ",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Mgbe ị na-agụ ya na ekwentị dina n’akụkụ, ihe ị kara akara ebe a na-apụ ka okwu jupụta ihuenyo. Gbagoo ntakịrị, ma ọ bụ pịa ọnụ elu, ka ọ laghachi.",
 "Top bar": "Ogwe elu",
 "Prayer and Circles buttons": "Bọtịnụ Ekpere na Otu",
 "Show the bars": "Gosi ogwe",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Swaịpụ aka ekpe ma ọ bụ aka nri ka ị gaa n’isi na-esote ma ọ bụ nke gara aga.",
 "Tap a verse": "Pịa amaokwu",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Pịnye okwu i chetara, ma ọ bụ akụkụ dị ka Jọn 3:16. Pịakwa ebe a ka ị họrọ akwụkwọ na isi.",
-"Open search": "Mepee nchọ",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Kesaa amaokwu na ekpere ya na mmadụ ole na ole ị tụkwasịrị obi, dị ka ezinụlọ gị ma ọ bụ obere otu ekpere.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Pịa 🙏 ka ị kpee ekpere n’olu dara ụda ma chekwaa ekpere gị. Ọ na-anọ na nzuzo.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Mgbe ị gara ebe ọzọ, pịa ebe a ka ị laghachi ebe ị na-agụ.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Klik ugboro atọ: akara agba ngwa ngwa",
 "Tap the chapter title": "Pịa aha isi ahụ",
 "Click the chapter title, or press /": "Klik aha isi ahụ, ma ọ bụ pịa /",
-"Or pull down at the top of a chapter, then let go": "Ma ọ bụ n’elu isi, dọda ya ala wee hapụ ya",
 "Hold 🙏 to choose its skin tone": "Jide 🙏 ka ịhọrọ agba akpụkpọ ahụ",
 "Only the verses you picked": "Naanị amaokwu ị họọrọ",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Enweghị olu maka Baịbụl a na ngwaọrụ a: okwu na-enwu ka ị gụọ ya n’obi.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Okwu dị na peeji",
 "Turning pages": "Ntụgharị peeji",
 "On screen": "Na ihuenyo",
-"Extras": "Ihe ndị ọzọ"
+"Extras": "Ihe ndị ọzọ",
+"Pull down at the top of a chapter, then let go": "N’elu isi, dọda ya ala wee hapụ ya",
+"Other ways to open search": "Ụzọ ndị ọzọ isi mepee nchọ",
+"You can also press / to open it.": "Ị nwekwara ike ịpị / iji mepee ya.",
+"Listen: hear the verses you picked": "Gee ntị: nụ amaokwu ndị ị họọrọ",
+"Hide while the phone is on its side": "Zoo mgbe ekwentị dina n’akụkụ",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ihe ndị ị kara akara na-apụ ka ị na-agụ gaa ala peeji, ka okwu jupụta ihuenyo. Bugharịa elu ntakịrị, ma ọ bụ pịa nsọtụ elu, ka ha laghachi."
 }

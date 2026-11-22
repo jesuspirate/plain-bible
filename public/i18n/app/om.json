@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Jechoonni mallatteeffaman akka tuqaman godhi (KJV, BSB, barreeffama Ibrootaa fi Giriikii)",
 "Show the numbers inline": "Lakkoofsota barreeffama keessatti agarsiisi",
 "Search bar": "Sarara barbaachaa",
-"Phone on its side": "Bilbila ciisaa",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Yeroo bilbilli ciisee dubbistu, wanti ati asitti filatte jechoonni iskiriinii akka guutaniif ni dhokata. Deebisuuf, xiqqoo ol socho'i, ykn qarqara gubbaa tuqi.",
 "Top bar": "Sarara gubbaa",
 "Prayer and Circles buttons": "Qabduuwwan Kadhannaa fi Gareewwanii",
 "Show the bars": "Sararoota agarsiisi",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Gara boqonnaa itti aanuu ykn kan duraatti deemuuf bitaa ykn mirgatti harkisi.",
 "Tap a verse": "Caqasa tuqi",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Jechoota yaadattu barreessi, ykn kutaa akka Yohannis 3:16. Kitaabaa fi boqonnaa filachuufis asitti tuqi.",
-"Open search": "Barbaacha bani",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Caqasootaa fi kadhannaawwan namoota muraasa amanattu wajjin qoodi, kan akka maatii keetii ykn garee kadhannaa xiqqaa.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Sagaleen kadhachuu fi kadhannaa kee olkaa'uuf 🙏 tuqi. Dhuunfaa ta'ee hafa.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Erga bakka biraa deemtee booda, gara iddoo itti dubbisaa turteetti deebi'uuf asitti tuqi.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Si’a sadii cuqaasi: halluu ariifachiisaa",
 "Tap the chapter title": "Mata duree boqonnaa tuqi",
 "Click the chapter title, or press /": "Mata duree boqonnaa cuqaasi, ykn / tuqi",
-"Or pull down at the top of a chapter, then let go": "Ykn boqonnaa gubbaatti gadi harkisii gadhiisi",
 "Hold 🙏 to choose its skin tone": "Halluu gogaa filachuuf 🙏 qabadhu",
 "Only the verses you picked": "Lakkoofsota filatte qofa",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Meeshaa kana irratti Macaafa Qulqulluu kanaaf sagaleen hin jiru: jechoonni ni ifu akka callisaan dubbistuuf.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Jechoota fuula irra",
 "Turning pages": "Fuula garagalchuu",
 "On screen": "Iskiriinii irratti",
-"Extras": "Dabalata"
+"Extras": "Dabalata",
+"Pull down at the top of a chapter, then let go": "Boqonnaa gubbaatti gadi harkisii gadhiisi",
+"Other ways to open search": "Karaalee biroo barbaacha banuu",
+"You can also press / to open it.": "Banuuf / tuquus ni dandeessa.",
+"Listen: hear the verses you picked": "Dhaggeeffadhu: lakkoofsota filatte dhaggeeffadhu",
+"Hide while the phone is on its side": "Yeroo bilbilli cinaachaan ciisu dhoksi",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Wantoonni mallattoo qaban yeroo fuula gadi dubbiftu ni bahu, akka jechoonni iskiriinii guutaniif. Deebisuuf xiqqoo ol harkisi, ykn qarqara gubbaa tuqi."
 }

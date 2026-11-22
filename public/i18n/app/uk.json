@@ -620,8 +620,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Зробити позначені слова активними (KJV, BSB, тексти на івриті й грецькою)",
 "Show the numbers inline": "Показувати номери в тексті",
 "Search bar": "Рядок пошуку",
-"Phone on its side": "Телефон горизонтально",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Коли ви читаєте, тримаючи телефон горизонтально, позначене тут ховається, щоб текст заповнив екран. Трохи прокрутіть угору або торкніться верхнього краю, щоб повернути.",
 "Top bar": "Верхня панель",
 "Prayer and Circles buttons": "Кнопки «Молитися» й «Кола»",
 "Show the bars": "Показувати панелі",
@@ -916,7 +914,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Проведіть ліворуч або праворуч, щоб перейти до наступного чи попереднього розділу.",
 "Tap a verse": "Торкніться вірша",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Введіть слова, які пам’ятаєте, або посилання, наприклад Івана 3:16. Торкніться тут, щоб також вибрати книгу й розділ.",
-"Open search": "Відкрити пошук",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Діліться віршами й молитвами з кількома людьми, яким довіряєте, наприклад із родиною чи невеликою молитовною групою.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Торкніться 🙏, щоб молитися вголос і зберегти молитву. Вона залишиться особистою.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Коли ви перейдете в інше місце, торкніться тут, щоб повернутися туди, де ви читали.",
@@ -1377,7 +1374,6 @@
 "Triple click: quick highlight": "Потрійне клацання: швидке виділення",
 "Tap the chapter title": "Торкніться назви розділу",
 "Click the chapter title, or press /": "Клацніть назву розділу або натисніть /",
-"Or pull down at the top of a chapter, then let go": "Або вгорі розділу потягніть униз і відпустіть",
 "Hold 🙏 to choose its skin tone": "Утримуйте 🙏, щоб вибрати відтінок шкіри",
 "Only the verses you picked": "Лише вибрані вірші",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Для цієї Біблії на цьому пристрої немає голосу: слова підсвічуються, щоб читати подумки.",
@@ -1428,5 +1424,11 @@
 "Words on the page": "Текст на сторінці",
 "Turning pages": "Гортання сторінок",
 "On screen": "На екрані",
-"Extras": "Додатково"
+"Extras": "Додатково",
+"Pull down at the top of a chapter, then let go": "Угорі розділу потягніть униз і відпустіть",
+"Other ways to open search": "Інші способи відкрити пошук",
+"You can also press / to open it.": "Його також можна відкрити клавішею /.",
+"Listen: hear the verses you picked": "Слухати: прослухати вибрані вірші",
+"Hide while the phone is on its side": "Ховати, коли телефон лежить боком",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Позначене від’їжджає, поки ви читаєте вниз сторінкою, щоб текст заповнив екран. Прокрутіть трохи вгору або торкніться верхнього краю, щоб повернути."
 }

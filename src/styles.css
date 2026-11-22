@@ -1420,6 +1420,13 @@ body.selecting .continue { display: none; }
 .audio-pick .what { color: var(--muted); font-size: 15px; line-height: 1.35; }
 .audio-note { margin: 0; color: var(--muted); font-size: 15px; }
 
+/* Font and layout → Search bar: the other ways to open search, each with its gesture. */
+.search-ways { display: flex; flex-direction: column; gap: 10px; margin: 14px 0 0; }
+.search-ways h3 { margin: 0; font-size: 17px; font-weight: 600; }
+.search-ways .audio-also { margin: 0; color: var(--text); font-size: 16px; }
+.search-ways .audio-note { margin: 0; }
+.search-ways .audio-show { margin: 6px 0 4px; }
+
 /* Send a suggestion (Settings): a big box to write in, then one big Send. */
 .suggest-field { display: flex; flex-direction: column; gap: 6px; margin: 0 0 16px; font-weight: 600; }
 .suggest-text { font: 17px/1.45 var(--sans); color: var(--text); background: var(--surface); border: 1px solid var(--line); border-radius: 12px; padding: 10px 12px; min-height: 9.5em; resize: vertical; width: 100%; }
@@ -1452,7 +1459,11 @@ body.selecting .continue { display: none; }
 @media (prefers-reduced-motion: reduce) { .steps-pill .steps-dot { animation: none; } }
 
 /* Account, signed out: the two ways in, each a soft card with its real buttons. */
-.signin-steps { margin-bottom: 18px; }
+.signin-steps { list-style: none; margin: 4px 0 18px; padding: 0; display: flex; flex-direction: column; gap: 14px; }
+.signin-steps > li { display: flex; gap: 12px; align-items: flex-start; }
+.signin-steps .step-n { flex: none; width: 28px; height: 28px; border-radius: 50%; background: var(--chip); color: var(--accent); font: 700 15px/28px var(--sans); text-align: center; margin-top: 2px; }
+.signin-steps .step-body { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 10px; }
+.signin-steps .step-title { font-size: 18px; font-weight: 600; min-height: 32px; display: flex; align-items: center; }
 .signin-way { display: flex; flex-direction: column; gap: 10px; padding: 14px; border-radius: 18px; border: 1px solid var(--line); background: var(--surface); }
 .signin-way .way-name { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 8px; font: 600 17px/1.25 var(--sans); }
 .signin-way .way-name svg { color: var(--accent); flex: none; }

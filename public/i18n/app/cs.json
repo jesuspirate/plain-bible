@@ -620,8 +620,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Označená slova lze klepnutím otevřít (KJV, BSB, hebrejské a řecké texty)",
 "Show the numbers inline": "Zobrazovat čísla v textu",
 "Search bar": "Vyhledávací pole",
-"Phone on its side": "Telefon na šířku",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Když čtete s telefonem na šířku, to, co tu zaškrtnete, se schová, aby text vyplnil obrazovku. Trochu se posuňte zpět nahoru nebo klepněte na horní okraj a vrátí se to.",
 "Top bar": "Horní lišta",
 "Prayer and Circles buttons": "Tlačítka Modlit se a Kruhy",
 "Show the bars": "Zobrazit lišty",
@@ -916,7 +914,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Přejeďte doleva nebo doprava a přejdete na další nebo předchozí kapitolu.",
 "Tap a verse": "Klepněte na verš",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Napište slova, která si pamatujete, nebo úryvek jako Jan 3:16. Klepnutím sem můžete také vybrat knihu a kapitolu.",
-"Open search": "Otevřít hledání",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Sdílejte verše a modlitby s několika lidmi, kterým důvěřujete, třeba s rodinou nebo malou modlitební skupinkou.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Klepněte na 🙏, modlete se nahlas a modlitbu si uložte. Zůstane soukromá.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Když přejdete jinam, klepnutím sem se vrátíte tam, kde jste četli.",
@@ -1377,7 +1374,6 @@
 "Triple click: quick highlight": "Trojité kliknutí: rychlé zvýraznění",
 "Tap the chapter title": "Klepněte na název kapitoly",
 "Click the chapter title, or press /": "Klikněte na název kapitoly, nebo stiskněte /",
-"Or pull down at the top of a chapter, then let go": "Nebo na začátku kapitoly táhněte dolů a pusťte",
 "Hold 🙏 to choose its skin tone": "Podržte 🙏 a vyberte odstín pleti",
 "Only the verses you picked": "Jen vybrané verše",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Pro tuto Bibli na tomto zařízení není hlas: slova se rozsvěcují, abyste mohli číst potichu.",
@@ -1428,5 +1424,11 @@
 "Words on the page": "Text na stránce",
 "Turning pages": "Otáčení stránek",
 "On screen": "Na obrazovce",
-"Extras": "Další"
+"Extras": "Další",
+"Pull down at the top of a chapter, then let go": "Na začátku kapitoly táhněte dolů a pusťte",
+"Other ways to open search": "Další způsoby, jak otevřít hledání",
+"You can also press / to open it.": "Hledání otevřete také klávesou /.",
+"Listen: hear the verses you picked": "Poslechnout: uslyšíte vybrané verše",
+"Hide while the phone is on its side": "Skrýt, když je telefon na šířku",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaškrtnuté položky se při čtení dolů po stránce odsunou, aby text vyplnil obrazovku. Vrátíte je, když trochu posunete nahoru nebo klepnete na horní okraj."
 }

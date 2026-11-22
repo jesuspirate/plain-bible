@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "قابل لمس کردن واژه‌های برچسب‌دار (KJV، BSB، متن‌های عبری و یونانی)",
 "Show the numbers inline": "نمایش شماره‌ها در دل متن",
 "Search bar": "نوار جست‌وجو",
-"Phone on its side": "تلفن به حالت افقی",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "وقتی با تلفن افقی می‌خوانید، آنچه اینجا تیک می‌زنید کنار می‌رود تا واژه‌ها صفحه را پر کنند. کمی به بالا پیمایش کنید، یا لبهٔ بالا را بزنید، تا برگردد.",
 "Top bar": "نوار بالا",
 "Prayer and Circles buttons": "دکمه‌های دعا و حلقه‌ها",
 "Show the bars": "نمایش نوارها",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "به چپ یا راست بکشید تا به باب بعدی یا قبلی بروید.",
 "Tap a verse": "روی آیه بزنید",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "واژه‌هایی را که به یاد دارید، یا بخشی مثل یوحنا 3:16 را بنویسید. برای انتخاب کتاب و باب هم اینجا بزنید.",
-"Open search": "باز کردن جست‌وجو",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "آیه‌ها و دعاها را با چند نفر که به آن‌ها اعتماد دارید هم‌رسانی کنید، مثل خانواده یا یک گروه کوچک دعا.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "روی 🙏 بزنید تا با صدای بلند دعا کنید و دعایتان را نگه دارید. خصوصی می‌ماند.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "پس از رفتن به جای دیگر، اینجا بزنید تا به جایی که می‌خواندید برگردید.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "سه کلیک: برجسته‌سازی سریع",
 "Tap the chapter title": "روی عنوان فصل ضربه بزنید",
 "Click the chapter title, or press /": "روی عنوان فصل کلیک کنید، یا / را فشار دهید",
-"Or pull down at the top of a chapter, then let go": "یا در بالای فصل، به پایین بکشید و رها کنید",
 "Hold 🙏 to choose its skin tone": "🙏 را نگه دارید تا رنگ پوست را انتخاب کنید",
 "Only the verses you picked": "فقط آیه‌های انتخاب‌شده",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "برای این کتاب‌مقدس روی این دستگاه صدایی نیست: کلمه‌ها روشن می‌شوند تا بی‌صدا بخوانید.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "متن روی صفحه",
 "Turning pages": "ورق زدن",
 "On screen": "روی صفحه نمایش",
-"Extras": "موارد بیشتر"
+"Extras": "موارد بیشتر",
+"Pull down at the top of a chapter, then let go": "در بالای فصل، به پایین بکشید و رها کنید",
+"Other ways to open search": "راه‌های دیگر باز کردن جست‌وجو",
+"You can also press / to open it.": "برای باز کردن آن می‌توانید / را هم بزنید.",
+"Listen: hear the verses you picked": "شنیدن: آیه‌هایی را که برگزیدید بشنوید",
+"Hide while the phone is on its side": "پنهان کردن وقتی گوشی افقی است",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "موارد تیک‌خورده هنگام خواندن رو به پایین صفحه کنار می‌روند تا متن صفحه را پر کند. برای برگرداندنشان کمی بالا بروید یا لبهٔ بالا را بزنید."
 }

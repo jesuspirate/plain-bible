@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Kak pedikih lokaia me kilelehda (KJV, BSB, nting en Ipru oh Krihk)",
 "Show the numbers inline": "Kasansalehda nempe kan nan nting",
 "Search bar": "Wasa en rapahki",
-"Phone on its side": "Telepohn wonon",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Ni ahnsou me komw wadek oh telepohn wonon, mehkan me komw kilelehdi met pahn mwekidla pwe lokaia kan en direkihla sikirihn. Mwekidiong powe kis, de pedikih imwin powe, pwe en pwurodo.",
 "Top bar": "Wasa powe",
 "Prayer and Circles buttons": "Wasa en Kapakap oh Pwihn kan",
 "Show the bars": "Kasansalehda wasa kan",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Kesepwil pali maun de pali mering pwe komw en kohla irelaud kohkohdo de irelaud mahs.",
 "Tap a verse": "Pedikih iretik ehu",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Ntingihdi lokaia me komw tamante, de pali ehu duwehte Sohn 3:16. Pil pedikih met pwe komw en pilada pwuhk oh irelaud.",
-"Open search": "Ritingala rapahki",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Nehne iretik oh kapakap rehn aramas malaulau me komw likih, duwehte noumw peneinei de pwihn en kapakap tikitik ehu.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Pedikih 🙏 pwe komw en kapakap ni ngihl laud oh kolokol noumw kapakap. E pahn mihmihte rir.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Mwurin komw kohla wasa teio, pedikih met pwe komw en pwurala wasa me komw wadewadek ie.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Click pak siluh: kasansal mwadang",
 "Tap the chapter title": "Pedikih ilen irelaud",
 "Click the chapter title, or press /": "Click ilen irelaud, de pedikih /",
-"Or pull down at the top of a chapter, then let go": "De powe nan irelaud ehu, pwekipwekidi oh lusala",
 "Hold 🙏 to choose its skin tone": "Kolokol 🙏 pwe komw en pilada kalahr en kili",
 "Only the verses you picked": "Iretikis ko ke pilada ehu",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Sohte ngihl ong Paipel wet nan dipwisou wet: lepin lokaia kan kin marain pwe ke en wadek ni nennen.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Lokaia nan pali",
 "Turning pages": "Wekidala pali",
 "On screen": "Pohn skrihn",
-"Extras": "Mehteikan"
+"Extras": "Mehteikan",
+"Pull down at the top of a chapter, then let go": "Nan irelaud ehu, pwekipwekidi oh lusala",
+"Other ways to open search": "Ahl teikan pwehn ritingala rapahki",
+"You can also press / to open it.": "Ke pil kak padikedi / pwe ke en ritingala.",
+"Listen: hear the verses you picked": "Rong: rong iren kan me ke pilada",
+"Hide while the phone is on its side": "Rihlahdi ni ahnsou me telepwohn wonohnsang",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Mehkan me ke kileledi kin pwisikseli ni omw wadek ohng pah, pwe lokaia kan en direkihla skrihn. Wekidala pohngi mwahu, de doaropwe irelaud powe, pwe re en pwurodo."
 }

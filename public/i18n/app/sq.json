@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Bëji të prekshme fjalët e etiketuara (KJV, BSB, tekstet hebraike dhe greke)",
 "Show the numbers inline": "Shfaq numrat brenda tekstit",
 "Search bar": "Shiriti i kërkimit",
-"Phone on its side": "Telefoni i shtrirë",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Kur lexoni me telefonin të shtrirë, ajo që shënoni këtu rrëshqet mënjanë që fjalët të mbushin ekranin. Rrëshqitni pak lart, ose prekni skajin e sipërm, për ta rikthyer.",
 "Top bar": "Shiriti i sipërm",
 "Prayer and Circles buttons": "Butonat Lutu dhe Rrethet",
 "Show the bars": "Shfaq shiritat",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Rrëshqitni majtas ose djathtas për të shkuar te kapitulli tjetër ose i mëparshëm.",
 "Tap a verse": "Prek një varg",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Shkruani fjalët që mbani mend, ose një pjesë si Gjoni 3:16. Prekni këtu edhe për të zgjedhur një libër dhe kapitull.",
-"Open search": "Hap kërkimin",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Ndani vargje dhe lutje me disa njerëz që u besoni, si familja ose një grup i vogël lutjeje.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Prekni 🙏 për t’u lutur me zë dhe për ta ruajtur lutjen tuaj. Mbetet private.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Pasi të kaloni diku tjetër, prekni këtu për t’u kthyer aty ku po lexonit.",
@@ -1275,7 +1272,6 @@
 "Triple click: quick highlight": "Klikim i trefishtë: theksim i shpejtë",
 "Tap the chapter title": "Prek titullin e kapitullit",
 "Click the chapter title, or press /": "Kliko titullin e kapitullit, ose shtyp /",
-"Or pull down at the top of a chapter, then let go": "Ose në krye të një kapitulli tërhiq poshtë, pastaj lësho",
 "Hold 🙏 to choose its skin tone": "Mbaj shtypur 🙏 për të zgjedhur ngjyrën e lëkurës",
 "Only the verses you picked": "Vetëm vargjet e zgjedhura",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Pa zë për këtë Bibël në këtë pajisje: fjalët ndriçohen që të lexoni në heshtje.",
@@ -1326,5 +1322,11 @@
 "Words on the page": "Teksti në faqe",
 "Turning pages": "Kthimi i faqeve",
 "On screen": "Në ekran",
-"Extras": "Shtesë"
+"Extras": "Shtesë",
+"Pull down at the top of a chapter, then let go": "Në krye të një kapitulli tërhiq poshtë, pastaj lësho",
+"Other ways to open search": "Mënyra të tjera për të hapur kërkimin",
+"You can also press / to open it.": "Mund ta hapësh edhe duke shtypur /.",
+"Listen: hear the verses you picked": "Dëgjo: dëgjo vargjet që zgjodhe",
+"Hide while the phone is on its side": "Fshih kur telefoni është shtrirë",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ato që shënon largohen ndërsa lexon poshtë faqes, që teksti të mbushë ekranin. Rrëshqit pak lart, ose prek skajin e sipërm, për t’i kthyer."
 }

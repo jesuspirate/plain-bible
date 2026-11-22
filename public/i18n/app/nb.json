@@ -555,8 +555,6 @@
 "Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Gjør merkede ord trykkbare (KJV, BSB, hebraiske og greske tekster)",
 "Show the numbers inline": "Vis numrene i teksten",
 "Search bar": "Søkefelt",
-"Phone on its side": "Telefonen liggende",
-"While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.": "Når du leser med telefonen liggende, glir det du krysser av her, bort, så teksten fyller skjermen. Rull litt opp igjen, eller trykk på øverste kant, for å få det tilbake.",
 "Top bar": "Øverste linje",
 "Prayer and Circles buttons": "Knappene Be og Kretser",
 "Show the bars": "Vis linjene",
@@ -821,7 +819,6 @@
 "Swipe left or right to go to the next or the previous chapter.": "Sveip til venstre eller høyre for å gå til neste eller forrige kapittel.",
 "Tap a verse": "Trykk på et vers",
 "Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.": "Skriv ord du husker, eller et skriftsted som Johannes 3:16. Trykk også her for å velge bok og kapittel.",
-"Open search": "Åpne søk",
 "Share verses and prayers with a few people you trust, like your family or a small prayer group.": "Del vers og bønner med noen få mennesker du stoler på, som familien din eller en liten bønnegruppe.",
 "Tap 🙏 to pray out loud and keep your prayer. It stays private.": "Trykk på 🙏 for å be høyt og ta vare på bønnen din. Den forblir privat.",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Når du har hoppet et annet sted, trykk her for å komme tilbake dit du leste.",
@@ -1272,7 +1269,6 @@
 "Triple click: quick highlight": "Trippelklikk: rask utheving",
 "Tap the chapter title": "Trykk på kapitteltittelen",
 "Click the chapter title, or press /": "Klikk på kapitteltittelen, eller trykk på /",
-"Or pull down at the top of a chapter, then let go": "Eller dra ned øverst i et kapittel, og slipp",
 "Hold 🙏 to choose its skin tone": "Hold inne 🙏 for å velge hudfarge",
 "Only the verses you picked": "Bare versene du valgte",
 "No voice for this Bible on this device: the words light up so you can read quietly.": "Ingen stemme for denne bibelen på denne enheten: ordene lyser opp, så du kan lese i stillhet.",
@@ -1323,5 +1319,11 @@
 "Words on the page": "Teksten på siden",
 "Turning pages": "Bla om",
 "On screen": "På skjermen",
-"Extras": "Ekstra"
+"Extras": "Ekstra",
+"Pull down at the top of a chapter, then let go": "Dra ned øverst i et kapittel, og slipp",
+"Other ways to open search": "Andre måter å åpne søk på",
+"You can also press / to open it.": "Du kan også trykke på / for å åpne det.",
+"Listen: hear the verses you picked": "Lytt: hør versene du har valgt",
+"Hide while the phone is on its side": "Skjul når telefonen ligger på siden",
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Det du krysser av, glir bort mens du leser nedover siden, så teksten fyller skjermen. Rull litt opp, eller trykk på øverste kant, for å få det tilbake."
 }
