@@ -126,7 +126,7 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // leaves it.
 type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording'
 const PAGE_TITLE: Record<Page, string> = {
-  home: N_('Settings'), sync: N_('Account'), reading: N_('Reading'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
+  home: N_('Settings'), sync: N_('Account'), reading: N_('Font and layout'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
 }
 
@@ -381,6 +381,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   // The open book is showing now (see Reader): then the page turns like a
   // book, and Chapter turn does nothing, so it's left out until one page is used.
   const wide = useWide(), recording = useRecording()
+  const bigScreen = matchMedia(`(min-width: 1000px), ${UNFOLDED}`).matches
   const bookOn = wide && settings.spread !== 'single' && !(recording.on && recording.version !== settings.version) && !settings.parallel.some(id => id !== settings.version)
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
@@ -391,65 +392,78 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   )
   const fontName = FONTS.find(f => f.id === settings.font)?.label
 
-  if (page === 'reading') return <>
-    <div class="field"><span>{t('Font')}</span>
-      <div class="fonts" role="radiogroup" aria-label={t('Reading font')}>
-        {FONTS.map(f => (
-          <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
-            style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
-            <span class="font-sample">{t('In the beginning was the Word')}</span>
-            <span class="font-name">{t(f.label)}<span class="muted"> · {t(f.note)}</span></span>
-          </button>
-        ))}
+  // Grouped like the Settings page itself: a small heading over each kind of
+  // choice. A tick box has a short bold name, and what it does in quiet words under it.
+  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'strongs' | 'strongsNumbers' | 'searchBar', label: string, note?: string) => (
+    <label class="check"><input type="checkbox" checked={settings[k]} onChange={e => update({ [k]: (e.target as HTMLInputElement).checked } as Partial<Settings>)} />
+      <span class="check-text"><span class={note ? "check-name" : undefined}>{label}</span>{note && <span class="muted small">{note}</span>}</span></label>
+  )
+  if (page === 'reading') return <div class="layout-page">
+    <section class="set-group">
+      <h2 class="set-kicker">{t('Words on the page')}</h2>
+      <div class="field"><span>{t('Font')}</span>
+        <div class="fonts" role="radiogroup" aria-label={t('Reading font')}>
+          {FONTS.map(f => (
+            <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
+              style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
+              <span class="font-sample">{t('In the beginning was the Word')}</span>
+              <span class="font-name">{t(f.label)}<span class="muted"> · {t(f.note)}</span></span>
+            </button>
+          ))}
+        </div>
       </div>
-    </div>
-    <div class="field"><span>{t('Layout')}</span>{sel('layout', [['verses', t('One verse per line')], ['paragraph', t('Paragraph')]])}</div>
-    <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
-    <div class="field"><span>{t('Highlights')}</span>
-      <div class="col">
-        <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</span>
-        {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
-        <HlPreview />
-        <label><input type="checkbox" checked={settings.penSlow} onChange={e => update({ penSlow: (e.target as HTMLInputElement).checked })} /> {t('Draw each new highlight slowly, like a marker in your hand.')}</label>
+      <div class="field"><span>{t('Layout')}</span>{sel('layout', [['verses', t('One verse per line')], ['paragraph', t('Paragraph')]])}</div>
+      <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
+    </section>
+    <section class="set-group">
+      <h2 class="set-kicker">{t('Highlights')}</h2>
+      <div class="field">
+        <div class="col">
+          {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
+          <HlPreview />
+          {check('penSlow', t('Draw each new highlight slowly, like a marker in your hand.'))}
+          <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</span>
+        </div>
       </div>
-    </div>
-    {!bookOn && <div class="field"><span>{t('Chapter turn')}</span>
-      <div class="col">
-        {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
-        <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
+    </section>
+    {(!bookOn || bigScreen) && <section class="set-group">
+      <h2 class="set-kicker">{t('Turning pages')}</h2>
+      {!bookOn && <div class="field"><span>{t('Chapter turn')}</span>
+        <div class="col">
+          {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
+          <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
+        </div>
+      </div>}
+      {bigScreen && <div class="field"><span>{t('Big screen')}</span>
+        <div class="col">
+          {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
+          <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : bookOn ? t('On now: an open book, two pages side by side, and you turn the page like a book. Chapter turn is only for one page.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
+        </div>
+      </div>}
+    </section>}
+    <section class="set-group">
+      <h2 class="set-kicker">{t('On screen')}</h2>
+      <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}</div>
+      <div class="field"><span>{t('Phone on its side')}</span>
+        <div class="col">
+          <span class="muted small">{t('While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.')}</span>
+          {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
+            <label class="check"><input type="checkbox" checked={settings.sideways.includes(a)}
+              onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} /> {label}</label>
+          ))}
+        </div>
       </div>
-    </div>}
-    {matchMedia(`(min-width: 1000px), ${UNFOLDED}`).matches && <div class="field"><span>{t('Big screen')}</span>
-      <div class="col">
-        {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
-        <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : bookOn ? t('On now: an open book, two pages side by side, and you turn the page like a book. Chapter turn is only for one page.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
-      </div>
-    </div>}
-    <div class="field"><span>{t('Notes')}</span>
-      <label><input type="checkbox" checked={settings.noteReminders} onChange={e => update({ noteReminders: (e.target as HTMLInputElement).checked })} /> {t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.')}</label>
-    </div>
-    <div class="field"><span>{t('Streaks')}</span>
-      <label><input type="checkbox" checked={settings.streaks} onChange={e => update({ streaks: (e.target as HTMLInputElement).checked })} /> {t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.')}</label>
-    </div>
-    <div class="field"><span>{t("Strong's numbers")}</span>
-      <div class="col">
-        <label><input type="checkbox" checked={settings.strongs} onChange={e => update({ strongs: (e.target as HTMLInputElement).checked })} /> {t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)')}</label>
-        <label><input type="checkbox" checked={settings.strongsNumbers} onChange={e => update({ strongsNumbers: (e.target as HTMLInputElement).checked })} /> {t('Show the numbers inline')}</label>
-      </div>
-    </div>
-    <div class="field"><span>{t('Search bar')}</span>
-      <label><input type="checkbox" checked={settings.searchBar} onChange={e => update({ searchBar: (e.target as HTMLInputElement).checked })} /> {t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.')}</label>
-    </div>
-    <div class="field"><span>{t('Phone on its side')}</span>
-      <div class="col">
-        <span class="muted small">{t('While you read with the phone on its side, what you tick here slides away so the words fill the screen. Scroll back up a little, or tap the top edge, to bring it back.')}</span>
-        {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
-          <label><input type="checkbox" checked={settings.sideways.includes(a)}
-            onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} /> {label}</label>
-        ))}
-      </div>
-    </div>
-  </>
+    </section>
+    <section class="set-group">
+      <h2 class="set-kicker">{t('Extras')}</h2>
+      <div class="field">{check('noteReminders', t('Notes'), t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.'))}</div>
+      <div class="field">{check('streaks', t('Streaks'), t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.'))}</div>
+      <div class="field"><div class="col">
+        {check('strongs', t("Strong's numbers"), t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)'))}
+        {check('strongsNumbers', t('Show the numbers inline'))}
+      </div></div>
+    </section>
+  </div>
 
   // Listening lives on a verse's bar, where people don't think to look: this
   // page says so, and Show me opens that bar on a verse in view.

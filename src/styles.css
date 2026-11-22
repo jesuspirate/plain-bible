@@ -1410,3 +1410,14 @@ body.selecting .continue { display: none; }
 .audio-pick .what { color: var(--muted); font-size: 15px; line-height: 1.35; }
 .audio-note { margin: 0; color: var(--muted); font-size: 15px; }
 
+
+/* Font and layout: grouped under small headings, like the Settings page. A
+   tick box shows a short bold name with what it does in quiet words under it. */
+.layout-page .set-group { margin-bottom: 26px; }
+.layout-page .set-kicker { margin: 0; padding-bottom: 2px; border-bottom: 1px solid var(--line); }
+.layout-page .set-group > .field:last-child { border-bottom: 0; }
+.settings .field label.check { flex: 1 1 100%; min-height: 46px; align-items: center; }
+.settings .field label.check:has(.check-text .muted) { align-items: flex-start; }
+.settings .field label.check:has(.check-text .muted) input { margin-top: 1px; }
+.check-text { display: flex; flex-direction: column; gap: 2px; }
+.check-name { font-weight: 600; }
