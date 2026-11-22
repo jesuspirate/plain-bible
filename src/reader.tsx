@@ -4,7 +4,7 @@ import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
 import { loadPlace, savePlace, withoutVerse } from './lib/place'
-import { afterUsing, colorsByUse, FoundNote, lastColor, markKey, newNoteId, notesCovering, notesOf, setNote, tidy } from './lib/marks'
+import { afterUsing, colorsByUse, FoundNote, hlVars, lastColor, markKey, newNoteId, notesCovering, notesOf, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
@@ -1126,7 +1126,7 @@ export function Reader({ route }: { route: Route }) {
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v), onMouseDown: fine ? (e: MouseEvent) => { if (e.detail === 3) e.preventDefault() } : undefined }
       : { id: undefined, onClick: undefined, onMouseDown: undefined }
-    const hl = (v: number) => mark(v)?.c ? { '--hl': mark(v)!.c } : undefined
+    const hl = (v: number) => mark(v)?.c ? hlVars(mark(v)!.c!) : undefined
     const after = (v: number) => {
       if (live) return marksAfter(v)
       return <>

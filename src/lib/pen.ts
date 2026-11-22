@@ -10,6 +10,8 @@
 // the start of the line to its end. When the last strip is done they all go
 // and the verse's own highlight takes over, so nothing moves or flickers.
 
+import { hlVars } from './marks'
+
 /** Verses (mark keys) whose new highlight is waiting to be drawn. */
 const waiting = new Set<string>()
 /** Verses being drawn right now. */
@@ -100,7 +102,7 @@ export function inkStrip(r: DOMRect, layer: HTMLElement, box: DOMRect, color: st
   const el = document.createElement('span')
   el.className = 'hl pen-ink' + (style === 'text' ? ' pen-line' : '')
   el.setAttribute('aria-hidden', 'true')
-  el.style.setProperty('--hl', color)
+  for (const [k, v] of Object.entries(hlVars(color))) el.style.setProperty(k, v)
   // The underline sits a little below the letters.
   const top = style === 'text' ? r.bottom - .05 * fs : r.top
   const height = style === 'text' ? .16 * fs : r.height

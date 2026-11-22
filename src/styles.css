@@ -1,8 +1,8 @@
 :root {
   --bg: #faf8f3; --surface: #ffffff; --text: #22211f; --muted: #6b675f; --line: #e4dfd4;
   --accent: #7a4b1e; --accent-ink: #ffffff; --mark: #fde9a6; --mark-ink: #22211f; --chip: #f1ece1;
-  /* bookmark ribbon, and how much of a highlight color tints letters */
-  --ribbon: #b3261e; --hl-ink: 30%;
+  /* bookmark ribbon */
+  --ribbon: #b3261e;
   --font-size: 19px;
   --serif: 'Literata Variable', Georgia, 'Noto Serif', serif;
   --sans: 'Inter Variable', system-ui, -apple-system, 'Segoe UI', Roboto, 'Noto Sans', sans-serif;
@@ -10,9 +10,9 @@
   color-scheme: light;
 }
 :root[data-theme='sepia'] { --bg: #f4ecd8; --surface: #fbf5e6; --text: #3b2f22; --muted: #7a6a55; --line: #e0d3b6; --chip: #ebe0c6; --mark: #f2d88b; }
-:root[data-theme='dark'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; --ribbon: #ff8a7a; --hl-ink: 75%; color-scheme: dark; }
+:root[data-theme='dark'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; --ribbon: #ff8a7a; color-scheme: dark; }
 @media (prefers-color-scheme: dark) {
-  :root[data-theme='system'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; --ribbon: #ff8a7a; --hl-ink: 75%; color-scheme: dark; }
+  :root[data-theme='system'] { --bg: #16161a; --surface: #1f1f24; --text: #e6e3dc; --muted: #9a958b; --line: #2f2f36; --accent: #e0a96d; --accent-ink: #16161a; --mark: #5a4a1a; --mark-ink: #fff3cf; --chip: #2a2a31; --ribbon: #ff8a7a; color-scheme: dark; }
 }
 
 :root[data-vn='medium'] { --vn-size: .78em; }
@@ -460,27 +460,29 @@ main.with-mini { padding-bottom: 144px; }
 :root[data-hl='block'] .hl .vt { background: none; padding: 0; margin: 0; }
 :root[data-hl='block'] .verse.hl .cell, :root[data-hl='block'] .pv.hl { background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: 4px; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
 :root[data-hl='block'] .verse.hl .cell { padding: 1px 4px; margin: 0 -4px; }
-/* Colored text: the letters take the color, with a line of it underneath. */
-:root[data-hl='text'] .hl .vt { background: none; padding: 0; margin: 0; color: color-mix(in srgb, var(--hl) var(--hl-ink), var(--text));
-  text-decoration: underline; text-decoration-color: var(--hl); text-decoration-thickness: .16em; text-underline-offset: .22em; text-decoration-skip-ink: none; }
+/* Colored text: only the letters take the color, in an ink deep enough to
+   read on light and sepia pages and bright on dark ones (hlVars in lib/marks). */
+.hl, .hlp { --hl-ink-now: var(--hl-t, color-mix(in oklab, var(--hl) 45%, #000)); }
+:root[data-hl='text'] .hl .vt { background: none; padding: 0; margin: 0; color: var(--hl-ink-now); transition: color .3s; }
 .hl-preview { margin: 4px 0 0; font-family: var(--reading); font-size: 18px; line-height: 1.7; }
 .hl-preview .pv { cursor: default; }
 :root[data-theme='dark'] .hl, :root[data-theme='dark'] .hlp { --hl-mix: 32%; }
 /* Only some words highlighted, drawn with a pen (src/lib/stroke.ts). */
 mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); border-radius: .3em; padding: .04em .12em; margin: 0 -.12em; box-decoration-break: clone; -webkit-box-decoration-break: clone; }
-:root[data-hl='text'] mark.hl-part { background: none; padding: 0; margin: 0; color: color-mix(in srgb, var(--hl) var(--hl-ink), var(--text));
-  text-decoration: underline; text-decoration-color: var(--hl); text-decoration-thickness: .16em; text-underline-offset: .22em; text-decoration-skip-ink: none; }
+:root[data-hl='text'] mark.hl-part { background: none; padding: 0; margin: 0; color: var(--hl-ink-now); }
 /* A new highlight drawn in by hand (src/lib/pen.ts): strips of ink behind the
    words, while the verse's own highlight waits until the pen is done. */
 .hl-preview, article.chapter { position: relative; }
 .pen-ink { position: absolute; z-index: 0; pointer-events: none; background: color-mix(in srgb, var(--hl) var(--hl-mix), transparent); }
-.pen-ink.pen-line { background: var(--hl); }
+.pen-ink.pen-line { background: var(--hl-ink-now); }
 .hl-draw .vt, .hl-draw .vn, .penning .vt { position: relative; z-index: 1; }
 .penning { -webkit-user-select: none; user-select: none; }
 .hl.hl-draw .vt { background: none; }
 :root[data-hl='block'] .verse.hl.hl-draw .cell, :root[data-hl='block'] .pv.hl.hl-draw { background: none; }
-:root[data-hl='text'] .hl.hl-draw .vt { text-decoration-color: transparent; }
-@media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl, :root[data-theme='system'] .hlp { --hl-mix: 32%; } }
+/* While the pen line sweeps under them, the letters wait, then fill with color. */
+:root[data-hl='text'] .hl.hl-draw .vt { color: inherit; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .hl, :root[data-theme='system'] .hlp { --hl-mix: 32%; --hl-ink-now: var(--hl-td, var(--hl)); } }
+:root[data-theme='dark'] .hl, :root[data-theme='dark'] .hlp { --hl-ink-now: var(--hl-td, var(--hl)); }
 /* After the verse number: a bookmark ribbon and a note icon */
 .note-mark { all: unset; cursor: pointer; display: inline-flex; vertical-align: -.08em; font-size: .9em; color: var(--accent); margin: 0 5px 0 -1px; padding: 2px; border-radius: 5px; }
 @media (hover: hover) { .note-mark:hover { background: var(--chip); } }

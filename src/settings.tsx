@@ -14,7 +14,7 @@ import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
 import { checkForUpdate, useUpdate } from './lib/update'
-import { hasContent } from './lib/marks'
+import { hasContent, hlVars, yellowHidden } from './lib/marks'
 import { QUICK, draw, penAllowed } from './lib/pen'
 import { AccountSection } from './account'
 import { canSuggest, reopenReport, SuggestPage } from './suggest'
@@ -594,8 +594,8 @@ function HlPreview() {
   }, [settings.penSlow, settings.highlight])
   return (
     <p class="hl-preview" aria-hidden="true" ref={box}>
-      <span class="pv hl" style={{ '--hl': '#fff193' }}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
-      <span class="pv hl" style={{ '--hl': '#b3e487' }}><span class="vt">{t('and the Word was God.')}</span></span>
+      <span class="pv hl" style={hlVars(yellowHidden(settings.highlight, settings.theme) ? '#dac6ff' : '#fff193')}><span class="vt">{t('In the beginning was the Word, and the Word was with God,')}</span></span>{' '}
+      <span class="pv hl" style={hlVars('#b3e487')}><span class="vt">{t('and the Word was God.')}</span></span>
     </p>
   )
 }

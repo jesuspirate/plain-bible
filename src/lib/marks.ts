@@ -55,6 +55,30 @@ export const PALETTE: { color: string; name: string }[] = [
   { color: '#ffadaf', name: N_('Red') },
 ]
 
+/** "Colored text" highlights: the letters themselves take the color. The
+ *  pale highlight colors can't be read as letters on a light page, so each has
+ *  a deeper ink for light and sepia pages (at least 4.5:1 contrast on sepia) and
+ *  a bright one for dark pages. Other colors fall back to a mix in CSS. */
+const INK: Record<string, [string, string]> = {
+  // Yellow isn't offered for colored text on light pages (yellowHidden);
+  // verses already yellow show there in the orange ink, which reads well.
+  '#fff193': ['#9a4606', '#ffe066'],
+  '#b3e487': ['#2a6b15', '#a8e27c'],
+  '#cae1fe': ['#1d5bb8', '#9fc8ff'],
+  '#80cbc4': ['#0b6e66', '#74d4c9'],
+  '#dac6ff': ['#6a3ec0', '#c9adff'],
+  '#ffc9e4': ['#a8306f', '#ffa3d0'],
+  '#ffc595': ['#9a4606', '#ffb57a'],
+  '#ffadaf': ['#b0261e', '#ff9497'],
+}
+
+/** The style that gives an element a highlight color (--hl), with its inks
+ *  for colored text (--hl-t on light pages, --hl-td on dark ones). */
+export function hlVars(color: string): Record<string, string> {
+  const ink = INK[color.toLowerCase()]
+  return ink ? { '--hl': color, '--hl-t': ink[0], '--hl-td': ink[1] } : { '--hl': color }
+}
+
 /** The color last picked on this device, from before the order synced. */
 const LAST_COLOR = 'plain-bible:last-color'
 function oldLast() {
@@ -62,10 +86,21 @@ function oldLast() {
 }
 /** The palette with the colors you used most recently first, newest on the
  *  left; colors never used keep their usual order after them. */
-export function colorsByUse(recent: string[] | undefined) {
+export function colorsByUse(recent: string[] | undefined, noYellow = yellowHidden()) {
   const order = recent?.length ? recent : [oldLast() ?? '']
   const used = order.map(c => PALETTE.find(p => p.color === c)).filter(p => !!p) as typeof PALETTE
-  return [...used, ...PALETTE.filter(p => !used.includes(p))]
+  const all = [...used, ...PALETTE.filter(p => !used.includes(p))]
+  return noYellow ? all.filter(p => p.color !== YELLOW) : all
+}
+const YELLOW = '#fff193'
+/** Yellow letters can't be read on a light or sepia page, so with Colored
+ *  text highlights there yellow isn't offered (verses already yellow keep it). */
+export function yellowHidden(hl?: string, theme?: string) {
+  if (typeof document === 'undefined') return false
+  hl ??= document.documentElement.dataset.hl
+  theme ??= document.documentElement.dataset.theme
+  if (hl !== 'text') return false
+  return theme === 'light' || theme === 'sepia' || (theme === 'system' && !matchMedia('(prefers-color-scheme: dark)').matches)
 }
 /** The color last used, for double-tap highlighting. */
 export const lastColor = (recent: string[] | undefined) => colorsByUse(recent)[0].color
