@@ -1478,10 +1478,10 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           <button class="close-btn" aria-label={t('Clear selection')} onClick={onClose}><CloseIcon size={22} /></button>
         </div>
         <div class="swatches" role="radiogroup" aria-label={t('Highlight color')}>
-          {colorsByUse(settings.recentColors).map(p => (
+          {colorsByUse(settings.recentColors, undefined, current).map(p => (
             <button role="radio" aria-checked={current === p.color} aria-label={t(p.name)} class={'swatch' + (current === p.color ? ' on' : '')}
               style={{ background: p.color }} onClick={() => { if (current !== p.color) update({ recentColors: afterUsing(settings.recentColors, p.color) }); apply({ c: current === p.color ? null : p.color }); onClose() }}>
-              {current === p.color && <svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="#222" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" /></svg>}
+              {current === p.color && <CheckMark />}
             </button>
           ))}
           {colors.size > 0 && <button class="swatch none" aria-label={t('Remove highlight')} onClick={() => { apply({ c: null }); onClose() }}>✕</button>}
@@ -1709,3 +1709,6 @@ function NoteEditor({ at: markK, id, verses, passage, onDone, onShare }: {
     </>
   )
 }
+
+/** The tick on the color a verse already has: big and dark, easy to spot. */
+export const CheckMark = () => <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><path d="M4.5 12.5l5 5L19.5 7" fill="none" stroke="#1a1a1a" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
