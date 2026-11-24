@@ -56,12 +56,10 @@ export const SpinnerIcon = ({ size, class: c }: P) => (
     <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" pathLength="100" stroke-dasharray="28 72" /></svg>
 )
 
-/** Three people around a circle: share with your circle. */
+/** Eight friends in a ring around a heart: a small circle that loves one
+ *  another. Solid shapes, so it stays clear at the size of a fingertip. */
 export const CircleIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}><circle cx="12" cy="7" r="3" fill="none" stroke="currentColor" stroke-width="2.2" />
-    <circle cx="5.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
-    <circle cx="18.5" cy="15.5" r="2.6" fill="none" stroke="currentColor" stroke-width="2.2" />
-    <path d="M8.2 20.5a6.5 6.5 0 0 0 7.6 0M7.2 10.6a6.5 6.5 0 0 0-1.6 2.3M16.8 10.6a6.5 6.5 0 0 1 1.6 2.3" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
+  <svg {...svg(size, c)} fill="currentColor"><circle cx="12" cy="2.3" r="2" /><circle cx="18.86" cy="5.14" r="2" /><circle cx="21.7" cy="12" r="2" /><circle cx="18.86" cy="18.86" r="2" /><circle cx="12" cy="21.7" r="2" /><circle cx="5.14" cy="18.86" r="2" /><circle cx="2.3" cy="12" r="2" /><circle cx="5.14" cy="5.14" r="2" /><path d="M12 17.36C8.48 14.94 6.5 12.96 6.5 10.43 6.5 8.67 7.82 7.35 9.47 7.35 10.57 7.35 11.45 7.9 12 8.78 12.55 7.9 13.43 7.35 14.53 7.35 16.18 7.35 17.5 8.67 17.5 10.43 17.5 12.96 15.52 14.94 12 17.36z" /></svg>
 )
 
 /** A thick ×: close. Drawn, not typed, so it stays bold on every phone. */

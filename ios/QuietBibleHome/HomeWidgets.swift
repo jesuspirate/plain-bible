@@ -3,8 +3,8 @@ import WidgetKit
 
 // The Home Screen (and Lock Screen) widgets of the iPhone app. Each one is
 // only a button or two: 🙏 opens the app straight on the prayer screen, the
-// three people open Circles. The Circles button also says, quietly, when a
-// circle has something new: a gold dot and a few words, never a count and
+// Circles mark (friends round a heart) opens Circles. The Circles button
+// also says, quietly, when a circle has something new: a gold dot and a few words, never a count and
 // never what was shared. The widgets never ask iOS for updates on a clock;
 // the app and its notification extension redraw them when the news changes
 // (Shared/SharedCircles.swift). The app handles the links in SceneDelegate.swift.
@@ -112,27 +112,38 @@ struct PrayDisc: View {
     }
 }
 
-/// The app's Circles mark (src/icons.tsx, CircleIcon): three people in a ring.
+/// The app's Circles mark (src/icons.tsx, CircleIcon): eight friends in a
+/// ring around a heart. Solid shapes, drawn with fill.
 struct CirclesMark: Shape {
     func path(in rect: CGRect) -> Path {
         let s = min(rect.width, rect.height) / 24
         let ox = rect.midX - 12 * s, oy = rect.midY - 12 * s
         func p(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: ox + x * s, y: oy + y * s) }
-        func ring(_ x: CGFloat, _ y: CGFloat, _ r: CGFloat) -> CGRect {
-            CGRect(x: ox + (x - r) * s, y: oy + (y - r) * s, width: 2 * r * s, height: 2 * r * s)
+        func dot(_ x: CGFloat, _ y: CGFloat) -> CGRect {
+            CGRect(x: ox + (x - 2) * s, y: oy + (y - 2) * s, width: 4 * s, height: 4 * s)
         }
         var path = Path()
-        path.addEllipse(in: ring(12, 7, 3))
-        path.addEllipse(in: ring(5.5, 15.5, 2.6))
-        path.addEllipse(in: ring(18.5, 15.5, 2.6))
-        path.move(to: p(8.2, 20.5)); path.addQuadCurve(to: p(15.8, 20.5), control: p(12, 22.96))
-        path.move(to: p(7.2, 10.6)); path.addQuadCurve(to: p(5.6, 12.9), control: p(6.15, 11.57))
-        path.move(to: p(16.8, 10.6)); path.addQuadCurve(to: p(18.4, 12.9), control: p(17.85, 11.57))
+        path.addEllipse(in: dot(12, 2.3))
+        path.addEllipse(in: dot(18.86, 5.14))
+        path.addEllipse(in: dot(21.7, 12))
+        path.addEllipse(in: dot(18.86, 18.86))
+        path.addEllipse(in: dot(12, 21.7))
+        path.addEllipse(in: dot(5.14, 18.86))
+        path.addEllipse(in: dot(2.3, 12))
+        path.addEllipse(in: dot(5.14, 5.14))
+        path.move(to: p(12, 17.36))
+        path.addCurve(to: p(6.5, 10.43), control1: p(8.48, 14.94), control2: p(6.5, 12.96))
+        path.addCurve(to: p(9.47, 7.35), control1: p(6.5, 8.67), control2: p(7.82, 7.35))
+        path.addCurve(to: p(12, 8.78), control1: p(10.57, 7.35), control2: p(11.45, 7.9))
+        path.addCurve(to: p(14.53, 7.35), control1: p(12.55, 7.9), control2: p(13.43, 7.35))
+        path.addCurve(to: p(17.5, 10.43), control1: p(16.18, 7.35), control2: p(17.5, 8.67))
+        path.addCurve(to: p(12, 17.36), control1: p(17.5, 12.96), control2: p(15.52, 14.94))
+        path.closeSubpath()
         return path
     }
 }
 
-/// The three people on a plain round button.
+/// The Circles mark on a plain round button.
 struct CirclesDisc: View {
     let size: CGFloat
     var news = false
@@ -143,7 +154,7 @@ struct CirclesDisc: View {
         ZStack {
             Circle().fill(c.surface).overlay(Circle().stroke(c.line, lineWidth: 1))
             CirclesMark()
-                .stroke(c.ink, style: StrokeStyle(lineWidth: size * 0.6 / 24 * 2.6, lineCap: .round))
+                .fill(c.ink)
                 .frame(width: size * 0.6, height: size * 0.6)
         }
         .frame(width: size, height: size)
@@ -224,7 +235,7 @@ struct CirclesFace: View {
             ZStack {
                 AccessoryWidgetBackground()
                 CirclesMark()
-                    .stroke(style: StrokeStyle(lineWidth: 2.4, lineCap: .round))
+                    .fill()
                     .padding(9)
             }
             .overlay(alignment: .topTrailing) {
@@ -291,7 +302,7 @@ struct CirclesBar: View {
         let c = Palette(scheme)
         HStack(spacing: 12) {
             CirclesMark()
-                .stroke(c.ink, style: StrokeStyle(lineWidth: 2.6 * 30 / 24, lineCap: .round))
+                .fill(c.ink)
                 .frame(width: 30, height: 30)
                 .overlay(alignment: .topTrailing) { if entry.news { NewsDot(size: 11).offset(x: 4, y: -3) } }
             (entry.news ? newsWords(entry, named: true) : Text("Circles"))
