@@ -26,6 +26,7 @@ import { QUICK, draw, inkStrip, penAllowed, penDown, penHold, penOn, penUp, take
 import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } from './lib/stroke'
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, useWide } from './lib/spread'
 import { tally } from './lib/tally'
+import { useLeave } from './motion'
 
 // After Try it now (Audio in Settings), the next verse bar shows which two
 // buttons are the audio ones: the fingertip taps each, with what it does.
@@ -38,6 +39,7 @@ export function Reader({ route }: { route: Route }) {
   const book = bookParam && BOOK_INDEX[bookParam] !== undefined ? bookParam : 'Gen'
   const chapter = Math.max(1, +chParam || 1)
   const target = +(route.params.get('v') || 0)
+  const pickLeave = useLeave(), tiedLeave = useLeave()
   // The last verse when you went to several (John 3:16-18).
   const targetEnd = Math.max(target, +(route.params.get('e') || 0) || 0)
   // Back to a place in your history: that verse at the top, not marked.
@@ -1284,7 +1286,7 @@ export function Reader({ route }: { route: Route }) {
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
         onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
       {picking && (
-        <div class="pick-verse" role="region" aria-label={t('Verses for your prayer')}>
+        <div class="pick-verse" ref={pickLeave} role="region" aria-label={t('Verses for your prayer')}>
           <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap verses for your prayer')}</p>
           {picking.verses.length > 0 && <ul class="pick-list">
             {picking.verses.map(x => <li>
@@ -1300,7 +1302,7 @@ export function Reader({ route }: { route: Route }) {
           </div>
         </div>
       )}
-      {tied && <div class="pick-verse done" role="status">{tied}</div>}
+      {tied && <div class="pick-verse done" ref={tiedLeave} role="status">{tied}</div>}
       {noteFor && <NotesSheet book={book} chapter={chapter} version={version} {...noteFor} dir={info?.rtl ? 'rtl' : 'ltr'} links={links} onGo={x => { setNoteFor(undefined); goNote(x) }}
         text={v => plain(primary?.books[book]?.[chapter - 1]?.[v - 1] ?? '')} onClose={() => setNoteFor(undefined)} />}
       {chapterSheet && (
@@ -1457,6 +1459,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // A verse tapped low on the screen would sit under this bar: lift it into
   // view, never so far that its top goes under the top bar.
   const bar = useRef<HTMLDivElement>(null)
+  const barLeave = useLeave(bar)
   useEffect(() => {
     const el = document.getElementById('v' + verses[0])
     if (!el || !bar.current) return
@@ -1471,7 +1474,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
 
   return (
     <>
-      <div class="selbar" ref={bar} role="toolbar" aria-label={t('{ref} selected', { ref })}>
+      <div class="selbar" ref={barLeave} role="toolbar" aria-label={t('{ref} selected', { ref })}>
         <div class="selbar-head">
           <strong>{ref}</strong>
           <span class="muted small">{verses.length > 1 ? tn(verses.length, '{n} verse', '{n} verses') : t('Tap more verses to add them')}</span>

@@ -1484,3 +1484,28 @@ body.selecting .continue { display: none; }
 .settings .field label.check:has(.check-text .muted) input { margin-top: 1px; }
 .check-text { display: flex; flex-direction: column; gap: 2px; }
 .check-name { font-weight: 600; }
+
+/* ---- Quiet motion (motion.ts): everything that opens from a button comes in
+   the same way, a short fade with a small rise, and goes the same way, a
+   little quicker. Only opacity, translate and scale move, which every phone
+   draws without effort. `translate` and `scale` add to an element's own
+   transform (the centred bars keep their translateX(-50%)). Nothing waits on
+   it: a card can be tapped while it is still coming in. */
+:root { --quiet: cubic-bezier(.2, .8, .2, 1); }
+@keyframes quiet-in { from { opacity: 0; translate: 0 10px; scale: .98; } }
+@keyframes quiet-out { to { opacity: 0; translate: 0 8px; scale: .985; } }
+@keyframes quiet-fade-out { to { opacity: 0; } }
+/* The prayer list and circles inside 🙏 named this but it was never written. */
+@keyframes sb-rise { from { opacity: 0; translate: 0 14px; } }
+dialog.sheet[open] { animation: quiet-in .22s var(--quiet); }
+dialog.sheet[open]::backdrop { animation: sb-fade .22s ease-out; }
+.selbar, .move-welcome, .move-ask-card, .steps-pill, .selbar-ask { animation: quiet-in .22s var(--quiet); }
+.move-ask { animation: sb-fade .22s ease-out; }
+.ghost-out { pointer-events: none !important; margin: 0 !important; }
+.ghost-out * { animation: none !important; transition: none !important; }
+.ghost-out.ghost-sink { animation: quiet-out .16s ease-in forwards !important; }
+.ghost-out.ghost-fade { animation: quiet-fade-out .18s ease-in forwards !important; }
+.ghost-dim { position: fixed; inset: 0; z-index: 999; }
+@media (prefers-reduced-motion: reduce) {
+  dialog.sheet[open], dialog.sheet[open]::backdrop, .selbar, .move-welcome, .move-ask, .move-ask-card, .steps-pill, .selbar-ask, .pray-list { animation: none; }
+}

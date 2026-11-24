@@ -7,6 +7,7 @@ import { PhoneIcon } from './icons'
 import { ShowDeviceCode } from './devicecode'
 import { t, tj } from './i18n'
 import { homeScreenHelps } from './lib/install'
+import { useLeave } from './motion'
 
 const set = (k: string, v: string | null) => { try { v === null ? localStorage.removeItem(k) : localStorage.setItem(k, v) } catch { /* ignore */ } }
 
@@ -14,6 +15,7 @@ const set = (k: string, v: string | null) => { try { v === null ? localStorage.r
  *  asks first: a link signs this device in to someone's account, and what's
  *  here then syncs to it, so nothing happens until you say so. */
 export function Arriving({ link }: { link: { id: string; key: string } }) {
+  const leave = useLeave(undefined, 'fade')
   const [step, setStep] = useState(() => t('Checking the link…'))
   const [error, setError] = useState('')
   const [ask, setAsk] = useState<{ got: Awaited<ReturnType<typeof fetchMove>>; email: string | null; signedIn: boolean }>()
@@ -35,7 +37,7 @@ export function Arriving({ link }: { link: { id: string; key: string } }) {
     applyMove(ask.got.bundle, ask.got.prayers).then(toBible).catch(e => setError((e as Error).message || String(e)))
   }
   if (ask && !error) return (
-    <div class="move-ask">
+    <div ref={leave} class="move-ask">
       <div class="confirm-card move-ask-card" role="alertdialog" aria-labelledby="move-ask-title">
         <p id="move-ask-title" class="confirm-title"><strong>{t('Link this device to an account?')}</strong></p>
         <p>{ask.signedIn
@@ -90,12 +92,13 @@ export function PasteMove({ onDone }: { onDone?: () => void }) {
 /** After a device link: what came. A fresh install opens quietly; pasting
  *  a link lives in Settings → Account. */
 export function MoveWelcome() {
+  const leave1 = useLeave()
   const [info, setInfo] = useState(movedIn)
   // Moves from the old address ended; only device links remain.
   if (info?.kind !== 'link') return null
   const close = () => { set(MOVED_IN, null); setInfo(null) }
   return (
-    <div class="move-welcome" role="dialog" aria-label={t('Linked')}>
+    <div ref={leave1} class="move-welcome" role="dialog" aria-label={t('Linked')}>
       <p><strong>{t('This device is linked.')}</strong> {info.prayerKey
         ? t('You’re signed in and your prayers are unlocked. Your highlights, notes and settings arrive in a moment, and your prayers right after.')
         : t('You’re signed in. Your highlights, notes and settings arrive in a moment.')}</p>

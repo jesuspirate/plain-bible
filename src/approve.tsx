@@ -4,6 +4,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { loadAccount, noPasskey } from './lib/sync'
 import { t, tj } from './i18n'
+import { useLeave } from './motion'
 
 type Lib = typeof import('./lib/approve')
 let lib: Promise<Lib> | undefined
@@ -56,6 +57,7 @@ export function AskApproval({ onDone, btn = 'c-btn' }: { onDone: () => void; btn
  *  so a request from someone else (who got into your email, say) can't be
  *  let in by a quick tap. */
 export function ApproveCard() {
+  const leave = useLeave()
   const [asks, setAsks] = useState<Awaited<ReturnType<Lib['waitingApprovals']>>>([])
   const [busy, setBusy] = useState(false)
   const [msg, setMsg] = useState('')
@@ -87,7 +89,7 @@ export function ApproveCard() {
     } catch (e) { setMsg((e as Error).message) } finally { setBusy(false) }
   }
   return (
-    <div class="move-welcome approve-card" role="dialog" aria-live="polite">
+    <div ref={leave} class="move-welcome approve-card" role="dialog" aria-live="polite">
       {ask ? <>
         <p><strong>{t('Allow your {device}?', { device: t(ask.label) })}</strong> {t('It’s signed in to your account and asks to open your prayers and circles.')}</p>
         <form onSubmit={e => { e.preventDefault(); answer(true)() }}>

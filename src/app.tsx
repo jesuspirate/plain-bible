@@ -36,6 +36,7 @@ import { nativeNotify } from './lib/nativeNotify'
 import { hello } from './lib/hello'
 import { AWAY, useSideways } from './sideways'
 import { useRecording } from './lib/recordMode'
+import { useLeave } from './motion'
 
 // The status bar color the page loaded with (set in index.html before first paint).
 const LOAD_TINT = document.querySelector('meta[name="theme-color"]')?.getAttribute('content')
@@ -542,6 +543,7 @@ const placeName = (p: Visit) => formatRef({ book: p.book, chapter: p.chapter, ve
 // back again: handy for following a preacher between passages. Press and
 // hold (or right-click) to see your last 3 places.
 function HistoryButton({ route }: { route: Route }) {
+  const leave = useLeave()
   const { settings, byId, data } = useApp()
   const trail = useTrail()
   const [peek, setPeek] = useState(false)
@@ -592,7 +594,7 @@ function HistoryButton({ route }: { route: Route }) {
         <HistoryIcon size={26} />
       </button>
       {peek && (
-        <div class="peek" role="dialog" aria-label={t('Go back')}>
+        <div ref={leave} class="peek" role="dialog" aria-label={t('Go back')}>
           {!first ? <p class="peek-empty">{t('When you jump to another passage, the place you left shows here so you can come back with one tap.')}</p> : <>
             <button class="peek-main" onClick={() => goTo(first)}>
               <span class="peek-kicker">{t('Back to')}</span>

@@ -3,6 +3,7 @@
 import { useEffect, useRef, useState } from 'preact/hooks'
 import { t } from './i18n'
 import { PasteMove } from './move'
+import { useLeave } from './motion'
 
 type Lib = typeof import('./lib/devicecode')
 let lib: Promise<Lib> | undefined
@@ -85,6 +86,7 @@ export function ShowDeviceCode({ onClose, onLink }: { onClose: () => void; onLin
  *  good: on a phone, typing it in another app (Fedi, say) can reload this
  *  one, and the other device is still waiting for Allow here. */
 export function PendingDeviceCode() {
+  const leave = useLeave()
   const [open, setOpen] = useState(() => {
     try {
       const c = JSON.parse(localStorage.getItem('plain-bible:devicecode') || 'null') as { expires?: number } | null
@@ -92,7 +94,7 @@ export function PendingDeviceCode() {
     } catch { return false }
   })
   if (!open) return null
-  return <div class="move-welcome approve-card" role="dialog" aria-live="polite">
+  return <div ref={leave} class="move-welcome approve-card" role="dialog" aria-live="polite">
     <ShowDeviceCode onClose={() => setOpen(false)} />
   </div>
 }

@@ -4,6 +4,7 @@
 import { nowPlaying } from './lib/nowplaying'
 import type { ComponentChildren } from 'preact'
 import { useEffect, useRef, useState } from 'preact/hooks'
+import { useLeave } from './motion'
 import { holdUpdate } from './lib/update'
 import { AskApproval } from './approve'
 import { canRecord, duration, partsOf, prayers, PrayerInfo, recordingType } from './lib/prayers'
@@ -90,6 +91,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // keyboard is up the screen covers just what's left of the view, and the
   // card sits right above the keyboard.
   const root = useRef<HTMLDivElement>(null)
+  const rootLeave = useLeave(root, 'fade')
   useEffect(() => {
     const vv = window.visualViewport, el = root.current
     if (!vv || !el) return
@@ -296,7 +298,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     : tj('Prayed using {verse}', { verse: refs })
 
   return (
-    <div class="pray" role="dialog" aria-modal="true" ref={root} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
+    <div class="pray" role="dialog" aria-modal="true" ref={rootLeave} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
       {/* The list has its own Done, so only one close is ever on screen. */}
       {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
       {view === 'pray' && phase !== 'heard' && (tied.length

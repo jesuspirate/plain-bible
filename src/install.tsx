@@ -8,6 +8,7 @@ import { CloseIcon } from './icons'
 import { canInstall, INSTALL_EVENT, installNow, installed, isAndroid, isIPhone } from './lib/install'
 import './install.css'
 import { appleHelp, google } from './lib/helpLinks'
+import { useLeave } from './motion'
 
 const ShareGlyph = () => <svg class="hs-glyph" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3v12M7.5 7.5 12 3l4.5 4.5" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /><path d="M8 10H6.5A1.5 1.5 0 0 0 5 11.5v8A1.5 1.5 0 0 0 6.5 21h11a1.5 1.5 0 0 0 1.5-1.5v-8a1.5 1.5 0 0 0-1.5-1.5H16" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
 const AddGlyph = () => <svg class="hs-glyph" viewBox="0 0 24 24" aria-hidden="true"><rect x="3.5" y="3.5" width="17" height="17" rx="4" fill="none" stroke="currentColor" stroke-width="2.2" /><path d="M12 8v8M8 12h8" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
@@ -19,6 +20,7 @@ const APP_STORE = 'https://apps.apple.com/app/my-quiet-bible/id6831915876'
 const APPLE_LOGO = 'M16.37 12.6c-.02-2.33 1.9-3.45 1.99-3.5-1.08-1.59-2.77-1.8-3.37-1.83-1.43-.15-2.8.84-3.53.84-.73 0-1.85-.82-3.04-.8-1.57.02-3.01.91-3.82 2.31-1.63 2.82-.42 7 1.17 9.29.78 1.12 1.7 2.38 2.91 2.33 1.17-.05 1.61-.75 3.02-.75 1.41 0 1.81.75 3.04.73 1.26-.02 2.05-1.14 2.82-2.27.89-1.3 1.25-2.56 1.27-2.62-.03-.01-2.44-.94-2.46-3.73zM14.06 5.75c.64-.78 1.08-1.86.96-2.94-.93.04-2.05.62-2.72 1.4-.6.69-1.12 1.79-.98 2.85 1.04.08 2.1-.53 2.74-1.31z'
 
 export function HomeScreen({ onClose }: { onClose: () => void }) {
+  const leave = useLeave(undefined, 'fade')
   const [oneTap, setOneTap] = useState(canInstall)
   const [busy, setBusy] = useState(false)
   const main = useRef<HTMLButtonElement>(null)
@@ -60,7 +62,7 @@ export function HomeScreen({ onClose }: { onClose: () => void }) {
     : { href: google(android ? 'Android' : 'Desktop', lang), label: t('Google’s instructions') }
 
   return (
-    <div class="hs" role="dialog" aria-modal="true" aria-labelledby="hs-title">
+    <div ref={leave} class="hs" role="dialog" aria-modal="true" aria-labelledby="hs-title">
       <div class="hs-dim" onClick={onClose} />
       <div class="hs-card">
         <div class="hs-top">
