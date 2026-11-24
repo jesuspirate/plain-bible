@@ -26,7 +26,7 @@ import { canShare, copyText } from './lib/native'
 import { go, openCircles, openSettings, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
-import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, NoteIcon } from './icons'
+import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, NoteIcon, PlayIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import { nowPlaying } from './lib/nowplaying'
@@ -1290,6 +1290,16 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
 /** 0.42 as "42 %" or "42%", the way the reader's language writes it. */
 const percent = (n: number) => new Intl.NumberFormat(locale(), { style: 'percent', maximumFractionDigits: 0 }).format(Math.min(1, Math.max(0, n)))
 
+/** A recording's length in words, like "4 min 35 s", in the reader's own language
+ *  (no new strings: the browser knows the unit names). */
+export function spokenLength(ms: number) {
+  const s = Math.max(0, Math.round(ms / 1000)), m = Math.floor(s / 60), r = s % 60
+  try {
+    const f = (n: number, unit: string) => new Intl.NumberFormat(locale(), { style: 'unit', unit, unitDisplay: 'short' }).format(n)
+    return m ? (r ? `${f(m, 'minute')} ${f(r, 'second')}` : f(m, 'minute')) : f(r, 'second')
+  } catch { return duration(ms) }
+}
+
 /** Share verses, a bookmark, a note or a prayer with one of your circles:
  *  one tap to choose the circle (if there's more than one), and Share. */
 export function ShareSheet({ request, onClose }: { request: ShareRequest; onClose: () => void }) {
@@ -1302,6 +1312,8 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const [msg, setMsg] = useState('')
   const [done, setDone] = useState(false)
   const [what, setWhat] = useState('')
+  // A prayer's length and its verses, shown apart so 4:35 is never read as a chapter and verse.
+  const [said, setSaid] = useState<{ ms: number; verses: string[] }>()
   // A day's prayers: each one shared on its own, so it keeps the day it was
   // prayed. What already went to a circle isn't sent there again on a retry.
   const many = 'prayers' in request
@@ -1331,8 +1343,8 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
       cs = cs.filter(c => c.door !== 'member')
       const first = cs.find(c => !full.has(c.id))
       setList(cs); setShared(sh); setHad(full); setPicks(first ? [first.id] : [])
-      if ('prayers' in request) setWhat(`${tn(kept.length, '{n} prayer', '{n} prayers')} · ${duration(kept.reduce((n, p) => n + p.ms, 0))}`)
-      else if ('prayer' in request) setWhat(kept[0] ? `${t('Your prayer')} · ${duration(kept[0].ms)}${versesOf(kept[0]).map(v => ` · ${verseLabel(v)}`).join('')}` : '')
+      if ('prayers' in request) { setWhat(tn(kept.length, '{n} prayer', '{n} prayers')); setSaid({ ms: kept.reduce((n, p) => n + p.ms, 0), verses: [] }) }
+      else if ('prayer' in request && kept[0]) { setWhat(t('Your prayer')); setSaid({ ms: kept[0].ms, verses: versesOf(kept[0]).map(verseLabel) }) }
     })
     if ('verse' in request) setWhat(verseLabel(request.verse))
   }, [])
@@ -1427,7 +1439,10 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   return (
     <Sheet title={t('Share with your circle')} onClose={onClose}>
       <div class="c-share">
-        <p><strong>{what}</strong></p>
+        {said ? <div class="c-said">
+          <p class="c-said-head"><strong>{what}</strong> <span class="c-len"><PlayIcon size={16} /> {spokenLength(said.ms)}</span></p>
+          {said.verses.map(v => <p class="c-said-verse"><BookIcon size={20} /> <strong>{v}</strong></p>)}
+        </div> : <p><strong>{what}</strong></p>}
         {'verse' in request && <>
           <div class="seg c-pick" role="radiogroup" aria-label={t('Share as')}>
             <button role="radio" aria-checked={kind === 'verse'} class={kind === 'verse' ? 'on' : ''} onClick={() => setKind('verse')}>{t('Verse')}</button>
