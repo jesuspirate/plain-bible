@@ -3,7 +3,7 @@ import WidgetKit
 
 // The Home Screen (and Lock Screen) widgets of the iPhone app. Each one is
 // only a button or two: 🙏 opens the app straight on the prayer screen, the
-// Circles mark (friends round a heart) opens Circles. The Circles button
+// Circles mark (three friends in a circle) opens Circles. The Circles button
 // also says, quietly, when a circle has something new: a gold dot and a few words, never a count and
 // never what was shared. The widgets never ask iOS for updates on a clock;
 // the app and its notification extension redraw them when the news changes
@@ -112,33 +112,26 @@ struct PrayDisc: View {
     }
 }
 
-/// The app's Circles mark (src/icons.tsx, CircleIcon): eight friends in a
-/// ring around a heart. Solid shapes, drawn with fill.
+/// The app's Circles mark (src/icons.tsx, CircleIcon): three friends joined
+/// in one circle, one on top. Open rings and arcs, drawn with stroke.
 struct CirclesMark: Shape {
     func path(in rect: CGRect) -> Path {
         let s = min(rect.width, rect.height) / 24
         let ox = rect.midX - 12 * s, oy = rect.midY - 12 * s
-        func p(_ x: CGFloat, _ y: CGFloat) -> CGPoint { CGPoint(x: ox + x * s, y: oy + y * s) }
+        let c = CGPoint(x: ox + 12 * s, y: oy + 13.3 * s)
         func dot(_ x: CGFloat, _ y: CGFloat) -> CGRect {
-            CGRect(x: ox + (x - 2) * s, y: oy + (y - 2) * s, width: 4 * s, height: 4 * s)
+            CGRect(x: ox + (x - 2.6) * s, y: oy + (y - 2.6) * s, width: 5.2 * s, height: 5.2 * s)
         }
         var path = Path()
-        path.addEllipse(in: dot(12, 2.3))
-        path.addEllipse(in: dot(18.86, 5.14))
-        path.addEllipse(in: dot(21.7, 12))
-        path.addEllipse(in: dot(18.86, 18.86))
-        path.addEllipse(in: dot(12, 21.7))
-        path.addEllipse(in: dot(5.14, 18.86))
-        path.addEllipse(in: dot(2.3, 12))
-        path.addEllipse(in: dot(5.14, 5.14))
-        path.move(to: p(12, 17.36))
-        path.addCurve(to: p(6.5, 10.43), control1: p(8.48, 14.94), control2: p(6.5, 12.96))
-        path.addCurve(to: p(9.47, 7.35), control1: p(6.5, 8.67), control2: p(7.82, 7.35))
-        path.addCurve(to: p(12, 8.78), control1: p(10.57, 7.35), control2: p(11.45, 7.9))
-        path.addCurve(to: p(14.53, 7.35), control1: p(12.55, 7.9), control2: p(13.43, 7.35))
-        path.addCurve(to: p(17.5, 10.43), control1: p(16.18, 7.35), control2: p(17.5, 8.67))
-        path.addCurve(to: p(12, 17.36), control1: p(17.5, 12.96), control2: p(15.52, 14.94))
-        path.closeSubpath()
+        path.addEllipse(in: dot(12, 5.1))
+        path.addEllipse(in: dot(19.1, 17.4))
+        path.addEllipse(in: dot(4.9, 17.4))
+        // The circle between them, with a gap where each friend sits on it.
+        // Angles are measured like the web's: 0 is straight up, clockwise.
+        for t in [0.0, 120.0, 240.0] {
+            path.addArc(center: c, radius: 8.2 * s,
+                        startAngle: .degrees(t + 32.6 - 90), endAngle: .degrees(t + 120 - 32.6 - 90), clockwise: false)
+        }
         return path
     }
 }
@@ -154,7 +147,7 @@ struct CirclesDisc: View {
         ZStack {
             Circle().fill(c.surface).overlay(Circle().stroke(c.line, lineWidth: 1))
             CirclesMark()
-                .fill(c.ink)
+                .stroke(c.ink, lineWidth: size * 0.6 / 24 * 2)
                 .frame(width: size * 0.6, height: size * 0.6)
         }
         .frame(width: size, height: size)
@@ -235,7 +228,7 @@ struct CirclesFace: View {
             ZStack {
                 AccessoryWidgetBackground()
                 CirclesMark()
-                    .fill()
+                    .stroke(lineWidth: 2)
                     .padding(9)
             }
             .overlay(alignment: .topTrailing) {
@@ -302,7 +295,7 @@ struct CirclesBar: View {
         let c = Palette(scheme)
         HStack(spacing: 12) {
             CirclesMark()
-                .fill(c.ink)
+                .stroke(c.ink, lineWidth: 2 * 30 / 24)
                 .frame(width: 30, height: 30)
                 .overlay(alignment: .topTrailing) { if entry.news { NewsDot(size: 11).offset(x: 4, y: -3) } }
             (entry.news ? newsWords(entry, named: true) : Text("Circles"))
