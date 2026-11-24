@@ -5,8 +5,11 @@
   animation: hb-pulse 2.4s ease-in-out infinite; }
 @keyframes hb-pulse { 0%, 100% { box-shadow: 0 0 0 0 color-mix(in srgb, var(--accent) 55%, transparent); }
   50% { box-shadow: 0 0 0 14px color-mix(in srgb, var(--accent) 0%, transparent); } }
-.hb-close { position: absolute; top: calc(env(safe-area-inset-top) + 14px); right: 16px; z-index: 3; }
-:root[dir='rtl'] .hb-close { right: auto; left: 16px; }
+.hb-close { position: absolute; top: calc(env(safe-area-inset-top) + 12px); right: 14px; z-index: 3;
+  /* Over the dimmed page: light, bold and ringed, so it can't be missed. */
+  width: 52px; height: 52px; background: var(--surface); color: var(--text);
+  box-shadow: 0 0 0 3px var(--accent), 0 4px 16px rgba(0,0,0,.35); }
+:root[dir='rtl'] .hb-close { right: auto; left: 14px; }
 /* Where you are: a dot for each step, then one for repeat. */
 .hb-dots { position: absolute; left: 0; right: 0; display: flex; justify-content: center; gap: 10px; pointer-events: none; }
 .hb-dots span { width: 10px; height: 10px; border-radius: 50%; background: rgba(255,255,255,.35); transition: background-color .3s, transform .3s; }
@@ -19,9 +22,10 @@
 .hb-cycle { position: absolute; inset: 0; width: 100%; height: 100%; color: color-mix(in srgb, var(--accent) 45%, transparent); animation: hb-spin 14s linear infinite; }
 .hb-ic { position: absolute; width: 56px; height: 56px; margin: -28px 0 0 -28px; display: flex; align-items: center; justify-content: center;
   border-radius: 50%; background: var(--surface); color: var(--accent); animation: hb-glow 5.28s ease-in-out infinite both; z-index: 1; }
-.hb-ic0 { left: 50%; top: 22%; }
-.hb-ic1 { left: 77%; top: 70%; }
-.hb-ic2 { left: 23%; top: 70%; }
+/* All three the same distance from the middle, a third of a turn apart. */
+.hb-ic0 { left: 50%; top: 22.1%; }
+.hb-ic1 { left: 74.2%; top: 63.9%; }
+.hb-ic2 { left: 25.8%; top: 63.9%; }
 .hb-n2 .hb-ic0 { left: 28%; top: 50%; }
 .hb-n2 .hb-ic1 { left: 72%; top: 50%; }
 .hb-n1 .hb-ic0 { left: 50%; top: 50%; }
