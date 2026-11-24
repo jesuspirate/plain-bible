@@ -3,8 +3,19 @@
 import { dayOf } from './streaks'
 import { N_ } from '../i18n'
 
-/** `fav`: starred. `name`, `topic`, `answered` (when): yours to fill in. */
-export interface Journal { fav?: boolean; name?: string; topic?: string; answered?: number }
+/** `fav`: starred. `name`, `topics`, `answered` (when): yours to fill in.
+ *  A prayer can have several topics. `topic` is the first of them, the only
+ *  one apps from before several could keep (a prayer from then has only that). */
+export interface Journal { fav?: boolean; name?: string; topic?: string; topics?: string[]; answered?: number }
+
+/** At most this many topics on one prayer. */
+const MOST_TOPICS = 12
+const cleanTopic = (x: unknown) => typeof x === 'string' ? x.trim().slice(0, 40) : ''
+/** A prayer's topics: all of them, or the one an older app kept. */
+export function topicsOfPrayer(x: { topic?: unknown; topics?: unknown }): string[] {
+  const list = Array.isArray(x.topics) ? x.topics : [x.topic]
+  return [...new Set(list.map(cleanTopic).filter(Boolean))].slice(0, MOST_TOPICS)
+}
 
 /** A journal as it came back from storage or another device: only what's
  *  set, and nothing oversized. */
@@ -13,8 +24,8 @@ export function cleanJournal(v: unknown): Journal {
   if (x.fav === true) out.fav = true
   const name = typeof x.name === 'string' ? x.name.trim().slice(0, 80) : ''
   if (name) out.name = name
-  const topic = typeof x.topic === 'string' ? x.topic.trim().slice(0, 40) : ''
-  if (topic) out.topic = topic
+  const topics = topicsOfPrayer(x)
+  if (topics.length) { out.topic = topics[0]; out.topics = topics }
   if (typeof x.answered === 'number' && Number.isFinite(x.answered) && x.answered > 0) out.answered = x.answered
   return out
 }
@@ -42,7 +53,7 @@ export function byMonth<T extends { at: number }>(list: T[], now: number | Date 
 export const foldFind = (s: string) => s.toLowerCase().normalize('NFD').replace(/\p{M}/gu, '').replace(/[^\p{L}\p{N}]+/gu, ' ').trim()
 
 /** Whether every word typed is in what a prayer shows (its verses, its date,
- *  its name and topic), as the start of a word: "nov 7", "psalm 23". */
+ *  its name and topics), as the start of a word: "nov 7", "psalm 23". */
 export function finds(typed: string, shown: string[]) {
   const hay = ' ' + foldFind(shown.join(' '))
   return foldFind(typed).split(' ').every(w => hay.includes(' ' + w))
@@ -60,7 +71,7 @@ export const TOPICS = [N_('Thanks'), N_('Family'), N_('Healing'), N_('Guidance')
 
 /** The topics to choose from: the ones offered, then your own, in the order
  *  they were first used (`list` is newest first). */
-export function topicsOf(list: { topic?: string }[]) {
-  const own = [...list].reverse().map(p => p.topic).filter((x): x is string => !!x && !TOPICS.includes(x))
+export function topicsOf(list: { topic?: string; topics?: string[] }[]) {
+  const own = [...list].reverse().flatMap(topicsOfPrayer).filter(x => !TOPICS.includes(x))
   return [...TOPICS, ...new Set(own)]
 }
