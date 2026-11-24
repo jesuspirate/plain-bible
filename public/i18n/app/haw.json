@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "ʻAʻohe mea e lawe mai ai i loaʻa ma {file}.",
 "Could not read {file}: {error}": "ʻAʻole i hiki ke heluhelu iā {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Ua lawe mai ʻia {h} kaha kala, {b} kaha ʻaoʻao a me {n} manaʻo kākau.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Ma kēia mīkini, he {h} paukū i kaha kala ʻia kāu, {b} kaha ʻaoʻao a me {n} manaʻo kākau.",
 "Reading…": "Ke heluhelu nei…",
 "Import highlights and notes…": "Lawe mai i nā kaha kala a me nā manaʻo kākau…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Makemake ʻoe i kou kope ponoʻī? Hoʻokahi .zip me kāu mau kaha kala, manaʻo kākau, kaha ʻaoʻao a me nā pule, e mālama ma nā wahi a pau.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Hiki nō iā ʻoe ke kaomi i ka / e wehe ai.",
 "Listen: hear the verses you picked": "Hoʻolohe: e lohe i nā paukū āu i koho ai",
 "Hide while the phone is on its side": "Hūnā ʻia ke moe ke kelepona ma ka ʻaoʻao",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Hoʻoneʻe ʻia nā mea āu i kaha ai i kou heluhelu ʻana i lalo o ka ʻaoʻao, i piha ka pakuhi i nā huaʻōlelo. E ʻōwili iki i luna, a i ʻole e kaomi i ka lihi o luna, e hoʻihoʻi mai ai."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Hoʻoneʻe ʻia nā mea āu i kaha ai i kou heluhelu ʻana i lalo o ka ʻaoʻao, i piha ka pakuhi i nā huaʻōlelo. E ʻōwili iki i luna, a i ʻole e kaomi i ka lihi o luna, e hoʻihoʻi mai ai.",
+"Getting your prayers…": "Ke kiʻi ʻia nei kāu mau pule…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "ʻAʻole i hiki mai i kēia mīkini kekahi pule o kāu moʻokāki, no laila ʻaʻole ia i loko o ka .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "ʻAʻole i hiki mai i kēia mīkini nā pule he {n} o kāu moʻokāki, no laila ʻaʻole lākou i loko o ka .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "E wehe iā Kāu mau pule a kaomi iā Hoʻolike i kaʻu mau pule, a laila e hoʻoiho hou.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Ma kēia mīkini, he {h} paukū i kaha kala ʻia kāu, {b} kaha ʻaoʻao, {n} manaʻo kākau a me {p} pule."
 }

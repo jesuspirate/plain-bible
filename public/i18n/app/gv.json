@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Cha row veg ry-gheddyn ayns {file} dy chur stiagh.",
 "Could not read {file}: {error}": "Cha dod {file} ve lhaiht: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Currit stiagh: {h} soilshaghey, {b} cowrey-lioar as {n} noat.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Ta {h} rann soilshit, {b} cowrey-lioar as {n} noat ayd er y ghreie shoh.",
 "Reading…": "Lhaih…",
 "Import highlights and notes…": "Cur stiagh soilshaghyn as noatyn…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Kopi dhyt hene neesht? Un .zip lesh dty hoilshaghyn, noatyn, cowraghyn-lioar as padjeryn, dy reayll raad erbee.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Foddee oo / y vrooghey neesht dy osley eh.",
 "Listen: hear the verses you picked": "Clasht: clasht ny rannaghyn ta reiht ayd",
 "Hide while the phone is on its side": "Follee choud as ta’n fone er e lhiattee",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ta ny reddyn ta cowrit goll ass shilley myr t’ou lhaih sheese y duillag, myr shen dy lhieen ny goan y scrieen. Scrol seose beggan, ny bean da’n oirr heose, dy chur ad er ash."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ta ny reddyn ta cowrit goll ass shilley myr t’ou lhaih sheese y duillag, myr shen dy lhieen ny goan y scrieen. Scrol seose beggan, ny bean da’n oirr heose, dy chur ad er ash.",
+"Getting your prayers…": "Goaill dty phadjeryn…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Cha nel un phadjer ayns dty choontey er y ghreie shoh foast, myr shen cha nel eh ayns y .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Cha nel {n} padjeryn ayns dty choontey er y ghreie shoh foast, myr shen cha nel ad ayns y .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Fosley Dty phadjeryn as bwoal er Jean sync er my phadjeryn, as eisht lhieu neose reesht.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Ta {h} rann soilshit, {b} cowrey-lioar, {n} noat as {p} padjer ayd er y ghreie shoh."
 }

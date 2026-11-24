@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Nou pa jwenn anyen pou enpòte nan {file}.",
 "Could not read {file}: {error}": "Nou pa t ka li {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} souliyaj, {b} makè ak {n} nòt enpòte.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Ou gen {h} vèsè souliye, {b} makè ak {n} nòt sou aparèy sa a.",
 "Reading…": "N ap li…",
 "Import highlights and notes…": "Enpòte souliyaj ak nòt…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Ou vle pwòp kopi pa ou tou? Yon sèl .zip ak souliyaj, nòt, makè ak lapriyè ou yo, pou kenbe kote ou vle.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Ou ka peze / tou pou louvri l.",
 "Listen: hear the verses you picked": "Koute: tande vèsè ou chwazi yo",
 "Hide while the phone is on its side": "Kache lè telefòn nan kouche",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Sa ou tcheke yo ale sou kote pandan w ap li desann paj la, pou mo yo plen ekran an. Monte yon ti kras, oswa tape bò anwo a, pou fè yo tounen."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Sa ou tcheke yo ale sou kote pandan w ap li desann paj la, pou mo yo plen ekran an. Monte yon ti kras, oswa tape bò anwo a, pou fè yo tounen.",
+"Getting your prayers…": "N ap pran lapriyè ou yo…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Yon lapriyè nan kont ou poko sou aparèy sa a, kidonk li pa nan .zip la.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} lapriyè nan kont ou poko sou aparèy sa a, kidonk yo pa nan .zip la.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Louvri Lapriyè ou yo epi tape Senkronize lapriyè mwen yo, apre sa telechaje ankò.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Ou gen {h} vèsè souliye, {b} makè, {n} nòt ak {p} lapriyè sou aparèy sa a."
 }

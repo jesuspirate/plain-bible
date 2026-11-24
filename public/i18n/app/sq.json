@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Nuk u gjet asgjë për të importuar në {file}.",
 "Could not read {file}: {error}": "{file} nuk u lexua: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "U importuan {h} theksime, {b} faqeshënues dhe {n} shënime.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Keni {h} vargje të theksuara, {b} faqeshënues dhe {n} shënime në këtë pajisje.",
 "Reading…": "Po lexohet…",
 "Import highlights and notes…": "Importo theksime dhe shënime…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Doni edhe një kopje tuajën? Një skedar .zip me theksimet, shënimet, faqeshënuesit dhe lutjet tuaja, për ta ruajtur kudo.",
@@ -1328,5 +1327,10 @@
 "You can also press / to open it.": "Mund ta hapësh edhe duke shtypur /.",
 "Listen: hear the verses you picked": "Dëgjo: dëgjo vargjet që zgjodhe",
 "Hide while the phone is on its side": "Fshih kur telefoni është shtrirë",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ato që shënon largohen ndërsa lexon poshtë faqes, që teksti të mbushë ekranin. Rrëshqit pak lart, ose prek skajin e sipërm, për t’i kthyer."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ato që shënon largohen ndërsa lexon poshtë faqes, që teksti të mbushë ekranin. Rrëshqit pak lart, ose prek skajin e sipërm, për t’i kthyer.",
+"Getting your prayers…": "Po marr lutjet tuaja…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Një lutje në llogarinë tuaj nuk është ende në këtë pajisje, ndaj nuk është në .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} lutje në llogarinë tuaj nuk janë ende në këtë pajisje, ndaj nuk janë në .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Hapni Lutjet tuaja dhe prekni Sinkronizo lutjet e mia, pastaj shkarkoni sërish.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Keni {h} vargje të theksuara, {b} faqeshënues, {n} shënime dhe {p} lutje në këtë pajisje."
 }

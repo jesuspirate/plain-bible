@@ -235,7 +235,6 @@
 "Nothing to import was found in {file}.": "لم يُعثر على شيء للاستيراد في {file}.",
 "Could not read {file}: {error}": "تعذّرت قراءة {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "تم استيراد {h} تمييز و{b} إشارة مرجعية و{n} ملاحظة.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "لديك على هذا الجهاز {h} آية مميّزة و{b} إشارة مرجعية و{n} ملاحظة.",
 "Reading…": "جارٍ القراءة…",
 "Import highlights and notes…": "استيراد التمييزات والملاحظات…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "أتريد نسختك الخاصة أيضًا؟ ملف .zip واحد يضم تمييزاتك وملاحظاتك وإشاراتك المرجعية وصلواتك، لتحتفظ به أينما شئت.",
@@ -1465,5 +1464,17 @@
 "You can also press / to open it.": "يمكنك أيضًا الضغط على / لفتحه.",
 "Listen: hear the verses you picked": "استماع: اسمع الآيات التي اخترتها",
 "Hide while the phone is on its side": "إخفاء عندما يكون الهاتف على جانبه",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "تختفي العناصر المحددة وأنت تقرأ نزولًا في الصفحة، ليملأ النص الشاشة. مرّر للأعلى قليلًا، أو اضغط على الحافة العليا، لإعادتها."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "تختفي العناصر المحددة وأنت تقرأ نزولًا في الصفحة، ليملأ النص الشاشة. مرّر للأعلى قليلًا، أو اضغط على الحافة العليا، لإعادتها.",
+"Getting your prayers…": "جارٍ جلب صلواتك…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "صلاة واحدة في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "zero": "{n} صلاة في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip.",
+ "one": "{n} صلاة في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip.",
+ "two": "{n} صلاتان في حسابك ليستا على هذا الجهاز بعد، لذلك ليستا في ملف ‎.zip.",
+ "few": "{n} صلوات في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip.",
+ "many": "{n} صلاة في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip.",
+ "other": "{n} صلاة في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "افتح «صلواتك» واضغط «مزامنة صلواتي»، ثم نزّل مرة أخرى.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "لديك على هذا الجهاز {h} آية مميّزة و{b} إشارة مرجعية و{n} ملاحظة و{p} صلاة."
 }

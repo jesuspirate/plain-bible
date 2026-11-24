@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Fant ikke noe å importere i {file}.",
 "Could not read {file}: {error}": "Kunne ikke lese {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Importerte {h} markeringer, {b} bokmerker og {n} notater.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Du har {h} markerte vers, {b} bokmerker og {n} notater på denne enheten.",
 "Reading…": "Leser…",
 "Import highlights and notes…": "Importer markeringer og notater…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Vil du også ha din egen kopi? Én .zip med markeringene, notatene, bokmerkene og bønnene dine, som du kan ta vare på hvor som helst.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Du kan også trykke på / for å åpne det.",
 "Listen: hear the verses you picked": "Lytt: hør versene du har valgt",
 "Hide while the phone is on its side": "Skjul når telefonen ligger på siden",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Det du krysser av, glir bort mens du leser nedover siden, så teksten fyller skjermen. Rull litt opp, eller trykk på øverste kant, for å få det tilbake."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Det du krysser av, glir bort mens du leser nedover siden, så teksten fyller skjermen. Rull litt opp, eller trykk på øverste kant, for å få det tilbake.",
+"Getting your prayers…": "Henter bønnene dine…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Én bønn i kontoen din er ikke på denne enheten ennå, så den er ikke i .zip-filen.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} bønner i kontoen din er ikke på denne enheten ennå, så de er ikke i .zip-filen.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Åpne Bønnene dine og trykk på Synkroniser bønnene mine, og last ned på nytt.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Du har {h} markerte vers, {b} bokmerker, {n} notater og {p} bønner på denne enheten."
 }

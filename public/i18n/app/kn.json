@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} ನಲ್ಲಿ ಆಮದು ಮಾಡಲು ಏನೂ ಸಿಗಲಿಲ್ಲ.",
 "Could not read {file}: {error}": "{file} ಓದಲಾಗಲಿಲ್ಲ: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} ಹೈಲೈಟ್‌ಗಳು, {b} ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳು ಮತ್ತು {n} ಟಿಪ್ಪಣಿಗಳನ್ನು ಆಮದು ಮಾಡಲಾಗಿದೆ.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "ಈ ಸಾಧನದಲ್ಲಿ ನಿಮ್ಮ ಬಳಿ {h} ಹೈಲೈಟ್ ಮಾಡಿದ ವಚನಗಳು, {b} ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳು ಮತ್ತು {n} ಟಿಪ್ಪಣಿಗಳಿವೆ.",
 "Reading…": "ಓದಲಾಗುತ್ತಿದೆ…",
 "Import highlights and notes…": "ಹೈಲೈಟ್‌ಗಳು ಮತ್ತು ಟಿಪ್ಪಣಿಗಳನ್ನು ಆಮದು ಮಾಡಿ…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "ನಿಮ್ಮದೇ ಪ್ರತಿ ಬೇಕೇ? ನಿಮ್ಮ ಹೈಲೈಟ್‌ಗಳು, ಟಿಪ್ಪಣಿಗಳು, ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳು ಮತ್ತು ಪ್ರಾರ್ಥನೆಗಳಿರುವ ಒಂದು .zip, ಎಲ್ಲಿ ಬೇಕಾದರೂ ಇಟ್ಟುಕೊಳ್ಳಲು.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "ಅದನ್ನು ತೆರೆಯಲು ನೀವು / ಒತ್ತಬಹುದು.",
 "Listen: hear the verses you picked": "ಆಲಿಸಿ: ಆಯ್ದ ವಚನಗಳನ್ನು ಕೇಳಿ",
 "Hide while the phone is on its side": "ಫೋನ್ ಅಡ್ಡವಾಗಿದ್ದಾಗ ಮರೆಮಾಡಿ",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ಪುಟದ ಕೆಳಗೆ ಓದುತ್ತಾ ಹೋದಂತೆ ಟಿಕ್ ಮಾಡಿದವು ಸರಿದು ಹೋಗುತ್ತವೆ, ಪದಗಳು ಪರದೆ ತುಂಬುತ್ತವೆ. ಅವನ್ನು ಮರಳಿ ತರಲು ಸ್ವಲ್ಪ ಮೇಲೆ ಸ್ಕ್ರೋಲ್ ಮಾಡಿ ಅಥವಾ ಮೇಲಿನ ಅಂಚನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ಪುಟದ ಕೆಳಗೆ ಓದುತ್ತಾ ಹೋದಂತೆ ಟಿಕ್ ಮಾಡಿದವು ಸರಿದು ಹೋಗುತ್ತವೆ, ಪದಗಳು ಪರದೆ ತುಂಬುತ್ತವೆ. ಅವನ್ನು ಮರಳಿ ತರಲು ಸ್ವಲ್ಪ ಮೇಲೆ ಸ್ಕ್ರೋಲ್ ಮಾಡಿ ಅಥವಾ ಮೇಲಿನ ಅಂಚನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ.",
+"Getting your prayers…": "ನಿಮ್ಮ ಪ್ರಾರ್ಥನೆಗಳನ್ನು ತರಲಾಗುತ್ತಿದೆ…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "ನಿಮ್ಮ ಖಾತೆಯ ಒಂದು ಪ್ರಾರ್ಥನೆ ಇನ್ನೂ ಈ ಸಾಧನದಲ್ಲಿ ಇಲ್ಲ, ಆದ್ದರಿಂದ ಅದು .zip ನಲ್ಲಿ ಇಲ್ಲ.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "ನಿಮ್ಮ ಖಾತೆಯ {n} ಪ್ರಾರ್ಥನೆಗಳು ಇನ್ನೂ ಈ ಸಾಧನದಲ್ಲಿ ಇಲ್ಲ, ಆದ್ದರಿಂದ ಅವು .zip ನಲ್ಲಿ ಇಲ್ಲ.",
+"Open Your prayers and tap Sync my prayers, then download again.": "ನಿಮ್ಮ ಪ್ರಾರ್ಥನೆಗಳು ತೆರೆಯಿರಿ ಮತ್ತು ನನ್ನ ಪ್ರಾರ್ಥನೆಗಳನ್ನು ಸಿಂಕ್ ಮಾಡಿ ಟ್ಯಾಪ್ ಮಾಡಿ, ನಂತರ ಮತ್ತೆ ಡೌನ್‌ಲೋಡ್ ಮಾಡಿ.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ಈ ಸಾಧನದಲ್ಲಿ ನಿಮ್ಮ ಬಳಿ {h} ಹೈಲೈಟ್ ಮಾಡಿದ ವಚನಗಳು, {b} ಬುಕ್‌ಮಾರ್ಕ್‌ಗಳು, {n} ಟಿಪ್ಪಣಿಗಳು ಮತ್ತು {p} ಪ್ರಾರ್ಥನೆಗಳಿವೆ."
 }

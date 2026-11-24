@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} இல் இறக்குமதி செய்ய எதுவும் கிடைக்கவில்லை.",
 "Could not read {file}: {error}": "{file} ஐ வாசிக்க முடியவில்லை: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} ஹைலைட்கள், {b} புக்மார்க்குகள், {n} குறிப்புகள் இறக்குமதி செய்யப்பட்டன.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "இந்தச் சாதனத்தில் உங்களிடம் {h} ஹைலைட் செய்த வசனங்கள், {b} புக்மார்க்குகள், {n} குறிப்புகள் உள்ளன.",
 "Reading…": "வாசிக்கிறது…",
 "Import highlights and notes…": "ஹைலைட்களையும் குறிப்புகளையும் இறக்குமதி செய்…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "உங்களுக்கென ஒரு நகலும் வேண்டுமா? உங்கள் ஹைலைட்கள், குறிப்புகள், புக்மார்க்குகள், ஜெபங்கள் அடங்கிய ஒரே .zip, எங்கு வேண்டுமானாலும் வைத்துக்கொள்ளலாம்.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "திறக்க / ஐயும் அழுத்தலாம்.",
 "Listen: hear the verses you picked": "கேள்: தேர்ந்தெடுத்த வசனங்களைக் கேளுங்கள்",
 "Hide while the phone is on its side": "தொலைபேசி பக்கவாட்டில் இருக்கும்போது மறை",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "பக்கத்தில் கீழே படிக்கும்போது டிக் செய்தவை விலகும், சொற்கள் திரையை நிரப்பும். திரும்பக் கொண்டுவர சற்று மேலே உருட்டுங்கள் அல்லது மேல் ஓரத்தைத் தட்டுங்கள்."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "பக்கத்தில் கீழே படிக்கும்போது டிக் செய்தவை விலகும், சொற்கள் திரையை நிரப்பும். திரும்பக் கொண்டுவர சற்று மேலே உருட்டுங்கள் அல்லது மேல் ஓரத்தைத் தட்டுங்கள்.",
+"Getting your prayers…": "உங்கள் ஜெபங்கள் கொண்டுவரப்படுகின்றன…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "உங்கள் கணக்கில் உள்ள ஒரு ஜெபம் இன்னும் இந்தச் சாதனத்தில் இல்லை, எனவே அது .zip-இல் இல்லை.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "உங்கள் கணக்கில் உள்ள {n} ஜெபங்கள் இன்னும் இந்தச் சாதனத்தில் இல்லை, எனவே அவை .zip-இல் இல்லை.",
+"Open Your prayers and tap Sync my prayers, then download again.": "உங்கள் ஜெபங்கள் திறந்து என் ஜெபங்களை ஒத்திசை தட்டவும், பிறகு மீண்டும் பதிவிறக்கவும்.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "இந்தச் சாதனத்தில் உங்களிடம் {h} ஹைலைட் செய்த வசனங்கள், {b} புக்மார்க்குகள், {n} குறிப்புகள், {p} ஜெபங்கள் உள்ளன."
 }

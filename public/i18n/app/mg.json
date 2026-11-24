@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Tsy nisy hita hafarana tao amin’ny {file}.",
 "Could not read {file}: {error}": "Tsy voavaky ny {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Voafarana ny fanasongadinana {h}, famantarana {b} ary naoty {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Manana andininy voasongadina {h}, famantarana {b} ary naoty {n} amin’ity fitaovana ity ianao.",
 "Reading…": "Mamaky…",
 "Import highlights and notes…": "Hanafatra fanasongadinana sy naoty…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Te hanana ny dika mitovy anao manokana koa? .zip iray misy ny fanasongadinana, naoty, famantarana ary vavakao, azonao tehirizina na aiza na aiza.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Azonao atao koa ny manindry / hanokafana azy.",
 "Listen: hear the verses you picked": "Hihaino: henoy ireo andininy nofidinao",
 "Hide while the phone is on its side": "Afeno rehefa mitsivalana ny finday",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Miala ireo zavatra nomarihinao rehefa mamaky midina ny pejy ianao, mba hamenoan’ny soratra ny efijery. Atsangano kely, na tsindrio ny sisiny ambony, hamerenana azy."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Miala ireo zavatra nomarihinao rehefa mamaky midina ny pejy ianao, mba hamenoan’ny soratra ny efijery. Atsangano kely, na tsindrio ny sisiny ambony, hamerenana azy.",
+"Getting your prayers…": "Alaina ny vavakao…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Vavaka iray ao amin’ny kaontinao no mbola tsy eo amin’ity fitaovana ity, ka tsy ao anatin’ny .zip izy.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Vavaka {n} ao amin’ny kaontinao no mbola tsy eo amin’ity fitaovana ity, ka tsy ao anatin’ny .zip izy ireo.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Sokafy ny Ny vavakao ary tsindrio ny Ampifanaraho ny vavako, avy eo ampidino indray.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Manana andininy voasongadina {h}, famantarana {b}, naoty {n} ary vavaka {p} amin’ity fitaovana ity ianao."
 }

@@ -227,7 +227,6 @@
 "Nothing to import was found in {file}.": "У файлі {file} немає нічого для імпорту.",
 "Could not read {file}: {error}": "Не вдалося прочитати {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Імпортовано: виділення — {h}, закладки — {b}, нотатки — {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "На цьому пристрої у вас: виділені вірші — {h}, закладки — {b}, нотатки — {n}.",
 "Reading…": "Читання…",
 "Import highlights and notes…": "Імпортувати виділення й нотатки…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Бажаєте мати й власну копію? Один файл .zip із виділеннями, нотатками, закладками й молитвами, щоб зберігати будь-де.",
@@ -1430,5 +1429,15 @@
 "You can also press / to open it.": "Його також можна відкрити клавішею /.",
 "Listen: hear the verses you picked": "Слухати: прослухати вибрані вірші",
 "Hide while the phone is on its side": "Ховати, коли телефон лежить боком",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Позначене від’їжджає, поки ви читаєте вниз сторінкою, щоб текст заповнив екран. Прокрутіть трохи вгору або торкніться верхнього краю, щоб повернути."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Позначене від’їжджає, поки ви читаєте вниз сторінкою, щоб текст заповнив екран. Прокрутіть трохи вгору або торкніться верхнього краю, щоб повернути.",
+"Getting your prayers…": "Завантажуємо ваші молитви…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Однієї молитви з вашого облікового запису ще немає на цьому пристрої, тому її немає в .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} молитви з вашого облікового запису ще немає на цьому пристрої, тому її немає в .zip.",
+ "few": "{n} молитов з вашого облікового запису ще немає на цьому пристрої, тому їх немає в .zip.",
+ "many": "{n} молитов з вашого облікового запису ще немає на цьому пристрої, тому їх немає в .zip.",
+ "other": "{n} молитви з вашого облікового запису ще немає на цьому пристрої, тому їх немає в .zip."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Відкрийте «Ваші молитви» й торкніться «Синхронізувати мої молитви», потім завантажте знову.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "На цьому пристрої у вас: виділені вірші — {h}, закладки — {b}, нотатки — {n}, молитви — {p}."
 }

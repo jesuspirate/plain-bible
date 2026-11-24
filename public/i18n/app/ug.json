@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} دا ئەكىرىدىغان نەرسە تېپىلمىدى.",
 "Could not read {file}: {error}": "{file} نى ئوقۇيالمىدى: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} گەۋدىلەندۈرۈش، {b} خەتكۈچ ۋە {n} خاتىرە ئەكىرىلدى.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "بۇ ئۈسكۈنىدە {h} گەۋدىلەندۈرۈلگەن ئايەت، {b} خەتكۈچ ۋە {n} خاتىرىڭىز بار.",
 "Reading…": "ئوقۇلۇۋاتىدۇ…",
 "Import highlights and notes…": "گەۋدىلەندۈرۈش ۋە خاتىرىلەرنى ئەكىرىش…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "ئۆزىڭىزگىمۇ بىر نۇسخا كېرەكمۇ؟ گەۋدىلەندۈرۈش، خاتىرە، خەتكۈچ ۋە دۇئالىرىڭىز بار بىرلا ‎.zip ھۆججىتى، خالىغان يەردە ساقلاڭ.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "ئۇنى ئېچىش ئۈچۈن / نى باسسىڭىزمۇ بولىدۇ.",
 "Listen: hear the verses you picked": "ئاڭلاش: تاللىغان ئايەتلەرنى ئاڭلاڭ",
 "Hide while the phone is on its side": "تېلېفون يانتۇ تۇرغاندا يوشۇرۇش",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "بەتنى تۆۋەنگە ئوقۇغانسېرى بەلگە قويۇلغانلار ئېلىپ كېتىلىدۇ، شۇنىڭ بىلەن خەت ئېكراننى تولدۇرىدۇ. قايتۇرۇش ئۈچۈن سەل يۇقىرىغا سۈرۈڭ ياكى ئۈستى گىرۋەكنى چېكىڭ."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "بەتنى تۆۋەنگە ئوقۇغانسېرى بەلگە قويۇلغانلار ئېلىپ كېتىلىدۇ، شۇنىڭ بىلەن خەت ئېكراننى تولدۇرىدۇ. قايتۇرۇش ئۈچۈن سەل يۇقىرىغا سۈرۈڭ ياكى ئۈستى گىرۋەكنى چېكىڭ.",
+"Getting your prayers…": "دۇئالىرىڭىز ئېلىنىۋاتىدۇ…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "ھېساباتىڭىزدىكى بىر دۇئا تېخى بۇ ئۈسكۈنىدە يوق، شۇڭا ئۇ ‎.zip دا يوق.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "ھېساباتىڭىزدىكى {n} دۇئا تېخى بۇ ئۈسكۈنىدە يوق، شۇڭا ئۇلار ‎.zip دا يوق.",
+"Open Your prayers and tap Sync my prayers, then download again.": "«دۇئالىرىڭىز» نى ئېچىپ «دۇئالىرىمنى ماس قەدەملەش» نى بېسىڭ، ئاندىن قايتا چۈشۈرۈڭ.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "بۇ ئۈسكۈنىدە {h} گەۋدىلەندۈرۈلگەن ئايەت، {b} خەتكۈچ، {n} خاتىرە ۋە {p} دۇئايىڭىز بار."
 }

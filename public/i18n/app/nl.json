@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Niets gevonden om te importeren in {file}.",
 "Could not read {file}: {error}": "Kan {file} niet lezen: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} markeringen, {b} bladwijzers en {n} notities geïmporteerd.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Je hebt {h} gemarkeerde verzen, {b} bladwijzers en {n} notities op dit apparaat.",
 "Reading…": "Lezen…",
 "Import highlights and notes…": "Markeringen en notities importeren…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Wil je ook een eigen kopie? Eén .zip met je markeringen, notities, bladwijzers en gebeden, om overal te bewaren.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Je kunt ook op / drukken om het te openen.",
 "Listen: hear the verses you picked": "Luisteren: hoor de verzen die je koos",
 "Hide while the phone is on its side": "Verbergen als de telefoon gekanteld is",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Wat je aanvinkt, schuift weg terwijl je de pagina afleest, zodat de tekst het scherm vult. Scrol een stukje omhoog, of tik op de bovenrand, om het terug te halen."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Wat je aanvinkt, schuift weg terwijl je de pagina afleest, zodat de tekst het scherm vult. Scrol een stukje omhoog, of tik op de bovenrand, om het terug te halen.",
+"Getting your prayers…": "Je gebeden ophalen…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Eén gebed in je account staat nog niet op dit apparaat, dus het zit niet in de .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} gebeden in je account staan nog niet op dit apparaat, dus ze zitten niet in de .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Open Je gebeden en tik op Mijn gebeden synchroniseren, en download dan opnieuw.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Je hebt {h} gemarkeerde verzen, {b} bladwijzers, {n} notities en {p} gebeden op dit apparaat."
 }

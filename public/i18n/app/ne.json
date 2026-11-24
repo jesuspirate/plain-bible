@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} मा आयात गर्नुपर्ने केही भेटिएन।",
 "Could not read {file}: {error}": "{file} पढ्न सकिएन: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} हाइलाइट, {b} बुकमार्क र {n} नोट आयात गरियो।",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "यो डिभाइसमा तपाईंका {h} हाइलाइट गरिएका पद, {b} बुकमार्क र {n} नोट छन्।",
 "Reading…": "पढ्दै…",
 "Import highlights and notes…": "हाइलाइट र नोटहरू आयात गर्नुहोस्…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "आफ्नै प्रति पनि चाहिन्छ? तपाईंका हाइलाइट, नोट, बुकमार्क र प्रार्थनाहरू भएको एउटा .zip, जहाँ पनि राख्न।",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "यसलाई खोल्न तपाईं / पनि थिच्न सक्नुहुन्छ।",
 "Listen: hear the verses you picked": "सुन्नुहोस्: छानिएका पदहरू सुन्नुहोस्",
 "Hide while the phone is on its side": "फोन तेर्सो हुँदा लुकाउनुहोस्",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "पृष्ठमा तल पढ्दै जाँदा टिक गरिएका कुरा हट्छन्, ताकि शब्दले स्क्रिन भरून्। फर्काउन अलिकति माथि स्क्रोल गर्नुहोस् वा माथिल्लो किनारामा ट्याप गर्नुहोस्।"
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "पृष्ठमा तल पढ्दै जाँदा टिक गरिएका कुरा हट्छन्, ताकि शब्दले स्क्रिन भरून्। फर्काउन अलिकति माथि स्क्रोल गर्नुहोस् वा माथिल्लो किनारामा ट्याप गर्नुहोस्।",
+"Getting your prayers…": "तपाईंका प्रार्थनाहरू ल्याइँदै…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "तपाईंको खाताको एउटा प्रार्थना अझै यो डिभाइसमा छैन, त्यसैले त्यो .zip मा छैन।",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "तपाईंको खाताका {n} प्रार्थना अझै यो डिभाइसमा छैनन्, त्यसैले ती .zip मा छैनन्।",
+"Open Your prayers and tap Sync my prayers, then download again.": "तपाईंका प्रार्थनाहरू खोल्नुहोस् र मेरा प्रार्थनाहरू सिंक गर्नुहोस् ट्याप गर्नुहोस्, अनि फेरि डाउनलोड गर्नुहोस्।",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "यो डिभाइसमा तपाईंका {h} हाइलाइट गरिएका पद, {b} बुकमार्क, {n} नोट र {p} प्रार्थना छन्।"
 }

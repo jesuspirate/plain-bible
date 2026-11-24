@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Tidak ada yang bisa diimpor di {file}.",
 "Could not read {file}: {error}": "Tidak dapat membaca {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Mengimpor {h} sorotan, {b} penanda, dan {n} catatan.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Anda memiliki {h} ayat yang disorot, {b} penanda, dan {n} catatan di perangkat ini.",
 "Reading…": "Membaca…",
 "Import highlights and notes…": "Impor sorotan dan catatan…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Ingin salinan sendiri juga? Satu file .zip berisi sorotan, catatan, penanda, dan doa Anda, untuk disimpan di mana saja.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Anda juga bisa menekan / untuk membukanya.",
 "Listen: hear the verses you picked": "Dengarkan: dengar ayat yang Anda pilih",
 "Hide while the phone is on its side": "Sembunyikan saat ponsel miring",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Yang dicentang akan menyingkir saat Anda membaca ke bawah halaman, agar teks memenuhi layar. Gulir sedikit ke atas, atau ketuk tepi atas, untuk memunculkannya lagi."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Yang dicentang akan menyingkir saat Anda membaca ke bawah halaman, agar teks memenuhi layar. Gulir sedikit ke atas, atau ketuk tepi atas, untuk memunculkannya lagi.",
+"Getting your prayers…": "Mengambil doa Anda…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Satu doa di akun Anda belum ada di perangkat ini, jadi tidak ada di .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} doa di akun Anda belum ada di perangkat ini, jadi tidak ada di .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Buka Doa Anda lalu ketuk Sinkronkan doa saya, kemudian unduh lagi.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Anda memiliki {h} ayat yang disorot, {b} penanda, {n} catatan, dan {p} doa di perangkat ini."
 }

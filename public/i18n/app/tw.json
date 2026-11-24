@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Yɛanhunu hwee a yɛde bɛba wɔ {file} mu.",
 "Could not read {file}: {error}": "Yɛantumi ankenkan {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Yɛde kɔla nsɛm {h}, agyiraehyɛde {b} ne nkaeɛ {n} aba.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Wowɔ nkyekyɛm {h} a woahyɛ kɔla, agyiraehyɛde {b} ne nkaeɛ {n} wɔ saa afidie yi so.",
 "Reading…": "Ɛrekenkan…",
 "Import highlights and notes…": "Fa kɔla nsɛm ne nkaeɛ bra…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Wopɛ wo ankasa wo deɛ bi nso? .zip baako a wo kɔla nsɛm, wo nkaeɛ, w’agyiraehyɛde ne wo mpaebɔ wom, na kora baabiara.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Wobɛtumi aka / nso de abue.",
 "Listen: hear the verses you picked": "Tie: tie nkyekyem a woapaw",
 "Hide while the phone is on its side": "Fa sie bere a fon no da ne nkyɛn",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Nneɛma a woahyɛ ho nsɛnkyerɛnne no kɔ nkyɛn bere a woresi kɔ krataafa no ase, sɛnea nsɛm no bɛhyɛ skrin no ma. Twe kɔ soro kakra, anaa mia atifi ano, na ɛsan aba."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Nneɛma a woahyɛ ho nsɛnkyerɛnne no kɔ nkyɛn bere a woresi kɔ krataafa no ase, sɛnea nsɛm no bɛhyɛ skrin no ma. Twe kɔ soro kakra, anaa mia atifi ano, na ɛsan aba.",
+"Getting your prayers…": "Yɛrede wo mpaebɔ reba…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Mpaebɔ baako a ɛwɔ wo akawnt mu nnya mmaa saa afidie yi so, enti ɛnni .zip no mu.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Mpaebɔ {n} a ɛwɔ wo akawnt mu nnya mmaa saa afidie yi so, enti ɛnni .zip no mu.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Bue Wo mpaebɔ na mia Bɔ me mpaebɔ ho sync so, na afei san twe bio.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Wowɔ nkyekyɛm {h} a woahyɛ kɔla, agyiraehyɛde {b}, nkaeɛ {n} ne mpaebɔ {p} wɔ saa afidie yi so."
 }
