@@ -10,22 +10,40 @@ on:
     paths: ['ios/QuietBibleHome/**', 'ios/Shared/**', 'ios/widget-pictures/**', '.github/workflows/widget-pictures.yml']
   workflow_dispatch:
 
+# Read-only by default. Only the small "keep" job below may write, and it
+# runs none of the pull request's own code: it only stores the pictures.
 permissions:
-  contents: write
+  contents: read
 
 jobs:
   draw:
     runs-on: macos-15
     steps:
       - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
       - name: Draw
         run: bash ios/widget-pictures/draw.sh pictures
       - uses: actions/upload-artifact@v7
         with:
           name: widget-pictures
           path: pictures/
+
+  keep:
+    needs: draw
+    if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          ref: ${{ github.event.pull_request.base.sha }}
+      - uses: actions/download-artifact@v7
+        with:
+          name: widget-pictures
+          path: pictures/
       - name: Keep as a git ref
-        if: github.event_name == 'pull_request' && github.event.pull_request.head.repo.full_name == github.repository
         env:
           PR: ${{ github.event.pull_request.number }}
         run: |
