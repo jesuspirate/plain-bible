@@ -227,7 +227,6 @@
 "Nothing to import was found in {file}.": "W pliku {file} nie znaleziono nic do zaimportowania.",
 "Could not read {file}: {error}": "Nie można odczytać pliku {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Zaimportowano: zakreślenia – {h}, zakładki – {b}, notatki – {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Na tym urządzeniu masz: zakreślone wersety – {h}, zakładki – {b}, notatki – {n}.",
 "Reading…": "Odczytywanie…",
 "Import highlights and notes…": "Importuj zakreślenia i notatki…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Chcesz mieć też własną kopię? Jeden plik .zip z zakreśleniami, notatkami, zakładkami i modlitwami, do przechowania gdziekolwiek.",
@@ -1428,6 +1427,16 @@
 "You can also press / to open it.": "Możesz je też otworzyć klawiszem /.",
 "Listen: hear the verses you picked": "Słuchaj: posłuchaj wybranych wersetów",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaznaczone elementy odsuwają się, gdy czytasz w dół strony, żeby tekst wypełnił ekran. Przewiń trochę w górę albo stuknij górną krawędź, by wróciły.",
+"Getting your prayers…": "Pobieram twoje modlitwy…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitwa z twojego konta nie jest jeszcze na tym urządzeniu, więc nie ma jej w pliku .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} modlitwa z twojego konta nie jest jeszcze na tym urządzeniu, więc nie ma jej w pliku .zip.",
+ "few": "{n} modlitwy z twojego konta nie są jeszcze na tym urządzeniu, więc nie ma ich w pliku .zip.",
+ "many": "{n} modlitw z twojego konta nie ma jeszcze na tym urządzeniu, więc nie ma ich w pliku .zip.",
+ "other": "{n} modlitwy z twojego konta nie ma jeszcze na tym urządzeniu, więc nie ma ich w pliku .zip."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Otwórz Twoje modlitwy i dotknij Synchronizuj moje modlitwy, a potem pobierz ponownie.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tym urządzeniu masz: zakreślone wersety – {h}, zakładki – {b}, notatki – {n}, modlitwy – {p}.",
 "On": "Wł.",
 "Phone on its side": "Telefon bokiem",
 "Nothing hidden": "Nic nie jest ukryte"

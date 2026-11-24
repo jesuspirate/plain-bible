@@ -223,7 +223,6 @@
 "Nothing to import was found in {file}.": "У датотеци {file} није пронађено ништа за увоз.",
 "Could not read {file}: {error}": "Није могуће прочитати {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Увезено – истицања: {h}, обележивачи: {b}, белешке: {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "На овом уређају имате истакнутих стихова: {h}, обележивача: {b}, белешки: {n}.",
 "Reading…": "Читање…",
 "Import highlights and notes…": "Увези истицања и белешке…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Желите и сопствену копију? Једна .zip датотека са вашим истицањима, белешкама, обележивачима и молитвама, да је чувате где год желите.",
@@ -1407,6 +1406,15 @@
 "You can also press / to open it.": "Можете је отворити и тастером /.",
 "Listen: hear the verses you picked": "Слушај: чујте изабране стихове",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Означено се склони док читате низ страницу, да текст испуни екран. Померите се мало горе или додирните горњу ивицу да се врати.",
+"Getting your prayers…": "Преузимам ваше молитве…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Једна молитва са вашег налога још није на овом уређају, па није у .zip датотеци.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} молитва са вашег налога још није на овом уређају, па није у .zip датотеци.",
+ "few": "{n} молитве са вашег налога још нису на овом уређају, па нису у .zip датотеци.",
+ "other": "{n} молитви са вашег налога још није на овом уређају, па нису у .zip датотеци."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Отворите Ваше молитве и додирните Синхронизуј моје молитве, па поново преузмите.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "На овом уређају имате истакнутих стихова: {h}, обележивача: {b}, белешки: {n}, молитви: {p}.",
 "On": "Укључено",
 "Phone on its side": "Телефон положен",
 "Nothing hidden": "Ништа није сакривено"

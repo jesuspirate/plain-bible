@@ -223,7 +223,6 @@
 "Nothing to import was found in {file}.": "Failā {file} netika atrasts nekas importējams.",
 "Could not read {file}: {error}": "Neizdevās nolasīt {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Importēti izcēlumi: {h}, grāmatzīmes: {b}, piezīmes: {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Šajā ierīcē jums ir izcelti panti: {h}, grāmatzīmes: {b}, piezīmes: {n}.",
 "Reading…": "Nolasa…",
 "Import highlights and notes…": "Importēt izcēlumus un piezīmes…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Vēlaties arī savu kopiju? Viens .zip fails ar jūsu izcēlumiem, piezīmēm, grāmatzīmēm un lūgšanām, ko glabāt jebkur.",
@@ -1407,6 +1406,15 @@
 "You can also press / to open it.": "To var atvērt arī ar taustiņu /.",
 "Listen: hear the verses you picked": "Klausīties: dzirdēt izvēlētos pantus",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Atzīmētais aizslīd, kamēr lasāt lapu uz leju, lai teksts aizpildītu ekrānu. Ritiniet nedaudz uz augšu vai pieskarieties augšējai malai, lai to atgrieztu.",
+"Getting your prayers…": "Ielādē jūsu lūgšanas…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Viena jūsu konta lūgšana vēl nav šajā ierīcē, tāpēc tā nav .zip failā.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "zero": "{n} jūsu konta lūgšanas vēl nav šajā ierīcē, tāpēc tās nav .zip failā.",
+ "one": "{n} jūsu konta lūgšana vēl nav šajā ierīcē, tāpēc tā nav .zip failā.",
+ "other": "{n} jūsu konta lūgšanas vēl nav šajā ierīcē, tāpēc tās nav .zip failā."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Atveriet Jūsu lūgšanas un pieskarieties Sinhronizēt manas lūgšanas, tad lejupielādējiet vēlreiz.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Šajā ierīcē jums ir izcelti panti: {h}, grāmatzīmes: {b}, piezīmes: {n}, lūgšanas: {p}.",
 "On": "Ieslēgts",
 "Phone on its side": "Tālrunis guļus",
 "Nothing hidden": "Nekas nav paslēpts"

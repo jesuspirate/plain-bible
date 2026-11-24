@@ -227,7 +227,6 @@
 "Nothing to import was found in {file}.": "V datoteki {file} ni bilo najdenega ničesar za uvoz.",
 "Could not read {file}: {error}": "Datoteke {file} ni bilo mogoče prebrati: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Uvoženo: označbe {h}, zaznamki {b}, opombe {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Na tej napravi imate: označene vrstice {h}, zaznamki {b}, opombe {n}.",
 "Reading…": "Branje …",
 "Import highlights and notes…": "Uvozi označbe in opombe …",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Želite tudi svojo kopijo? Ena datoteka .zip z označbami, opombami, zaznamki in molitvami, ki jo lahko shranite kamor koli.",
@@ -1428,6 +1427,16 @@
 "You can also press / to open it.": "Odprete ga lahko tudi s tipko /.",
 "Listen: hear the verses you picked": "Poslušaj: slišite izbrane vrstice",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Označeno se umakne, ko berete navzdol po strani, da besedilo zapolni zaslon. Pomaknite se malo navzgor ali tapnite zgornji rob, da se vrne.",
+"Getting your prayers…": "Pridobivam vaše molitve…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Ena molitev iz vašega računa še ni na tej napravi, zato je ni v datoteki .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} molitev iz vašega računa še ni na tej napravi, zato je ni v datoteki .zip.",
+ "two": "{n} molitvi iz vašega računa še nista na tej napravi, zato ju ni v datoteki .zip.",
+ "few": "{n} molitve iz vašega računa še niso na tej napravi, zato jih ni v datoteki .zip.",
+ "other": "{n} molitev iz vašega računa še ni na tej napravi, zato jih ni v datoteki .zip."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Odprite Vaše molitve in tapnite Sinhroniziraj moje molitve, nato znova prenesite.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tej napravi imate: označene vrstice {h}, zaznamki {b}, opombe {n}, molitve {p}.",
 "On": "Vklopljeno",
 "Phone on its side": "Telefon položen",
 "Nothing hidden": "Nič ni skrito"

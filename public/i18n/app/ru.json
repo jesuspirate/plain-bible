@@ -227,7 +227,6 @@
 "Nothing to import was found in {file}.": "В файле {file} нет ничего для импорта.",
 "Could not read {file}: {error}": "Не удалось прочитать {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Импортировано: выделения — {h}, закладки — {b}, заметки — {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "На этом устройстве у вас: выделенные стихи — {h}, закладки — {b}, заметки — {n}.",
 "Reading…": "Чтение…",
 "Import highlights and notes…": "Импортировать выделения и заметки…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Хотите и свою копию? Один файл .zip с выделениями, заметками, закладками и молитвами, чтобы хранить где угодно.",
@@ -1428,6 +1427,16 @@
 "You can also press / to open it.": "Его также можно открыть клавишей /.",
 "Listen: hear the verses you picked": "Слушать: прослушать выбранные стихи",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Отмеченное уезжает, пока вы читаете вниз по странице, чтобы текст заполнил экран. Прокрутите чуть вверх или коснитесь верхнего края, чтобы вернуть.",
+"Getting your prayers…": "Загружаем ваши молитвы…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Одной молитвы из вашего аккаунта ещё нет на этом устройстве, поэтому её нет в .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} молитвы из вашего аккаунта ещё нет на этом устройстве, поэтому её нет в .zip.",
+ "few": "{n} молитв из вашего аккаунта ещё нет на этом устройстве, поэтому их нет в .zip.",
+ "many": "{n} молитв из вашего аккаунта ещё нет на этом устройстве, поэтому их нет в .zip.",
+ "other": "{n} молитвы из вашего аккаунта ещё нет на этом устройстве, поэтому их нет в .zip."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Откройте «Ваши молитвы» и нажмите «Синхронизировать мои молитвы», затем скачайте снова.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "На этом устройстве у вас: выделенные стихи — {h}, закладки — {b}, заметки — {n}, молитвы — {p}.",
 "On": "Вкл.",
 "Phone on its side": "Телефон боком",
 "Nothing hidden": "Ничего не скрыто"

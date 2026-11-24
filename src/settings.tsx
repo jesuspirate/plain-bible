@@ -26,6 +26,7 @@ import { saveRecording, useRecording } from './lib/recordMode'
 import { StreakRow } from './streaks'
 import { AWAY } from './sideways'
 import { UNFOLDED, useWide } from './lib/spread'
+import { clearSteps } from './lib/steps'
 import { currentLang, deviceLang, intlTag, LANGS, locale, N_, t, tj } from './i18n'
 
 // The version, quietly at the very bottom of Settings. Tap it to copy it
@@ -152,7 +153,10 @@ const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turn
 /** Where you are in Settings: the first page, one page in, or (under Font and layout) two. */
 function useSettingsNav() {
   const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : (takeSettingsPage() as Page | undefined) ?? 'home')
-  const back = () => setPage(LAYOUT_PAGES.includes(page) ? 'reading' : 'home')
+  // Going back from Report a problem cancels it: the recorded steps go too,
+  // so they don't wait on the device for a report that was never sent.
+  // (Closing Settings, or Record again, keeps them: that's not a cancel.)
+  const back = () => { if (page === 'suggest') clearSteps(); setPage(LAYOUT_PAGES.includes(page) ? 'reading' : 'home') }
   return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : LAYOUT_PAGES.includes(page) ? 2 : 1 }
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
