@@ -1,4 +1,5 @@
-// The guided tour: a handful of calm steps for someone new. Each one dims the
+// The guided tour: first read, pray, share, repeat without words (habits.tsx),
+// then, for whoever taps More, the full tour: a handful of calm steps. Each one dims the
 // page, leaves the one thing it's about lit, and says in a sentence or two
 // what it does. Nothing can be pressed by mistake behind it, the × on every
 // step puts it away, and it never comes back by itself once seen. Loaded only when it opens.
@@ -15,6 +16,7 @@ import { fine, Gesture, GESTURE_MS, Glyph, stillMotion, type Kind } from './gest
 import { SpeakerIcon } from './icons'
 import './tour.css'
 import { useLeave } from './motion'
+import { Habits, habitStops } from './habits'
 
 
 /** A line of the card, with the gesture (or the real button) beside it. */
@@ -113,9 +115,18 @@ function steps(): Step[] {
 type Box = { top: number; left: number; width: number; height: number }
 type Spot = { x: number; y: number }
 
+// First the habits, without words (habits.tsx); its "More" opens the full
+// tour below, for those who like to read, from its second step (no welcome
+// again). With the bottom bar hidden there are no habits to show: the full
+// tour, as before.
 export function Tour({ onClose }: { onClose: () => void }) {
+  const [full, setFull] = useState(() => !habitStops().length)
+  return full ? <Full onClose={onClose} more={!!habitStops().length} /> : <Habits onClose={onClose} onMore={() => setFull(true)} />
+}
+
+function Full({ onClose, more }: { onClose: () => void; more: boolean }) {
   const leave = useLeave(undefined, 'fade')
-  const [list] = useState(steps)
+  const [list] = useState(() => more ? steps().slice(1) : steps())
   const [i, setI] = useState(0)
   const [box, setBox] = useState<Box>()
   // Where each of this step's gestures is shown, and which one is showing.
@@ -213,11 +224,11 @@ export function Tour({ onClose }: { onClose: () => void }) {
           {step.after && <p class="tour-after">{step.after}</p>}
         </div>
         <div class="tour-buttons">
-          {i === 0
-            ? <button class="tour-btn" onClick={close}>{t('Not now')}</button>
-            : <button class="tour-btn" onClick={backward}>{t('Previous')}</button>}
+          {i > 0
+            ? <button class="tour-btn" onClick={backward}>{t('Previous')}</button>
+            : !more && <button class="tour-btn" onClick={close}>{t('Not now')}</button>}
           <button ref={next} class="tour-btn primary" onClick={forward}>
-            {i === 0 ? t('Show me') : last ? t('Done') : t('Next')}
+            {i === 0 && !more ? t('Show me') : last ? t('Done') : t('Next')}
           </button>
         </div>
       </div>
