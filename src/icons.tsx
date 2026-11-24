@@ -184,11 +184,12 @@ export const SpeakerIcon = ({ size, class: c }: P) => (
     <path d="M15.5 9a4.2 4.2 0 0 1 0 6M18.3 6.3a8 8 0 0 1 0 11.4" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" /></svg>
 )
 
-/** An open book with a play mark: read aloud. */
+/** Read along: an open book, its pages dipping at the spine over the curve of
+ *  its cover, with a big play cut out of it. Solid and tall so it still reads
+ *  as a book at search bar size, for tired eyes (Jet's pick, 2026-11-24). */
 export const ReadIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}><path d="M12 6.2C10 4.9 7.2 4.4 3.5 4.6v13.6c3.7-.2 6.5.3 8.5 1.6 2-1.3 4.8-1.8 8.5-1.6V4.6c-3.7-.2-6.5.3-8.5 1.6z" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round" />
-    <path d="M12 6.2v13.6" fill="none" stroke="currentColor" stroke-width="2" />
-    <path d="M6.3 9.3v5.4l4-2.7z" fill="currentColor" stroke="currentColor" stroke-width="1" stroke-linejoin="round" /></svg>
+  <svg {...svg(size, c)}><path fill-rule="evenodd" d="M12 5.2C10.1 3.2 7 2.4 3.4 2.8v14.8c3.6-.4 6.8.4 8.6 2.2 1.8-1.8 5-2.6 8.6-2.2V2.8C17 2.4 13.9 3.2 12 5.2zM8.9 6.4v10l8.2-5z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+    <path d="M1.6 5.6v14.4c4.4-.3 8 .3 10.4 2.2 2.4-1.9 6-2.5 10.4-2.2V5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
 export const PlayIcon = ({ size, class: c }: P) => (
