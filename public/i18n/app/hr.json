@@ -1417,5 +1417,6 @@
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na ovom uređaju imate istaknutih redaka: {h}, knjižnih oznaka: {b}, bilježaka: {n}, molitava: {p}.",
 "On": "Uključeno",
 "Phone on its side": "Telefon položen",
-"Nothing hidden": "Ništa skriveno"
+"Nothing hidden": "Ništa skriveno",
+"Tap the verse being read to highlight or share it.": "Dodirnite redak koji se čita da ga označite ili podijelite."
 }

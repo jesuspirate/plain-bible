@@ -1329,5 +1329,6 @@
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "इस डिवाइस पर आपके {h} हाइलाइट किए गए पद, {b} बुकमार्क, {n} नोट और {p} प्रार्थनाएँ हैं।",
 "On": "चालू",
 "Phone on its side": "फ़ोन आड़ा होने पर",
-"Nothing hidden": "कुछ भी छिपा नहीं"
+"Nothing hidden": "कुछ भी छिपा नहीं",
+"Tap the verse being read to highlight or share it.": "पढ़े जा रहे पद पर टैप करके उसे हाइलाइट या साझा करें।"
 }

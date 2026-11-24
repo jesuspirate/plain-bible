@@ -94,7 +94,7 @@ function steps(): Step[] {
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap],
       after: [t('After a search, open it again to go back to your last result.'),
         // Read along, if ticked under Audio, sits at the field's right end.
-        ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.'), t('While it reads, tap any verse to read on from there.')] : []),
+        ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.'), t('While it reads, tap any verse to read on from there.'), t('Tap the verse being read to highlight or share it.')] : []),
         // With a keyboard, / opens it from anywhere.
         ...(fine ? [t('You can also press / to open it.')] : [])].join(' ') },
     // Not signed in yet: one more sentence on how easy the free account is

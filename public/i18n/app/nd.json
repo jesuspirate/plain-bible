@@ -1329,5 +1329,6 @@
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Lilamavesi agqanyisiweyo angu-{h}, izimpawu ezingu-{b}, amanothi angu-{n} lemikhuleko engu-{p} kule divayisi.",
 "On": "Kuvuliwe",
 "Phone on its side": "Ifoni ilele ngehlangothi",
-"Nothing hidden": "Kakukho okufihliweyo"
+"Nothing hidden": "Kakukho okufihliweyo",
+"Tap the verse being read to highlight or share it.": "Thinta ivesi elibalwayo ukuze uligqamise loba ulabelane."
 }

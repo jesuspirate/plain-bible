@@ -17,7 +17,7 @@ import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
-import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, toggleReading, WORD_EVENT } from './listen'
+import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { showTapHints } from './taphint'
 import { overlayOpen } from './lib/overlay'
@@ -566,9 +566,10 @@ export function Reader({ route }: { route: Route }) {
   }, [])
   const tapVerse = (e: MouseEvent, v: number) => {
     if (picking) { pickVerses({ ...picking, verses: toggleVerse(picking.verses, book, chapter, v) }); return }
-    // Reading aloud: a tap is where reading goes on from; a quick second tap
+    // Reading aloud: a tap on another verse is where reading goes on from; a
+    // tap on the verse being read opens its bar; a quick second tap
     // highlights the verse instead (so the reading doesn't jump there); a
-    // press held a moment bookmarks it (below). Nothing to aim at, nothing to open.
+    // press held a moment bookmarks it (above).
     if (readingAloud() && bibles[version]) {
       if (held.current) { held.current = false; return }
       const at = Date.now(), prev = aloudTap.current
@@ -580,11 +581,18 @@ export function Reader({ route }: { route: Route }) {
       }
       if (prev) clearTimeout(prev.timer)
       const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible = bibles[version]
+      // Which verse was being read as the finger came down, not once the
+      // wait for a second tap is over: the voice may have moved on by then.
+      const r = readingAt(), reading = !!r && r.book === book && r.chapter === chapter && r.verse === v
+      const open = selected.includes(v)
       aloudTap.current = { v, t: at, timer: window.setTimeout(() => {
         aloudTap.current = undefined
-        // The verse being read: a tap pauses, and another goes on. Any other verse: read from there.
-        const r = readingAt()
-        if (r && r.book === book && r.chapter === chapter && r.verse === v) toggleReading(); else readFrom(spot, bible)
+        // Its bar already open: the tap closes it. The verse being read
+        // (playing or paused): its bar opens, for colors, sharing, copy...,
+        // and reading goes on. Any other verse: read from there.
+        if (open) setSelected([])
+        else if (reading) setSelected([v])
+        else { setSelected([]); readFrom(spot, bible) }
       }, TAP2) }
       return
     }
@@ -1408,6 +1416,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const [askShare, setAskShare] = useState(false)
   const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note, setNote } = useVerseActions(book, chapter, verses, versions, bibles)
   const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: Math.min(...verses) }
+  // Opened on the verse being read: it is already being read, so no Listen.
+  const aloud = readingAloud()
   // One plain text with the link at its end, no separate title or url: the
   // Mac share sheet's Copy pasted the text and the link as two pieces, and
   // showed only the reference and the site, as if one verse went out.
@@ -1477,7 +1487,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
       <div class="selbar" ref={barLeave} role="toolbar" aria-label={t('{ref} selected', { ref })}>
         <div class="selbar-head">
           <strong>{ref}</strong>
-          <span class="muted small">{verses.length > 1 ? tn(verses.length, '{n} verse', '{n} verses') : t('Tap more verses to add them')}</span>
+          {/* While reading aloud a tap on another verse reads from there, so the hint would mislead. */}
+          <span class="muted small">{verses.length > 1 ? tn(verses.length, '{n} verse', '{n} verses') : aloud ? '' : t('Tap more verses to add them')}</span>
           <span class="spacer" />
           <button class="close-btn" aria-label={t('Clear selection')} onClick={onClose}><CloseIcon size={22} /></button>
         </div>
@@ -1512,7 +1523,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
             {/* Listen: just these verses, then it stops. (Read along, in the search bar, goes on.) */}
-            {canHear(version, spot.lang) && !settings.readSilent && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
+            {canHear(version, spot.lang) && !settings.readSilent && !aloud && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
               <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>

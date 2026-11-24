@@ -388,6 +388,7 @@ function AudioHow() {
       <span class="audio-pick audio-stack"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span>
         <span class="what">{t('In the search bar, at its right end: reads on from the top of the screen as the words light up.')}</span></span>
       <p class="audio-also"><Glyph kind="tap" />{t('While it reads, tap any verse to read on from there.')}</p>
+      <p class="audio-also"><Glyph kind="tap" />{t('Tap the verse being read to highlight or share it.')}</p>
       {hear && <>
         <p class="audio-also audio-first"><Glyph kind="tap" />{t('Tap a verse')}</p>
         <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span>

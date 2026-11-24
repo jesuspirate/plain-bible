@@ -1329,5 +1329,6 @@
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Muli ndi mavesi owunikira {h}, zizindikiro {b}, zolemba {n} ndi mapemphero {p} pa chipangizo ichi.",
 "On": "Koyatsa",
 "Phone on its side": "Foni ikagona m’mbali",
-"Nothing hidden": "Palibe chobisika"
+"Nothing hidden": "Palibe chobisika",
+"Tap the verse being read to highlight or share it.": "Dinani vesi lomwe likuwerengedwa kuti muliwunikire kapena kuligawana."
 }
