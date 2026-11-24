@@ -223,7 +223,6 @@
 "Nothing to import was found in {file}.": "U datoteci {file} nije pronađeno ništa za uvoz.",
 "Could not read {file}: {error}": "Nije moguće pročitati {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Uvezeno – isticanja: {h}, knjižne oznake: {b}, bilješke: {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Na ovom uređaju imate istaknutih redaka: {h}, knjižnih oznaka: {b}, bilježaka: {n}.",
 "Reading…": "Čitanje…",
 "Import highlights and notes…": "Uvezi isticanja i bilješke…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Želite li i vlastitu kopiju? Jedna .zip datoteka s vašim isticanjima, bilješkama, knjižnim oznakama i molitvama, da je čuvate gdje god želite.",
@@ -1409,5 +1408,14 @@
 "You can also press / to open it.": "Možete ga otvoriti i tipkom /.",
 "Listen: hear the verses you picked": "Slušaj: čujte odabrane retke",
 "Hide while the phone is on its side": "Sakrij kad je telefon položen",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Označeno se skloni dok čitate niz stranicu, da tekst ispuni zaslon. Pomaknite se malo gore ili dodirnite gornji rub da se vrati."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Označeno se skloni dok čitate niz stranicu, da tekst ispuni zaslon. Pomaknite se malo gore ili dodirnite gornji rub da se vrati.",
+"Getting your prayers…": "Dohvaćam vaše molitve…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna molitva s vašeg računa još nije na ovom uređaju, pa nije u .zip datoteci.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} molitva s vašeg računa još nije na ovom uređaju, pa nije u .zip datoteci.",
+ "few": "{n} molitve s vašeg računa još nisu na ovom uređaju, pa nisu u .zip datoteci.",
+ "other": "{n} molitava s vašeg računa još nije na ovom uređaju, pa nisu u .zip datoteci."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Otvorite Vaše molitve i dodirnite Sinkroniziraj moje molitve, zatim ponovno preuzmite.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na ovom uređaju imate istaknutih redaka: {h}, knjižnih oznaka: {b}, bilježaka: {n}, molitava: {p}."
 }

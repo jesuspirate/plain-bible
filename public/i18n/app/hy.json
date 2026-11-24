@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} ֆայլում ներմուծելու ոչինչ չգտնվեց։",
 "Could not read {file}: {error}": "Չհաջողվեց կարդալ {file} ֆայլը․ {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Ներմուծվեց {h} ընդգծում, {b} էջանիշ և {n} նշում։",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Այս սարքում ունեք {h} ընդգծված համար, {b} էջանիշ և {n} նշում։",
 "Reading…": "Կարդացվում է…",
 "Import highlights and notes…": "Ներմուծել ընդգծումներ և նշումներ…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Ուզո՞ւմ եք նաև ձեր սեփական պատճենը։ Մեկ .zip ֆայլ՝ ձեր ընդգծումներով, նշումներով, էջանիշներով և աղոթքներով, որ պահեք որտեղ ուզեք։",
@@ -1328,5 +1327,10 @@
 "You can also press / to open it.": "Այն բացելու համար կարող եք սեղմել նաև /։",
 "Listen: hear the verses you picked": "Լսել. լսեք ընտրած համարները",
 "Hide while the phone is on its side": "Թաքցնել, երբ հեռախոսը կողքի վրա է",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Նշված տարրերը հեռանում են, երբ կարդում եք էջով ներքև, որպեսզի տեքստը լցնի էկրանը։ Մի քիչ վեր ոլորեք կամ հպեք վերին եզրին՝ դրանք վերադարձնելու համար։"
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Նշված տարրերը հեռանում են, երբ կարդում եք էջով ներքև, որպեսզի տեքստը լցնի էկրանը։ Մի քիչ վեր ոլորեք կամ հպեք վերին եզրին՝ դրանք վերադարձնելու համար։",
+"Getting your prayers…": "Ձեր աղոթքները բերվում են…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Ձեր հաշվի մեկ աղոթք դեռ այս սարքում չէ, ուստի այն .zip-ում չէ։",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Ձեր հաշվի {n} աղոթք դեռ այս սարքում չեն, ուստի դրանք .zip-ում չեն։",
+"Open Your prayers and tap Sync my prayers, then download again.": "Բացեք «Ձեր աղոթքները» և հպեք «Համաժամացնել իմ աղոթքները», ապա նորից ներբեռնեք։",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Այս սարքում ունեք {h} ընդգծված համար, {b} էջանիշ, {n} նշում և {p} աղոթք։"
 }

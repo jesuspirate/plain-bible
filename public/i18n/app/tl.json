@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Walang nakitang mai-import sa {file}.",
 "Could not read {file}: {error}": "Hindi mabasa ang {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Na-import ang {h} highlight, {b} bookmark at {n} tala.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Mayroon kang {h} naka-highlight na talata, {b} bookmark at {n} tala sa device na ito.",
 "Reading…": "Binabasa…",
 "Import highlights and notes…": "Mag-import ng mga highlight at tala…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Gusto mo rin ng sarili mong kopya? Isang .zip na may mga highlight, tala, bookmark at panalangin mo, para itago kahit saan.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Puwede mo ring pindutin ang / para buksan ito.",
 "Listen: hear the verses you picked": "Pakinggan: pakinggan ang mga talatang pinili mo",
 "Hide while the phone is on its side": "Itago kapag nakatagilid ang telepono",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Lumalayo ang mga naka-tsek habang nagbabasa ka pababa ng pahina, para mapuno ng salita ang screen. Mag-scroll nang kaunti pataas, o i-tap ang itaas na gilid, para ibalik ang mga ito."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Lumalayo ang mga naka-tsek habang nagbabasa ka pababa ng pahina, para mapuno ng salita ang screen. Mag-scroll nang kaunti pataas, o i-tap ang itaas na gilid, para ibalik ang mga ito.",
+"Getting your prayers…": "Kinukuha ang iyong mga panalangin…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Ang isang panalangin sa iyong account ay wala pa sa device na ito, kaya wala ito sa .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Ang {n} panalangin sa iyong account ay wala pa sa device na ito, kaya wala sila sa .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Buksan ang Iyong mga panalangin at i-tap ang I-sync ang mga panalangin ko, pagkatapos ay i-download muli.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Mayroon kang {h} naka-highlight na talata, {b} bookmark, {n} tala at {p} panalangin sa device na ito."
 }

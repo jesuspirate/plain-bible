@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "هیچ شتێک بۆ هاوردەکردن لە {file}دا نەدۆزرایەوە.",
 "Could not read {file}: {error}": "نەتوانرا {file} بخوێنرێتەوە: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h} ڕەنگکردن، {b} نیشانە و {n} تێبینی هاوردە کران.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "لەسەر ئەم ئامێرە {h} ئایەتی ڕەنگکراو، {b} نیشانە و {n} تێبینیت هەیە.",
 "Reading…": "خوێندنەوە…",
 "Import highlights and notes…": "هاوردەکردنی ڕەنگکردن و تێبینی…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "کۆپییەکی تایبەت بە خۆشت دەوێت؟ یەک فایلی ‎.zip لەگەڵ ڕەنگکردنەکان، تێبینییەکان، نیشانەکان و نوێژەکانت، بۆ ئەوەی لە هەر شوێنێک بیپارێزیت.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "دەتوانیت / ش دابگریت بۆ کردنەوەی.",
 "Listen: hear the verses you picked": "گوێگرتن: گوێ لەو ئایەتانە بگرە کە هەڵتبژاردوون",
 "Hide while the phone is on its side": "شاردنەوە کاتێک مۆبایل لەسەر لایە",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ئەوەی نیشانەت کردووە لادەچێت کاتێک بەرەو خوارەوەی پەڕە دەخوێنیتەوە، تا نووسینەکە شاشەکە پڕ بکات. کەمێک بۆ سەرەوە بڕۆ، یان لە لێواری سەرەوە بدە، بۆ گەڕاندنەوەیان."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ئەوەی نیشانەت کردووە لادەچێت کاتێک بەرەو خوارەوەی پەڕە دەخوێنیتەوە، تا نووسینەکە شاشەکە پڕ بکات. کەمێک بۆ سەرەوە بڕۆ، یان لە لێواری سەرەوە بدە، بۆ گەڕاندنەوەیان.",
+"Getting your prayers…": "هێنانی نوێژەکانت…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "نوێژێک لە هەژمارەکەت هێشتا لەسەر ئەم ئامێرە نییە، بۆیە لە ‎.zip دا نییە.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} نوێژ لە هەژمارەکەت هێشتا لەسەر ئەم ئامێرە نین، بۆیە لە ‎.zip دا نین.",
+"Open Your prayers and tap Sync my prayers, then download again.": "«نوێژەکانت» بکەرەوە و «هاوکاتکردنی نوێژەکانم» دابگرە، پاشان دووبارە دایبەزێنە.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "لەسەر ئەم ئامێرە {h} ئایەتی ڕەنگکراو، {b} نیشانە، {n} تێبینی و {p} نوێژت هەیە."
 }

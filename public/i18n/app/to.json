@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Naʻe ʻikai ha meʻa ke ʻomai naʻe maʻu ʻi he {file}.",
 "Could not read {file}: {error}": "Naʻe ʻikai lava ʻo lau ʻa e {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Kuo ʻomai ha fakalanu ʻe {h}, fakaʻilonga ʻe {b} mo e noti ʻe {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "ʻOku ʻi ai haʻo veesi fakalanu ʻe {h}, fakaʻilonga ʻe {b} mo e noti ʻe {n} ʻi he meʻangāue ko ʻení.",
 "Reading…": "ʻOku lau…",
 "Import highlights and notes…": "ʻOmai ha ngaahi fakalanu mo e noti…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Fiemaʻu foki haʻo tatau pē ʻaʻau? Ko ha .zip ʻe taha mo hoʻo ngaahi fakalanu, noti, fakaʻilonga mo e lotu, ke tauhi ʻi ha feituʻu pē.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "ʻE lava foki ke ke lomiʻi ʻa e / ke fakaava ia.",
 "Listen: hear the verses you picked": "Fanongo: fanongo ki he ngaahi veesi kuó ke fili",
 "Hide while the phone is on its side": "Fufū ʻi he taimi ʻoku tokoto ai ʻa e telefoní",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ʻOku hiki ʻa e meʻa kuó ke fakaʻilongaʻí ʻi hoʻo lau hifo ʻi he peesí, koeʻuhí ke fakafonu ʻe he ngaahi leá ʻa e sikiliní. Sikolo hake siʻi, pe lomiʻi ʻa e kauʻi ʻolungá, ke toe foki mai."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "ʻOku hiki ʻa e meʻa kuó ke fakaʻilongaʻí ʻi hoʻo lau hifo ʻi he peesí, koeʻuhí ke fakafonu ʻe he ngaahi leá ʻa e sikiliní. Sikolo hake siʻi, pe lomiʻi ʻa e kauʻi ʻolungá, ke toe foki mai.",
+"Getting your prayers…": "ʻOku ʻomai hoʻo ngaahi lotu…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "ʻOku teʻeki ai ke ʻi he meʻangāue ko ʻení ha lotu ʻe taha ʻi hoʻo ʻakauní, ko ia ʻoku ʻikai ke ʻi he .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "ʻOku teʻeki ai ke ʻi he meʻangāue ko ʻení ha lotu ʻe {n} ʻi hoʻo ʻakauní, ko ia ʻoku ʻikai ke nau ʻi he .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Fakaava ʻa Hoʻo ngaahi lotu pea lomiʻi ʻa Fakatatau ʻeku ngaahi lotu, pea toe hiki mai.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ʻOku ʻi ai haʻo veesi fakalanu ʻe {h}, fakaʻilonga ʻe {b}, noti ʻe {n} mo e lotu ʻe {p} ʻi he meʻangāue ko ʻení."
 }

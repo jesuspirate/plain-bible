@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Inget att importera hittades i {file}.",
 "Could not read {file}: {error}": "Kunde inte läsa {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Importerade {h} markeringar, {b} bokmärken och {n} anteckningar.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Du har {h} markerade verser, {b} bokmärken och {n} anteckningar på den här enheten.",
 "Reading…": "Läser…",
 "Import highlights and notes…": "Importera markeringar och anteckningar…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Vill du också ha en egen kopia? En .zip med dina markeringar, anteckningar, bokmärken och böner, att spara var du vill.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "Du kan också trycka på / för att öppna den.",
 "Listen: hear the verses you picked": "Lyssna: hör verserna du valt",
 "Hide while the phone is on its side": "Dölj när telefonen ligger ner",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Det du kryssar i glider undan medan du läser nedåt på sidan, så att texten fyller skärmen. Rulla upp lite, eller tryck på överkanten, för att få tillbaka det."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Det du kryssar i glider undan medan du läser nedåt på sidan, så att texten fyller skärmen. Rulla upp lite, eller tryck på överkanten, för att få tillbaka det.",
+"Getting your prayers…": "Hämtar dina böner…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "En bön i ditt konto finns inte på den här enheten än, så den finns inte i .zip-filen.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} böner i ditt konto finns inte på den här enheten än, så de finns inte i .zip-filen.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Öppna Dina böner och tryck på Synkronisera mina böner, och ladda sedan ner igen.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Du har {h} markerade verser, {b} bokmärken, {n} anteckningar och {p} böner på den här enheten."
 }

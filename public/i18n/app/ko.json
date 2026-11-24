@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file}에서 가져올 항목을 찾지 못했습니다.",
 "Could not read {file}: {error}": "{file}을(를) 읽을 수 없습니다: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "하이라이트 {h}개, 책갈피 {b}개, 메모 {n}개를 가져왔습니다.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "이 기기에 하이라이트한 구절 {h}개, 책갈피 {b}개, 메모 {n}개가 있습니다.",
 "Reading…": "읽는 중…",
 "Import highlights and notes…": "하이라이트 및 메모 가져오기…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "나만의 사본도 원하시나요? 하이라이트, 메모, 책갈피, 기도를 .zip 파일 하나에 담아 어디에나 보관할 수 있습니다.",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "/ 키를 눌러도 열 수 있어요.",
 "Listen: hear the verses you picked": "듣기: 고른 구절 듣기",
 "Hide while the phone is on its side": "휴대폰을 옆으로 눕혔을 때 숨기기",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "체크한 항목은 페이지를 아래로 읽어 내려가면 비켜나서 글이 화면을 채워요. 조금 위로 스크롤하거나 위쪽 가장자리를 누르면 돌아와요."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "체크한 항목은 페이지를 아래로 읽어 내려가면 비켜나서 글이 화면을 채워요. 조금 위로 스크롤하거나 위쪽 가장자리를 누르면 돌아와요.",
+"Getting your prayers…": "기도를 가져오는 중…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "계정의 기도 1개가 아직 이 기기에 없어서 .zip에 들어 있지 않습니다.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "계정의 기도 {n}개가 아직 이 기기에 없어서 .zip에 들어 있지 않습니다.",
+"Open Your prayers and tap Sync my prayers, then download again.": "나의 기도를 열고 내 기도 동기화를 누른 다음 다시 다운로드하세요.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "이 기기에 하이라이트한 구절 {h}개, 책갈피 {b}개, 메모 {n}개, 기도 {p}개가 있습니다."
 }

@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} တွင် တင်သွင်းစရာ မတွေ့ပါ။",
 "Could not read {file}: {error}": "{file} ကို ဖတ်၍ မရပါ: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "အရောင်ခြယ်ချက် {h} ခု၊ စာမှတ် {b} ခုနှင့် မှတ်စု {n} ခုကို တင်သွင်းပြီးပါပြီ။",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "ဤစက်တွင် အရောင်ခြယ်ထားသော ကျမ်းချက် {h} ချက်၊ စာမှတ် {b} ခုနှင့် မှတ်စု {n} ခု ရှိပါသည်။",
 "Reading…": "ဖတ်နေသည်…",
 "Import highlights and notes…": "အရောင်ခြယ်ချက်များနှင့် မှတ်စုများ တင်သွင်းရန်…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "ကိုယ်ပိုင်မိတ္တူလည်း လိုချင်ပါသလား။ သင့်အရောင်ခြယ်ချက်များ၊ မှတ်စုများ၊ စာမှတ်များနှင့် ဆုတောင်းချက်များပါသော .zip တစ်ခု၊ မည်သည့်နေရာတွင်မဆို သိမ်းထားနိုင်ပါသည်။",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "/ ကိုနှိပ်၍လည်း ဖွင့်နိုင်သည်။",
 "Listen: hear the verses you picked": "နားထောင်ရန်: ရွေးထားသော အခန်းငယ်များကို နားထောင်ပါ",
 "Hide while the phone is on its side": "ဖုန်းကို ဘေးတိုက်ထားချိန် ဖျောက်ရန်",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "စာမျက်နှာအောက်သို့ ဖတ်သွားသည်နှင့် အမှန်ခြစ်ထားသည်များ ဖယ်သွားပြီး စာက မျက်နှာပြင်ကို ပြည့်စေသည်။ ပြန်ပေါ်ရန် အပေါ်သို့ နည်းနည်းဆွဲပါ သို့မဟုတ် အပေါ်အစွန်းကို တို့ပါ။"
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "စာမျက်နှာအောက်သို့ ဖတ်သွားသည်နှင့် အမှန်ခြစ်ထားသည်များ ဖယ်သွားပြီး စာက မျက်နှာပြင်ကို ပြည့်စေသည်။ ပြန်ပေါ်ရန် အပေါ်သို့ နည်းနည်းဆွဲပါ သို့မဟုတ် အပေါ်အစွန်းကို တို့ပါ။",
+"Getting your prayers…": "သင့်ဆုတောင်းချက်များကို ယူနေသည်…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "သင့်အကောင့်ရှိ ဆုတောင်းချက် တစ်ခုသည် ဤစက်ပေါ်တွင် မရှိသေးသဖြင့် .zip ထဲတွင် မပါပါ။",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "သင့်အကောင့်ရှိ ဆုတောင်းချက် {n} ခုသည် ဤစက်ပေါ်တွင် မရှိသေးသဖြင့် .zip ထဲတွင် မပါပါ။",
+"Open Your prayers and tap Sync my prayers, then download again.": "သင့်ဆုတောင်းချက်များကို ဖွင့်ပြီး ကျွန်ုပ်၏ဆုတောင်းချက်များကို စင့်ခ်လုပ်ရန် ကို နှိပ်ပါ၊ ထို့နောက် ပြန်ဒေါင်းလုဒ်လုပ်ပါ။",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ဤစက်တွင် အရောင်ခြယ်ထားသော ကျမ်းချက် {h} ချက်၊ စာမှတ် {b} ခု၊ မှတ်စု {n} ခုနှင့် ဆုတောင်းချက် {p} ခု ရှိပါသည်။"
 }

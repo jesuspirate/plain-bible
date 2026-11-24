@@ -227,7 +227,6 @@
 "Nothing to import was found in {file}.": "V souboru {file} se nenašlo nic k importu.",
 "Could not read {file}: {error}": "Soubor {file} nelze přečíst: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Importováno: zvýraznění {h}, záložky {b}, poznámky {n}.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Na tomto zařízení máte: zvýrazněné verše {h}, záložky {b}, poznámky {n}.",
 "Reading…": "Načítání…",
 "Import highlights and notes…": "Importovat zvýraznění a poznámky…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Chcete mít i vlastní kopii? Jeden soubor .zip se zvýrazněním, poznámkami, záložkami a modlitbami, který si můžete uložit kamkoli.",
@@ -1430,5 +1429,15 @@
 "You can also press / to open it.": "Hledání otevřete také klávesou /.",
 "Listen: hear the verses you picked": "Poslechnout: uslyšíte vybrané verše",
 "Hide while the phone is on its side": "Skrýt, když je telefon na šířku",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaškrtnuté položky se při čtení dolů po stránce odsunou, aby text vyplnil obrazovku. Vrátíte je, když trochu posunete nahoru nebo klepnete na horní okraj."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaškrtnuté položky se při čtení dolů po stránce odsunou, aby text vyplnil obrazovku. Vrátíte je, když trochu posunete nahoru nebo klepnete na horní okraj.",
+"Getting your prayers…": "Načítám vaše modlitby…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitba z vašeho účtu ještě není na tomto zařízení, takže není v souboru .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
+ "one": "{n} modlitba z vašeho účtu ještě není na tomto zařízení, takže není v souboru .zip.",
+ "few": "{n} modlitby z vašeho účtu ještě nejsou na tomto zařízení, takže nejsou v souboru .zip.",
+ "many": "{n} modlitby z vašeho účtu ještě není na tomto zařízení, takže nejsou v souboru .zip.",
+ "other": "{n} modliteb z vašeho účtu ještě není na tomto zařízení, takže nejsou v souboru .zip."
+},
+"Open Your prayers and tap Sync my prayers, then download again.": "Otevřete Vaše modlitby, klepněte na Synchronizovat mé modlitby a pak stáhněte znovu.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tomto zařízení máte: zvýrazněné verše {h}, záložky {b}, poznámky {n}, modlitby {p}."
 }

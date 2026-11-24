@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "Δεν βρέθηκε τίποτα για εισαγωγή στο {file}.",
 "Could not read {file}: {error}": "Δεν ήταν δυνατή η ανάγνωση του {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Εισήχθησαν {h} επισημάνσεις, {b} σελιδοδείκτες και {n} σημειώσεις.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Έχετε {h} επισημασμένα εδάφια, {b} σελιδοδείκτες και {n} σημειώσεις σε αυτή τη συσκευή.",
 "Reading…": "Ανάγνωση…",
 "Import highlights and notes…": "Εισαγωγή επισημάνσεων και σημειώσεων…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "Θέλετε και ένα δικό σας αντίγραφο; Ένα αρχείο .zip με τις επισημάνσεις, τις σημειώσεις, τους σελιδοδείκτες και τις προσευχές σας, για να το φυλάξετε όπου θέλετε.",
@@ -1328,5 +1327,10 @@
 "You can also press / to open it.": "Μπορείτε επίσης να πατήσετε / για να την ανοίξετε.",
 "Listen: hear the verses you picked": "Ακρόαση: ακούστε τα εδάφια που επιλέξατε",
 "Hide while the phone is on its side": "Απόκρυψη όταν το τηλέφωνο είναι οριζόντια",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Όσα έχετε τσεκάρει φεύγουν καθώς διαβάζετε προς τα κάτω, ώστε το κείμενο να γεμίζει την οθόνη. Κυλήστε λίγο προς τα πάνω ή πατήστε το πάνω άκρο για να επιστρέψουν."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Όσα έχετε τσεκάρει φεύγουν καθώς διαβάζετε προς τα κάτω, ώστε το κείμενο να γεμίζει την οθόνη. Κυλήστε λίγο προς τα πάνω ή πατήστε το πάνω άκρο για να επιστρέψουν.",
+"Getting your prayers…": "Λήψη των προσευχών σας…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Μία προσευχή στον λογαριασμό σας δεν είναι ακόμη σε αυτή τη συσκευή, οπότε δεν είναι στο .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} προσευχές στον λογαριασμό σας δεν είναι ακόμη σε αυτή τη συσκευή, οπότε δεν είναι στο .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Ανοίξτε «Οι προσευχές σας» και πατήστε «Συγχρονισμός των προσευχών μου», έπειτα κατεβάστε ξανά.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Έχετε {h} επισημασμένα εδάφια, {b} σελιδοδείκτες, {n} σημειώσεις και {p} προσευχές σε αυτή τη συσκευή."
 }

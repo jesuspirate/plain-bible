@@ -1,7 +1,7 @@
 // Settings → Your data: import highlights and saved verses from other apps,
 // and download / restore everything of this app's own (lib/export).
 import { unzipSync, strFromU8 } from 'fflate'
-import { useState } from 'preact/hooks'
+import { useEffect, useState } from 'preact/hooks'
 import { Backup, BACKUP_FILE, BackupPrayer, htmlToText, ImportItem, isBackup, mergeImport, mergeMark, Marks, notesOf, parseNotes, parseRefList } from './lib/marks'
 import { Part, Prayer, prayers, withPart } from './lib/prayers'
 import { cleanJournal } from './lib/prayerJournal'
@@ -87,6 +87,9 @@ export function DataTools() {
   const [preview, setPreview] = useState<Preview>()
   const [msg, setMsg] = useState('')
   const [busy, setBusy] = useState(false)
+  // Prayers are on this device too, and go in the download with the rest.
+  const [pc, setPc] = useState(0)
+  useEffect(() => { prayers.list().then(l => setPc(l.length), () => {}) }, [msg])
   const count = Object.values(marks)
   const hl = count.filter(m => m.c).length, bm = count.filter(m => m.b).length, nt = count.reduce((n, m) => n + notesOf(m).length, 0)
 
@@ -128,7 +131,7 @@ export function DataTools() {
 
   return (
     <div class="datatools">
-      <p class="muted">{tj('You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.', { h: <strong>{hl}</strong>, b: <strong>{bm}</strong>, n: <strong>{nt}</strong> })}</p>
+      <p class="muted">{tj('You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.', { h: <strong>{hl}</strong>, b: <strong>{bm}</strong>, n: <strong>{nt}</strong>, p: <strong>{pc}</strong> })}</p>
       <div class="row wrap">
         <label class={'button primary' + (busy ? ' disabled' : '')}>
           {busy ? t('Reading…') : t('Import highlights and notes…')}

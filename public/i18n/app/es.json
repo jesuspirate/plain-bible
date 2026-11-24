@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "No se encontró nada para importar en {file}.",
 "Could not read {file}: {error}": "No se pudo leer {file}: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "Se importaron {h} resaltados, {b} marcadores y {n} notas.",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "Tienes {h} versículos resaltados, {b} marcadores y {n} notas en este dispositivo.",
 "Reading…": "Leyendo…",
 "Import highlights and notes…": "Importar resaltados y notas…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "¿Quieres también tu propia copia? Un solo .zip con tus resaltados, notas, marcadores y oraciones, para guardarlo donde quieras.",
@@ -1160,5 +1159,10 @@
 "You can also press / to open it.": "También puedes pulsar / para abrirla.",
 "Listen: hear the verses you picked": "Escuchar: oír los versículos elegidos",
 "Hide while the phone is on its side": "Ocultar con el teléfono en horizontal",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Lo que marques se aparta mientras lees hacia abajo, para que el texto llene la pantalla. Sube un poco, o toca el borde de arriba, para que vuelva."
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Lo que marques se aparta mientras lees hacia abajo, para que el texto llene la pantalla. Sube un poco, o toca el borde de arriba, para que vuelva.",
+"Getting your prayers…": "Trayendo tus oraciones…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Una oración de tu cuenta aún no está en este dispositivo, así que no está en el .zip.",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} oraciones de tu cuenta aún no están en este dispositivo, así que no están en el .zip.",
+"Open Your prayers and tap Sync my prayers, then download again.": "Abre Tus oraciones y toca Sincronizar mis oraciones; luego descarga de nuevo.",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Tienes {h} versículos resaltados, {b} marcadores, {n} notas y {p} oraciones en este dispositivo."
 }

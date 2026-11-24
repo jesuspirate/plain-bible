@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file}ত আমদানি কৰিবলগীয়া একো পোৱা নগ'ল।",
 "Could not read {file}: {error}": "{file} পঢ়িব পৰা নগ'ল: {error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "{h}টা হাইলাইট, {b}টা বুকমাৰ্ক আৰু {n}টা টোকা আমদানি কৰা হ'ল।",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "এই ডিভাইচত আপোনাৰ {h}টা হাইলাইট কৰা পদ, {b}টা বুকমাৰ্ক আৰু {n}টা টোকা আছে।",
 "Reading…": "পঢ়ি আছে…",
 "Import highlights and notes…": "হাইলাইট আৰু টোকা আমদানি কৰক…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "নিজৰ বাবেও এটা কপি বিচাৰে নেকি? আপোনাৰ হাইলাইট, টোকা, বুকমাৰ্ক আৰু প্ৰাৰ্থনাৰ সৈতে এটা .zip, য'তে ইচ্ছা ৰাখিব পাৰে।",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "ইয়াক খুলিবলৈ আপুনি / টিপিবও পাৰে।",
 "Listen: hear the verses you picked": "শুনক: বাছি লোৱা পদবোৰ শুনক",
 "Hide while the phone is on its side": "ফোন কাষলৈ কৰি থাকিলে লুকুৱাওক",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "পৃষ্ঠাৰ তললৈ পঢ়ি যোৱাৰ লগে লগে টিক দিয়া বস্তুবোৰ আঁতৰি যায়, যাতে লেখাই পৰ্দা ভৰাই। সেইবোৰ ঘূৰাই আনিবলৈ অলপ ওপৰলৈ স্ক্ৰ'ল কৰক বা ওপৰৰ কাষত টিপক।"
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "পৃষ্ঠাৰ তললৈ পঢ়ি যোৱাৰ লগে লগে টিক দিয়া বস্তুবোৰ আঁতৰি যায়, যাতে লেখাই পৰ্দা ভৰাই। সেইবোৰ ঘূৰাই আনিবলৈ অলপ ওপৰলৈ স্ক্ৰ'ল কৰক বা ওপৰৰ কাষত টিপক।",
+"Getting your prayers…": "আপোনাৰ প্ৰাৰ্থনা অনা হৈছে…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "আপোনাৰ একাউণ্টৰ এটা প্ৰাৰ্থনা এতিয়াও এই ডিভাইচত নাই, সেয়ে সেয়া .zip ত নাই।",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "আপোনাৰ একাউণ্টৰ {n}টা প্ৰাৰ্থনা এতিয়াও এই ডিভাইচত নাই, সেয়ে সেইবোৰ .zip ত নাই।",
+"Open Your prayers and tap Sync my prayers, then download again.": "আপোনাৰ প্ৰাৰ্থনা খোলক আৰু মোৰ প্ৰাৰ্থনা ছিংক কৰক টিপক, তাৰ পিছত পুনৰ ডাউনলোড কৰক।",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "এই ডিভাইচত আপোনাৰ {h}টা হাইলাইট কৰা পদ, {b}টা বুকমাৰ্ক, {n}টা টোকা আৰু {p}টা প্ৰাৰ্থনা আছে।"
 }

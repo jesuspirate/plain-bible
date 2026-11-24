@@ -207,7 +207,6 @@
 "Nothing to import was found in {file}.": "{file} にはインポートできるものが見つかりませんでした。",
 "Could not read {file}: {error}": "{file} を読み込めませんでした：{error}",
 "Imported {h} highlights, {b} bookmarks and {n} notes.": "ハイライト {h} 件、ブックマーク {b} 件、メモ {n} 件をインポートしました。",
-"You have {h} highlighted verses, {b} bookmarks and {n} notes on this device.": "このデバイスには、ハイライトした節が {h} 件、ブックマークが {b} 件、メモが {n} 件あります。",
 "Reading…": "読み込み中…",
 "Import highlights and notes…": "ハイライトとメモをインポート…",
 "Want your own copy too? One .zip with your highlights, notes, bookmarks and prayers, to keep anywhere.": "自分用のコピーもほしいですか？ハイライト、メモ、ブックマーク、祈りを1つの .zip にまとめて、どこにでも保管できます。",
@@ -1325,5 +1324,10 @@
 "You can also press / to open it.": "/ キーでも開けます。",
 "Listen: hear the verses you picked": "聞く：選んだ節を聞く",
 "Hide while the phone is on its side": "スマホを横にしているときに隠す",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "チェックしたものは、ページを下へ読み進めると隠れ、文字が画面いっぱいになります。少し上へスクロールするか上端をタップすると戻ります。"
+"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "チェックしたものは、ページを下へ読み進めると隠れ、文字が画面いっぱいになります。少し上へスクロールするか上端をタップすると戻ります。",
+"Getting your prayers…": "祈りを取得しています…",
+"One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "アカウントの祈りのうち 1 件がまだこのデバイスにないため、.zip に含まれていません。",
+"{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "アカウントの祈りのうち {n} 件がまだこのデバイスにないため、.zip に含まれていません。",
+"Open Your prayers and tap Sync my prayers, then download again.": "「あなたの祈り」を開いて「祈りを同期」をタップし、もう一度ダウンロードしてください。",
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "このデバイスには、ハイライトした節が {h} 件、ブックマークが {b} 件、メモが {n} 件、祈りが {p} 件あります。"
 }
