@@ -397,7 +397,7 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         <div class="pray-title">
           {circle
             ? <button class="settings-back" onClick={() => setCircle(undefined)}><BackIcon class="back-ico" /> <span class="back-name">{circle.name}</span></button>
-            : <h2>{t('Circles')}</h2>}
+            : <h2 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h2>}
           <button class="done-btn" onClick={done}>{t('Done')}</button>
         </div>
       </div>

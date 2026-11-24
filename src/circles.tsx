@@ -26,7 +26,7 @@ import { canShare, copyText } from './lib/native'
 import { go, openCircles, openSettings, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
-import { BackIcon, BellIcon, BookIcon, BookmarkIcon, NoteIcon } from './icons'
+import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, NoteIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import { nowPlaying } from './lib/nowplaying'
@@ -104,7 +104,7 @@ function SignedOut() {
   const { sheet } = useNav()
   return (
     <div class="circles">
-      {!sheet && <h1>{t('Circles')}</h1>}
+      {!sheet && <h1 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h1>}
       <p>{t('Share the verses you read and the prayers you pray with a few people you choose: family, a friend, a small group.')}</p>
       <p class="muted">{t('Everything you share is encrypted on your device, so only the people in your circle can read or hear it.')}</p>
       <SignIn />
@@ -128,7 +128,7 @@ export function CirclesPage({ route }: { route: Route }) {
     keptCircles().then(cs => toSheet({ id: at, name: cs.find(c => c.id === at)?.name ?? t('Circle') }))
   }, [route.path.join('/')])
   if (route.path[0] === 'circles') return null
-  if (!SYNC_URL) return <div class="circles"><h1>{t('Circles')}</h1><p class="muted">{t('Circles aren’t available in this copy of the app.')}</p></div>
+  if (!SYNC_URL) return <div class="circles"><h1 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h1><p class="muted">{t('Circles aren’t available in this copy of the app.')}</p></div>
   // An invite opens even before you have an account: it says who it's
   // from, then makes the account right there, without leaving the page.
   if (route.path[0] === 'join') {
@@ -318,7 +318,7 @@ function CircleList() {
 
   return (
     <div class="circles">
-      {!nav.sheet && <h1>{t('Circles')}</h1>}
+      {!nav.sheet && <h1 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h1>}
       <p class="muted">{t('Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.')}</p>
       {needCode
         ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')}
