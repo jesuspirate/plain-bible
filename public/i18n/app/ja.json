@@ -1329,5 +1329,6 @@
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "このデバイスには、ハイライトした節が {h} 件、ブックマークが {b} 件、メモが {n} 件、祈りが {p} 件あります。",
 "On": "オン",
 "Phone on its side": "スマホを横にしたとき",
-"Nothing hidden": "何も隠さない"
+"Nothing hidden": "何も隠さない",
+"Tap the verse being read to highlight or share it.": "読んでいる節をタップすると、色を付けたり共有したりできます。"
 }

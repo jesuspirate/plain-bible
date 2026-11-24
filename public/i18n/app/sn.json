@@ -1329,5 +1329,6 @@
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Mune ndima dzakapendwa {h}, zviratidzo {b}, zvinyorwa {n} neminamato {p} pamudziyo uyu.",
 "On": "Zvakabatidzwa",
 "Phone on its side": "Foni yakarara parutivi",
-"Nothing hidden": "Hapana chakavigwa"
+"Nothing hidden": "Hapana chakavigwa",
+"Tap the verse being read to highlight or share it.": "Baya ndima iri kuverengwa kuti uiise ruvara kana kuigovera."
 }
