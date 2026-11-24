@@ -322,6 +322,10 @@ main.with-bar { padding-bottom: 120px; }
   color: var(--text); background: var(--surface); border: 1px solid var(--line); box-sizing: border-box;
   box-shadow: 0 10px 30px rgba(0,0,0,.14); -webkit-tap-highlight-color: transparent;
 }
+/* "Circles" with its mark (friends round a heart) in front, so the page
+   says where you are at a glance. */
+.title-with-icon { display: flex; align-items: center; gap: .4em; }
+.title-with-icon svg { flex: none; }
 .sb-circles::before { content: ''; position: absolute; inset: -5px; border-radius: 50%; }
 .sb-circles:active { transform: scale(.94); }
 /* The page-wide button hover (a darker border) would draw a ring on its hidden
