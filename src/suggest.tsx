@@ -11,6 +11,7 @@ import { recentErrors } from './lib/errors'
 import { inMacApp, inOtherApp, inStoreApp, fromPlayStore, installed } from './lib/install'
 import { onStepsChange, recordedSteps, clearSteps, screenOf, stopSteps } from './lib/steps'
 import { currentLang, t } from './i18n'
+import { useLeave } from './motion'
 
 const MAX = 3000
 const DRAFT = 'plain-bible:suggest-draft'
@@ -46,11 +47,12 @@ export const canSuggest = () => !!SYNC_URL
 export const START_STEPS = 'plain-bible:start-steps'
 
 export function StepsPill({ onStop }: { onStop: () => void }) {
+  const leave = useLeave()
   const [n, setN] = useState(() => recordedSteps().length)
   useEffect(() => onStepsChange(() => setN(recordedSteps().length)), [])
   const finish = () => { stopSteps(); reopen = true; onStop() }
   return (
-    <div class="steps-pill" role="status">
+    <div ref={leave} class="steps-pill" role="status">
       <span class="steps-dot" aria-hidden="true" />
       <span class="steps-say">{t('Recording')}<span class="steps-n" aria-hidden="true"> · {Math.max(0, n - 1)}</span></span>
       <button class="primary" onClick={finish}>{t('Stop')}</button>

@@ -3,6 +3,7 @@ import { cleanWord, define, Definition, DICT_LANGS, DictLang, haveDict, isWord, 
 import { Sheet } from './ui'
 import { go } from './state'
 import { currentLang, t } from './i18n'
+import { useLeave } from './motion'
 
 /** The dictionary in the Bible's own language when there is one, else in
  *  the app's language. */
@@ -36,8 +37,9 @@ export function useSelectedWord(within: () => HTMLElement | null | undefined): {
 
 /** The big glass button offered over the page while one word is selected. */
 export function DefinePill({ word, onDefine }: { word: string; onDefine: () => void }) {
+  const leave = useLeave()
   return (
-    <button class="define-pill" onClick={onDefine}
+    <button ref={leave} class="define-pill" onClick={onDefine}
       // Keep the word selected while the button is pressed.
       onPointerDown={e => e.preventDefault()} onMouseDown={e => e.preventDefault()}>
       <BookIcon />

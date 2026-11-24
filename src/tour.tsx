@@ -14,6 +14,7 @@ import { inFedi } from './lib/nostr'
 import { fine, Gesture, GESTURE_MS, Glyph, stillMotion, type Kind } from './gesture'
 import { SpeakerIcon } from './icons'
 import './tour.css'
+import { useLeave } from './motion'
 
 
 /** A line of the card, with the gesture (or the real button) beside it. */
@@ -113,6 +114,7 @@ type Box = { top: number; left: number; width: number; height: number }
 type Spot = { x: number; y: number }
 
 export function Tour({ onClose }: { onClose: () => void }) {
+  const leave = useLeave(undefined, 'fade')
   const [list] = useState(steps)
   const [i, setI] = useState(0)
   const [box, setBox] = useState<Box>()
@@ -181,7 +183,7 @@ export function Tour({ onClose }: { onClose: () => void }) {
   const place = !box ? 'tour-mid' : below ? 'tour-below' : 'tour-above'
   const style = fit !== undefined ? { top: `${fit}px`, transform: 'none' } : !box ? undefined : below ? { top: `${box.top + box.height + gap}px` } : { bottom: `${innerHeight - box.top + gap}px` }
   return (
-    <div class="tour" role="dialog" aria-modal="true" aria-labelledby="tour-title" aria-describedby="tour-body">
+    <div ref={leave} class="tour" role="dialog" aria-modal="true" aria-labelledby="tour-title" aria-describedby="tour-body">
       {/* Takes every tap, so nothing behind is pressed by mistake. */}
       <div class="tour-block" onClick={e => e.stopPropagation()} />
       {box

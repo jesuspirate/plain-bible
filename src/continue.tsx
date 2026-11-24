@@ -9,6 +9,7 @@ import { go, resumePath, useApp } from './state'
 import { useReadingAloud } from './listen'
 import { CloseIcon } from './icons'
 import { N_, t } from './i18n'
+import { useLeave } from './motion'
 
 const FROM: Record<Device, string> = {
   iphone: N_('From your iPhone'), ipad: N_('From your iPad'), mac: N_('From your Mac'),
@@ -16,6 +17,7 @@ const FROM: Record<Device, string> = {
 }
 
 export function ContinueOffer({ mini }: { mini: boolean }) {
+  const leave = useLeave()
   const { byId, settings } = useApp()
   const aloud = useReadingAloud()
   const [offer, setOffer] = useState<SyncedPlace | undefined>(placeOffer)
@@ -46,7 +48,7 @@ export function ContinueOffer({ mini }: { mini: boolean }) {
   }
   const place = formatRef({ book: offer.book, chapter: offer.chapter, verse: offer.s ? offer.verse : undefined })
   return (
-    <div class={'continue' + (mini ? ' continue-mini' : '')} role="status">
+    <div ref={leave} class={'continue' + (mini ? ' continue-mini' : '')} role="status">
       <button type="button" class="continue-go" onClick={take}>
         <strong>{t('Continue on {place}', { place })}</strong>
         <span>{t(FROM[offer.on])}{offer.s && <> · {t('Search')} “{offer.s.q}”</>}</span>

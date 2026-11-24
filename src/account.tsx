@@ -19,6 +19,7 @@ import { DownloadEverything } from './exporter'
 import { inFedi, nostrPubkey, nostrSignIn } from './lib/nostr'
 import { CheckIcon, KeyIcon, MailIcon, RefreshIcon, SignOutIcon, TrashIcon } from './icons'
 import { locale, t, tj, tn } from './i18n'
+import { useLeave } from './motion'
 
 export interface SyncApi {
   enabled: boolean
@@ -242,11 +243,12 @@ function HoldToConfirm({ label, busy, onDone, ms = 2500 }: { label: string; busy
 
 /** Just signed out, or deleted the account: said once, after the app starts afresh. */
 export function LeftNote() {
+  const leave = useLeave()
   const [note, setNote] = useState(() => { try { const n = sessionStorage.getItem(LEFT); sessionStorage.removeItem(LEFT); return n } catch { return null } })
   useEffect(() => { if (note) { const id = setTimeout(() => setNote(null), 6000); return () => clearTimeout(id) } }, [note])
   if (!note) return null
   return (
-    <div class="move-welcome" role="status" onClick={() => setNote(null)}>
+    <div ref={leave} class="move-welcome" role="status" onClick={() => setNote(null)}>
       <p>{note === 'deleted'
         ? <><strong>{t('Account deleted.')}</strong> {t('Your highlights, notes and prayers stay on this device.')}</>
         : <><strong>{t('Signed out.')}</strong> {t('Nothing of your account is left on this device.')}</>}</p>

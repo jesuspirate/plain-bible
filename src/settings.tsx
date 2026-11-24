@@ -3,7 +3,8 @@
 // have their own buttons beside search.) They rise as
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
-import { useEffect, useRef, useState } from 'preact/hooks'
+import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
+import { useLeave } from './motion'
 import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar, showSearchWays, takeSettingsPage } from './state'
 import { canHear } from './listen'
 import { fine, Glyph } from './gesture'
@@ -156,12 +157,20 @@ function putAway(box: HTMLElement | null, done: () => void) {
  *  pages have only ‹ back. */
 export function SettingsSheet({ onClose }: { onClose: () => void }) {
   const box = useRef<HTMLDivElement>(null)
+  const boxLeave = useLeave(box), scrimLeave = useLeave(undefined, 'fade')
+  const page = useRef<HTMLDivElement>(null)
   const nav = useSettingsNav()
   const navRef = useRef(nav)
   navRef.current = nav
   usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
   const done = () => putAway(box.current, onClose)
   useEffect(() => { box.current?.scrollTo(0, 0) }, [nav.page])
+  // A page inside comes in the same quiet way as everything else.
+  const first = useRef(true)
+  useLayoutEffect(() => {
+    if (first.current) { first.current = false; return }
+    if (!still()) page.current?.animate?.([{ opacity: 0, translate: '0 8px' }, { opacity: 1, translate: '0 0' }], { duration: 200, easing: 'cubic-bezier(.2, .8, .2, 1)' })
+  }, [nav.page])
   useEffect(() => {
     // Escape steps back a page, then closes.
     const esc = (e: KeyboardEvent) => {
@@ -176,8 +185,8 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
   }, [])
   return (
     <>
-    <div class="settings-scrim" onClick={done} aria-hidden="true" />
-    <div class="settings-sheet" ref={box} role="dialog" aria-modal="true" aria-label={t('Settings')} tabIndex={-1}
+    <div class="settings-scrim" ref={scrimLeave} onClick={done} aria-hidden="true" />
+    <div class="settings-sheet" ref={boxLeave} role="dialog" aria-modal="true" aria-label={t('Settings')} tabIndex={-1}
       // A link inside (a verse, mostly) leaves Settings behind.
       onClick={e => { if ((e.target as Element).closest?.('a[href^="#"], .pray-open')) onClose() }}>
       <div class="settings-head">
@@ -188,7 +197,7 @@ export function SettingsSheet({ onClose }: { onClose: () => void }) {
             : <button class="settings-back" onClick={nav.back}><BackIcon class="back-ico" /> {nav.title}</button>}
         </div>
       </div>
-      <div class="settings"><SettingsBody nav={nav} /></div>
+      <div class="settings" ref={page}><SettingsBody nav={nav} /></div>
     </div>
     </>
   )

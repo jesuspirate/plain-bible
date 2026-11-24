@@ -7,6 +7,12 @@ import { LIKE, likeMatches } from './lib/like'
 import { useApp } from './state'
 import { CloseIcon } from './icons'
 import { languageName, t } from './i18n'
+import { ghostOut } from './motion'
+
+// What a card leaves behind as it goes: its copy and the dimmed page, fading.
+const DIM = 'rgba(0,0,0,.35)'
+/** Close a card the quiet way: a fading copy stays a moment, the card itself goes at once. */
+function shut(d: HTMLDialogElement | null) { if (d?.open) { ghostOut(d, 'sink', DIM); d.close() } }
 
 export function Sheet({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ComponentChildren; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null)
@@ -18,6 +24,9 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
     d.showModal()
     const close = () => latest.current()
     d.addEventListener('close', close)
+    // Escape closes it too: leave the same fading copy first.
+    const esc = () => ghostOut(d, 'sink', DIM)
+    d.addEventListener('cancel', esc)
     // On a phone the sheet sits at the bottom of the screen, where the
     // keyboard would cover it (and the note you're typing): lift it above
     // the keyboard and keep it within the space that's left. iPhone often
@@ -38,18 +47,21 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
     }
     vv?.addEventListener('resize', fit)
     vv?.addEventListener('scroll', fit)
-    return () => { d.removeEventListener('close', close); vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit) }
+    return () => {
+      // Taken away while still open (a choice on it was made): fade out all the same.
+      if (d.open) ghostOut(d, 'sink', DIM)
+      d.removeEventListener('cancel', esc); d.removeEventListener('close', close); vv?.removeEventListener('resize', fit); vv?.removeEventListener('scroll', fit) }
   }, [])
   // Only a tap that starts and ends on the dimmed area closes the sheet, not
   // a drag (say, selecting text in a note) that happens to end there.
   const downOutside = useRef(false)
   return (
     <dialog ref={ref} class={'sheet' + (wide ? ' wide' : '')} onPointerDown={e => { downOutside.current = e.target === ref.current }}
-      onClick={e => { if (e.target === ref.current && downOutside.current) ref.current!.close() }}>
+      onClick={e => { if (e.target === ref.current && downOutside.current) shut(ref.current) }}>
       <div class="sheet-inner">
         <header class="sheet-head">
           <h2>{title}</h2>
-          <button class="close-btn" aria-label={t('Close')} onClick={() => ref.current!.close()}><CloseIcon size={22} /></button>
+          <button class="close-btn" aria-label={t('Close')} onClick={() => shut(ref.current)}><CloseIcon size={22} /></button>
         </header>
         <div class="sheet-body">{children}</div>
       </div>
