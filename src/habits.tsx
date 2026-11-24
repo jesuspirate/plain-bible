@@ -91,7 +91,7 @@ export function Habits({ onClose, onMore }: { onClose: () => void; onMore: () =>
       {box && !repeat && <button class="hb-target" key={i} aria-label={t(stops[i].label)} onClick={forward}
         style={{ top: `${box.top}px`, left: `${box.left}px`, width: `${box.width}px`, height: `${box.height}px` }} />}
       {tapAt && (tick || stillMotion()) ? <Gesture key={`${i}-${tick}`} kind="tap" x={tapAt.left + tapAt.width / 2} y={tapAt.top + tapAt.height / 2} /> : null}
-      <button class="close-btn hb-close" aria-label={t('End the tour')} title={t('End the tour')} onClick={close}><CloseIcon size={22} /></button>
+      <button class="close-btn hb-close" aria-label={t('End the tour')} title={t('End the tour')} onClick={close}><CloseIcon size={26} /></button>
       <div class="hb-dots" aria-hidden="true" style={{ top: `${head + 14}px` }}>
         {[...stops, null].map((_, n) => <span class={n === i ? 'on' : n < i ? 'done' : ''} />)}
       </div>
