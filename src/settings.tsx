@@ -4,7 +4,7 @@
 // a sheet; pulling it down (or Done) goes back to the word. #/settings still
 // opens them as a page, for old links.
 import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
-import { useLeave } from './motion'
+import { AWAY_ATTR, useLeave } from './motion'
 import { defaultSettings, DEFAULT_FONT_SIZE, FONTS, go, readPath, Settings, useApp, useRoute, openTour, showVerseBar, showSearchWays, takeSettingsPage } from './state'
 import { canHear } from './listen'
 import { fine, Glyph } from './gesture'
@@ -53,12 +53,22 @@ function VersionLine() {
 
 const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
-/** Slide `box` away downwards, then run `done`. */
-export function slideAway(box: HTMLElement | null, done: () => void) {
+/** Slide `box` away (downwards, or `to` the right), then run `done`.
+ *  `done` waits for the slide to really end: run any sooner and the card
+ *  was taken away while still partly on screen, so its fading copy (see
+ *  motion.ts) showed the old view again for a moment before the new one.
+ *  The card is marked as having gone by itself, so no copy is left at all. */
+export function slideAway(box: HTMLElement | null, done: () => void, to = 'translate3d(0, 100%, 0)') {
   if (!box || still()) { done(); return }
+  box.setAttribute(AWAY_ATTR, '')
   box.style.transition = 'transform .2s ease-in'
-  box.style.transform = 'translate3d(0, 100%, 0)'
-  setTimeout(done, 190)
+  box.style.transform = to
+  let over = false
+  const end = () => { if (over) return; over = true; box.removeEventListener('transitionend', ended); done() }
+  const ended = (e: TransitionEvent) => { if (e.target === box && e.propertyName === 'transform') end() }
+  box.addEventListener('transitionend', ended)
+  // In case the end never comes (the slide was cut short, a busy phone).
+  setTimeout(end, 320)
 }
 
 // Pull down from the top to close, like the search panel. Only a pull that
@@ -74,7 +84,7 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
     const el: HTMLElement = box.current
     let start: { x: number; y: number } | undefined
     let pulling = false, dy = 0, last = { y: 0, t: 0 }, v = 0
-    const back = () => { el.style.transition = 'transform .25s cubic-bezier(.2, .8, .2, 1)'; el.style.transform = '' }
+    const back = () => { el.removeAttribute(AWAY_ATTR); el.style.transition = 'transform .25s cubic-bezier(.2, .8, .2, 1)'; el.style.transform = '' }
     const stop = () => {
       start = undefined
       removeEventListener('touchmove', move)
@@ -145,10 +155,7 @@ type SettingsNav = ReturnType<typeof useSettingsNav>
 const wide = () => matchMedia('(min-width: 900px)').matches
 /** Put Settings away: down on a phone, off to the right on a wide screen. */
 function putAway(box: HTMLElement | null, done: () => void) {
-  if (!box || !wide() || still()) { slideAway(box, done); return }
-  box.style.transition = 'transform .2s ease-in'
-  box.style.transform = 'translate3d(100%, 0, 0)'
-  setTimeout(done, 190)
+  slideAway(box, done, wide() ? 'translate3d(100%, 0, 0)' : undefined)
 }
 
 /** Settings as a sheet that rises over the page (a panel from the right on a

@@ -252,12 +252,15 @@ export async function checkPasskey(token: string) {
 // Email sign-in, where the server has it turned on. Remembered, so the form
 // is there at once next time, offline included.
 const EMAIL_KEY = 'plain-bible:email-signin'
+// On unless the server last said it's off: email sign-in is the usual case,
+// and starting from "off" showed the older passkey-only Account page for a
+// moment, then swapped in the real one once the server answered.
 export function emailSignInOn() {
-  try { return localStorage.getItem(EMAIL_KEY) === '1' } catch { return false }
+  try { return localStorage.getItem(EMAIL_KEY) !== '0' } catch { return true }
 }
 export async function checkEmailSignIn(): Promise<boolean> {
   const on = !!(await api<{ email?: boolean }>('/')).email
-  try { on ? localStorage.setItem(EMAIL_KEY, '1') : localStorage.removeItem(EMAIL_KEY) } catch { /* ignore */ }
+  try { localStorage.setItem(EMAIL_KEY, on ? '1' : '0') } catch { /* ignore */ }
   return on
 }
 /** Email a 6-digit code. With a token, it adds the address to that account. */

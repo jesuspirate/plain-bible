@@ -10,16 +10,22 @@ import type { Ref } from 'preact'
 
 export const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches
 
+/** Set on a card that has already slid itself away (Settings, prayer, Circles:
+ *  see slideAway). It leaves no fading copy: it is gone already. */
+export const AWAY_ATTR = 'data-away'
+
 /** Leave a fading copy of `el` where it is now. `fade` only fades (for things
  *  that fill the screen); otherwise it also sinks a little, as it came. */
 export function ghostOut(el: Element | null | undefined, how: 'fade' | 'sink' = 'sink', dim?: string) {
-  if (!(el instanceof HTMLElement) || !el.isConnected || still()) return
+  if (!(el instanceof HTMLElement) || !el.isConnected || still() || el.hasAttribute(AWAY_ATTR)) return
   const r = el.getBoundingClientRect()
   // Already gone or slid off screen (Settings slides itself away): nothing to fade.
   if (r.width < 1 || r.height < 1 || r.bottom <= 0 || r.top >= innerHeight || r.right <= 0 || r.left >= innerWidth) return
   const z = getComputedStyle(el).zIndex
   const c = el.cloneNode(true) as HTMLElement
   for (const n of [c, ...c.querySelectorAll('[id]')]) n.removeAttribute('id')
+  // A card inside that slid itself away stays away in the copy too.
+  for (const n of c.querySelectorAll<HTMLElement>(`[${AWAY_ATTR}]`)) n.style.visibility = 'hidden'
   c.setAttribute('aria-hidden', 'true')
   c.setAttribute('inert', '')
   if (c instanceof HTMLDialogElement) c.setAttribute('open', '')
