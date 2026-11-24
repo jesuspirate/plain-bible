@@ -10,6 +10,11 @@
 #   - "Build for Google Play": a signed .aab to upload to Play Console. Needs
 #     ANDROID_KEY_PASSWORD and ANDROID_KEYSTORE_BASE64.
 name: Release to Google Play (Android)
+# The list of runs shows the version each build got, like "Google Play 1.0.7".
+run-name: >-
+  ${{ github.event_name == 'pull_request' && format('Android check: {0}', github.event.pull_request.title)
+  || inputs.task == 'Make upload key' && 'Make upload key'
+  || format('Google Play 1.0.{0}', github.run_number) }}
 
 on:
   pull_request:

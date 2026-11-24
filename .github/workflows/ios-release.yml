@@ -3,7 +3,9 @@
 #
 # Run it by hand: Actions → "Release to App Store (iPhone, iPad, Mac)" → Run
 # workflow, and type the
-# version (like 1.2). About 15 minutes later the build is in App Store
+# version: higher than any sent before. The list of runs shows each run's
+# version ("App Store 1.2.13"), and the run stops with the number to use if
+# the one typed was already sent. About 15 minutes later the build is in App Store
 # Connect → TestFlight, ready to be picked for a new version and submitted.
 #
 # Changes to the website never need this. Only changes inside ios/ do.
@@ -15,12 +17,14 @@
 # Apple signs the app with that key ("cloud signing"), so no certificate is
 # kept here.
 name: Release to App Store (iPhone, iPad, Mac)
+# The list of runs shows the version each one sent, like "App Store 1.2.13".
+run-name: App Store ${{ inputs.version }}
 
 on:
   workflow_dispatch:
     inputs:
       version:
-        description: 'Version for the App Store, like 1.2'
+        description: 'Version, higher than any sent before (the newest run in the list shows the last one)'
         required: true
         type: string
 
@@ -73,6 +77,39 @@ jobs:
           printf '%s\n' "$ASC_KEY_P8" > "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
           chmod 600 "$RUNNER_TEMP/asc/AuthKey_$ASC_KEY_ID.p8"
 
+      - name: Check the version is new
+        # Apple quietly drops a build whose version is not higher than every
+        # version ever sent (TestFlight ones too), so ask App Store Connect
+        # for the highest one and stop here, naming the number to use.
+        env:
+          VERSION: ${{ inputs.version }}
+          ASC_KEY_ID: ${{ secrets.ASC_KEY_ID }}
+          ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
+        run: |
+          python3 - <<'PY'
+          import os, sys; sys.path.insert(0, ".github/scripts")
+          from asc import call, every
+          def nums(v):
+              try: return tuple(int(x) for x in v.split("."))
+              except ValueError: return None
+          def show(t): return ".".join(map(str, t))
+          want = nums(os.environ["VERSION"])
+          try:
+              app = call("GET", "/v1/apps?filter[bundleId]=com.myquietbible.ios")["data"][0]["id"]
+              seen = [x["attributes"].get("version") for x in every(f"/v1/apps/{app}/preReleaseVersions?limit=200")]
+          except Exception as e:
+              print(f"::warning::Could not read the versions already sent ({e}); building anyway."); sys.exit(0)
+          seen = [t for t in (nums(v or "") for v in seen) if t]
+          if not seen:
+              sys.exit(0)
+          top = max(seen)
+          nxt = top[:-1] + (top[-1] + 1,) if len(top) == 3 else top + (1,)
+          print(f"Highest version already sent: {show(top)}. Next: {show(nxt)}.")
+          if want <= top:
+              print(f"::error::{show(want)} is not higher than {show(top)}, the highest version already sent to Apple. Run again with {show(nxt)}.")
+              sys.exit(1)
+          PY
+
       - name: Make room for a signing certificate
         # Each run signs on a fresh Mac, so Xcode makes a new "Apple
         # Development" certificate every time, and Apple allows only a few.
@@ -84,28 +121,8 @@ jobs:
           ASC_ISSUER_ID: ${{ secrets.ASC_ISSUER_ID }}
         run: |
           python3 - <<'PY'
-          import base64, json, os, subprocess, time, urllib.request
-          kid, iss = os.environ["ASC_KEY_ID"], os.environ["ASC_ISSUER_ID"]
-          key = os.path.join(os.environ["RUNNER_TEMP"], "asc", f"AuthKey_{kid}.p8")
-          b64 = lambda b: base64.urlsafe_b64encode(b).rstrip(b"=")
-          now = int(time.time())
-          head = b64(json.dumps({"alg": "ES256", "kid": kid, "typ": "JWT"}).encode())
-          body = b64(json.dumps({"iss": iss, "iat": now, "exp": now + 600, "aud": "appstoreconnect-v1"}).encode())
-          der = subprocess.run(["openssl", "dgst", "-sha256", "-sign", key], input=head + b"." + body,
-                               capture_output=True, check=True).stdout
-          # DER ECDSA signature -> the raw 64 bytes a JWT wants.
-          def ints(d):
-              i, out = 2 + (d[1] & 0x7f if d[1] & 0x80 else 0), []
-              for _ in range(2):
-                  n = d[i + 1]; v = d[i + 2:i + 2 + n]; i += 2 + n
-                  out.append(v.lstrip(b"\0").rjust(32, b"\0"))
-              return b"".join(out)
-          token = (head + b"." + body + b"." + b64(ints(der))).decode()
-          def call(method, path):
-              req = urllib.request.Request("https://api.appstoreconnect.apple.com" + path, method=method,
-                                           headers={"Authorization": "Bearer " + token})
-              with urllib.request.urlopen(req) as r:
-                  return json.loads(r.read() or b"{}")
+          import sys; sys.path.insert(0, ".github/scripts")
+          from asc import call
           dev = "DEVELOPMENT,IOS_DEVELOPMENT,MAC_APP_DEVELOPMENT"
           try:
               found = call("GET", f"/v1/certificates?filter[certificateType]={dev}&limit=200")["data"]
@@ -175,10 +192,13 @@ jobs:
         env:
           VERSION: ${{ inputs.version }}
         run: |
+          NEXT=$(printf '%s' "$VERSION" | awk -F. -v OFS=. 'NF==3{$3++; print; next} {print $0".1"}')
           {
             echo "## Sent to App Store Connect: $VERSION (build $BUILD)"
             echo "It shows up under TestFlight in 5 to 30 minutes."
             echo "Then, in App Store Connect: **+** next to iOS App → $VERSION → Add Build → What's New → Add for Review."
+            echo
+            echo "Next time, use a higher version than $VERSION (like $NEXT)."
           } >> "$GITHUB_STEP_SUMMARY"
 
       - name: Remove the Apple key
