@@ -26,7 +26,7 @@ import { canShare, copyText } from './lib/native'
 import { go, openCircles, openSettings, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
-import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, NoteIcon, PlayIcon } from './icons'
+import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, CloseIcon, NoteIcon, PlayIcon, ReturnIcon } from './icons'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import { nowPlaying } from './lib/nowplaying'
@@ -1313,7 +1313,10 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   const [done, setDone] = useState(false)
   const [what, setWhat] = useState('')
   // A prayer's length and its verses, shown apart so 4:35 is never read as a chapter and verse.
-  const [said, setSaid] = useState<{ ms: number; verses: string[] }>()
+  const [said, setSaid] = useState<{ ms: number; verses: PrayerVerse[] }>()
+  // Verses left out of this share (by place in the list): the prayer itself keeps them.
+  const [dropped, setDropped] = useState(new Set<number>())
+  const flip = (i: number) => setDropped(o => { const n = new Set(o); n.has(i) ? n.delete(i) : n.add(i); return n })
   // A day's prayers: each one shared on its own, so it keeps the day it was
   // prayed. What already went to a circle isn't sent there again on a retry.
   const many = 'prayers' in request
@@ -1344,7 +1347,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
       const first = cs.find(c => !full.has(c.id))
       setList(cs); setShared(sh); setHad(full); setPicks(first ? [first.id] : [])
       if ('prayers' in request) { setWhat(tn(kept.length, '{n} prayer', '{n} prayers')); setSaid({ ms: kept.reduce((n, p) => n + p.ms, 0), verses: [] }) }
-      else if ('prayer' in request && kept[0]) { setWhat(t('Your prayer')); setSaid({ ms: kept[0].ms, verses: versesOf(kept[0]).map(verseLabel) }) }
+      else if ('prayer' in request && kept[0]) { setWhat(t('Your prayer')); setSaid({ ms: kept[0].ms, verses: versesOf(kept[0]) }) }
     })
     if ('verse' in request) setWhat(verseLabel(request.verse))
   }, [])
@@ -1399,7 +1402,7 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
           await sharePrayer(pick, id!, first ? words.trim() : '', v => toStandard(b, v), up)
           sent.current.add(key)
         } else if ('prayer' in request) {
-          await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v), up)
+          await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v), up, said?.verses.filter((_, i) => !dropped.has(i)))
         } else {
           const v = request.verse
           const size = renumbered(b, v.book) ? 0 : chapterSize(b, v.book, v.chapter)
@@ -1441,7 +1444,13 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
       <div class="c-share">
         {said ? <div class="c-said">
           <p class="c-said-head"><strong>{what}</strong> <span class="c-len"><PlayIcon size={16} /> {spokenLength(said.ms)}</span></p>
-          {said.verses.map(v => <p class="c-said-verse"><BookIcon size={20} /> <strong>{v}</strong></p>)}
+          {said.verses.map((v, i) => {
+            const off = dropped.has(i), name = verseLabel(v)
+            // A × beside each verse leaves it out of this share; tapped again it comes back.
+            return <p class={'c-said-verse' + (off ? ' off' : '')}><BookIcon size={20} /> <strong>{name}</strong>
+              <button type="button" class="c-said-x" aria-label={`${t(off ? 'Undo' : 'Remove')} ${name}`} title={t(off ? 'Undo' : 'Remove')} onClick={() => flip(i)}>
+                {off ? <ReturnIcon size={20} /> : <CloseIcon size={18} />}</button></p>
+          })}
         </div> : <p><strong>{what}</strong></p>}
         {'verse' in request && <>
           <div class="seg c-pick" role="radiogroup" aria-label={t('Share as')}>
