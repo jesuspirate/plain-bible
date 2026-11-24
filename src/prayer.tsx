@@ -55,6 +55,14 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [bible, setBible] = useState<Bible>()
   // Said back once a prayer is kept: a verse picked at random, in the Bible you read.
   const [comfort, setComfort] = useState<Comfort>(pickComfort)
+  // The verse a prayer is given when it is first kept, so it has one even if
+  // it ends without Amen (paused by a call or the phone locking, then closed,
+  // or the app reloaded). Amen then shows this same verse.
+  const given = useRef<{ id: string; c: Comfort }>()
+  const withGiven = (id: string | undefined, list: PrayerVerse[]) => {
+    const c = id && given.current?.id === id ? given.current.c : undefined
+    return c ? withVerse(list, { book: c.book, chapter: c.chapter, verses: c.verses }) : list
+  }
   // The verses this prayer is prayed using, from anywhere in the Bible.
   // Verses you just selected are offered; Pray on the selection bar (or
   // Done after Add a verse) ties them straight away.
@@ -195,11 +203,16 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         }
         const part = { ms, type: blob.type, audio }
         let id = before?.id
-        const tie = tiedRef.current
+        let tie = tiedRef.current
         if (id) await prayers.append(id, part).catch(() => { id = undefined })
-        if (id) await prayers.tie(id, tie).catch(() => {})
-        if (!id) tally('pr')
-        if (!id) await prayers.put({ id: id = started.toString(36) + Math.random().toString(36).slice(2, 6), at: started, ...part, ...(tie.length ? { verse: tie[0], verses: tie, vrev: 1, vdirty: true } : {}) })
+        if (id) await prayers.tie(id, withGiven(id, tie)).catch(() => {})
+        if (!id) {
+          tally('pr')
+          id = started.toString(36) + Math.random().toString(36).slice(2, 6)
+          given.current = { id, c: pickComfort() }
+          tie = withGiven(id, tie)
+          await prayers.put({ id, at: started, ...part, verse: tie[0], verses: tie, vrev: 1, vdirty: true })
+        }
         markDay(PRAY, dayOf(started))
         navigator.storage?.persist?.().catch(() => {})
         resume.current = interrupted ? { id, ms: (before?.ms ?? 0) + ms } : undefined
@@ -247,7 +260,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // verses (by reference, so a circle reads it in their own Bible), and the
   // prayer's own verses, if it has any.
   function heardNow(id?: string) {
-    const c = pickComfort()
+    const c = id && given.current?.id === id ? given.current.c : pickComfort()
     setComfort(c)
     setTied([])
     setPhase('heard')
@@ -266,7 +279,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     const id = resume.current?.id
     resume.current = undefined
     if (!id) return heardNow()
-    prayers.tie(id, tiedRef.current).catch(() => {}).then(() => heardNow(id)).then(() => { refresh(); sync() })
+    prayers.tie(id, withGiven(id, tiedRef.current)).catch(() => {}).then(() => heardNow(id)).then(() => { refresh(); sync() })
   }
   const read = (v: PrayerVerse) => { onClose(); go(readPath(version, v.book, v.chapter, v.verses[0])) }
   // Add a verse: the prayer steps aside, and the verses you tap on the page,

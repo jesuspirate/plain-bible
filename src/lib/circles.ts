@@ -584,13 +584,13 @@ export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', ver
 
 /** `standard`: the prayer's verses as everyone numbers them (see versification).
  *  `verse` is the first, for apps that show only one; `verses` all of them. */
-export async function sharePrayer(circle: string, prayerId: string, note?: string, standard = (v: PrayerVerse) => v, up?: Upload) {
+export async function sharePrayer(circle: string, prayerId: string, note?: string, standard = (v: PrayerVerse) => v, up?: Upload, only?: PrayerVerse[]) {
   const p = await prayers.get(prayerId)
   if (!p) throw new SyncError('That prayer is no longer on this device.')
   const parts = partsOf(p)
   const audio = new Uint8Array(parts.reduce((n, x) => n + x.audio.byteLength, 0))
   parts.reduce((o, x) => { audio.set(new Uint8Array(x.audio), o); return o + x.audio.byteLength }, 0)
-  const verses = versesOf(p).map(standard)
+  const verses = (only ?? versesOf(p)).map(standard)
   const id = await send(circle, {
     k: 'prayer', ms: p.ms, verse: verses[0], ...(verses.length > 1 ? { verses } : {}), note: note || undefined, prayed: p.at,
     parts: parts.map(x => ({ ms: x.ms, type: x.type, size: x.audio.byteLength })),

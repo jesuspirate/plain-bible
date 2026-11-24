@@ -214,3 +214,9 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-len { display: inline-flex; align-items: center; gap: 5px; padding: 3px 11px 3px 9px; border-radius: 999px; background: color-mix(in srgb, currentColor 9%, transparent); font-weight: 600; font-size: .92em; opacity: .85; white-space: nowrap; }
 .c-said-verse { display: flex; align-items: center; gap: 8px; }
 .c-said-verse svg { flex: none; opacity: .8; }
+/* × beside a verse: leaves it out of this share only. Quiet, so it never reads as closing the sheet. */
+.c-said-verse { min-height: 44px; }
+.c-said-x { all: unset; cursor: pointer; flex: none; margin-inline-start: auto; display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; border: 1.5px solid var(--line); color: var(--muted); -webkit-tap-highlight-color: transparent; }
+.c-said-verse.off strong { text-decoration: line-through; opacity: .45; }
+.c-said-verse.off > svg { opacity: .35; }
+.c-said-verse.off .c-said-x { color: var(--text); border-color: var(--text); }
