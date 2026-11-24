@@ -507,18 +507,68 @@ export function newsIn(feed: Feed, since: number) {
   return { items, latest }
 }
 
-async function send(circle: string, body: Shared, audio?: Uint8Array) {
-  const key = await keyOf(circle), tok = token(), id = newId()
-  const sealed = audio && await seal(key, audio, `${circle}/${id}/audio`)
-  const chunks = sealed ? Math.ceil(sealed.length / CHUNK) : 0
-  await api(`/circles/${circle}/items/${id}`, { method: 'PUT', token: tok, body: { body: await sealJson(key, body, `${circle}/${id}`), chunks, size: sealed?.length ?? 0 } })
-  for (let n = 0; n < chunks; n++) {
-    const res = await fetch(`${SYNC_URL}/circles/${circle}/items/${id}/${n}`, {
-      method: 'PUT', body: sealed!.subarray(n * CHUNK, (n + 1) * CHUNK) as BodyInit,
-      headers: { Authorization: `Bearer ${tok}`, 'Content-Type': 'application/octet-stream' },
-    }).catch(() => { throw new SyncError('The connection dropped while sending. Try again.') })
-    if (!res.ok) throw new SyncError((await res.json().catch(() => ({}))).error || t('Sync service error ({status})', { status: res.status }), res.status)
+/** A share part way out: what trying again needs to carry on where it
+ *  stopped instead of sending everything again. */
+export type Sending = { id: string; body: string; sealed?: Uint8Array; chunks: number; next: number; listed: boolean }
+/** `onProgress`: bytes out of the total, as they go. `held`: keeps a share
+ *  that stopped part way, so trying again with the same holder carries on. */
+export type Upload = { onProgress?: (done: number, total: number) => void; held?: { s?: Sending } }
+
+/** What the share itself counts for, besides its audio. */
+const HEAD = 4000
+
+/** One piece of a prayer's audio, with how far it got as it goes (fetch
+ *  can't tell that). A dropped connection gets one more quick try. */
+function putChunk(url: string, tok: string, piece: Uint8Array, onSent: (n: number) => void, again = true): Promise<void> {
+  return new Promise((resolve, reject) => {
+    const x = new XMLHttpRequest()
+    x.open('PUT', url)
+    x.setRequestHeader('Authorization', `Bearer ${tok}`)
+    x.setRequestHeader('Content-Type', 'application/octet-stream')
+    x.timeout = 120_000
+    x.upload.onprogress = e => onSent(e.loaded)
+    const dropped = () => {
+      onSent(0)
+      if (again && navigator.onLine !== false) setTimeout(() => putChunk(url, tok, piece, onSent, false).then(resolve, reject), 800)
+      else reject(new SyncError('The connection dropped while sending. Try again.'))
+    }
+    x.onerror = dropped
+    x.ontimeout = dropped
+    x.onload = () => {
+      if (x.status >= 200 && x.status < 300) { onSent(piece.length); return resolve() }
+      let error = ''
+      try { error = JSON.parse(x.responseText).error } catch { /* not JSON */ }
+      reject(new SyncError(error || t('Sync service error ({status})', { status: x.status }), x.status))
+    }
+    x.send(piece as unknown as XMLHttpRequestBodyInit)
+  })
+}
+
+async function send(circle: string, body: Shared, audio?: Uint8Array, up: Upload = {}) {
+  const tok = token()
+  // Carried on only once the server has it: before that, what's sent is
+  // made again, in case the words were changed in between.
+  let s = up.held?.s?.listed ? up.held.s : undefined
+  if (!s) {
+    const key = await keyOf(circle), id = newId()
+    const sealed = audio && await seal(key, audio, `${circle}/${id}/audio`)
+    s = { id, body: await sealJson(key, body, `${circle}/${id}`), sealed, chunks: sealed ? Math.ceil(sealed.length / CHUNK) : 0, next: 0, listed: false }
+    if (up.held) up.held.s = s
   }
+  const { id, sealed, chunks } = s, total = HEAD + (sealed?.length ?? 0)
+  const report = (n: number) => up.onProgress?.(Math.min(n, total), total)
+  report(s.listed ? HEAD + s.next * CHUNK : 0)
+  if (!s.listed) {
+    await api(`/circles/${circle}/items/${id}`, { method: 'PUT', token: tok, body: { body: s.body, chunks, size: sealed?.length ?? 0 } })
+    s.listed = true
+  }
+  for (; s.next < chunks; s.next++) {
+    const at = HEAD + s.next * CHUNK
+    report(at)
+    await putChunk(`${SYNC_URL}/circles/${circle}/items/${id}/${s.next}`, tok, sealed!.subarray(s.next * CHUNK, (s.next + 1) * CHUNK), n => report(at + n))
+  }
+  report(total)
+  if (up.held) up.held.s = undefined
   // Your own prayer plays from here without downloading it again.
   if (audio) await meta.set(`circle-audio:${circle}/${id}`, audio.buffer)
   return id
@@ -526,15 +576,15 @@ async function send(circle: string, body: Shared, audio?: Uint8Array) {
 
 /** Verses as they are, as a bookmark (others can bookmark them too with a
  *  tap), or with one of your notes on them. */
-export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', verse: PrayerVerse, version: string, quote: string, note?: string, size?: number) {
+export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', verse: PrayerVerse, version: string, quote: string, note?: string, size?: number, up?: Upload) {
   if (k === 'note' && !note) throw new SyncError('That note is empty.')
   const base = { verse, version, text: quote, ...(size ? { size } : {}) }
-  return send(circle, k === 'note' ? { k, ...base, note: note! } : { k, ...base, note: note || undefined })
+  return send(circle, k === 'note' ? { k, ...base, note: note! } : { k, ...base, note: note || undefined }, undefined, up)
 }
 
 /** `standard`: the prayer's verses as everyone numbers them (see versification).
  *  `verse` is the first, for apps that show only one; `verses` all of them. */
-export async function sharePrayer(circle: string, prayerId: string, note?: string, standard = (v: PrayerVerse) => v) {
+export async function sharePrayer(circle: string, prayerId: string, note?: string, standard = (v: PrayerVerse) => v, up?: Upload) {
   const p = await prayers.get(prayerId)
   if (!p) throw new SyncError('That prayer is no longer on this device.')
   const parts = partsOf(p)
@@ -544,7 +594,7 @@ export async function sharePrayer(circle: string, prayerId: string, note?: strin
   const id = await send(circle, {
     k: 'prayer', ms: p.ms, verse: verses[0], ...(verses.length > 1 ? { verses } : {}), note: note || undefined, prayed: p.at,
     parts: parts.map(x => ({ ms: x.ms, type: x.type, size: x.audio.byteLength })),
-  }, audio)
+  }, audio, up)
   // So it shows as shared there, even before the circle is opened again.
   await keepPrayerSent(circle, p.at).catch(() => {})
   return id

@@ -6,11 +6,11 @@ import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
-  askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
+  type Sending, type Upload, askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
-import { duration, Prayer, prayers } from './lib/prayers'
+import { duration, partsOf, Prayer, prayers } from './lib/prayers'
 import { circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
@@ -1287,6 +1287,9 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
   )
 }
 
+/** 0.42 as "42 %" or "42%", the way the reader's language writes it. */
+const percent = (n: number) => new Intl.NumberFormat(locale(), { style: 'percent', maximumFractionDigits: 0 }).format(Math.min(1, Math.max(0, n)))
+
 /** Share verses, a bookmark, a note or a prayer with one of your circles:
  *  one tap to choose the circle (if there's more than one), and Share. */
 export function ShareSheet({ request, onClose }: { request: ShareRequest; onClose: () => void }) {
@@ -1335,39 +1338,71 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
   }, [])
   const chosen = (list ?? []).filter(c => picks.includes(c.id))
   const toggle = (id: string) => setPicks(p => p.includes(id) ? p.filter(x => x !== id) : [...p, id])
+  // How far the share has got, 0 to 1, shown as a bar while it goes.
+  const [progress, setProgress] = useState<number>()
+  const [failed, setFailed] = useState(false)
+  // A prayer that stopped part way: trying again carries on from there.
+  const held = useRef(new Map<string, { s?: Sending }>())
+  // What was sent before it stopped, so trying again doesn't send the bar back.
+  const went = useRef({ before: 0 })
   const send = async () => {
     if (!picks.length) return
-    setBusy(true); setMsg('')
+    const again = failed
+    setBusy(true); setMsg(''); setFailed(false)
+    if (!again) { went.current.before = 0; setProgress(0) }
     try {
+      // Everything to send first, each weighed by its size, so the bar moves
+      // at the pace of the bytes, across every circle and prayer.
+      const bytes = (p?: Prayer) => p ? partsOf(p).reduce((n, x) => n + x.audio.byteLength, 0) : 0
+      const jobs: { pick: string; id?: string; w: number }[] = []
       for (const pick of picks) {
-        // The reference goes in standard numbering, so each reader finds it
-        // in their own Bible (see lib/passage), with how many verses your
-        // Bible has in that chapter, so one that numbers it differently
-        // doesn't show them the wrong verse.
         if ('prayers' in request) {
-          const b = await data.bible(settings.version).catch(() => undefined)
-          let first = true
           for (const id of request.prayers) {
             if (sent.current.has(`${pick}/${id}`)) continue
             // Gone since the list was opened, or in that circle already: nothing to send.
             const p = await prayers.get(id)
             if (!p || shared?.get(pick)?.has(p.at)) continue
-            // The few words go with the first one only.
-            await sharePrayer(pick, id, first ? words.trim() : '', v => toStandard(b, v))
-            sent.current.add(`${pick}/${id}`)
-            first = false
+            jobs.push({ pick, id, w: 4000 + bytes(p) })
           }
+        } else if ('prayer' in request) jobs.push({ pick, id: request.prayer, w: 4000 + bytes(await prayers.get(request.prayer)) })
+        else jobs.push({ pick, w: 4000 })
+      }
+      let before = again ? went.current.before : 0
+      const all = before + jobs.reduce((n, j) => n + j.w, 0) || 1
+      const firsts = new Set<string>()
+      const b = await data.bible('verse' in request ? request.version : settings.version).catch(() => undefined)
+      for (const [i, job] of jobs.entries()) {
+        const { pick, id } = job
+        const key = `${pick}/${id ?? ''}`
+        if (!held.current.has(key)) held.current.set(key, {})
+        const up: Upload = { held: held.current.get(key), onProgress: (n, total) => setProgress((before + job.w * n / total) / all) }
+        // The reference goes in standard numbering, so each reader finds it
+        // in their own Bible (see lib/passage), with how many verses your
+        // Bible has in that chapter, so one that numbers it differently
+        // doesn't show them the wrong verse.
+        if ('prayers' in request) {
+          // The few words go with the first one only.
+          const first = !firsts.has(pick)
+          firsts.add(pick)
+          await sharePrayer(pick, id!, first ? words.trim() : '', v => toStandard(b, v), up)
+          sent.current.add(key)
         } else if ('prayer' in request) {
-          const b = await data.bible(settings.version).catch(() => undefined)
-          await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v))
+          await sharePrayer(pick, request.prayer, words.trim(), v => toStandard(b, v), up)
         } else {
-          const b = await data.bible(request.version).catch(() => undefined), v = request.verse
+          const v = request.verse
           const size = renumbered(b, v.book) ? 0 : chapterSize(b, v.book, v.chapter)
-          await shareVerse(pick, kind, toStandard(b, v), request.version, request.text, kind === 'note' ? theNote : words.trim(), size)
+          await shareVerse(pick, kind, toStandard(b, v), request.version, request.text, kind === 'note' ? theNote : words.trim(), size, up)
           tally('sh')
         }
-        // Shared already: a second tap won't send it there twice.
-        setPicks(p => p.filter(x => x !== pick))
+        before += job.w
+        went.current.before = before
+        setProgress(before / all)
+        // That circle has it all now: shown as shared, and a second tap
+        // won't send it there twice.
+        if (jobs[i + 1]?.pick !== pick) {
+          setPicks(p => p.filter(x => x !== pick))
+          if (list && list.length > 1) setHad(h => new Set(h).add(pick))
+        }
       }
       // Shared as a bookmark is one of yours too, if it wasn't yet.
       if ('verse' in request && kind === 'bookmark' && !bookmarked) {
@@ -1381,7 +1416,10 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
       if (!('verse' in request)) dispatchEvent(new Event(SHARED_EVENT))
       setDone(true)
       setTimeout(onClose, 900)
-    } catch (e) { setMsg(navigator.onLine === false ? t('You’re offline. Share again once you’re connected.') : message(e)) } finally { setBusy(false) }
+    } catch (e) {
+      setFailed(true)
+      setMsg(navigator.onLine === false ? t('You’re offline. Share again once you’re connected.') : message(e))
+    } finally { setBusy(false) }
   }
   const canNote = notes.length > 0 || ('verse' in request && !!request.note)
   const left = (list ?? []).filter(c => !had.has(c.id))
@@ -1417,10 +1455,16 @@ export function ShareSheet({ request, onClose }: { request: ShareRequest; onClos
         {kind !== 'note' && <textarea rows={2} maxLength={1000} value={words} placeholder={many ? t('Add a note about these prayers (optional)') : 'prayer' in request ? t('Add a note about this prayer (optional)') : t('Add a few words (optional)')} onInput={e => setWords((e.target as HTMLTextAreaElement).value)} />}
         {many && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear these prayers.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear these prayers.')}</p>}
         {'prayer' in request && <p class="muted small">{chosen.length ? t('Everyone in {circle} will be able to hear this prayer.', { circle: chosen.map(c => c.name).join(', ') }) : t('Everyone in the circle will be able to hear this prayer.')}</p>}
-        <button class="c-btn primary" disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? t('Sharing…') : allHad ? t('Already shared')
+        {progress !== undefined && (busy || done || failed) && (
+          <div class={`c-progress${failed ? ' failed' : done ? ' done' : ''}`} role="progressbar" aria-label={t('Sharing…')}
+            aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress * 100)}>
+            <span style={{ width: `${Math.max(3, progress * 100)}%` }} />
+          </div>
+        )}
+        <button class={busy || done ? 'c-btn primary going' : 'c-btn primary'} disabled={busy || done || !picks.length || (kind === 'note' && !theNote)} onClick={send}>{done ? t('Shared ✓') : busy ? `${t('Sharing…')} ${percent(progress ?? 0)}` : failed && picks.length ? t('Try again') : allHad ? t('Already shared')
           : chosen.length === 2 ? t('Share with {a} and {b}', { a: chosen[0].name, b: chosen[1].name })
           : chosen.length > 1 ? t('Share with {n} circles', { n: chosen.length }) : chosen.length ? t('Share with {circle}', { circle: chosen[0].name }) : t('Share with circle')}</button>
-        {msg && <p class="note small">{msg}</p>}
+        {msg && <p class={failed ? 'note small c-share-failed' : 'note small'} role={failed ? 'alert' : undefined}>{msg}</p>}
         {list && !list.length && <p class="muted">{t('You’re not in a circle on this device yet. Open Circles, beside 🙏.')}</p>}
       </div>
     </Sheet>

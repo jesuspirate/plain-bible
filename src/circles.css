@@ -195,3 +195,14 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-kind-pick { border-radius: 12px; margin: 0 0 10px; }
 .c-kind-pick button { flex: 1; min-height: 46px; font: 600 16px var(--sans); }
 .c-email { display: block; min-height: 46px; margin: 6px 0 0; padding: 6px 0; font: 600 16px var(--sans); }
+/* Sharing: a thick bar that fills as it goes; it turns red and stays where
+   it stopped if the connection drops, and Try again carries on from there. */
+.c-progress { height: 14px; border-radius: 999px; background: var(--chip); border: 1px solid var(--line); overflow: hidden; }
+.c-progress span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width .25s ease; }
+.c-progress.failed span { background: #b3261e; }
+.c-share-failed { color: #b3261e; font-weight: 600; }
+:root[data-theme='dark'] .c-progress.failed span { background: #ff8a80; }
+:root[data-theme='dark'] .c-share-failed { color: #ff8a80; }
+@media (prefers-reduced-motion: reduce) { .c-progress span { transition: none; } }
+/* While it goes, the button keeps full strength so the words stay easy to read. */
+.c-share .c-btn.primary.going:disabled { opacity: 1; }
