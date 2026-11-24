@@ -32,6 +32,7 @@ import { CloseIcon, PauseIcon, PlayIcon } from './icons'
 import { Sheet } from './ui'
 import { locale, N_, t } from './i18n'
 import { noteError } from './lib/errors'
+import { heard } from './lib/heard'
 
 export interface Spot {
   version: string; lang: string; book: string; chapter: number; verse: number
@@ -136,6 +137,9 @@ export function followSettings(s: { follow: 'words' | 'verse'; readSilent: boole
 /** The narrator reading now, if a recording is. */
 const recorded = () => now && !follow.silent && !unreachable ? recordingFor(now.version) : undefined
 const silentNow = () => follow.silent || (!(now ? hasVoice(now.lang) : canListen) && !recorded())
+/** Counted with the next daily hello (lib/heard.ts): what kind of listening
+ *  this is, never what or for how long. */
+const counted = (source: string) => { if (now) heard(now.only ? 'listen' : 'along', source, now.version, now.lang) }
 
 // The verse being read: its words, and the word lit now.
 let cur: { text: string; spans: Span[] } | undefined
@@ -430,6 +434,7 @@ function lost(my: number) {
   hush(); held = undefined; keep = false; lockButtons(false)
   cur = undefined; resumeAt = 0
   if (typeof navigator !== 'undefined' && navigator.onLine === false) listenNote(t('No connection: the phone’s own voice'))
+  counted(silentNow() || !synth ? 'silent' : 'voice')
   emit()
   next(my)
 }
@@ -581,7 +586,9 @@ function begin() {
   const my = ++run
   now = { ...now, playing: true, trouble: undefined }
   unreachable = typeof navigator !== 'undefined' && navigator.onLine === false
-  if (recorded()) { synth?.cancel(); emit(); return hear(my) }
+  const rec = recorded()
+  counted(rec ? rec.id : silentNow() || !synth ? 'silent' : 'voice')
+  if (rec) { synth?.cancel(); emit(); return hear(my) }
   hush(); held = undefined; lockButtons(false)
   if (silentNow() || !synth) {
     // Silently, pick up at the word where it was paused.

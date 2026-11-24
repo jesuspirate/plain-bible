@@ -36,4 +36,15 @@ describe('hello', () => {
       { version: 'LSG', platform: 'mac', hour: 7, weekday: 0, tally: { pr: 2, ch: 0, bm: 1 } })!
     expect(r.q).toBe('lang=fr&bible=LSG&on=mac&h=7&wd=0&pr=2&bm=1')
   })
+  it('says what was listened to, and whether it is the first listening this week or month', () => {
+    const now = periods(new Date('2026-11-24T09:00:00Z'))
+    const last: Kept = { ...periods(new Date('2026-11-23T09:00:00Z')), first: '2026-11-20' }
+    const heard = { m: ['along', 'listen'], s: ['tresor'], b: ['LSG'], l: ['fr'] }
+    const r = helloQuery(last, now, false, 'fr', { heard })!
+    expect(r.q).toBe('lang=fr&am=along%2Clisten&as=tresor&ab=LSG&al=fr&aw=1&amo=1')
+    expect(r.keep).toMatchObject({ heardWeek: '2026-W48', heardMonth: '2026-11' })
+    const next = helloQuery({ ...r.keep, day: '2026-11-23' }, now, false, 'fr', { heard })!
+    expect(next.q).toBe('lang=fr&am=along%2Clisten&as=tresor&ab=LSG&al=fr')
+    expect(helloQuery(last, now, false, 'fr', { heard: {} })!.q).toBe('lang=fr')
+  })
 })

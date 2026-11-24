@@ -6,7 +6,8 @@
 // Android app, Fedi, a browser), the hour and weekday of this first opening,
 // whether it is still opening a week, a month or three months after its first
 // hello, and how many prayers, chapters, shares and bookmarks happened on it
-// since the last hello (see tally.ts). The service adds
+// since the last hello (see tally.ts), and whether anything was listened to,
+// with what kind of voice, in which Bible and language (see heard.ts). The service adds
 // one to a few counters and keeps nothing else, not even the address it
 // came from. That's enough to tell how many devices open the app each
 // day, week and month, and how many are new.
@@ -14,6 +15,7 @@ import { savedLang } from '../i18n'
 import { fromPlayStore, inMacApp, inStoreApp, installed, isAndroid, isIPhone } from './install'
 import { inFedi } from './nostr'
 import { tallies, untally, type Tally } from './tally'
+import { HEARD_KINDS, heardSince, unheard, type Heard } from './heard'
 
 const KEY = 'plain-bible:hello'
 const SYNC_URL: string = (import.meta.env.VITE_SYNC_URL ?? '').replace(/\/$/, '')
@@ -31,7 +33,7 @@ export interface Seen { day: string; week: string; month: string }
 /** What this device keeps: the last hello, the day of its first hello under
  *  this count (devices from before it start the day they get it), and which
  *  "still opening after N days" it already told. */
-export interface Kept extends Seen { first?: string; kept?: number[] }
+export interface Kept extends Seen { first?: string; kept?: number[]; heardWeek?: string; heardMonth?: string }
 export const periods = (d: Date): Seen => {
   const day = d.toISOString().slice(0, 10)
   return { day, week: isoWeek(d), month: day.slice(0, 7) }
@@ -47,7 +49,7 @@ export function platform(): string {
   return isIPhone() || isAndroid() ? 'phone' : 'computer'
 }
 
-export interface Extra { version?: string; platform?: string; hour?: number; weekday?: number; tally?: Tally }
+export interface Extra { version?: string; platform?: string; hour?: number; weekday?: number; tally?: Tally; heard?: Heard }
 
 /** What to tell the service today, or nothing if this device already said
  *  hello today. Also what to keep once it has been told. */
@@ -70,7 +72,15 @@ export function helloQuery(last: Kept | null, now: Seen, home: boolean, lang = '
   if (extra.hour !== undefined) q.set('h', String(extra.hour))
   if (extra.weekday !== undefined) q.set('wd', String(extra.weekday))
   for (const [k, n] of Object.entries(extra.tally ?? {})) if (n > 0) q.set(k, String(n))
-  return { q: q.toString(), keep: { ...now, first, ...(kept.length ? { kept } : {}) } }
+  // Listened since the last hello: what, and whether it's the first time
+  // this week and this month, so listeners can be counted, not only days.
+  let { heardWeek, heardMonth } = last ?? {}
+  if (extra.heard?.m?.length) {
+    for (const k of HEARD_KINDS) if (extra.heard[k]?.length) q.set(`a${k}`, extra.heard[k]!.join(','))
+    if (heardWeek !== now.week) { q.set('aw', '1'); heardWeek = now.week }
+    if (heardMonth !== now.month) { q.set('amo', '1'); heardMonth = now.month }
+  }
+  return { q: q.toString(), keep: { ...now, first, ...(kept.length ? { kept } : {}), ...(heardWeek ? { heardWeek } : {}), ...(heardMonth ? { heardMonth } : {}) } }
 }
 
 const savedVersion = () => {
@@ -83,14 +93,15 @@ export function hello() {
   if (!SYNC_URL || typeof navigator === 'undefined' || !navigator.onLine) return
   let last: Kept | null = null
   try { last = JSON.parse(localStorage.getItem(KEY) || 'null') } catch { return }
-  const at = new Date(), now = periods(at), tally = tallies()
-  const said = helloQuery(last, now, installed(), savedLang(), { version: savedVersion(), platform: platform(), hour: at.getHours(), weekday: at.getDay(), tally })
+  const at = new Date(), now = periods(at), tally = tallies(), heard = heardSince()
+  const said = helloQuery(last, now, installed(), savedLang(), { version: savedVersion(), platform: platform(), hour: at.getHours(), weekday: at.getDay(), tally, heard })
   if (said === null) return
   fetch(`${SYNC_URL}/hello?${said.q}`, { cache: 'no-store', credentials: 'omit', keepalive: true })
     .then(res => {
       if (!res.ok) return
       try { localStorage.setItem(KEY, JSON.stringify(said.keep)) } catch { /* private mode */ }
       untally(tally)
+      unheard(heard)
     })
     .catch(() => {})
 }
