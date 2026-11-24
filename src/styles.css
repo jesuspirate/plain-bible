@@ -315,14 +315,13 @@ main.with-bar { padding-bottom: 120px; }
 .tones button { font: 20px/1 'Apple Color Emoji', 'Segoe UI Emoji', 'Noto Color Emoji', sans-serif; padding: 8px 10px; }
 .tones button.on { background: var(--chip); box-shadow: inset 0 0 0 2px var(--accent); }
 .sb-pray:active { transform: scale(.94); }
-/* Circles, just left of 🙏: a plain round button with three people, the
+/* Circles, just left of 🙏: a plain round button with eight friends round a heart, the
    height of the search bar, so the two read as a pair and 🙏 still leads. */
 .sb-circles {
   all: unset; cursor: pointer; flex: none; position: relative; display: grid; place-items: center; width: 52px; height: 52px; border-radius: 50%;
   color: var(--text); background: var(--surface); border: 1px solid var(--line); box-sizing: border-box;
   box-shadow: 0 10px 30px rgba(0,0,0,.14); -webkit-tap-highlight-color: transparent;
 }
-.sb-circles svg * { stroke-width: 2.6; }
 .sb-circles::before { content: ''; position: absolute; inset: -5px; border-radius: 50%; }
 .sb-circles:active { transform: scale(.94); }
 /* The page-wide button hover (a darker border) would draw a ring on its hidden
