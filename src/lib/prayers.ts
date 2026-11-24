@@ -22,7 +22,7 @@ export interface Prayer extends Part, Journal {
   jrev?: number; jdirty?: boolean; jsize?: number
 }
 /** The prayer without its journal. */
-const bare = <T extends Journal>({ fav: _f, name: _n, topic: _t, answered: _a, ...p }: T) => p
+const bare = <T extends Journal>({ fav: _f, name: _n, topic: _t, topics: _ts, answered: _a, ...p }: T) => p
 /** A prayer without its audio; `parts` counts its parts. */
 export type PrayerInfo = Omit<Prayer, 'audio' | 'more'> & { parts: number }
 

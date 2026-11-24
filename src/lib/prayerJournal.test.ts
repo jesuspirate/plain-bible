@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { byMonth, cleanJournal, finds, longDuration, sameJournal, topicsOf } from './prayerJournal'
+import { byMonth, cleanJournal, finds, longDuration, sameJournal, topicsOf, topicsOfPrayer } from './prayerJournal'
 
 const at = (y: number, m: number, d: number, h = 12) => new Date(y, m - 1, d, h).getTime()
 
@@ -7,7 +7,7 @@ describe('prayer journal', () => {
   it('keeps only what is set', () => {
     expect(cleanJournal(undefined)).toEqual({})
     expect(cleanJournal({ fav: false, name: '  ', topic: 3, answered: 'x' })).toEqual({})
-    expect(cleanJournal({ fav: true, name: ' For the children ', topic: 'Family', answered: 5, other: 1 })).toEqual({ fav: true, name: 'For the children', topic: 'Family', answered: 5 })
+    expect(cleanJournal({ fav: true, name: ' For the children ', topic: 'Family', answered: 5, other: 1 })).toEqual({ fav: true, name: 'For the children', topic: 'Family', topics: ['Family'], answered: 5 })
     expect(cleanJournal({ name: 'x'.repeat(200) }).name).toHaveLength(80)
     expect(sameJournal({ fav: false }, {})).toBe(true)
     expect(sameJournal({ fav: true }, {})).toBe(false)
@@ -34,8 +34,18 @@ describe('prayer journal', () => {
     expect(longDuration(54 * 60_000)).toBe('54 min')
     expect(longDuration(89 * 60_000)).toBe('1 h 29')
   })
+  it('keeps several topics, and reads the one an older app kept', () => {
+    expect(cleanJournal({ topics: [' Family ', 'Thanks', 'Family', '', 4] })).toEqual({ topic: 'Family', topics: ['Family', 'Thanks'] })
+    // Taking every topic off wins over the one an older app kept.
+    expect(cleanJournal({ ...cleanJournal({ topic: 'Family' }), topics: [] })).toEqual({})
+    expect(cleanJournal({ topics: Array.from({ length: 20 }, (_, i) => `T${i}`) }).topics).toHaveLength(12)
+    expect(topicsOfPrayer({ topic: 'Healing' })).toEqual(['Healing'])
+    expect(topicsOfPrayer({})).toEqual([])
+    expect(sameJournal({ topic: 'Family' }, { topics: ['Family'] })).toBe(true)
+  })
   it('offers its topics, then yours in the order you made them', () => {
     expect(topicsOf([])).toEqual(['Thanks', 'Family', 'Healing', 'Guidance', 'Church'])
     expect(topicsOf([{ topic: 'Work' }, {}, { topic: 'Family' }, { topic: 'Neighbors' }, { topic: 'Work' }]).slice(5)).toEqual(['Work', 'Neighbors'])
+    expect(topicsOf([{ topics: ['Family', 'Work', 'Lent'] }, { topic: 'Work' }]).slice(5)).toEqual(['Work', 'Lent'])
   })
 })

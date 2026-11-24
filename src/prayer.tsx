@@ -16,7 +16,7 @@ import { go, canShareInCircles as inCircles, openSettings, parseHash, pickVerses
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
-import { byMonth, finds, longDuration, TOPICS, topicsOf } from './lib/prayerJournal'
+import { byMonth, finds, longDuration, TOPICS, topicsOf, topicsOfPrayer } from './lib/prayerJournal'
 import { holdsVerse, MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
 import { Comfort, pickComfort } from './lib/comfort'
 import type { Bible } from './lib/data'
@@ -560,22 +560,27 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   // Days opened or folded by hand; the rest follow the rule (the latest open).
   const [dayOpen, setDayOpen] = useState<Record<string, boolean>>({})
   // Naming a prayer, or choosing its topic, inside its open row.
-  const [edit, setEdit] = useState<{ id: string; what: 'name' | 'topic'; text: string }>()
+  // `topics`: the prayer's topics as tapped, shown at once while they're saved.
+  const [edit, setEdit] = useState<{ id: string; what: 'name' | 'topic'; text: string; topics?: string[] }>()
   const all = list ?? [], favs = all.filter(isFav)
   const ANSWERED = '\u2713'
-  const inTopic = (name: string) => all.filter(p => name === ANSWERED ? p.answered : p.topic === name)
+  const inTopic = (name: string) => all.filter(p => name === ANSWERED ? p.answered : topicsOfPrayer(p).includes(name))
   const shelves = [ANSWERED, ...topicsOf(all)].filter(name => inTopic(name).length)
   const topicName = (name: string) => name === ANSWERED ? `✓ ${t('Answered')}` : TOPICS.includes(name) ? t(name) : name
+  const topicLabel = (names: string[]) => {
+    const topic = names.map(topicName).join(', ')
+    return !names.length ? t('Topic') : names.length > 1 ? t('Topics: {topic}', { topic }) : t('Topic: {topic}', { topic })
+  }
   // A topic emptied while it was open (its last prayer moved or deleted) closes.
   const within = view === 'topics' && topic && inTopic(topic).length ? topic : undefined
   const typed = find.trim()
   const flat = view !== 'all' || !!typed
   const shown = (view === 'fav' ? favs : within ? inTopic(within) : all).filter(p => !typed || finds(typed, [
-    ...versesOf(p).map(verseLabel), p.name ?? '', p.topic ? topicName(p.topic) : '',
+    ...versesOf(p).map(verseLabel), p.name ?? '', ...topicsOfPrayer(p).map(topicName),
     new Date(p.at).toLocaleDateString(locale(), { weekday: 'long', month: 'long', day: 'numeric', year: 'numeric' }),
   ]))
-  const note = async (p: PrayerInfo, change: Journal) => {
-    setEdit(undefined)
+  const note = async (p: PrayerInfo, change: Journal, stay = false) => {
+    if (!stay) setEdit(undefined)
     await prayers.note(p.id, change).catch(() => {})
     onChange()
     syncPrayers().catch(() => {})
@@ -591,8 +596,8 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
       <span class="pray-when">{p.name && <strong class="pray-name">{p.name}</strong>}
         {dated ? date(p.at) : time(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
         {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
-        {(p.topic || p.answered) && <span class="pray-tags">
-          {p.topic && <span class="pray-tag">{topicName(p.topic)}</span>}
+        {(topicsOfPrayer(p).length > 0 || p.answered) && <span class="pray-tags">
+          {topicsOfPrayer(p).map(name => <span class="pray-tag">{topicName(name)}</span>)}
           {p.answered && <span class="pray-tag answered">✓ {t('Answered')}</span>}
         </span>}
         {sharedWith([p]).length > 0 && <span class="pray-shared muted">✓ {t('Shared with {circle}', { circle: sharedWith([p]).map(c => c.name).join(', ') })}</span>}</span>
@@ -613,16 +618,31 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           <button class="pray-btn primary">{t('Save')}</button>
         </div>
       </form>}
-      {/* One topic a prayer: tap one to choose it, tap it again to take it off, or type your own. */}
-      {open === p.id && edit?.id === p.id && edit.what === 'topic' && <form class="pray-edit" onSubmit={e => { e.preventDefault(); if (edit.text.trim()) note(p, { topic: edit.text }) }}>
+      {/* Several topics a prayer: tap one to put it on, tap it again to take it off,
+          or type your own. The choices stay open until Done. */}
+      {open === p.id && edit?.id === p.id && edit.what === 'topic' && <form class="pray-edit" onSubmit={e => {
+        e.preventDefault()
+        const typed = edit.text.trim(), mine = edit.topics ?? topicsOfPrayer(p)
+        if (!typed) return
+        const topics = mine.includes(typed) ? mine : [...mine, typed]
+        setEdit({ ...edit, text: '', topics })
+        note(p, { topics }, true)
+      }}>
         <div class="pray-topics">
-          {topicsOf(all).map(name => <button type="button" class={'pray-topic' + (p.topic === name ? ' on' : '')} aria-pressed={p.topic === name} onClick={() => note(p, { topic: p.topic === name ? '' : name })}>{p.topic === name ? '✓ ' : ''}{topicName(name)}</button>)}
+          {[...new Set([...topicsOf(all), ...(edit.topics ?? [])])].map(name => {
+            const mine = edit.topics ?? topicsOfPrayer(p), on = mine.includes(name)
+            return <button type="button" class={'pray-topic' + (on ? ' on' : '')} aria-pressed={on} onClick={() => {
+              const topics = on ? mine.filter(x => x !== name) : [...mine, name]
+              setEdit({ ...edit, topics })
+              note(p, { topics }, true)
+            }}>{on ? '✓ ' : ''}{topicName(name)}</button>
+          })}
         </div>
         <div class="pray-new-topic">
           <input class="saved-find" value={edit.text} maxLength={40} placeholder={t('New topic')} aria-label={t('New topic')} enterkeyhint="done" onInput={e => setEdit({ ...edit, text: (e.target as HTMLInputElement).value })} />
           <button class="pray-btn primary" disabled={!edit.text.trim()}>{t('Add')}</button>
         </div>
-        <button type="button" class="pray-btn" onClick={() => setEdit(undefined)}>{t('Cancel')}</button>
+        <button type="button" class="pray-btn primary" onClick={() => setEdit(undefined)}>{t('Done')}</button>
       </form>}
       {open === p.id && confirm !== p.id && edit?.id !== p.id && <div class="pray-acts">
         <button class="pray-act" onClick={() => setEdit({ id: p.id, what: 'name', text: p.name ?? '' })}>
@@ -631,7 +651,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
         </button>
         <button class="pray-act" onClick={() => setEdit({ id: p.id, what: 'topic', text: '' })}>
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M4 6.5A1.5 1.5 0 0 1 5.5 5h4l2 2.5h7A1.5 1.5 0 0 1 20 9v8.5A1.5 1.5 0 0 1 18.5 19h-13A1.5 1.5 0 0 1 4 17.5z" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linejoin="round" /></svg>
-          <span>{p.topic ? t('Topic: {topic}', { topic: topicName(p.topic) }) : t('Topic')}</span>
+          <span>{topicLabel(topicsOfPrayer(p))}</span>
         </button>
         <button class={'pray-act' + (p.answered ? ' answered' : '')} aria-pressed={!!p.answered} onClick={() => note(p, { answered: p.answered ? 0 : Date.now() })}>
           <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><path d="M5 12.5l4.5 4.5L19 7.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" /></svg>
