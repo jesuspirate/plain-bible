@@ -1487,6 +1487,15 @@ body.selecting .continue { display: none; }
 .settings .field label.check:has(.check-text .muted) input { margin-top: 1px; }
 .check-text { display: flex; flex-direction: column; gap: 2px; }
 .check-name { font-weight: 600; }
+/* Its own pages (one choice each): the choice full width, big enough to tap
+   with ease, and a sample of the page above it that changes as you tap. */
+.layout-page > .seg, .layout-page .col > .seg { display: flex; width: 100%; }
+.layout-page > .seg button, .layout-page .col > .seg button { flex: 1; min-height: 52px; font-size: 17px; }
+.layout-page .set-label { white-space: normal; line-height: 1.25; }
+.layout-sample { font-family: var(--reading); font-size: var(--font-size); line-height: 1.55; padding: 14px 18px; margin: 4px 0 18px; border: 1px solid var(--line); border-radius: 16px; background: var(--surface); }
+.layout-sample:not(.para) .ls-verse { display: block; }
+.layout-sample:not(.para) .ls-verse + .ls-verse { margin-top: .3em; }
+.layout-sample .vn { cursor: default; }
 
 /* ---- Quiet motion (motion.ts): everything that opens from a button comes in
    the same way, a short fade with a small rise, and goes the same way, a
