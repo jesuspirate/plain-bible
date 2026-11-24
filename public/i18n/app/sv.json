@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "I sökfältet, längst till höger: läser vidare från skärmens topp medan orden lyser upp.",
 "While it reads, tap any verse to read on from there.": "Medan den läser, tryck på en vers för att läsa vidare därifrån.",
 "Show the Read along icon in the search bar": "Visa ”Läs med”-ikonen i sökfältet",
-"Words on the page": "Texten på sidan",
 "Turning pages": "Bläddra",
-"On screen": "På skärmen",
 "Extras": "Extra",
 "Pull down at the top of a chapter, then let go": "Dra nedåt överst i ett kapitel och släpp",
 "Other ways to open search": "Andra sätt att öppna sökningen",
 "You can also press / to open it.": "Du kan också trycka på / för att öppna den.",
 "Listen: hear the verses you picked": "Lyssna: hör verserna du valt",
-"Hide while the phone is on its side": "Dölj när telefonen ligger ner",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Det du kryssar i glider undan medan du läser nedåt på sidan, så att texten fyller skärmen. Rulla upp lite, eller tryck på överkanten, för att få tillbaka det.",
 "Getting your prayers…": "Hämtar dina böner…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "En bön i ditt konto finns inte på den här enheten än, så den finns inte i .zip-filen.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} böner i ditt konto finns inte på den här enheten än, så de finns inte i .zip-filen.",
 "Open Your prayers and tap Sync my prayers, then download again.": "Öppna Dina böner och tryck på Synkronisera mina böner, och ladda sedan ner igen.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Du har {h} markerade verser, {b} bokmärken, {n} anteckningar och {p} böner på den här enheten."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Du har {h} markerade verser, {b} bokmärken, {n} anteckningar och {p} böner på den här enheten.",
+"On": "På",
+"Phone on its side": "Telefonen ligger ner",
+"Nothing hidden": "Inget dolt"
 }

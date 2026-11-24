@@ -1399,15 +1399,12 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "U traci za pretraživanje, na desnom kraju: čita od vrha zaslona dok riječi svijetle.",
 "While it reads, tap any verse to read on from there.": "Dok čita, dodirnite bilo koji redak da nastavi odande.",
 "Show the Read along icon in the search bar": "Prikaži ikonu „Prati čitanje” u traci za pretraživanje",
-"Words on the page": "Tekst na stranici",
 "Turning pages": "Okretanje stranica",
-"On screen": "Na zaslonu",
 "Extras": "Dodatno",
 "Pull down at the top of a chapter, then let go": "Na vrhu poglavlja povucite prema dolje pa pustite",
 "Other ways to open search": "Drugi načini otvaranja pretraživanja",
 "You can also press / to open it.": "Možete ga otvoriti i tipkom /.",
 "Listen: hear the verses you picked": "Slušaj: čujte odabrane retke",
-"Hide while the phone is on its side": "Sakrij kad je telefon položen",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Označeno se skloni dok čitate niz stranicu, da tekst ispuni zaslon. Pomaknite se malo gore ili dodirnite gornji rub da se vrati.",
 "Getting your prayers…": "Dohvaćam vaše molitve…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna molitva s vašeg računa još nije na ovom uređaju, pa nije u .zip datoteci.",
@@ -1417,5 +1414,8 @@
  "other": "{n} molitava s vašeg računa još nije na ovom uređaju, pa nisu u .zip datoteci."
 },
 "Open Your prayers and tap Sync my prayers, then download again.": "Otvorite Vaše molitve i dodirnite Sinkroniziraj moje molitve, zatim ponovno preuzmite.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na ovom uređaju imate istaknutih redaka: {h}, knjižnih oznaka: {b}, bilježaka: {n}, molitava: {p}."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na ovom uređaju imate istaknutih redaka: {h}, knjižnih oznaka: {b}, bilježaka: {n}, molitava: {p}.",
+"On": "Uključeno",
+"Phone on its side": "Telefon položen",
+"Nothing hidden": "Ništa skriveno"
 }

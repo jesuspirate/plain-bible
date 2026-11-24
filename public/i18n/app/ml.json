@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "തിരയൽ ബാറിൽ, വലത്തേ അറ്റത്ത്: വാക്കുകൾ തെളിയുമ്പോൾ സ്ക്രീനിന്റെ മുകളിൽ നിന്ന് വായിക്കുന്നു.",
 "While it reads, tap any verse to read on from there.": "വായിക്കുമ്പോൾ, അവിടെ നിന്ന് തുടരാൻ ഏതെങ്കിലും വാക്യത്തിൽ ടാപ്പ് ചെയ്യുക.",
 "Show the Read along icon in the search bar": "തിരയൽ ബാറിൽ “കൂടെ വായിക്കുക” ചിഹ്നം കാണിക്കുക",
-"Words on the page": "പേജിലെ വാക്കുകൾ",
 "Turning pages": "പേജ് മറിക്കൽ",
-"On screen": "സ്ക്രീനിൽ",
 "Extras": "കൂടുതൽ",
 "Pull down at the top of a chapter, then let go": "അധ്യായത്തിന്റെ മുകളിൽ താഴേക്ക് വലിച്ച് വിടുക",
 "Other ways to open search": "തിരയൽ തുറക്കാനുള്ള മറ്റു വഴികൾ",
 "You can also press / to open it.": "തുറക്കാൻ / അമർത്തുകയും ചെയ്യാം.",
 "Listen: hear the verses you picked": "കേൾക്കുക: തിരഞ്ഞെടുത്ത വാക്യങ്ങൾ കേൾക്കുക",
-"Hide while the phone is on its side": "ഫോൺ ചരിച്ചു പിടിക്കുമ്പോൾ മറയ്ക്കുക",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "പേജിൽ താഴേക്ക് വായിക്കുമ്പോൾ ടിക്ക് ചെയ്തവ മാറിപ്പോകും, വാക്കുകൾ സ്ക്രീൻ നിറയും. തിരികെ കൊണ്ടുവരാൻ അല്പം മുകളിലേക്ക് സ്ക്രോൾ ചെയ്യുക അല്ലെങ്കിൽ മുകളിലെ അരികിൽ ടാപ്പ് ചെയ്യുക.",
 "Getting your prayers…": "നിങ്ങളുടെ പ്രാർത്ഥനകൾ കൊണ്ടുവരുന്നു…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "നിങ്ങളുടെ അക്കൗണ്ടിലെ ഒരു പ്രാർത്ഥന ഇനിയും ഈ ഉപകരണത്തിൽ ഇല്ല, അതിനാൽ അത് .zip-ൽ ഇല്ല.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "നിങ്ങളുടെ അക്കൗണ്ടിലെ {n} പ്രാർത്ഥനകൾ ഇനിയും ഈ ഉപകരണത്തിൽ ഇല്ല, അതിനാൽ അവ .zip-ൽ ഇല്ല.",
 "Open Your prayers and tap Sync my prayers, then download again.": "നിങ്ങളുടെ പ്രാർത്ഥനകൾ തുറന്ന് എന്റെ പ്രാർത്ഥനകൾ സിങ്ക് ചെയ്യുക ടാപ്പ് ചെയ്യുക, തുടർന്ന് വീണ്ടും ഡൗൺലോഡ് ചെയ്യുക.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ഈ ഉപകരണത്തിൽ നിങ്ങൾക്ക് {h} ഹൈലൈറ്റ് ചെയ്ത വാക്യങ്ങളും {b} ബുക്ക്‌മാർക്കുകളും {n} കുറിപ്പുകളും {p} പ്രാർത്ഥനകളും ഉണ്ട്."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ഈ ഉപകരണത്തിൽ നിങ്ങൾക്ക് {h} ഹൈലൈറ്റ് ചെയ്ത വാക്യങ്ങളും {b} ബുക്ക്‌മാർക്കുകളും {n} കുറിപ്പുകളും {p} പ്രാർത്ഥനകളും ഉണ്ട്.",
+"On": "ഓൺ",
+"Phone on its side": "ഫോൺ ചരിച്ചു പിടിക്കുമ്പോൾ",
+"Nothing hidden": "ഒന്നും മറച്ചിട്ടില്ല"
 }

@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "সার্চ বারে, ডান প্রান্তে: শব্দগুলো আলোকিত হতে হতে স্ক্রিনের উপর থেকে পড়ে যায়।",
 "While it reads, tap any verse to read on from there.": "পড়ার সময়, সেখান থেকে পড়তে যেকোনো পদে ট্যাপ করুন।",
 "Show the Read along icon in the search bar": "সার্চ বারে “সঙ্গে পড়ুন” আইকন দেখান",
-"Words on the page": "পাতার লেখা",
 "Turning pages": "পাতা ওল্টানো",
-"On screen": "স্ক্রিনে",
 "Extras": "অতিরিক্ত",
 "Pull down at the top of a chapter, then let go": "অধ্যায়ের শুরুতে নিচে টানুন, তারপর ছেড়ে দিন",
 "Other ways to open search": "খোঁজ খোলার অন্য উপায়",
 "You can also press / to open it.": "এটি খুলতে আপনি / চাপতেও পারেন।",
 "Listen: hear the verses you picked": "শুনুন: বেছে নেওয়া পদগুলি শুনুন",
-"Hide while the phone is on its side": "ফোন কাত করে রাখলে লুকান",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "পাতার নিচে পড়তে থাকলে টিক দেওয়া জিনিসগুলো সরে যায়, যাতে লেখা পর্দা ভরে দেয়। সেগুলো ফিরিয়ে আনতে একটু ওপরে স্ক্রল করুন বা ওপরের কিনারায় চাপুন।",
 "Getting your prayers…": "আপনার প্রার্থনা আনা হচ্ছে…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "আপনার অ্যাকাউন্টের একটি প্রার্থনা এখনও এই ডিভাইসে নেই, তাই সেটি .zip-এ নেই।",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "আপনার অ্যাকাউন্টের {n}টি প্রার্থনা এখনও এই ডিভাইসে নেই, তাই সেগুলো .zip-এ নেই।",
 "Open Your prayers and tap Sync my prayers, then download again.": "আপনার প্রার্থনা খুলে আমার প্রার্থনা সিঙ্ক করুন চাপুন, তারপর আবার ডাউনলোড করুন।",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "এই ডিভাইসে আপনার {h}টি হাইলাইট করা পদ, {b}টি বুকমার্ক, {n}টি নোট ও {p}টি প্রার্থনা আছে।"
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "এই ডিভাইসে আপনার {h}টি হাইলাইট করা পদ, {b}টি বুকমার্ক, {n}টি নোট ও {p}টি প্রার্থনা আছে।",
+"On": "চালু",
+"Phone on its side": "ফোন কাত করলে",
+"Nothing hidden": "কিছুই লুকানো নেই"
 }

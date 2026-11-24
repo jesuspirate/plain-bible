@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "検索バーの右端：言葉が光りながら、画面の一番上から読み進めます。",
 "While it reads, tap any verse to read on from there.": "読んでいる間に節をタップすると、そこから読み進めます。",
 "Show the Read along icon in the search bar": "検索バーに「目で追って読む」アイコンを表示",
-"Words on the page": "ページの文字",
 "Turning pages": "ページめくり",
-"On screen": "画面の表示",
 "Extras": "その他",
 "Pull down at the top of a chapter, then let go": "章の一番上で下に引いて離す",
 "Other ways to open search": "検索を開くほかの方法",
 "You can also press / to open it.": "/ キーでも開けます。",
 "Listen: hear the verses you picked": "聞く：選んだ節を聞く",
-"Hide while the phone is on its side": "スマホを横にしているときに隠す",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "チェックしたものは、ページを下へ読み進めると隠れ、文字が画面いっぱいになります。少し上へスクロールするか上端をタップすると戻ります。",
 "Getting your prayers…": "祈りを取得しています…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "アカウントの祈りのうち 1 件がまだこのデバイスにないため、.zip に含まれていません。",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "アカウントの祈りのうち {n} 件がまだこのデバイスにないため、.zip に含まれていません。",
 "Open Your prayers and tap Sync my prayers, then download again.": "「あなたの祈り」を開いて「祈りを同期」をタップし、もう一度ダウンロードしてください。",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "このデバイスには、ハイライトした節が {h} 件、ブックマークが {b} 件、メモが {n} 件、祈りが {p} 件あります。"
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "このデバイスには、ハイライトした節が {h} 件、ブックマークが {b} 件、メモが {n} 件、祈りが {p} 件あります。",
+"On": "オン",
+"Phone on its side": "スマホを横にしたとき",
+"Nothing hidden": "何も隠さない"
 }

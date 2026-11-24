@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ရှာဖွေရေးဘား၏ ညာဘက်အစွန်တွင်- စကားလုံးများ လင်းလာစဉ် မျက်နှာပြင်ထိပ်မှ ဖတ်ပေးသည်။",
 "While it reads, tap any verse to read on from there.": "ဖတ်နေစဉ် မည်သည့်ကျမ်းချက်ကိုမဆို တို့လျှင် ထိုနေရာမှ ဆက်ဖတ်ပေးသည်။",
 "Show the Read along icon in the search bar": "ရှာဖွေရေးဘားတွင် “လိုက်ဖတ်ရန်” သင်္ကေတကို ပြပါ",
-"Words on the page": "စာမျက်နှာပေါ်ရှိ စကားလုံးများ",
 "Turning pages": "စာမျက်နှာလှန်ခြင်း",
-"On screen": "မျက်နှာပြင်ပေါ်တွင်",
 "Extras": "အပိုများ",
 "Pull down at the top of a chapter, then let go": "အခန်း၏ထိပ်တွင် အောက်သို့ဆွဲပြီး လွှတ်ပါ",
 "Other ways to open search": "ရှာဖွေမှုကို ဖွင့်ရန် အခြားနည်းလမ်းများ",
 "You can also press / to open it.": "/ ကိုနှိပ်၍လည်း ဖွင့်နိုင်သည်။",
 "Listen: hear the verses you picked": "နားထောင်ရန်: ရွေးထားသော အခန်းငယ်များကို နားထောင်ပါ",
-"Hide while the phone is on its side": "ဖုန်းကို ဘေးတိုက်ထားချိန် ဖျောက်ရန်",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "စာမျက်နှာအောက်သို့ ဖတ်သွားသည်နှင့် အမှန်ခြစ်ထားသည်များ ဖယ်သွားပြီး စာက မျက်နှာပြင်ကို ပြည့်စေသည်။ ပြန်ပေါ်ရန် အပေါ်သို့ နည်းနည်းဆွဲပါ သို့မဟုတ် အပေါ်အစွန်းကို တို့ပါ။",
 "Getting your prayers…": "သင့်ဆုတောင်းချက်များကို ယူနေသည်…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "သင့်အကောင့်ရှိ ဆုတောင်းချက် တစ်ခုသည် ဤစက်ပေါ်တွင် မရှိသေးသဖြင့် .zip ထဲတွင် မပါပါ။",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "သင့်အကောင့်ရှိ ဆုတောင်းချက် {n} ခုသည် ဤစက်ပေါ်တွင် မရှိသေးသဖြင့် .zip ထဲတွင် မပါပါ။",
 "Open Your prayers and tap Sync my prayers, then download again.": "သင့်ဆုတောင်းချက်များကို ဖွင့်ပြီး ကျွန်ုပ်၏ဆုတောင်းချက်များကို စင့်ခ်လုပ်ရန် ကို နှိပ်ပါ၊ ထို့နောက် ပြန်ဒေါင်းလုဒ်လုပ်ပါ။",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ဤစက်တွင် အရောင်ခြယ်ထားသော ကျမ်းချက် {h} ချက်၊ စာမှတ် {b} ခု၊ မှတ်စု {n} ခုနှင့် ဆုတောင်းချက် {p} ခု ရှိပါသည်။"
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "ဤစက်တွင် အရောင်ခြယ်ထားသော ကျမ်းချက် {h} ချက်၊ စာမှတ် {b} ခု၊ မှတ်စု {n} ခုနှင့် ဆုတောင်းချက် {p} ခု ရှိပါသည်။",
+"On": "ဖွင့်ထားသည်",
+"Phone on its side": "ဖုန်းကို ဘေးတိုက်ထားချိန်",
+"Nothing hidden": "ဘာမျှ မဖျောက်ထားပါ"
 }

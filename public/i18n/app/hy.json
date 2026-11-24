@@ -1318,19 +1318,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Որոնման տողում, աջ ծայրում. կարդում է էկրանի վերևից, մինչ բառերը լուսավորվում են։",
 "While it reads, tap any verse to read on from there.": "Կարդալու ընթացքում հպեք ցանկացած համարի՝ այնտեղից շարունակելու համար։",
 "Show the Read along icon in the search bar": "Ցույց տալ «Հետևել ընթերցանությանը» պատկերակը որոնման տողում",
-"Words on the page": "Բառերը էջի վրա",
 "Turning pages": "Էջերի թերթում",
-"On screen": "Էկրանին",
 "Extras": "Լրացուցիչ",
 "Pull down at the top of a chapter, then let go": "Գլխի վերևում քաշեք ներքև, ապա բաց թողեք",
 "Other ways to open search": "Որոնումը բացելու այլ ձևեր",
 "You can also press / to open it.": "Այն բացելու համար կարող եք սեղմել նաև /։",
 "Listen: hear the verses you picked": "Լսել. լսեք ընտրած համարները",
-"Hide while the phone is on its side": "Թաքցնել, երբ հեռախոսը կողքի վրա է",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Նշված տարրերը հեռանում են, երբ կարդում եք էջով ներքև, որպեսզի տեքստը լցնի էկրանը։ Մի քիչ վեր ոլորեք կամ հպեք վերին եզրին՝ դրանք վերադարձնելու համար։",
 "Getting your prayers…": "Ձեր աղոթքները բերվում են…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Ձեր հաշվի մեկ աղոթք դեռ այս սարքում չէ, ուստի այն .zip-ում չէ։",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Ձեր հաշվի {n} աղոթք դեռ այս սարքում չեն, ուստի դրանք .zip-ում չեն։",
 "Open Your prayers and tap Sync my prayers, then download again.": "Բացեք «Ձեր աղոթքները» և հպեք «Համաժամացնել իմ աղոթքները», ապա նորից ներբեռնեք։",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Այս սարքում ունեք {h} ընդգծված համար, {b} էջանիշ, {n} նշում և {p} աղոթք։"
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Այս սարքում ունեք {h} ընդգծված համար, {b} էջանիշ, {n} նշում և {p} աղոթք։",
+"On": "Միացված",
+"Phone on its side": "Հեռախոսը կողքի վրա",
+"Nothing hidden": "Ոչինչ թաքցված չէ"
 }

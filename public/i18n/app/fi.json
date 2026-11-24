@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Hakupalkissa, sen oikeassa reunassa: lukee näytön ylälaidasta alkaen, ja sanat syttyvät.",
 "While it reads, tap any verse to read on from there.": "Kun se lukee, napauta mitä tahansa jaetta jatkaaksesi siitä.",
 "Show the Read along icon in the search bar": "Näytä ”Lue mukana” -kuvake hakupalkissa",
-"Words on the page": "Teksti sivulla",
 "Turning pages": "Sivun kääntäminen",
-"On screen": "Näytöllä",
 "Extras": "Lisät",
 "Pull down at the top of a chapter, then let go": "Vedä luvun alussa alaspäin ja päästä irti",
 "Other ways to open search": "Muita tapoja avata haku",
 "You can also press / to open it.": "Voit avata sen myös painamalla /.",
 "Listen: hear the verses you picked": "Kuuntele: kuule valitsemasi jakeet",
-"Hide while the phone is on its side": "Piilota, kun puhelin on vaakatasossa",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Valitut kohdat liukuvat pois, kun luet sivua alaspäin, jotta teksti täyttää näytön. Tuo ne takaisin vierittämällä vähän ylös tai napauttamalla yläreunaa.",
 "Getting your prayers…": "Haetaan rukouksiasi…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Yksi tilisi rukous ei ole vielä tällä laitteella, joten se ei ole .zip-tiedostossa.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} tilisi rukousta ei ole vielä tällä laitteella, joten ne eivät ole .zip-tiedostossa.",
 "Open Your prayers and tap Sync my prayers, then download again.": "Avaa Rukouksesi ja napauta Synkronoi rukoukseni, ja lataa sitten uudelleen.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Sinulla on tällä laitteella {h} korostettua jaetta, {b} kirjanmerkkiä, {n} muistiinpanoa ja {p} rukousta."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Sinulla on tällä laitteella {h} korostettua jaetta, {b} kirjanmerkkiä, {n} muistiinpanoa ja {p} rukousta.",
+"On": "Päällä",
+"Phone on its side": "Puhelin vaakatasossa",
+"Nothing hidden": "Mitään ei piiloteta"
 }

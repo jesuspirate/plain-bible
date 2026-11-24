@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "ئىزدەش بالدىقىدا، ئۇنىڭ ئۇچىدا: سۆزلەر يورۇغاندا ئېكراننىڭ ئۈستىدىن ئوقۇيدۇ.",
 "While it reads, tap any verse to read on from there.": "ئوقۇۋاتقاندا، شۇ يەردىن داۋاملاشتۇرۇش ئۈچۈن خالىغان ئايەتنى بېسىڭ.",
 "Show the Read along icon in the search bar": "ئىزدەش بالدىقىدا «ئەگىشىپ ئوقۇش» سىنبەلگىسىنى كۆرسىتىش",
-"Words on the page": "بەتتىكى سۆزلەر",
 "Turning pages": "بەت ئۆرۈش",
-"On screen": "ئېكراندا",
 "Extras": "قوشۇمچە",
 "Pull down at the top of a chapter, then let go": "بابنىڭ بېشىدا تۆۋەنگە تارتىپ قويۇۋېتىڭ",
 "Other ways to open search": "ئىزدەشنى ئېچىشنىڭ باشقا يوللىرى",
 "You can also press / to open it.": "ئۇنى ئېچىش ئۈچۈن / نى باسسىڭىزمۇ بولىدۇ.",
 "Listen: hear the verses you picked": "ئاڭلاش: تاللىغان ئايەتلەرنى ئاڭلاڭ",
-"Hide while the phone is on its side": "تېلېفون يانتۇ تۇرغاندا يوشۇرۇش",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "بەتنى تۆۋەنگە ئوقۇغانسېرى بەلگە قويۇلغانلار ئېلىپ كېتىلىدۇ، شۇنىڭ بىلەن خەت ئېكراننى تولدۇرىدۇ. قايتۇرۇش ئۈچۈن سەل يۇقىرىغا سۈرۈڭ ياكى ئۈستى گىرۋەكنى چېكىڭ.",
 "Getting your prayers…": "دۇئالىرىڭىز ئېلىنىۋاتىدۇ…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "ھېساباتىڭىزدىكى بىر دۇئا تېخى بۇ ئۈسكۈنىدە يوق، شۇڭا ئۇ ‎.zip دا يوق.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "ھېساباتىڭىزدىكى {n} دۇئا تېخى بۇ ئۈسكۈنىدە يوق، شۇڭا ئۇلار ‎.zip دا يوق.",
 "Open Your prayers and tap Sync my prayers, then download again.": "«دۇئالىرىڭىز» نى ئېچىپ «دۇئالىرىمنى ماس قەدەملەش» نى بېسىڭ، ئاندىن قايتا چۈشۈرۈڭ.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "بۇ ئۈسكۈنىدە {h} گەۋدىلەندۈرۈلگەن ئايەت، {b} خەتكۈچ، {n} خاتىرە ۋە {p} دۇئايىڭىز بار."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "بۇ ئۈسكۈنىدە {h} گەۋدىلەندۈرۈلگەن ئايەت، {b} خەتكۈچ، {n} خاتىرە ۋە {p} دۇئايىڭىز بار.",
+"On": "ئوچۇق",
+"Phone on its side": "تېلېفون يانتۇ تۇرغاندا",
+"Nothing hidden": "ھېچنېمە يوشۇرۇلمىدى"
 }

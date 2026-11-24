@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "در نوار جستجو، در انتهای آن: از بالای صفحه می‌خواند و کلمه‌ها روشن می‌شوند.",
 "While it reads, tap any verse to read on from there.": "هنگام خواندن، روی هر آیه بزنید تا از همان‌جا ادامه دهد.",
 "Show the Read along icon in the search bar": "نمایش نماد «خواندن همراه» در نوار جستجو",
-"Words on the page": "متن روی صفحه",
 "Turning pages": "ورق زدن",
-"On screen": "روی صفحه نمایش",
 "Extras": "موارد بیشتر",
 "Pull down at the top of a chapter, then let go": "در بالای فصل، به پایین بکشید و رها کنید",
 "Other ways to open search": "راه‌های دیگر باز کردن جست‌وجو",
 "You can also press / to open it.": "برای باز کردن آن می‌توانید / را هم بزنید.",
 "Listen: hear the verses you picked": "شنیدن: آیه‌هایی را که برگزیدید بشنوید",
-"Hide while the phone is on its side": "پنهان کردن وقتی گوشی افقی است",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "موارد تیک‌خورده هنگام خواندن رو به پایین صفحه کنار می‌روند تا متن صفحه را پر کند. برای برگرداندنشان کمی بالا بروید یا لبهٔ بالا را بزنید.",
 "Getting your prayers…": "در حال آوردن دعاهای شما…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "یک دعا در حساب شما هنوز روی این دستگاه نیست، پس در فایل ‎.zip نیست.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} دعا در حساب شما هنوز روی این دستگاه نیست، پس در فایل ‎.zip نیستند.",
 "Open Your prayers and tap Sync my prayers, then download again.": "«دعاهای شما» را باز کنید و «همگام‌سازی دعاهایم» را بزنید، سپس دوباره دانلود کنید.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "در این دستگاه {h} آیهٔ برجسته‌شده، {b} نشانک، {n} یادداشت و {p} دعا دارید."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "در این دستگاه {h} آیهٔ برجسته‌شده، {b} نشانک، {n} یادداشت و {p} دعا دارید.",
+"On": "روشن",
+"Phone on its side": "گوشی افقی",
+"Nothing hidden": "چیزی پنهان نیست"
 }

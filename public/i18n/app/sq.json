@@ -1318,19 +1318,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Në shiritin e kërkimit, në skajin e djathtë: lexon nga maja e ekranit ndërsa fjalët ndriçohen.",
 "While it reads, tap any verse to read on from there.": "Gjatë leximit, prek çdo varg për të vazhduar prej andej.",
 "Show the Read along icon in the search bar": "Shfaq ikonën “Lexo duke ndjekur” në shiritin e kërkimit",
-"Words on the page": "Teksti në faqe",
 "Turning pages": "Kthimi i faqeve",
-"On screen": "Në ekran",
 "Extras": "Shtesë",
 "Pull down at the top of a chapter, then let go": "Në krye të një kapitulli tërhiq poshtë, pastaj lësho",
 "Other ways to open search": "Mënyra të tjera për të hapur kërkimin",
 "You can also press / to open it.": "Mund ta hapësh edhe duke shtypur /.",
 "Listen: hear the verses you picked": "Dëgjo: dëgjo vargjet që zgjodhe",
-"Hide while the phone is on its side": "Fshih kur telefoni është shtrirë",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Ato që shënon largohen ndërsa lexon poshtë faqes, që teksti të mbushë ekranin. Rrëshqit pak lart, ose prek skajin e sipërm, për t’i kthyer.",
 "Getting your prayers…": "Po marr lutjet tuaja…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Një lutje në llogarinë tuaj nuk është ende në këtë pajisje, ndaj nuk është në .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "{n} lutje në llogarinë tuaj nuk janë ende në këtë pajisje, ndaj nuk janë në .zip.",
 "Open Your prayers and tap Sync my prayers, then download again.": "Hapni Lutjet tuaja dhe prekni Sinkronizo lutjet e mia, pastaj shkarkoni sërish.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Keni {h} vargje të theksuara, {b} faqeshënues, {n} shënime dhe {p} lutje në këtë pajisje."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Keni {h} vargje të theksuara, {b} faqeshënues, {n} shënime dhe {p} lutje në këtë pajisje.",
+"On": "Aktiv",
+"Phone on its side": "Telefoni i shtrirë",
+"Nothing hidden": "Asgjë e fshehur"
 }

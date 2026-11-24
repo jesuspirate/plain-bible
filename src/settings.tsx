@@ -137,21 +137,27 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // row below opens a page of its own, inside the sheet, with a way back.
 // Nothing opened from Settings is a page on its own: only opening a verse
 // leaves it.
-type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest'
+// Font and layout is a short list too: each of its rows opens a page with
+// just that one thing, and ‹ back goes to the list.
+type LayoutPage = 'font' | 'layout' | 'verseNums' | 'highlights' | 'turning' | 'searchBar' | 'sideways' | 'extras'
+type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest' | LayoutPage
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Font and layout'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
   suggest: N_('Report a problem'),
+  font: N_('Font'), layout: N_('Layout'), verseNums: N_('Verse numbers'), highlights: N_('Highlights'), turning: N_('Turning pages'),
+  searchBar: N_('Search bar'), sideways: N_('Phone on its side'), extras: N_('Extras'),
 }
+const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turning', 'searchBar', 'sideways', 'extras']
 
-/** Where you are in Settings: the first page, or one page in. */
+/** Where you are in Settings: the first page, one page in, or (under Font and layout) two. */
 function useSettingsNav() {
   const [page, setPage] = useState<Page>(() => reopenReport() ? 'suggest' : (takeSettingsPage() as Page | undefined) ?? 'home')
   // Going back from Report a problem cancels it: the recorded steps go too,
   // so they don't wait on the device for a report that was never sent.
   // (Closing Settings, or Record again, keeps them: that's not a cancel.)
-  const back = () => { if (page === 'suggest') clearSteps(); setPage('home') }
-  return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : 1 }
+  const back = () => { if (page === 'suggest') clearSteps(); setPage(LAYOUT_PAGES.includes(page) ? 'reading' : 'home') }
+  return { page, setPage, back, title: t(PAGE_TITLE[page]), depth: page === 'home' ? 0 : LAYOUT_PAGES.includes(page) ? 2 : 1 }
 }
 type SettingsNav = ReturnType<typeof useSettingsNav>
 
@@ -437,72 +443,96 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <label class="check"><input type="checkbox" checked={settings[k]} onChange={e => update({ [k]: (e.target as HTMLInputElement).checked } as Partial<Settings>)} />
       <span class="check-text"><span class={note ? "check-name" : undefined}>{label}</span>{note && <span class="muted small">{note}</span>}</span></label>
   )
+  // Font and layout: a short list, one row for each kind of choice with what
+  // it's set to now. Each row opens a page with only that choice on it.
+  const turnName = bookOn ? t('Two pages') : t(settings.turn === 'slide' ? 'Side by side' : settings.turn === 'off' ? 'None' : 'Stack')
+  const awayNames = ([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const)
+    .filter(([a]) => settings.sideways.includes(a)).map(([, l]) => l)
+  const extras = [settings.noteReminders && t('Notes'), settings.streaks && t('Streaks'), settings.strongs && t("Strong's numbers")].filter(Boolean).join(', ')
   if (page === 'reading') return <div class="layout-page">
-    <section class="set-group">
-      <h2 class="set-kicker">{t('Words on the page')}</h2>
-      <div class="field"><span>{t('Font')}</span>
-        <div class="fonts" role="radiogroup" aria-label={t('Reading font')}>
-          {FONTS.map(f => (
-            <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
-              style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
-              <span class="font-sample">{t('In the beginning was the Word')}</span>
-              <span class="font-name">{t(f.label)}<span class="muted"> · {t(f.note)}</span></span>
-            </button>
-          ))}
-        </div>
+    <section class="set-group"><div class="set-list">
+      <Row label={t('Font')} value={fontName && t(fontName)} onClick={() => setPage('font')} />
+      <Row label={t('Layout')} sub={settings.layout === 'paragraph' ? t('Paragraph') : t('One verse per line')} onClick={() => setPage('layout')} />
+      <Row label={t('Verse numbers')} value={t(settings.verseNumbers === 'small' ? 'Small' : settings.verseNumbers === 'large' ? 'Large' : 'Medium')} onClick={() => setPage('verseNums')} />
+    </div></section>
+    <section class="set-group"><div class="set-list">
+      <Row label={t('Highlights')} value={t(settings.highlight === 'text' ? 'Colored text' : settings.highlight === 'block' ? 'Block' : 'Marker')} onClick={() => setPage('highlights')} />
+      {(!bookOn || bigScreen) && <Row label={t('Turning pages')} value={turnName} onClick={() => setPage('turning')} />}
+      <Row label={t('Search bar')} value={settings.searchBar ? t('On') : t('Off')} onClick={() => setPage('searchBar')} />
+      <Row label={t('Phone on its side')} sub={awayNames.length ? awayNames.join(', ') : t('Nothing hidden')} onClick={() => setPage('sideways')} />
+    </div></section>
+    <section class="set-group"><div class="set-list">
+      <Row label={t('Extras')} sub={extras || t('Off')} onClick={() => setPage('extras')} />
+    </div></section>
+  </div>
+
+  if (page === 'font') return <div class="layout-page">
+    <div class="fonts" role="radiogroup" aria-label={t('Reading font')}>
+      {FONTS.map(f => (
+        <button role="radio" aria-checked={settings.font === f.id} class={'font-card' + (settings.font === f.id ? ' on' : '')}
+          style={{ fontFamily: f.family }} onClick={() => update({ font: f.id })}>
+          <span class="font-sample">{t('In the beginning was the Word')}</span>
+          <span class="font-name">{t(f.label)}<span class="muted"> · {t(f.note)}</span></span>
+        </button>
+      ))}
+    </div>
+  </div>
+
+  if (page === 'layout') return <div class="layout-page">
+    <Sample />
+    {sel('layout', [['verses', t('One verse per line')], ['paragraph', t('Paragraph')]])}
+  </div>
+
+  if (page === 'verseNums') return <div class="layout-page">
+    <Sample />
+    {sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}
+  </div>
+
+  if (page === 'highlights') return <div class="layout-page">
+    <div class="col">
+      {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
+      <HlPreview />
+    </div>
+    <div class="field">{check('penSlow', t('Draw each new highlight slowly, like a marker in your hand.'))}</div>
+    <p class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</p>
+  </div>
+
+  if (page === 'turning') return <div class="layout-page">
+    {!bookOn && <div class="field"><span>{t('Chapter turn')}</span>
+      <div class="col">
+        {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
+        <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
       </div>
-      <div class="field"><span>{t('Layout')}</span>{sel('layout', [['verses', t('One verse per line')], ['paragraph', t('Paragraph')]])}</div>
-      <div class="field"><span>{t('Verse numbers')}</span>{sel('verseNumbers', [['small', t('Small')], ['medium', t('Medium')], ['large', t('Large')]])}</div>
-    </section>
-    <section class="set-group">
-      <h2 class="set-kicker">{t('Highlights')}</h2>
-      <div class="field">
-        <div class="col">
-          {sel('highlight', [['marker', t('Marker')], ['text', t('Colored text')], ['block', t('Block')]])}
-          <HlPreview />
-          {check('penSlow', t('Draw each new highlight slowly, like a marker in your hand.'))}
-          <span class="muted small">{t('Tap a verse twice quickly to highlight it in the last color you used.')} {t('With a pen or stylus, draw across words to highlight just those words.')}</span>
-        </div>
+    </div>}
+    {bigScreen && <div class="field"><span>{t('Big screen')}</span>
+      <div class="col">
+        {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
+        <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : bookOn ? t('On now: an open book, two pages side by side, and you turn the page like a book. Chapter turn is only for one page.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
       </div>
-    </section>
-    {(!bookOn || bigScreen) && <section class="set-group">
-      <h2 class="set-kicker">{t('Turning pages')}</h2>
-      {!bookOn && <div class="field"><span>{t('Chapter turn')}</span>
-        <div class="col">
-          {sel('turn', [['stack', t('Stack')], ['slide', t('Side by side')], ['off', t('None')]])}
-          <span class="muted small">{settings.turn === 'slide' ? t('Both chapters slide across together.') : settings.turn === 'off' ? t('The chapter changes with no movement.') : t('Your page slides away over the next chapter, like a stack of pages.')}</span>
-        </div>
-      </div>}
-      {bigScreen && <div class="field"><span>{t('Big screen')}</span>
-        <div class="col">
-          {sel('spread', [['double', t('Two pages')], ['single', t('One page')]])}
-          <span class="muted small">{settings.spread === 'single' ? t('One long page that scrolls, as on a phone.') : bookOn ? t('On now: an open book, two pages side by side, and you turn the page like a book. Chapter turn is only for one page.') : t('An open book: two pages side by side, and you turn the page. Used when the screen is wider than it is tall.')}</span>
-        </div>
-      </div>}
-    </section>}
-    <section class="set-group">
-      <h2 class="set-kicker">{t('On screen')}</h2>
-      <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}
-        <SearchWays /></div>
-      <div class="field"><span>{t('Hide while the phone is on its side')}</span>
-        <div class="col">
-          <span class="muted small">{t('Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.')}</span>
-          {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
-            <label class="check"><input type="checkbox" checked={settings.sideways.includes(a)}
-              onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} /> {label}</label>
-          ))}
-        </div>
-      </div>
-    </section>
-    <section class="set-group">
-      <h2 class="set-kicker">{t('Extras')}</h2>
-      <div class="field">{check('noteReminders', t('Notes'), t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.'))}</div>
-      <div class="field">{check('streaks', t('Streaks'), t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.'))}</div>
-      <div class="field"><div class="col">
-        {check('strongs', t("Strong's numbers"), t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)'))}
-        {check('strongsNumbers', t('Show the numbers inline'))}
-      </div></div>
-    </section>
+    </div>}
+  </div>
+
+  if (page === 'searchBar') return <div class="layout-page">
+    <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}</div>
+    <SearchWays />
+  </div>
+
+  if (page === 'sideways') return <div class="layout-page">
+    <p class="muted small">{t('Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.')}</p>
+    {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
+      <div class="field"><label class="check"><input type="checkbox" checked={settings.sideways.includes(a)}
+        onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} />
+        <span class="check-text"><span class="check-name">{label}</span></span></label></div>
+    ))}
+  </div>
+
+  if (page === 'extras') return <div class="layout-page">
+    <div class="field">{check('noteReminders', t('Notes'), t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.'))}</div>
+    <div class="field">{check('streaks', t('Streaks'), t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.'))}</div>
+    <div class="field"><div class="col">
+      {check('strongs', t("Strong's numbers"), t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)'))}
+      {check('strongsNumbers', t('Show the numbers inline'))}
+    </div></div>
   </div>
 
   // Read along is the icon at the search field's end, Listen is on a verse's
@@ -632,6 +662,16 @@ function ResetSettings({ synced, onReset }: { synced: boolean; onReset: () => vo
 
 // Two highlighted lines, as the reader shows them. They're drawn in again
 // (quick or slow) whenever you change how highlights look, so you can see it.
+// Two verses as they'll look on the page, in your font, size, layout and
+// verse numbers, so a choice shows the moment you tap it.
+function Sample() {
+  const { settings } = useApp()
+  const vs = [t('In the beginning was the Word, and the Word was with God,'), t('and the Word was God.')]
+  return <div class={'layout-sample' + (settings.layout === 'paragraph' ? ' para' : '')} aria-hidden="true">
+    {vs.map((v, i) => <span class="ls-verse"><sup class="vn">{i + 1}</sup><span class="vt">{v}</span>{' '}</span>)}
+  </div>
+}
+
 function HlPreview() {
   const { settings } = useApp()
   const box = useRef<HTMLParagraphElement>(null)

@@ -1420,15 +1420,12 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "W pasku wyszukiwania, na prawym końcu: czyta od góry ekranu, a słowa się podświetlają.",
 "While it reads, tap any verse to read on from there.": "Podczas czytania stuknij dowolny werset, aby czytać dalej od niego.",
 "Show the Read along icon in the search bar": "Pokaż ikonę „Czytaj z podświetleniem” w pasku wyszukiwania",
-"Words on the page": "Tekst na stronie",
 "Turning pages": "Przewracanie stron",
-"On screen": "Na ekranie",
 "Extras": "Dodatki",
 "Pull down at the top of a chapter, then let go": "Na początku rozdziału pociągnij w dół i puść",
 "Other ways to open search": "Inne sposoby otwierania wyszukiwania",
 "You can also press / to open it.": "Możesz je też otworzyć klawiszem /.",
 "Listen: hear the verses you picked": "Słuchaj: posłuchaj wybranych wersetów",
-"Hide while the phone is on its side": "Ukryj, gdy telefon leży bokiem",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaznaczone elementy odsuwają się, gdy czytasz w dół strony, żeby tekst wypełnił ekran. Przewiń trochę w górę albo stuknij górną krawędź, by wróciły.",
 "Getting your prayers…": "Pobieram twoje modlitwy…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitwa z twojego konta nie jest jeszcze na tym urządzeniu, więc nie ma jej w pliku .zip.",
@@ -1439,5 +1436,8 @@
  "other": "{n} modlitwy z twojego konta nie ma jeszcze na tym urządzeniu, więc nie ma ich w pliku .zip."
 },
 "Open Your prayers and tap Sync my prayers, then download again.": "Otwórz Twoje modlitwy i dotknij Synchronizuj moje modlitwy, a potem pobierz ponownie.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tym urządzeniu masz: zakreślone wersety – {h}, zakładki – {b}, notatki – {n}, modlitwy – {p}."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tym urządzeniu masz: zakreślone wersety – {h}, zakładki – {b}, notatki – {n}, modlitwy – {p}.",
+"On": "Wł.",
+"Phone on its side": "Telefon bokiem",
+"Nothing hidden": "Nic nie jest ukryte"
 }

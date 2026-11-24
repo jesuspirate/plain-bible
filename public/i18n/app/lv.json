@@ -1399,15 +1399,12 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Meklēšanas joslā, tās labajā galā: lasa no ekrāna augšas, kamēr vārdi iedegas.",
 "While it reads, tap any verse to read on from there.": "Kamēr tā lasa, pieskarieties jebkuram pantam, lai turpinātu no tā.",
 "Show the Read along icon in the search bar": "Rādīt ikonu “Lasīt līdzi” meklēšanas joslā",
-"Words on the page": "Teksts lapā",
 "Turning pages": "Lapu šķiršana",
-"On screen": "Ekrānā",
 "Extras": "Papildus",
 "Pull down at the top of a chapter, then let go": "Nodaļas augšā velciet uz leju un atlaidiet",
 "Other ways to open search": "Citi veidi, kā atvērt meklēšanu",
 "You can also press / to open it.": "To var atvērt arī ar taustiņu /.",
 "Listen: hear the verses you picked": "Klausīties: dzirdēt izvēlētos pantus",
-"Hide while the phone is on its side": "Paslēpt, kad tālrunis ir guļus",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Atzīmētais aizslīd, kamēr lasāt lapu uz leju, lai teksts aizpildītu ekrānu. Ritiniet nedaudz uz augšu vai pieskarieties augšējai malai, lai to atgrieztu.",
 "Getting your prayers…": "Ielādē jūsu lūgšanas…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Viena jūsu konta lūgšana vēl nav šajā ierīcē, tāpēc tā nav .zip failā.",
@@ -1417,5 +1414,8 @@
  "other": "{n} jūsu konta lūgšanas vēl nav šajā ierīcē, tāpēc tās nav .zip failā."
 },
 "Open Your prayers and tap Sync my prayers, then download again.": "Atveriet Jūsu lūgšanas un pieskarieties Sinhronizēt manas lūgšanas, tad lejupielādējiet vēlreiz.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Šajā ierīcē jums ir izcelti panti: {h}, grāmatzīmes: {b}, piezīmes: {n}, lūgšanas: {p}."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Šajā ierīcē jums ir izcelti panti: {h}, grāmatzīmes: {b}, piezīmes: {n}, lūgšanas: {p}.",
+"On": "Ieslēgts",
+"Phone on its side": "Tālrunis guļus",
+"Nothing hidden": "Nekas nav paslēpts"
 }

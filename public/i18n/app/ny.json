@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Mu bala losakira, kumapeto kwake kumanja: kamawerenga kuyambira pamwamba pa sikirini mawu akuwala.",
 "While it reads, tap any verse to read on from there.": "Ikamawerenga, dinani vesi lililonse kuti ipitirire kuchokera pamenepo.",
 "Show the Read along icon in the search bar": "Onetsani kachizindikiro ka “Werengani motsatira” mu bala losakira",
-"Words on the page": "Mawu patsamba",
 "Turning pages": "Kutembenuza masamba",
-"On screen": "Pa sikirini",
 "Extras": "Zina",
 "Pull down at the top of a chapter, then let go": "Pamwamba pa mutu, kokani pansi kenako melekani",
 "Other ways to open search": "Njira zina zotsegulira kusaka",
 "You can also press / to open it.": "Mungathenso kudina / kuti mutsegule.",
 "Listen: hear the verses you picked": "Mverani: imvani mavesi amene mwasankha",
-"Hide while the phone is on its side": "Bisani foni ikagona m’mbali",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zimene mwasankha zimachoka mukamawerenga kutsika tsamba, kuti mawu adzaze sikirini. Kwerani pang’ono, kapena dinani m’mphepete mwa pamwamba, kuti zibwerere.",
 "Getting your prayers…": "Tikubweretsa mapemphero anu…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Pemphero limodzi la mu akaunti yanu silinafike pa chipangizo ichi, choncho silili mu .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "Mapemphero {n} a mu akaunti yanu sanafike pa chipangizo ichi, choncho palibe mu .zip.",
 "Open Your prayers and tap Sync my prayers, then download again.": "Tsegulani Mapemphero anu ndipo dinani Gwirizanitsani mapemphero anga, kenako tsitsaninso.",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Muli ndi mavesi owunikira {h}, zizindikiro {b}, zolemba {n} ndi mapemphero {p} pa chipangizo ichi."
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Muli ndi mavesi owunikira {h}, zizindikiro {b}, zolemba {n} ndi mapemphero {p} pa chipangizo ichi.",
+"On": "Koyatsa",
+"Phone on its side": "Foni ikagona m’mbali",
+"Nothing hidden": "Palibe chobisika"
 }

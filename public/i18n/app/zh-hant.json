@@ -1315,19 +1315,19 @@
 "In the search bar, at its right end: reads on from the top of the screen as the words light up.": "在搜尋列右端：從螢幕頂部讀起，字詞隨之亮起。",
 "While it reads, tap any verse to read on from there.": "朗讀時，點一下任何一節，就從那裡接著讀。",
 "Show the Read along icon in the search bar": "在搜尋列顯示「跟讀」圖示",
-"Words on the page": "頁面上的文字",
 "Turning pages": "翻頁",
-"On screen": "螢幕顯示",
 "Extras": "其他",
 "Pull down at the top of a chapter, then let go": "在章節頂端向下拉，然後放開",
 "Other ways to open search": "打開搜尋的其他方法",
 "You can also press / to open it.": "也可以按 / 打開。",
 "Listen: hear the verses you picked": "收聽：聽你選的經文",
-"Hide while the phone is on its side": "手機橫放時隱藏",
 "Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "勾選的項目會在你往下閱讀時移開，讓文字鋪滿螢幕。稍微往上捲動，或輕點頂端邊緣，即可讓它們回來。",
 "Getting your prayers…": "正在取回你的禱告…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "你帳戶中有 1 則禱告還不在這部裝置上，所以不在 .zip 裡。",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": "你帳戶中有 {n} 則禱告還不在這部裝置上，所以不在 .zip 裡。",
 "Open Your prayers and tap Sync my prayers, then download again.": "打開「你的禱告」，點一下「同步我的禱告」，然後再下載一次。",
-"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "這部裝置上有 {h} 節螢光標記的經文、{b} 個書籤、{n} 則筆記和 {p} 則禱告。"
+"You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "這部裝置上有 {h} 節螢光標記的經文、{b} 個書籤、{n} 則筆記和 {p} 則禱告。",
+"On": "開啟",
+"Phone on its side": "手機橫放時",
+"Nothing hidden": "未隱藏任何項"
 }
