@@ -17,7 +17,7 @@ import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
-import { canHear, followPage, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
+import { canHear, followPage, goOnReading, holdReading, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { showTapHints } from './taphint'
 import { overlayOpen } from './lib/overlay'
@@ -564,6 +564,15 @@ export function Reader({ route }: { route: Route }) {
     document.addEventListener('pointerdown', down, true)
     return () => document.removeEventListener('pointerdown', down, true)
   }, [])
+  // Reading aloud paused because the bar of the verse being read opened:
+  // once that bar closes (a color picked, ✕, a tap), reading goes on. Not
+  // after Note or Pray, which have their own pages.
+  const barHeld = useRef(false)
+  useEffect(() => {
+    if (selected.length || !barHeld.current) return
+    barHeld.current = false
+    goOnReading()
+  }, [selected.length])
   const tapVerse = (e: MouseEvent, v: number) => {
     if (picking) { pickVerses({ ...picking, verses: toggleVerse(picking.verses, book, chapter, v) }); return }
     // Reading aloud: a tap on another verse is where reading goes on from; a
@@ -589,10 +598,10 @@ export function Reader({ route }: { route: Route }) {
         aloudTap.current = undefined
         // Its bar already open: the tap closes it. The verse being read
         // (playing or paused): its bar opens, for colors, sharing, copy...,
-        // and reading goes on. Any other verse: read from there.
+        // and reading waits until it closes. Any other verse: read from there.
         if (open) setSelected([])
-        else if (reading) setSelected([v])
-        else { setSelected([]); readFrom(spot, bible) }
+        else if (reading) { barHeld.current = holdReading() || barHeld.current; setSelected([v]) }
+        else { barHeld.current = false; setSelected([]); readFrom(spot, bible) }
       }, TAP2) }
       return
     }
@@ -1292,7 +1301,7 @@ export function Reader({ route }: { route: Route }) {
         version={versions.find(v => byId.get(v)?.lang === defining.lang) ?? version} onClose={() => setDefining(undefined)} />}
       {lex && <LexiconSheet num={lex} onClose={() => setLex(undefined)} onSearch={n => { setLex(undefined); go(`search?q=${n}&v=${versions.filter(v => byId.get(v)?.strongs).join(',') || 'KJV'}`) }} />}
       {selected.length > 0 && <SelectionBar book={book} chapter={chapter} verses={selected} versions={versions} bibles={bibles} onClose={() => setSelected([])}
-        onNote={vs => { setSelected([]); openNote(vs) }} onPray={vs => { setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
+        onNote={vs => { barHeld.current = false; setSelected([]); openNote(vs) }} onPray={vs => { barHeld.current = false; setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
       {picking && (
         <div class="pick-verse" ref={pickLeave} role="region" aria-label={t('Verses for your prayer')}>
           <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap verses for your prayer')}</p>

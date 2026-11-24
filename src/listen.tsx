@@ -636,6 +636,18 @@ export function listenNote(text: string) {
 export const readingAt = () => now && { version: now.version, book: now.book, chapter: now.chapter, verse: now.verse }
 export const LISTEN_EVENT = EVENT
 
+/** The bar of the verse being read opens: reading waits while it's up.
+ *  Says whether it was playing (so closing the bar can go on). */
+export function holdReading() {
+  if (!now?.playing) return false
+  pauseListening()
+  return true
+}
+/** That bar closed: go on reading, if reading aloud is still on and paused. */
+export function goOnReading() {
+  if (now && !now.playing) begin()
+}
+
 /** A verse tapped while reading aloud: read from there. */
 export function readFrom(spot: Spot, bible: Bible) {
   startListening(spot, bible)
