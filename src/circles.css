@@ -206,3 +206,11 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 @media (prefers-reduced-motion: reduce) { .c-progress span { transition: none; } }
 /* While it goes, the button keeps full strength so the words stay easy to read. */
 .c-share .c-btn.primary.going:disabled { opacity: 1; }
+
+/* Share sheet head for a prayer: its length as a quiet pill beside the title,
+   each verse on its own line with a book, so 4:35 never reads as chapter 4 verse 35. */
+.c-said { display: grid; gap: 6px; }
+.c-said-head { display: flex; align-items: center; flex-wrap: wrap; gap: 10px; }
+.c-len { display: inline-flex; align-items: center; gap: 5px; padding: 3px 11px 3px 9px; border-radius: 999px; background: color-mix(in srgb, currentColor 9%, transparent); font-weight: 600; font-size: .92em; opacity: .85; white-space: nowrap; }
+.c-said-verse { display: flex; align-items: center; gap: 8px; }
+.c-said-verse svg { flex: none; opacity: .8; }
