@@ -1423,6 +1423,9 @@ export function isoWeek(d: Date) {
 const LANGS = ['en', 'fr', 'es']
 const KEEPS = ['7', '30', '90']
 const TALLIES = ['pr', 'ch', 'sh', 'bm']
+const HEARD_MODES = ['listen', 'along']
+// Who reads aloud (src/lib/recordings.ts ids, the phone's voice, or nobody).
+const VOICES: Record<string, string> = { hays: 'Barry Hays (BSB)', david: 'David (KJV)', tresor: 'Trésor Sonore (LSG)', voice: 'The phone’s voice', silent: 'No voice (highlight only)' }
 const PLATFORMS: [string, string][] = [['ios', 'iPhone & iPad app'], ['mac', 'Mac app'], ['android', 'Android app'], ['fedi', 'In Fedi'], ['phone', 'Phone browser'], ['computer', 'Computer browser']]
 const isLang = (l: string | null | undefined): l is string => !!l && /^[a-z]{2,3}(-han[st])?$/.test(l)
 const langName = (l: string) => { try { return new Intl.DisplayNames(['en'], { type: 'language' }).of(l.replace(/-(han[st])$/, (_, x: string) => '-' + x[0].toUpperCase() + x.slice(1))) ?? l } catch { return l } }
@@ -1453,6 +1456,19 @@ async function helloRoute(req: Request, env: Env) {
   for (const k of TALLIES) {
     const n = Number(q.get(k) ?? 0)
     if (Number.isInteger(n) && n > 0) adds.push([day, `total:${k}`, Math.min(n, 500)])
+  }
+  // Listened since the last hello (src/lib/heard.ts): each kind once.
+  const said = (k: string, ok: (x: string) => boolean) => [...new Set((q.get(k) ?? '').split(',').filter(ok))].slice(0, 12)
+  const modes = said('am', x => HEARD_MODES.includes(x))
+  if (modes.length) {
+    adds.push([day, 'heard', 1])
+    if (q.get('aw') === '1') adds.push([isoWeek(now), 'heard-week', 1])
+    if (q.get('amo') === '1') adds.push([day.slice(0, 7), 'heard-month', 1])
+    for (const m of modes) adds.push([day, `heard:${m}`, 1])
+    const id = (x: string) => /^[A-Za-z0-9_-]{1,20}$/.test(x)
+    for (const x of said('as', id)) adds.push([day, `heardby:${x}`, 1])
+    for (const x of said('ab', id)) adds.push([day, `heardin:${x}`, 1])
+    for (const x of said('al', x => /^[a-z]{2,3}(-[A-Za-z]{2,4})?$/.test(x))) adds.push([day, `heardlang:${x}`, 1])
   }
   await env.DB.batch(adds.map(([period, kind, n]) =>
     env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, ?) ON CONFLICT (period, kind) DO UPDATE SET n = n + excluded.n').bind(period, kind, n)))
@@ -1703,11 +1719,11 @@ ${reportActs(r)}</div>`).join('')}` : ''
   const n = (x: number) => x.toLocaleString('en')
   const pct = (part: number, whole: number) => whole ? `${Math.round(100 * part / whole)}%` : '0%'
   // Shares of the last 30 days' hellos: kind of device, Bible, app language.
-  const split = (prefix: string, name: (id: string) => string, keep = 6): Tile[] => {
+  const split = (prefix: string, name: (id: string) => string, keep = 6, unit = 'daily hello'): Tile[] => {
     const ids = [...new Set(rows.results.filter(r => r.kind.startsWith(prefix) && r.period >= since30).map(r => r.kind.slice(prefix.length)))]
     const list = ids.map(id => [id, sum(prefix + id, since30)] as const).filter(([, x]) => x > 0).sort((a, b) => b[1] - a[1]).slice(0, keep)
     const all = ids.reduce((a, id) => a + sum(prefix + id, since30), 0)
-    return list.map(([id, x]) => ({ id: '', label: name(id), value: pct(x, all), sub: `${n(x)} daily hellos` }))
+    return list.map(([id, x]) => ({ id: '', label: name(id), value: pct(x, all), sub: `${n(x)} ${unit}${x === 1 ? '' : 's'}` }))
   }
   // The busiest hour and day of the week for opening the app, last 30 days.
   const busiest = (prefix: string, span: number) => {
@@ -1749,6 +1765,19 @@ ${reportActs(r)}</div>`).join('')}` : ''
       { id: 'devices', title: 'Kind of device', tiles: split('on:', id => PLATFORMS.find(([p]) => p === id)?.[1] ?? id) },
       { id: 'bibles', title: 'Bibles', tiles: split('bible:', id => id) },
       { id: 'languages', title: 'App languages', tiles: split('lang:', langName) },
+    ] },
+    // Listening (src/lib/heard.ts): told with the next day's hello, so a day
+    // late, once a day per device whatever it played.
+    { title: 'Listening', tiles: [
+      { id: 'heard-today', label: 'Listened', value: n(get(day, 'heard')), sub: 'devices, told with today’s hello' },
+      { id: 'heard-week', label: 'This week', value: n(get(isoWeek(now), 'heard-week')), sub: 'devices that listened' },
+      { id: 'heard-month', label: 'This month', value: n(get(day.slice(0, 7), 'heard-month')), sub: 'devices that listened' },
+      { id: 'heard-share', label: 'Of all openings', value: pct(sum('heard', since30), sum('day', since30)), sub: 'daily hellos with listening, last 30 days', zero: !sum('heard', since30) },
+    ], groups: [
+      { id: 'heard-how', title: 'Listen or Read along', tiles: split('heard:', id => id === 'listen' ? 'Listen (picked verses)' : 'Read along', 6, 'listening day') },
+      { id: 'heard-by', title: 'Voices', tiles: split('heardby:', id => VOICES[id] ?? id, 6, 'listening day') },
+      { id: 'heard-in', title: 'Bibles listened to', tiles: split('heardin:', id => id, 6, 'listening day') },
+      { id: 'heard-lang', title: 'Languages listened in', tiles: split('heardlang:', langName, 6, 'listening day') },
     ] },
     { title: 'Lifetime', tiles: [
       { id: 'ever', label: 'All devices ever', value: n(ever), sub: own ? `since the count began, not counting your own ${n(own)}` : 'counted since the count began' },
