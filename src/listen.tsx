@@ -24,7 +24,7 @@ import { useApp } from './state'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import type { Bible } from './lib/data'
 import { plain } from './lib/text'
-import { chapterUrl, loadTimes, locate, nextTimed, recordingsFor, type ChapterTimes, type Recording } from './lib/recordings'
+import { chapterUrl, loadTimes, locate, nextTimed, recordingsFor, timesNow, type ChapterTimes, type Recording } from './lib/recordings'
 import { nowPlaying } from './lib/nowplaying'
 import { formatRef } from './lib/refs'
 import { go, parseHash, readPath } from './state'
@@ -64,7 +64,10 @@ function stayAwake() {
     if (now?.playing) lock = l; else l.release().catch(() => {})
   }, () => { asking = false })
 }
-if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => stayAwake())
+if (typeof document !== 'undefined') document.addEventListener('visibilitychange', () => {
+  stayAwake()
+  if (document.visibilityState === 'visible') heardOnReturn()
+})
 
 const emit = () => {
   dispatchEvent(new Event(EVENT))
@@ -439,8 +442,9 @@ function lost(my: number) {
   next(my)
 }
 
-/** Play the recording of the chapter from the verse we're at. */
-function hear(my: number) {
+/** Play the recording of the chapter from the verse we're at; `flow`: on
+ * from the end of the chapter before, by itself. */
+function hear(my: number, flow = false) {
   const n = now, rec = recorded()
   if (!n || !rec || my !== run) return
   const url = chapterUrl(rec, n.book, n.chapter)
@@ -449,11 +453,23 @@ function hear(my: number) {
   // Paused a moment ago, nothing changed: go on from that very moment.
   const resume = keep && held?.url === url && held.rec === rec && !!held.times
   keep = false
+  // On from the chapter before, at its top: straight on, with the sound on,
+  // from where the chapter's announcement starts when that's known already.
+  // Never muted here: a muted player is silence to an iPhone, and with the
+  // app in the background (another app in front, the screen off) the phone
+  // then takes the sound away and stops the app before the next chapter can
+  // start, so it never did, and the bar said Pause over nothing.
+  const opening = flow ? timesNow(rec, n.book)?.[n.chapter - 1]?.opening : undefined
   if (!resume) {
-    if (a.src !== url) a.src = url
     held = { rec, url }
-    // Start inside the tap (iPhones ask for that), silently, until the verse's place is known.
-    a.muted = true
+    if (flow) {
+      a.src = opening ? `${url}#t=${opening}` : url
+      a.muted = false
+    } else {
+      if (a.src !== url) a.src = url
+      // Start inside the tap (iPhones ask for that), silently, until the verse's place is known.
+      a.muted = true
+    }
   }
   a.playbackRate = rate()
   lockButtons(true)
@@ -478,7 +494,17 @@ function hear(my: number) {
     // not what some recordings say before that (the name of the Bible).
     const at = verse === nextTimed(times, 1) && !n.only ? times.opening ?? 0 : jump(verse)
     const go = () => { if (my === run && held?.url === url) { a.currentTime = at; a.muted = false } }
-    if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true })
+    // Already playing from the top (on from the chapter before): only past
+    // what's said before the chapter's name, if the times came late.
+    const placed = flow && (opening !== undefined || !times.opening)
+    if (placed) { /* playing from the right place already */ }
+    else if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true })
+    // The last chapter of a book: the next book's times are fetched now,
+    // while the app is surely awake, so the next chapter needs no wait.
+    if (!n.only && n.chapter === (n.bible.books[n.book] ?? []).length) {
+      const after = BOOKS.slice(BOOK_INDEX[n.book] + 1).find(b => n.bible.books[b.id]?.length)
+      if (after) void loadTimes(rec, after.id)
+    }
     now = { ...now, verse }
     cur = verseWords(now, verse); wordNow = -1
     clearWord()
@@ -549,7 +575,25 @@ function chapterDone() {
   const n = now
   if (!n) return
   if (n.only) return stopListening()
-  if (onward()) hear(run)
+  if (onward()) hear(run, true)
+}
+
+/** Back in the app: if the bar says it's playing but nothing is heard (the
+ * phone stopped the sound while the app was away), the bar says so too:
+ * paused, where it was, so one tap on play carries on. */
+function heardOnReturn() {
+  const a = player
+  if (!now?.playing || !held || !a || !recorded()) return
+  const t0 = a.currentTime
+  setTimeout(() => {
+    if (!now?.playing || !held || player !== a || document.visibilityState !== 'visible') return
+    if (!a.paused && !a.muted && a.currentTime > t0) return
+    noteError(`read along: silent on return (${a.paused ? 'paused ' : ''}${a.muted ? 'muted ' : ''}ready ${a.readyState}, at ${a.currentTime.toFixed(1)}s)`)
+    const muted = a.muted
+    pauseListening()
+    // Never got as far as its verse: play starts it again from there.
+    if (muted) keep = false
+  }, 2500)
 }
 
 function next(my: number) {
