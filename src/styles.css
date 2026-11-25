@@ -996,6 +996,9 @@ p > button.link { padding: 0; text-decoration: underline; text-underline-offset:
   font: 600 16px/1.15 var(--sans); -webkit-tap-highlight-color: transparent;
 }
 .share-apps a:active { transform: scale(.97); }
+/* Until the verse picture is sent (a moment): not tappable yet. */
+.share-wait a { opacity: .45; pointer-events: none; }
+.share-apps a { transition: opacity .2s; }
 /* The verse picture the apps get, small above them. */
 .share-picture { display: block; width: min(100%, 340px); aspect-ratio: 1200 / 630; margin: 10px auto 0; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0, 0, 0, .12); background: var(--bg); overflow: hidden; }
 .share-picture img { display: block; width: 100%; height: 100%; animation: share-picture-in .2s ease-out; }

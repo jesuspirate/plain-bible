@@ -1506,6 +1506,16 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const cardPicture = sent?.key === pictureKey ? sent.id : undefined
   const showPreview = !!SYNC_URL && navigator.onLine !== false && !sendFailed
   const cardTo = cardPicture ? `${card}&p=${cardPicture}` : card
+  // Facebook, X and WhatsApp wait (dimmed) until the picture is sent:
+  // tapped sooner, the link went out without it and the post showed the
+  // lamp card. A few seconds at most; then they go with the lamp card.
+  const [gaveUp, setGaveUp] = useState(false)
+  useEffect(() => {
+    if (!askShare) return
+    const id = setTimeout(() => setGaveUp(true), 5000)
+    return () => clearTimeout(id)
+  }, [askShare])
+  const waiting = askShare && showPreview && !cardPicture && !gaveUp
   useEffect(() => {
     if (!askShare || picture || !sheetHasApps()) return
     let live = true
@@ -1607,7 +1617,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           {/* One tap to the apps people share verses to, then the phone's own
               Share (smaller) for every other app. Plain links: the phone opens
               the app if it's there, the website if not. */}
-          <div class="share-apps">
+          <div class={`share-apps${waiting ? ' share-wait' : ''}`} aria-busy={waiting}>
             {/* Facebook takes only the link, so the words go to the clipboard
                 too, to paste into the post. */}
             <a href={facebookUrl(cardTo)} target="_blank" rel="noopener" onClick={() => { tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
