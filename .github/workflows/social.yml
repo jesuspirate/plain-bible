@@ -95,10 +95,10 @@ jobs:
           path: social-out/*.png
 
   check:
+    # Any branch may run a check by hand (it posts nothing); the Saturday one runs on main.
     if: >-
-      github.ref == 'refs/heads/main' &&
-      ((github.event_name == 'schedule' && github.event.schedule == '0 23 * * 6' && vars.SOCIAL_POSTING == 'on') ||
-       (github.event_name == 'workflow_dispatch' && inputs.mode == 'check'))
+      (github.event_name == 'schedule' && github.event.schedule == '0 23 * * 6' && vars.SOCIAL_POSTING == 'on') ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'check')
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
