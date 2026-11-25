@@ -428,7 +428,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   // book, and Chapter turn does nothing, so it's left out until one page is used.
   const wide = useWide(), recording = useRecording()
   const bigScreen = matchMedia(`(min-width: 1000px), ${UNFOLDED}`).matches
-  const bookOn = wide && settings.spread !== 'single' && !(recording.on && recording.version !== settings.version) && !settings.parallel.some(id => id !== settings.version)
+  const bookOn = wide && settings.spread !== 'single' && (recording.on || !settings.parallel.some(id => id !== settings.version))
   const sel = <K extends keyof Settings>(k: K, opts: [Settings[K], string][]) => (
     <div class="seg" role="radiogroup">
       {opts.map(([v, label]) => (

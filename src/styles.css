@@ -1313,14 +1313,15 @@ header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3
 
 /* ---- recording mode (src/lib/recordMode.ts) ----
    The version picked for the video large; your Bible small and quiet under
-   each verse, for you to follow. One column on every screen, no lines
-   between verses, nothing else on the page. */
+   each verse, for you to follow. One column (cols-1), so it sits on the
+   same page of paper, or in the same open book, as your own reading. */
 .rec-version { margin: -.4em 0 1.2em; text-align: center; font-size: .62em; letter-spacing: .04em; color: var(--muted); }
-.chapter.rec:not(.cols-1) { max-width: 44rem; }
-.chapter.rec:not(.cols-1) .verse { grid-template-columns: 1fr; border-bottom: 0; padding: 10px 0 14px; }
-.chapter.rec:not(.cols-1) .cell { padding: 0; }
-.chapter.rec:not(.cols-1) .cell + .cell { font-size: .6em; line-height: 1.45; color: var(--muted); margin-top: .35em; }
-.chapter.rec:not(.cols-1) .cell + .cell .vn { display: none; }
+.chapter.rec .verse { padding: 10px 0 14px; }
+/* In the open book a verse and the line under it stay on one page. */
+.chapter.rec.spread .verse { break-inside: avoid; }
+.chapter.rec .cell { padding: 0; }
+.chapter.rec .cell + .cell { font-size: .6em; line-height: 1.45; color: var(--muted); margin-top: .35em; }
+.chapter.rec .cell + .cell .vn { display: none; }
 .chapter.rec .chapter-notes { display: none; }
 /* Where the top bar was: a tap brings the bars back. A faint line shows where. */
 .away-edge {
