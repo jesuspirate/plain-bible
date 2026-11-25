@@ -587,6 +587,15 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   }
   const go = (v: 'all' | 'fav' | 'topics') => { setView(v); setTopic(undefined); setOpen(undefined); setEdit(undefined) }
   const { days, months } = flat ? { days: [], months: [] } : byMonth(shown)
+  // What matters most when looking back: answered prayers, then favorites. Big and in color on the folded row.
+  const marks = (some: typeof shown) => {
+    const answered = some.filter(p => p.answered).length, stars = some.filter(isFav).length
+    if (!answered && !stars) return null
+    return <span class="pray-marks">
+      {answered > 0 && <span class="pray-mark answered">✓ {t('Answered')}{answered > 1 ? ` · ${answered}` : ''}</span>}
+      {stars > 0 && <span class="pray-mark fav">★ {stars}</span>}
+    </span>
+  }
   const total = (ps: PrayerInfo[]) => longDuration(ps.reduce((n, p) => n + p.ms, 0))
   const row = (p: PrayerInfo, dated = flat) => (
     <li id={`pray-${p.id}`} class={'pray-row' + (playing === p.id ? ' on' : '') + (open === p.id ? ' open' : '')}>
@@ -721,11 +730,12 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           {flat && shown.map(p => row(p))}
           {/* Each day is one row too; the latest one starts open, and a tap opens or folds any of them. */}
           {days.map(({ day, list: some }, i) => {
-            const isOpen = dayOpen[day] ?? i === 0, stars = some.filter(isFav).length
+            const isOpen = dayOpen[day] ?? i === 0
             return <>
-              <li class="pray-month pray-fold-day"><button aria-expanded={isOpen} onClick={() => { setDayOpen({ ...dayOpen, [day]: !isOpen }); setOpen(undefined); setEdit(undefined) }}>
+              <li class={'pray-month pray-fold-day' + (some.some(p => p.answered) ? ' has-answered' : '')}><button aria-expanded={isOpen} onClick={() => { setDayOpen({ ...dayOpen, [day]: !isOpen }); setOpen(undefined); setEdit(undefined) }}>
                 <strong>{dayName(day)}</strong>
-                <span class="muted">{tn(some.length, '{n} prayer', '{n} prayers')} · {total(some)}{stars ? ` · ★ ${stars}` : ''}</span>
+                <span class="muted">{tn(some.length, '{n} prayer', '{n} prayers')} · {total(some)}</span>
+                {marks(some)}
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </button></li>
               {/* The whole day at once, oldest first: optional, like every share. */}
@@ -737,11 +747,12 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           })}
           {/* Earlier months: one row each, opened with a tap. */}
           {months.map(({ month, list: some }) => {
-            const isOpen = unfolded.includes(month), stars = some.filter(isFav).length
+            const isOpen = unfolded.includes(month)
             return <>
-              <li class="pray-month"><button aria-expanded={isOpen} onClick={() => setUnfolded(isOpen ? unfolded.filter(m => m !== month) : [...unfolded, month])}>
+              <li class={'pray-month' + (some.some(p => p.answered) ? ' has-answered' : '')}><button aria-expanded={isOpen} onClick={() => setUnfolded(isOpen ? unfolded.filter(m => m !== month) : [...unfolded, month])}>
                 <strong>{monthName(month)}</strong>
-                <span class="muted">{tn(some.length, '{n} prayer', '{n} prayers')} · {total(some)}{stars ? ` · ★ ${stars}` : ''}</span>
+                <span class="muted">{tn(some.length, '{n} prayer', '{n} prayers')} · {total(some)}</span>
+                {marks(some)}
                 <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true" class={isOpen ? 'open' : ''}><path d="M9 5l7 7-7 7" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
               </button></li>
               {isOpen && some.map(p => row(p, true))}
