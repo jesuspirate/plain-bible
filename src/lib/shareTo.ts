@@ -13,7 +13,9 @@ export const SHARE_ORIGIN = 'https://share.myquietbible.com'
  *  follows a # (index.html turns ?r= back into the passage). */
 export function cardLink(origin: string, version: string, book: string, chapter: number, first: number, last: number) {
   const vs = last > first ? `${first}-${last}` : `${first}`
-  return `${origin}/?r=${[version, book, chapter, vs].map(s => encodeURIComponent(String(s))).join('/')}`
+  // c=2: a new address for Facebook, which keeps the card it first read
+  // for a link (the first links got the home page's card) for weeks.
+  return `${origin}/?r=${[version, book, chapter, vs].map(s => encodeURIComponent(String(s))).join('/')}&c=2`
 }
 
 /** ?r=KJV/John/3/16-18 back into the shared passage (mirrors index.html). */
