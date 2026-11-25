@@ -33,6 +33,11 @@ describe('share page', () => {
     expect(html).toContain('content="John 3:16 (KJV) · My Quiet Bible"')
     expect(html).toContain('<meta property="og:url" content="https://share.myquietbible.com/?r=KJV/John/3/16">')
     expect(html).toContain('https://myquietbible.com/share.png')
+    // Facebook follows a meta refresh like a redirect, to the home page's card.
+    expect(html).not.toMatch(/http-equiv="refresh"/i)
+    expect(html).toContain('location.replace("https://myquietbible.com/?r=KJV/John/3/16")')
+    const fresh = await (await ask('KJV/John/3/16&c=2')).text()
+    expect(fresh).toContain('<meta property="og:url" content="https://share.myquietbible.com/?r=KJV/John/3/16&#38;c=2">')
   })
 
   it('sends people straight on to the passage in the app', async () => {

@@ -4,7 +4,7 @@ import { cardLink, clip, facebookUrl, fromCardLink, whatsappUrl, xUrl } from './
 describe('share to apps', () => {
   it('gives Facebook a link without a #, that opens the passage', () => {
     const link = cardLink('https://myquietbible.com', 'KJV', 'John', 3, 16, 18)
-    expect(link).toBe('https://myquietbible.com/?r=KJV/John/3/16-18')
+    expect(link).toBe('https://myquietbible.com/?r=KJV/John/3/16-18&c=2')
     expect(link).not.toContain('#')
     expect(fromCardLink(new URL(link).searchParams.get('r')!)).toBe('read/KJV/John/3?v=16&e=18&shared=1')
     expect(fromCardLink('KJV/John/3/16')).toBe('read/KJV/John/3?v=16&shared=1')

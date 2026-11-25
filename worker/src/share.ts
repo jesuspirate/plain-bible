@@ -68,8 +68,10 @@ export const clipTitle = (s: string, room = 200) => {
 
 const esc = (s: string) => s.replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`)
 
-/** Link previews (Facebook, X, WhatsApp, iMessage…) read the page; people go on. */
-const PREVIEW = /facebookexternalhit|Facebot|meta-externalagent|Twitterbot|WhatsApp|TelegramBot|Slackbot|Discordbot|LinkedInBot|SkypeUriPreview|Pinterest|redditbot|Applebot|bingbot|Googlebot|Embedly|vkShare|Viber|Signal|Iframely|Mastodon|Bluesky/i
+/** Link previews (Facebook, X, WhatsApp, iMessage…) read the page; people go on.
+ *  No <meta refresh> on that page: Facebook follows it like a redirect, and
+ *  then reads the home page's card ("My Quiet Bible") instead of the verse. */
+const PREVIEW = /facebookexternalhit|facebookcatalog|Facebot|meta-external|Twitterbot|WhatsApp|TelegramBot|Slackbot|Discordbot|LinkedInBot|SkypeUriPreview|Pinterest|redditbot|Applebot|bingbot|Googlebot|Embedly|vkShare|Viber|Signal|Iframely|Mastodon|Bluesky/i
 
 export function pageFor(s: Shared, words: string | undefined, lang: string, self: string) {
   const vs = s.last > s.first ? `${s.first}-${s.last}` : `${s.first}`
@@ -87,8 +89,8 @@ export function pageFor(s: Shared, words: string | undefined, lang: string, self
 <meta property="og:image:alt" content="A lit lamp beside the words My Quiet Bible.">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}">
 <meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${APP}/share.png">
-<meta http-equiv="refresh" content="0; url=${esc(to)}"></head>
-<body><p><a href="${esc(to)}">${esc(ref)}</a></p></body></html>`
+</head>
+<body><p><a href="${esc(to)}">${esc(ref)}</a></p><script>location.replace(${JSON.stringify(to).replace(/</g, '\\u003c')})</script></body></html>`
 }
 
 type Fetcher = (url: string) => Promise<Response>
@@ -112,7 +114,9 @@ export async function answer(req: Request, get: Fetcher): Promise<Response> {
       lang = c.translations?.find(t => t.id === s.version)?.lang ?? 'en'
     }
   } catch { /* the card still names the passage */ }
-  const self = `${url.origin}/?r=${[s.version, s.book, s.chapter, vs].join('/')}`
+  // The very address asked for (with its ?c=), so Facebook never reuses a card it
+  // read before this page named the verse.
+  const self = `${url.origin}/?r=${[s.version, s.book, s.chapter, vs].join('/')}${/^\d{1,3}$/.test(url.searchParams.get('c') ?? '') ? `&c=${url.searchParams.get('c')}` : ''}`
   return new Response(pageFor(s, words, lang, self), {
     headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=86400', 'X-Robots-Tag': 'noindex' },
   })
