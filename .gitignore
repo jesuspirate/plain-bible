@@ -6,3 +6,5 @@ public/data
 __pycache__
 *.pyc
 public/audio-times/*.report.json
+social-out
+scripts/social/.post.mjs

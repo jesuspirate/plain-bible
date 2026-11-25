@@ -1,0 +1,91 @@
+name: Daily posts (X and Facebook)
+
+# One post a day to X (@myquietbible) and the Facebook page, from
+# social/posts.json on main. Merging a pull request that adds posts is the
+# yes for them: nothing else is ever posted (scripts/social/post.ts).
+#
+# Off until the repository variable SOCIAL_POSTING is "on"
+# (Settings → Secrets and variables → Actions → Variables). Set it to "off"
+# to pause. Keys are repository secrets: X_API_KEY, X_API_SECRET,
+# X_ACCESS_TOKEN, X_ACCESS_SECRET, FB_PAGE_ID, FB_PAGE_TOKEN.
+
+on:
+  schedule:
+    # 6:30 AM in New York in winter (7:30 AM in summer: GitHub's clock has
+    # no daylight saving). GitHub may start it a few minutes late.
+    - cron: '30 11 * * *'
+  workflow_dispatch:
+    inputs:
+      mode:
+        description: 'preview = draw the pictures and show the words, post nothing. post = post that day now.'
+        type: choice
+        options: [preview, post]
+        default: preview
+      date:
+        description: 'Which day (YYYY-MM-DD). Empty = today in New York.'
+        required: false
+  # A pull request that changes the posts shows them: the pictures are kept
+  # with the run (Summary → Artifacts → social-preview). It posts nothing.
+  pull_request:
+    paths: ['social/**', 'scripts/social/**', 'src/lib/socialPosts.ts', 'src/lib/versePicture.ts', '.github/workflows/social.yml']
+
+permissions:
+  contents: read
+
+# Never two posting runs at once.
+concurrency:
+  group: social-posts-${{ github.event_name == 'pull_request' && github.ref || 'main' }}
+  cancel-in-progress: false
+
+jobs:
+  preview:
+    if: github.event_name == 'pull_request' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'preview')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium
+      - name: Draw the posts still to come
+        run: bash scripts/social/run.sh --dry --all ${{ inputs.date && format('--date {0}', inputs.date) || '' }}
+      - uses: actions/upload-artifact@v7
+        with:
+          name: social-preview
+          path: social-out/*.png
+
+  post:
+    if: >-
+      github.ref == 'refs/heads/main' && vars.SOCIAL_POSTING == 'on' &&
+      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'post'))
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium
+      - name: Post today's verse
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          # Where the Facebook card's verse picture is kept (the sync service).
+          SYNC_URL: ${{ vars.SYNC_URL || 'https://plain-bible-sync.wqk45tyy.workers.dev' }}
+        run: bash scripts/social/run.sh ${{ inputs.date && format('--date {0}', inputs.date) || '' }}
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: posted-pictures
+          path: social-out/*.png
