@@ -17,7 +17,7 @@ import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, WhatsAppIcon, XIcon } from './icons'
-import { canSharePicture, drawPicture, pictureName } from './lib/versePicture'
+import { canSharePicture, drawPicture, pictureName, sheetHasApps } from './lib/versePicture'
 import { cardLink, facebookUrl, SHARE_ORIGIN, whatsappUrl, xUrl } from './lib/shareTo'
 import { canHear, followPage, goOnReading, holdReading, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
@@ -1442,10 +1442,11 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // the tap (a share sheet opens only straight from a tap). Facebook, X and
   // WhatsApp then send the picture: no app can take a picture from a web
   // link, so it goes through the phone's share sheet, where you tap the app.
-  // Where pictures can't be shared (Fedi, Firefox), they send links as before.
+  // Where pictures can't be shared (Fedi, Firefox), and on a Mac or computer,
+  // whose share sheet has none of these apps, they send links as before.
   const [picture, setPicture] = useState<{ file: File; url: string }>()
   useEffect(() => {
-    if (!askShare || picture) return
+    if (!askShare || picture || !sheetHasApps()) return
     let live = true
     drawPicture({
       // Just the words, no verse numbers, for a picture.

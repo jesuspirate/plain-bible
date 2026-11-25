@@ -143,3 +143,10 @@ export function pictureName(reference: string) {
 export function canSharePicture(file: File) {
   try { return !!navigator.canShare?.({ files: [file] }) } catch { return false }
 }
+
+/** A phone or tablet (touch first). Only there does the share sheet list
+ *  Facebook, X and WhatsApp; a Mac's or computer's has none of them, so
+ *  there the buttons open the apps' websites with a link, as before. */
+export function sheetHasApps() {
+  try { return matchMedia('(pointer: coarse)').matches } catch { return false }
+}
