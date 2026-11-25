@@ -1331,5 +1331,8 @@
 "Tap the verse being read to highlight or share it.": "読んでいる節をタップすると、色を付けたり共有したりできます。",
 "Topics: {topic}": "テーマ：{topic}",
 "Other apps": "ほかのアプリ",
-"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook にはリンクしか渡せないため、聖句もコピーしました。投稿に貼り付けてください。"
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook にはリンクしか渡せないため、聖句もコピーしました。投稿に貼り付けてください。",
+"Picture": "画像",
+"Save picture": "画像を保存",
+"Or press and hold the picture to save or share it.": "または画像を長押しして保存・共有できます。"
 }
