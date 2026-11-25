@@ -219,6 +219,14 @@ export const SuggestIcon = ({ size, class: c }: P) => (
 /* The apps people share verses to, in their own colors so they're known at a
    glance (drawn here: no outside code or pictures). The letters and marks are
    white on the colored disc. */
+/** A picture: a round tile like the apps' (mountains and a sun). */
+export const PictureIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="12" fill="#7a4b1e" />
+    <rect x="5.5" y="6.5" width="13" height="11" rx="2" fill="none" stroke="#fff" stroke-width="1.6" />
+    <circle cx="14.6" cy="9.9" r="1.4" fill="#fff" />
+    <path d="M6.3 16.6 10 12.4l2.6 2.8 1.6-1.5 3.5 2.9Z" fill="#fff" /></svg>
+)
+
 export const FacebookIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><circle cx="12" cy="12" r="12" fill="#1877F2" />
     <path d="M13.3 24v-8.4h2.8l.45-3.3H13.3v-2.1c0-.95.3-1.6 1.65-1.6h1.7V5.65a23 23 0 0 0-2.5-.13c-2.47 0-4.15 1.5-4.15 4.27v2.5H7.2v3.3H10V24Z" fill="#fff" /></svg>
