@@ -245,7 +245,9 @@ function StartOver({ onDone }: { onDone: () => void }) {
 
 // The last list seen, so Circles opens with it already in place (see warmCircles).
 let lastList: CircleInfo[] | undefined
-export const warmList = () => keptCircles().then(k => { lastList = k })
+// Once read, it's kept in memory: opening Circles again doesn't wait for the
+// phone's storage (the list still refreshes itself once it shows).
+export const warmList = () => lastList ? Promise.resolve() : keptCircles().then(k => { lastList = k })
 
 function CircleList() {
   const nav = useNav()

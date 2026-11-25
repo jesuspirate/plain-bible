@@ -380,6 +380,9 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   )
 }
 
+/** The dimmed screen a card sits on: it fades as the card slides away. */
+const dimOf = (box: HTMLElement | null) => box?.closest<HTMLElement>('.pray') ?? null
+
 // Circles' code and the list kept on this phone, loaded before the card first
 // shows (see app.tsx), so it opens filled in instead of growing up the screen.
 let circlesMod: typeof import('./circles') | undefined
@@ -399,9 +402,10 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   }
   useEffect(() => setCircle(at?.circle), [at])
   const box = useRef<HTMLDivElement>(null)
-  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
+  const shade = () => dimOf(box.current)
+  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose, shade)
   useEffect(() => { box.current?.scrollTo(0, 0) }, [circle?.id])
-  const done = () => slideAway(box.current, onClose)
+  const done = () => slideAway(box.current, onClose, undefined, shade())
   return (
     // A link inside (a verse, mostly) goes to the word, so prayer steps aside.
     <div class="pray-list pray-circles" ref={box} onClick={e => { if ((e.target as Element).closest?.('a[href^="#"]')) onClose() }}>
@@ -533,8 +537,9 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
 
   // One way out: Done, or pull the card down, like Settings.
   const box = useRef<HTMLDivElement>(null)
-  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose)
-  const done = () => slideAway(box.current, onClose)
+  const shade = () => dimOf(box.current)
+  usePullDown(box, () => box.current?.scrollTop ?? 0, onClose, shade)
+  const done = () => slideAway(box.current, onClose, undefined, shade())
   const when = (at: number) => new Date(at).toLocaleString(locale(), { weekday: 'short', month: 'short', day: 'numeric', hour: 'numeric', minute: '2-digit' })
   const time = (at: number) => new Date(at).toLocaleTimeString(locale(), { hour: 'numeric', minute: '2-digit' })
   const date = (at: number) => new Date(at).toLocaleDateString(locale(), { weekday: 'short', month: 'short', day: 'numeric', ...(new Date(at).getFullYear() === new Date().getFullYear() ? {} : { year: 'numeric' }) })

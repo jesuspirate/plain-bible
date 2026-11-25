@@ -202,6 +202,16 @@ export function App() {
     addEventListener(PRAY_EVENT, on)
     return () => removeEventListener(PRAY_EVENT, on)
   }, [])
+  // For people in a circle, Circles gets ready a few seconds after the app
+  // opens, while nothing else is happening: its code (already on the phone)
+  // and the list kept on this phone. Otherwise the first tap after the app
+  // opened (an iPhone Home Screen app opens afresh each time) waited for all
+  // that, and for the phone's storage to wake up, before the card showed.
+  useEffect(() => {
+    if (!inCircles()) return
+    const t = setTimeout(() => { import('./prayer').then(m => m.warmCircles()).catch(() => {}) }, 4000)
+    return () => clearTimeout(t)
+  }, [])
   // #/pray (the 🙏 on the iPhone Home Screen widget): back to the page you
   // were reading, with the prayer screen open over it, already listening.
   // (#/circles, the widget's other button, already opens Circles: circles.tsx.)
