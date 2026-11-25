@@ -375,7 +375,6 @@
 "Note": "കുറിപ്പ്",
 "Listen": "കേൾക്കുക",
 "Copy": "പകർത്തുക",
-"Link": "ലിങ്ക്",
 "Compare": "താരതമ്യം ചെയ്യുക",
 "Notes": "കുറിപ്പുകൾ",
 "Add note": "കുറിപ്പ് ചേർക്കുക",
@@ -939,7 +938,6 @@
 "Bookmarked": "ബുക്ക്‌മാർക്ക് ചെയ്തു",
 "Bookmark removed": "ബുക്ക്‌മാർക്ക് നീക്കം ചെയ്തു",
 "Share {ref}": "{ref} പങ്കിടുക",
-"Outside the app": "ആപ്പിനു പുറത്ത്",
 "With a circle": "ഒരു കൂട്ടായ്മയുമായി",
 "Copy a link": "ഒരു ലിങ്ക് പകർത്തുക",
 "Favorites": "പ്രിയപ്പെട്ടവ",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ഫോൺ ചരിച്ചു പിടിക്കുമ്പോൾ",
 "Nothing hidden": "ഒന്നും മറച്ചിട്ടില്ല",
 "Tap the verse being read to highlight or share it.": "വായിക്കുന്ന വാക്യത്തിൽ ടാപ്പ് ചെയ്ത് അത് ഹൈലൈറ്റ് ചെയ്യുകയോ പങ്കിടുകയോ ചെയ്യുക.",
-"Topics: {topic}": "വിഷയങ്ങൾ: {topic}"
+"Topics: {topic}": "വിഷയങ്ങൾ: {topic}",
+"Other apps": "മറ്റ് ആപ്പുകൾ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ഫേസ്ബുക്ക് ലിങ്ക് മാത്രമേ എടുക്കൂ, അതിനാൽ വാക്യവും പകർത്തിയിട്ടുണ്ട്: അത് നിങ്ങളുടെ പോസ്റ്റിൽ ഒട്ടിക്കുക."
 }

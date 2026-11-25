@@ -375,7 +375,6 @@
 "Note": "မှတ်စု",
 "Listen": "နားထောင်ရန်",
 "Copy": "ကူးယူရန်",
-"Link": "လင့်ခ်",
 "Compare": "နှိုင်းယှဉ်ရန်",
 "Notes": "မှတ်စုများ",
 "Add note": "မှတ်စု ထည့်ရန်",
@@ -939,7 +938,6 @@
 "Bookmarked": "စာမှတ်ထားပြီး",
 "Bookmark removed": "စာမှတ်ကို ဖယ်ရှားပြီး",
 "Share {ref}": "{ref} ကို မျှဝေရန်",
-"Outside the app": "အက်ပ်၏ အပြင်သို့",
 "With a circle": "အသိုင်းအဝိုင်းနှင့်",
 "Copy a link": "လင့်ခ် ကူးယူရန်",
 "Favorites": "အကြိုက်ဆုံးများ",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ဖုန်းကို ဘေးတိုက်ထားချိန်",
 "Nothing hidden": "ဘာမျှ မဖျောက်ထားပါ",
 "Tap the verse being read to highlight or share it.": "ဖတ်နေသော ကျမ်းချက်ကို တို့၍ အရောင်ခြယ်ရန် သို့မဟုတ် မျှဝေရန်။",
-"Topics: {topic}": "ခေါင်းစဉ်များ: {topic}"
+"Topics: {topic}": "ခေါင်းစဉ်များ: {topic}",
+"Other apps": "အခြားအက်ပ်များ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook သည် လင့်ခ်ကိုသာ ယူသောကြောင့် ကျမ်းချက်ကိုလည်း ကူးယူထားပါသည်- သင့်ပို့စ်ထဲတွင် ကူးထည့်ပါ။"
 }

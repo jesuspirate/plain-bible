@@ -375,7 +375,6 @@
 "Note": "笔记",
 "Listen": "收听",
 "Copy": "复制",
-"Link": "链接",
 "Compare": "对照",
 "Notes": "笔记",
 "Add note": "添加笔记",
@@ -939,7 +938,6 @@
 "Bookmarked": "已添加书签",
 "Bookmark removed": "已移除书签",
 "Share {ref}": "分享{ref}",
-"Outside the app": "分享到应用之外",
 "With a circle": "与小组分享",
 "Copy a link": "复制链接",
 "Favorites": "个人收藏",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "手机横放时",
 "Nothing hidden": "未隐藏任何项",
 "Tap the verse being read to highlight or share it.": "轻点正在朗读的那一节，就能标色或分享。",
-"Topics: {topic}": "主题：{topic}"
+"Topics: {topic}": "主题：{topic}",
+"Other apps": "其他应用",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook 只接受链接，所以经文也已复制：请粘贴到你的帖子里。"
 }

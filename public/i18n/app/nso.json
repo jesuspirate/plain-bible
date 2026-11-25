@@ -375,7 +375,6 @@
 "Note": "Sengwalo",
 "Listen": "Theeletša",
 "Copy": "Kopiša",
-"Link": "Linki",
 "Compare": "Bapetša",
 "Notes": "Dingwalo",
 "Add note": "Tsenya sengwalo",
@@ -939,7 +938,6 @@
 "Bookmarked": "E swailwe ka leswao la letlakala",
 "Bookmark removed": "Leswao la letlakala le tlošitšwe",
 "Share {ref}": "Abelana {ref}",
-"Outside the app": "Ka ntle ga app",
 "With a circle": "Le sedikologo",
 "Copy a link": "Kopiša linki",
 "Favorites": "Tše di ratwago",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Mogala o robetše ka lehlakore",
 "Nothing hidden": "Ga go selo se utilwego",
 "Tap the verse being read to highlight or share it.": "Kgotla temana yeo e balwago go e swaya goba go e abelana.",
-"Topics: {topic}": "Dihlogo: {topic}"
+"Topics: {topic}": "Dihlogo: {topic}",
+"Other apps": "Di-app tše dingwe",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook e amogela fela linki, ka gona temana le yona e kopilwe: e kgomaretše ka gare ga poso ya gago."
 }

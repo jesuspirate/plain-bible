@@ -375,7 +375,6 @@
 "Note": "টোকা",
 "Listen": "শুনক",
 "Copy": "কপি কৰক",
-"Link": "লিংক",
 "Compare": "তুলনা কৰক",
 "Notes": "টোকা",
 "Add note": "টোকা যোগ কৰক",
@@ -939,7 +938,6 @@
 "Bookmarked": "বুকমাৰ্ক কৰা হ'ল",
 "Bookmark removed": "বুকমাৰ্ক আঁতৰোৱা হ'ল",
 "Share {ref}": "{ref} শ্বেয়াৰ কৰক",
-"Outside the app": "এপৰ বাহিৰত",
 "With a circle": "এটা ছাৰ্কলৰ সৈতে",
 "Copy a link": "এটা লিংক কপি কৰক",
 "Favorites": "প্ৰিয়",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ফোন কাষলৈ কৰিলে",
 "Nothing hidden": "একো লুকুওৱা নাই",
 "Tap the verse being read to highlight or share it.": "পঢ়ি থকা পদটোত টিপি তাক ৰং দিয়ক বা শ্বেয়াৰ কৰক।",
-"Topics: {topic}": "বিষয়: {topic}"
+"Topics: {topic}": "বিষয়: {topic}",
+"Other apps": "অন্য এপ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ফেচবুকে কেৱল লিংকটো লয়, সেয়ে পদটোও কপি কৰা হৈছে: আপোনাৰ পোষ্টত পেষ্ট কৰক।"
 }

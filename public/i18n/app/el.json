@@ -375,7 +375,6 @@
 "Note": "Σημείωση",
 "Listen": "Ακρόαση",
 "Copy": "Αντιγραφή",
-"Link": "Σύνδεσμος",
 "Compare": "Σύγκριση",
 "Notes": "Σημειώσεις",
 "Add note": "Προσθήκη σημείωσης",
@@ -939,7 +938,6 @@
 "Bookmarked": "Προστέθηκε σελιδοδείκτης",
 "Bookmark removed": "Ο σελιδοδείκτης αφαιρέθηκε",
 "Share {ref}": "Κοινοποίηση {ref}",
-"Outside the app": "Εκτός εφαρμογής",
 "With a circle": "Με έναν κύκλο",
 "Copy a link": "Αντιγραφή συνδέσμου",
 "Favorites": "Αγαπημένα",
@@ -1334,5 +1332,7 @@
 "Phone on its side": "Τηλέφωνο οριζόντια",
 "Nothing hidden": "Τίποτα κρυφό",
 "Tap the verse being read to highlight or share it.": "Αγγίξτε το εδάφιο που διαβάζεται για να το επισημάνετε ή να το κοινοποιήσετε.",
-"Topics: {topic}": "Θέματα: {topic}"
+"Topics: {topic}": "Θέματα: {topic}",
+"Other apps": "Άλλες εφαρμογές",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Το Facebook δέχεται μόνο τον σύνδεσμο, γι' αυτό αντιγράφηκε και το εδάφιο: επικολλήστε το στην ανάρτησή σας."
 }

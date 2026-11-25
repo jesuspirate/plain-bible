@@ -415,7 +415,6 @@
 "Note": "Белешка",
 "Listen": "Слушај",
 "Copy": "Копирај",
-"Link": "Линк",
 "Compare": "Упореди",
 "Notes": "Белешке",
 "Add note": "Додај белешку",
@@ -1015,7 +1014,6 @@
 "Bookmarked": "Додато у обележиваче",
 "Bookmark removed": "Обележивач уклоњен",
 "Share {ref}": "Подели {ref}",
-"Outside the app": "Ван апликације",
 "With a circle": "Са кругом",
 "Copy a link": "Копирај линк",
 "Favorites": "Омиљено",
@@ -1419,5 +1417,7 @@
 "Phone on its side": "Телефон положен",
 "Nothing hidden": "Ништа није сакривено",
 "Tap the verse being read to highlight or share it.": "Додирните стих који се чита да га означите или поделите.",
-"Topics: {topic}": "Теме: {topic}"
+"Topics: {topic}": "Теме: {topic}",
+"Other apps": "Друге апликације",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Фејсбук прима само везу, па је копиран и стих: налепите га у своју објаву."
 }

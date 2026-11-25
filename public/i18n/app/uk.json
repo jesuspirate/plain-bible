@@ -425,7 +425,6 @@
 "Note": "Нотатка",
 "Listen": "Слухати",
 "Copy": "Скопіювати",
-"Link": "Посилання",
 "Compare": "Порівняти",
 "Notes": "Нотатки",
 "Add note": "Додати нотатку",
@@ -1034,7 +1033,6 @@
 "Bookmarked": "Закладку додано",
 "Bookmark removed": "Закладку вилучено",
 "Share {ref}": "Поділитися: {ref}",
-"Outside the app": "Поза застосунком",
 "With a circle": "З колом",
 "Copy a link": "Скопіювати посилання",
 "Favorites": "Вибране",
@@ -1441,5 +1439,7 @@
 "Phone on its side": "Телефон боком",
 "Nothing hidden": "Нічого не сховано",
 "Tap the verse being read to highlight or share it.": "Торкніться вірша, що читається, щоб виділити його чи поділитися ним.",
-"Topics: {topic}": "Теми: {topic}"
+"Topics: {topic}": "Теми: {topic}",
+"Other apps": "Інші застосунки",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook приймає лише посилання, тому вірш теж скопійовано: вставте його у свій допис."
 }

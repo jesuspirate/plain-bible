@@ -375,7 +375,6 @@
 "Note": "నోట్",
 "Listen": "విను",
 "Copy": "కాపీ చేయి",
-"Link": "లింక్",
 "Compare": "పోల్చు",
 "Notes": "నోట్‌లు",
 "Add note": "నోట్ జోడించు",
@@ -939,7 +938,6 @@
 "Bookmarked": "బుక్‌మార్క్ చేయబడింది",
 "Bookmark removed": "బుక్‌మార్క్ తీసివేయబడింది",
 "Share {ref}": "{ref} షేర్ చేయి",
-"Outside the app": "యాప్ బయట",
 "With a circle": "ఒక సర్కిల్‌తో",
 "Copy a link": "లింక్ కాపీ చేయి",
 "Favorites": "ఇష్టమైనవి",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ఫోన్ అడ్డంగా ఉన్నప్పుడు",
 "Nothing hidden": "ఏదీ దాచలేదు",
 "Tap the verse being read to highlight or share it.": "చదువుతున్న వచనాన్ని నొక్కి దాన్ని హైలైట్ లేదా షేర్ చేయండి.",
-"Topics: {topic}": "అంశాలు: {topic}"
+"Topics: {topic}": "అంశాలు: {topic}",
+"Other apps": "ఇతర యాప్‌లు",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ఫేస్‌బుక్ లింక్‌ను మాత్రమే తీసుకుంటుంది, కాబట్టి వచనం కూడా కాపీ అయింది: దాన్ని మీ పోస్ట్‌లో అతికించండి."
 }

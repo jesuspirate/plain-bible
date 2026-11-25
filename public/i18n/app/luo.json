@@ -375,7 +375,6 @@
 "Note": "Paro",
 "Listen": "Winj",
 "Copy": "Kopi",
-"Link": "Link",
 "Compare": "Por",
 "Notes": "Paro",
 "Add note": "Med paro",
@@ -939,7 +938,6 @@
 "Bookmarked": "Oket alama",
 "Bookmark removed": "Alama ogol",
 "Share {ref}": "Pog {ref}",
-"Outside the app": "Oko mar app",
 "With a circle": "Gi kanyakla",
 "Copy a link": "Kopi link",
 "Favorites": "Mohero",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Simu onindo e bathe",
 "Nothing hidden": "Onge gima opandi",
 "Tap the verse being read to highlight or share it.": "Mul ver ma isomo sani mondo iket kitane kata ipoge.",
-"Topics: {topic}": "Wiye weche: {topic}"
+"Topics: {topic}": "Wiye weche: {topic}",
+"Other apps": "Apps mamoko",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook kawo mana link, omiyo ndiko bende osekop: rwake e post mari."
 }

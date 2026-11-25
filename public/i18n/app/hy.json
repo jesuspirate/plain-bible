@@ -375,7 +375,6 @@
 "Note": "Նշում",
 "Listen": "Լսել",
 "Copy": "Պատճենել",
-"Link": "Հղում",
 "Compare": "Համեմատել",
 "Notes": "Նշումներ",
 "Add note": "Ավելացնել նշում",
@@ -939,7 +938,6 @@
 "Bookmarked": "Էջանիշն ավելացվեց",
 "Bookmark removed": "Էջանիշը հեռացվեց",
 "Share {ref}": "Կիսվել {ref}-ով",
-"Outside the app": "Հավելվածից դուրս",
 "With a circle": "Շրջանակի հետ",
 "Copy a link": "Պատճենել հղում",
 "Favorites": "Ընտրյալներ",
@@ -1334,5 +1332,7 @@
 "Phone on its side": "Հեռախոսը կողքի վրա",
 "Nothing hidden": "Ոչինչ թաքցված չէ",
 "Tap the verse being read to highlight or share it.": "Հպեք կարդացվող համարին՝ այն նշելու կամ կիսվելու համար։",
-"Topics: {topic}": "Թեմաներ՝ {topic}"
+"Topics: {topic}": "Թեմաներ՝ {topic}",
+"Other apps": "Այլ հավելվածներ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook-ը ընդունում է միայն հղումը, ուստի համարն էլ պատճենվեց․ տեղադրեք այն ձեր գրառման մեջ։"
 }

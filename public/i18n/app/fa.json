@@ -375,7 +375,6 @@
 "Note": "یادداشت",
 "Listen": "شنیدن",
 "Copy": "کپی",
-"Link": "پیوند",
 "Compare": "مقایسه",
 "Notes": "یادداشت‌ها",
 "Add note": "افزودن یادداشت",
@@ -939,7 +938,6 @@
 "Bookmarked": "نشانک گذاشته شد",
 "Bookmark removed": "نشانک برداشته شد",
 "Share {ref}": "هم‌رسانی {ref}",
-"Outside the app": "بیرون از برنامه",
 "With a circle": "با یک حلقه",
 "Copy a link": "کپی پیوند",
 "Favorites": "برگزیده‌ها",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "گوشی افقی",
 "Nothing hidden": "چیزی پنهان نیست",
 "Tap the verse being read to highlight or share it.": "روی آیه‌ای که خوانده می‌شود بزنید تا آن را رنگ کنید یا هم‌رسانی کنید.",
-"Topics: {topic}": "موضوع‌ها: {topic}"
+"Topics: {topic}": "موضوع‌ها: {topic}",
+"Other apps": "برنامه‌های دیگر",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "فیسبوک فقط پیوند را می‌پذیرد، پس آیه هم کپی شد: آن را در پستتان بچسبانید."
 }

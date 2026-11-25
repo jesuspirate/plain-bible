@@ -375,7 +375,6 @@
 "Note": "تێبینی",
 "Listen": "گوێگرتن",
 "Copy": "کۆپیکردن",
-"Link": "بەستەر",
 "Compare": "بەراوردکردن",
 "Notes": "تێبینییەکان",
 "Add note": "زیادکردنی تێبینی",
@@ -939,7 +938,6 @@
 "Bookmarked": "نیشانە کرا",
 "Bookmark removed": "نیشانە لابرا",
 "Share {ref}": "هاوبەشکردنی {ref}",
-"Outside the app": "لە دەرەوەی ئەپەکە",
 "With a circle": "لەگەڵ بازنەیەک",
 "Copy a link": "کۆپیکردنی بەستەرێک",
 "Favorites": "دڵخوازەکان",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "مۆبایل لەسەر لا",
 "Nothing hidden": "هیچ شاراوە نییە",
 "Tap the verse being read to highlight or share it.": "کرتە لەو ئایەتە بکە کە ئێستا دەخوێندرێتەوە بۆ ڕەنگکردن یان هاوبەشکردنی.",
-"Topics: {topic}": "بابەتەکان: {topic}"
+"Topics: {topic}": "بابەتەکان: {topic}",
+"Other apps": "ئەپەکانی تر",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "فەیسبووک تەنها بەستەرەکە وەردەگرێت، بۆیە ئایەتەکەش کۆپی کرا: لە پۆستەکەتدا بیلکێنە."
 }

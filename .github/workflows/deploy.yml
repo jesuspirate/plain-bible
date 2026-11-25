@@ -101,6 +101,15 @@ jobs:
           CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
           CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
         run: bash scripts/deploy_old_address.sh
+      # share.myquietbible.com: the verse page Facebook reads (worker/src/share.ts).
+      # Never blocks the main site.
+      - name: Deploy share address
+        if: github.event_name != 'pull_request' && env.HAS_SYNC_SECRETS == 'true'
+        continue-on-error: true
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
+          CLOUDFLARE_ACCOUNT_ID: ${{ secrets.CLOUDFLARE_ACCOUNT_ID }}
+        run: bash scripts/deploy_share.sh
       - if: github.event_name != 'pull_request'
         uses: actions/upload-pages-artifact@v5
         with:

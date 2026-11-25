@@ -375,7 +375,6 @@
 "Note": "Manaʻo kākau",
 "Listen": "Hoʻolohe",
 "Copy": "Kope",
-"Link": "Loulou",
 "Compare": "Hoʻohālikelike",
 "Notes": "Nā Manaʻo Kākau",
 "Add note": "Hoʻohui i manaʻo kākau",
@@ -939,7 +938,6 @@
 "Bookmarked": "Ua kaha ʻaoʻao ʻia",
 "Bookmark removed": "Ua wehe ʻia ke kaha ʻaoʻao",
 "Share {ref}": "Kaʻana iā {ref}",
-"Outside the app": "Ma waho o ka polokalamu",
 "With a circle": "Me kekahi pōʻai",
 "Copy a link": "Kope i loulou",
 "Favorites": "Nā Punahele",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Kelepona ma ka ʻaoʻao",
 "Nothing hidden": "ʻAʻohe mea i hūnā ʻia",
 "Tap the verse being read to highlight or share it.": "Kaomi i ka paukū e heluhelu ʻia nei e kahakaha a kaʻana paha.",
-"Topics: {topic}": "Nā Kumuhana: {topic}"
+"Topics: {topic}": "Nā Kumuhana: {topic}",
+"Other apps": "Nā polokalamu ʻē aʻe",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Lawe ʻo Facebook i ka loulou wale nō, no laila ua kope ʻia ka paukū pū kekahi: kāpili iā ia i loko o kāu pou."
 }

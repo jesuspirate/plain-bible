@@ -375,7 +375,6 @@
 "Note": "टीप",
 "Listen": "ऐका",
 "Copy": "कॉपी करा",
-"Link": "लिंक",
 "Compare": "तुलना करा",
 "Notes": "टिपा",
 "Add note": "टीप जोडा",
@@ -939,7 +938,6 @@
 "Bookmarked": "बुकमार्क केले",
 "Bookmark removed": "बुकमार्क काढला",
 "Share {ref}": "{ref} शेअर करा",
-"Outside the app": "ॲपच्या बाहेर",
 "With a circle": "गटासोबत",
 "Copy a link": "लिंक कॉपी करा",
 "Favorites": "आवडत्या",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "फोन आडवा असताना",
 "Nothing hidden": "काहीही लपवलेले नाही",
 "Tap the verse being read to highlight or share it.": "वाचले जात असलेल्या वचनावर टॅप करून ते हायलाइट किंवा शेअर करा.",
-"Topics: {topic}": "विषय: {topic}"
+"Topics: {topic}": "विषय: {topic}",
+"Other apps": "इतर ॲप्स",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "फेसबुक फक्त लिंक घेते, म्हणून वचनही कॉपी केले आहे: ते तुमच्या पोस्टमध्ये पेस्ट करा."
 }

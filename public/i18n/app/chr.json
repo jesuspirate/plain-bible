@@ -375,7 +375,6 @@
 "Note": "ᎪᏪᎳᏅ",
 "Listen": "ᎯᏛᎦ",
 "Copy": "ᎯᏬᏪᎳ",
-"Link": "ᎦᎵᏓᏍᏔᏅ",
 "Compare": "ᏗᏟᎶᏍᏗ",
 "Notes": "ᎪᏪᎳᏅ",
 "Add note": "ᎪᏪᎳᏅ ᎯᏯᏙᏢ",
@@ -939,7 +938,6 @@
 "Bookmarked": "ᎤᏰᎸᏛ ᎤᏯᏙᏢ",
 "Bookmark removed": "ᎤᏰᎸᏛ ᎤᏲᏨ",
 "Share {ref}": "{ref} ᎯᏁᏗ",
-"Outside the app": "App ᏙᏱᏗᏢ",
 "With a circle": "ᏓᏓᏡᎬ ᎬᏗ",
 "Copy a link": "ᎦᎵᏓᏍᏔᏅ ᎯᏬᏪᎳ",
 "Favorites": "ᏣᎸᏉᏗ",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ᎦᏍᎦᏂ ᏗᏟᎶᏍᏗ",
 "Nothing hidden": "ᎥᏝ ᏳᏍᎦᎳᏅ",
 "Tap the verse being read to highlight or share it.": "ᎯᏯᏏᎳᏛ ᎪᎵᏍᏗ ᎯᏁᏗ.",
-"Topics: {topic}": "ᏗᎧᏃᎮᏗ: {topic}"
+"Topics: {topic}": "ᏗᎧᏃᎮᏗ: {topic}",
+"Other apps": "ᏅᏩᏓᎴ ᎠᏓᏁᏟᏴᏗ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook ᎤᏩᏒᏉ link ᎠᏓᏂᎩᏍᎪᎢ, ᎾᏍᎩᏃ ᎦᏛᎦ ᎠᏟᏃᎮᏗ ᎾᏍᏉ copy ᎢᎬᏁᎸ: paste ᏂᏍᏓ ᏣᏬᏪᎳᏅᎢ."
 }

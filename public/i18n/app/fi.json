@@ -375,7 +375,6 @@
 "Note": "Muistiinpano",
 "Listen": "Kuuntele",
 "Copy": "Kopioi",
-"Link": "Linkki",
 "Compare": "Vertaa",
 "Notes": "Muistiinpanot",
 "Add note": "Lisää muistiinpano",
@@ -939,7 +938,6 @@
 "Bookmarked": "Kirjanmerkki lisätty",
 "Bookmark removed": "Kirjanmerkki poistettu",
 "Share {ref}": "Jaa {ref}",
-"Outside the app": "Sovelluksen ulkopuolelle",
 "With a circle": "Piirin kanssa",
 "Copy a link": "Kopioi linkki",
 "Favorites": "Suosikit",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Puhelin vaakatasossa",
 "Nothing hidden": "Mitään ei piiloteta",
 "Tap the verse being read to highlight or share it.": "Napauta luettavaa jaetta korostaaksesi tai jakaaksesi sen.",
-"Topics: {topic}": "Aiheet: {topic}"
+"Topics: {topic}": "Aiheet: {topic}",
+"Other apps": "Muut sovellukset",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook ottaa vain linkin, joten jae on myös kopioitu: liitä se julkaisuusi."
 }

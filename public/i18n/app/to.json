@@ -375,7 +375,6 @@
 "Note": "Noti",
 "Listen": "Fanongo",
 "Copy": "Hiki tatau",
-"Link": "Linki",
 "Compare": "Fakahoa",
 "Notes": "Ngaahi Noti",
 "Add note": "Tānaki ha noti",
@@ -939,7 +938,6 @@
 "Bookmarked": "Kuo fakaʻilongaʻi",
 "Bookmark removed": "Kuo toʻo ʻa e fakaʻilonga",
 "Share {ref}": "Vahevahe ʻa e {ref}",
-"Outside the app": "ʻI tuʻa ʻi he ʻapí",
 "With a circle": "Mo ha kulupu",
 "Copy a link": "Hiki tatau ha linki",
 "Favorites": "Ngaahi Manakoa",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Tokoto ʻa e telefoní",
 "Nothing hidden": "ʻIkai ha meʻa ʻoku fufū",
 "Tap the verse being read to highlight or share it.": "Lomiʻi ʻa e veesi ʻoku lau ke fakamamafaʻi pe vahevahe.",
-"Topics: {topic}": "Ngaahi Kaveinga: {topic}"
+"Topics: {topic}": "Ngaahi Kaveinga: {topic}",
+"Other apps": "Ngaahi ʻapi kehe",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ʻOku toki tali pē ʻe Facebook ʻa e link, ko ia kuo kopi foki ʻa e veesi: pēsiti ia ki hoʻo pousi."
 }

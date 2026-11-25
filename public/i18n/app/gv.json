@@ -375,7 +375,6 @@
 "Note": "Noat",
 "Listen": "Clasht",
 "Copy": "Jean kopi",
-"Link": "Kiangley",
 "Compare": "Cosoylee",
 "Notes": "Noatyn",
 "Add note": "Cur noat stiagh",
@@ -939,7 +938,6 @@
 "Bookmarked": "Cowrey-lioar currit",
 "Bookmark removed": "Cowrey-lioar goit ersooyl",
 "Share {ref}": "Rheynn {ref}",
-"Outside the app": "Mooie veih’n app",
 "With a circle": "Lesh kiarkyl",
 "Copy a link": "Jean kopi jeh kiangley",
 "Favorites": "Mie lhiam",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Fone er e lhiattee",
 "Nothing hidden": "Veg follit",
 "Tap the verse being read to highlight or share it.": "Bean rish y rann ta lhaih nish dy chur dath er ny dy rheynn eh.",
-"Topics: {topic}": "Cooishyn: {topic}"
+"Topics: {topic}": "Cooishyn: {topic}",
+"Other apps": "Appyn elley",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Cha nee Facebook goaill agh y kiangley, myr shen ta'n rann copit neesht: cur eh ayns dty phost."
 }

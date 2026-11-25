@@ -415,7 +415,6 @@
 "Note": "Piezīme",
 "Listen": "Klausīties",
 "Copy": "Kopēt",
-"Link": "Saite",
 "Compare": "Salīdzināt",
 "Notes": "Piezīmes",
 "Add note": "Pievienot piezīmi",
@@ -1015,7 +1014,6 @@
 "Bookmarked": "Pievienots grāmatzīmēm",
 "Bookmark removed": "Grāmatzīme noņemta",
 "Share {ref}": "Kopīgot {ref}",
-"Outside the app": "Ārpus lietotnes",
 "With a circle": "Ar loku",
 "Copy a link": "Kopēt saiti",
 "Favorites": "Izlase",
@@ -1419,5 +1417,7 @@
 "Phone on its side": "Tālrunis guļus",
 "Nothing hidden": "Nekas nav paslēpts",
 "Tap the verse being read to highlight or share it.": "Pieskarieties pantam, ko pašlaik lasa, lai to iezīmētu vai kopīgotu.",
-"Topics: {topic}": "Tēmas: {topic}"
+"Topics: {topic}": "Tēmas: {topic}",
+"Other apps": "Citas lietotnes",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook pieņem tikai saiti, tāpēc arī pants ir nokopēts: ielīmējiet to savā ierakstā."
 }

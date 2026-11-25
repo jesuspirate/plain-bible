@@ -375,7 +375,6 @@
 "Note": "Nkaeɛ",
 "Listen": "Tie",
 "Copy": "Fa bi",
-"Link": "Link",
 "Compare": "Toto ho",
 "Notes": "Nkaeɛ",
 "Add note": "Fa nkaeɛ ka ho",
@@ -939,7 +938,6 @@
 "Bookmarked": "Wɔde agyiraehyɛde ato so",
 "Bookmark removed": "Wɔayi agyiraehyɛde no",
 "Share {ref}": "Kyɛ {ref}",
-"Outside the app": "App no akyi",
 "With a circle": "Ne kuw bi",
 "Copy a link": "Fa link bi",
 "Favorites": "Nea wopɛ paa",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Fon no da ne nkyɛn",
 "Nothing hidden": "Biribiara nnhintaw",
 "Tap the verse being read to highlight or share it.": "Mia nkyekyem a ɛrekenkan no so na fa kɔla hyɛ so anaa kyɛ.",
-"Topics: {topic}": "Asɛmti: {topic}"
+"Topics: {topic}": "Asɛmti: {topic}",
+"Other apps": "Apps foforo",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook gye link no nko, enti wɔakɔpi nkyekyem no nso: fa hyɛ wo post no mu."
 }

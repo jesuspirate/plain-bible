@@ -375,7 +375,6 @@
 "Note": "Notitie",
 "Listen": "Luisteren",
 "Copy": "Kopiëren",
-"Link": "Link",
 "Compare": "Vergelijken",
 "Notes": "Notities",
 "Add note": "Notitie toevoegen",
@@ -939,7 +938,6 @@
 "Bookmarked": "Bladwijzer toegevoegd",
 "Bookmark removed": "Bladwijzer verwijderd",
 "Share {ref}": "{ref} delen",
-"Outside the app": "Buiten de app",
 "With a circle": "Met een kring",
 "Copy a link": "Link kopiëren",
 "Favorites": "Favorieten",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefoon gekanteld",
 "Nothing hidden": "Niets verborgen",
 "Tap the verse being read to highlight or share it.": "Tik op het vers dat wordt gelezen om het te markeren of te delen.",
-"Topics: {topic}": "Onderwerpen: {topic}"
+"Topics: {topic}": "Onderwerpen: {topic}",
+"Other apps": "Andere apps",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook neemt alleen de link over, dus het vers is ook gekopieerd: plak het in je bericht."
 }

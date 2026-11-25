@@ -375,7 +375,6 @@
 "Note": "குறிப்பு",
 "Listen": "கேள்",
 "Copy": "நகலெடு",
-"Link": "இணைப்பு",
 "Compare": "ஒப்பிடு",
 "Notes": "குறிப்புகள்",
 "Add note": "குறிப்பைச் சேர்",
@@ -939,7 +938,6 @@
 "Bookmarked": "புக்மார்க் செய்யப்பட்டது",
 "Bookmark removed": "புக்மார்க் அகற்றப்பட்டது",
 "Share {ref}": "{ref} ஐப் பகிர்",
-"Outside the app": "ஆப்ஸுக்கு வெளியே",
 "With a circle": "ஒரு வட்டத்துடன்",
 "Copy a link": "இணைப்பை நகலெடு",
 "Favorites": "பிடித்தவை",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "தொலைபேசி பக்கவாட்டில்",
 "Nothing hidden": "எதுவும் மறைக்கப்படவில்லை",
 "Tap the verse being read to highlight or share it.": "வாசிக்கப்படும் வசனத்தைத் தட்டி அதை வண்ணமிடவும் அல்லது பகிரவும்.",
-"Topics: {topic}": "தலைப்புகள்: {topic}"
+"Topics: {topic}": "தலைப்புகள்: {topic}",
+"Other apps": "பிற ஆப்கள்",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ஃபேஸ்புக் இணைப்பை மட்டுமே எடுக்கும், எனவே வசனமும் நகலெடுக்கப்பட்டது: அதை உங்கள் பதிவில் ஒட்டுங்கள்."
 }

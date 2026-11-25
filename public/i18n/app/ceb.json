@@ -375,7 +375,6 @@
 "Note": "Nota",
 "Listen": "Paminaw",
 "Copy": "Kopyaha",
-"Link": "Link",
 "Compare": "Itandi",
 "Notes": "Mga Nota",
 "Add note": "Pagdugang og nota",
@@ -939,7 +938,6 @@
 "Bookmarked": "Na-bookmark",
 "Bookmark removed": "Natangtang ang bookmark",
 "Share {ref}": "Ipaambit ang {ref}",
-"Outside the app": "Gawas sa app",
 "With a circle": "Sa usa ka pundok",
 "Copy a link": "Kopyaha ang usa ka link",
 "Favorites": "Mga Paborito",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Patagilid ang telepono",
 "Nothing hidden": "Walay gitago",
 "Tap the verse being read to highlight or share it.": "I-tap ang bersikulo nga gibasa karon aron i-highlight o ipaambit kini.",
-"Topics: {topic}": "Mga Hilisgutan: {topic}"
+"Topics: {topic}": "Mga Hilisgutan: {topic}",
+"Other apps": "Ubang mga app",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Ang Facebook modawat lang sa link, busa gikopya usab ang bersikulo: idikit kini sa imong post."
 }

@@ -375,7 +375,6 @@
 "Note": "Tala",
 "Listen": "Pakinggan",
 "Copy": "Kopyahin",
-"Link": "Link",
 "Compare": "Ihambing",
 "Notes": "Mga Tala",
 "Add note": "Magdagdag ng tala",
@@ -939,7 +938,6 @@
 "Bookmarked": "Na-bookmark",
 "Bookmark removed": "Inalis ang bookmark",
 "Share {ref}": "Ibahagi ang {ref}",
-"Outside the app": "Sa labas ng app",
 "With a circle": "Sa isang samahan",
 "Copy a link": "Kopyahin ang isang link",
 "Favorites": "Mga Paborito",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Nakatagilid ang telepono",
 "Nothing hidden": "Walang nakatago",
 "Tap the verse being read to highlight or share it.": "I-tap ang talatang binabasa para i-highlight o ibahagi ito.",
-"Topics: {topic}": "Mga Paksa: {topic}"
+"Topics: {topic}": "Mga Paksa: {topic}",
+"Other apps": "Ibang app",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Link lang ang tinatanggap ng Facebook, kaya kinopya rin ang talata: i-paste ito sa iyong post."
 }
