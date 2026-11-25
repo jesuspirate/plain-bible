@@ -997,7 +997,7 @@ p > button.link { padding: 0; text-decoration: underline; text-underline-offset:
 }
 .share-apps a:active { transform: scale(.97); }
 /* The verse picture the apps get, small above them. */
-.share-picture { display: block; height: 170px; width: auto; max-width: 100%; margin: 10px auto 0; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0, 0, 0, .12); }
+.share-picture { display: block; width: min(100%, 340px); height: auto; margin: 10px auto 0; border-radius: 10px; border: 1px solid var(--line); box-shadow: 0 2px 10px rgba(0, 0, 0, .12); }
 .share-apps svg { flex: none; }
 :root[data-theme='dark'] .share-apps svg circle[fill='#000'] { stroke: #fff; stroke-width: .8; }
 /* The phone's own Share (every other app) and Cancel: smaller, side by side. */

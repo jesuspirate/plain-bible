@@ -1438,14 +1438,24 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // Mac share sheet's Copy pasted the text and the link as two pieces, and
   // showed only the reference and the site, as if one verse went out.
   // With the verse picture sent (below), the share link, whose card shows it.
-  const shareOut = () => { const to = cardPicture ? cardTo : link; tally('sh'); return canShare ? share({ text: `${quote}\n${to}` }) : copy(to) }
+  // On a phone, Other apps sends the verse as a picture too (Instagram,
+  // Messages, Save Image…), through the phone's share sheet.
+  const shareOut = () => {
+    const to = cardPicture ? cardTo : link
+    tally('sh')
+    if (picture) {
+      let o: ShareData = { files: [picture.file], text: `${ref} (${version})\n${to}` }
+      try { if (!navigator.canShare?.(o)) o = { files: [picture.file] } } catch { o = { files: [picture.file] } }
+      return navigator.share(o).catch(() => {})
+    }
+    return canShare ? share({ text: `${quote}\n${to}` }) : copy(to)
+  }
 
   // The verse as a picture, drawn as the Share card opens so it's ready for
-  // the tap (a share sheet opens only straight from a tap). Facebook, X and
-  // WhatsApp then send the picture: no app can take a picture from a web
-  // link, so it goes through the phone's share sheet, where you tap the app.
-  // Where pictures can't be shared (Fedi, Firefox), and on a Mac or computer,
-  // whose share sheet has none of these apps, they send links as before.
+  // the tap (a share sheet opens only straight from a tap), for Other apps on
+  // a phone. Facebook, X and WhatsApp open directly, in one tap, with the
+  // link whose card shows the verse picture (below): the share sheet lists
+  // only installed apps, and no app takes a picture from a web link.
   const [picture, setPicture] = useState<{ file: File; url: string }>()
   const pictureOf = () => ({
     // Just the words, no verse numbers, for a picture.
@@ -1456,16 +1466,22 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // picture, sent once to the sync service as the card opens (card.ts), and
   // named on the link (&p=…). Not ready, offline, or refused: the lamp card.
   const [cardPicture, setCardPicture] = useState<string>()
+  // Shown small above the apps once it's sent: what their card will show.
+  const [cardPreview, setCardPreview] = useState<string>()
   useEffect(() => {
     if (!askShare || cardPicture || !SYNC_URL || navigator.onLine === false) return
-    let live = true
+    let live = true, drawn: Blob | undefined
     drawPicture({ ...pictureOf(), wide: true })
-      .then(b => fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: b }))
+      .then(b => { drawn = b; return fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: b }) })
       .then(r => r.ok ? r.json() as Promise<{ id?: string }> : undefined)
-      .then(j => { if (live && j?.id && /^[a-f0-9]{32}$/.test(j.id)) setCardPicture(j.id) })
+      .then(j => {
+        if (!live || !j?.id || !/^[a-f0-9]{32}$/.test(j.id) || !drawn) return
+        setCardPicture(j.id); setCardPreview(URL.createObjectURL(drawn))
+      })
       .catch(() => {})
     return () => { live = false }
   }, [askShare])
+  useEffect(() => () => { if (cardPreview) URL.revokeObjectURL(cardPreview) }, [cardPreview])
   const cardTo = cardPicture ? `${card}&p=${cardPicture}` : card
   useEffect(() => {
     if (!askShare || picture || !sheetHasApps()) return
@@ -1477,19 +1493,6 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
     return () => { live = false }
   }, [askShare])
   useEffect(() => () => { if (picture) URL.revokeObjectURL(picture.url) }, [picture])
-  /** A tap on Facebook, X or WhatsApp: the share sheet with the picture (and
-   *  the reference and link, which WhatsApp and X keep as the message). */
-  const viaPicture = (e: Event) => {
-    if (!picture) return false
-    e.preventDefault(); tally('sh')
-    const text = `${ref} (${version})\n${cardPicture ? cardTo : link}`
-    const files = [picture.file]
-    let o: ShareData = { files, text }
-    try { if (!navigator.canShare?.(o)) o = { files } } catch { o = { files } }
-    navigator.share(o).then(onClose, () => {})
-    return true
-  }
-
   // Cmd+C / Ctrl+C copies the picked verses, like the Copy button, unless
   // you're typing somewhere or have dragged over some words to copy them.
   const copyNow = useRef(() => {}); copyNow.current = () => copy(quote)
@@ -1577,18 +1580,18 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
         </div> : askShare ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="share-title">
           <p id="share-title" class="confirm-title"><strong>{t('Share {ref}', { ref })}</strong></p>
           {/* What the apps get: the verse as a picture. */}
-          {picture && <img class="share-picture" src={picture.url} alt="" />}
+          {cardPreview && <img class="share-picture" src={cardPreview} alt="" />}
           {/* One tap to the apps people share verses to, then the phone's own
               Share (smaller) for every other app. Plain links: the phone opens
               the app if it's there, the website if not. */}
           <div class="share-apps">
             {/* Facebook takes only the link, so the words go to the clipboard
                 too, to paste into the post. */}
-            <a href={facebookUrl(cardTo)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
+            <a href={facebookUrl(cardTo)} target="_blank" rel="noopener" onClick={() => { tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
               <FacebookIcon size={40} /><span>Facebook</span></a>
-            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, cardPicture ? cardTo : link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
+            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, cardPicture ? cardTo : link)} target="_blank" rel="noopener" onClick={() => { tally('sh'); onClose() }}>
               <XIcon size={40} /><span>X</span></a>
-            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, cardPicture ? cardTo : link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
+            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, cardPicture ? cardTo : link)} target="_blank" rel="noopener" onClick={() => { tally('sh'); onClose() }}>
               <WhatsAppIcon size={40} /><span>WhatsApp</span></a>
           </div>
           <div class="confirm-buttons selbar-share">
@@ -1600,9 +1603,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               <button class="selbar-cancel" onClick={() => setAskShare(false)}>{t('Cancel')}</button>
             </div>
           </div>
-          <p class="muted small share-paste">{picture
-            ? t('Tap an app, then tap it again in your phone’s share menu to post the picture.')
-            : t('Facebook takes only the link, so the verse is copied too: paste it into your post.')}</p>
+          <p class="muted small share-paste">{t('Facebook takes only the link, so the verse is copied too: paste it into your post.')}</p>
         </div> : <>
           <div class="actions">
             <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { if (allBookmarked) setAskUnmark(true); else { apply({ b: 1 }); onClose() } }}>
