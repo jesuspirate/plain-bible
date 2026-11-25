@@ -73,30 +73,38 @@ const esc = (s: string) => s.replace(/[&<>"']/g, c => `&#${c.charCodeAt(0)};`)
  *  then reads the home page's card ("My Quiet Bible") instead of the verse. */
 const PREVIEW = /facebookexternalhit|facebookcatalog|Facebot|meta-external|Twitterbot|WhatsApp|TelegramBot|Slackbot|Discordbot|LinkedInBot|SkypeUriPreview|Pinterest|redditbot|Applebot|bingbot|Googlebot|Embedly|vkShare|Viber|Signal|Iframely|Mastodon|Bluesky/i
 
-export function pageFor(s: Shared, words: string | undefined, lang: string, self: string) {
+/** `picture`: the verse picture the sharer's device drew (card.ts), if any;
+ *  else the lamp. */
+export function pageFor(s: Shared, words: string | undefined, lang: string, self: string, picture?: string) {
   const vs = s.last > s.first ? `${s.first}-${s.last}` : `${s.first}`
   const ref = `${plainBookName(s.book, lang)} ${s.chapter}:${vs} (${s.version})`
   const title = words ? `“${clipTitle(words)}”` : ref
   const desc = words ? `${ref} · My Quiet Bible` : 'My Quiet Bible'
   const to = `${APP}/?r=${[s.version, s.book, s.chapter, vs].join('/')}`
+  const image = picture ?? `${APP}/share.png`
+  const alt = picture && words ? `${clipTitle(words, 300)} ${ref}` : 'A lit lamp beside the words My Quiet Bible.'
   return `<!doctype html><html lang="${esc(lang)}"><head><meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1"><title>${esc(title)}</title>
 <meta property="og:type" content="article"><meta property="og:site_name" content="My Quiet Bible">
 <meta property="og:title" content="${esc(title)}"><meta property="og:description" content="${esc(desc)}">
 <meta property="og:url" content="${esc(self)}">
-<meta property="og:image" content="${APP}/share.png"><meta property="og:image:type" content="image/png">
+<meta property="og:image" content="${esc(image)}"><meta property="og:image:type" content="image/png">
 <meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
-<meta property="og:image:alt" content="A lit lamp beside the words My Quiet Bible.">
+<meta property="og:image:alt" content="${esc(alt)}">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="${esc(title)}">
-<meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${APP}/share.png">
+<meta name="twitter:description" content="${esc(desc)}"><meta name="twitter:image" content="${esc(image)}">
 </head>
 <body><p><a href="${esc(to)}">${esc(ref)}</a></p><script>location.replace(${JSON.stringify(to).replace(/</g, '\\u003c')})</script></body></html>`
 }
 
 type Fetcher = (url: string) => Promise<Response>
 
-/** The whole answer for one request. `get` fetches (and caches) a Bible file. */
-export async function answer(req: Request, get: Fetcher): Promise<Response> {
+/** A verse picture's name on a shared link (&p=…, see card.ts). */
+const PICTURE = /^[a-f0-9]{32}$/
+
+/** The whole answer for one request. `get` fetches (and caches) a Bible file;
+ *  `cards` is the sync service's address, where verse pictures are kept. */
+export async function answer(req: Request, get: Fetcher, cards = ''): Promise<Response> {
   const url = new URL(req.url)
   if (req.method !== 'GET' && req.method !== 'HEAD') return new Response(null, { status: 405 })
   const s = parseShared(url.searchParams.get('r'))
@@ -116,8 +124,10 @@ export async function answer(req: Request, get: Fetcher): Promise<Response> {
   } catch { /* the card still names the passage */ }
   // The very address asked for (with its ?c=), so Facebook never reuses a card it
   // read before this page named the verse.
-  const self = `${url.origin}/?r=${[s.version, s.book, s.chapter, vs].join('/')}${/^\d{1,3}$/.test(url.searchParams.get('c') ?? '') ? `&c=${url.searchParams.get('c')}` : ''}`
-  return new Response(pageFor(s, words, lang, self), {
+  const p = url.searchParams.get('p') ?? ''
+  const picture = cards && PICTURE.test(p) ? `${cards.replace(/\/$/, '')}/card/${p}.png` : undefined
+  const self = `${url.origin}/?r=${[s.version, s.book, s.chapter, vs].join('/')}${/^\d{1,3}$/.test(url.searchParams.get('c') ?? '') ? `&c=${url.searchParams.get('c')}` : ''}${picture ? `&p=${p}` : ''}`
+  return new Response(pageFor(s, words, lang, self, picture), {
     headers: { 'Content-Type': 'text/html; charset=utf-8', 'Cache-Control': 'public, max-age=86400', 'X-Robots-Tag': 'noindex' },
   })
 }

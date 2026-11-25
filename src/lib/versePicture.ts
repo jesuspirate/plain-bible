@@ -48,24 +48,32 @@ export function wrap(measure: Measure, text: string, w: number): string[] {
   return lines
 }
 
-/** The biggest size (120 down to 30) at which the words fit `room`; at the
- *  smallest, lines past the room are left out and the last ends with "…". */
-export function fit(measureAt: (size: number) => Measure, text: string, w: number, room: (size: number) => number) {
-  let size = 120, lines: string[] = []
-  for (; size >= 30; size -= 2) {
+/** The biggest size (`max` down to `min`) at which the words fit `room`; at
+ *  the smallest, lines past the room are left out and the last ends with "…". */
+export function fit(measureAt: (size: number) => Measure, text: string, w: number, room: (size: number) => number, max = 120, min = 30) {
+  let size = max, lines: string[] = []
+  for (; size >= min; size -= 2) {
     lines = wrap(measureAt(size), text, w)
     if (lines.length * size * 1.42 <= room(size)) return { size, lines }
   }
-  size = 30
-  const max = Math.max(1, Math.floor(room(size) / (size * 1.42)))
-  if (lines.length > max) {
-    lines = lines.slice(0, max)
-    lines[max - 1] = lines[max - 1].replace(/[\s,;:.]+$/, '') + '…'
+  size = min
+  const most = Math.max(1, Math.floor(room(size) / (size * 1.42)))
+  if (lines.length > most) {
+    lines = lines.slice(0, most)
+    lines[most - 1] = lines[most - 1].replace(/[\s,;:.]+$/, '') + '…'
   }
   return { size, lines }
 }
 
-export type Picture = { words: string; reference: string; bible: string; rtl?: boolean; look?: keyof typeof LOOKS }
+export type Picture = { words: string; reference: string; bible: string; rtl?: boolean; look?: keyof typeof LOOKS
+  /** Wide (1200×630), for a shared link's card, instead of tall (1080×1350) for a post. */
+  wide?: boolean }
+
+// Where everything goes: tall for a photo post, wide for a link's card.
+const TALL = { W: PICTURE_W, H: PICTURE_H, inset: 40, radius: 36, top: 100, foot: 250, side: 120, max: 120, min: 30,
+  ref: 46, refGap: 70, ver: 30, verGap: 118, under: 130, fy: 150, ic: 64, name: 34, addr: 28, addrGap: 66 }
+export const WIDE = { W: 1200, H: 630, inset: 22, radius: 28, top: 44, foot: 120, side: 90, max: 80, min: 22,
+  ref: 32, refGap: 46, ver: 22, verGap: 78, under: 88, fy: 80, ic: 40, name: 24, addr: 19, addrGap: 36 }
 
 /** Draws the picture; resolves to a PNG. */
 export async function drawPicture(p: Picture): Promise<Blob> {
@@ -79,7 +87,7 @@ export async function drawPicture(p: Picture): Promise<Blob> {
   await Promise.all([`400 60px ${reading}`, `700 40px ${sans}`, `500 30px ${sans}`]
     .map(f => document.fonts?.load(f, p.words + p.reference).catch(() => {})))
 
-  const W = PICTURE_W, H = PICTURE_H
+  const L = p.wide ? WIDE : TALL, W = L.W, H = L.H
   const canvas = document.createElement('canvas')
   canvas.width = W; canvas.height = H
   const x = canvas.getContext('2d')!
@@ -87,15 +95,15 @@ export async function drawPicture(p: Picture): Promise<Blob> {
   x.fillStyle = look.bg; x.fillRect(0, 0, W, H)
   // A quiet frame.
   x.strokeStyle = look.line; x.lineWidth = 3
-  x.beginPath(); roundRect(x, 40, 40, W - 80, H - 80, 36); x.stroke()
+  x.beginPath(); roundRect(x, L.inset, L.inset, W - 2 * L.inset, H - 2 * L.inset, L.radius); x.stroke()
 
   // The words, as big as they fit between the top and the lamp, with the
   // quote mark above them and the reference below.
-  const top = 100, bottom = H - 250, maxW = W - 240
+  const top = L.top, bottom = H - L.foot, maxW = W - 2 * L.side
   const measureAt = (size: number): Measure => { x.font = `400 ${size}px ${reading}`; return s => x.measureText(s).width }
-  const { size, lines } = fit(measureAt, p.words, maxW, s => bottom - top - s * 1.3 - 130)
+  const { size, lines } = fit(measureAt, p.words, maxW, s => bottom - top - s * 1.3 - L.under, L.max, L.min)
   const lh = size * 1.42, block = lines.length * lh
-  const ys = top + (bottom - top - (size * 1.3 + block + 130)) / 2, y0 = ys + size * 1.3
+  const ys = top + (bottom - top - (size * 1.3 + block + L.under)) / 2, y0 = ys + size * 1.3
   x.textAlign = 'center'; x.textBaseline = 'alphabetic'
   x.fillStyle = look.accent; x.globalAlpha = .55
   x.font = `700 ${Math.round(size * 1.6)}px ${reading}`
@@ -103,15 +111,15 @@ export async function drawPicture(p: Picture): Promise<Blob> {
   x.globalAlpha = 1
   x.fillStyle = look.text; x.font = `400 ${size}px ${reading}`
   lines.forEach((l, i) => x.fillText(l, W / 2, y0 + lh * i + size))
-  x.fillStyle = look.accent; x.font = `700 46px ${sans}`
-  x.fillText(p.reference, W / 2, y0 + block + 70, maxW)
-  x.fillStyle = look.muted; x.font = `500 30px ${sans}`
-  x.fillText(p.bible, W / 2, y0 + block + 118, maxW)
+  x.fillStyle = look.accent; x.font = `700 ${L.ref}px ${sans}`
+  x.fillText(p.reference, W / 2, y0 + block + L.refGap, maxW)
+  x.fillStyle = look.muted; x.font = `500 ${L.ver}px ${sans}`
+  x.fillText(p.bible, W / 2, y0 + block + L.verGap, maxW)
 
   // The lamp, the app's name and its address.
-  const fy = H - 150, ic = 64
-  x.font = `700 34px ${sans}`
-  const name = 'My Quiet Bible', nw = x.measureText(name).width, sx = (W - ic - 20 - nw) / 2
+  const fy = H - L.fy, ic = L.ic
+  x.font = `700 ${L.name}px ${sans}`
+  const name = 'My Quiet Bible', nw = x.measureText(name).width, sx = (W - ic - ic * .3 - nw) / 2
   x.save(); x.translate(sx, fy - ic / 2); x.scale(ic / 512, ic / 512)
   x.fillStyle = '#22211f'; x.beginPath(); roundRect(x, 0, 0, 512, 512, 114); x.fill()
   x.fillStyle = '#e0a96d'; x.fill(new Path2D(FLAME))
@@ -119,9 +127,9 @@ export async function drawPicture(p: Picture): Promise<Blob> {
   x.fillStyle = '#f4ecd8'; x.fill(new Path2D(BOWL))
   x.restore()
   x.direction = 'ltr'; x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillStyle = look.text
-  x.fillText(name, sx + ic + 20, fy + 2)
-  x.textAlign = 'center'; x.fillStyle = look.muted; x.font = `500 28px ${sans}`
-  x.fillText('myquietbible.com', W / 2, fy + 66)
+  x.fillText(name, sx + ic * 1.3, fy + 2)
+  x.textAlign = 'center'; x.fillStyle = look.muted; x.font = `500 ${L.addr}px ${sans}`
+  x.fillText('myquietbible.com', W / 2, fy + L.addrGap)
 
   return new Promise((ok, no) => canvas.toBlob(b => b ? ok(b) : no(new Error('no picture')), 'image/png'))
 }

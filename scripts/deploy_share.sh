@@ -17,6 +17,11 @@ cf() { curl -sS -H "Authorization: Bearer $CLOUDFLARE_API_TOKEN" -H 'Content-Typ
 if ! (cf "" || true) | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{try{process.exit(JSON.parse(s).success?0:1)}catch{process.exit(1)}})'; then
   "$W" pages project create "$PROJECT" --production-branch main >&2 || true
 fi
+# Where verse pictures for link cards are kept: the sync service (set in
+# GITHUB_ENV by scripts/deploy_sync.sh). Without it, cards show the lamp.
+if [ -n "${VITE_SYNC_URL:-}" ]; then
+  printf '// Filled in by scripts/deploy_share.sh.\nexport default %s\n' "$(node -e 'process.stdout.write(JSON.stringify(process.argv[1]))' "$VITE_SYNC_URL")" > "$ROOT/scripts/share-page/cards.js"
+fi
 "$W" pages deploy "$ROOT/scripts/share-page" --project-name "$PROJECT" --branch main --commit-dirty=true
 
 # Attaching the domain is harmless before DNS points here: it waits as pending.

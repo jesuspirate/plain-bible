@@ -18,6 +18,7 @@ import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
 import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, WhatsAppIcon, XIcon } from './icons'
 import { canSharePicture, drawPicture, pictureName, sheetHasApps } from './lib/versePicture'
+import { SYNC_URL } from './lib/sync'
 import { cardLink, facebookUrl, SHARE_ORIGIN, whatsappUrl, xUrl } from './lib/shareTo'
 import { canHear, followPage, goOnReading, holdReading, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
@@ -1445,14 +1446,30 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // Where pictures can't be shared (Fedi, Firefox), and on a Mac or computer,
   // whose share sheet has none of these apps, they send links as before.
   const [picture, setPicture] = useState<{ file: File; url: string }>()
+  const pictureOf = () => ({
+    // Just the words, no verse numbers, for a picture.
+    words: verses.map(v => plain(bibles[version]?.books[book]?.[chapter - 1]?.[v - 1] ?? '')).filter(Boolean).join(' '),
+    reference: ref, bible: byId.get(version)?.name ?? version, rtl: byId.get(version)?.rtl,
+  })
+  // On a Mac or computer, the link's card shows the verse instead: a wide
+  // picture, sent once to the sync service as the card opens (card.ts), and
+  // named on the link (&p=…). Not ready, offline, or refused: the lamp card.
+  const [cardPicture, setCardPicture] = useState<string>()
+  useEffect(() => {
+    if (!askShare || cardPicture || sheetHasApps() || !SYNC_URL || navigator.onLine === false) return
+    let live = true
+    drawPicture({ ...pictureOf(), wide: true })
+      .then(b => fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: b }))
+      .then(r => r.ok ? r.json() as Promise<{ id?: string }> : undefined)
+      .then(j => { if (live && j?.id && /^[a-f0-9]{32}$/.test(j.id)) setCardPicture(j.id) })
+      .catch(() => {})
+    return () => { live = false }
+  }, [askShare])
+  const cardTo = cardPicture ? `${card}&p=${cardPicture}` : card
   useEffect(() => {
     if (!askShare || picture || !sheetHasApps()) return
     let live = true
-    drawPicture({
-      // Just the words, no verse numbers, for a picture.
-      words: verses.map(v => plain(bibles[version]?.books[book]?.[chapter - 1]?.[v - 1] ?? '')).filter(Boolean).join(' '),
-      reference: ref, bible: byId.get(version)?.name ?? version, rtl: byId.get(version)?.rtl,
-    }).then(b => {
+    drawPicture(pictureOf()).then(b => {
       const file = new File([b], pictureName(`${ref} (${version})`), { type: 'image/png' })
       if (live && canSharePicture(file)) setPicture({ file, url: URL.createObjectURL(file) })
     }).catch(() => {})
@@ -1566,11 +1583,11 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           <div class="share-apps">
             {/* Facebook takes only the link, so the words go to the clipboard
                 too, to paste into the post. */}
-            <a href={facebookUrl(card)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
+            <a href={facebookUrl(cardTo)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
               <FacebookIcon size={40} /><span>Facebook</span></a>
-            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
+            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, cardPicture ? cardTo : link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
               <XIcon size={40} /><span>X</span></a>
-            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
+            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, cardPicture ? cardTo : link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
               <WhatsAppIcon size={40} /><span>WhatsApp</span></a>
           </div>
           <div class="confirm-buttons selbar-share">

@@ -29,4 +29,9 @@ describe('verse picture', () => {
     expect(pictureName('1 Corinthians 13:4–7 (BSB)')).toBe('1-Corinthians-13-4-7-BSB.png')
     expect(pictureName('Jean 3:16 (LSG)')).toBe('Jean-3-16-LSG.png')
   })
+  it('keeps to the wide card\'s own sizes', () => {
+    const at = (size: number) => (s: string) => [...s].length * size * .5
+    expect(fit(at, 'Jesus wept.', 1000, () => 400, 80, 22).size).toBe(80)
+    expect(fit(at, 'word '.repeat(5000), 1000, () => 400, 80, 22).size).toBe(22)
+  })
 })
