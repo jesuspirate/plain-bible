@@ -1437,7 +1437,8 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // One plain text with the link at its end, no separate title or url: the
   // Mac share sheet's Copy pasted the text and the link as two pieces, and
   // showed only the reference and the site, as if one verse went out.
-  const shareOut = () => { tally('sh'); return canShare ? share({ text: `${quote}\n${link}` }) : copy(link) }
+  // With the verse picture sent (below), the share link, whose card shows it.
+  const shareOut = () => { const to = cardPicture ? cardTo : link; tally('sh'); return canShare ? share({ text: `${quote}\n${to}` }) : copy(to) }
 
   // The verse as a picture, drawn as the Share card opens so it's ready for
   // the tap (a share sheet opens only straight from a tap). Facebook, X and
@@ -1451,12 +1452,12 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
     words: verses.map(v => plain(bibles[version]?.books[book]?.[chapter - 1]?.[v - 1] ?? '')).filter(Boolean).join(' '),
     reference: ref, bible: byId.get(version)?.name ?? version, rtl: byId.get(version)?.rtl,
   })
-  // On a Mac or computer, the link's card shows the verse instead: a wide
+  // The link's card shows the verse too (on a phone, a computer or a Mac): a wide
   // picture, sent once to the sync service as the card opens (card.ts), and
   // named on the link (&p=…). Not ready, offline, or refused: the lamp card.
   const [cardPicture, setCardPicture] = useState<string>()
   useEffect(() => {
-    if (!askShare || cardPicture || sheetHasApps() || !SYNC_URL || navigator.onLine === false) return
+    if (!askShare || cardPicture || !SYNC_URL || navigator.onLine === false) return
     let live = true
     drawPicture({ ...pictureOf(), wide: true })
       .then(b => fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: b }))
@@ -1481,7 +1482,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const viaPicture = (e: Event) => {
     if (!picture) return false
     e.preventDefault(); tally('sh')
-    const text = `${ref} (${version})\n${link}`
+    const text = `${ref} (${version})\n${cardPicture ? cardTo : link}`
     const files = [picture.file]
     let o: ShareData = { files, text }
     try { if (!navigator.canShare?.(o)) o = { files } } catch { o = { files } }
