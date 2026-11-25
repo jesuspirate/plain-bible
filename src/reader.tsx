@@ -1491,14 +1491,17 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   useEffect(() => {
     if (!askShare || sent?.key === pictureKey || !wideNow || !SYNC_URL || navigator.onLine === false) return
     let live = true
-    fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: wideNow.blob })
+    // Tried again once after a second if the first send doesn't make it.
+    const send = (again: boolean): Promise<void> => fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: wideNow.blob })
       .then(r => r.ok ? r.json() as Promise<{ id?: string }> : undefined)
+      .catch(() => undefined)
       .then(j => {
         if (!live) return
         if (j?.id && /^[a-f0-9]{32}$/.test(j.id)) setSent({ key: wideNow.key, id: j.id })
+        else if (again) return new Promise<void>(ok => setTimeout(ok, 1000)).then(() => live ? send(false) : undefined)
         else setSendFailed(true)
       })
-      .catch(() => { if (live) setSendFailed(true) })
+    send(true)
     return () => { live = false }
   }, [askShare, wideNow])
   // Shown small above the apps: what their card will show. Its room is kept
@@ -1506,6 +1509,17 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const cardPicture = sent?.key === pictureKey ? sent.id : undefined
   const showPreview = !!SYNC_URL && navigator.onLine !== false && !sendFailed
   const cardTo = cardPicture ? `${card}&p=${cardPicture}` : card
+  // Facebook, X and WhatsApp wait (dimmed, a bar filling under the picture)
+  // until the picture is sent: tapped sooner, the link went out without it
+  // and the post showed the lamp card. If it can't go in 12 s (very poor
+  // signal), they go with the lamp card rather than never.
+  const [gaveUp, setGaveUp] = useState(false)
+  useEffect(() => {
+    if (!askShare) return
+    const id = setTimeout(() => setGaveUp(true), 12000)
+    return () => clearTimeout(id)
+  }, [askShare])
+  const waiting = askShare && showPreview && !cardPicture && !gaveUp
   useEffect(() => {
     if (!askShare || picture || !sheetHasApps()) return
     let live = true
@@ -1603,11 +1617,12 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
         </div> : askShare ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="share-title">
           <p id="share-title" class="confirm-title"><strong>{t('Share {ref}', { ref })}</strong></p>
           {/* What the apps get: the verse as a picture. */}
-          {showPreview && <div class="share-picture">{wideNow && <img src={wideNow.url} alt="" />}</div>}
+          {showPreview && <div class="share-picture">{wideNow && <img src={wideNow.url} alt="" />}
+            <span class={`share-bar${waiting ? '' : ' done'}`} aria-hidden="true"><span /></span></div>}
           {/* One tap to the apps people share verses to, then the phone's own
               Share (smaller) for every other app. Plain links: the phone opens
               the app if it's there, the website if not. */}
-          <div class="share-apps">
+          <div class={`share-apps${waiting ? ' share-wait' : ''}`} aria-busy={waiting}>
             {/* Facebook takes only the link, so the words go to the clipboard
                 too, to paste into the post. */}
             <a href={facebookUrl(cardTo)} target="_blank" rel="noopener" onClick={() => { tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
