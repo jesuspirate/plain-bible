@@ -16,7 +16,7 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, PictureIcon, ShareIcon, SpeakerIcon, WhatsAppIcon, XIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, WhatsAppIcon, XIcon } from './icons'
 import { canSharePicture, drawPicture, pictureName } from './lib/versePicture'
 import { cardLink, facebookUrl, SHARE_ORIGIN, whatsappUrl, xUrl } from './lib/shareTo'
 import { canHear, followPage, goOnReading, holdReading, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
@@ -1439,32 +1439,36 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const shareOut = () => { tally('sh'); return canShare ? share({ text: `${quote}\n${link}` }) : copy(link) }
 
   // The verse as a picture, drawn as the Share card opens so it's ready for
-  // the tap (a share sheet opens only straight from a tap).
-  const [picture, setPicture] = useState<File>()
-  const [showPicture, setShowPicture] = useState<{ url: string; name: string }>()
-  const makePicture = () => drawPicture({
-    // Just the words, no verse numbers, for a picture.
-    words: verses.map(v => plain(bibles[version]?.books[book]?.[chapter - 1]?.[v - 1] ?? '')).filter(Boolean).join(' '),
-    reference: ref, bible: byId.get(version)?.name ?? version, rtl: byId.get(version)?.rtl,
-  }).then(b => new File([b], pictureName(`${ref} (${version})`), { type: 'image/png' }))
+  // the tap (a share sheet opens only straight from a tap). Facebook, X and
+  // WhatsApp then send the picture: no app can take a picture from a web
+  // link, so it goes through the phone's share sheet, where you tap the app.
+  // Where pictures can't be shared (Fedi, Firefox), they send links as before.
+  const [picture, setPicture] = useState<{ file: File; url: string }>()
   useEffect(() => {
     if (!askShare || picture) return
     let live = true
-    makePicture().then(f => { if (live) setPicture(f) }).catch(() => {})
+    drawPicture({
+      // Just the words, no verse numbers, for a picture.
+      words: verses.map(v => plain(bibles[version]?.books[book]?.[chapter - 1]?.[v - 1] ?? '')).filter(Boolean).join(' '),
+      reference: ref, bible: byId.get(version)?.name ?? version, rtl: byId.get(version)?.rtl,
+    }).then(b => {
+      const file = new File([b], pictureName(`${ref} (${version})`), { type: 'image/png' })
+      if (live && canSharePicture(file)) setPicture({ file, url: URL.createObjectURL(file) })
+    }).catch(() => {})
     return () => { live = false }
   }, [askShare])
-  useEffect(() => () => { if (showPicture) URL.revokeObjectURL(showPicture.url) }, [showPicture])
-  // The phone's share sheet with the picture (Facebook, Instagram, Messages,
-  // Save Image…); where pictures can't be shared, the picture opens big to
-  // save, or to press and hold.
-  const sharePicture = async () => {
-    tally('sh')
-    const file = picture ?? await makePicture().catch(() => undefined)
-    if (!file) { setNote(t('Something went wrong')); return }
-    const show = () => setShowPicture({ url: URL.createObjectURL(file), name: file.name })
-    if (!canSharePicture(file)) return show()
-    try { await navigator.share({ files: [file] }); onClose() }
-    catch (e) { if ((e as Error).name !== 'AbortError') show() }
+  useEffect(() => () => { if (picture) URL.revokeObjectURL(picture.url) }, [picture])
+  /** A tap on Facebook, X or WhatsApp: the share sheet with the picture (and
+   *  the reference and link, which WhatsApp and X keep as the message). */
+  const viaPicture = (e: Event) => {
+    if (!picture) return false
+    e.preventDefault(); tally('sh')
+    const text = `${ref} (${version})\n${link}`
+    const files = [picture.file]
+    let o: ShareData = { files, text }
+    try { if (!navigator.canShare?.(o)) o = { files } } catch { o = { files } }
+    navigator.share(o).then(onClose, () => {})
+    return true
   }
 
   // Cmd+C / Ctrl+C copies the picked verses, like the Copy button, unless
@@ -1553,19 +1557,19 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           </div>
         </div> : askShare ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="share-title">
           <p id="share-title" class="confirm-title"><strong>{t('Share {ref}', { ref })}</strong></p>
+          {/* What the apps get: the verse as a picture. */}
+          {picture && <img class="share-picture" src={picture.url} alt="" />}
           {/* One tap to the apps people share verses to, then the phone's own
               Share (smaller) for every other app. Plain links: the phone opens
               the app if it's there, the website if not. */}
           <div class="share-apps">
-            {/* The verse as a picture, for any app: the whole verse shows. */}
-            <button onClick={sharePicture}><PictureIcon size={40} /><span>{t('Picture')}</span></button>
             {/* Facebook takes only the link, so the words go to the clipboard
                 too, to paste into the post. */}
-            <a href={facebookUrl(card)} target="_blank" rel="noopener" onClick={() => { tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
+            <a href={facebookUrl(card)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
               <FacebookIcon size={40} /><span>Facebook</span></a>
-            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={() => { tally('sh'); onClose() }}>
+            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
               <XIcon size={40} /><span>X</span></a>
-            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={() => { tally('sh'); onClose() }}>
+            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={e => { if (viaPicture(e)) return; tally('sh'); onClose() }}>
               <WhatsAppIcon size={40} /><span>WhatsApp</span></a>
           </div>
           <div class="confirm-buttons selbar-share">
@@ -1577,7 +1581,9 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               <button class="selbar-cancel" onClick={() => setAskShare(false)}>{t('Cancel')}</button>
             </div>
           </div>
-          <p class="muted small share-paste">{t('Facebook takes only the link, so the verse is copied too: paste it into your post.')}</p>
+          <p class="muted small share-paste">{picture
+            ? t('Tap an app, then tap it again in your phone’s share menu to post the picture.')
+            : t('Facebook takes only the link, so the verse is copied too: paste it into your post.')}</p>
         </div> : <>
           <div class="actions">
             <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { if (allBookmarked) setAskUnmark(true); else { apply({ b: 1 }); onClose() } }}>
@@ -1600,14 +1606,6 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
         </>}
         {note && <p class="muted small selbar-note">{note}</p>}
       </div>
-      {showPicture && (
-        <Sheet title={ref} onClose={() => { setShowPicture(undefined); onClose() }}>
-          <img class="verse-picture" src={showPicture.url} alt={quote} />
-          <a class="verse-picture-save" href={showPicture.url} download={showPicture.name} onClick={() => tally('sh')}>
-            <PictureIcon size={26} /><span>{t('Save picture')}</span></a>
-          <p class="muted small">{t('Or press and hold the picture to save or share it.')}</p>
-        </Sheet>
-      )}
       {compare && (
         <Sheet title={ref} onClose={() => setCompare(undefined)}>
           <dl class="compare">
