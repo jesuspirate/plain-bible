@@ -5,6 +5,8 @@
 //   run.sh --dry               draws and prints today's post, posts nothing
 //   run.sh --dry --all         every post still to come (to look them over)
 //   run.sh --date 2026-12-01   that day's post instead of today's
+//   run.sh --check             tests the keys, the Bible, the pictures and the
+//                              Facebook card for the next post; posts nothing
 //
 // What goes out comes only from social/posts.json, so merging it is the yes.
 // X gets the words and the tall verse picture (no link: a link post costs 13
@@ -31,7 +33,7 @@ const GRAPH = `https://graph.facebook.com/${process.env.FB_GRAPH_VERSION || 'v24
 const ROOT = process.env.ROOT!, OUT = process.env.OUT || join(ROOT, 'social-out')
 
 const args = process.argv.slice(2)
-const dry = args.includes('--dry'), all = args.includes('--all')
+const dry = args.includes('--dry'), all = args.includes('--all'), check = args.includes('--check')
 const day = args[args.indexOf('--date') + 1] && args.includes('--date') ? args[args.indexOf('--date') + 1] : newYorkDate()
 
 const note = (s: string) => console.log(s)
@@ -148,6 +150,83 @@ async function postFacebook(text: string, link: string) {
 const posts: Post[] = JSON.parse(readFileSync(join(ROOT, 'social/posts.json'), 'utf8'))
 const wrong = checkPosts(posts)
 if (wrong.length) fail(`social/posts.json: ${wrong.join('; ')}`)
+
+// ---- The check: everything a real post needs, without posting -------------------
+
+async function runCheck() {
+  let bad = 0
+  const ok = (s: string) => note(`✓ ${s}`)
+  const no = (s: string) => { bad++; console.log(`::error::✗ ${s}`) }
+  const next = posts.find(p => p.date >= day)
+  if (!next) no('no post still to come in social/posts.json')
+  else ok(`next post: ${next.date} (${posts.filter(p => p.date >= day).length} still to come)`)
+
+  let wide: Buffer | undefined, v: Verse | undefined
+  if (next) {
+    try {
+      v = parseVerse(next.verse)!
+      const [words, bible] = await Promise.all([verseWords(v), bibleName(v.version)])
+      ok(`verse found: ${reference(v)} (${bible})`)
+      const look = next.look ?? 'sepia'
+      mkdirSync(OUT, { recursive: true })
+      const [tall, w] = await draw([{ words, reference: reference(v), bible, look, wide: false }, { words, reference: reference(v), bible, look, wide: true }])
+      writeFileSync(join(OUT, `${next.date}-x.png`), tall); writeFileSync(join(OUT, `${next.date}-facebook-card.png`), w)
+      wide = w
+      ok(`pictures drawn (${tall.length} and ${w.length} bytes)`)
+    } catch (e) { no(`verse or pictures: ${e}`) }
+  }
+
+  // X: who these keys post as. A read costs a fraction of a cent.
+  if (['X_API_KEY', 'X_API_SECRET', 'X_ACCESS_TOKEN', 'X_ACCESS_SECRET'].every(k => process.env[k])) {
+    try {
+      const url = 'https://api.x.com/2/users/me'
+      const r = await fetch(url, { headers: { Authorization: xAuth('GET', url) } })
+      const j = await r.json() as { data?: { username?: string }; title?: string; detail?: string }
+      if (r.ok && j.data?.username) ok(`X keys work, posting as @${j.data.username}`)
+      else no(`X keys refused: ${r.status} ${j.title ?? ''} ${j.detail ?? ''}`)
+    } catch (e) { no(`X: ${e}`) }
+  } else no('X keys are not all set')
+
+  // Facebook: the page token, read by itself (debug_token).
+  if (process.env.FB_PAGE_ID && process.env.FB_PAGE_TOKEN) {
+    try {
+      const tok = process.env.FB_PAGE_TOKEN
+      const page = await (await fetch(`${GRAPH}/${encodeURIComponent(process.env.FB_PAGE_ID)}?fields=id,name&access_token=${encodeURIComponent(tok)}`)).json() as { name?: string; error?: { message?: string } }
+      if (page.name) ok(`Facebook page found: ${page.name}`)
+      else no(`Facebook page: ${page.error?.message ?? 'not found'}`)
+      const d = (await (await fetch(`${GRAPH}/debug_token?input_token=${encodeURIComponent(tok)}&access_token=${encodeURIComponent(tok)}`)).json() as { data?: { type?: string; is_valid?: boolean; expires_at?: number; data_access_expires_at?: number; scopes?: string[] } }).data
+      if (!d?.is_valid) no('Facebook token is not valid')
+      else {
+        if (d.type === 'PAGE') ok('Facebook token is a page token')
+        else no(`Facebook token is a ${d.type} token, not a page token (use the access_token from me/accounts)`)
+        if (d.scopes?.includes('pages_manage_posts')) ok('Facebook token may post on the page')
+        else no('Facebook token lacks pages_manage_posts')
+        if (!d.expires_at) ok('Facebook token never expires')
+        else no(`Facebook token expires ${new Date(d.expires_at * 1000).toISOString().slice(0, 10)}: make it from an extended user token`)
+        if (d.data_access_expires_at) note(`  (Facebook asks for a fresh sign-in to the app by ${new Date(d.data_access_expires_at * 1000).toISOString().slice(0, 10)})`)
+      }
+    } catch (e) { no(`Facebook: ${e}`) }
+  } else no('Facebook keys are not both set')
+
+  // The Facebook card: the wide picture kept by the sync service, shown by the share page.
+  if (wide && v) {
+    const id = await cardPicture(wide)
+    if (!id) no('the sync service did not keep the card picture')
+    else {
+      ok('card picture kept by the sync service')
+      try {
+        const link = `${cardLink(SHARE_ORIGIN, v.version, v.book, v.chapter, v.first, v.last)}&p=${id}`
+        const html = await (await fetch(link, { headers: { 'User-Agent': 'facebookexternalhit/1.1' } })).text()
+        if (html.includes(`/card/${id}.png`)) ok('the share page shows the verse picture as its card')
+        else no('the share page does not show the verse picture')
+      } catch (e) { no(`share page: ${e}`) }
+    }
+  }
+
+  note(bad ? `\n${bad} problem${bad === 1 ? '' : 's'} to fix before the next post.` : '\nAll set: the next post should go out.')
+  process.exit(bad ? 1 : 0)
+}
+if (check) await runCheck()
 
 const today = all ? posts.filter(p => p.date >= day) : posts.filter(p => p.date === day)
 const left = postsLeft(posts, day)

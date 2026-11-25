@@ -14,13 +14,17 @@ on:
     # 6:30 AM in New York in winter (7:30 AM in summer: GitHub's clock has
     # no daylight saving). GitHub may start it a few minutes late.
     - cron: '30 11 * * *'
+    # Saturday 6 PM in New York: a check that posts nothing (below), so a
+    # broken key shows up (as a failed run, with GitHub's email) before it
+    # costs a day.
+    - cron: '0 23 * * 6'
   workflow_dispatch:
     inputs:
       mode:
-        description: 'preview = draw the pictures and show the words, post nothing. post = post that day now.'
+        description: 'check = test the keys, Bible, pictures and Facebook card, post nothing. preview = draw the pictures, post nothing. post = post that day now.'
         type: choice
-        options: [preview, post]
-        default: preview
+        options: [check, preview, post]
+        default: check
       date:
         description: 'Which day (YYYY-MM-DD). Empty = today in New York.'
         required: false
@@ -61,7 +65,7 @@ jobs:
   post:
     if: >-
       github.ref == 'refs/heads/main' && vars.SOCIAL_POSTING == 'on' &&
-      (github.event_name == 'schedule' || (github.event_name == 'workflow_dispatch' && inputs.mode == 'post'))
+      ((github.event_name == 'schedule' && github.event.schedule == '30 11 * * *') || (github.event_name == 'workflow_dispatch' && inputs.mode == 'post'))
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v7
@@ -88,4 +92,36 @@ jobs:
         if: always()
         with:
           name: posted-pictures
+          path: social-out/*.png
+
+  check:
+    # Any branch may run a check by hand (it posts nothing); the Saturday one runs on main.
+    if: >-
+      (github.event_name == 'schedule' && github.event.schedule == '0 23 * * 6' && vars.SOCIAL_POSTING == 'on') ||
+      (github.event_name == 'workflow_dispatch' && inputs.mode == 'check')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+        with:
+          persist-credentials: false
+      - uses: actions/setup-node@v7
+        with:
+          node-version: 22
+          cache: npm
+      - run: npm ci
+      - run: npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium
+      - name: Check everything the next post needs (posts nothing)
+        env:
+          X_API_KEY: ${{ secrets.X_API_KEY }}
+          X_API_SECRET: ${{ secrets.X_API_SECRET }}
+          X_ACCESS_TOKEN: ${{ secrets.X_ACCESS_TOKEN }}
+          X_ACCESS_SECRET: ${{ secrets.X_ACCESS_SECRET }}
+          FB_PAGE_ID: ${{ secrets.FB_PAGE_ID }}
+          FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
+          SYNC_URL: ${{ vars.SYNC_URL || 'https://plain-bible-sync.wqk45tyy.workers.dev' }}
+        run: bash scripts/social/run.sh --check ${{ inputs.date && format('--date {0}', inputs.date) || '' }}
+      - uses: actions/upload-artifact@v7
+        if: always()
+        with:
+          name: checked-pictures
           path: social-out/*.png
