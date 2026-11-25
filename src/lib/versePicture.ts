@@ -71,9 +71,12 @@ export type Picture = { words: string; reference: string; bible: string; rtl?: b
 
 // Where everything goes: tall for a photo post, wide for a link's card.
 const TALL = { W: PICTURE_W, H: PICTURE_H, inset: 40, radius: 36, top: 100, foot: 250, side: 120, max: 120, min: 30,
-  ref: 46, refGap: 70, ver: 30, verGap: 118, under: 130, fy: 150, ic: 64, name: 34, addr: 28, addrGap: 66 }
-export const WIDE = { W: 1200, H: 630, inset: 22, radius: 28, top: 44, foot: 120, side: 90, max: 80, min: 22,
-  ref: 32, refGap: 46, ver: 22, verGap: 78, under: 88, fy: 80, ic: 40, name: 24, addr: 19, addrGap: 36 }
+  ref: 46, refGap: 70, ver: 30, verGap: 118, under: 130, fy: 150, ic: 64, name: 34, addr: 28, addrGap: 66, brandTop: false }
+// The wide one carries the lamp and name on TOP: X lays the page title
+// across the bottom of a link's picture and would hide them there, so the
+// bottom is left quiet (everything ends above X's strip).
+export const WIDE = { W: 1200, H: 630, inset: 22, radius: 28, top: 108, foot: 118, side: 90, max: 76, min: 22,
+  ref: 32, refGap: 46, ver: 22, verGap: 78, under: 88, fy: 568, ic: 38, name: 23, addr: 19, addrGap: 36, brandTop: true }
 
 /** Draws the picture; resolves to a PNG. */
 export async function drawPicture(p: Picture): Promise<Blob> {
@@ -116,10 +119,14 @@ export async function drawPicture(p: Picture): Promise<Blob> {
   x.fillStyle = look.muted; x.font = `500 ${L.ver}px ${sans}`
   x.fillText(p.bible, W / 2, y0 + block + L.verGap, maxW)
 
-  // The lamp, the app's name and its address.
-  const fy = H - L.fy, ic = L.ic
+  // The lamp, the app's name and its address: under the words on the tall
+  // picture, on one line at the top of the wide one.
+  const fy = H - L.fy, ic = L.ic, addr = 'myquietbible.com', gap = ic * .9
   x.font = `700 ${L.name}px ${sans}`
-  const name = 'My Quiet Bible', nw = x.measureText(name).width, sx = (W - ic - ic * .3 - nw) / 2
+  const name = 'My Quiet Bible', nw = x.measureText(name).width
+  x.font = `500 ${L.addr}px ${sans}`
+  const aw = L.brandTop ? x.measureText(addr).width + gap : 0
+  const sx = (W - ic - ic * .3 - nw - aw) / 2
   x.save(); x.translate(sx, fy - ic / 2); x.scale(ic / 512, ic / 512)
   x.fillStyle = '#22211f'; x.beginPath(); roundRect(x, 0, 0, 512, 512, 114); x.fill()
   x.fillStyle = '#e0a96d'; x.fill(new Path2D(FLAME))
@@ -127,9 +134,11 @@ export async function drawPicture(p: Picture): Promise<Blob> {
   x.fillStyle = '#f4ecd8'; x.fill(new Path2D(BOWL))
   x.restore()
   x.direction = 'ltr'; x.textAlign = 'left'; x.textBaseline = 'middle'; x.fillStyle = look.text
+  x.font = `700 ${L.name}px ${sans}`
   x.fillText(name, sx + ic * 1.3, fy + 2)
-  x.textAlign = 'center'; x.fillStyle = look.muted; x.font = `500 ${L.addr}px ${sans}`
-  x.fillText('myquietbible.com', W / 2, fy + L.addrGap)
+  x.fillStyle = look.muted; x.font = `500 ${L.addr}px ${sans}`
+  if (L.brandTop) x.fillText(addr, sx + ic * 1.3 + nw + gap, fy + 2)
+  else { x.textAlign = 'center'; x.fillText(addr, W / 2, fy + L.addrGap) }
 
   return new Promise((ok, no) => canvas.toBlob(b => b ? ok(b) : no(new Error('no picture')), 'image/png'))
 }

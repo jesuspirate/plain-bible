@@ -31,7 +31,7 @@ describe('verse picture', () => {
   })
   it('keeps to the wide card\'s own sizes', () => {
     const at = (size: number) => (s: string) => [...s].length * size * .5
-    expect(fit(at, 'Jesus wept.', 1000, () => 400, 80, 22).size).toBe(80)
-    expect(fit(at, 'word '.repeat(5000), 1000, () => 400, 80, 22).size).toBe(22)
+    expect(fit(at, 'Jesus wept.', 1000, () => 400, 76, 22).size).toBe(76)
+    expect(fit(at, 'word '.repeat(5000), 1000, () => 400, 76, 22).size).toBe(22)
   })
 })
