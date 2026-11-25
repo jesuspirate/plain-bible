@@ -12,6 +12,7 @@ import { APNS_PREFIX, APNS_TOKEN, isApnsEnv, sendApns, type Apns } from './apns'
 import { checkNostrEvent, NOSTR_WRAP } from './nostr'
 import { plainBookName } from '../../src/lib/bookList'
 import { suggestionMail } from './suggest'
+import { CARD_ID, CARD_MAX, cardId, isCard } from './card'
 
 export interface Env {
   DB: D1Database
@@ -40,7 +41,8 @@ export interface Env {
    *  one account is ever read. */
   STATS_EMAIL?: string
   /** Recorded Bible readings the app serves itself (/audio/…), when the
-   *  account has R2 storage (scripts/deploy_sync.sh). */
+   *  account has R2 storage (scripts/deploy_sync.sh). Verse pictures for
+   *  shared links' cards live there too, under cards/ (card.ts). */
   AUDIO?: R2Bucket
 }
 
@@ -1872,6 +1874,48 @@ async function audioRoute(req: Request, env: Env, key: string): Promise<Response
   return new Response(req.method === 'HEAD' ? null : obj.body, { status, headers })
 }
 
+// Verse pictures for shared links' cards (card.ts): sent once from a Mac or
+// computer, kept, and shown to Facebook, X and WhatsApp when they read the link.
+const CARDS_PER_HOUR = 20
+const CARDS_PER_DAY = 60
+const CARDS_ALL_PER_DAY = 3000
+
+async function cardSend(req: Request, env: Env): Promise<Response> {
+  if (!env.AUDIO) throw new HttpError(404, 'Not found')
+  if (Number(req.headers.get('Content-Length') ?? 0) > CARD_MAX) throw new HttpError(413, 'Too large')
+  const body = new Uint8Array(await req.arrayBuffer())
+  if (!isCard(body)) throw new HttpError(400, 'Bad request')
+  const db = env.DB, now = Date.now(), ip = await ipKey(req)
+  const [here, all] = await Promise.all([
+    db.prepare('SELECT COUNT(*) AS n, COUNT(CASE WHEN at > ? THEN 1 END) AS h FROM card_sends WHERE ip = ? AND at > ?').bind(now - 3_600_000, ip, now - DAY).first<{ n: number; h: number }>(),
+    db.prepare('SELECT COUNT(*) AS n FROM card_sends WHERE at > ?').bind(now - DAY).first<{ n: number }>(),
+  ])
+  if ((here?.h ?? 0) >= CARDS_PER_HOUR || (here?.n ?? 0) >= CARDS_PER_DAY || (all?.n ?? 0) >= CARDS_ALL_PER_DAY) {
+    throw new HttpError(429, 'Too many links from here. Try again in an hour.')
+  }
+  const id = await cardId(body), key = `cards/${id}.png`
+  // The same verse in the same look is the same picture: kept once.
+  if (!await env.AUDIO.head(key)) {
+    await env.AUDIO.put(key, body, { httpMetadata: { contentType: 'image/png', cacheControl: 'public, max-age=31536000, immutable' } })
+  }
+  await db.batch([
+    db.prepare('DELETE FROM card_sends WHERE at < ?').bind(now - DAY),
+    db.prepare('INSERT INTO card_sends (ip, at) VALUES (?, ?)').bind(ip, now),
+  ])
+  return json({ id })
+}
+
+async function cardGet(req: Request, env: Env, name: string): Promise<Response> {
+  const id = name.replace(/\.png$/, '')
+  if (!env.AUDIO || !CARD_ID.test(id)) throw new HttpError(404, 'Not found')
+  const obj = await env.AUDIO.get(`cards/${id}.png`)
+  if (!obj) throw new HttpError(404, 'Not found')
+  return new Response(req.method === 'HEAD' ? null : obj.body, { headers: {
+    'Content-Type': 'image/png', 'Content-Length': String(obj.size), ETag: obj.httpEtag,
+    'Cache-Control': 'public, max-age=31536000, immutable', 'Access-Control-Allow-Origin': '*',
+  } })
+}
+
 async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Response> {
   const { pathname } = new URL(req.url)
   const key = `${req.method} ${pathname}`
@@ -1894,6 +1938,9 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
   if (pathname === '/push' || pathname.startsWith('/push/')) {
     return pushRoute(req, env, pathname.split('/').slice(2).filter(Boolean))
   }
+  if (pathname.startsWith('/card/') && (req.method === 'GET' || req.method === 'HEAD')) {
+    return cardGet(req, env, pathname.slice(6))
+  }
   if (pathname.startsWith('/audio/') && (req.method === 'GET' || req.method === 'HEAD')) {
     return audioRoute(req, env, decodeURIComponent(pathname.slice(7)))
   }
@@ -1901,6 +1948,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
   switch (key) {
     case 'GET /hello': return helloRoute(req, env)
     case 'POST /suggest': return suggestRoute(req, env)
+    case 'POST /card': return cardSend(req, env)
     case 'GET /stats': case 'POST /stats': return statsRoute(req, env)
     case 'GET /': return json({ service: 'plain-bible-sync', ok: true, email: emailOn(env), push: !!vapid(env), apns: !!apns(env) })
 

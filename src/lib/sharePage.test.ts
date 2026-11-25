@@ -51,4 +51,17 @@ describe('share page', () => {
     const html = await (await ask('LSG/John/3/16')).text()
     expect(html).toContain('<meta property="og:title" content="Jean 3:16 (LSG)">')
   })
+
+  it('shows the verse picture the sharer sent, when the link names one', async () => {
+    const id = 'a'.repeat(32)
+    const at = (q: string, cards?: string) => answer(new Request(`https://share.myquietbible.com/?r=KJV/John/3/16&c=2&p=${q}`, { headers: { 'User-Agent': 'facebookexternalhit/1.1' } }), get, cards)
+    const html = await (await at(id, 'https://sync.example/')).text()
+    expect(html).toContain(`<meta property="og:image" content="https://sync.example/card/${id}.png">`)
+    expect(html).toContain(`<meta name="twitter:image" content="https://sync.example/card/${id}.png">`)
+    expect(html).toContain(`?r=KJV/John/3/16&#38;c=2&#38;p=${id}">`)
+    expect(html).toContain('og:image:alt" content="For God so loved')
+    // A made-up name, or no picture service: the lamp.
+    expect(await (await at('../x', 'https://sync.example')).text()).toContain('https://myquietbible.com/share.png')
+    expect(await (await at(id)).text()).toContain('https://myquietbible.com/share.png')
+  })
 })
