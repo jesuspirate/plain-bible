@@ -56,7 +56,15 @@ jobs:
       - run: npm ci
       - run: npm i --no-save playwright@1.63.0 && npx playwright install --with-deps chromium
       - name: Draw the posts still to come
-        run: bash scripts/social/run.sh --dry --all ${{ inputs.date && format('--date {0}', inputs.date) || '' }}
+        # The typed day reaches the script as data (an environment variable),
+        # never as part of the command, and must look like YYYY-MM-DD.
+        env:
+          DATE: ${{ inputs.date }}
+        run: |
+          if [ -n "$DATE" ] && ! [[ "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "::error::The day must look like YYYY-MM-DD."; exit 1
+          fi
+          bash scripts/social/run.sh --dry --all ${DATE:+--date "$DATE"}
       - uses: actions/upload-artifact@v7
         with:
           name: social-preview
@@ -87,7 +95,12 @@ jobs:
           FB_PAGE_TOKEN: ${{ secrets.FB_PAGE_TOKEN }}
           # Where the Facebook card's verse picture is kept (the sync service).
           SYNC_URL: ${{ vars.SYNC_URL || 'https://plain-bible-sync.wqk45tyy.workers.dev' }}
-        run: bash scripts/social/run.sh ${{ inputs.date && format('--date {0}', inputs.date) || '' }}
+          DATE: ${{ inputs.date }}
+        run: |
+          if [ -n "$DATE" ] && ! [[ "$DATE" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+            echo "::error::The day must look like YYYY-MM-DD."; exit 1
+          fi
+          bash scripts/social/run.sh ${DATE:+--date "$DATE"}
       - uses: actions/upload-artifact@v7
         if: always()
         with:
