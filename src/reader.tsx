@@ -55,9 +55,12 @@ export function Reader({ route }: { route: Route }) {
   const versions = big ? [...new Set([big, version])] : [version, ...parallel]
   // On an iPad on its side, a computer or an unfolded phone, the chapter is an open book of two
   // pages that you turn, unless you chose one page (Settings, Reading). Side
-  // by side versions keep their columns, which scroll.
+  // by side versions keep their columns, which scroll. Teaching mode is one
+  // column too (your Bible small under each verse), so it keeps the book and
+  // the page of paper you chose: it only adds its own changes.
   const wide = useWide()
-  const spread = wide && settings.spread !== 'single' && versions.length === 1
+  const cols = big ? 1 : versions.length
+  const spread = wide && settings.spread !== 'single' && cols === 1
   useEffect(() => {
     document.documentElement.classList.toggle('spread-on', spread)
     return () => document.documentElement.classList.remove('spread-on')
@@ -1259,13 +1262,13 @@ export function Reader({ route }: { route: Route }) {
 
       {loaded && rows > 0 && !spread && (
         <article key={`${book}.${chapter}`} ref={article}
-          class={`chapter ${settings.layout} cols-${versions.length}${big ? ' rec' : ''}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': versions.length }}>
+          class={`chapter ${settings.layout} cols-${cols}${big ? ' rec' : ''}${mode === 'stack' && peek?.dir === 1 && peek.from === `${book}.${chapter}` ? ' turning' : ''}`} style={{ '--cols': cols }}>
           {page(book, chapter, true)}
         </article>
       )}
       {loaded && rows > 0 && spread && (
         <div class="spread-box">
-          <article key={`${book}.${chapter}`} ref={article} class={`chapter ${settings.layout} cols-1 spread`}>
+          <article key={`${book}.${chapter}`} ref={article} class={`chapter ${settings.layout} cols-1 spread${big ? ' rec' : ''}`}>
             <div class="spread-flow" ref={flowEl}>{page(book, chapter, true)}</div>
           </article>
           <div class="leaf-box" ref={leafBox} />
@@ -1278,8 +1281,8 @@ export function Reader({ route }: { route: Route }) {
       {peek && (
         <div class={'turn-peek' + (mode === 'stack' && peek.dir === 1 ? ' under' : '')} aria-hidden="true">
           <div class="turn-dim" ref={dimEl} style={{ opacity: mode === 'stack' && peek.dir === 1 ? .3 : 0 }} />
-          <article ref={peekEl} class={`chapter ${settings.layout} cols-${versions.length}${big ? ' rec' : ''}${mode === 'stack' && peek.dir === -1 ? ' turning' : ''}`}
-            style={{ '--cols': versions.length, top: peek.top + 'px', left: peek.left + 'px', width: peek.width + 'px', transform: looks(x.current).peek }}>
+          <article ref={peekEl} class={`chapter ${settings.layout} cols-${cols}${big ? ' rec' : ''}${mode === 'stack' && peek.dir === -1 ? ' turning' : ''}`}
+            style={{ '--cols': cols, top: peek.top + 'px', left: peek.left + 'px', width: peek.width + 'px', transform: looks(x.current).peek }}>
             {page(peek.b, peek.c, false)}
           </article>
         </div>
