@@ -1465,23 +1465,46 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   // The link's card shows the verse too (on a phone, a computer or a Mac): a wide
   // picture, sent once to the sync service as the card opens (card.ts), and
   // named on the link (&p=…). Not ready, offline, or refused: the lamp card.
-  const [cardPicture, setCardPicture] = useState<string>()
-  // Shown small above the apps once it's sent: what their card will show.
-  const [cardPreview, setCardPreview] = useState<string>()
+  const [sent, setSent] = useState<{ key: string; id: string }>()
+  // Drawn a moment after the verse bar opens (when the phone is idle), so
+  // the Share card shows it at once: drawing waits for the fonts and makes a
+  // PNG, which was a visible lag on a phone. Only sent once Share is tapped.
+  const pictureKey = `${version} ${book} ${chapter} ${verses.join(',')}`
+  const [wide, setWide] = useState<{ key: string; blob: Blob; url: string }>()
   useEffect(() => {
-    if (!askShare || cardPicture || !SYNC_URL || navigator.onLine === false) return
-    let live = true, drawn: Blob | undefined
-    drawPicture({ ...pictureOf(), wide: true })
-      .then(b => { drawn = b; return fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: b }) })
+    if (!SYNC_URL || (wide && wide.key === pictureKey)) return
+    let live = true
+    const idle = window.requestIdleCallback ?? ((f: () => void) => setTimeout(f, 300))
+    const id = setTimeout(() => idle(() => {
+      if (!live) return
+      drawPicture({ ...pictureOf(), wide: true })
+        .then(blob => { if (live) setWide({ key: pictureKey, blob, url: URL.createObjectURL(blob) }) })
+        .catch(() => {})
+    }), askShare ? 0 : 400)
+    return () => { live = false; clearTimeout(id) }
+  }, [pictureKey, askShare, !!bibles[version]])
+  useEffect(() => () => { if (wide) URL.revokeObjectURL(wide.url) }, [wide])
+  const wideNow = wide?.key === pictureKey ? wide : undefined
+  // Sent when the Share card opens (not before: each send counts toward a
+  // limit), using the picture already drawn.
+  const [sendFailed, setSendFailed] = useState(false)
+  useEffect(() => {
+    if (!askShare || sent?.key === pictureKey || !wideNow || !SYNC_URL || navigator.onLine === false) return
+    let live = true
+    fetch(`${SYNC_URL}/card`, { method: 'POST', headers: { 'Content-Type': 'image/png' }, body: wideNow.blob })
       .then(r => r.ok ? r.json() as Promise<{ id?: string }> : undefined)
       .then(j => {
-        if (!live || !j?.id || !/^[a-f0-9]{32}$/.test(j.id) || !drawn) return
-        setCardPicture(j.id); setCardPreview(URL.createObjectURL(drawn))
+        if (!live) return
+        if (j?.id && /^[a-f0-9]{32}$/.test(j.id)) setSent({ key: wideNow.key, id: j.id })
+        else setSendFailed(true)
       })
-      .catch(() => {})
+      .catch(() => { if (live) setSendFailed(true) })
     return () => { live = false }
-  }, [askShare])
-  useEffect(() => () => { if (cardPreview) URL.revokeObjectURL(cardPreview) }, [cardPreview])
+  }, [askShare, wideNow])
+  // Shown small above the apps: what their card will show. Its room is kept
+  // from the start so nothing jumps; hidden when it can't go out.
+  const cardPicture = sent?.key === pictureKey ? sent.id : undefined
+  const showPreview = !!SYNC_URL && navigator.onLine !== false && !sendFailed
   const cardTo = cardPicture ? `${card}&p=${cardPicture}` : card
   useEffect(() => {
     if (!askShare || picture || !sheetHasApps()) return
@@ -1580,7 +1603,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
         </div> : askShare ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="share-title">
           <p id="share-title" class="confirm-title"><strong>{t('Share {ref}', { ref })}</strong></p>
           {/* What the apps get: the verse as a picture. */}
-          {cardPreview && <img class="share-picture" src={cardPreview} alt="" />}
+          {showPreview && <div class="share-picture">{wideNow && <img src={wideNow.url} alt="" />}</div>}
           {/* One tap to the apps people share verses to, then the phone's own
               Share (smaller) for every other app. Plain links: the phone opens
               the app if it's there, the website if not. */}
