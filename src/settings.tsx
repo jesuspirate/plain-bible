@@ -58,12 +58,29 @@ const still = () => matchMedia('(prefers-reduced-motion: reduce)').matches
  *  `done` waits for the slide to really end: run any sooner and the card
  *  was taken away while still partly on screen, so its fading copy (see
  *  motion.ts) showed the old view again for a moment before the new one.
- *  The card is marked as having gone by itself, so no copy is left at all. */
-export function slideAway(box: HTMLElement | null, done: () => void, to = 'translate3d(0, 100%, 0)') {
+ *  The card is marked as having gone by itself, so no copy is left at all.
+ *  Downwards it goes all the way off the screen: a card that sits higher up
+ *  (Circles, Your prayers) moved only its own height before, so it stopped
+ *  with its top still showing and then vanished in one go.
+ *  `dim`, the shade behind the card, fades out with it, so the two leave
+ *  together instead of the shade waiting for the card and then going. */
+export function slideAway(box: HTMLElement | null, done: () => void, to?: string, dim?: HTMLElement | null) {
   if (!box || still()) { done(); return }
+  if (!to) {
+    // Where the card is without any pull-down already applied to it.
+    const pulled = new DOMMatrix(getComputedStyle(box).transform).m42
+    const top = box.getBoundingClientRect().top - pulled
+    // A little more than the screen, so its shadow goes too.
+    to = `translate3d(0, ${Math.ceil(Math.max(box.offsetHeight, innerHeight - top) + 40)}px, 0)`
+  }
   box.setAttribute(AWAY_ATTR, '')
   box.style.transition = 'transform .2s ease-in'
   box.style.transform = to
+  if (dim) {
+    dim.setAttribute(AWAY_ATTR, '')
+    dim.style.transition = 'opacity .2s ease-in'
+    dim.style.opacity = '0'
+  }
   let over = false
   const end = () => { if (over) return; over = true; box.removeEventListener('transitionend', ended); done() }
   const ended = (e: TransitionEvent) => { if (e.target === box && e.propertyName === 'transform') end() }
@@ -77,7 +94,7 @@ export function slideAway(box: HTMLElement | null, done: () => void, to = 'trans
 // sideways) and goes far enough, or is flicked, closes; anything else is a
 // normal scroll. The non-passive touchmove listener is added only for such a
 // pull, so scrolling never waits on it. Only transforms move, nothing blurs.
-export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () => number, onClose: () => void) {
+export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () => number, onClose: () => void, dim?: () => HTMLElement | null) {
   const close = useRef(onClose)
   close.current = onClose
   useEffect(() => {
@@ -112,7 +129,7 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
       const was = pulling
       stop(); pulling = false
       if (!was) return
-      if (dy > 120 || (dy > 50 && v > .5)) slideAway(el, close.current)
+      if (dy > 120 || (dy > 50 && v > .5)) slideAway(el, close.current, undefined, dim?.())
       else back()
     }
     function cancel() { const was = pulling; stop(); pulling = false; if (was) back() }
