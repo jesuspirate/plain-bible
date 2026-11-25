@@ -375,7 +375,6 @@
 "Note": "Cholemba",
 "Listen": "Mverani",
 "Copy": "Koperani",
-"Link": "Linki",
 "Compare": "Fananitsani",
 "Notes": "Zolemba",
 "Add note": "Onjezani cholemba",
@@ -939,7 +938,6 @@
 "Bookmarked": "Chizindikiro chaikidwa",
 "Bookmark removed": "Chizindikiro chachotsedwa",
 "Share {ref}": "Gawanani {ref}",
-"Outside the app": "Kunja kwa pulogalamu",
 "With a circle": "Ndi gulu",
 "Copy a link": "Koperani linki",
 "Favorites": "Zokondedwa",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Foni ikagona m’mbali",
 "Nothing hidden": "Palibe chobisika",
 "Tap the verse being read to highlight or share it.": "Dinani vesi lomwe likuwerengedwa kuti muliwunikire kapena kuligawana.",
-"Topics: {topic}": "Mitu: {topic}"
+"Topics: {topic}": "Mitu: {topic}",
+"Other apps": "Ma app ena",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook imalandira ulalo wokha, choncho vesi nalonso lakopedwa: liikeni mu positi yanu."
 }

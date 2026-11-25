@@ -215,3 +215,22 @@ export const VideoIcon = ({ size, class: c }: P) => (
 export const SuggestIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M4 6.5A2.5 2.5 0 0 1 6.5 4h11A2.5 2.5 0 0 1 20 6.5v7a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4h0A2.5 2.5 0 0 1 4 13.5z" {...line} /><circle cx="8.5" cy="10" r="1.3" fill="currentColor" /><circle cx="12" cy="10" r="1.3" fill="currentColor" /><circle cx="15.5" cy="10" r="1.3" fill="currentColor" /></svg>
 )
+
+/* The apps people share verses to, in their own colors so they're known at a
+   glance (drawn here: no outside code or pictures). The letters and marks are
+   white on the colored disc. */
+export const FacebookIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="12" fill="#1877F2" />
+    <path d="M13.3 24v-8.4h2.8l.45-3.3H13.3v-2.1c0-.95.3-1.6 1.65-1.6h1.7V5.65a23 23 0 0 0-2.5-.13c-2.47 0-4.15 1.5-4.15 4.27v2.5H7.2v3.3H10V24Z" fill="#fff" /></svg>
+)
+
+export const XIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="12" fill="#000" />
+    <path d="M16.2 6.3h1.95l-4.25 4.86 5 6.6h-3.92l-3.07-4.01-3.51 4.01H6.45l4.55-5.2L6.2 6.3h4.02l2.77 3.67Zm-.68 10.3h1.08L9.63 7.4H8.47Z" fill="#fff" /></svg>
+)
+
+export const WhatsAppIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><circle cx="12" cy="12" r="12" fill="#25D366" />
+    <path d="M12 5.3a6.7 6.7 0 0 0-5.8 10.05L5.3 18.7l3.42-.88A6.7 6.7 0 1 0 12 5.3Z" fill="none" stroke="#fff" stroke-width="1.5" stroke-linejoin="round" />
+    <path d="M9.75 8.9c.15-.35.32-.36.47-.36h.4c.13 0 .3.05.46.38l.5 1.2c.05.13.08.27 0 .42l-.22.36-.3.33c-.1.1-.2.21-.08.41.12.2.52.86 1.12 1.39.77.69 1.42.9 1.62 1 .2.1.32.08.44-.05l.6-.7c.14-.18.27-.15.45-.09l1.17.56c.2.1.32.14.37.22.05.08.05.47-.11.93-.17.46-.96.88-1.32.92-.34.04-.66.16-2.2-.46-1.88-.74-3.06-2.66-3.16-2.78-.09-.13-.75-1-.75-1.9 0-.91.47-1.36.64-1.54Z" fill="#fff" /></svg>
+)

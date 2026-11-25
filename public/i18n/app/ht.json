@@ -375,7 +375,6 @@
 "Note": "Nòt",
 "Listen": "Koute",
 "Copy": "Kopye",
-"Link": "Lyen",
 "Compare": "Konpare",
 "Notes": "Nòt",
 "Add note": "Ajoute nòt",
@@ -939,7 +938,6 @@
 "Bookmarked": "Makè mete",
 "Bookmark removed": "Makè retire",
 "Share {ref}": "Pataje {ref}",
-"Outside the app": "Andeyò aplikasyon an",
 "With a circle": "Ak yon sèk",
 "Copy a link": "Kopye yon lyen",
 "Favorites": "Favori",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefòn nan kouche",
 "Nothing hidden": "Anyen pa kache",
 "Tap the verse being read to highlight or share it.": "Peze vèsè y ap li a pou make l oswa pataje l.",
-"Topics: {topic}": "Sijè: {topic}"
+"Topics: {topic}": "Sijè: {topic}",
+"Other apps": "Lòt aplikasyon",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook pran lyen an sèlman, kidonk vèsè a kopye tou: kole l nan piblikasyon w."
 }

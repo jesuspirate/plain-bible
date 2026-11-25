@@ -375,7 +375,6 @@
 "Note": "Ndetu",
 "Listen": "Gee ntị",
 "Copy": "Detuo",
-"Link": "Njikọ",
 "Compare": "Tụnyere",
 "Notes": "Ndetu",
 "Add note": "Tinye ndetu",
@@ -939,7 +938,6 @@
 "Bookmarked": "Etinyere akara ibe",
 "Bookmark removed": "Ewepụla akara ibe",
 "Share {ref}": "Kesaa {ref}",
-"Outside the app": "N’èzí ngwa ahụ",
 "With a circle": "Ya na otu",
 "Copy a link": "Detuo njikọ",
 "Favorites": "Ndị kacha amasị m",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Ekwentị dina n’akụkụ",
 "Nothing hidden": "Ọ dịghị ihe zoro ezo",
 "Tap the verse being read to highlight or share it.": "Pịa amaokwu a na-agụ ugbu a iji mee ka ọ pụta ìhè ma ọ bụ kesaa ya.",
-"Topics: {topic}": "Isiokwu: {topic}"
+"Topics: {topic}": "Isiokwu: {topic}",
+"Other apps": "Ngwa ndị ọzọ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook na-anabata naanị njikọ ahụ, ya mere e depụtakwara amaokwu ahụ: mado ya na post gị."
 }

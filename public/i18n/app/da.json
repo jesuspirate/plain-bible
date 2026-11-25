@@ -375,7 +375,6 @@
 "Note": "Note",
 "Listen": "Lyt",
 "Copy": "Kopiér",
-"Link": "Link",
 "Compare": "Sammenlign",
 "Notes": "Noter",
 "Add note": "Tilføj note",
@@ -939,7 +938,6 @@
 "Bookmarked": "Bogmærke tilføjet",
 "Bookmark removed": "Bogmærke fjernet",
 "Share {ref}": "Del {ref}",
-"Outside the app": "Uden for appen",
 "With a circle": "Med en kreds",
 "Copy a link": "Kopiér et link",
 "Favorites": "Favoritter",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefonen ligger ned",
 "Nothing hidden": "Intet skjult",
 "Tap the verse being read to highlight or share it.": "Tryk på det vers, der læses, for at markere eller dele det.",
-"Topics: {topic}": "Emner: {topic}"
+"Topics: {topic}": "Emner: {topic}",
+"Other apps": "Andre apps",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook tager kun linket, så verset er også kopieret: indsæt det i dit opslag."
 }

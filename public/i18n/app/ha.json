@@ -375,7 +375,6 @@
 "Note": "Rubutu",
 "Listen": "Saurara",
 "Copy": "Kwafa",
-"Link": "Mahaɗi",
 "Compare": "Kwatanta",
 "Notes": "Rubuce-rubuce",
 "Add note": "Ƙara rubutu",
@@ -939,7 +938,6 @@
 "Bookmarked": "An sa alamar shafi",
 "Bookmark removed": "An cire alamar shafi",
 "Share {ref}": "Raba {ref}",
-"Outside the app": "A wajen manhajar",
 "With a circle": "Da ƙungiya",
 "Copy a link": "Kwafi mahaɗi",
 "Favorites": "Waɗanda aka fi so",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Waya a kwance a gefe",
 "Nothing hidden": "Babu abin da aka ɓoye",
 "Tap the verse being read to highlight or share it.": "Taɓa ayar da ake karantawa don ka haskaka ta ko ka raba ta.",
-"Topics: {topic}": "Jigogi: {topic}"
+"Topics: {topic}": "Jigogi: {topic}",
+"Other apps": "Wasu manhajoji",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook yana karɓar mahaɗin kawai, don haka an kwafi ayar ma: liƙa ta a rubutunka."
 }

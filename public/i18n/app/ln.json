@@ -375,7 +375,6 @@
 "Note": "Noti",
 "Listen": "Yoká",
 "Copy": "Kopí",
-"Link": "Lien",
 "Compare": "Kokanisa",
 "Notes": "Noti",
 "Add note": "Bakisa noti",
@@ -939,7 +938,6 @@
 "Bookmarked": "Elembo etyami",
 "Bookmark removed": "Elembo elongwe",
 "Share {ref}": "Kabolá {ref}",
-"Outside the app": "Libanda ya application",
 "With a circle": "Na lisanga",
 "Copy a link": "Kopí lien",
 "Favorites": "Oyo nalingi",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefone na mopanzi",
 "Nothing hidden": "Eloko moko te ebombami",
 "Tap the verse being read to highlight or share it.": "Finá vɛrsɛ oyo ezali kotángama mpo na kotya yango langi to kokabola yango.",
-"Topics: {topic}": "Mitó ya makambo: {topic}"
+"Topics: {topic}": "Mitó ya makambo: {topic}",
+"Other apps": "Ba app mosusu",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook ezwaka kaka lien, yango wana vɛrsɛ mpe ekopiami: tyá yango na publication na yo."
 }

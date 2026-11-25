@@ -375,7 +375,6 @@
 "Note": "Nota",
 "Listen": "Denggen",
 "Copy": "Kopiaen",
-"Link": "Link",
 "Compare": "Ipada",
 "Notes": "Dagiti Nota",
 "Add note": "Mangnayon iti nota",
@@ -939,7 +938,6 @@
 "Bookmarked": "Na-bookmark",
 "Bookmark removed": "Naikkat ti bookmark",
 "Share {ref}": "Ibingay ti {ref}",
-"Outside the app": "Iti ruar ti app",
 "With a circle": "Iti maysa a bunggoy",
 "Copy a link": "Kopiaen ti maysa a link",
 "Favorites": "Dagiti Paborito",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Nakaidda ti telepono",
 "Nothing hidden": "Awan ti nailemmeng",
 "Tap the verse being read to highlight or share it.": "I-tap ti bersikulo a mabasbasa tapno i-highlight wenno ibingay.",
-"Topics: {topic}": "Dagiti Topiko: {topic}"
+"Topics: {topic}": "Dagiti Topiko: {topic}",
+"Other apps": "Dadduma nga app",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Ti Facebook ket ti link laeng ti awatenna, isu a nakopia met ti bersikulo: idikitmo iti post-mo."
 }

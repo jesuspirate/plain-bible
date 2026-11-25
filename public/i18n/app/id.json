@@ -375,7 +375,6 @@
 "Note": "Catatan",
 "Listen": "Dengarkan",
 "Copy": "Salin",
-"Link": "Tautan",
 "Compare": "Bandingkan",
 "Notes": "Catatan",
 "Add note": "Tambahkan catatan",
@@ -939,7 +938,6 @@
 "Bookmarked": "Ditandai",
 "Bookmark removed": "Penanda dihapus",
 "Share {ref}": "Bagikan {ref}",
-"Outside the app": "Di luar aplikasi",
 "With a circle": "Ke lingkaran",
 "Copy a link": "Salin tautan",
 "Favorites": "Favorit",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Ponsel miring",
 "Nothing hidden": "Tidak ada yang disembunyikan",
 "Tap the verse being read to highlight or share it.": "Ketuk ayat yang sedang dibaca untuk menandai atau membagikannya.",
-"Topics: {topic}": "Topik: {topic}"
+"Topics: {topic}": "Topik: {topic}",
+"Other apps": "Aplikasi lain",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook hanya menerima tautan, jadi ayatnya juga sudah disalin: tempelkan ke postingan Anda."
 }

@@ -445,7 +445,6 @@
 "Note": "ملاحظة",
 "Listen": "استماع",
 "Copy": "نسخ",
-"Link": "رابط",
 "Compare": "مقارنة",
 "Notes": "الملاحظات",
 "Add note": "إضافة ملاحظة",
@@ -1065,7 +1064,6 @@
 "Bookmarked": "أُضيفت إشارة مرجعية",
 "Bookmark removed": "أُزيلت الإشارة المرجعية",
 "Share {ref}": "مشاركة {ref}",
-"Outside the app": "خارج التطبيق",
 "With a circle": "مع دائرة",
 "Copy a link": "نسخ رابط",
 "Favorites": "المفضلة",
@@ -1478,5 +1476,7 @@
 "Phone on its side": "الهاتف على جانبه",
 "Nothing hidden": "لا شيء مخفي",
 "Tap the verse being read to highlight or share it.": "اضغط الآية التي تُقرأ الآن لتلوينها أو مشاركتها.",
-"Topics: {topic}": "المواضيع: {topic}"
+"Topics: {topic}": "المواضيع: {topic}",
+"Other apps": "تطبيقات أخرى",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "فيسبوك يأخذ الرابط فقط، لذلك نُسخت الآية أيضًا: الصقها في منشورك."
 }

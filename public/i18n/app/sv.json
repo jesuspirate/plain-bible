@@ -375,7 +375,6 @@
 "Note": "Anteckning",
 "Listen": "Lyssna",
 "Copy": "Kopiera",
-"Link": "Länk",
 "Compare": "Jämför",
 "Notes": "Anteckningar",
 "Add note": "Lägg till anteckning",
@@ -939,7 +938,6 @@
 "Bookmarked": "Bokmärke tillagt",
 "Bookmark removed": "Bokmärket borttaget",
 "Share {ref}": "Dela {ref}",
-"Outside the app": "Utanför appen",
 "With a circle": "Med en krets",
 "Copy a link": "Kopiera en länk",
 "Favorites": "Favoriter",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefonen ligger ner",
 "Nothing hidden": "Inget dolt",
 "Tap the verse being read to highlight or share it.": "Tryck på versen som läses för att markera eller dela den.",
-"Topics: {topic}": "Ämnen: {topic}"
+"Topics: {topic}": "Ämnen: {topic}",
+"Other apps": "Andra appar",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook tar bara emot länken, så versen är också kopierad: klistra in den i ditt inlägg."
 }

@@ -375,7 +375,6 @@
 "Note": "নোট",
 "Listen": "শুনুন",
 "Copy": "কপি করুন",
-"Link": "লিঙ্ক",
 "Compare": "তুলনা করুন",
 "Notes": "নোট",
 "Add note": "নোট যোগ করুন",
@@ -939,7 +938,6 @@
 "Bookmarked": "বুকমার্ক করা হয়েছে",
 "Bookmark removed": "বুকমার্ক সরানো হয়েছে",
 "Share {ref}": "{ref} শেয়ার করুন",
-"Outside the app": "অ্যাপের বাইরে",
 "With a circle": "একটি সার্কেলের সঙ্গে",
 "Copy a link": "একটি লিঙ্ক কপি করুন",
 "Favorites": "প্রিয়",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ফোন কাত করলে",
 "Nothing hidden": "কিছুই লুকানো নেই",
 "Tap the verse being read to highlight or share it.": "যে পদটি পড়া হচ্ছে তাতে ট্যাপ করে সেটি রাঙান বা শেয়ার করুন।",
-"Topics: {topic}": "বিষয়: {topic}"
+"Topics: {topic}": "বিষয়: {topic}",
+"Other apps": "অন্য অ্যাপ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ফেসবুক শুধু লিংকটি নেয়, তাই পদটিও কপি করা হয়েছে: আপনার পোস্টে পেস্ট করুন।"
 }

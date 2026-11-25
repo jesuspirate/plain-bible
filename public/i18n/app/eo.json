@@ -375,7 +375,6 @@
 "Note": "Noto",
 "Listen": "Aŭskulti",
 "Copy": "Kopii",
-"Link": "Ligilo",
 "Compare": "Kompari",
 "Notes": "Notoj",
 "Add note": "Aldoni noton",
@@ -939,7 +938,6 @@
 "Bookmarked": "Legosignita",
 "Bookmark removed": "Legosigno forigita",
 "Share {ref}": "Kunhavigi {ref}",
-"Outside the app": "Ekster la aplikaĵo",
 "With a circle": "Kun rondo",
 "Copy a link": "Kopii ligilon",
 "Favorites": "Plej ŝatataj",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefono flanke",
 "Nothing hidden": "Nenio kaŝita",
 "Tap the verse being read to highlight or share it.": "Tuŝetu la nun legatan verson por marki aŭ kunhavigi ĝin.",
-"Topics: {topic}": "Temoj: {topic}"
+"Topics: {topic}": "Temoj: {topic}",
+"Other apps": "Aliaj aplikaĵoj",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook akceptas nur la ligilon, do la verso ankaŭ estas kopiita: algluu ĝin en vian afiŝon."
 }

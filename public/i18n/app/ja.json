@@ -375,7 +375,6 @@
 "Note": "メモ",
 "Listen": "聞く",
 "Copy": "コピー",
-"Link": "リンク",
 "Compare": "比較",
 "Notes": "メモ",
 "Add note": "メモを追加",
@@ -939,7 +938,6 @@
 "Bookmarked": "ブックマークしました",
 "Bookmark removed": "ブックマークを削除しました",
 "Share {ref}": "{ref} を共有",
-"Outside the app": "アプリの外へ",
 "With a circle": "サークルと",
 "Copy a link": "リンクをコピー",
 "Favorites": "お気に入り",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "スマホを横にしたとき",
 "Nothing hidden": "何も隠さない",
 "Tap the verse being read to highlight or share it.": "読んでいる節をタップすると、色を付けたり共有したりできます。",
-"Topics: {topic}": "テーマ：{topic}"
+"Topics: {topic}": "テーマ：{topic}",
+"Other apps": "ほかのアプリ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook にはリンクしか渡せないため、聖句もコピーしました。投稿に貼り付けてください。"
 }

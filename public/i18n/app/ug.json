@@ -375,7 +375,6 @@
 "Note": "خاتىرە",
 "Listen": "ئاڭلاش",
 "Copy": "كۆچۈرۈش",
-"Link": "ئۇلانما",
 "Compare": "سېلىشتۇرۇش",
 "Notes": "خاتىرىلەر",
 "Add note": "خاتىرە قوشۇش",
@@ -939,7 +938,6 @@
 "Bookmarked": "خەتكۈچ قوشۇلدى",
 "Bookmark removed": "خەتكۈچ ئۆچۈرۈلدى",
 "Share {ref}": "{ref} نى ھەمبەھىرلەش",
-"Outside the app": "ئەپنىڭ سىرتىدا",
 "With a circle": "چەمبەر بىلەن",
 "Copy a link": "ئۇلانما كۆچۈرۈش",
 "Favorites": "ياقتۇرغانلار",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "تېلېفون يانتۇ تۇرغاندا",
 "Nothing hidden": "ھېچنېمە يوشۇرۇلمىدى",
 "Tap the verse being read to highlight or share it.": "ئوقۇلۇۋاتقان ئايەتنى بېسىپ ئۇنى بەلگىلەڭ ياكى ھەمبەھىرلەڭ.",
-"Topics: {topic}": "تېمىلار: {topic}"
+"Topics: {topic}": "تېمىلار: {topic}",
+"Other apps": "باشقا ئەپلار",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook پەقەت ئۇلىنىشنىلا قوبۇل قىلىدۇ، شۇڭا ئايەتمۇ كۆچۈرۈلدى: ئۇنى يازمىڭىزغا چاپلاڭ."
 }

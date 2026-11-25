@@ -375,7 +375,6 @@
 "Note": "Àkọsílẹ̀",
 "Listen": "Gbọ́",
 "Copy": "Dà á kọ",
-"Link": "Ìlujá",
 "Compare": "Ṣe àfiwé",
 "Notes": "Àwọn àkọsílẹ̀",
 "Add note": "Fi àkọsílẹ̀ kún un",
@@ -939,7 +938,6 @@
 "Bookmarked": "A ti fi àmì ìwé sí i",
 "Bookmark removed": "A ti yọ àmì ìwé kúrò",
 "Share {ref}": "Pín {ref}",
-"Outside the app": "Lóde áàpù",
 "With a circle": "Pẹ̀lú ẹgbẹ́ kan",
 "Copy a link": "Da ìlujá kọ",
 "Favorites": "Àwọn àyànfẹ́",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Fóònù dùbúlẹ̀",
 "Nothing hidden": "Kò sí ohun tí a fi pamọ́",
 "Tap the verse being read to highlight or share it.": "Tẹ ẹsẹ tí wọ́n ń kà láti fi àwọ̀ sí i tàbí láti pín in.",
-"Topics: {topic}": "Àwọn kókó: {topic}"
+"Topics: {topic}": "Àwọn kókó: {topic}",
+"Other apps": "Àwọn app mìíràn",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook máa ń gba ìjápọ̀ nìkan, nítorí náà a ti da ẹsẹ náà kọ pẹ̀lú: lẹ̀ ẹ́ mọ́ ìfiránṣẹ́ rẹ."
 }

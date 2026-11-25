@@ -375,7 +375,6 @@
 "Note": "筆記",
 "Listen": "收聽",
 "Copy": "拷貝",
-"Link": "連結",
 "Compare": "對照",
 "Notes": "筆記",
 "Add note": "加入筆記",
@@ -939,7 +938,6 @@
 "Bookmarked": "已加入書籤",
 "Bookmark removed": "已移除書籤",
 "Share {ref}": "分享{ref}",
-"Outside the app": "分享到 App 之外",
 "With a circle": "與小組分享",
 "Copy a link": "拷貝連結",
 "Favorites": "個人收藏",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "手機橫放時",
 "Nothing hidden": "未隱藏任何項",
 "Tap the verse being read to highlight or share it.": "點一下正在朗讀的那一節，就能標色或分享。",
-"Topics: {topic}": "主題：{topic}"
+"Topics: {topic}": "主題：{topic}",
+"Other apps": "其他應用程式",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook 只接受連結，所以經文也已複製：請貼到你的貼文裡。"
 }

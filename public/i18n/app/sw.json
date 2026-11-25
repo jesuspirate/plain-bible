@@ -375,7 +375,6 @@
 "Note": "Dokezo",
 "Listen": "Sikiliza",
 "Copy": "Nakili",
-"Link": "Kiungo",
 "Compare": "Linganisha",
 "Notes": "Madokezo",
 "Add note": "Ongeza dokezo",
@@ -939,7 +938,6 @@
 "Bookmarked": "Alamisho limewekwa",
 "Bookmark removed": "Alamisho limeondolewa",
 "Share {ref}": "Shiriki {ref}",
-"Outside the app": "Nje ya programu",
 "With a circle": "Na kikundi",
 "Copy a link": "Nakili kiungo",
 "Favorites": "Vipendwa",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Simu ikiwa imelala ubavuni",
 "Nothing hidden": "Hakuna kilichofichwa",
 "Tap the verse being read to highlight or share it.": "Gusa mstari unaosomwa ili kuuwekea rangi au kuushiriki.",
-"Topics: {topic}": "Mada: {topic}"
+"Topics: {topic}": "Mada: {topic}",
+"Other apps": "Programu nyingine",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook inapokea kiungo tu, kwa hiyo mstari pia umenakiliwa: ubandike kwenye chapisho lako."
 }

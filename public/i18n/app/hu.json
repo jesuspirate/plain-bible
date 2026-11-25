@@ -375,7 +375,6 @@
 "Note": "Jegyzet",
 "Listen": "Meghallgatás",
 "Copy": "Másolás",
-"Link": "Link",
 "Compare": "Összehasonlítás",
 "Notes": "Jegyzetek",
 "Add note": "Jegyzet hozzáadása",
@@ -939,7 +938,6 @@
 "Bookmarked": "Könyvjelző hozzáadva",
 "Bookmark removed": "Könyvjelző eltávolítva",
 "Share {ref}": "{ref} megosztása",
-"Outside the app": "Az alkalmazáson kívül",
 "With a circle": "Egy körrel",
 "Copy a link": "Link másolása",
 "Favorites": "Kedvencek",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Fekvő telefon",
 "Nothing hidden": "Semmi sincs elrejtve",
 "Tap the verse being read to highlight or share it.": "Koppints az épp olvasott versre a kiemeléshez vagy megosztáshoz.",
-"Topics: {topic}": "Témák: {topic}"
+"Topics: {topic}": "Témák: {topic}",
+"Other apps": "Más alkalmazások",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "A Facebook csak a linket veszi át, ezért az igevers is ki van másolva: illeszd be a bejegyzésedbe."
 }

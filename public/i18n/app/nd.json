@@ -375,7 +375,6 @@
 "Note": "Inothi",
 "Listen": "Lalela",
 "Copy": "Khuphela",
-"Link": "Ilinki",
 "Compare": "Qathanisa",
 "Notes": "Amanothi",
 "Add note": "Engeza inothi",
@@ -939,7 +938,6 @@
 "Bookmarked": "Uphawu lufakiwe",
 "Bookmark removed": "Uphawu lususiwe",
 "Share {ref}": "Yabelana nge-{ref}",
-"Outside the app": "Ngaphandle kwe-app",
 "With a circle": "Leqembu",
 "Copy a link": "Khuphela ilinki",
 "Favorites": "Okuthandiweyo",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Ifoni ilele ngehlangothi",
 "Nothing hidden": "Kakukho okufihliweyo",
 "Tap the verse being read to highlight or share it.": "Thinta ivesi elibalwayo ukuze uligqamise loba ulabelane.",
-"Topics: {topic}": "Izihloko: {topic}"
+"Topics: {topic}": "Izihloko: {topic}",
+"Other apps": "Ezinye ama-app",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "UFacebook uthatha ilinki kuphela, ngakho levesi likhutshiwe: linamathisele kuposti yakho."
 }

@@ -425,7 +425,6 @@
 "Note": "Заметка",
 "Listen": "Слушать",
 "Copy": "Скопировать",
-"Link": "Ссылка",
 "Compare": "Сравнить",
 "Notes": "Заметки",
 "Add note": "Добавить заметку",
@@ -1034,7 +1033,6 @@
 "Bookmarked": "Закладка добавлена",
 "Bookmark removed": "Закладка удалена",
 "Share {ref}": "Поделиться: {ref}",
-"Outside the app": "Вне приложения",
 "With a circle": "С кругом",
 "Copy a link": "Скопировать ссылку",
 "Favorites": "Избранное",
@@ -1441,5 +1439,7 @@
 "Phone on its side": "Телефон боком",
 "Nothing hidden": "Ничего не скрыто",
 "Tap the verse being read to highlight or share it.": "Нажмите на читаемый стих, чтобы выделить его или поделиться им.",
-"Topics: {topic}": "Темы: {topic}"
+"Topics: {topic}": "Темы: {topic}",
+"Other apps": "Другие приложения",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook принимает только ссылку, поэтому стих тоже скопирован: вставьте его в свою публикацию."
 }

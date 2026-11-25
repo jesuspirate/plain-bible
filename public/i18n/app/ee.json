@@ -375,7 +375,6 @@
 "Note": "Nuŋlɔɖi",
 "Listen": "Ɖo to",
 "Copy": "Ɖe kɔpi",
-"Link": "Kadodo",
 "Compare": "Tsɔe sɔ",
 "Notes": "Nuŋlɔɖiwo",
 "Add note": "Tsɔ nuŋlɔɖi kpee",
@@ -939,7 +938,6 @@
 "Bookmarked": "Wode agbalẽdzesi",
 "Bookmark removed": "Woɖe agbalẽdzesi ɖa",
 "Share {ref}": "Ma {ref}",
-"Outside the app": "Le dɔwɔnuƒomɔ la godo",
 "With a circle": "Kple habɔbɔ aɖe",
 "Copy a link": "Ɖe kadodo ƒe kɔpi",
 "Favorites": "Nu siwo dze ŋunye",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Fon la mlɔ axadzi",
 "Nothing hidden": "Naneke mele ɣaɣla o",
 "Tap the verse being read to highlight or share it.": "Zi kpukpui si wòle xlẽxlẽm dzi be nàde amadede eŋu alo nàma.",
-"Topics: {topic}": "Nyatiwo: {topic}"
+"Topics: {topic}": "Nyatiwo: {topic}",
+"Other apps": "Dɔwɔnu bubuwo",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook xɔa link la ɖeɖe ko, eya ta wogaŋlɔ kpukpui la hã ɖe kɔpi: tsɔe de wò nyatakaka me."
 }

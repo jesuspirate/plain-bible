@@ -375,7 +375,6 @@
 "Note": "메모",
 "Listen": "듣기",
 "Copy": "복사",
-"Link": "링크",
 "Compare": "비교",
 "Notes": "메모",
 "Add note": "메모 추가",
@@ -939,7 +938,6 @@
 "Bookmarked": "책갈피에 추가됨",
 "Bookmark removed": "책갈피 삭제됨",
 "Share {ref}": "{ref} 공유",
-"Outside the app": "앱 밖으로",
 "With a circle": "모임과",
 "Copy a link": "링크 복사",
 "Favorites": "즐겨찾기",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "휴대폰을 옆으로 눕혔을 때",
 "Nothing hidden": "숨긴 것 없음",
 "Tap the verse being read to highlight or share it.": "지금 읽고 있는 절을 누르면 색칠하거나 공유할 수 있습니다.",
-"Topics: {topic}": "주제: {topic}"
+"Topics: {topic}": "주제: {topic}",
+"Other apps": "다른 앱",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook은 링크만 받기 때문에 구절도 복사해 두었습니다. 게시물에 붙여 넣으세요."
 }

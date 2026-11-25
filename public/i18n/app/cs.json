@@ -425,7 +425,6 @@
 "Note": "Poznámka",
 "Listen": "Poslechnout",
 "Copy": "Kopírovat",
-"Link": "Odkaz",
 "Compare": "Porovnat",
 "Notes": "Poznámky",
 "Add note": "Přidat poznámku",
@@ -1034,7 +1033,6 @@
 "Bookmarked": "Přidáno do záložek",
 "Bookmark removed": "Záložka odstraněna",
 "Share {ref}": "Sdílet {ref}",
-"Outside the app": "Mimo aplikaci",
 "With a circle": "S kruhem",
 "Copy a link": "Kopírovat odkaz",
 "Favorites": "Oblíbené",
@@ -1441,5 +1439,7 @@
 "Phone on its side": "Telefon na šířku",
 "Nothing hidden": "Nic skryto",
 "Tap the verse being read to highlight or share it.": "Klepněte na právě čtený verš a můžete ho zvýraznit nebo sdílet.",
-"Topics: {topic}": "Témata: {topic}"
+"Topics: {topic}": "Témata: {topic}",
+"Other apps": "Jiné aplikace",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook přijme jen odkaz, proto je zkopírován i verš: vložte ho do svého příspěvku."
 }

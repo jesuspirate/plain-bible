@@ -375,7 +375,6 @@
 "Note": "Kĩandĩko",
 "Listen": "Thikĩrĩria",
 "Copy": "Kopia",
-"Link": "Link",
 "Compare": "Ringithania",
 "Notes": "Iandĩko",
 "Add note": "Ongerera kĩandĩko",
@@ -939,7 +938,6 @@
 "Bookmarked": "Nĩ kwĩkĩrwo kĩmenyithia",
 "Bookmark removed": "Kĩmenyithia nĩ kĩeherio",
 "Share {ref}": "Gayana {ref}",
-"Outside the app": "Nja ya app",
 "With a circle": "Na gĩkundi",
 "Copy a link": "Kopia link",
 "Favorites": "Iria nyendete",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Thimũ ĩkomete mbaru",
 "Nothing hidden": "Gũtirĩ kĩndũ kĩhithĩtwo",
 "Tap the verse being read to highlight or share it.": "Hutia mũhari ũrathomwo ũũhenie kana ũũgayane.",
-"Topics: {topic}": "Mĩtwe: {topic}"
+"Topics: {topic}": "Mĩtwe: {topic}",
+"Other apps": "Apps ingĩ",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook yoyaga link tu, kwoguo kĩhumo nĩ kĩrakopio o nakĩo: kĩhande thĩinĩ wa post yaku."
 }

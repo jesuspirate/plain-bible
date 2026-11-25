@@ -375,7 +375,6 @@
 "Note": "Ghi chú",
 "Listen": "Nghe",
 "Copy": "Sao chép",
-"Link": "Liên kết",
 "Compare": "So sánh",
 "Notes": "Ghi chú",
 "Add note": "Thêm ghi chú",
@@ -939,7 +938,6 @@
 "Bookmarked": "Đã thêm dấu trang",
 "Bookmark removed": "Đã bỏ dấu trang",
 "Share {ref}": "Chia sẻ {ref}",
-"Outside the app": "Ra ngoài ứng dụng",
 "With a circle": "Với một nhóm",
 "Copy a link": "Sao chép liên kết",
 "Favorites": "Yêu thích",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Điện thoại xoay ngang",
 "Nothing hidden": "Không ẩn gì",
 "Tap the verse being read to highlight or share it.": "Chạm vào câu đang được đọc để tô màu hoặc chia sẻ.",
-"Topics: {topic}": "Chủ đề: {topic}"
+"Topics: {topic}": "Chủ đề: {topic}",
+"Other apps": "Ứng dụng khác",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook chỉ nhận đường liên kết, nên câu Kinh Thánh cũng đã được sao chép: hãy dán vào bài đăng của bạn."
 }

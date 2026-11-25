@@ -375,7 +375,6 @@
 "Note": "Nting",
 "Listen": "Rong",
 "Copy": "Kopi",
-"Link": "Link",
 "Compare": "Keirada",
 "Notes": "Nting kan",
 "Add note": "Kapatahiong nting",
@@ -939,7 +938,6 @@
 "Bookmarked": "Kilelehdier",
 "Bookmark removed": "Kilel kasohrehlahr",
 "Share {ref}": "Nehne {ref}",
-"Outside the app": "Liki sang app",
 "With a circle": "Rehn pwihn ehu",
 "Copy a link": "Kopi link ehu",
 "Favorites": "Me komw poakohng",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telepwohn wonohnsang",
 "Nothing hidden": "Sohte mehkot rirala",
 "Tap the verse being read to highlight or share it.": "Pedikih iretik me wadekwadek pwe ke en kalahngamwahda de nehne.",
-"Topics: {topic}": "Ire kan: {topic}"
+"Topics: {topic}": "Ire kan: {topic}",
+"Other apps": "Apps teikan",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook kin ale link te, ihme iangahki ire kopihda pil: pedolong nan noumw post."
 }

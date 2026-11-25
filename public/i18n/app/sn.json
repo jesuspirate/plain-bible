@@ -375,7 +375,6 @@
 "Note": "Chinyorwa",
 "Listen": "Teerera",
 "Copy": "Kopa",
-"Link": "Link",
 "Compare": "Enzanisa",
 "Notes": "Zvinyorwa",
 "Add note": "Wedzera chinyorwa",
@@ -939,7 +938,6 @@
 "Bookmarked": "Chiratidzo chaiswa",
 "Bookmark removed": "Chiratidzo chabviswa",
 "Share {ref}": "Govera {ref}",
-"Outside the app": "Kunze kweapp",
 "With a circle": "Neboka",
 "Copy a link": "Kopa link",
 "Favorites": "Zvandinoda",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Foni yakarara parutivi",
 "Nothing hidden": "Hapana chakavigwa",
 "Tap the verse being read to highlight or share it.": "Baya ndima iri kuverengwa kuti uiise ruvara kana kuigovera.",
-"Topics: {topic}": "Misoro: {topic}"
+"Topics: {topic}": "Misoro: {topic}",
+"Other apps": "Mamwe maapp",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook inotora link chete, saka ndima yakopwawo: inamatidza mupost yako."
 }

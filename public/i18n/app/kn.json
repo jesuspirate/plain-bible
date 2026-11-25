@@ -375,7 +375,6 @@
 "Note": "ಟಿಪ್ಪಣಿ",
 "Listen": "ಆಲಿಸಿ",
 "Copy": "ನಕಲಿಸಿ",
-"Link": "ಲಿಂಕ್",
 "Compare": "ಹೋಲಿಸಿ",
 "Notes": "ಟಿಪ್ಪಣಿಗಳು",
 "Add note": "ಟಿಪ್ಪಣಿ ಸೇರಿಸಿ",
@@ -939,7 +938,6 @@
 "Bookmarked": "ಬುಕ್‌ಮಾರ್ಕ್ ಮಾಡಲಾಗಿದೆ",
 "Bookmark removed": "ಬುಕ್‌ಮಾರ್ಕ್ ತೆಗೆದುಹಾಕಲಾಗಿದೆ",
 "Share {ref}": "{ref} ಹಂಚಿಕೊಳ್ಳಿ",
-"Outside the app": "ಆ್ಯಪ್‌ನ ಹೊರಗೆ",
 "With a circle": "ಬಳಗದೊಂದಿಗೆ",
 "Copy a link": "ಲಿಂಕ್ ನಕಲಿಸಿ",
 "Favorites": "ಮೆಚ್ಚಿನವು",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "ಫೋನ್ ಅಡ್ಡವಾಗಿದ್ದಾಗ",
 "Nothing hidden": "ಏನನ್ನೂ ಮರೆಮಾಡಿಲ್ಲ",
 "Tap the verse being read to highlight or share it.": "ಓದುತ್ತಿರುವ ವಚನವನ್ನು ಟ್ಯಾಪ್ ಮಾಡಿ ಹೈಲೈಟ್ ಅಥವಾ ಹಂಚಿಕೊಳ್ಳಿ.",
-"Topics: {topic}": "ವಿಷಯಗಳು: {topic}"
+"Topics: {topic}": "ವಿಷಯಗಳು: {topic}",
+"Other apps": "ಇತರ ಆ್ಯಪ್‌ಗಳು",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "ಫೇಸ್‌ಬುಕ್ ಲಿಂಕ್ ಮಾತ್ರ ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ, ಆದ್ದರಿಂದ ವಚನವನ್ನೂ ನಕಲಿಸಲಾಗಿದೆ: ಅದನ್ನು ನಿಮ್ಮ ಪೋಸ್ಟ್‌ನಲ್ಲಿ ಅಂಟಿಸಿ."
 }

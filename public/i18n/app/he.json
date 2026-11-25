@@ -375,7 +375,6 @@
 "Note": "הערה",
 "Listen": "האזנה",
 "Copy": "העתקה",
-"Link": "קישור",
 "Compare": "השוואה",
 "Notes": "הערות",
 "Add note": "הוספת הערה",
@@ -939,7 +938,6 @@
 "Bookmarked": "נוסף לסימניות",
 "Bookmark removed": "הסימנייה הוסרה",
 "Share {ref}": "שיתוף {ref}",
-"Outside the app": "מחוץ לאפליקציה",
 "With a circle": "עם מעגל",
 "Copy a link": "העתקת קישור",
 "Favorites": "מועדפים",
@@ -1335,5 +1333,7 @@
 "Phone on its side": "טלפון לרוחב",
 "Nothing hidden": "שום דבר לא מוסתר",
 "Tap the verse being read to highlight or share it.": "הקישו על הפסוק שנקרא כעת כדי לסמן או לשתף אותו.",
-"Topics: {topic}": "נושאים: {topic}"
+"Topics: {topic}": "נושאים: {topic}",
+"Other apps": "אפליקציות אחרות",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "פייסבוק מקבל רק את הקישור, לכן גם הפסוק הועתק: הדביקו אותו בפוסט שלכם."
 }

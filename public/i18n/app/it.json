@@ -375,7 +375,6 @@
 "Note": "Nota",
 "Listen": "Ascolta",
 "Copy": "Copia",
-"Link": "Link",
 "Compare": "Confronta",
 "Notes": "Note",
 "Add note": "Aggiungi nota",
@@ -939,7 +938,6 @@
 "Bookmarked": "Aggiunto ai segnalibri",
 "Bookmark removed": "Segnalibro rimosso",
 "Share {ref}": "Condividi {ref}",
-"Outside the app": "Fuori dall’app",
 "With a circle": "Con una cerchia",
 "Copy a link": "Copia un link",
 "Favorites": "Preferite",
@@ -1331,5 +1329,7 @@
 "Phone on its side": "Telefono in orizzontale",
 "Nothing hidden": "Niente nascosto",
 "Tap the verse being read to highlight or share it.": "Tocca il versetto che sta leggendo per evidenziarlo o condividerlo.",
-"Topics: {topic}": "Temi: {topic}"
+"Topics: {topic}": "Temi: {topic}",
+"Other apps": "Altre app",
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook accetta solo il link, quindi è stato copiato anche il versetto: incollalo nel tuo post."
 }

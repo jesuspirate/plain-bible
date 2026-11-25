@@ -16,7 +16,8 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, WhatsAppIcon, XIcon } from './icons'
+import { cardLink, facebookUrl, SHARE_ORIGIN, whatsappUrl, xUrl } from './lib/shareTo'
 import { canHear, followPage, goOnReading, holdReading, LISTEN_EVENT, listenNote, readFrom, readingAloud, readingAt, startListening, WORD_EVENT } from './listen'
 import { locale, t, tn } from './i18n'
 import { showTapHints } from './taphint'
@@ -1391,7 +1392,8 @@ function useVerseActions(book: string, chapter: number, verses: number[], versio
   const copy = async (s: string) => {
     try { await copyText(s); setNote(t('Copied')) } catch { setNote(t('Copy failed')) }
   }
-  return { version, keys, ref, colors, current, allBookmarked, hasNote, apply, textOf, quote, link, copy, note, setNote }
+  const card = cardLink(SHARE_ORIGIN, version, std.book, std.chapter, Math.min(...std.verses), Math.max(...std.verses))
+  return { version, keys, ref, colors, current, allBookmarked, hasNote, apply, textOf, quote, link, card, copy, note, setNote }
 }
 
 /** Tells the iPhone, iPad and Mac app which verses are picked, so its own
@@ -1423,7 +1425,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
   const [askUnmark, setAskUnmark] = useState(false)
   // Share: outside the app (the phone's share sheet), or with a circle.
   const [askShare, setAskShare] = useState(false)
-  const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, copy, note, setNote } = useVerseActions(book, chapter, verses, versions, bibles)
+  const { version, ref, current, colors, allBookmarked, hasNote, apply, textOf, quote, link, card, copy, note, setNote } = useVerseActions(book, chapter, verses, versions, bibles)
   const spot = { version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: Math.min(...verses) }
   // Opened on the verse being read: it is already being read, so no Listen.
   const aloud = readingAloud()
@@ -1518,13 +1520,29 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
           </div>
         </div> : askShare ? <div class="confirm-card selbar-ask" role="alertdialog" aria-labelledby="share-title">
           <p id="share-title" class="confirm-title"><strong>{t('Share {ref}', { ref })}</strong></p>
-          <div class="confirm-buttons selbar-share">
-            <button onClick={() => { setAskShare(false); shareOut() }}>
-              {canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Outside the app') : t('Copy a link')}</span></button>
-            <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}>
-              <CircleIcon size={22} /><span>{t('With a circle')}</span></button>
-            <button class="selbar-cancel" onClick={() => setAskShare(false)}>{t('Cancel')}</button>
+          {/* One tap to the apps people share verses to, then the phone's own
+              Share (smaller) for every other app. Plain links: the phone opens
+              the app if it's there, the website if not. */}
+          <div class="share-apps">
+            {/* Facebook takes only the link, so the words go to the clipboard
+                too, to paste into the post. */}
+            <a href={facebookUrl(card)} target="_blank" rel="noopener" onClick={() => { tally('sh'); copyText(quote).catch(() => {}); onClose() }}>
+              <FacebookIcon size={40} /><span>Facebook</span></a>
+            <a href={xUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={() => { tally('sh'); onClose() }}>
+              <XIcon size={40} /><span>X</span></a>
+            <a href={whatsappUrl(textOf(bibles[version]), `${ref} (${version})`, link)} target="_blank" rel="noopener" onClick={() => { tally('sh'); onClose() }}>
+              <WhatsAppIcon size={40} /><span>WhatsApp</span></a>
           </div>
+          <div class="confirm-buttons selbar-share">
+            {inCircles() && <button onClick={() => { shareWithCircle({ verse: { book, chapter, verses }, version, text: textOf(bibles[version]) }); onClose() }}>
+              <CircleIcon size={22} /><span>{t('With a circle')}</span></button>}
+            <div class="share-small">
+              <button onClick={() => { setAskShare(false); shareOut() }}>
+                {canShare ? <ShareIcon size={20} /> : <LinkIcon size={20} />}<span>{canShare ? t('Other apps') : t('Copy a link')}</span></button>
+              <button class="selbar-cancel" onClick={() => setAskShare(false)}>{t('Cancel')}</button>
+            </div>
+          </div>
+          <p class="muted small share-paste">{t('Facebook takes only the link, so the verse is copied too: paste it into your post.')}</p>
         </div> : <>
           <div class="actions">
             <button class={allBookmarked ? 'on' : ''} aria-pressed={allBookmarked} onClick={() => { if (allBookmarked) setAskUnmark(true); else { apply({ b: 1 }); onClose() } }}>
@@ -1537,9 +1555,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
             {/* Share last: it closes the row like a button of its own. */}
-            {inCircles()
-              ? <button onClick={() => setAskShare(true)}><ShareIcon size={22} /><span>{t('Share')}</span></button>
-              : <button onClick={shareOut}>{canShare ? <ShareIcon size={22} /> : <LinkIcon size={22} />}<span>{canShare ? t('Share') : t('Link')}</span></button>}
+            <button onClick={() => setAskShare(true)}><ShareIcon size={22} /><span>{t('Share')}</span></button>
           </div>
           {/* Pray from this verse. (Read along lives in the search bar: while it
               reads, tapping a verse reads on from there.) */}
