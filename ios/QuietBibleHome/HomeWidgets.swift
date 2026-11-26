@@ -126,16 +126,16 @@ struct CirclesMark: Shape {
         path.addEllipse(in: dot(12, 5.1))
         path.addEllipse(in: dot(19.1, 17.4))
         path.addEllipse(in: dot(4.9, 17.4))
-        // The circle between them, with a gap where each friend sits on it.
+        // The circle between them, running from friend to friend, joined.
         // Angles are measured like the web's: 0 is straight up, clockwise.
         // Each arc is its own piece: addArc on its own joins the arc to the
         // last point with a straight line, right through the friends below.
         let r = 8.2 * s
         for t in [0.0, 120.0, 240.0] {
-            let a = Angle.degrees(t + 32.6 - 90)
+            let a = Angle.degrees(t + 18.24 - 90)
             path.move(to: CGPoint(x: c.x + r * CGFloat(cos(a.radians)), y: c.y + r * CGFloat(sin(a.radians))))
             path.addArc(center: c, radius: r,
-                        startAngle: a, endAngle: .degrees(t + 120 - 32.6 - 90), clockwise: false)
+                        startAngle: a, endAngle: .degrees(t + 120 - 18.24 - 90), clockwise: false)
         }
         return path
     }
