@@ -1333,5 +1333,14 @@
 "Other apps": "Ezinye ama-app",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "UFacebook uthatha ilinki kuphela, ngakho levesi likhutshiwe: linamathisele kuposti yakho.",
 "Hide bars while scrolling": "Fihla imigqa nxa usehlisa",
-"Always, not only with the phone on its side": "Kokuphela, hatshi nxa ifoni ilele kuphela"
+"Always, not only with the phone on its side": "Kokuphela, hatshi nxa ifoni ilele kuphela",
+"Prayer request": "Isicelo somkhuleko",
+"What can we pray for?": "Singakhulekela ini?",
+"Ask for prayer": "Cela umkhuleko",
+"Everyone in {circle} can read it and pray.": "Wonke umuntu ku-{circle} angakubala njalo akhuleke.",
+"{n} of {total} prayed": "{n} ku-{total} sebekhulekile",
+"Everyone prayed": "Bonke sebekhulekile",
+"Ask again": "Cela futhi",
+"Asked again": "Kucelwe futhi",
+"Ready for your prayer": "Kulindele umkhuleko wakho"
 }

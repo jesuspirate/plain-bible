@@ -1480,5 +1480,14 @@
 "Other apps": "تطبيقات أخرى",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "فيسبوك يأخذ الرابط فقط، لذلك نُسخت الآية أيضًا: الصقها في منشورك.",
 "Hide bars while scrolling": "إخفاء الأشرطة أثناء التمرير",
-"Always, not only with the phone on its side": "دائمًا، وليس فقط والهاتف أفقي"
+"Always, not only with the phone on its side": "دائمًا، وليس فقط والهاتف أفقي",
+"Prayer request": "طلب صلاة",
+"What can we pray for?": "لأجل ماذا نصلي؟",
+"Ask for prayer": "اطلب الصلاة",
+"Everyone in {circle} can read it and pray.": "يستطيع كل من في {circle} قراءته والصلاة.",
+"{n} of {total} prayed": "صلّى {n} من {total}",
+"Everyone prayed": "صلّى الجميع",
+"Ask again": "اطلب مرة أخرى",
+"Asked again": "طُلبت مرة أخرى",
+"Ready for your prayer": "بانتظار صلاتك"
 }

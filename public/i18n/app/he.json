@@ -1337,5 +1337,14 @@
 "Other apps": "אפליקציות אחרות",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "פייסבוק מקבל רק את הקישור, לכן גם הפסוק הועתק: הדביקו אותו בפוסט שלכם.",
 "Hide bars while scrolling": "הסתרת הסרגלים בזמן גלילה",
-"Always, not only with the phone on its side": "תמיד, לא רק כשהטלפון לרוחב"
+"Always, not only with the phone on its side": "תמיד, לא רק כשהטלפון לרוחב",
+"Prayer request": "בקשת תפילה",
+"What can we pray for?": "על מה נוכל להתפלל?",
+"Ask for prayer": "לבקש תפילה",
+"Everyone in {circle} can read it and pray.": "כל מי שב־{circle} יכול לקרוא ולהתפלל.",
+"{n} of {total} prayed": "{n} מתוך {total} התפללו",
+"Everyone prayed": "כולם התפללו",
+"Ask again": "לבקש שוב",
+"Asked again": "התבקשה שוב",
+"Ready for your prayer": "מחכה לתפילה שלך"
 }

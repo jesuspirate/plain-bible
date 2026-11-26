@@ -1333,5 +1333,14 @@
 "Other apps": "Muut sovellukset",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook ottaa vain linkin, joten jae on myös kopioitu: liitä se julkaisuusi.",
 "Hide bars while scrolling": "Piilota palkit vierittäessä",
-"Always, not only with the phone on its side": "Aina, ei vain puhelimen ollessa vaakatasossa"
+"Always, not only with the phone on its side": "Aina, ei vain puhelimen ollessa vaakatasossa",
+"Prayer request": "Rukouspyyntö",
+"What can we pray for?": "Minkä puolesta voimme rukoilla?",
+"Ask for prayer": "Pyydä esirukousta",
+"Everyone in {circle} can read it and pray.": "Kaikki piirissä {circle} voivat lukea sen ja rukoilla.",
+"{n} of {total} prayed": "{n}/{total} rukoili",
+"Everyone prayed": "Kaikki rukoilivat",
+"Ask again": "Pyydä uudelleen",
+"Asked again": "Pyydetty uudelleen",
+"Ready for your prayer": "Odottaa rukoustasi"
 }

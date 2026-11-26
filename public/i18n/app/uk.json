@@ -1443,5 +1443,14 @@
 "Other apps": "Інші застосунки",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook приймає лише посилання, тому вірш теж скопійовано: вставте його у свій допис.",
 "Hide bars while scrolling": "Ховати панелі під час гортання",
-"Always, not only with the phone on its side": "Завжди, а не лише з телефоном набік"
+"Always, not only with the phone on its side": "Завжди, а не лише з телефоном набік",
+"Prayer request": "Молитовне прохання",
+"What can we pray for?": "За що нам помолитися?",
+"Ask for prayer": "Попросити молитви",
+"Everyone in {circle} can read it and pray.": "Усі в колі {circle} можуть прочитати його й помолитися.",
+"{n} of {total} prayed": "Помолилися {n} з {total}",
+"Everyone prayed": "Усі помолилися",
+"Ask again": "Попросити знову",
+"Asked again": "Попросили знову",
+"Ready for your prayer": "Чекає на вашу молитву"
 }

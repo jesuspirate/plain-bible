@@ -1443,5 +1443,14 @@
 "Other apps": "Jiné aplikace",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook přijme jen odkaz, proto je zkopírován i verš: vložte ho do svého příspěvku.",
 "Hide bars while scrolling": "Skrýt lišty při posouvání",
-"Always, not only with the phone on its side": "Vždy, nejen s telefonem na šířku"
+"Always, not only with the phone on its side": "Vždy, nejen s telefonem na šířku",
+"Prayer request": "Prosba o modlitbu",
+"What can we pray for?": "Za co se můžeme modlit?",
+"Ask for prayer": "Požádat o modlitbu",
+"Everyone in {circle} can read it and pray.": "Všichni v kruhu {circle} si ji mohou přečíst a modlit se.",
+"{n} of {total} prayed": "Modlilo se {n} z {total}",
+"Everyone prayed": "Všichni se modlili",
+"Ask again": "Požádat znovu",
+"Asked again": "Požádáno znovu",
+"Ready for your prayer": "Čeká na vaši modlitbu"
 }

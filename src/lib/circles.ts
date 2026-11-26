@@ -40,6 +40,10 @@ export type Shared =
   | { k: 'note'; verse: PrayerVerse; version: string; text: string; size?: number; note: string }
   /** `prayed`: when it was prayed, which can be long before it was shared */
   | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; verses?: PrayerVerse[]; note?: string; prayed?: number }
+  /** a prayer request, in a few words, for the whole circle to pray for.
+   *  Each one who prays taps 🙏 (`amens`); nobody marks it answered.
+   *  `again`: asked once more, after everyone had prayed. */
+  | { k: 'ask'; note: string; again?: boolean }
 
 /** `door`: an Open door circle, which you lead or are a member of. */
 export interface CircleInfo { id: string; name: string; members: number; door?: 'lead' | 'member' }
@@ -422,6 +426,7 @@ export function cleanShared(v: unknown): Shared | undefined {
     if (x.k === 'note') return note ? { k: 'note', ...base, note } : undefined
     return { k: x.k, ...base, note }
   }
+  if (x.k === 'ask') return note ? { k: 'ask', note, ...(x.again === true ? { again: true } : {}) } : undefined
   if (x.k === 'prayer' && Array.isArray(x.parts)) {
     const parts = x.parts.filter(p => p && Number.isInteger(p.size) && p.size > 0 && typeof p.type === 'string')
       .map(p => ({ ms: Number(p.ms) || 0, type: text(p.type, 60), size: p.size as number }))
@@ -665,6 +670,24 @@ export async function react(circle: string, item: string, mid: string, e: Reacti
   if (!e.length) return api(path, { method: 'DELETE', token: token() })
   return api(path, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), { e }, reactAad(circle, item, mid)), added } })
 }
+
+/** A prayer request for the whole circle: everyone in it reads it and
+ *  prays. `again`: the same request once more, after everyone prayed. */
+export const askPrayer = (circle: string, note: string, again = false) =>
+  send(circle, { k: 'ask', note: note.trim().slice(0, 2000), ...(again ? { again: true } : {}) })
+
+/** Who in the circle a prayer request waits on: everyone but the one who
+ *  asked. `prayed`: those of them who tapped 🙏. */
+export function askedOf(feed: Feed, i: FeedItem) {
+  const others = feed.members.filter(m => m.mid !== i.by).map(m => m.mid)
+  const prayed = others.filter(m => i.amens.includes(m))
+  return { others, prayed, all: others.length > 0 && prayed.length === others.length }
+}
+
+/** Prayer requests from others that you haven't prayed for yet, from the
+ *  last two weeks: they wait for you at the top of the circle, gently. */
+export const waitingFor = (feed: Feed, now = Date.now()) =>
+  feed.items.filter(i => i.body.k === 'ask' && i.by !== feed.me && !i.amens.includes(feed.me) && now - i.at < 14 * 86400_000)
 
 /** A few words back on something shared. */
 export async function reply(circle: string, item: string, said: string) {

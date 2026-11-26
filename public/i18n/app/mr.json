@@ -1333,5 +1333,14 @@
 "Other apps": "इतर ॲप्स",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "फेसबुक फक्त लिंक घेते, म्हणून वचनही कॉपी केले आहे: ते तुमच्या पोस्टमध्ये पेस्ट करा.",
 "Hide bars while scrolling": "स्क्रोल करताना बार लपवा",
-"Always, not only with the phone on its side": "नेहमी, फक्त फोन आडवा असताना नाही"
+"Always, not only with the phone on its side": "नेहमी, फक्त फोन आडवा असताना नाही",
+"Prayer request": "प्रार्थना विनंती",
+"What can we pray for?": "आम्ही कशासाठी प्रार्थना करावी?",
+"Ask for prayer": "प्रार्थना मागा",
+"Everyone in {circle} can read it and pray.": "{circle} मधील प्रत्येकजण ती वाचू आणि प्रार्थना करू शकतो.",
+"{n} of {total} prayed": "{total} पैकी {n} जणांनी प्रार्थना केली",
+"Everyone prayed": "सर्वांनी प्रार्थना केली",
+"Ask again": "पुन्हा मागा",
+"Asked again": "पुन्हा मागितली",
+"Ready for your prayer": "तुमच्या प्रार्थनेची वाट पाहत आहे"
 }

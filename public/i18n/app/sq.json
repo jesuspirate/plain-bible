@@ -1336,5 +1336,14 @@
 "Other apps": "Aplikacione të tjera",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook merr vetëm lidhjen, prandaj u kopjua edhe vargu: ngjiteni në postimin tuaj.",
 "Hide bars while scrolling": "Fshih shiritat gjatë rrëshqitjes",
-"Always, not only with the phone on its side": "Gjithmonë, jo vetëm me telefonin horizontal"
+"Always, not only with the phone on its side": "Gjithmonë, jo vetëm me telefonin horizontal",
+"Prayer request": "Kërkesë për lutje",
+"What can we pray for?": "Për çfarë mund të lutemi?",
+"Ask for prayer": "Kërko lutje",
+"Everyone in {circle} can read it and pray.": "Të gjithë në {circle} mund ta lexojnë dhe të luten.",
+"{n} of {total} prayed": "{n} nga {total} u lutën",
+"Everyone prayed": "Të gjithë u lutën",
+"Ask again": "Kërko përsëri",
+"Asked again": "U kërkua përsëri",
+"Ready for your prayer": "Gati për lutjen tënde"
 }

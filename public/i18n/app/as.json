@@ -1333,5 +1333,14 @@
 "Other apps": "অন্য এপ",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "ফেচবুকে কেৱল লিংকটো লয়, সেয়ে পদটোও কপি কৰা হৈছে: আপোনাৰ পোষ্টত পেষ্ট কৰক।",
 "Hide bars while scrolling": "স্ক্ৰ'ল কৰোঁতে বাৰবোৰ লুকুৱাওক",
-"Always, not only with the phone on its side": "সদায়, কেৱল ফোন কাষলৈ থকাৰ সময়ত নহয়"
+"Always, not only with the phone on its side": "সদায়, কেৱল ফোন কাষলৈ থকাৰ সময়ত নহয়",
+"Prayer request": "প্ৰাৰ্থনাৰ অনুৰোধ",
+"What can we pray for?": "আমি কিহৰ বাবে প্ৰাৰ্থনা কৰিব পাৰোঁ?",
+"Ask for prayer": "প্ৰাৰ্থনা বিচাৰক",
+"Everyone in {circle} can read it and pray.": "{circle}ৰ সকলোৱে ইয়াক পঢ়িব আৰু প্ৰাৰ্থনা কৰিব পাৰে।",
+"{n} of {total} prayed": "{total} জনৰ {n} জনে প্ৰাৰ্থনা কৰিলে",
+"Everyone prayed": "সকলোৱে প্ৰাৰ্থনা কৰিলে",
+"Ask again": "আকৌ বিচাৰক",
+"Asked again": "আকৌ বিচৰা হ'ল",
+"Ready for your prayer": "আপোনাৰ প্ৰাৰ্থনাৰ বাবে সাজু"
 }

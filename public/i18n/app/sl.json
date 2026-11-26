@@ -1443,5 +1443,14 @@
 "Other apps": "Druge aplikacije",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook sprejme samo povezavo, zato je kopirana tudi vrstica: prilepite jo v svojo objavo.",
 "Hide bars while scrolling": "Skrij vrstice med pomikanjem",
-"Always, not only with the phone on its side": "Vedno, ne le s telefonom ležeče"
+"Always, not only with the phone on its side": "Vedno, ne le s telefonom ležeče",
+"Prayer request": "Prošnja za molitev",
+"What can we pray for?": "Za kaj lahko molimo?",
+"Ask for prayer": "Prosi za molitev",
+"Everyone in {circle} can read it and pray.": "Vsi v {circle} jo lahko preberejo in molijo.",
+"{n} of {total} prayed": "Molilo je {n} od {total}",
+"Everyone prayed": "Vsi so molili",
+"Ask again": "Prosi znova",
+"Asked again": "Ponovno zaprošeno",
+"Ready for your prayer": "Čaka na vašo molitev"
 }

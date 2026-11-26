@@ -1333,5 +1333,14 @@
 "Other apps": "Di-app tše dingwe",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook e amogela fela linki, ka gona temana le yona e kopilwe: e kgomaretše ka gare ga poso ya gago.",
 "Hide bars while scrolling": "Uta dibara ge o sutiša",
-"Always, not only with the phone on its side": "Ka mehla, e sego fela ge founu e robetše"
+"Always, not only with the phone on its side": "Ka mehla, e sego fela ge founu e robetše",
+"Prayer request": "Kgopelo ya thapelo",
+"What can we pray for?": "Re ka rapelela eng?",
+"Ask for prayer": "Kgopela thapelo",
+"Everyone in {circle} can read it and pray.": "Mang le mang ka go {circle} a ka e bala le go rapela.",
+"{n} of {total} prayed": "{n} go {total} ba rapetše",
+"Everyone prayed": "Bohle ba rapetše",
+"Ask again": "Kgopela gape",
+"Asked again": "E kgopetšwe gape",
+"Ready for your prayer": "E letile thapelo ya gago"
 }

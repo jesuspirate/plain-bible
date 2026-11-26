@@ -1333,5 +1333,14 @@
 "Other apps": "Ibang app",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Link lang ang tinatanggap ng Facebook, kaya kinopya rin ang talata: i-paste ito sa iyong post.",
 "Hide bars while scrolling": "Itago ang mga bar habang nag-i-scroll",
-"Always, not only with the phone on its side": "Palagi, hindi lang kapag nakahiga ang telepono"
+"Always, not only with the phone on its side": "Palagi, hindi lang kapag nakahiga ang telepono",
+"Prayer request": "Kahilingan sa panalangin",
+"What can we pray for?": "Ano ang maipapanalangin namin?",
+"Ask for prayer": "Humingi ng panalangin",
+"Everyone in {circle} can read it and pray.": "Lahat sa {circle} ay makakabasa nito at makakapanalangin.",
+"{n} of {total} prayed": "{n} sa {total} ang nanalangin",
+"Everyone prayed": "Nanalangin ang lahat",
+"Ask again": "Humingi muli",
+"Asked again": "Hiniling muli",
+"Ready for your prayer": "Handa para sa iyong panalangin"
 }

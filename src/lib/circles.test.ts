@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { cleanShared, inviteMessage, parseInviteLink } from './circles'
+import { askedOf, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -66,5 +66,25 @@ describe('inviteMessage', () => {
     const m = inviteMessage(['Come pray with us.', 'Already have it? Paste this link in Circles.'], link)
     expect(m).toBe('Come pray with us.\n\nAlready have it? Paste this link in Circles.\n\n' + link)
     expect(parseInviteLink(m)).toEqual({ i: 'zKpMGqvt-JhAYZhj', k: 'Ab_cdEFghIJklMNopQRstu' })
+  })
+})
+
+describe('prayer requests', () => {
+  const ask = (by: string, amens: string[], at = Date.now()): FeedItem => ({ id: 'i' + by, by, at, body: { k: 'ask', note: 'Peace' }, chunks: 0, amens, replies: [] })
+  const feed = (items: FeedItem[]): Feed => ({ me: 'a', members: [{ mid: 'a', name: 'A' }, { mid: 'b', name: 'B' }, { mid: 'c', name: 'C' }], items })
+  it('keeps a request, and drops an empty one', () => {
+    expect(cleanShared({ k: 'ask', note: 'For my brother' })).toEqual({ k: 'ask', note: 'For my brother' })
+    expect(cleanShared({ k: 'ask', note: 'Again', again: true })).toEqual({ k: 'ask', note: 'Again', again: true })
+    expect(cleanShared({ k: 'ask', note: '' })).toBeUndefined()
+  })
+  it('counts everyone but the one who asked', () => {
+    const f = feed([])
+    expect(askedOf(f, ask('b', ['a']))).toEqual({ others: ['a', 'c'], prayed: ['a'], all: false })
+    expect(askedOf(f, ask('b', ['a', 'c', 'b'])).all).toBe(true)
+  })
+  it('waits for you only on others’ recent requests you haven’t prayed for', () => {
+    const old = Date.now() - 20 * 86400_000
+    const f = feed([ask('b', []), ask('c', ['a']), ask('a', []), ask('d', [], old)])
+    expect(waitingFor(f).map(i => i.by)).toEqual(['b'])
   })
 })

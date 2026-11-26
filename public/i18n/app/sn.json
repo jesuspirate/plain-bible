@@ -1333,5 +1333,14 @@
 "Other apps": "Mamwe maapp",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook inotora link chete, saka ndima yakopwawo: inamatidza mupost yako.",
 "Hide bars while scrolling": "Viga mabhawa pamunenge muchikwesha",
-"Always, not only with the phone on its side": "Nguva dzose, kwete chete kana foni yakarara"
+"Always, not only with the phone on its side": "Nguva dzose, kwete chete kana foni yakarara",
+"Prayer request": "Chikumbiro chemunamato",
+"What can we pray for?": "Tinganamatira chii?",
+"Ask for prayer": "Kumbira munamato",
+"Everyone in {circle} can read it and pray.": "Munhu wese mu{circle} anogona kuchiverenga uye kunamata.",
+"{n} of {total} prayed": "{n} pa{total} vanamata",
+"Everyone prayed": "Vese vanamata",
+"Ask again": "Kumbira zvakare",
+"Asked again": "Chakumbirwa zvakare",
+"Ready for your prayer": "Chakamirira munamato wako"
 }

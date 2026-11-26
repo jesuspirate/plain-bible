@@ -1333,5 +1333,14 @@
 "Other apps": "ئەپەکانی تر",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "فەیسبووک تەنها بەستەرەکە وەردەگرێت، بۆیە ئایەتەکەش کۆپی کرا: لە پۆستەکەتدا بیلکێنە.",
 "Hide bars while scrolling": "شاردنەوەی شریتەکان لە کاتی خلیسکاندندا",
-"Always, not only with the phone on its side": "هەمیشە، نەک تەنها کاتێک تەلەفۆنەکە ئاسۆییە"
+"Always, not only with the phone on its side": "هەمیشە، نەک تەنها کاتێک تەلەفۆنەکە ئاسۆییە",
+"Prayer request": "داوای نوێژ",
+"What can we pray for?": "بۆ چی نوێژ بکەین؟",
+"Ask for prayer": "داوای نوێژ بکە",
+"Everyone in {circle} can read it and pray.": "هەموو کەس لە {circle} دەتوانن بیخوێننەوە و نوێژ بکەن.",
+"{n} of {total} prayed": "{n} لە {total} نوێژیان کرد",
+"Everyone prayed": "هەمووان نوێژیان کرد",
+"Ask again": "دووبارە داوا بکە",
+"Asked again": "دووبارە داواکرایەوە",
+"Ready for your prayer": "ئامادەیە بۆ نوێژەکەت"
 }

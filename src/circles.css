@@ -220,3 +220,18 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-said-verse.off strong { text-decoration: line-through; opacity: .45; }
 .c-said-verse.off > svg { opacity: .35; }
 .c-said-verse.off .c-said-x { color: var(--text); border-color: var(--text); }
+
+/* A prayer request in a circle: its words, a quiet bar of who prayed
+   ("2 of 3 prayed"), and one big button. Everyone prayed is a warm state. */
+.c-ask-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
+.c-ask-top { margin: 4px 0 14px; }
+.c-ask-said { font-size: 18px; }
+.c-ask-again { margin: 0 0 4px; }
+.c-asked { margin-top: 10px; }
+.c-asked-bar { height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); overflow: hidden; }
+.c-asked-bar span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width .25s ease; }
+.c-asked-said { margin: 8px 0 10px; }
+.c-asked.all .c-asked-said { color: var(--accent); }
+.c-pray-big { width: 100%; min-height: 46px; font-size: 17px; }
+.c-pray-big.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.c-item.c-kind-ask:has(.c-asked.all) { box-shadow: inset 0 0 0 2.5px color-mix(in srgb, var(--accent) 60%, transparent); }

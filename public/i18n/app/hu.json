@@ -1333,5 +1333,14 @@
 "Other apps": "Más alkalmazások",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "A Facebook csak a linket veszi át, ezért az igevers is ki van másolva: illeszd be a bejegyzésedbe.",
 "Hide bars while scrolling": "Sávok elrejtése görgetéskor",
-"Always, not only with the phone on its side": "Mindig, nem csak fekvő telefonnál"
+"Always, not only with the phone on its side": "Mindig, nem csak fekvő telefonnál",
+"Prayer request": "Imakérés",
+"What can we pray for?": "Miért imádkozhatunk?",
+"Ask for prayer": "Ima kérése",
+"Everyone in {circle} can read it and pray.": "A(z) {circle} körben mindenki elolvashatja és imádkozhat érte.",
+"{n} of {total} prayed": "{total}-ből {n} imádkozott",
+"Everyone prayed": "Mindenki imádkozott",
+"Ask again": "Kérd újra",
+"Asked again": "Újra kérve",
+"Ready for your prayer": "Várja az imádat"
 }

@@ -1333,5 +1333,14 @@
 "Other apps": "برنامه‌های دیگر",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "فیسبوک فقط پیوند را می‌پذیرد، پس آیه هم کپی شد: آن را در پستتان بچسبانید.",
 "Hide bars while scrolling": "پنهان کردن نوارها هنگام پیمایش",
-"Always, not only with the phone on its side": "همیشه، نه فقط وقتی گوشی افقی است"
+"Always, not only with the phone on its side": "همیشه، نه فقط وقتی گوشی افقی است",
+"Prayer request": "درخواست دعا",
+"What can we pray for?": "برای چه دعا کنیم؟",
+"Ask for prayer": "درخواست دعا کنید",
+"Everyone in {circle} can read it and pray.": "همه در {circle} می‌توانند آن را بخوانند و دعا کنند.",
+"{n} of {total} prayed": "{n} از {total} نفر دعا کردند",
+"Everyone prayed": "همه دعا کردند",
+"Ask again": "دوباره درخواست کنید",
+"Asked again": "دوباره درخواست شد",
+"Ready for your prayer": "آماده برای دعای شما"
 }

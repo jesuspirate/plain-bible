@@ -1333,5 +1333,14 @@
 "Other apps": "Dadduma nga app",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Ti Facebook ket ti link laeng ti awatenna, isu a nakopia met ti bersikulo: idikitmo iti post-mo.",
 "Hide bars while scrolling": "Ilemmeng dagiti bar bayat ti panag-scroll",
-"Always, not only with the phone on its side": "Kanayon, saan laeng no nakaidda ti telepono"
+"Always, not only with the phone on its side": "Kanayon, saan laeng no nakaidda ti telepono",
+"Prayer request": "Kiddaw a kararag",
+"What can we pray for?": "Ania ti mabalin nga ikararagmi?",
+"Ask for prayer": "Dumawat iti kararag",
+"Everyone in {circle} can read it and pray.": "Amin nga adda iti {circle} ket mabalin a mangbasa ken agkararag.",
+"{n} of {total} prayed": "{n} iti {total} ti nagkararag",
+"Everyone prayed": "Nagkararag amin",
+"Ask again": "Dumawat manen",
+"Asked again": "Nadawat manen",
+"Ready for your prayer": "Nakasagana para iti kararagmo"
 }

@@ -1333,5 +1333,14 @@
 "Other apps": "Programu nyingine",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook inapokea kiungo tu, kwa hiyo mstari pia umenakiliwa: ubandike kwenye chapisho lako.",
 "Hide bars while scrolling": "Ficha pau unaposogeza",
-"Always, not only with the phone on its side": "Kila wakati, si tu simu ikiwa imelala"
+"Always, not only with the phone on its side": "Kila wakati, si tu simu ikiwa imelala",
+"Prayer request": "Ombi la maombi",
+"What can we pray for?": "Tuombe kwa ajili ya nini?",
+"Ask for prayer": "Omba kuombewa",
+"Everyone in {circle} can read it and pray.": "Kila mtu katika {circle} anaweza kulisoma na kuomba.",
+"{n} of {total} prayed": "{n} kati ya {total} wameomba",
+"Everyone prayed": "Wote wameomba",
+"Ask again": "Omba tena",
+"Asked again": "Limeombwa tena",
+"Ready for your prayer": "Linangoja maombi yako"
 }

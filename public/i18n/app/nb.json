@@ -1333,5 +1333,14 @@
 "Other apps": "Andre apper",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook tar bare med lenken, så verset er også kopiert: lim det inn i innlegget ditt.",
 "Hide bars while scrolling": "Skjul linjene mens du ruller",
-"Always, not only with the phone on its side": "Alltid, ikke bare med telefonen på tvers"
+"Always, not only with the phone on its side": "Alltid, ikke bare med telefonen på tvers",
+"Prayer request": "Bønneemne",
+"What can we pray for?": "Hva kan vi be for?",
+"Ask for prayer": "Be om forbønn",
+"Everyone in {circle} can read it and pray.": "Alle i {circle} kan lese den og be.",
+"{n} of {total} prayed": "{n} av {total} har bedt",
+"Everyone prayed": "Alle har bedt",
+"Ask again": "Be igjen",
+"Asked again": "Bedt om igjen",
+"Ready for your prayer": "Klar for din bønn"
 }

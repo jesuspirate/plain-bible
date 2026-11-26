@@ -1168,5 +1168,14 @@
 "Other apps": "Otras apps",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook solo acepta el enlace, así que el versículo también se copió: pégalo en tu publicación.",
 "Hide bars while scrolling": "Ocultar las barras al desplazarse",
-"Always, not only with the phone on its side": "Siempre, no solo con el teléfono en horizontal"
+"Always, not only with the phone on its side": "Siempre, no solo con el teléfono en horizontal",
+"Prayer request": "Petición de oración",
+"What can we pray for?": "¿Por qué podemos orar?",
+"Ask for prayer": "Pedir oración",
+"Everyone in {circle} can read it and pray.": "Todos en {circle} pueden leerla y orar.",
+"{n} of {total} prayed": "{n} de {total} oraron",
+"Everyone prayed": "Todos oraron",
+"Ask again": "Pedir de nuevo",
+"Asked again": "Pedida de nuevo",
+"Ready for your prayer": "Lista para tu oración"
 }

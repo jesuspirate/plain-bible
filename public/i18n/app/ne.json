@@ -1333,5 +1333,14 @@
 "Other apps": "अन्य एपहरू",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "फेसबुकले लिङ्क मात्र लिन्छ, त्यसैले पद पनि कपी गरिएको छ: यसलाई आफ्नो पोस्टमा टाँस्नुहोस्।",
 "Hide bars while scrolling": "स्क्रोल गर्दा बारहरू लुकाउनुहोस्",
-"Always, not only with the phone on its side": "सधैं, फोन तेर्सो हुँदा मात्र होइन"
+"Always, not only with the phone on its side": "सधैं, फोन तेर्सो हुँदा मात्र होइन",
+"Prayer request": "प्रार्थना अनुरोध",
+"What can we pray for?": "हामी केका लागि प्रार्थना गरौं?",
+"Ask for prayer": "प्रार्थना माग्नुहोस्",
+"Everyone in {circle} can read it and pray.": "{circle} मा सबैले यो पढ्न र प्रार्थना गर्न सक्छन्।",
+"{n} of {total} prayed": "{total} मध्ये {n} जनाले प्रार्थना गरे",
+"Everyone prayed": "सबैले प्रार्थना गरे",
+"Ask again": "फेरि माग्नुहोस्",
+"Asked again": "फेरि मागियो",
+"Ready for your prayer": "तपाईंको प्रार्थनाको प्रतीक्षामा"
 }
