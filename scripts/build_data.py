@@ -304,6 +304,67 @@ CORRECTIONS = {
 }
 
 
+# ---------- 1 Enoch: editor's marks left in the text ----------
+
+# The open 1 Enoch texts were copied from printed study editions, and the
+# copies kept the editor's apparatus as if it were scripture: Charles' line
+# letters ("6a.", "b.", "7c.") where he moved lines of a verse around, his
+# Greek-text column printed after the Ethiopic one ("2. And there were..."),
+# the column headings ("Ethiopic Greek"), a Greek manuscript quoted in a
+# footnote, and the † he puts round words he thinks the copyists spoiled.
+# Some verses were also glued onto the one before ("16. And this son..."),
+# leaving their own number empty. Nothing here changes a word of the text:
+# a glued verse goes back to its own number, a copy of a verse that is
+# already in its place is dropped, and the marks themselves are removed.
+ENOCH_LABEL = re.compile(r"(?:^|(?<=\s))(\d{1,3}[a-z]?|[a-j])\.\s+(?=[A-ZÀ-Ý‘'«\[†(])")
+
+
+def _words(s):
+    return " ".join(re.findall(r"[a-zà-ÿ]+", s.lower()))
+
+
+def tidy_enoch(chapters):
+    changed = 0
+    for ch in chapters:
+        moves = {}
+        for i, text in enumerate(list(ch)):
+            n = i + 1
+            t = re.sub(r"\s*Greek fragment from .*$", "", text)
+            t = re.sub(r"\[ ?Chapter \d+ ?\]", "", t)
+            t = re.sub(r"(?:\s+(?:Ethiopic|Greek))+\s*$", "", t)
+            t = re.sub(r"(?<=\. )[a-j] (?=[A-Z])", "", t)
+            t = t.replace("†", "")
+            parts = ENOCH_LABEL.split(t)
+            head, num = parts[0].strip(), n
+            for label, seg in zip(parts[1::2], parts[2::2]):
+                seg = seg.strip()
+                digits = re.match(r"\d+", label)
+                num = int(digits.group()) if digits else num
+                lettered = not label.isdigit()
+                k = num - 1
+                if num == n:
+                    if not head:
+                        head = seg              # the verse came after its own number
+                    elif lettered:
+                        head += " " + seg       # a line letter inside the verse
+                    # else: the Greek column's copy of this same verse
+                elif 0 <= k < len(ch) and k != i and (not ch[k].strip() or ch[k][:1].islower()):
+                    moves.setdefault(k, []).append(seg)   # glued onto the verse before
+                elif 0 <= k < len(ch) and _words(seg)[:40] in _words(ch[k]):
+                    pass                        # a copy of a verse already in place
+                elif lettered or not 0 <= k < len(ch):
+                    head += " " + seg           # a line the editor moved here
+                # else: the Greek column's copy of another verse
+            head = re.sub(r"\s+", " ", head).strip()
+            if head != text:
+                ch[i] = head
+                changed += 1
+        for k, segs in moves.items():
+            ch[k] = re.sub(r"\s+", " ", " ".join(segs)).strip()
+            changed += 1
+    return changed
+
+
 def apply_corrections(tid, books):
     for book, ch, vs, wrong, right in CORRECTIONS.get(tid, []):
         verses = books[book][ch - 1]
@@ -542,6 +603,7 @@ def build_eth_en():
     # copy of the same translation numbers its last twenty chapters
     # differently, which would send "1 Enoch 106:1" to the wrong place.
     books = {"1En": build_geez("translation")["1En"]}
+    tidy_enoch(books["1En"])
     for code, slug in ETH_EN.items():
         path = os.path.join(SRC, "deuterocanonical", "sources", "en", slug, slug + ".json")
         chapters = []
@@ -699,6 +761,8 @@ def main():
         if not books:
             continue
         apply_corrections(tid, books)
+        if "1En" in books:
+            tidy_enoch(books["1En"])
         if tid in parts:
             built[tid] = books
         if only and tid not in only:
