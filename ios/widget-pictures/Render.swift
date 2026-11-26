@@ -80,6 +80,41 @@ struct Sheet: View {
     }
 }
 
+/// The Pray and Circles widget (medium: the widget family can't be set
+/// outside WidgetKit, and the face draws its medium look by default), the
+/// wide Circles bar of the large one, and the Circles mark up close, to hold
+/// against the app's own Circles button (src/icons.tsx CircleIcon).
+struct Both: View {
+    let dark: Bool
+    var body: some View {
+        BothFace(entry: StillEntry(date: .now))
+            .padding(16)
+            .frame(width: 364, height: 170)
+            .background(Paper())
+            .clipShape(RoundedRectangle(cornerRadius: 22, style: .continuous))
+            .environment(\.colorScheme, dark ? .dark : .light)
+    }
+}
+
+struct CirclesSheet: View {
+    var body: some View {
+        VStack(alignment: .leading, spacing: 12) {
+            Caption(s: "The Circles mark, up close")
+            HStack(spacing: 24) {
+                CirclesMark().stroke(Color.black, lineWidth: 2 * 160 / 24).frame(width: 160, height: 160)
+                CirclesDisc(size: 160).environment(\.colorScheme, .dark)
+                CirclesDisc(size: 160).environment(\.colorScheme, .light)
+            }
+            Caption(s: "Pray and Circles (Sepia and Dark)")
+            HStack(spacing: 24) { Both(dark: false); Both(dark: true) }
+            Caption(s: "The Circles bar of the large widget")
+            CirclesBar(entry: StillEntry(date: .now)).frame(width: 332).padding(16).background(Paper())
+        }
+        .padding(32)
+        .background(Color(white: 0.93))
+    }
+}
+
 @MainActor func save(_ view: some View, _ name: String) {
     let r = ImageRenderer(content: view)
     r.scale = 2
@@ -92,5 +127,6 @@ struct Sheet: View {
 struct Render {
     @MainActor static func main() {
         save(Sheet(), "daily-verse-widget.png")
+        save(CirclesSheet(), "circles-widget.png")
     }
 }

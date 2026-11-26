@@ -56,10 +56,10 @@ export const SpinnerIcon = ({ size, class: c }: P) => (
     <circle cx="12" cy="12" r="8.5" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" pathLength="100" stroke-dasharray="28 72" /></svg>
 )
 
-/** Three friends joined in one circle, one on top: open rings with a small
- *  gap where each sits on the circle, so they read as people at fingertip size. */
+/** Three friends joined in one circle, one on top: open rings, with the
+ *  circle running from each friend to the next, no gaps (holding hands). */
 export const CircleIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)} fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5.1" r="2.6" /><circle cx="19.1" cy="17.4" r="2.6" /><circle cx="4.9" cy="17.4" r="2.6" /><path d="M16.42 6.39A8.2 8.2 0 0 1 20.19 12.93M15.77 20.58A8.2 8.2 0 0 1 8.23 20.58M3.81 12.93A8.2 8.2 0 0 1 7.58 6.39" /></svg>
+  <svg {...svg(size, c)} fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="5.1" r="2.6" /><circle cx="19.1" cy="17.4" r="2.6" /><circle cx="4.9" cy="17.4" r="2.6" /><path d="M14.57 5.51A8.2 8.2 0 0 1 20.03 14.97M17.46 19.42A8.2 8.2 0 0 1 6.54 19.42M3.97 14.97A8.2 8.2 0 0 1 9.43 5.51" /></svg>
 )
 
 /** A thick ×: close. Drawn, not typed, so it stays bold on every phone. */
