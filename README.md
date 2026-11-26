@@ -1,9 +1,11 @@
 # My Quiet Bible
 
-Live at https://myquietbible.com (formerly Plain Bible, at bible.chama.community).
+Live at https://myquietbible.com. Also in the App Store for iPhone, iPad, Mac and Apple Watch
+(https://apps.apple.com/app/my-quiet-bible/id6831915876), and in testing on Google Play.
 
-Just the Bible. Many versions and languages, thorough search, and nothing else:
-no reading plans, devotionals, accounts, or feeds.
+Read, pray, share, repeat. The Bible in many versions and languages, thorough search, and a quiet
+place to pray, with no reading plans, devotionals or curated content. An account is optional and
+only needed for sync and prayer circles. The app itself speaks more than 70 languages.
 
 - **162 versions in 85 languages**, all public domain or openly licensed
   (KJV, Berean Standard Bible, ASV, YLT, Douay-Rheims, Reina-Valera 1909, Luther 1545,
@@ -31,22 +33,33 @@ no reading plans, devotionals, accounts, or feeds.
   to change chapters. Highlights belong to the verse, so they show in every version. Highlights can look like a
   marker pen (default), colored text, or a full block (Settings). Double-tap a verse to highlight it in the last color
   you used (or take the highlight off). Select several verses to write one note on all of them.
-- **Recorded readings**: the Berean Standard Bible and the King James Version are read aloud by a recorded
-  narrator, a chapter at a time, played straight from openbible.com (the Berean Bible's publisher), and the
-  highlight follows the narrator word by word. Every other Bible, and these two with no connection, is read by
-  the phone's own voice. The word times are in `public/audio-times/`, made by `scripts/align_audio.py`.
+- **Listen and Read along**: the Berean Standard Bible and the King James Version are read aloud by a recorded
+  narrator, played straight from openbible.com (the Berean Bible's publisher), and the French Louis Segond 1910
+  by Trésor Sonore's narrators (« Voix : tresorsonore.com »), served by the sync Worker. The highlight follows
+  the narrator word by word, and the next chapter carries on by itself. Every other Bible is read by the device's
+  own voice where it has one. Listen is in the verse bar; Read along is the icon at the end of the search field.
+  The word times are in `public/audio-times/`, made by `scripts/align_audio.py` and `scripts/align_audio_ctc.py`.
+- **Prayer**: the 🙏 button (bottom right; hold it for skin tones) records a spoken prayer, kept on the device,
+  with the verses you were reading and topics you pick. Your prayers lists them by day, with answered prayers
+  and favorites marked. Signed in, prayers sync end-to-end encrypted (the server never holds the key).
+- **Circles**: small private groups (up to 50 people) to share verses and prayers with, with reactions and
+  notifications. An Open door circle lets one leader share with up to 300 people who never see each other.
+  Circles need an account.
+- **Sharing**: share verses as text with a link, as a picture drawn on the device, or straight to Facebook,
+  X or WhatsApp. A shared verse opens in the reader's own Bible.
 - **History button** (top right): one tap goes back to the previous chapter and verse, a second tap brings you back,
-  so you can bounce between two passages. Hold it to see your last 3 places. Kept on the device only.
-- **Minimal top bar**: history and version. The theme toggle sits in the search bar; Settings and Saved at the bottom of
-  the search panel. Settings shows text size, theme and your Bible; everything else is under "More settings". The version
-  picker shows the 5 versions you use most, with a search for the rest.
+  so you can bounce between two passages. Hold it to see recent places. Kept on the device only.
+- **Simple layout**: the top bar has only the history button and Settings; the bottom has the search bar,
+  Circles and 🙏. Settings is a sheet with a short list (Saved, Account, Audio, Font and layout, Language,
+  Your data, Take the tour, Report a problem, About), each opening its own page. A short guided tour shows
+  the basics, and Teaching mode puts the verse large on screen for recording or teaching.
 - **Saved** page listing your highlights and bookmarks in Bible order, filterable by color.
 - **Import** highlights and saved verses exported from other Bible apps (a .zip, .html or .txt export) or any
   list of references, and back up your data to a JSON file.
 - **Reading fonts**: Literata, Source Serif, EB Garamond, Inter, Atkinson Hyperlegible, or the system font.
   Light, dark and sepia themes.
-- **Parallel reading** of up to six versions side by side.
-- **Works offline** as an installable web app (PWA): the app itself, your Default Bible and any version you open or save are kept on the device. It reopens on the exact verse you were reading. Settings, highlights and bookmarks stay on your device; only passkey sign-in and sync use the network.
+- **Parallel reading** of up to six versions side by side, and a two-page open book on wide screens.
+- **Works offline** as an installable web app (PWA): the app itself, your Default Bible and any version you open or save are kept on the device. It reopens on the exact verse you were reading. Settings, highlights and bookmarks stay on your device; the network is used only for sign-in, sync, circles, sharing and recorded narrators.
 
 ## Welcome page
 
@@ -60,9 +73,21 @@ Vite build (`vite.config.ts`), so it shares the fonts and is saved offline with 
 of versions and languages in its text (and in the app's description) is read from the catalog at build
 time. Screenshots are in `docs/welcome/`.
 
-## iPhone and iPad app
+## Store apps
 
-A small native app in [ios/](ios/README.md) shows this same website in its own window, for the App Store.
+- **iPhone, iPad, Mac and Apple Watch**: a small native app in [ios/](ios/README.md) shows this same website
+  in its own window, with Home Screen widgets (pray, verse of the day), circle notifications and a Watch app
+  that records a prayer. Live in the App Store. `.github/workflows/ios-release.yml` uploads a new version.
+- **Android**: a Trusted Web Activity in [android/](android/README.md), built by `.github/workflows/android.yml`,
+  now in testing on Google Play.
+
+Both show the live website, so a change to the site reaches every app without a store release; only changes
+inside `ios/` or `android/` need a new upload.
+
+## Fedi
+
+Inside the Fedi app, you can sign in with your Fedi Nostr key in one tap (that sign-in is offered only there),
+and the prayer key is sealed to that key (NIP-44).
 
 ## Search syntax
 
@@ -88,7 +113,8 @@ Chinese and Japanese text is matched without needing word breaks.
 ## Optional account sync
 
 Signing in is optional, with a passkey or a 6-digit code sent by email (no password). A small Cloudflare Worker in
-[`worker/`](worker) keeps one JSON document per account in D1: highlights, bookmarks and settings.
+[`worker/`](worker) keeps one JSON document per account in D1: highlights, bookmarks, notes and settings.
+The same Worker carries circles, encrypted prayer sync, reports from Report a problem and anonymous daily usage counts.
 Each verse keeps its newest change, so edits on two devices merge cleanly.
 
 To turn it on, add two repository secrets: `CLOUDFLARE_API_TOKEN` (an API token from the
@@ -101,24 +127,14 @@ Email sign-in turns on once a third repository secret, `RESEND_API_KEY`, is set 
 also makes `EMAIL_SECRET` once, the key for the email fingerprints; never change it. Addresses are not
 stored, only that fingerprint and a hint. Codes come from `EMAIL_FROM` in `worker/wrangler.toml`.
 
-### Moving addresses
+### Linking another device
 
-The app moved from bible.chama.community to myquietbible.com. Browsers keep each address's
-storage and passkeys apart, so the old address shows a "Move" button (`src/move.tsx`,
-`src/lib/move.ts`): it packs everything on the device (highlights, notes, settings, history,
-prayers and the prayer sync key, plus a fresh sign-in for the same account), encrypts it with a
-key that only travels in the move link's `#fragment`, and leaves it with the sync Worker
-(`/move`) for 7 days. The new address takes it in from the link, or from "Paste move link"
-(iPhone Home Screen apps keep their own storage). A passkey is then saved for the new domain;
-the Worker picks the passkey domain from each request's `Origin` (both are in `ORIGINS`).
+Settings → Account (or Your prayers) → "Link another device" makes a link, valid for an hour, that
+carries a fresh sign-in and the prayer key, encrypted with a key that only travels in the link's
+`#fragment` (`src/move.tsx`, `src/lib/move.ts`, the Worker's `/move`), so the other device is signed in
+and its synced prayers unlocked with nothing to type.
 
-The same mechanism adds a device: Settings → Account (or Your prayers) → "Link another device" makes
-a link, valid for an hour, that carries only a fresh sign-in and the prayer key, so the other device is
-signed in and its synced prayers unlocked with nothing to type.
-
-GitHub Pages serves myquietbible.com; the same build is deployed to Cloudflare Pages
-(`scripts/deploy_old_address.sh`, needs the token to have Cloudflare Pages → Edit) for
-bible.chama.community until every device has moved.
+GitHub Pages serves myquietbible.com.
 
 Local development: `cd worker && npm install && npx wrangler d1 migrations apply plain-bible-sync --local &&
 npx wrangler dev --var RP_ID:localhost --var ORIGINS:http://localhost:5173`, then run the app with
@@ -128,7 +144,7 @@ npx wrangler dev --var RP_ID:localhost --var ORIGINS:http://localhost:5173`, the
 
 ```sh
 npm install
-npm run data      # downloads source texts into ./sources and builds public/data (~440 MB)
+npm run data      # downloads source texts into ./sources and builds public/data (several hundred MB)
 npm run dev
 npm test
 ```
@@ -141,6 +157,13 @@ The Bible data is generated, not committed. `scripts/build_data.py` reads:
 - [openscriptures/morphhb](https://github.com/openscriptures/morphhb): Hebrew Bible with Strong's (CC BY 4.0).
 - [Beblia/Holy-Bible-XML-Format](https://github.com/Beblia/Holy-Bible-XML-Format): Louis Segond 1910 (public domain).
 - [openscriptures/strongs](https://github.com/openscriptures/strongs): Strong's dictionary (CC BY-SA).
+- [eBible.org](https://ebible.org): most of the African, Asian and Middle Eastern languages, only open
+  or public domain texts.
+- [scrollmapper/bible_databases_deuterocanonical](https://github.com/scrollmapper/bible_databases_deuterocanonical)
+  and [LPettay/ethiopian-bible](https://github.com/LPettay/ethiopian-bible): deuterocanonical and Ethiopian books.
+
+Big media (the French recordings, shared verse pictures) live in Cloudflare R2 behind the Worker, not in the
+Pages build.
 
 ## Deploying
 
