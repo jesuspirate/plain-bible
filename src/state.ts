@@ -29,8 +29,8 @@ export interface Settings {
   searchBar: boolean
   /** what slides away while you read with the phone on its side (none: nothing does) */
   sideways: Away[]
-  /** all the bars slide away as you read down, whichever way the device is
-   *  held, as in Teaching mode (off: the search bar is always there) */
+  /** the bars picked in `sideways` slide away whichever way the device is
+   *  held, as in Teaching mode (off: only with the phone on its side) */
   hideBars: boolean
   layout: 'paragraph' | 'verses'
   /** how highlights look: behind the letters like a pen, a full block, or colored letters */
