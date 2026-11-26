@@ -163,7 +163,7 @@ const PAGE_TITLE: Record<Page, string> = {
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
   suggest: N_('Report a problem'),
   font: N_('Font'), layout: N_('Layout'), verseNums: N_('Verse numbers'), highlights: N_('Highlights'), turning: N_('Turning pages'),
-  searchBar: N_('Search bar'), sideways: N_('Phone on its side'), extras: N_('Extras'),
+  searchBar: N_('Search bar'), sideways: N_('Hide bars while scrolling'), extras: N_('Extras'),
 }
 const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turning', 'searchBar', 'sideways', 'extras']
 
@@ -457,7 +457,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
 
   // Grouped like the Settings page itself: a small heading over each kind of
   // choice. A tick box has a short bold name, and what it does in quiet words under it.
-  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'strongs' | 'strongsNumbers' | 'searchBar', label: string, note?: string) => (
+  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'strongs' | 'strongsNumbers' | 'searchBar' | 'hideBars', label: string, note?: string) => (
     <label class="check"><input type="checkbox" checked={settings[k]} onChange={e => update({ [k]: (e.target as HTMLInputElement).checked } as Partial<Settings>)} />
       <span class="check-text"><span class={note ? "check-name" : undefined}>{label}</span>{note && <span class="muted small">{note}</span>}</span></label>
   )
@@ -477,7 +477,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       <Row label={t('Highlights')} value={t(settings.highlight === 'text' ? 'Colored text' : settings.highlight === 'block' ? 'Block' : 'Marker')} onClick={() => setPage('highlights')} />
       {(!bookOn || bigScreen) && <Row label={t('Turning pages')} value={turnName} onClick={() => setPage('turning')} />}
       <Row label={t('Search bar')} value={settings.searchBar ? t('On') : t('Off')} onClick={() => setPage('searchBar')} />
-      <Row label={t('Phone on its side')} sub={awayNames.length ? awayNames.join(', ') : t('Nothing hidden')} onClick={() => setPage('sideways')} />
+      <Row label={t('Hide bars while scrolling')} sub={!awayNames.length ? t('Nothing hidden') : settings.hideBars ? awayNames.join(', ') : `${t('Phone on its side')}: ${awayNames.join(', ')}`} onClick={() => setPage('sideways')} />
     </div></section>
     <section class="set-group"><div class="set-list">
       <Row label={t('Extras')} sub={extras || t('Off')} onClick={() => setPage('extras')} />
@@ -535,6 +535,8 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <SearchWays />
   </div>
 
+  // Which bars slide away as you read down, and when: with the phone on its
+  // side only (the first choice, #205), or always, as in Teaching mode.
   if (page === 'sideways') return <div class="layout-page">
     <p class="muted small">{t('Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.')}</p>
     {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
@@ -542,6 +544,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} />
         <span class="check-text"><span class="check-name">{label}</span></span></label></div>
     ))}
+    <div class="field">{check('hideBars', t('Always, not only with the phone on its side'))}</div>
   </div>
 
   if (page === 'extras') return <div class="layout-page">
