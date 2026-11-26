@@ -180,7 +180,6 @@ button.pray-btn.danger-quiet { background: var(--surface); border: 1.5px solid #
 .pray-back { display: flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 12px 0 8px; border: none; border-radius: 14px; background: var(--chip); color: var(--text); font: 18px var(--sans); text-align: left; }
 .pray-edit { flex-basis: 100%; min-width: 0; max-width: 100%; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
 .pray-edit .saved-find { flex: none; min-height: 50px; font-size: 17px; border-radius: 14px; }
-.pray-edit > .pray-btn { margin: 0; }
 .pray-edit .pray-btn, .pray-edit .saved-find { box-sizing: border-box; }
 .pray-topics { display: flex; flex-wrap: wrap; gap: 8px; }
 .pray-topic { min-height: 46px; padding: 0 16px; border-radius: 99px; border: 1.5px solid var(--line); background: var(--surface); color: var(--text); font: 600 16px var(--sans); }

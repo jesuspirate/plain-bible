@@ -633,7 +633,8 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
         </div>
       </form>}
       {/* Several topics a prayer: tap one to put it on, tap it again to take it off,
-          or type your own. The choices stay open until Done. */}
+          or type your own. Each tap is saved at once, so there is no Done:
+          the round close button on the prayer closes the choices with the row. */}
       {open === p.id && edit?.id === p.id && edit.what === 'topic' && <form class="pray-edit" onSubmit={e => {
         e.preventDefault()
         const typed = edit.text.trim(), mine = edit.topics ?? topicsOfPrayer(p)
@@ -656,7 +657,6 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           <input class="saved-find" value={edit.text} maxLength={40} placeholder={t('New topic')} aria-label={t('New topic')} enterkeyhint="done" onInput={e => setEdit({ ...edit, text: (e.target as HTMLInputElement).value })} />
           <button class="pray-btn primary" disabled={!edit.text.trim()}>{t('Add')}</button>
         </div>
-        <button type="button" class="pray-btn primary" onClick={() => setEdit(undefined)}>{t('Done')}</button>
       </form>}
       {open === p.id && confirm !== p.id && edit?.id !== p.id && <div class="pray-acts">
         <button class="pray-act" onClick={() => setEdit({ id: p.id, what: 'name', text: p.name ?? '' })}>
