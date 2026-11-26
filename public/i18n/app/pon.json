@@ -1333,5 +1333,13 @@
 "Other apps": "Apps teikan",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook kin ale link te, ihme iangahki ire kopihda pil: pedolong nan noumw post.",
 "Hide bars while scrolling": "Rir wasa kan ni omw wekidala",
-"Always, not only with the phone on its side": "Ansou koaros, kaidehn ni ahnsou me dahlpwa pwoundi"
+"Always, not only with the phone on its side": "Ansou koaros, kaidehn ni ahnsou me dahlpwa pwoundi",
+"Prayer request": "Peki en kapakap",
+"Not answered yet": "Saikinte sapengla",
+"How far is it answered?": "Ia uwen sapengla?",
+"Only you can mark it fully answered (✓).": "Kowe kelehte me kak kileledih me sapengla unsek (✓).",
+"What can we pray for?": "Dahme kitail kak kapakapki?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Aramas koaros nan {circle} kak wadek, kapakap, oh kileledih ia uwen sapengla.",
+"Ask for prayer": "Peki kapakap",
+"Answered {step}": "Sapengla {step}"
 }

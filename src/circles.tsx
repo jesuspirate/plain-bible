@@ -7,6 +7,7 @@ import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
   type Sending, type Upload, askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
+  askPrayer, type Step, STEPS, stepOf,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -691,6 +692,7 @@ function CircleView({ id }: { id: string }) {
   const tab = page ?? (feed && !guest && feed.members.length < 2 && !feed.items.length ? 'people' : 'shared')
 
   const sharedList = feed && <>
+    {!door && <AskCircle circle={id} name={info?.name ?? t('this circle')} onSent={load} />}
     {!feed.items.length && <p class="muted c-empty">{guest ? t('Nothing shared yet. When {name} shares a verse or a prayer, it shows here.', { name: leader })
       : t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
     {/* Each day is one row, as in Your prayers, and a tap opens or folds
@@ -956,13 +958,17 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
   const { marks, setMarks, settings } = useApp()
   const b = item.body
   // Your own 🙏 and reactions show the moment you tap; the circle catches up.
-  const [tapped, setTapped] = useState<{ prayed?: boolean; reacts?: Reaction[] }>({})
+  const [tapped, setTapped] = useState<{ prayed?: boolean; reacts?: Reaction[]; step?: Step }>({})
   useEffect(() => setTapped({}), [item])
   const prayed = tapped.prayed ?? item.amens.includes(me)
   const amens = prayed === item.amens.includes(me) ? item.amens : prayed ? [...item.amens, me] : item.amens.filter(m => m !== me)
   const reacts: Record<string, Reaction[]> = Object.fromEntries(Object.entries(item.reacts ?? {}).map(([m, x]) => [m, x.e]))
   if (tapped.reacts) reacts[me] = tapped.reacts
   const myReacts = reacts[me] ?? []
+  // A prayer request: the step marked last, by anyone (yours the moment you tap).
+  const myStep = tapped.step ?? item.reacts?.[me]?.s
+  const was = stepOf(item)
+  const step = tapped.step && (!was || tapped.step.at >= was.at) && (mine || was?.n !== STEPS) ? { ...tapped.step, by: me } : was
   const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone)
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
@@ -987,14 +993,19 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
     const on = !myReacts.includes(r)
     const next = REACTS.filter(x => x === r ? on : myReacts.includes(x))
     setTapped(x => ({ ...x, reacts: next }))
-    tap(() => react(circle, item.id, me, next, on), () => setTapped(x => ({ ...x, reacts: undefined })))()
+    tap(() => react(circle, item.id, me, next, on, myStep), () => setTapped(x => ({ ...x, reacts: undefined })))()
+  }
+  const mark = (n: number) => {
+    const s = { n, at: Math.max(Date.now(), (was?.at ?? 0) + 1) }
+    setTapped(x => ({ ...x, step: s }))
+    tap(() => react(circle, item.id, me, myReacts, true, s), () => setTapped(x => ({ ...x, step: undefined })))()
   }
   // Who gave what, in the order of the buttons; nobody, nothing.
   const who = [['pray', amens] as const, ...REACTS.map(r => [r, Object.keys(reacts).filter(m => reacts[m].includes(r))] as const)].filter(([, ms]) => ms.length)
   // Never the sender's Bible: the reader's own, unless theirs lacks it.
-  const shown = usePassage(b.verse, b.k === 'prayer' ? undefined : { text: b.text, version: b.version, size: b.size })
+  const shown = usePassage(b.k === 'ask' ? undefined : b.verse, b.k === 'prayer' || b.k === 'ask' ? undefined : { text: b.text, version: b.version, size: b.size })
   // The passage as your Bible numbers it (the Psalms differ in some).
-  const verse = shown?.at ?? b.verse
+  const verse = shown?.at ?? (b.k === 'ask' ? undefined : b.verse)
   const nav = useNav()
   const open = (v: PrayerVerse) => { nav.away(); go(readPath(shown?.version ?? fav, v.book, v.chapter, v.verses[0])) }
   const ref = (v: PrayerVerse) => <button class="link c-ref" onClick={() => open(v)}>{verseLabel(v)}{shown && <span class="muted small"> ({shown.version})</span>}</button>
@@ -1017,7 +1028,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
   }
   // What was shared, in one word and one sign: a prayer, a bookmark, a note
   // or a verse. Told apart at a glance, before reading anything.
-  const kind = b.k === 'bookmark' ? t('Bookmark') : b.k === 'note' ? t('Note') : b.k === 'prayer' ? t('Prayer') : t('Verse')
+  const kind = b.k === 'ask' ? t('Prayer request') : b.k === 'bookmark' ? t('Bookmark') : b.k === 'note' ? t('Note') : b.k === 'prayer' ? t('Prayer') : t('Verse')
   // One pill for each person: the signs they gave, then their name. Those
   // new since you last looked come first, and stand out.
   const isNew = (m: string) => !!(news?.amens.has(m) || news?.reacts.has(m))
@@ -1056,7 +1067,10 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
           <p class="c-item-what"><span class="c-item-kind">{kind}</span><span class="muted"> · {when(dayAt(item), !!news || dayOf(dayAt(item)) !== dayOf(item.at))}</span></p>
         </div>
       </div>
-      {b.k === 'prayer' ? <>
+      {b.k === 'ask' ? <>
+        <p class="c-note c-note-main c-ask-said">{b.note}</p>
+        <AnswerSteps step={step} nameOf={nameOf} onMark={mark} asker={mine} />
+      </> : b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
         {verse && <button class="link c-ref" onClick={() => open(verse)}>{t('With {verse}', { verse: verseLabel(verse) })}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
@@ -1082,7 +1096,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
       )}
       {writing && (
         <div class="c-reply">
-          <textarea rows={2} maxLength={1000} value={said} placeholder={b.k === 'prayer' ? t('Pray with them in a few words…') : t('Write back…')}
+          <textarea rows={2} maxLength={1000} value={said} placeholder={b.k === 'prayer' || b.k === 'ask' ? t('Pray with them in a few words…') : t('Write back…')}
             autoFocus onInput={e => setSaid((e.target as HTMLTextAreaElement).value)} />
           <div class="c-row">
             <button class="c-btn small primary" disabled={busy || !said.trim()} onClick={send}>{busy ? t('Sending…') : t('Send')}</button>
@@ -1151,6 +1165,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
 function reportedWords(item: FeedItem, reply: Reply | undefined, nameOf: (mid: string) => string) {
   if (reply) return `${nameOf(reply.by)} replied: ${reply.text}`
   const b = item.body, who = nameOf(item.by)
+  if (b.k === 'ask') return `${who} asked for prayer: ${b.note}`
   if (b.k === 'prayer') return `${who} shared a spoken prayer${b.note ? ` with these words: ${b.note}` : ' (audio only)'}`
   const verse = `${verseLabel(b.verse)} (${b.version}): ${b.text}`
   return b.k === 'note' ? `${who} shared a note: ${b.note}\n\nOn ${verse}` : `${who} shared ${verse}${b.note ? `\n\nWith: ${b.note}` : ''}`
@@ -1233,8 +1248,72 @@ function Blocking({ circle, feed, onChange }: { circle: string; feed: Feed; onCh
 
 /** The sign of what was shared: a prayer, a bookmark, a note or a verse. */
 function KindSign({ k, tone, size = 22 }: { k: Shared['k']; tone: string; size?: number }) {
-  return k === 'prayer' ? <span class="c-sign" style={{ fontSize: size + 2 }}>{reactEmoji('pray', tone)}</span>
+  return k === 'ask' ? <AskIcon size={size} class="c-sign" />
+    : k === 'prayer' ? <span class="c-sign" style={{ fontSize: size + 2 }}>{reactEmoji('pray', tone)}</span>
     : k === 'bookmark' ? <BookmarkIcon size={size - 2} class="c-sign c-sign-bm" /> : k === 'note' ? <NoteIcon size={size} class="c-sign" /> : <BookIcon size={size} class="c-sign" />
+}
+
+/** A prayer request: a speech bubble with a heart in it. */
+const AskIcon = ({ size, class: c }: { size: number; class?: string }) => (
+  <svg viewBox="0 0 24 24" width={size} height={size} class={c} aria-hidden="true" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round">
+    <path d="M4 5.5A2.5 2.5 0 0 1 6.5 3h11A2.5 2.5 0 0 1 20 5.5v8a2.5 2.5 0 0 1-2.5 2.5H11l-4.5 4v-4A2.5 2.5 0 0 1 4 13.5z" />
+    <path d="M12 12.6s-3-1.8-3-3.7c0-1 .8-1.7 1.6-1.7.6 0 1.1.3 1.4.8.3-.5.8-.8 1.4-.8.8 0 1.6.7 1.6 1.7 0 1.9-3 3.7-3 3.7z" fill="currentColor" stroke-width="1.2" />
+  </svg>
+)
+
+/** How far a prayer request is answered: anyone in the circle taps 1/4 to
+ *  3/4; only the one who asked marks it fully answered (✓), and once they
+ *  have, the others' steps rest. Tapping the step it's on takes it back
+ *  one, so a slip is easy to undo. */
+function AnswerSteps({ step, nameOf, onMark, asker }: { step?: Step & { by: string }; nameOf: (mid: string) => string; onMark: (n: number) => void; asker: boolean }) {
+  const n = step?.n ?? 0
+  const can = (k: number) => asker || (n < STEPS && k < STEPS)
+  return (
+    <div class={'c-steps' + (n === STEPS ? ' done' : '')}>
+      <p class="c-steps-said">
+        {n === STEPS ? <strong class="c-answered">✓ {t('Answered')}</strong>
+          : n ? <strong>{t('Answered {step}', { step: `${n}/${STEPS}` })}</strong>
+          : <span class="muted">{t('Not answered yet')}</span>}
+        {step && n > 0 && <span class="muted small"> · {nameOf(step.by)}</span>}
+      </p>
+      <div class="c-step-row" role="group" aria-label={t('How far is it answered?')}>
+        {Array.from({ length: STEPS }, (_, i) => i + 1).map(k => (
+          <button class={'c-step' + (k <= n ? ' on' : '') + (k === STEPS ? ' last' : '')} aria-pressed={k === n} disabled={!can(k)}
+            aria-label={k === STEPS ? t('Answered') : t('Answered {step}', { step: `${k}/${STEPS}` })} onClick={() => onMark(k === n ? k - 1 : k)}>
+            {k === STEPS ? '✓' : `${k}/${STEPS}`}
+          </button>
+        ))}
+      </div>
+      {asker && n < STEPS && <p class="muted small c-steps-hint">{t('Only you can mark it fully answered (✓).')}</p>}
+    </div>
+  )
+}
+
+/** Ask the whole circle to pray: a few words everyone in it reads. */
+function AskCircle({ circle, name, onSent }: { circle: string; name: string; onSent: () => void }) {
+  const [open, setOpen] = useState(false)
+  const [said, setSaid] = useState('')
+  const [busy, setBusy] = useState(false)
+  const [msg, setMsg] = useState('')
+  const send = async () => {
+    setBusy(true); setMsg('')
+    try { await askPrayer(circle, said); setSaid(''); setOpen(false); onSent() }
+    catch (e) { setMsg(navigator.onLine === false ? t('You’re offline. Try again once you’re connected.') : message(e)) } finally { setBusy(false) }
+  }
+  return (
+    <div class={open ? 'c-card c-ask' : 'c-ask-top'}>
+      {open ? <>
+        <label class="c-label">{t('What can we pray for?')}
+          <textarea rows={3} maxLength={2000} value={said} autoFocus onInput={e => setSaid((e.target as HTMLTextAreaElement).value)} /></label>
+        <p class="muted small">{t('Everyone in {circle} can read it, pray, and mark how far it’s answered.', { circle: name })}</p>
+        <div class="c-row c-two">
+          <button class="c-btn" onClick={() => { setOpen(false); setSaid('') }}>{t('Cancel')}</button>
+          <button class="c-btn primary" disabled={busy || !said.trim()} onClick={send}>{busy ? t('Sending…') : t('Send')}</button>
+        </div>
+      </> : <button class="c-btn primary c-ask-btn" onClick={() => { setOpen(true); setMsg('') }}><AskIcon size={22} /> {t('Ask for prayer')}</button>}
+      {msg && <p class="note small">{msg}</p>}
+    </div>
+  )
 }
 
 /** Love, strength, encouragement. The hands take the skin tone picked for 🙏. */

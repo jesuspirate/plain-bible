@@ -1333,5 +1333,13 @@
 "Other apps": "Fampiharana hafa",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Ny rohy ihany no raisin'i Facebook, ka voadika koa ilay andininy: apetaho ao amin'ny lahatsoratrao.",
 "Hide bars while scrolling": "Afenina ny tsipika rehefa manodina",
-"Always, not only with the phone on its side": "Foana, tsy rehefa mandry ny finday ihany"
+"Always, not only with the phone on its side": "Foana, tsy rehefa mandry ny finday ihany",
+"Prayer request": "Fangatahana vavaka",
+"Not answered yet": "Mbola tsy voavaly",
+"How far is it answered?": "Hatraiza ny nahavoavaly azy?",
+"Only you can mark it fully answered (✓).": "Ianao ihany no afaka manamarika azy ho voavaly tanteraka (✓).",
+"What can we pray for?": "Inona no azontsika ivavahana?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Afaka mamaky azy, mivavaka, ary manamarika hatraiza ny nahavoavaly azy ny rehetra ao amin'ny {circle}.",
+"Ask for prayer": "Mangataka vavaka",
+"Answered {step}": "Voavaly {step}"
 }

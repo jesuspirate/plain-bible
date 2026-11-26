@@ -1333,5 +1333,13 @@
 "Other apps": "Ezinye ama-app",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "UFacebook uthatha ilinki kuphela, ngakho levesi likhutshiwe: linamathisele kuposti yakho.",
 "Hide bars while scrolling": "Fihla imigqa nxa usehlisa",
-"Always, not only with the phone on its side": "Kokuphela, hatshi nxa ifoni ilele kuphela"
+"Always, not only with the phone on its side": "Kokuphela, hatshi nxa ifoni ilele kuphela",
+"Prayer request": "Isicelo somkhuleko",
+"Not answered yet": "Akukaphendulwa",
+"How far is it answered?": "Sekuphendulwe kangakanani?",
+"Only you can mark it fully answered (✓).": "Nguwe kuphela ongakutshengisa ukuthi sekuphendulwe ngokupheleleyo (✓).",
+"What can we pray for?": "Singakhulekela ini?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Wonke umuntu ku-{circle} angakubala, akhuleke, njalo atshengise ukuthi sekuphendulwe kangakanani.",
+"Ask for prayer": "Cela umkhuleko",
+"Answered {step}": "Uphendulwe {step}"
 }

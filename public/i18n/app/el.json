@@ -1336,5 +1336,13 @@
 "Other apps": "Άλλες εφαρμογές",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Το Facebook δέχεται μόνο τον σύνδεσμο, γι' αυτό αντιγράφηκε και το εδάφιο: επικολλήστε το στην ανάρτησή σας.",
 "Hide bars while scrolling": "Απόκρυψη γραμμών κατά την κύλιση",
-"Always, not only with the phone on its side": "Πάντα, όχι μόνο με το τηλέφωνο οριζόντια"
+"Always, not only with the phone on its side": "Πάντα, όχι μόνο με το τηλέφωνο οριζόντια",
+"Prayer request": "Αίτημα προσευχής",
+"Not answered yet": "Δεν εισακούστηκε ακόμα",
+"How far is it answered?": "Πόσο έχει εισακουστεί;",
+"Only you can mark it fully answered (✓).": "Μόνο εσύ μπορείς να το σημειώσεις ως πλήρως εισακουσμένο (✓).",
+"What can we pray for?": "Για τι μπορούμε να προσευχηθούμε;",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Όλοι στο {circle} μπορούν να το διαβάσουν, να προσευχηθούν και να σημειώσουν πόσο έχει εισακουστεί.",
+"Ask for prayer": "Ζήτα προσευχή",
+"Answered {step}": "Εισακούστηκε {step}"
 }

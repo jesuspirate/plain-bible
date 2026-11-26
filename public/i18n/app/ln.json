@@ -1333,5 +1333,13 @@
 "Other apps": "Ba app mosusu",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook ezwaka kaka lien, yango wana vɛrsɛ mpe ekopiami: tyá yango na publication na yo.",
 "Hide bars while scrolling": "Kobomba myɔngɔ ntango ozali kokitisa",
-"Always, not only with the phone on its side": "Ntango nyonso, kaka te ntango telefone elali"
+"Always, not only with the phone on its side": "Ntango nyonso, kaka te ntango telefone elali",
+"Prayer request": "Bosɛngi ya libondeli",
+"Not answered yet": "Eyanolami naino te",
+"How far is it answered?": "Eyanolami tii wapi?",
+"Only you can mark it fully answered (✓).": "Kaka yo nde okoki kotya elembo ete eyanolami mobimba (✓).",
+"What can we pray for?": "Tokoki kobondela mpo na nini?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Moto nyonso na {circle} akoki kotánga yango, kobondela, mpe kotya elembo tii wapi eyanolami.",
+"Ask for prayer": "Sɛnga libondeli",
+"Answered {step}": "Eyanolami {step}"
 }

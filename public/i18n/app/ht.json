@@ -1333,5 +1333,13 @@
 "Other apps": "Lòt aplikasyon",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook pran lyen an sèlman, kidonk vèsè a kopye tou: kole l nan piblikasyon w.",
 "Hide bars while scrolling": "Kache ba yo pandan w ap defile",
-"Always, not only with the phone on its side": "Toujou, pa sèlman lè telefòn nan kouche"
+"Always, not only with the phone on its side": "Toujou, pa sèlman lè telefòn nan kouche",
+"Prayer request": "Demann lapriyè",
+"Not answered yet": "Poko egzose",
+"How far is it answered?": "Ki kote egzosman an rive?",
+"Only you can mark it fully answered (✓).": "Se ou sèl ki ka make li egzose nèt (✓).",
+"What can we pray for?": "Pou kisa nou ka priye?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Tout moun nan {circle} ka li l, priye, epi make ki kote egzosman an rive.",
+"Ask for prayer": "Mande lapriyè",
+"Answered {step}": "Egzose {step}"
 }

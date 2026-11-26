@@ -1333,5 +1333,13 @@
 "Other apps": "অন্য অ্যাপ",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "ফেসবুক শুধু লিংকটি নেয়, তাই পদটিও কপি করা হয়েছে: আপনার পোস্টে পেস্ট করুন।",
 "Hide bars while scrolling": "স্ক্রল করার সময় বার লুকান",
-"Always, not only with the phone on its side": "সবসময়, শুধু ফোন আড়াআড়ি থাকলে নয়"
+"Always, not only with the phone on its side": "সবসময়, শুধু ফোন আড়াআড়ি থাকলে নয়",
+"Prayer request": "প্রার্থনার অনুরোধ",
+"Not answered yet": "এখনও উত্তর পাওয়া যায়নি",
+"How far is it answered?": "কতটা উত্তর পাওয়া গেছে?",
+"Only you can mark it fully answered (✓).": "শুধু আপনিই এটিকে পুরোপুরি উত্তর পাওয়া হিসেবে চিহ্নিত করতে পারেন (✓)।",
+"What can we pray for?": "আমরা কীসের জন্য প্রার্থনা করতে পারি?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}-এর সবাই এটি পড়তে, প্রার্থনা করতে এবং কতটা উত্তর পাওয়া গেছে তা চিহ্নিত করতে পারেন।",
+"Ask for prayer": "প্রার্থনা চান",
+"Answered {step}": "উত্তর পেয়েছি {step}"
 }

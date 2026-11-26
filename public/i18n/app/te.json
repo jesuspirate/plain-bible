@@ -1333,5 +1333,13 @@
 "Other apps": "ఇతర యాప్‌లు",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "ఫేస్‌బుక్ లింక్‌ను మాత్రమే తీసుకుంటుంది, కాబట్టి వచనం కూడా కాపీ అయింది: దాన్ని మీ పోస్ట్‌లో అతికించండి.",
 "Hide bars while scrolling": "స్క్రోల్ చేసేటప్పుడు బార్‌లు దాచు",
-"Always, not only with the phone on its side": "ఎప్పుడూ, ఫోన్ అడ్డంగా ఉన్నప్పుడే కాదు"
+"Always, not only with the phone on its side": "ఎప్పుడూ, ఫోన్ అడ్డంగా ఉన్నప్పుడే కాదు",
+"Prayer request": "ప్రార్థన మనవి",
+"Not answered yet": "ఇంకా జవాబు రాలేదు",
+"How far is it answered?": "ఎంతవరకు జవాబు వచ్చింది?",
+"Only you can mark it fully answered (✓).": "పూర్తిగా జవాబు వచ్చింది అని మీరు మాత్రమే గుర్తించగలరు (✓).",
+"What can we pray for?": "మేము దేని కోసం ప్రార్థించాలి?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}లో అందరూ దీన్ని చదివి, ప్రార్థించి, ఎంతవరకు జవాబు వచ్చిందో గుర్తించవచ్చు.",
+"Ask for prayer": "ప్రార్థన అడగండి",
+"Answered {step}": "జవాబు వచ్చింది {step}"
 }

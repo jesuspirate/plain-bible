@@ -1336,5 +1336,13 @@
 "Other apps": "Այլ հավելվածներ",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook-ը ընդունում է միայն հղումը, ուստի համարն էլ պատճենվեց․ տեղադրեք այն ձեր գրառման մեջ։",
 "Hide bars while scrolling": "Թաքցնել գոտիները ոլորելիս",
-"Always, not only with the phone on its side": "Միշտ, ոչ միայն երբ հեռախոսը հորիզոնական է"
+"Always, not only with the phone on its side": "Միշտ, ոչ միայն երբ հեռախոսը հորիզոնական է",
+"Prayer request": "Աղոթքի խնդրանք",
+"Not answered yet": "Դեռ չի պատասխանվել",
+"How far is it answered?": "Որքանո՞վ է պատասխանվել",
+"Only you can mark it fully answered (✓).": "Միայն դուք կարող եք նշել այն լիովին պատասխանված (✓)։",
+"What can we pray for?": "Ինչի՞ համար կարող ենք աղոթել",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}-ում բոլորը կարող են կարդալ այն, աղոթել և նշել, թե որքանով է պատասխանվել։",
+"Ask for prayer": "Աղոթք խնդրել",
+"Answered {step}": "Պատասխանված {step}"
 }

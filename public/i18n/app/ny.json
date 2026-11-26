@@ -1333,5 +1333,13 @@
 "Other apps": "Ma app ena",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook imalandira ulalo wokha, choncho vesi nalonso lakopedwa: liikeni mu positi yanu.",
 "Hide bars while scrolling": "Bisani mabala pamene mukusuntha",
-"Always, not only with the phone on its side": "Nthawi zonse, osati pokhapokha foni ili chogona"
+"Always, not only with the phone on its side": "Nthawi zonse, osati pokhapokha foni ili chogona",
+"Prayer request": "Chopempha pemphero",
+"Not answered yet": "Silinayankhidwe",
+"How far is it answered?": "Layankhidwa bwanji mpaka pano?",
+"Only you can mark it fully answered (✓).": "Ndi inu nokha amene mungalembe kuti layankhidwa kwathunthu (✓).",
+"What can we pray for?": "Tingapempherere chiyani?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Aliyense mu {circle} angawerenge, kupemphera, ndi kulemba kuti layankhidwa bwanji.",
+"Ask for prayer": "Pemphani pemphero",
+"Answered {step}": "Layankhidwa {step}"
 }

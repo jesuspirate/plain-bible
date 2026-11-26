@@ -1333,5 +1333,13 @@
 "Other apps": "Wasu manhajoji",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook yana karɓar mahaɗin kawai, don haka an kwafi ayar ma: liƙa ta a rubutunka.",
 "Hide bars while scrolling": "Ɓoye sanduna yayin gungurawa",
-"Always, not only with the phone on its side": "Koyaushe, ba sai waya tana kwance kawai ba"
+"Always, not only with the phone on its side": "Koyaushe, ba sai waya tana kwance kawai ba",
+"Prayer request": "Roƙon addu’a",
+"Not answered yet": "Ba a amsa ba tukuna",
+"How far is it answered?": "Har ina aka amsa?",
+"Only you can mark it fully answered (✓).": "Kai kaɗai ne za ka iya alamta cewa an amsa gaba ɗaya (✓).",
+"What can we pray for?": "Me za mu yi addu’a a kai?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Kowa a cikin {circle} zai iya karanta shi, yin addu’a, kuma ya alamta har ina aka amsa.",
+"Ask for prayer": "Nemi addu’a",
+"Answered {step}": "An amsa {step}"
 }

@@ -1333,5 +1333,13 @@
 "Other apps": "इतर ॲप्स",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "फेसबुक फक्त लिंक घेते, म्हणून वचनही कॉपी केले आहे: ते तुमच्या पोस्टमध्ये पेस्ट करा.",
 "Hide bars while scrolling": "स्क्रोल करताना बार लपवा",
-"Always, not only with the phone on its side": "नेहमी, फक्त फोन आडवा असताना नाही"
+"Always, not only with the phone on its side": "नेहमी, फक्त फोन आडवा असताना नाही",
+"Prayer request": "प्रार्थना विनंती",
+"Not answered yet": "अजून उत्तर मिळाले नाही",
+"How far is it answered?": "किती उत्तर मिळाले?",
+"Only you can mark it fully answered (✓).": "फक्त तुम्हीच ती पूर्ण उत्तर मिळाली म्हणून चिन्हांकित करू शकता (✓).",
+"What can we pray for?": "आम्ही कशासाठी प्रार्थना करावी?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} मधील प्रत्येकजण ती वाचू, प्रार्थना करू आणि किती उत्तर मिळाले ते चिन्हांकित करू शकतो.",
+"Ask for prayer": "प्रार्थना मागा",
+"Answered {step}": "उत्तर मिळाले {step}"
 }

@@ -1333,5 +1333,13 @@
 "Other apps": "برنامه‌های دیگر",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "فیسبوک فقط پیوند را می‌پذیرد، پس آیه هم کپی شد: آن را در پستتان بچسبانید.",
 "Hide bars while scrolling": "پنهان کردن نوارها هنگام پیمایش",
-"Always, not only with the phone on its side": "همیشه، نه فقط وقتی گوشی افقی است"
+"Always, not only with the phone on its side": "همیشه، نه فقط وقتی گوشی افقی است",
+"Prayer request": "درخواست دعا",
+"Not answered yet": "هنوز مستجاب نشده",
+"How far is it answered?": "تا چه اندازه مستجاب شده؟",
+"Only you can mark it fully answered (✓).": "فقط شما می‌توانید آن را کاملاً مستجاب‌شده علامت بزنید (✓).",
+"What can we pray for?": "برای چه دعا کنیم؟",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "همه در {circle} می‌توانند آن را بخوانند، دعا کنند و علامت بزنند که تا چه اندازه مستجاب شده است.",
+"Ask for prayer": "درخواست دعا کنید",
+"Answered {step}": "مستجاب‌شده {step}"
 }

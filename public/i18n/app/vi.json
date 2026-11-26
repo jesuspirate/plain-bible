@@ -1333,5 +1333,13 @@
 "Other apps": "Ứng dụng khác",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook chỉ nhận đường liên kết, nên câu Kinh Thánh cũng đã được sao chép: hãy dán vào bài đăng của bạn.",
 "Hide bars while scrolling": "Ẩn các thanh khi cuộn",
-"Always, not only with the phone on its side": "Luôn luôn, không chỉ khi điện thoại nằm ngang"
+"Always, not only with the phone on its side": "Luôn luôn, không chỉ khi điện thoại nằm ngang",
+"Prayer request": "Nan đề cầu nguyện",
+"Not answered yet": "Chưa được nhậm lời",
+"How far is it answered?": "Đã được nhậm lời đến đâu?",
+"Only you can mark it fully answered (✓).": "Chỉ bạn mới có thể đánh dấu là đã được nhậm lời trọn vẹn (✓).",
+"What can we pray for?": "Chúng tôi có thể cầu nguyện cho điều gì?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Mọi người trong {circle} đều có thể đọc, cầu nguyện và đánh dấu đã được nhậm lời đến đâu.",
+"Ask for prayer": "Xin cầu nguyện",
+"Answered {step}": "Đã được nhậm lời {step}"
 }

@@ -1333,5 +1333,13 @@
 "Other apps": "其他应用",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook 只接受链接，所以经文也已复制：请粘贴到你的帖子里。",
 "Hide bars while scrolling": "滚动时隐藏栏",
-"Always, not only with the phone on its side": "总是如此，不只在手机横放时"
+"Always, not only with the phone on its side": "总是如此，不只在手机横放时",
+"Prayer request": "代祷请求",
+"Not answered yet": "尚未蒙应允",
+"How far is it answered?": "应允到什么程度了?",
+"Only you can mark it fully answered (✓).": "只有你能把它标为完全蒙应允(✓)。",
+"What can we pray for?": "我们可以为什么祷告?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} 里的每个人都能读到、为它祷告,并标出应允到什么程度。",
+"Ask for prayer": "请求代祷",
+"Answered {step}": "已蒙应允 {step}"
 }

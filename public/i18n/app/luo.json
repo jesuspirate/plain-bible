@@ -1333,5 +1333,13 @@
 "Other apps": "Apps mamoko",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook kawo mana link, omiyo ndiko bende osekop: rwake e post mari.",
 "Hide bars while scrolling": "Pand bar ka imako ite",
-"Always, not only with the phone on its side": "Kinde duto, ok mana ka simu onindo"
+"Always, not only with the phone on its side": "Kinde duto, ok mana ka simu onindo",
+"Prayer request": "Kwayo mar lamo",
+"Not answered yet": "Pok odwok",
+"How far is it answered?": "Odwok nyaka kanye?",
+"Only you can mark it fully answered (✓).": "In kendi ema inyalo ketone ni odwok chuth (✓).",
+"What can we pray for?": "Wanyalo lemo ne ang'o?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Ng'ato ka ng'ato e {circle} nyalo somo, lemo, kendo keto ranyisi kaka odwok.",
+"Ask for prayer": "Kwa lamo",
+"Answered {step}": "Odwok {step}"
 }

@@ -1333,5 +1333,13 @@
 "Other apps": "ಇತರ ಆ್ಯಪ್‌ಗಳು",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "ಫೇಸ್‌ಬುಕ್ ಲಿಂಕ್ ಮಾತ್ರ ತೆಗೆದುಕೊಳ್ಳುತ್ತದೆ, ಆದ್ದರಿಂದ ವಚನವನ್ನೂ ನಕಲಿಸಲಾಗಿದೆ: ಅದನ್ನು ನಿಮ್ಮ ಪೋಸ್ಟ್‌ನಲ್ಲಿ ಅಂಟಿಸಿ.",
 "Hide bars while scrolling": "ಸ್ಕ್ರೋಲ್ ಮಾಡುವಾಗ ಪಟ್ಟಿಗಳನ್ನು ಮರೆಮಾಡಿ",
-"Always, not only with the phone on its side": "ಯಾವಾಗಲೂ, ಫೋನ್ ಅಡ್ಡವಾಗಿದ್ದಾಗ ಮಾತ್ರವಲ್ಲ"
+"Always, not only with the phone on its side": "ಯಾವಾಗಲೂ, ಫೋನ್ ಅಡ್ಡವಾಗಿದ್ದಾಗ ಮಾತ್ರವಲ್ಲ",
+"Prayer request": "ಪ್ರಾರ್ಥನಾ ವಿನಂತಿ",
+"Not answered yet": "ಇನ್ನೂ ಉತ್ತರ ಸಿಕ್ಕಿಲ್ಲ",
+"How far is it answered?": "ಎಷ್ಟು ಉತ್ತರ ಸಿಕ್ಕಿದೆ?",
+"Only you can mark it fully answered (✓).": "ಸಂಪೂರ್ಣ ಉತ್ತರ ಸಿಕ್ಕಿದೆ ಎಂದು ನೀವು ಮಾತ್ರ ಗುರುತಿಸಬಹುದು (✓).",
+"What can we pray for?": "ನಾವು ಯಾವುದಕ್ಕಾಗಿ ಪ್ರಾರ್ಥಿಸಬಹುದು?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} ನಲ್ಲಿರುವ ಎಲ್ಲರೂ ಇದನ್ನು ಓದಬಹುದು, ಪ್ರಾರ್ಥಿಸಬಹುದು ಮತ್ತು ಎಷ್ಟು ಉತ್ತರ ಸಿಕ್ಕಿದೆ ಎಂದು ಗುರುತಿಸಬಹುದು.",
+"Ask for prayer": "ಪ್ರಾರ್ಥನೆ ಕೇಳಿ",
+"Answered {step}": "ಉತ್ತರ ಸಿಕ್ಕಿದೆ {step}"
 }

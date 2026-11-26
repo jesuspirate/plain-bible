@@ -1333,5 +1333,13 @@
 "Other apps": "အခြားအက်ပ်များ",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook သည် လင့်ခ်ကိုသာ ယူသောကြောင့် ကျမ်းချက်ကိုလည်း ကူးယူထားပါသည်- သင့်ပို့စ်ထဲတွင် ကူးထည့်ပါ။",
 "Hide bars while scrolling": "လှိမ့်နေစဉ် ဘားများကို ဖျောက်ရန်",
-"Always, not only with the phone on its side": "အမြဲတမ်း၊ ဖုန်းကို လှဲထားချိန်မှာသာ မဟုတ်"
+"Always, not only with the phone on its side": "အမြဲတမ်း၊ ဖုန်းကို လှဲထားချိန်မှာသာ မဟုတ်",
+"Prayer request": "ဆုတောင်းပေးရန် တောင်းဆိုချက်",
+"Not answered yet": "မဖြေကြားရသေးပါ",
+"How far is it answered?": "မည်မျှ ဖြေကြားပြီးပြီလဲ?",
+"Only you can mark it fully answered (✓).": "အပြည့်အဝ ဖြေကြားပြီး (✓) ဟု သင်တစ်ဦးတည်းသာ မှတ်သားနိုင်သည်။",
+"What can we pray for?": "ဘာအတွက် ဆုတောင်းပေးရမလဲ?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} ရှိ လူတိုင်း ဖတ်ရှု၊ ဆုတောင်းပြီး မည်မျှ ဖြေကြားပြီးကြောင်း မှတ်သားနိုင်သည်။",
+"Ask for prayer": "ဆုတောင်းပေးရန် တောင်းဆိုရန်",
+"Answered {step}": "ဖြေကြားပြီး {step}"
 }

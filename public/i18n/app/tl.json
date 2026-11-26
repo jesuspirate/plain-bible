@@ -1333,5 +1333,13 @@
 "Other apps": "Ibang app",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Link lang ang tinatanggap ng Facebook, kaya kinopya rin ang talata: i-paste ito sa iyong post.",
 "Hide bars while scrolling": "Itago ang mga bar habang nag-i-scroll",
-"Always, not only with the phone on its side": "Palagi, hindi lang kapag nakahiga ang telepono"
+"Always, not only with the phone on its side": "Palagi, hindi lang kapag nakahiga ang telepono",
+"Prayer request": "Kahilingan sa panalangin",
+"Not answered yet": "Hindi pa sinasagot",
+"How far is it answered?": "Gaano na ito nasagot?",
+"Only you can mark it fully answered (✓).": "Ikaw lang ang makakapagmarka na lubos na itong nasagot (✓).",
+"What can we pray for?": "Ano ang maipapanalangin namin?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Lahat sa {circle} ay makakabasa nito, makakapanalangin, at makakapagmarka kung gaano na ito nasagot.",
+"Ask for prayer": "Humingi ng panalangin",
+"Answered {step}": "Sinagot {step}"
 }

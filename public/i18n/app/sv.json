@@ -1333,5 +1333,13 @@
 "Other apps": "Andra appar",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook tar bara emot länken, så versen är också kopierad: klistra in den i ditt inlägg.",
 "Hide bars while scrolling": "Dölj fälten när du rullar",
-"Always, not only with the phone on its side": "Alltid, inte bara med telefonen på tvären"
+"Always, not only with the phone on its side": "Alltid, inte bara med telefonen på tvären",
+"Prayer request": "Böneämne",
+"Not answered yet": "Ännu inte bönhörd",
+"How far is it answered?": "Hur långt är den bönhörd?",
+"Only you can mark it fully answered (✓).": "Bara du kan markera den som helt bönhörd (✓).",
+"What can we pray for?": "Vad kan vi be för?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Alla i {circle} kan läsa den, be och markera hur långt den är bönhörd.",
+"Ask for prayer": "Be om förbön",
+"Answered {step}": "Bönhörd {step}"
 }

@@ -1333,5 +1333,13 @@
 "Other apps": "Muut sovellukset",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook ottaa vain linkin, joten jae on myös kopioitu: liitä se julkaisuusi.",
 "Hide bars while scrolling": "Piilota palkit vierittäessä",
-"Always, not only with the phone on its side": "Aina, ei vain puhelimen ollessa vaakatasossa"
+"Always, not only with the phone on its side": "Aina, ei vain puhelimen ollessa vaakatasossa",
+"Prayer request": "Rukouspyyntö",
+"Not answered yet": "Ei vielä vastattu",
+"How far is it answered?": "Kuinka pitkälle siihen on vastattu?",
+"Only you can mark it fully answered (✓).": "Vain sinä voit merkitä sen täysin vastatuksi (✓).",
+"What can we pray for?": "Minkä puolesta voimme rukoilla?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Kaikki piirissä {circle} voivat lukea sen, rukoilla ja merkitä, kuinka pitkälle siihen on vastattu.",
+"Ask for prayer": "Pyydä esirukousta",
+"Answered {step}": "Vastattu {step}"
 }

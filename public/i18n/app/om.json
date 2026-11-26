@@ -1333,5 +1333,13 @@
 "Other apps": "Appiiwwan biroo",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook liinkii qofa fudhata, kanaaf luqqisni illee garagalfameera: maxxansa keessan keessa maxxansaa.",
 "Hide bars while scrolling": "Yeroo harkiftu sararoota dhoksi",
-"Always, not only with the phone on its side": "Yeroo hunda, yeroo bilbilli ciisu qofa miti"
+"Always, not only with the phone on its side": "Yeroo hunda, yeroo bilbilli ciisu qofa miti",
+"Prayer request": "Gaaffii kadhannaa",
+"Not answered yet": "Ammallee deebii hin arganne",
+"How far is it answered?": "Hammam deebii argate?",
+"Only you can mark it fully answered (✓).": "Guutummaatti deebii argateera (✓) jedhee mallattoo kan godhu si qofa.",
+"What can we pray for?": "Maaliif kadhachuu dandeenya?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Namni {circle} keessa jiru hundi dubbisuu, kadhachuu fi hammam deebii argate mallattoo gochuu ni danda'a.",
+"Ask for prayer": "Kadhannaa gaafadhu",
+"Answered {step}": "Deebii argate {step}"
 }

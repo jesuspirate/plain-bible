@@ -1333,5 +1333,13 @@
 "Other apps": "Andre appar",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook tek berre med lenkja, så verset er òg kopiert: lim det inn i innlegget ditt.",
 "Hide bars while scrolling": "Gøym linjene medan du rullar",
-"Always, not only with the phone on its side": "Alltid, ikkje berre med telefonen på tvers"
+"Always, not only with the phone on its side": "Alltid, ikkje berre med telefonen på tvers",
+"Prayer request": "Bøneemne",
+"Not answered yet": "Ikkje svart enno",
+"How far is it answered?": "Kor langt er ho svart?",
+"Only you can mark it fully answered (✓).": "Berre du kan merkje ho som heilt svart (✓).",
+"What can we pray for?": "Kva kan vi be for?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Alle i {circle} kan lese ho, be og merkje kor langt ho er svart.",
+"Ask for prayer": "Be om forbøn",
+"Answered {step}": "Svart {step}"
 }

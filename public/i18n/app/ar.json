@@ -1480,5 +1480,13 @@
 "Other apps": "تطبيقات أخرى",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "فيسبوك يأخذ الرابط فقط، لذلك نُسخت الآية أيضًا: الصقها في منشورك.",
 "Hide bars while scrolling": "إخفاء الأشرطة أثناء التمرير",
-"Always, not only with the phone on its side": "دائمًا، وليس فقط والهاتف أفقي"
+"Always, not only with the phone on its side": "دائمًا، وليس فقط والهاتف أفقي",
+"Prayer request": "طلب صلاة",
+"Not answered yet": "لم تُستجب بعد",
+"How far is it answered?": "إلى أي حد استُجيبت؟",
+"Only you can mark it fully answered (✓).": "أنت وحدك تستطيع وضع علامة الاستجابة الكاملة (✓).",
+"What can we pray for?": "لأجل ماذا نصلي؟",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "يستطيع كل من في {circle} قراءته والصلاة ووضع علامة على مدى الاستجابة.",
+"Ask for prayer": "اطلب الصلاة",
+"Answered {step}": "مُستجابة {step}"
 }

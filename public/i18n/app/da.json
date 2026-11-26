@@ -1333,5 +1333,13 @@
 "Other apps": "Andre apps",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook tager kun linket, så verset er også kopieret: indsæt det i dit opslag.",
 "Hide bars while scrolling": "Skjul linjer, mens du ruller",
-"Always, not only with the phone on its side": "Altid, ikke kun med telefonen på langs"
+"Always, not only with the phone on its side": "Altid, ikke kun med telefonen på langs",
+"Prayer request": "Bønneemne",
+"Not answered yet": "Endnu ikke bønhørt",
+"How far is it answered?": "Hvor langt er den bønhørt?",
+"Only you can mark it fully answered (✓).": "Kun du kan markere den som helt bønhørt (✓).",
+"What can we pray for?": "Hvad kan vi bede for?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Alle i {circle} kan læse den, bede og markere, hvor langt den er bønhørt.",
+"Ask for prayer": "Bed om forbøn",
+"Answered {step}": "Bønhørt {step}"
 }

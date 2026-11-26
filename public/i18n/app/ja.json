@@ -1333,5 +1333,13 @@
 "Other apps": "ほかのアプリ",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook にはリンクしか渡せないため、聖句もコピーしました。投稿に貼り付けてください。",
 "Hide bars while scrolling": "スクロール中はバーを隠す",
-"Always, not only with the phone on its side": "いつも（スマホを横にしたときだけでなく）"
+"Always, not only with the phone on its side": "いつも（スマホを横にしたときだけでなく）",
+"Prayer request": "祈りの課題",
+"Not answered yet": "まだ応えられていない",
+"How far is it answered?": "どこまで応えられた?",
+"Only you can mark it fully answered (✓).": "完全に応えられた(✓)と記せるのはあなただけです。",
+"What can we pray for?": "何のために祈りましょうか?",
+"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}の全員が読み、祈り、どこまで応えられたかを記せます。",
+"Ask for prayer": "祈りをお願いする",
+"Answered {step}": "聞かれた祈り {step}"
 }
