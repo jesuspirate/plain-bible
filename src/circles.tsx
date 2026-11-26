@@ -252,6 +252,7 @@ export const warmList = () => lastList ? Promise.resolve() : keptCircles().then(
 
 function CircleList() {
   const nav = useNav()
+  const { settings } = useApp()
   useCircleNews()
   const [list, setList] = useState<CircleInfo[] | undefined>(lastList)
   const [msg, setMsg] = useState('')
@@ -307,6 +308,25 @@ function CircleList() {
   // Unlocking can ask for the passkey, so that waits for a tap.
   useEffect(() => { keptCircles().then(k => { setList(lastList = k); if (navigator.onLine !== false) load() }) }, [])
   const unlock = () => load(true)
+  // Circles with a prayer request waiting for your prayer come first, so
+  // they're seen. Counted from what's kept on this device; a circle with
+  // something new is fetched first (quietly), so a fresh request counts too.
+  const [waits, setWaits] = useState<Record<string, number>>({})
+  useEffect(() => {
+    let live = true
+    ;(async () => {
+      const out: Record<string, number> = {}
+      for (const c of list ?? []) {
+        if (c.door) continue
+        const f = (hasNews(c.id) && navigator.onLine !== false ? await loadFeed(c.id).catch(() => undefined) : undefined) ?? await keptFeed(c.id).catch(() => undefined)
+        const n = f ? waitingFor(f).length : 0
+        if (n) out[c.id] = n
+      }
+      if (live) setWaits(out)
+    })()
+    return () => { live = false }
+  }, [list])
+  const shown = list && [...list].sort((a, b) => +!!waits[b.id] - +!!waits[a.id])
 
   const create = async (code?: string) => {
     if (!name.trim() || !me.trim()) return
@@ -348,10 +368,10 @@ function CircleList() {
           )}
           {list?.length ? (
             <ul class="c-list">
-              {list.map(c => (
-                <li><button class="c-open" onClick={() => nav.open(c)}>
+              {shown!.map(c => (
+                <li class={waits[c.id] ? 'c-waits' : ''}><button class="c-open" onClick={() => nav.open(c)}>
                   <strong>{c.name}{hasNews(c.id) && <span class="news-dot" aria-label={t(', something new')} />}</strong>
-                  <span class="muted">{hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.door ? `${t('Open door')} · ${tn(c.members, '{n} person', '{n} people')}` : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
+                  <span class="muted">{waits[c.id] ? <span class="c-new-word">{reactEmoji('pray', settings.prayTone)} {t('Ready for your prayer')}{waits[c.id] > 1 ? ` · ${waits[c.id]}` : ''}</span> : hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.door ? `${t('Open door')} · ${tn(c.members, '{n} person', '{n} people')}` : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
                 </button></li>
               ))}
             </ul>
