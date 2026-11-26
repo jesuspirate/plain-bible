@@ -156,16 +156,16 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // leaves it.
 // Font and layout is a short list too: each of its rows opens a page with
 // just that one thing, and ‹ back goes to the list.
-type LayoutPage = 'font' | 'layout' | 'verseNums' | 'highlights' | 'turning' | 'searchBar' | 'sideways' | 'extras'
+type LayoutPage = 'font' | 'layout' | 'verseNums' | 'highlights' | 'turning' | 'searchBar' | 'hideBars' | 'sideways' | 'extras'
 type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest' | LayoutPage
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Font and layout'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
   suggest: N_('Report a problem'),
   font: N_('Font'), layout: N_('Layout'), verseNums: N_('Verse numbers'), highlights: N_('Highlights'), turning: N_('Turning pages'),
-  searchBar: N_('Search bar'), sideways: N_('Phone on its side'), extras: N_('Extras'),
+  searchBar: N_('Search bar'), hideBars: N_('Hide bars while scrolling'), sideways: N_('Phone on its side'), extras: N_('Extras'),
 }
-const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turning', 'searchBar', 'sideways', 'extras']
+const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turning', 'searchBar', 'hideBars', 'sideways', 'extras']
 
 /** Where you are in Settings: the first page, one page in, or (under Font and layout) two. */
 function useSettingsNav() {
@@ -457,7 +457,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
 
   // Grouped like the Settings page itself: a small heading over each kind of
   // choice. A tick box has a short bold name, and what it does in quiet words under it.
-  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'strongs' | 'strongsNumbers' | 'searchBar', label: string, note?: string) => (
+  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'strongs' | 'strongsNumbers' | 'searchBar' | 'hideBars', label: string, note?: string) => (
     <label class="check"><input type="checkbox" checked={settings[k]} onChange={e => update({ [k]: (e.target as HTMLInputElement).checked } as Partial<Settings>)} />
       <span class="check-text"><span class={note ? "check-name" : undefined}>{label}</span>{note && <span class="muted small">{note}</span>}</span></label>
   )
@@ -477,6 +477,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       <Row label={t('Highlights')} value={t(settings.highlight === 'text' ? 'Colored text' : settings.highlight === 'block' ? 'Block' : 'Marker')} onClick={() => setPage('highlights')} />
       {(!bookOn || bigScreen) && <Row label={t('Turning pages')} value={turnName} onClick={() => setPage('turning')} />}
       <Row label={t('Search bar')} value={settings.searchBar ? t('On') : t('Off')} onClick={() => setPage('searchBar')} />
+      <Row label={t('Hide bars while scrolling')} value={settings.hideBars ? t('On') : t('Off')} onClick={() => setPage('hideBars')} />
       <Row label={t('Phone on its side')} sub={awayNames.length ? awayNames.join(', ') : t('Nothing hidden')} onClick={() => setPage('sideways')} />
     </div></section>
     <section class="set-group"><div class="set-list">
@@ -533,6 +534,10 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'searchBar') return <div class="layout-page">
     <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}</div>
     <SearchWays />
+  </div>
+
+  if (page === 'hideBars') return <div class="layout-page">
+    <div class="field">{check('hideBars', t('Hide bars while scrolling'), t('All the bars slide away as you read down the page, however you hold the device, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.'))}</div>
   </div>
 
   if (page === 'sideways') return <div class="layout-page">

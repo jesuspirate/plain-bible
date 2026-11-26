@@ -1331,5 +1331,7 @@
 "Tap the verse being read to highlight or share it.": "I-tap ti bersikulo a mabasbasa tapno i-highlight wenno ibingay.",
 "Topics: {topic}": "Dagiti Topiko: {topic}",
 "Other apps": "Dadduma nga app",
-"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Ti Facebook ket ti link laeng ti awatenna, isu a nakopia met ti bersikulo: idikitmo iti post-mo."
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Ti Facebook ket ti link laeng ti awatenna, isu a nakopia met ti bersikulo: idikitmo iti post-mo.",
+"Hide bars while scrolling": "Ilemmeng dagiti bar bayat ti panag-scroll",
+"All the bars slide away as you read down the page, however you hold the device, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Agpaadayo amin a bar bayat ti panagbasam nga agpababa iti panid, uray kasano ti panangiggemmo iti device, tapno mapno dagiti sao ti screen. Ipangato bassit, wenno tapen ti ngato nga igid, tapno agsubli dagitoy."
 }

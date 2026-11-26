@@ -1331,5 +1331,7 @@
 "Tap the verse being read to highlight or share it.": "読んでいる節をタップすると、色を付けたり共有したりできます。",
 "Topics: {topic}": "テーマ：{topic}",
 "Other apps": "ほかのアプリ",
-"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook にはリンクしか渡せないため、聖句もコピーしました。投稿に貼り付けてください。"
+"Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook にはリンクしか渡せないため、聖句もコピーしました。投稿に貼り付けてください。",
+"Hide bars while scrolling": "スクロール中はバーを隠す",
+"All the bars slide away as you read down the page, however you hold the device, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "端末の向きに関係なく、ページを下へ読み進めるとすべてのバーが隠れ、文字が画面いっぱいになります。少し上へスクロールするか上端をタップすると戻ります。"
 }

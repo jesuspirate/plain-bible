@@ -1316,10 +1316,11 @@ header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3
     translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
   }
 }
-/* Recording mode does the same whichever way the phone is held. */
-:root.recording.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
-:root.recording.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
-:root.recording.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
+/* Recording mode, and "Hide bars while scrolling", do the same whichever way
+   the phone is held. */
+:root.away-always.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
+:root.away-always.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
+:root.away-always.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
   translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
 }
 
