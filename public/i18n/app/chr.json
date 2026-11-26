@@ -1342,5 +1342,9 @@
 "Everyone prayed": "ᏂᎦᏛ ᎤᏓᏙᎵᏍᏔᏅ",
 "Ask again": "ᏔᎵᏁ ᎯᏔᏲᎯ",
 "Asked again": "ᏔᎵᏁ ᎠᏔᏲᎯᎲ",
-"Ready for your prayer": "ᏣᏓᏙᎵᏍᏙᏗ ᎠᏛᏅᎢᏍᏗ"
+"Ready for your prayer": "ᏣᏓᏙᎵᏍᏙᏗ ᎠᏛᏅᎢᏍᏗ",
+"Pray for {name}": "ᏘᏯᏓᏙᎵᏍᏓᏏ {name}",
+"I already prayed": "ᎦᏳᎳ ᎠᏆᏓᏙᎵᏍᏔᏅ",
+"Praying for {name}": "ᎠᏓᏙᎵᏍᏗᏍᎪᎢ {name} ᎤᎬᏩᎵ",
+"Back to {circle}": "ᏥᏳᎾᏯ {circle}"
 }

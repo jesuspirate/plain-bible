@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Semua sudah berdoa",
 "Ask again": "Minta lagi",
 "Asked again": "Diminta lagi",
-"Ready for your prayer": "Menanti doa Anda"
+"Ready for your prayer": "Menanti doa Anda",
+"Pray for {name}": "Doakan {name}",
+"I already prayed": "Saya sudah berdoa",
+"Praying for {name}": "Mendoakan {name}",
+"Back to {circle}": "Kembali ke {circle}"
 }

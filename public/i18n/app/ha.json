@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Kowa ya yi addu’a",
 "Ask again": "Sake roƙo",
 "Asked again": "An sake roƙo",
-"Ready for your prayer": "Yana jiran addu’arka"
+"Ready for your prayer": "Yana jiran addu’arka",
+"Pray for {name}": "Yi wa {name} addu’a",
+"I already prayed": "Na riga na yi addu’a",
+"Praying for {name}": "Addu’a domin {name}",
+"Back to {circle}": "Koma zuwa {circle}"
 }

@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Nivavaka avokoa ny rehetra",
 "Ask again": "Mangataka indray",
 "Asked again": "Nangatahina indray",
-"Ready for your prayer": "Miandry ny vavakao"
+"Ready for your prayer": "Miandry ny vavakao",
+"Pray for {name}": "Mivavaha ho an'i {name}",
+"I already prayed": "Efa nivavaka aho",
+"Praying for {name}": "Mivavaka ho an'i {name}",
+"Back to {circle}": "Hiverina amin'ny {circle}"
 }

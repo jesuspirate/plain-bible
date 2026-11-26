@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Ji duto oselamo",
 "Ask again": "Kwa kendo",
 "Asked again": "Okwa kendo",
-"Ready for your prayer": "Rito lamo mari"
+"Ready for your prayer": "Rito lamo mari",
+"Pray for {name}": "Lam ne {name}",
+"I already prayed": "Aselamo",
+"Praying for {name}": "Lamo ne {name}",
+"Back to {circle}": "Dog e {circle}"
 }

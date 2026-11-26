@@ -1345,5 +1345,9 @@
 "Everyone prayed": "Të gjithë u lutën",
 "Ask again": "Kërko përsëri",
 "Asked again": "U kërkua përsëri",
-"Ready for your prayer": "Gati për lutjen tënde"
+"Ready for your prayer": "Gati për lutjen tënde",
+"Pray for {name}": "Lutu për {name}",
+"I already prayed": "Jam lutur tashmë",
+"Praying for {name}": "Lutje për {name}",
+"Back to {circle}": "Kthehu te {circle}"
 }

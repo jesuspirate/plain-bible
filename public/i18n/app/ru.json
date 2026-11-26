@@ -1452,5 +1452,9 @@
 "Everyone prayed": "Все помолились",
 "Ask again": "Попросить снова",
 "Asked again": "Попросили снова",
-"Ready for your prayer": "Ждёт вашей молитвы"
+"Ready for your prayer": "Ждёт вашей молитвы",
+"Pray for {name}": "Помолиться за: {name}",
+"I already prayed": "Я уже помолился(ась)",
+"Praying for {name}": "Молитва за: {name}",
+"Back to {circle}": "Назад в {circle}"
 }

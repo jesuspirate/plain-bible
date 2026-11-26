@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Ĉiuj preĝis",
 "Ask again": "Peti denove",
 "Asked again": "Petita denove",
-"Ready for your prayer": "Preta por via preĝo"
+"Ready for your prayer": "Preta por via preĝo",
+"Pray for {name}": "Preĝi por {name}",
+"I already prayed": "Mi jam preĝis",
+"Praying for {name}": "Preĝante por {name}",
+"Back to {circle}": "Reen al {circle}"
 }

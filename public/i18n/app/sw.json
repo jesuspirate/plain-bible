@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Wote wameomba",
 "Ask again": "Omba tena",
 "Asked again": "Limeombwa tena",
-"Ready for your prayer": "Linangoja maombi yako"
+"Ready for your prayer": "Linangoja maombi yako",
+"Pray for {name}": "Muombee {name}",
+"I already prayed": "Nimeshaomba",
+"Praying for {name}": "Kumwombea {name}",
+"Back to {circle}": "Rudi kwa {circle}"
 }

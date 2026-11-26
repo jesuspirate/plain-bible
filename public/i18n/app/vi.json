@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Mọi người đã cầu nguyện",
 "Ask again": "Xin lại",
 "Asked again": "Đã xin lại",
-"Ready for your prayer": "Đang chờ lời cầu nguyện của bạn"
+"Ready for your prayer": "Đang chờ lời cầu nguyện của bạn",
+"Pray for {name}": "Cầu nguyện cho {name}",
+"I already prayed": "Tôi đã cầu nguyện rồi",
+"Praying for {name}": "Đang cầu nguyện cho {name}",
+"Back to {circle}": "Quay lại {circle}"
 }

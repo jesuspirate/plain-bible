@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Nagkararag amin",
 "Ask again": "Dumawat manen",
 "Asked again": "Nadawat manen",
-"Ready for your prayer": "Nakasagana para iti kararagmo"
+"Ready for your prayer": "Nakasagana para iti kararagmo",
+"Pray for {name}": "Ikararag ni {name}",
+"I already prayed": "Nagkararagak metten",
+"Praying for {name}": "Agkarkararag para ken ni {name}",
+"Back to {circle}": "Agsubli iti {circle}"
 }

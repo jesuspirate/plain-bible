@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Ua pule ka poʻe a pau",
 "Ask again": "Noi hou",
 "Asked again": "Ua noi hou ʻia",
-"Ready for your prayer": "Mākaukau no kāu pule"
+"Ready for your prayer": "Mākaukau no kāu pule",
+"Pray for {name}": "E pule no {name}",
+"I already prayed": "Ua pule mua au",
+"Praying for {name}": "Ke pule nei no {name}",
+"Back to {circle}": "Hoʻi i {circle}"
 }

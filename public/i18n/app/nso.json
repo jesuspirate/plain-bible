@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Bohle ba rapetše",
 "Ask again": "Kgopela gape",
 "Asked again": "E kgopetšwe gape",
-"Ready for your prayer": "E letile thapelo ya gago"
+"Ready for your prayer": "E letile thapelo ya gago",
+"Pray for {name}": "Rapelela {name}",
+"I already prayed": "Ke šetše ke rapetše",
+"Praying for {name}": "Thapelo ya {name}",
+"Back to {circle}": "Boela go {circle}"
 }

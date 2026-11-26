@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Kaikki rukoilivat",
 "Ask again": "Pyydä uudelleen",
 "Asked again": "Pyydetty uudelleen",
-"Ready for your prayer": "Odottaa rukoustasi"
+"Ready for your prayer": "Odottaa rukoustasi",
+"Pray for {name}": "Rukoile: {name}",
+"I already prayed": "Rukoilin jo",
+"Praying for {name}": "Rukous: {name}",
+"Back to {circle}": "Takaisin: {circle}"
 }

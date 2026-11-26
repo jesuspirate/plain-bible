@@ -1342,5 +1342,9 @@
 "Everyone prayed": "सर्वांनी प्रार्थना केली",
 "Ask again": "पुन्हा मागा",
 "Asked again": "पुन्हा मागितली",
-"Ready for your prayer": "तुमच्या प्रार्थनेची वाट पाहत आहे"
+"Ready for your prayer": "तुमच्या प्रार्थनेची वाट पाहत आहे",
+"Pray for {name}": "{name} साठी प्रार्थना करा",
+"I already prayed": "मी आधीच प्रार्थना केली",
+"Praying for {name}": "{name} साठी प्रार्थना",
+"Back to {circle}": "{circle} कडे परत"
 }

@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Othe nĩmahooete",
 "Ask again": "Hooya rĩngĩ",
 "Asked again": "Rĩahooywo rĩngĩ",
-"Ready for your prayer": "Rĩagĩrĩire ihooya rĩaku"
+"Ready for your prayer": "Rĩagĩrĩire ihooya rĩaku",
+"Pray for {name}": "Hooera {name}",
+"I already prayed": "Nĩ ndĩrahooya",
+"Praying for {name}": "Kũhooera {name}",
+"Back to {circle}": "Cooka {circle}"
 }

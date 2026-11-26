@@ -1342,5 +1342,9 @@
 "Everyone prayed": "ସମସ୍ତେ ପ୍ରାର୍ଥନା କଲେ",
 "Ask again": "ପୁଣି ମାଗନ୍ତୁ",
 "Asked again": "ପୁଣି ମଗାଗଲା",
-"Ready for your prayer": "ଆପଣଙ୍କ ପ୍ରାର୍ଥନା ପାଇଁ ଅପେକ୍ଷା"
+"Ready for your prayer": "ଆପଣଙ୍କ ପ୍ରାର୍ଥନା ପାଇଁ ଅପେକ୍ଷା",
+"Pray for {name}": "{name} ପାଇଁ ପ୍ରାର୍ଥନା କରନ୍ତୁ",
+"I already prayed": "ମୁଁ ପୂର୍ବରୁ ପ୍ରାର୍ଥନା କରିସାରିଛି",
+"Praying for {name}": "{name} ପାଇଁ ପ୍ରାର୍ଥନା",
+"Back to {circle}": "{circle} କୁ ଫେରନ୍ତୁ"
 }

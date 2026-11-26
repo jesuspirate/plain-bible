@@ -1346,5 +1346,9 @@
 "Everyone prayed": "כולם התפללו",
 "Ask again": "לבקש שוב",
 "Asked again": "התבקשה שוב",
-"Ready for your prayer": "מחכה לתפילה שלך"
+"Ready for your prayer": "מחכה לתפילה שלך",
+"Pray for {name}": "להתפלל עבור {name}",
+"I already prayed": "כבר התפללתי",
+"Praying for {name}": "תפילה עבור {name}",
+"Back to {circle}": "חזרה אל {circle}"
 }

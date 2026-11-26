@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Onse apemphera",
 "Ask again": "Pemphaninso",
 "Asked again": "Lapemphedwanso",
-"Ready for your prayer": "Likudikira pemphero lanu"
+"Ready for your prayer": "Likudikira pemphero lanu",
+"Pray for {name}": "Pemphererani {name}",
+"I already prayed": "Ndapemphera kale",
+"Praying for {name}": "Kupempherera {name}",
+"Back to {circle}": "Bwererani ku {circle}"
 }

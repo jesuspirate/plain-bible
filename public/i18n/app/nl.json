@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Iedereen heeft gebeden",
 "Ask again": "Opnieuw vragen",
 "Asked again": "Opnieuw gevraagd",
-"Ready for your prayer": "Klaar voor jouw gebed"
+"Ready for your prayer": "Klaar voor jouw gebed",
+"Pray for {name}": "Bid voor {name}",
+"I already prayed": "Ik heb al gebeden",
+"Praying for {name}": "Bidden voor {name}",
+"Back to {circle}": "Terug naar {circle}"
 }

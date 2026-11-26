@@ -1342,5 +1342,9 @@
 "Everyone prayed": "అందరూ ప్రార్థించారు",
 "Ask again": "మళ్లీ అడగండి",
 "Asked again": "మళ్లీ అడిగారు",
-"Ready for your prayer": "మీ ప్రార్థన కోసం ఎదురుచూస్తోంది"
+"Ready for your prayer": "మీ ప్రార్థన కోసం ఎదురుచూస్తోంది",
+"Pray for {name}": "{name} కోసం ప్రార్థించండి",
+"I already prayed": "నేను ఇప్పటికే ప్రార్థించాను",
+"Praying for {name}": "{name} కోసం ప్రార్థన",
+"Back to {circle}": "{circle}కి తిరిగి వెళ్లండి"
 }

@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Ang tanan nakaampo na",
 "Ask again": "Pangayo pag-usab",
 "Asked again": "Gipangayo pag-usab",
-"Ready for your prayer": "Andam alang sa imong pag-ampo"
+"Ready for your prayer": "Andam alang sa imong pag-ampo",
+"Pray for {name}": "Iampo si {name}",
+"I already prayed": "Nakaampo na ko",
+"Praying for {name}": "Nag-ampo para kang {name}",
+"Back to {circle}": "Balik sa {circle}"
 }

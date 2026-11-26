@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Obiara abɔ mpae",
 "Ask again": "Srɛ bio",
 "Asked again": "Wɔasrɛ bio",
-"Ready for your prayer": "Ɛretwɛn wo mpaebɔ"
+"Ready for your prayer": "Ɛretwɛn wo mpaebɔ",
+"Pray for {name}": "Bɔ mpae ma {name}",
+"I already prayed": "Mabɔ mpae dedaw",
+"Praying for {name}": "Mpaebɔ ma {name}",
+"Back to {circle}": "San kɔ {circle}"
 }

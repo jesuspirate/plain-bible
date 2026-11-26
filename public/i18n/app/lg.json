@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Bonna basabye",
 "Ask again": "Saba nate",
 "Asked again": "Kisabiddwa nate",
-"Ready for your prayer": "Kirindiridde okusaba kwo"
+"Ready for your prayer": "Kirindiridde okusaba kwo",
+"Pray for {name}": "Sabira {name}",
+"I already prayed": "Nnamaze okusaba",
+"Praying for {name}": "Okusabira {name}",
+"Back to {circle}": "Ddayo mu {circle}"
 }

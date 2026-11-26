@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Ren dy chooilley pheiagh guee",
 "Ask again": "Aght reesht",
 "Asked again": "Aghit reesht",
-"Ready for your prayer": "Aarloo son dty phadjer"
+"Ready for your prayer": "Aarloo son dty phadjer",
+"Pray for {name}": "Guee son {name}",
+"I already prayed": "Ta mee er ghuee hannah",
+"Praying for {name}": "Guee son {name}",
+"Back to {circle}": "Erash gys {circle}"
 }

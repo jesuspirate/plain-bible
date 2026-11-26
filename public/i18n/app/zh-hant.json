@@ -1342,5 +1342,9 @@
 "Everyone prayed": "大家都禱告了",
 "Ask again": "再次請求",
 "Asked again": "再次請求",
-"Ready for your prayer": "等候你的禱告"
+"Ready for your prayer": "等候你的禱告",
+"Pray for {name}": "為 {name} 禱告",
+"I already prayed": "我已經禱告了",
+"Praying for {name}": "為 {name} 禱告中",
+"Back to {circle}": "返回 {circle}"
 }

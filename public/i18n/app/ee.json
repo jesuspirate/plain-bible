@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Amesiame do gbe ɖa",
 "Ask again": "Gabia",
 "Asked again": "Wogabiae",
-"Ready for your prayer": "Ele lalam na wò gbedodoɖa"
+"Ready for your prayer": "Ele lalam na wò gbedodoɖa",
+"Pray for {name}": "Do gbe ɖa ɖe {name} ta",
+"I already prayed": "Medo gbe ɖa xoxo",
+"Praying for {name}": "Gbedodoɖa ɖe {name} ta",
+"Back to {circle}": "Trɔ yi {circle}"
 }

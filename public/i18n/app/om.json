@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Hundi kadhataniiru",
 "Ask again": "Irra deebi'ii gaafadhu",
 "Asked again": "Irra deebi'amee gaafatame",
-"Ready for your prayer": "Kadhannaa kee eeggachaa jira"
+"Ready for your prayer": "Kadhannaa kee eeggachaa jira",
+"Pray for {name}": "{name}f kadhadhu",
+"I already prayed": "Duraanuun kadhadheera",
+"Praying for {name}": "{name}f kadhachaa",
+"Back to {circle}": "Gara {circle} deebi'i"
 }

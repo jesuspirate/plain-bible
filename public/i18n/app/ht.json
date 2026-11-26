@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Tout moun te priye",
 "Ask again": "Mande ankò",
 "Asked again": "Mande ankò",
-"Ready for your prayer": "Pare pou lapriyè ou"
+"Ready for your prayer": "Pare pou lapriyè ou",
+"Pray for {name}": "Priye pou {name}",
+"I already prayed": "Mwen deja priye",
+"Praying for {name}": "Lapriyè pou {name}",
+"Back to {circle}": "Retounen nan {circle}"
 }

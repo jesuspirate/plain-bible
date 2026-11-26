@@ -162,6 +162,15 @@ let listenNow = false
 export const prayNow = () => { listenNow = true; openPrayer() }
 /** Asked once by the prayer screen as it opens. */
 export const takePrayNow = () => { const n = listenNow; listenNow = false; return n }
+/** Pray for someone's prayer request in a circle: the prayer screen opens
+ *  listening, with their words on top, and once the prayer is kept the
+ *  request is marked prayed. */
+export type PrayFor = { circle: string; circleName: string; item: string; by: string; note: string }
+let prayingFor: PrayFor | undefined
+export const prayFor = (ask: PrayFor) => { prayingFor = ask; prayNow() }
+export const takePrayFor = () => { const a = prayingFor; prayingFor = undefined; return a }
+/** Sent once a request was marked prayed this way, so the circle shows it. */
+export const ASK_PRAYED = 'plain-bible:ask-prayed'
 
 /** Open Settings (the sheet behind the button in the top right corner). */
 export const SETTINGS_EVENT = 'plain-bible:settings'

@@ -1430,5 +1430,9 @@
 "Everyone prayed": "Visi lūdza",
 "Ask again": "Lūgt vēlreiz",
 "Asked again": "Lūgts vēlreiz",
-"Ready for your prayer": "Gaida jūsu lūgšanu"
+"Ready for your prayer": "Gaida jūsu lūgšanu",
+"Pray for {name}": "Lūgt par {name}",
+"I already prayed": "Es jau lūdzu",
+"Praying for {name}": "Lūgšana par {name}",
+"Back to {circle}": "Atpakaļ uz {circle}"
 }

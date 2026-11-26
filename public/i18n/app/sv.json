@@ -1342,5 +1342,9 @@
 "Everyone prayed": "Alla har bett",
 "Ask again": "Be igen",
 "Asked again": "Ombedd igen",
-"Ready for your prayer": "Redo för din bön"
+"Ready for your prayer": "Redo för din bön",
+"Pray for {name}": "Be för {name}",
+"I already prayed": "Jag har redan bett",
+"Praying for {name}": "Ber för {name}",
+"Back to {circle}": "Tillbaka till {circle}"
 }
