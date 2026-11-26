@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Itago ang mga bar habang nag-i-scroll",
 "Always, not only with the phone on its side": "Palagi, hindi lang kapag nakahiga ang telepono",
 "Prayer request": "Kahilingan sa panalangin",
-"Not answered yet": "Hindi pa sinasagot",
-"How far is it answered?": "Gaano na ito nasagot?",
-"Only you can mark it fully answered (✓).": "Ikaw lang ang makakapagmarka na lubos na itong nasagot (✓).",
 "What can we pray for?": "Ano ang maipapanalangin namin?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Lahat sa {circle} ay makakabasa nito, makakapanalangin, at makakapagmarka kung gaano na ito nasagot.",
 "Ask for prayer": "Humingi ng panalangin",
-"Answered {step}": "Sinagot {step}"
+"Everyone in {circle} can read it and pray.": "Lahat sa {circle} ay makakabasa nito at makakapanalangin.",
+"{n} of {total} prayed": "{n} sa {total} ang nanalangin",
+"Everyone prayed": "Nanalangin ang lahat",
+"Ask again": "Humingi muli",
+"Asked again": "Hiniling muli",
+"Ready for your prayer": "Handa para sa iyong panalangin"
 }

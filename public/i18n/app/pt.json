@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Ocultar as barras ao rolar",
 "Always, not only with the phone on its side": "Sempre, não só com o telefone na horizontal",
 "Prayer request": "Pedido de oração",
-"Not answered yet": "Ainda não respondida",
-"How far is it answered?": "Quanto já foi respondida?",
-"Only you can mark it fully answered (✓).": "Só você pode marcá-la como totalmente respondida (✓).",
 "What can we pray for?": "Pelo que podemos orar?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Todos em {circle} podem lê-la, orar e marcar quanto já foi respondida.",
 "Ask for prayer": "Pedir oração",
-"Answered {step}": "Respondida {step}"
+"Everyone in {circle} can read it and pray.": "Todos em {circle} podem lê-la e orar.",
+"{n} of {total} prayed": "{n} de {total} oraram",
+"Everyone prayed": "Todos oraram",
+"Ask again": "Pedir de novo",
+"Asked again": "Pedida de novo",
+"Ready for your prayer": "Pronta para a sua oração"
 }

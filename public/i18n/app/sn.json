@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Viga mabhawa pamunenge muchikwesha",
 "Always, not only with the phone on its side": "Nguva dzose, kwete chete kana foni yakarara",
 "Prayer request": "Chikumbiro chemunamato",
-"Not answered yet": "Hachisati chapindurwa",
-"How far is it answered?": "Chapindurwa zvakadii?",
-"Only you can mark it fully answered (✓).": "Ndiwe chete unogona kuratidza kuti chapindurwa zvizere (✓).",
 "What can we pray for?": "Tinganamatira chii?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Munhu wese mu{circle} anogona kuchiverenga, kunamata, uye kuratidza kuti chapindurwa zvakadii.",
 "Ask for prayer": "Kumbira munamato",
-"Answered {step}": "Wapindurwa {step}"
+"Everyone in {circle} can read it and pray.": "Munhu wese mu{circle} anogona kuchiverenga uye kunamata.",
+"{n} of {total} prayed": "{n} pa{total} vanamata",
+"Everyone prayed": "Vese vanamata",
+"Ask again": "Kumbira zvakare",
+"Asked again": "Chakumbirwa zvakare",
+"Ready for your prayer": "Chakamirira munamato wako"
 }

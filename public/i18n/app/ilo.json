@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Ilemmeng dagiti bar bayat ti panag-scroll",
 "Always, not only with the phone on its side": "Kanayon, saan laeng no nakaidda ti telepono",
 "Prayer request": "Kiddaw a kararag",
-"Not answered yet": "Saan pay a nasungbatan",
-"How far is it answered?": "Kasano kaadayo ti pannakasungbatna?",
-"Only you can mark it fully answered (✓).": "Sika laeng ti mabalin a mangmarka a naan-anay a nasungbatan (✓).",
 "What can we pray for?": "Ania ti mabalin nga ikararagmi?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Amin nga adda iti {circle} ket mabalin a mangbasa, agkararag, ken mangmarka no kasano kaadayo ti pannakasungbatna.",
 "Ask for prayer": "Dumawat iti kararag",
-"Answered {step}": "Nasungbatan {step}"
+"Everyone in {circle} can read it and pray.": "Amin nga adda iti {circle} ket mabalin a mangbasa ken agkararag.",
+"{n} of {total} prayed": "{n} iti {total} ti nagkararag",
+"Everyone prayed": "Nagkararag amin",
+"Ask again": "Dumawat manen",
+"Asked again": "Nadawat manen",
+"Ready for your prayer": "Nakasagana para iti kararagmo"
 }

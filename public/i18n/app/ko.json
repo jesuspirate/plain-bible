@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "스크롤할 때 막대 숨기기",
 "Always, not only with the phone on its side": "항상 (휴대폰을 옆으로 눕혔을 때만이 아니라)",
 "Prayer request": "기도 제목",
-"Not answered yet": "아직 응답되지 않음",
-"How far is it answered?": "얼마나 응답되었나요?",
-"Only you can mark it fully answered (✓).": "완전히 응답됨(✓)은 요청한 본인만 표시할 수 있습니다.",
 "What can we pray for?": "무엇을 위해 기도할까요?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}의 모두가 읽고 기도하며 얼마나 응답되었는지 표시할 수 있습니다.",
 "Ask for prayer": "기도 부탁하기",
-"Answered {step}": "응답됨 {step}"
+"Everyone in {circle} can read it and pray.": "{circle}의 모두가 읽고 기도할 수 있습니다.",
+"{n} of {total} prayed": "{total}명 중 {n}명 기도함",
+"Everyone prayed": "모두 기도했어요",
+"Ask again": "다시 부탁하기",
+"Asked again": "다시 부탁함",
+"Ready for your prayer": "당신의 기도를 기다려요"
 }

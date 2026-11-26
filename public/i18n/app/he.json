@@ -1339,11 +1339,12 @@
 "Hide bars while scrolling": "הסתרת הסרגלים בזמן גלילה",
 "Always, not only with the phone on its side": "תמיד, לא רק כשהטלפון לרוחב",
 "Prayer request": "בקשת תפילה",
-"Not answered yet": "עוד לא נענתה",
-"How far is it answered?": "עד כמה נענתה?",
-"Only you can mark it fully answered (✓).": "רק את/ה יכול/ה לסמן שנענתה לגמרי (✓).",
 "What can we pray for?": "על מה נוכל להתפלל?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "כל מי שב־{circle} יכול לקרוא, להתפלל ולסמן עד כמה נענתה.",
 "Ask for prayer": "לבקש תפילה",
-"Answered {step}": "נענתה {step}"
+"Everyone in {circle} can read it and pray.": "כל מי שב־{circle} יכול לקרוא ולהתפלל.",
+"{n} of {total} prayed": "{n} מתוך {total} התפללו",
+"Everyone prayed": "כולם התפללו",
+"Ask again": "לבקש שוב",
+"Asked again": "התבקשה שוב",
+"Ready for your prayer": "מחכה לתפילה שלך"
 }

@@ -7,7 +7,7 @@ import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
   type Sending, type Upload, askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
-  askPrayer, type Step, STEPS, stepOf,
+  askPrayer, askedOf, waitingFor,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -682,7 +682,8 @@ function CircleView({ id }: { id: string }) {
   const fav = settings.version
   const news = feed ? newsIn(feed, since).items : undefined
   // A few days at a time, then a clear end: never an endless stack.
-  const { days, more } = feed ? byDay(feed.items, news!, limit, dayAt) : { days: [], more: false }
+  const waiting = feed && !feed.door ? waitingFor(feed) : []
+  const { days, more } = feed ? byDay(feed.items.filter(i => !waiting.includes(i)), news!, limit, dayAt) : { days: [], more: false }
   // Open door: you lead it, or you're one of the many who came in.
   const door = feed?.door
   const leading = !!door && door.lead === feed?.me
@@ -693,6 +694,13 @@ function CircleView({ id }: { id: string }) {
 
   const sharedList = feed && <>
     {!door && <AskCircle circle={id} name={info?.name ?? t('this circle')} onSent={load} />}
+    {/* Requests you haven't prayed for wait here, gently, until you do. */}
+    {waiting.length > 0 && (
+      <section class="c-day c-day-new c-waiting">
+        <h3 class="c-day-name">{t('Ready for your prayer')}</h3>
+        <ol class="c-feed">{waiting.map(item => <Item circle={id} item={item} mine={false} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} others={askedOf(feed, item).others} />)}</ol>
+      </section>
+    )}
     {!feed.items.length && <p class="muted c-empty">{guest ? t('Nothing shared yet. When {name} shares a verse or a prayer, it shows here.', { name: leader })
       : t('Nothing shared yet. While reading, select verses and tap Circle to share them, as a bookmark, or with your note. Prayers share from Your prayers.')}</p>}
     {/* Each day is one row, as in Your prayers, and a tap opens or folds
@@ -711,7 +719,7 @@ function CircleView({ id }: { id: string }) {
           )}
           {isOpen && (
             <ol class="c-feed">
-              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} door={door} />)}
+              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} door={door} others={item.body.k === 'ask' ? askedOf(feed, item).others : undefined} />)}
             </ol>
           )}
         </section>
@@ -948,8 +956,10 @@ function StreakBoard({ circle, name, feed, onChange }: { circle: string; name?: 
   )
 }
 
-function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
+function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, others }: {
   circle: string; item: FeedItem; mine: boolean; me: string; nameOf: (mid: string) => string; fav: string; onChange: () => void
+  /** a prayer request: everyone it waits on (all but the one who asked) */
+  others?: string[]
   /** what's new on it since you last looked */
   news?: News
   /** an Open door circle: 🙏 shows as a count, and only its leader writes back */
@@ -958,17 +968,13 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
   const { marks, setMarks, settings } = useApp()
   const b = item.body
   // Your own 🙏 and reactions show the moment you tap; the circle catches up.
-  const [tapped, setTapped] = useState<{ prayed?: boolean; reacts?: Reaction[]; step?: Step }>({})
+  const [tapped, setTapped] = useState<{ prayed?: boolean; reacts?: Reaction[] }>({})
   useEffect(() => setTapped({}), [item])
   const prayed = tapped.prayed ?? item.amens.includes(me)
   const amens = prayed === item.amens.includes(me) ? item.amens : prayed ? [...item.amens, me] : item.amens.filter(m => m !== me)
   const reacts: Record<string, Reaction[]> = Object.fromEntries(Object.entries(item.reacts ?? {}).map(([m, x]) => [m, x.e]))
   if (tapped.reacts) reacts[me] = tapped.reacts
   const myReacts = reacts[me] ?? []
-  // A prayer request: the step marked last, by anyone (yours the moment you tap).
-  const myStep = tapped.step ?? item.reacts?.[me]?.s
-  const was = stepOf(item)
-  const step = tapped.step && (!was || tapped.step.at >= was.at) && (mine || was?.n !== STEPS) ? { ...tapped.step, by: me } : was
   const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone)
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
@@ -993,12 +999,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
     const on = !myReacts.includes(r)
     const next = REACTS.filter(x => x === r ? on : myReacts.includes(x))
     setTapped(x => ({ ...x, reacts: next }))
-    tap(() => react(circle, item.id, me, next, on, myStep), () => setTapped(x => ({ ...x, reacts: undefined })))()
-  }
-  const mark = (n: number) => {
-    const s = { n, at: Math.max(Date.now(), (was?.at ?? 0) + 1) }
-    setTapped(x => ({ ...x, step: s }))
-    tap(() => react(circle, item.id, me, myReacts, true, s), () => setTapped(x => ({ ...x, step: undefined })))()
+    tap(() => react(circle, item.id, me, next, on), () => setTapped(x => ({ ...x, reacts: undefined })))()
   }
   // Who gave what, in the order of the buttons; nobody, nothing.
   const who = [['pray', amens] as const, ...REACTS.map(r => [r, Object.keys(reacts).filter(m => reacts[m].includes(r))] as const)].filter(([, ms]) => ms.length)
@@ -1068,8 +1069,9 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door }: {
         </div>
       </div>
       {b.k === 'ask' ? <>
+        {b.again && <p class="muted small c-ask-again">{t('Asked again')}</p>}
         <p class="c-note c-note-main c-ask-said">{b.note}</p>
-        <AnswerSteps step={step} nameOf={nameOf} onMark={mark} asker={mine} />
+        <Prayed others={others ?? []} amens={amens} mine={mine} prayed={prayed} onPray={pray} again={act(() => askPrayer(circle, b.note, true))} busy={busy} emoji={emoji('pray')} />
       </> : b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
@@ -1261,30 +1263,20 @@ const AskIcon = ({ size, class: c }: { size: number; class?: string }) => (
   </svg>
 )
 
-/** How far a prayer request is answered: anyone in the circle taps 1/4 to
- *  3/4; only the one who asked marks it fully answered (✓), and once they
- *  have, the others' steps rest. Tapping the step it's on takes it back
- *  one, so a slip is easy to undo. */
-function AnswerSteps({ step, nameOf, onMark, asker }: { step?: Step & { by: string }; nameOf: (mid: string) => string; onMark: (n: number) => void; asker: boolean }) {
-  const n = step?.n ?? 0
-  const can = (k: number) => asker || (n < STEPS && k < STEPS)
+/** Who prayed for a prayer request: a quiet bar and "2 of 3 prayed", and
+ *  one big button. Nobody marks it answered, and nobody is named for not
+ *  praying. When everyone has, the one who asked can ask again. */
+function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji }: {
+  others: string[]; amens: string[]; mine: boolean; prayed: boolean; onPray: () => void; again: () => void; busy: boolean; emoji: string
+}) {
+  const n = others.filter(m => amens.includes(m)).length, all = others.length > 0 && n === others.length
   return (
-    <div class={'c-steps' + (n === STEPS ? ' done' : '')}>
-      <p class="c-steps-said">
-        {n === STEPS ? <strong class="c-answered">✓ {t('Answered')}</strong>
-          : n ? <strong>{t('Answered {step}', { step: `${n}/${STEPS}` })}</strong>
-          : <span class="muted">{t('Not answered yet')}</span>}
-        {step && n > 0 && <span class="muted small"> · {nameOf(step.by)}</span>}
-      </p>
-      <div class="c-step-row" role="group" aria-label={t('How far is it answered?')}>
-        {Array.from({ length: STEPS }, (_, i) => i + 1).map(k => (
-          <button class={'c-step' + (k <= n ? ' on' : '') + (k === STEPS ? ' last' : '')} aria-pressed={k === n} disabled={!can(k)}
-            aria-label={k === STEPS ? t('Answered') : t('Answered {step}', { step: `${k}/${STEPS}` })} onClick={() => onMark(k === n ? k - 1 : k)}>
-            {k === STEPS ? '✓' : `${k}/${STEPS}`}
-          </button>
-        ))}
-      </div>
-      {asker && n < STEPS && <p class="muted small c-steps-hint">{t('Only you can mark it fully answered (✓).')}</p>}
+    <div class={'c-asked' + (all ? ' all' : '')}>
+      {others.length > 0 && <div class="c-asked-bar" aria-hidden="true"><span style={{ width: `${Math.round(100 * n / others.length)}%` }} /></div>}
+      <p class="c-asked-said"><strong>{all ? `${t('Everyone prayed')} ${emoji}` : t('{n} of {total} prayed', { n, total: others.length })}</strong></p>
+      {!mine && <button class={'c-btn c-pray-big' + (prayed ? ' on' : ' primary')} aria-pressed={prayed} onClick={onPray}>
+        {prayed ? `✓ ${t('You prayed')}` : `${emoji} ${t('I prayed')}`}</button>}
+      {mine && all && <button class="c-btn c-pray-big" disabled={busy} onClick={again}>{busy ? t('Sending…') : t('Ask again')}</button>}
     </div>
   )
 }
@@ -1305,7 +1297,7 @@ function AskCircle({ circle, name, onSent }: { circle: string; name: string; onS
       {open ? <>
         <label class="c-label">{t('What can we pray for?')}
           <textarea rows={3} maxLength={2000} value={said} autoFocus onInput={e => setSaid((e.target as HTMLTextAreaElement).value)} /></label>
-        <p class="muted small">{t('Everyone in {circle} can read it, pray, and mark how far it’s answered.', { circle: name })}</p>
+        <p class="muted small">{t('Everyone in {circle} can read it and pray.', { circle: name })}</p>
         <div class="c-row c-two">
           <button class="c-btn" onClick={() => { setOpen(false); setSaid('') }}>{t('Cancel')}</button>
           <button class="c-btn primary" disabled={busy || !said.trim()} onClick={send}>{busy ? t('Sending…') : t('Send')}</button>

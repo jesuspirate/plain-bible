@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Ẩn các thanh khi cuộn",
 "Always, not only with the phone on its side": "Luôn luôn, không chỉ khi điện thoại nằm ngang",
 "Prayer request": "Nan đề cầu nguyện",
-"Not answered yet": "Chưa được nhậm lời",
-"How far is it answered?": "Đã được nhậm lời đến đâu?",
-"Only you can mark it fully answered (✓).": "Chỉ bạn mới có thể đánh dấu là đã được nhậm lời trọn vẹn (✓).",
 "What can we pray for?": "Chúng tôi có thể cầu nguyện cho điều gì?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Mọi người trong {circle} đều có thể đọc, cầu nguyện và đánh dấu đã được nhậm lời đến đâu.",
 "Ask for prayer": "Xin cầu nguyện",
-"Answered {step}": "Đã được nhậm lời {step}"
+"Everyone in {circle} can read it and pray.": "Mọi người trong {circle} đều có thể đọc và cầu nguyện.",
+"{n} of {total} prayed": "{n}/{total} người đã cầu nguyện",
+"Everyone prayed": "Mọi người đã cầu nguyện",
+"Ask again": "Xin lại",
+"Asked again": "Đã xin lại",
+"Ready for your prayer": "Đang chờ lời cầu nguyện của bạn"
 }

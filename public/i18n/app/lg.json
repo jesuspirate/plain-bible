@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Kweka obutale ng’oseeteeza",
 "Always, not only with the phone on its side": "Bulijjo, si ng’essimu egalamidde yokka",
 "Prayer request": "Okusaba essaala",
-"Not answered yet": "Tekinnaddibwamu",
-"How far is it answered?": "Kiddiddwamu kyenkana wa?",
-"Only you can mark it fully answered (✓).": "Ggwe wekka ggw'oyinza okukiraga nti kiddiddwamu ddala (✓).",
 "What can we pray for?": "Tusabire ki?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Buli muntu mu {circle} asobola okukisoma, okusaba, n'okulaga nti kiddiddwamu kyenkana wa.",
 "Ask for prayer": "Saba okusabirwa",
-"Answered {step}": "Eddiddwamu {step}"
+"Everyone in {circle} can read it and pray.": "Buli muntu mu {circle} asobola okukisoma n'okusaba.",
+"{n} of {total} prayed": "{n} ku {total} basabye",
+"Everyone prayed": "Bonna basabye",
+"Ask again": "Saba nate",
+"Asked again": "Kisabiddwa nate",
+"Ready for your prayer": "Kirindiridde okusaba kwo"
 }

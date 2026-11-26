@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Hūnā i nā kaola i ka ʻōwili ʻana",
 "Always, not only with the phone on its side": "Mau, ʻaʻole wale nō i ka wā e moe ana ke kelepona",
 "Prayer request": "Noi pule",
-"Not answered yet": "ʻAʻole i pane ʻia",
-"How far is it answered?": "Ua pane ʻia a hea?",
-"Only you can mark it fully answered (✓).": "ʻO ʻoe wale nō ke hōʻailona he pane piha ʻia (✓).",
 "What can we pray for?": "No ke aha mākou e pule ai?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Hiki i nā mea a pau ma {circle} ke heluhelu, pule, a hōʻailona i ka nui o ka pane ʻana.",
 "Ask for prayer": "Noi i ka pule",
-"Answered {step}": "Ua pane ʻia {step}"
+"Everyone in {circle} can read it and pray.": "Hiki i nā mea a pau ma {circle} ke heluhelu a pule.",
+"{n} of {total} prayed": "Ua pule ʻo {n} o {total}",
+"Everyone prayed": "Ua pule ka poʻe a pau",
+"Ask again": "Noi hou",
+"Asked again": "Ua noi hou ʻia",
+"Ready for your prayer": "Mākaukau no kāu pule"
 }

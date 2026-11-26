@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "လှိမ့်နေစဉ် ဘားများကို ဖျောက်ရန်",
 "Always, not only with the phone on its side": "အမြဲတမ်း၊ ဖုန်းကို လှဲထားချိန်မှာသာ မဟုတ်",
 "Prayer request": "ဆုတောင်းပေးရန် တောင်းဆိုချက်",
-"Not answered yet": "မဖြေကြားရသေးပါ",
-"How far is it answered?": "မည်မျှ ဖြေကြားပြီးပြီလဲ?",
-"Only you can mark it fully answered (✓).": "အပြည့်အဝ ဖြေကြားပြီး (✓) ဟု သင်တစ်ဦးတည်းသာ မှတ်သားနိုင်သည်။",
 "What can we pray for?": "ဘာအတွက် ဆုတောင်းပေးရမလဲ?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} ရှိ လူတိုင်း ဖတ်ရှု၊ ဆုတောင်းပြီး မည်မျှ ဖြေကြားပြီးကြောင်း မှတ်သားနိုင်သည်။",
 "Ask for prayer": "ဆုတောင်းပေးရန် တောင်းဆိုရန်",
-"Answered {step}": "ဖြေကြားပြီး {step}"
+"Everyone in {circle} can read it and pray.": "{circle} ရှိ လူတိုင်း ဖတ်ရှုပြီး ဆုတောင်းနိုင်သည်။",
+"{n} of {total} prayed": "{total} ဦးအနက် {n} ဦး ဆုတောင်းပြီး",
+"Everyone prayed": "လူတိုင်း ဆုတောင်းပြီး",
+"Ask again": "ထပ်မံ တောင်းဆိုရန်",
+"Asked again": "ထပ်မံ တောင်းဆိုထားသည်",
+"Ready for your prayer": "သင့်ဆုတောင်းချက်ကို စောင့်နေသည်"
 }

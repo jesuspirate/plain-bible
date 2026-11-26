@@ -1445,11 +1445,12 @@
 "Hide bars while scrolling": "Скрывать панели при прокрутке",
 "Always, not only with the phone on its side": "Всегда, а не только с телефоном набок",
 "Prayer request": "Молитвенная просьба",
-"Not answered yet": "Пока не отвечена",
-"How far is it answered?": "Насколько отвечена?",
-"Only you can mark it fully answered (✓).": "Только вы можете отметить её как полностью отвеченную (✓).",
 "What can we pray for?": "О чём нам помолиться?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Все в кругу {circle} могут прочитать её, помолиться и отметить, насколько она отвечена.",
 "Ask for prayer": "Попросить о молитве",
-"Answered {step}": "Отвечена {step}"
+"Everyone in {circle} can read it and pray.": "Все в кругу {circle} могут прочитать её и помолиться.",
+"{n} of {total} prayed": "Помолились {n} из {total}",
+"Everyone prayed": "Все помолились",
+"Ask again": "Попросить снова",
+"Asked again": "Попросили снова",
+"Ready for your prayer": "Ждёт вашей молитвы"
 }

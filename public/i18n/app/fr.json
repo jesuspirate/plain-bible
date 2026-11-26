@@ -1170,11 +1170,12 @@
 "Hide bars while scrolling": "Masquer les barres en défilant",
 "Always, not only with the phone on its side": "Toujours, pas seulement téléphone à l’horizontale",
 "Prayer request": "Demande de prière",
-"Not answered yet": "Pas encore exaucée",
-"How far is it answered?": "Où en est l’exaucement ?",
-"Only you can mark it fully answered (✓).": "Vous seul pouvez la marquer pleinement exaucée (✓).",
 "What can we pray for?": "Pour quoi pouvons-nous prier ?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Tout le monde dans {circle} peut la lire, prier et marquer où en est l’exaucement.",
 "Ask for prayer": "Demander la prière",
-"Answered {step}": "Exaucée à {step}"
+"Everyone in {circle} can read it and pray.": "Tout le monde dans {circle} peut la lire et prier.",
+"{n} of {total} prayed": "{n} sur {total} ont prié",
+"Everyone prayed": "Tout le monde a prié",
+"Ask again": "Redemander",
+"Asked again": "Demandée à nouveau",
+"Ready for your prayer": "Prête pour votre prière"
 }

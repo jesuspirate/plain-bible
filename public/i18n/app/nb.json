@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Skjul linjene mens du ruller",
 "Always, not only with the phone on its side": "Alltid, ikke bare med telefonen på tvers",
 "Prayer request": "Bønneemne",
-"Not answered yet": "Ikke bønnhørt ennå",
-"How far is it answered?": "Hvor langt er den bønnhørt?",
-"Only you can mark it fully answered (✓).": "Bare du kan merke den som helt bønnhørt (✓).",
 "What can we pray for?": "Hva kan vi be for?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Alle i {circle} kan lese den, be og merke hvor langt den er bønnhørt.",
 "Ask for prayer": "Be om forbønn",
-"Answered {step}": "Bønnhørt {step}"
+"Everyone in {circle} can read it and pray.": "Alle i {circle} kan lese den og be.",
+"{n} of {total} prayed": "{n} av {total} har bedt",
+"Everyone prayed": "Alle har bedt",
+"Ask again": "Be igjen",
+"Asked again": "Bedt om igjen",
+"Ready for your prayer": "Klar for din bønn"
 }

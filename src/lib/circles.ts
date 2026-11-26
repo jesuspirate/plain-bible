@@ -41,8 +41,9 @@ export type Shared =
   /** `prayed`: when it was prayed, which can be long before it was shared */
   | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; verses?: PrayerVerse[]; note?: string; prayed?: number }
   /** a prayer request, in a few words, for the whole circle to pray for.
-   *  Anyone in the circle marks how far it's answered (see `Step`). */
-  | { k: 'ask'; note: string }
+   *  Each one who prays taps 🙏 (`amens`); nobody marks it answered.
+   *  `again`: asked once more, after everyone had prayed. */
+  | { k: 'ask'; note: string; again?: boolean }
 
 /** `door`: an Open door circle, which you lead or are a member of. */
 export interface CircleInfo { id: string; name: string; members: number; door?: 'lead' | 'member' }
@@ -53,29 +54,11 @@ export interface Reply { id: string; by: string; at: number; text: string }
  *  encouragement. Sealed, so only the circle knows which were given. */
 export const REACTS = ['love', 'strength', 'cheer'] as const
 export type Reaction = typeof REACTS[number]
-/** How far a prayer request is answered, as one member last marked it:
- *  `n` from 0 (not yet) to STEPS (fully answered), and when they marked it.
- *  Kept in that member's sealed reactions, so the server needs no change. */
-export interface Step { n: number; at: number }
-export const STEPS = 4
 /** `amenAt`: when each 🙏 was given, by member (missing in feeds kept by older versions).
  *  `reacts`: each member's other reactions, and when they last added one. */
 export interface FeedItem {
   id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; amenAt?: Record<string, number>; replies: Reply[]
-  reacts?: Record<string, { at: number; e: Reaction[]; s?: Step }>
-}
-/** Where a prayer request stands: the step marked last, by whoever marked
- *  it. Only the one who asked can call it fully answered, and once they
- *  have, it stays answered until they say otherwise. */
-export function stepOf(i: FeedItem): (Step & { by: string }) | undefined {
-  const asker = i.reacts?.[i.by]?.s
-  if (asker?.n === STEPS) return { ...asker, by: i.by }
-  let out: (Step & { by: string }) | undefined
-  for (const [by, x] of Object.entries(i.reacts ?? {})) {
-    if (!x.s || (x.s.n === STEPS && by !== i.by)) continue
-    if (!out || x.s.at > out.at) out = { ...x.s, by }
-  }
-  return out
+  reacts?: Record<string, { at: number; e: Reaction[] }>
 }
 /** When it belongs in the circle's days: a prayer on the day it was prayed
  *  (never later than it was shared), anything else when it was shared. */
@@ -443,7 +426,7 @@ export function cleanShared(v: unknown): Shared | undefined {
     if (x.k === 'note') return note ? { k: 'note', ...base, note } : undefined
     return { k: x.k, ...base, note }
   }
-  if (x.k === 'ask') return note ? { k: 'ask', note } : undefined
+  if (x.k === 'ask') return note ? { k: 'ask', note, ...(x.again === true ? { again: true } : {}) } : undefined
   if (x.k === 'prayer' && Array.isArray(x.parts)) {
     const parts = x.parts.filter(p => p && Number.isInteger(p.size) && p.size > 0 && typeof p.type === 'string')
       .map(p => ({ ms: Number(p.ms) || 0, type: text(p.type, 60), size: p.size as number }))
@@ -482,11 +465,10 @@ export async function loadFeed(circle: string): Promise<Feed> {
     const said = text(await openJson(key, x.body, `${circle}/${x.item}/${x.id}`).catch(() => ''), 2000)
     if (said) replies.set(x.item, [...(replies.get(x.item) ?? []), { id: x.id, by: x.mid, at: x.at, text: said }])
   }
-  const reacts = new Map<string, Record<string, { at: number; e: Reaction[]; s?: Step }>>()
+  const reacts = new Map<string, Record<string, { at: number; e: Reaction[] }>>()
   for (const x of r.reacts ?? []) {
-    const v = await openJson(key, x.body, reactAad(circle, x.item, x.mid)).catch(() => undefined)
-    const e = cleanReacts(v), s = cleanStep(v)
-    if (e.length || s) reacts.set(x.item, { ...reacts.get(x.item), [x.mid]: { at: x.at, e, ...(s ? { s } : {}) } })
+    const e = cleanReacts(await openJson(key, x.body, reactAad(circle, x.item, x.mid)).catch(() => undefined))
+    if (e.length) reacts.set(x.item, { ...reacts.get(x.item), [x.mid]: { at: x.at, e } })
   }
   const items: FeedItem[] = []
   for (const i of r.items) {
@@ -506,11 +488,6 @@ export async function loadFeed(circle: string): Promise<Feed> {
 /** Reactions as they came out of their seal: known ones, once each, in order. */
 export const cleanReacts = (v: unknown): Reaction[] =>
   Array.isArray((v as { e?: unknown })?.e) ? REACTS.filter(x => ((v as { e: unknown[] }).e).includes(x)) : []
-/** A prayer request's step as it came out of the seal. */
-const cleanStep = (v: unknown): Step | undefined => {
-  const s = (v as { s?: { n?: unknown; at?: unknown } } | undefined)?.s
-  return s && Number.isInteger(s.n) && (s.n as number) >= 0 && (s.n as number) <= STEPS && Number.isFinite(s.at) ? { n: s.n as number, at: s.at as number } : undefined
-}
 /** Tied to the member, so the server can't pass one person's off as another's. */
 const reactAad = (circle: string, item: string, mid: string) => `${circle}/${item}/react/${mid}`
 
@@ -686,20 +663,31 @@ export async function pushStreaks(ids: string[]) {
 export const amen = (circle: string, item: string, on: boolean) =>
   api(`/circles/${circle}/items/${item}/amen`, { method: on ? 'PUT' : 'DELETE', token: token() })
 
-/** Your reactions on something shared, all of them (none takes them away),
- *  and on a prayer request the step you last marked, kept with them.
- *  `added`: one was just given, or a step marked, which tells whoever shared it. */
-export async function react(circle: string, item: string, mid: string, e: Reaction[], added: boolean, s?: Step) {
+/** Your reactions on something shared, all of them (none takes them away).
+ *  `added`: one was just given, which tells whoever shared it. */
+export async function react(circle: string, item: string, mid: string, e: Reaction[], added: boolean) {
   const path = `/circles/${circle}/items/${item}/react`
-  if (!e.length && !s) return api(path, { method: 'DELETE', token: token() })
-  return api(path, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), { e, ...(s ? { s } : {}) }, reactAad(circle, item, mid)), added } })
+  if (!e.length) return api(path, { method: 'DELETE', token: token() })
+  return api(path, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), { e }, reactAad(circle, item, mid)), added } })
 }
 
-/** A prayer request for the whole circle: everyone in it reads it, prays,
- *  and can mark how far it's answered. */
-export function askPrayer(circle: string, note: string) {
-  return send(circle, { k: 'ask', note: note.trim().slice(0, 2000) })
+/** A prayer request for the whole circle: everyone in it reads it and
+ *  prays. `again`: the same request once more, after everyone prayed. */
+export const askPrayer = (circle: string, note: string, again = false) =>
+  send(circle, { k: 'ask', note: note.trim().slice(0, 2000), ...(again ? { again: true } : {}) })
+
+/** Who in the circle a prayer request waits on: everyone but the one who
+ *  asked. `prayed`: those of them who tapped 🙏. */
+export function askedOf(feed: Feed, i: FeedItem) {
+  const others = feed.members.filter(m => m.mid !== i.by).map(m => m.mid)
+  const prayed = others.filter(m => i.amens.includes(m))
+  return { others, prayed, all: others.length > 0 && prayed.length === others.length }
 }
+
+/** Prayer requests from others that you haven't prayed for yet, from the
+ *  last two weeks: they wait for you at the top of the circle, gently. */
+export const waitingFor = (feed: Feed, now = Date.now()) =>
+  feed.items.filter(i => i.body.k === 'ask' && i.by !== feed.me && !i.amens.includes(feed.me) && now - i.at < 14 * 86400_000)
 
 /** A few words back on something shared. */
 export async function reply(circle: string, item: string, said: string) {

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { cleanShared, inviteMessage, parseInviteLink, stepOf, type FeedItem } from './circles'
+import { askedOf, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -70,17 +70,21 @@ describe('inviteMessage', () => {
 })
 
 describe('prayer requests', () => {
-  const ask = (reacts: FeedItem['reacts']): FeedItem => ({ id: 'i', by: 'asker', at: 1, body: { k: 'ask', note: 'Peace' }, chunks: 0, amens: [], replies: [], reacts })
+  const ask = (by: string, amens: string[], at = Date.now()): FeedItem => ({ id: 'i' + by, by, at, body: { k: 'ask', note: 'Peace' }, chunks: 0, amens, replies: [] })
+  const feed = (items: FeedItem[]): Feed => ({ me: 'a', members: [{ mid: 'a', name: 'A' }, { mid: 'b', name: 'B' }, { mid: 'c', name: 'C' }], items })
   it('keeps a request, and drops an empty one', () => {
     expect(cleanShared({ k: 'ask', note: 'For my brother' })).toEqual({ k: 'ask', note: 'For my brother' })
+    expect(cleanShared({ k: 'ask', note: 'Again', again: true })).toEqual({ k: 'ask', note: 'Again', again: true })
     expect(cleanShared({ k: 'ask', note: '' })).toBeUndefined()
   })
-  it('stands at the step marked last, by anyone', () => {
-    expect(stepOf(ask({}))).toBeUndefined()
-    expect(stepOf(ask({ a: { at: 5, e: [], s: { n: 1, at: 5 } }, b: { at: 9, e: ['love'], s: { n: 3, at: 9 } } }))).toEqual({ n: 3, at: 9, by: 'b' })
+  it('counts everyone but the one who asked', () => {
+    const f = feed([])
+    expect(askedOf(f, ask('b', ['a']))).toEqual({ others: ['a', 'c'], prayed: ['a'], all: false })
+    expect(askedOf(f, ask('b', ['a', 'c', 'b'])).all).toBe(true)
   })
-  it('is fully answered only by the one who asked, and stays so', () => {
-    expect(stepOf(ask({ a: { at: 5, e: [], s: { n: 2, at: 5 } }, b: { at: 9, e: [], s: { n: 4, at: 9 } } }))).toEqual({ n: 2, at: 5, by: 'a' })
-    expect(stepOf(ask({ asker: { at: 5, e: [], s: { n: 4, at: 5 } }, b: { at: 9, e: [], s: { n: 2, at: 9 } } }))).toEqual({ n: 4, at: 5, by: 'asker' })
+  it('waits for you only on others’ recent requests you haven’t prayed for', () => {
+    const old = Date.now() - 20 * 86400_000
+    const f = feed([ask('b', []), ask('c', ['a']), ask('a', []), ask('d', [], old)])
+    expect(waitingFor(f).map(i => i.by)).toEqual(['b'])
   })
 })

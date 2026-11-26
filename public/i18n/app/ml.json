@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "സ്ക്രോൾ ചെയ്യുമ്പോൾ ബാറുകൾ മറയ്ക്കുക",
 "Always, not only with the phone on its side": "എപ്പോഴും, ഫോൺ ചെരിച്ചുവെച്ചപ്പോൾ മാത്രമല്ല",
 "Prayer request": "പ്രാർത്ഥനാ അപേക്ഷ",
-"Not answered yet": "ഇതുവരെ ഉത്തരം ലഭിച്ചിട്ടില്ല",
-"How far is it answered?": "എത്രത്തോളം ഉത്തരം ലഭിച്ചു?",
-"Only you can mark it fully answered (✓).": "പൂർണ്ണമായി ഉത്തരം ലഭിച്ചു എന്ന് അടയാളപ്പെടുത്താൻ നിങ്ങൾക്ക് മാത്രമേ കഴിയൂ (✓).",
 "What can we pray for?": "ഞങ്ങൾ എന്തിനുവേണ്ടി പ്രാർത്ഥിക്കണം?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}-ലെ എല്ലാവർക്കും ഇത് വായിക്കാനും പ്രാർത്ഥിക്കാനും എത്രത്തോളം ഉത്തരം ലഭിച്ചു എന്ന് അടയാളപ്പെടുത്താനും കഴിയും.",
 "Ask for prayer": "പ്രാർത്ഥന ചോദിക്കുക",
-"Answered {step}": "ഉത്തരം ലഭിച്ചു {step}"
+"Everyone in {circle} can read it and pray.": "{circle}-ലെ എല്ലാവർക്കും ഇത് വായിക്കാനും പ്രാർത്ഥിക്കാനും കഴിയും.",
+"{n} of {total} prayed": "{total} പേരിൽ {n} പേർ പ്രാർത്ഥിച്ചു",
+"Everyone prayed": "എല്ലാവരും പ്രാർത്ഥിച്ചു",
+"Ask again": "വീണ്ടും ചോദിക്കുക",
+"Asked again": "വീണ്ടും ചോദിച്ചു",
+"Ready for your prayer": "നിങ്ങളുടെ പ്രാർത്ഥനയ്ക്കായി കാത്തിരിക്കുന്നു"
 }

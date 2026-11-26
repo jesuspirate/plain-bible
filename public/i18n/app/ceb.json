@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Itago ang mga bar samtang nag-scroll",
 "Always, not only with the phone on its side": "Kanunay, dili lang kung pahigda ang telepono",
 "Prayer request": "Hangyo sa pag-ampo",
-"Not answered yet": "Wala pa matubag",
-"How far is it answered?": "Unsa na ka layo ang tubag?",
-"Only you can mark it fully answered (✓).": "Ikaw ra ang makamarka nga hingpit na kining natubag (✓).",
 "What can we pray for?": "Unsa ang among ikaampo?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Ang tanan sa {circle} makabasa niini, makaampo, ug makamarka kung unsa na ka layo ang tubag.",
 "Ask for prayer": "Pangayo og pag-ampo",
-"Answered {step}": "Natubag {step}"
+"Everyone in {circle} can read it and pray.": "Ang tanan sa {circle} makabasa niini ug makaampo.",
+"{n} of {total} prayed": "{n} sa {total} ang nakaampo",
+"Everyone prayed": "Ang tanan nakaampo na",
+"Ask again": "Pangayo pag-usab",
+"Asked again": "Gipangayo pag-usab",
+"Ready for your prayer": "Andam alang sa imong pag-ampo"
 }

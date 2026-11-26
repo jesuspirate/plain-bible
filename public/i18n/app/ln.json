@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Kobomba myɔngɔ ntango ozali kokitisa",
 "Always, not only with the phone on its side": "Ntango nyonso, kaka te ntango telefone elali",
 "Prayer request": "Bosɛngi ya libondeli",
-"Not answered yet": "Eyanolami naino te",
-"How far is it answered?": "Eyanolami tii wapi?",
-"Only you can mark it fully answered (✓).": "Kaka yo nde okoki kotya elembo ete eyanolami mobimba (✓).",
 "What can we pray for?": "Tokoki kobondela mpo na nini?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Moto nyonso na {circle} akoki kotánga yango, kobondela, mpe kotya elembo tii wapi eyanolami.",
 "Ask for prayer": "Sɛnga libondeli",
-"Answered {step}": "Eyanolami {step}"
+"Everyone in {circle} can read it and pray.": "Moto nyonso na {circle} akoki kotánga yango mpe kobondela.",
+"{n} of {total} prayed": "{n} na {total} babondeli",
+"Everyone prayed": "Bato nyonso babondeli",
+"Ask again": "Sɛnga lisusu",
+"Asked again": "Esɛngami lisusu",
+"Ready for your prayer": "Ezali kozela libondeli na yo"
 }

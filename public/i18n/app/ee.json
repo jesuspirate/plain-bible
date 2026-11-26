@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Ɣla atiwo ne èle ŋkɔ ʋum",
 "Always, not only with the phone on its side": "Ɣesiaɣi, menye ne fon la le axa dzi ɖeɖeko o",
 "Prayer request": "Gbedodoɖa ƒe biabia",
-"Not answered yet": "Womeɖo eŋu haɖe o",
-"How far is it answered?": "Aleke wòɖo eŋu ɖo?",
-"Only you can mark it fully answered (✓).": "Wò ɖeka koe ate ŋu aɖe dzesi be woɖo eŋu bliboe (✓).",
 "What can we pray for?": "Nu ka ŋuti míado gbe ɖa?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Ame sia ame le {circle} me ate ŋu axlẽe, ado gbe ɖa, eye wòaɖe dzesi aleke woɖo eŋu ɖo.",
 "Ask for prayer": "Bia gbedodoɖa",
-"Answered {step}": "Woɖo eŋu {step}"
+"Everyone in {circle} can read it and pray.": "Ame sia ame le {circle} me ate ŋu axlẽe eye wòado gbe ɖa.",
+"{n} of {total} prayed": "{n} le {total} me do gbe ɖa",
+"Everyone prayed": "Amesiame do gbe ɖa",
+"Ask again": "Gabia",
+"Asked again": "Wogabiae",
+"Ready for your prayer": "Ele lalam na wò gbedodoɖa"
 }

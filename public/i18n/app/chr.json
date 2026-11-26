@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "ᏗᏍᎦᎳᏗ ᎦᏙᏗ ᎭᎪᎵᏰᏍᎬ",
 "Always, not only with the phone on its side": "ᏂᎪᎯᎸ, ᎥᏝ ᎤᏩᏒ ᏧᏬᏂᎯᏍᏗ ᎦᏢᏍᏗ",
 "Prayer request": "ᎠᏓᏙᎵᏍᏙᏗ ᎠᏔᏲᎯᎲ",
-"Not answered yet": "ᎥᏝ ᎠᏏ ᎤᏁᏤᎸᎯ",
-"How far is it answered?": "ᎢᎳᎪ ᎢᏴ ᎤᏁᏤᎸ?",
-"Only you can mark it fully answered (✓).": "ᏂᎯ ᎤᏩᏒ ᏰᎵ ᏣᏰᎸᏗ ᏂᎦᏛ ᎤᏁᏤᎸᎢ (✓).",
 "What can we pray for?": "ᎦᏙ ᎤᏍᏗ ᏰᎵ ᏓᏓᏙᎵᏍᏓᏁᏗ?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "ᏂᎦᏛ {circle} ᏣᏁᎭ ᏰᎵ ᏓᎪᏪᎵᏍᎨᏍᏗ, ᏓᏓᏙᎵᏍᏗᏍᎨᏍᏗ, ᎠᎴ ᏓᏰᎸᏗᏍᎨᏍᏗ ᎢᎳᎪ ᎢᏴ ᎤᏁᏤᎸ.",
 "Ask for prayer": "ᎠᏓᏙᎵᏍᏙᏗ ᎯᏔᏲᎯ",
-"Answered {step}": "ᎤᏁᏤᎸ {step}"
+"Everyone in {circle} can read it and pray.": "ᏂᎦᏛ {circle} ᏣᏁᎭ ᏰᎵ ᏓᎪᏪᎵᏍᎨᏍᏗ ᎠᎴ ᏓᏓᏙᎵᏍᏗᏍᎨᏍᏗ.",
+"{n} of {total} prayed": "{n} {total} ᎢᏯᏂᏛ ᎤᏓᏙᎵᏍᏔᏅ",
+"Everyone prayed": "ᏂᎦᏛ ᎤᏓᏙᎵᏍᏔᏅ",
+"Ask again": "ᏔᎵᏁ ᎯᏔᏲᎯ",
+"Asked again": "ᏔᎵᏁ ᎠᏔᏲᎯᎲ",
+"Ready for your prayer": "ᏣᏓᏙᎵᏍᏙᏗ ᎠᏛᏅᎢᏍᏗ"
 }

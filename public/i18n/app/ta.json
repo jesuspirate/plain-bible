@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "உருட்டும்போது பட்டிகளை மறை",
 "Always, not only with the phone on its side": "எப்போதும், ஃபோன் படுக்கவைத்தபோது மட்டுமல்ல",
 "Prayer request": "ஜெப விண்ணப்பம்",
-"Not answered yet": "இன்னும் பதில் கிடைக்கவில்லை",
-"How far is it answered?": "எவ்வளவு பதில் கிடைத்தது?",
-"Only you can mark it fully answered (✓).": "முழுமையாக பதில் கிடைத்தது என்று நீங்கள் மட்டுமே குறிக்க முடியும் (✓).",
 "What can we pray for?": "நாங்கள் எதற்காக ஜெபிக்கலாம்?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} இல் உள்ள அனைவரும் இதைப் படித்து, ஜெபித்து, எவ்வளவு பதில் கிடைத்தது என்று குறிக்கலாம்.",
 "Ask for prayer": "ஜெபம் கேளுங்கள்",
-"Answered {step}": "பதில் கிடைத்தது {step}"
+"Everyone in {circle} can read it and pray.": "{circle} இல் உள்ள அனைவரும் இதைப் படித்து ஜெபிக்கலாம்.",
+"{n} of {total} prayed": "{total} பேரில் {n} பேர் ஜெபித்தனர்",
+"Everyone prayed": "அனைவரும் ஜெபித்தனர்",
+"Ask again": "மீண்டும் கேளுங்கள்",
+"Asked again": "மீண்டும் கேட்கப்பட்டது",
+"Ready for your prayer": "உங்கள் ஜெபத்திற்காகக் காத்திருக்கிறது"
 }

@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Leisten beim Scrollen ausblenden",
 "Always, not only with the phone on its side": "Immer, nicht nur mit dem Telefon quer",
 "Prayer request": "Gebetsanliegen",
-"Not answered yet": "Noch nicht erhört",
-"How far is it answered?": "Wie weit ist es erhört?",
-"Only you can mark it fully answered (✓).": "Nur du kannst es als ganz erhört markieren (✓).",
 "What can we pray for?": "Wofür können wir beten?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Alle in {circle} können es lesen, beten und markieren, wie weit es erhört ist.",
 "Ask for prayer": "Um Gebet bitten",
-"Answered {step}": "Erhört {step}"
+"Everyone in {circle} can read it and pray.": "Alle in {circle} können es lesen und beten.",
+"{n} of {total} prayed": "{n} von {total} haben gebetet",
+"Everyone prayed": "Alle haben gebetet",
+"Ask again": "Noch einmal bitten",
+"Asked again": "Erneut erbeten",
+"Ready for your prayer": "Bereit für dein Gebet"
 }

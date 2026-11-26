@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Follaghey ny barryn tra scrolley",
 "Always, not only with the phone on its side": "Dy kinjagh, cha nee ynrican tra ta’n chellvane er e lhiattee",
 "Prayer request": "Aghin padjer",
-"Not answered yet": "Gyn freggyrt foast",
-"How far is it answered?": "Cre cha foddey t'eh freggyrt?",
-"Only you can mark it fully answered (✓).": "Oddys uss ny lomarcan cowrey eh myr freggyrt dy slane (✓).",
 "What can we pray for?": "Cre son oddys mayd guee?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Oddys dagh peiagh ayns {circle} eh y lhaih, guee, as cowrey cre cha foddey t'eh freggyrt.",
 "Ask for prayer": "Aght er padjer",
-"Answered {step}": "Freggyrt {step}"
+"Everyone in {circle} can read it and pray.": "Oddys dagh peiagh ayns {circle} eh y lhaih as guee.",
+"{n} of {total} prayed": "{n} jeh {total} ren guee",
+"Everyone prayed": "Ren dy chooilley pheiagh guee",
+"Ask again": "Aght reesht",
+"Asked again": "Aghit reesht",
+"Ready for your prayer": "Aarloo son dty phadjer"
 }

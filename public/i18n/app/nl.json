@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Balken verbergen tijdens scrollen",
 "Always, not only with the phone on its side": "Altijd, niet alleen met de telefoon dwars",
 "Prayer request": "Gebedsverzoek",
-"Not answered yet": "Nog niet verhoord",
-"How far is it answered?": "Hoe ver is het verhoord?",
-"Only you can mark it fully answered (✓).": "Alleen jij kunt het als helemaal verhoord markeren (✓).",
 "What can we pray for?": "Waarvoor kunnen we bidden?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Iedereen in {circle} kan het lezen, bidden en aangeven hoe ver het verhoord is.",
 "Ask for prayer": "Om gebed vragen",
-"Answered {step}": "Verhoord {step}"
+"Everyone in {circle} can read it and pray.": "Iedereen in {circle} kan het lezen en bidden.",
+"{n} of {total} prayed": "{n} van {total} hebben gebeden",
+"Everyone prayed": "Iedereen heeft gebeden",
+"Ask again": "Opnieuw vragen",
+"Asked again": "Opnieuw gevraagd",
+"Ready for your prayer": "Klaar voor jouw gebed"
 }

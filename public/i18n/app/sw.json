@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Ficha pau unaposogeza",
 "Always, not only with the phone on its side": "Kila wakati, si tu simu ikiwa imelala",
 "Prayer request": "Ombi la maombi",
-"Not answered yet": "Bado halijajibiwa",
-"How far is it answered?": "Limejibiwa kwa kiasi gani?",
-"Only you can mark it fully answered (✓).": "Ni wewe tu unayeweza kuliwekea alama kuwa limejibiwa kikamilifu (✓).",
 "What can we pray for?": "Tuombe kwa ajili ya nini?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Kila mtu katika {circle} anaweza kulisoma, kuomba, na kuweka alama limejibiwa kwa kiasi gani.",
 "Ask for prayer": "Omba kuombewa",
-"Answered {step}": "Limejibiwa {step}"
+"Everyone in {circle} can read it and pray.": "Kila mtu katika {circle} anaweza kulisoma na kuomba.",
+"{n} of {total} prayed": "{n} kati ya {total} wameomba",
+"Everyone prayed": "Wote wameomba",
+"Ask again": "Omba tena",
+"Asked again": "Limeombwa tena",
+"Ready for your prayer": "Linangoja maombi yako"
 }

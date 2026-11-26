@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Zoo ogwe mgbe ị na-akpụgharị",
 "Always, not only with the phone on its side": "Mgbe niile, ọ bụghị naanị mgbe ekwentị dina n’akụkụ",
 "Prayer request": "Arịrịọ ekpere",
-"Not answered yet": "A zabeghị ya",
-"How far is it answered?": "Olee otú e si zaa ya?",
-"Only you can mark it fully answered (✓).": "Naanị gị nwere ike ịka ya akara na a zaala ya kpam kpam (✓).",
 "What can we pray for?": "Gịnị ka anyị ga-ekpere maka ya?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Onye ọ bụla nọ na {circle} nwere ike ịgụ ya, kpee ekpere, ma kaa akara otú e si zaa ya.",
 "Ask for prayer": "Rịọ ekpere",
-"Answered {step}": "Azara ya {step}"
+"Everyone in {circle} can read it and pray.": "Onye ọ bụla nọ na {circle} nwere ike ịgụ ya ma kpee ekpere.",
+"{n} of {total} prayed": "{n} n'ime {total} ekpeela ekpere",
+"Everyone prayed": "Onye ọ bụla ekpeela ekpere",
+"Ask again": "Rịọ ọzọ",
+"Asked again": "A rịọrọ ọzọ",
+"Ready for your prayer": "Na-echere ekpere gị"
 }

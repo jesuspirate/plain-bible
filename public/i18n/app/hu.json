@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Sávok elrejtése görgetéskor",
 "Always, not only with the phone on its side": "Mindig, nem csak fekvő telefonnál",
 "Prayer request": "Imakérés",
-"Not answered yet": "Még nem meghallgatott",
-"How far is it answered?": "Mennyire hallgatta meg?",
-"Only you can mark it fully answered (✓).": "Csak te jelölheted teljesen meghallgatottnak (✓).",
 "What can we pray for?": "Miért imádkozhatunk?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "A(z) {circle} körben mindenki elolvashatja, imádkozhat érte, és jelölheti, mennyire hallgatta meg Isten.",
 "Ask for prayer": "Ima kérése",
-"Answered {step}": "Meghallgatott {step}"
+"Everyone in {circle} can read it and pray.": "A(z) {circle} körben mindenki elolvashatja és imádkozhat érte.",
+"{n} of {total} prayed": "{total}-ből {n} imádkozott",
+"Everyone prayed": "Mindenki imádkozott",
+"Ask again": "Kérd újra",
+"Asked again": "Újra kérve",
+"Ready for your prayer": "Várja az imádat"
 }

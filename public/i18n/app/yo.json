@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Fi àwọn ọ̀pá pamọ́ nígbà tí o bá ń yí",
 "Always, not only with the phone on its side": "Nígbà gbogbo, kì í ṣe nígbà tí fóònù bá dùbúlẹ̀ nìkan",
 "Prayer request": "Ìbéèrè àdúrà",
-"Not answered yet": "A kò tíì dáhùn",
-"How far is it answered?": "Báwo ni a ti dáhùn rẹ̀ tó?",
-"Only you can mark it fully answered (✓).": "Ìwọ nìkan ló lè sàmì sí i pé a ti dáhùn rẹ̀ pátápátá (✓).",
 "What can we pray for?": "Kí ni a lè gbàdúrà fún?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Gbogbo ènìyàn nínú {circle} lè kà á, gbàdúrà, kí wọ́n sì sàmì sí bí a ti dáhùn rẹ̀ tó.",
 "Ask for prayer": "Béèrè àdúrà",
-"Answered {step}": "A ti dáhùn {step}"
+"Everyone in {circle} can read it and pray.": "Gbogbo ènìyàn nínú {circle} lè kà á kí wọ́n sì gbàdúrà.",
+"{n} of {total} prayed": "{n} nínú {total} ti gbàdúrà",
+"Everyone prayed": "Gbogbo ènìyàn ti gbàdúrà",
+"Ask again": "Béèrè lẹ́ẹ̀kan sí i",
+"Asked again": "A tún béèrè",
+"Ready for your prayer": "Ó ń dúró de àdúrà rẹ"
 }

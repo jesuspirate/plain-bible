@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "स्क्रॉल करते समय बार छिपाएँ",
 "Always, not only with the phone on its side": "हमेशा, सिर्फ़ फ़ोन आड़ा होने पर नहीं",
 "Prayer request": "प्रार्थना अनुरोध",
-"Not answered yet": "अभी उत्तर नहीं मिला",
-"How far is it answered?": "कितना उत्तर मिला?",
-"Only you can mark it fully answered (✓).": "केवल आप ही इसे पूरी तरह उत्तर मिला चिह्नित कर सकते हैं (✓)।",
 "What can we pray for?": "हम किसके लिए प्रार्थना करें?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} में सभी इसे पढ़ सकते हैं, प्रार्थना कर सकते हैं और चिह्नित कर सकते हैं कि कितना उत्तर मिला।",
 "Ask for prayer": "प्रार्थना माँगें",
-"Answered {step}": "उत्तर मिला {step}"
+"Everyone in {circle} can read it and pray.": "{circle} में सभी इसे पढ़ और प्रार्थना कर सकते हैं।",
+"{n} of {total} prayed": "{total} में से {n} ने प्रार्थना की",
+"Everyone prayed": "सबने प्रार्थना की",
+"Ask again": "फिर से माँगें",
+"Asked again": "फिर से माँगा गया",
+"Ready for your prayer": "आपकी प्रार्थना की प्रतीक्षा में"
 }

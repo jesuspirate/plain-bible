@@ -1338,11 +1338,12 @@
 "Hide bars while scrolling": "Թաքցնել գոտիները ոլորելիս",
 "Always, not only with the phone on its side": "Միշտ, ոչ միայն երբ հեռախոսը հորիզոնական է",
 "Prayer request": "Աղոթքի խնդրանք",
-"Not answered yet": "Դեռ չի պատասխանվել",
-"How far is it answered?": "Որքանո՞վ է պատասխանվել",
-"Only you can mark it fully answered (✓).": "Միայն դուք կարող եք նշել այն լիովին պատասխանված (✓)։",
 "What can we pray for?": "Ինչի՞ համար կարող ենք աղոթել",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}-ում բոլորը կարող են կարդալ այն, աղոթել և նշել, թե որքանով է պատասխանվել։",
 "Ask for prayer": "Աղոթք խնդրել",
-"Answered {step}": "Պատասխանված {step}"
+"Everyone in {circle} can read it and pray.": "{circle}-ում բոլորը կարող են կարդալ այն և աղոթել։",
+"{n} of {total} prayed": "{total}-ից {n}-ը աղոթեց",
+"Everyone prayed": "Բոլորն աղոթեցին",
+"Ask again": "Կրկին խնդրել",
+"Asked again": "Կրկին խնդրված",
+"Ready for your prayer": "Սպասում է ձեր աղոթքին"
 }

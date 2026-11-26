@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "ସ୍କ୍ରୋଲ୍ କରିବା ବେଳେ ବାର୍ ଲୁଚାନ୍ତୁ",
 "Always, not only with the phone on its side": "ସବୁବେଳେ, କେବଳ ଫୋନ୍ ଆଡ଼ା ଥିବାବେଳେ ନୁହେଁ",
 "Prayer request": "ପ୍ରାର୍ଥନା ଅନୁରୋଧ",
-"Not answered yet": "ଏପର୍ଯ୍ୟନ୍ତ ଉତ୍ତର ମିଳିନାହିଁ",
-"How far is it answered?": "କେତେ ଉତ୍ତର ମିଳିଲା?",
-"Only you can mark it fully answered (✓).": "କେବଳ ଆପଣ ହିଁ ଏହାକୁ ସମ୍ପୂର୍ଣ୍ଣ ଉତ୍ତର ମିଳିଲା ବୋଲି ଚିହ୍ନିତ କରିପାରିବେ (✓)।",
 "What can we pray for?": "ଆମେ କାହା ପାଇଁ ପ୍ରାର୍ଥନା କରିବା?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}ର ସମସ୍ତେ ଏହାକୁ ପଢ଼ି, ପ୍ରାର୍ଥନା କରି ଏବଂ କେତେ ଉତ୍ତର ମିଳିଲା ଚିହ୍ନିତ କରିପାରିବେ।",
 "Ask for prayer": "ପ୍ରାର୍ଥନା ମାଗନ୍ତୁ",
-"Answered {step}": "ଉତ୍ତର ମିଳିଲା {step}"
+"Everyone in {circle} can read it and pray.": "{circle}ର ସମସ୍ତେ ଏହାକୁ ପଢ଼ି ପ୍ରାର୍ଥନା କରିପାରିବେ।",
+"{n} of {total} prayed": "{total} ମଧ୍ୟରୁ {n} ଜଣ ପ୍ରାର୍ଥନା କଲେ",
+"Everyone prayed": "ସମସ୍ତେ ପ୍ରାର୍ଥନା କଲେ",
+"Ask again": "ପୁଣି ମାଗନ୍ତୁ",
+"Asked again": "ପୁଣି ମଗାଗଲା",
+"Ready for your prayer": "ଆପଣଙ୍କ ପ୍ରାର୍ଥନା ପାଇଁ ଅପେକ୍ଷା"
 }

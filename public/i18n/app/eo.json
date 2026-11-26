@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Kaŝi la bretojn dum rulumado",
 "Always, not only with the phone on its side": "Ĉiam, ne nur kun la telefono horizontala",
 "Prayer request": "Preĝpeto",
-"Not answered yet": "Ankoraŭ ne respondita",
-"How far is it answered?": "Kiom ĝi estas respondita?",
-"Only you can mark it fully answered (✓).": "Nur vi povas marki ĝin plene respondita (✓).",
 "What can we pray for?": "Por kio ni povas preĝi?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Ĉiuj en {circle} povas legi ĝin, preĝi kaj marki, kiom ĝi estas respondita.",
 "Ask for prayer": "Peti preĝon",
-"Answered {step}": "Respondita {step}"
+"Everyone in {circle} can read it and pray.": "Ĉiuj en {circle} povas legi ĝin kaj preĝi.",
+"{n} of {total} prayed": "{n} el {total} preĝis",
+"Everyone prayed": "Ĉiuj preĝis",
+"Ask again": "Peti denove",
+"Asked again": "Petita denove",
+"Ready for your prayer": "Preta por via preĝo"
 }

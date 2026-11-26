@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "سۈرگەندە بالداقلارنى يوشۇرۇش",
 "Always, not only with the phone on its side": "ھەمىشە، تېلېفون توغرىسىغا تۇرغاندىلا ئەمەس",
 "Prayer request": "دۇئا تەلىپى",
-"Not answered yet": "تېخى ئىجابەت بولمىدى",
-"How far is it answered?": "قانچىلىك ئىجابەت بولدى؟",
-"Only you can mark it fully answered (✓).": "پەقەت سىزلا ئۇنى تولۇق ئىجابەت بولدى دەپ بەلگە قويالايسىز (✓).",
 "What can we pray for?": "نېمە ئۈچۈن دۇئا قىلايلى؟",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle} دىكى ھەممەيلەن ئوقۇپ، دۇئا قىلىپ، قانچىلىك ئىجابەت بولغانلىقىنى بەلگە قويالايدۇ.",
 "Ask for prayer": "دۇئا سوراش",
-"Answered {step}": "ئىجابەت بولدى {step}"
+"Everyone in {circle} can read it and pray.": "{circle} دىكى ھەممەيلەن ئوقۇپ دۇئا قىلالايدۇ.",
+"{n} of {total} prayed": "{total} دىن {n} دۇئا قىلدى",
+"Everyone prayed": "ھەممەيلەن دۇئا قىلدى",
+"Ask again": "يەنە سوراش",
+"Asked again": "يەنە سورالدى",
+"Ready for your prayer": "دۇئايىڭىزنى كۈتمەكتە"
 }

@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "شاردنەوەی شریتەکان لە کاتی خلیسکاندندا",
 "Always, not only with the phone on its side": "هەمیشە، نەک تەنها کاتێک تەلەفۆنەکە ئاسۆییە",
 "Prayer request": "داوای نوێژ",
-"Not answered yet": "هێشتا وەڵام نەدراوەتەوە",
-"How far is it answered?": "تا چەند وەڵام درایەوە؟",
-"Only you can mark it fully answered (✓).": "تەنها تۆ دەتوانیت وەک تەواو وەڵامدراو نیشانی بکەیت (✓).",
 "What can we pray for?": "بۆ چی نوێژ بکەین؟",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "هەموو کەس لە {circle} دەتوانن بیخوێننەوە، نوێژ بکەن و نیشان بدەن تا چەند وەڵام درایەوە.",
 "Ask for prayer": "داوای نوێژ بکە",
-"Answered {step}": "وەڵام درایەوە {step}"
+"Everyone in {circle} can read it and pray.": "هەموو کەس لە {circle} دەتوانن بیخوێننەوە و نوێژ بکەن.",
+"{n} of {total} prayed": "{n} لە {total} نوێژیان کرد",
+"Everyone prayed": "هەمووان نوێژیان کرد",
+"Ask again": "دووبارە داوا بکە",
+"Asked again": "دووبارە داواکرایەوە",
+"Ready for your prayer": "ئامادەیە بۆ نوێژەکەت"
 }

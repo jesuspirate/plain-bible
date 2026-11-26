@@ -1423,11 +1423,12 @@
 "Hide bars while scrolling": "Paslēpt joslas ritinot",
 "Always, not only with the phone on its side": "Vienmēr, ne tikai ar tālruni horizontāli",
 "Prayer request": "Aizlūgums",
-"Not answered yet": "Vēl nav atbildēta",
-"How far is it answered?": "Cik tālu tā ir atbildēta?",
-"Only you can mark it fully answered (✓).": "Tikai jūs varat to atzīmēt kā pilnībā atbildētu (✓).",
 "What can we pray for?": "Par ko mēs varam lūgt?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Visi lokā {circle} var to izlasīt, lūgt un atzīmēt, cik tālu tā ir atbildēta.",
 "Ask for prayer": "Lūgt aizlūgumu",
-"Answered {step}": "Atbildēta {step}"
+"Everyone in {circle} can read it and pray.": "Visi lokā {circle} var to izlasīt un lūgt.",
+"{n} of {total} prayed": "Lūdza {n} no {total}",
+"Everyone prayed": "Visi lūdza",
+"Ask again": "Lūgt vēlreiz",
+"Asked again": "Lūgts vēlreiz",
+"Ready for your prayer": "Gaida jūsu lūgšanu"
 }

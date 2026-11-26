@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "Uta dibara ge o sutiša",
 "Always, not only with the phone on its side": "Ka mehla, e sego fela ge founu e robetše",
 "Prayer request": "Kgopelo ya thapelo",
-"Not answered yet": "Ga se ya arabja",
-"How far is it answered?": "E arabilwe go fihla kae?",
-"Only you can mark it fully answered (✓).": "Ke wena fela yo a ka e swayago bjalo ka ye e arabilwego ka botlalo (✓).",
 "What can we pray for?": "Re ka rapelela eng?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Mang le mang ka go {circle} a ka e bala, a rapela, gomme a swaya gore e arabilwe go fihla kae.",
 "Ask for prayer": "Kgopela thapelo",
-"Answered {step}": "E arabilwe {step}"
+"Everyone in {circle} can read it and pray.": "Mang le mang ka go {circle} a ka e bala le go rapela.",
+"{n} of {total} prayed": "{n} go {total} ba rapetše",
+"Everyone prayed": "Bohle ba rapetše",
+"Ask again": "Kgopela gape",
+"Asked again": "E kgopetšwe gape",
+"Ready for your prayer": "E letile thapelo ya gago"
 }

@@ -1335,11 +1335,12 @@
 "Hide bars while scrolling": "スクロール中はバーを隠す",
 "Always, not only with the phone on its side": "いつも（スマホを横にしたときだけでなく）",
 "Prayer request": "祈りの課題",
-"Not answered yet": "まだ応えられていない",
-"How far is it answered?": "どこまで応えられた?",
-"Only you can mark it fully answered (✓).": "完全に応えられた(✓)と記せるのはあなただけです。",
 "What can we pray for?": "何のために祈りましょうか?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "{circle}の全員が読み、祈り、どこまで応えられたかを記せます。",
 "Ask for prayer": "祈りをお願いする",
-"Answered {step}": "聞かれた祈り {step}"
+"Everyone in {circle} can read it and pray.": "{circle}の全員が読んで祈れます。",
+"{n} of {total} prayed": "{total}人中{n}人が祈りました",
+"Everyone prayed": "みんなが祈りました",
+"Ask again": "もう一度お願いする",
+"Asked again": "もう一度お願いされました",
+"Ready for your prayer": "あなたの祈りを待っています"
 }

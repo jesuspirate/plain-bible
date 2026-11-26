@@ -1338,11 +1338,12 @@
 "Hide bars while scrolling": "Fshih shiritat gjatë rrëshqitjes",
 "Always, not only with the phone on its side": "Gjithmonë, jo vetëm me telefonin horizontal",
 "Prayer request": "Kërkesë për lutje",
-"Not answered yet": "Ende pa përgjigje",
-"How far is it answered?": "Sa është përgjigjur?",
-"Only you can mark it fully answered (✓).": "Vetëm ti mund ta shënosh si të përgjigjur plotësisht (✓).",
 "What can we pray for?": "Për çfarë mund të lutemi?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Të gjithë në {circle} mund ta lexojnë, të luten dhe të shënojnë sa është përgjigjur.",
 "Ask for prayer": "Kërko lutje",
-"Answered {step}": "E përgjigjur {step}"
+"Everyone in {circle} can read it and pray.": "Të gjithë në {circle} mund ta lexojnë dhe të luten.",
+"{n} of {total} prayed": "{n} nga {total} u lutën",
+"Everyone prayed": "Të gjithë u lutën",
+"Ask again": "Kërko përsëri",
+"Asked again": "U kërkua përsëri",
+"Ready for your prayer": "Gati për lutjen tënde"
 }

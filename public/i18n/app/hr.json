@@ -1423,11 +1423,12 @@
 "Hide bars while scrolling": "Sakrij trake pri pomicanju",
 "Always, not only with the phone on its side": "Uvijek, ne samo s mobitelom položenim",
 "Prayer request": "Molitvena nakana",
-"Not answered yet": "Još nije uslišana",
-"How far is it answered?": "Koliko je uslišana?",
-"Only you can mark it fully answered (✓).": "Samo je vi možete označiti kao potpuno uslišanu (✓).",
 "What can we pray for?": "Za što možemo moliti?",
-"Everyone in {circle} can read it, pray, and mark how far it’s answered.": "Svi u {circle} mogu je pročitati, moliti i označiti koliko je uslišana.",
 "Ask for prayer": "Zamoli za molitvu",
-"Answered {step}": "Uslišana {step}"
+"Everyone in {circle} can read it and pray.": "Svi u {circle} mogu je pročitati i moliti.",
+"{n} of {total} prayed": "Molilo je {n} od {total}",
+"Everyone prayed": "Svi su molili",
+"Ask again": "Zamoli ponovno",
+"Asked again": "Ponovno zamoljeno",
+"Ready for your prayer": "Čeka vašu molitvu"
 }
