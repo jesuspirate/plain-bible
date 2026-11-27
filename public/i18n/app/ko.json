@@ -1346,5 +1346,6 @@
 "Pray for {name}": "{name}님을 위해 기도하기",
 "I already prayed": "이미 기도했어요",
 "Praying for {name}": "{name}님을 위한 기도",
-"Back to {circle}": "{circle}(으)로 돌아가기"
+"Back to {circle}": "{circle}(으)로 돌아가기",
+"Pray for this": "이 제목으로 기도하기"
 }

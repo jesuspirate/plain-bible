@@ -1346,5 +1346,6 @@
 "Pray for {name}": "Imádkozz érte: {name}",
 "I already prayed": "Már imádkoztam",
 "Praying for {name}": "Ima érte: {name}",
-"Back to {circle}": "Vissza ide: {circle}"
+"Back to {circle}": "Vissza ide: {circle}",
+"Pray for this": "Imádkozz érte"
 }

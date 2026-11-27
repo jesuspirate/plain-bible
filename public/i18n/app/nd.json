@@ -1346,5 +1346,6 @@
 "Pray for {name}": "Khulekela u-{name}",
 "I already prayed": "Sengikhulekile",
 "Praying for {name}": "Umkhuleko ka-{name}",
-"Back to {circle}": "Buyela ku-{circle}"
+"Back to {circle}": "Buyela ku-{circle}",
+"Pray for this": "Khulekela lokhu"
 }

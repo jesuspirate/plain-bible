@@ -1346,5 +1346,6 @@
 "Pray for {name}": "Rukoile: {name}",
 "I already prayed": "Rukoilin jo",
 "Praying for {name}": "Rukous: {name}",
-"Back to {circle}": "Takaisin: {circle}"
+"Back to {circle}": "Takaisin: {circle}",
+"Pray for this": "Rukoile tämän puolesta"
 }

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { askedOf, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
+import { answeredAt, askedOf, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -86,5 +86,12 @@ describe('prayer requests', () => {
     const old = Date.now() - 20 * 86400_000
     const f = feed([ask('b', []), ask('c', ['a']), ask('a', []), ask('d', [], old)])
     expect(waitingFor(f).map(i => i.by)).toEqual(['b'])
+  })
+  it('is answered only when the one who asked says so, and then waits for nobody', () => {
+    const byOther = { ...ask('b', []), reacts: { c: { at: 1, e: [], a: 5 } } }
+    const byAsker = { ...ask('b', []), reacts: { b: { at: 1, e: [], a: 7 } } }
+    expect(answeredAt(byOther)).toBeUndefined()
+    expect(answeredAt(byAsker)).toBe(7)
+    expect(waitingFor(feed([byOther, byAsker]))).toHaveLength(1)
   })
 })

@@ -1346,5 +1346,6 @@
 "Pray for {name}": "为 {name} 祷告",
 "I already prayed": "我已经祷告了",
 "Praying for {name}": "为 {name} 祷告中",
-"Back to {circle}": "返回 {circle}"
+"Back to {circle}": "返回 {circle}",
+"Pray for this": "为此祷告"
 }

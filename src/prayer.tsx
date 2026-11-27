@@ -327,7 +327,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
       {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
       {view === 'pray' && forAsk && phase !== 'heard' && (
         <div class="pray-for">
-          <p class="pray-over-head">{t('Praying for {name}', { name: forAsk.by })}</p>
+          <p class="pray-over-head">{forAsk.by ? t('Praying for {name}', { name: forAsk.by }) : t('A prayer request')}</p>
           <p class="pray-for-said">{forAsk.note}</p>
         </div>
       )}
