@@ -72,6 +72,13 @@ export const BackIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, 'back-icon' + (c ? ' ' + c : ''))}><path d="M15 4.5L7.5 12l7.5 7.5" fill="none" stroke="currentColor" stroke-width="3.2" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
+/** A thick ‹ or ›: turn the page. Drawn, not typed, and placed on the middle
+ *  of its box, so it sits right in the middle of a round button with every
+ *  font (a typed ‹ sat low or to one side, by how each font draws it). */
+export const TurnIcon = ({ size, class: c, back }: P & { back?: boolean }) => (
+  <svg {...svg(size, c)}><path d={back ? 'M15 5.5L9 12l6 6.5' : 'M9 5.5l6 6.5-6 6.5'} fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
+)
+
 // Settings rows. Each row has one of these at its left, in the accent color,
 // so the names line up down the whole sheet.
 const line = { fill: 'none', stroke: 'currentColor', 'stroke-width': 2.2, 'stroke-linecap': 'round', 'stroke-linejoin': 'round' } as const
