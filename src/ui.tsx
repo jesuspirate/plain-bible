@@ -138,15 +138,17 @@ export function LexiconSheet({ num, onClose, onSearch }: { num: string; onClose:
 }
 
 const RECENT_VERSIONS = 'plain-bible:recent-versions'
-const recentVersions = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT_VERSIONS) || '[]') } catch { return [] } }
-function rememberVersion(id: string) {
+export const recentVersions = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT_VERSIONS) || '[]') } catch { return [] } }
+export function rememberVersion(id: string) {
   try { localStorage.setItem(RECENT_VERSIONS, JSON.stringify([id, ...recentVersions().filter(x => x !== id)].slice(0, 5))) } catch { /* private mode */ }
 }
 
 // Picks a version. At first it shows only a handful (the ones you use),
 // with a search to find any of the others; the full list by language is
 // one tap further.
-export function VersionPicker({ title, selected, multi, onChange, onClose, max = 20, extra }: {
+export function VersionPicker({ title, selected, multi, onChange, onClose, max = 20, extra, startAll }: {
+  /** open on the full list by language (the short list was just shown) */
+  startAll?: boolean
   title: string; selected: string[]; multi?: boolean; onChange: (ids: string[]) => void; onClose: () => void; max?: number
   /** shown under the list, e.g. compare and Strong's options */
   extra?: ComponentChildren
@@ -154,7 +156,7 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
   const { catalog, settings } = useApp()
   const [filter, setFilter] = useState('')
   const [sel, setSel] = useState(selected)
-  const [all, setAll] = useState(false)
+  const [all, setAll] = useState(!!startAll)
   const f = filter.toLowerCase()
   const list = useMemo(() => catalog.translations.filter(v =>
     !f || likeMatches(v.id, f) || [v.id, v.name, v.langName, v.langNative, v.lang, languageName(v.lang, v.langName)].some(x => x.toLowerCase().includes(f))), [f])

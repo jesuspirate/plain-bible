@@ -10,7 +10,8 @@ import { canHear } from './listen'
 import { fine, Glyph } from './gesture'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
+import { placeName, RecentPlaces, usePlaces } from './places'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, HistoryIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -157,11 +158,11 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // Font and layout is a short list too: each of its rows opens a page with
 // just that one thing, and ‹ back goes to the list.
 type LayoutPage = 'font' | 'layout' | 'verseNums' | 'highlights' | 'turning' | 'searchBar' | 'sideways' | 'extras'
-type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest' | LayoutPage
+type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest' | 'places' | LayoutPage
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Font and layout'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
-  suggest: N_('Report a problem'),
+  suggest: N_('Report a problem'), places: N_('Recent places'),
   font: N_('Font'), layout: N_('Layout'), verseNums: N_('Verse numbers'), highlights: N_('Highlights'), turning: N_('Turning pages'),
   searchBar: N_('Search bar'), sideways: N_('Hide bars while scrolling'), extras: N_('Extras'),
 }
@@ -290,6 +291,13 @@ function Row({ label, sub, value, onClick, href, icon }: { label: string; sub?: 
     <span class="set-chev" aria-hidden="true">›</span>
   </>
   return href ? <a class="set-row" href={href}>{inner}</a> : <button class="set-row" onClick={onClick}>{inner}</button>
+}
+
+/** Recent places (it used to be the clock in the top bar): the place you'd go back to under it. */
+function PlacesRow({ onClick }: { onClick: () => void }) {
+  const { places } = usePlaces()
+  return <Row icon={<HistoryIcon size={24} />} label={t('Recent places')}
+    sub={places[0] ? t('Back to {place}', { place: placeName(places[0]) }) : t('Where you were reading')} onClick={onClick} />
 }
 
 // The Bible you're reading and the ones beside it. (This used to be the
@@ -575,6 +583,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'saved') return <Saved onImport={() => setPage('data')} />
   if (page === 'search') return <Search route={{ path: ['search'], params: new URLSearchParams(searchQuery) }} onGo={p => setSearchQuery(p.split('?')[1] ?? '')} />
   if (page === 'versions') return <Versions inSheet />
+  if (page === 'places') return <RecentPlaces />
   if (page === 'sync') return <AccountSection />
   if (page === 'language') return <LanguagePage />
   if (page === 'recording') return <RecordingPage />
@@ -617,6 +626,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
         <div class="set-list">
           {settings.streaks && <StreakRow />}
           <Row icon={<BookmarkIcon size={24} />} label={t('Saved')} sub={t('Highlights, notes, bookmarks')} value={saved ? String(saved) : undefined} onClick={() => setPage('saved')} />
+          <PlacesRow onClick={() => setPage('places')} />
         </div>
       </section>
       {sync.enabled && <section class="set-group">

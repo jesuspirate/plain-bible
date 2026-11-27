@@ -81,11 +81,27 @@ header.top {
 }
 .brand { font: 600 19px var(--serif); letter-spacing: .01em; color: var(--text); text-decoration: none; white-space: nowrap; -webkit-tap-highlight-color: transparent; }
 .history { position: relative; }
-.history-btn { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; color: var(--text); display: grid; place-items: center; width: 46px; height: 46px; border-radius: 12px; padding: 0; border: none; background: none; -webkit-tap-highlight-color: transparent; }
-.history-btn.on { background: var(--chip); }
-@media (hover: hover) { .history-btn:hover { background: var(--chip); } }
-.history-btn.on { color: var(--accent); }
-.history-btn.idle { color: var(--muted); }
+/* The Bible versions button: the Bible you're reading, as a round-ended
+   pill beside Settings, in the same chip style. */
+.version-btn { -webkit-touch-callout: none; user-select: none; -webkit-user-select: none; display: grid; place-items: center; min-width: 46px; max-width: 120px; height: 46px; padding: 0 14px; border-radius: 23px; border: 1px solid var(--line); background: var(--chip); color: var(--text); font: 700 16px var(--sans); letter-spacing: .02em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; -webkit-tap-highlight-color: transparent; }
+@media (hover: hover) { .version-btn:hover { filter: brightness(.96); } }
+.version-btn:active { transform: scale(.94); }
+.version-btn.on { color: var(--accent); border-color: var(--accent); }
+.peek .vpeek-row { flex-direction: row; align-items: center; gap: 12px; min-height: 52px; padding: 6px 14px; }
+.peek .vpeek-row + .vpeek-row { margin-top: 2px; }
+.peek .vpeek-row.on { background: var(--chip); }
+@media (hover: hover) { .peek .vpeek-row:hover, .peek .vpeek-all:hover { background: var(--chip); } }
+.vpeek-row strong { font: 700 17px var(--sans); min-width: 52px; }
+.vpeek-row span { flex: 1; color: var(--muted); font: 15px/1.3 var(--sans); display: -webkit-box; -webkit-line-clamp: 2; -webkit-box-orient: vertical; overflow: hidden; }
+.vpeek-row .vpeek-tick { flex: none; color: var(--accent); font: 700 20px var(--sans); }
+.peek .vpeek-all { flex-direction: row; align-items: center; justify-content: space-between; min-height: 52px; padding: 6px 14px; margin-top: 6px; border-top: 1px solid var(--line); border-radius: 0 0 12px 12px; font: 600 16px var(--sans); color: var(--accent); }
+/* Recent places, in Settings */
+.places { display: flex; flex-direction: column; gap: 8px; }
+.place { display: flex; flex-direction: column; gap: 2px; padding: 14px 16px; border-radius: 14px; background: var(--surface); border: 1px solid var(--line); color: var(--text); text-decoration: none; -webkit-tap-highlight-color: transparent; }
+.place.first { background: var(--chip); }
+.place strong { font: 600 18px var(--sans); }
+.place.first strong { font-size: 22px; }
+.places-empty { margin: 8px 4px; }
 /* What the history button will do, shown on the first tap */
 .peek {
   position: fixed; z-index: 40; top: calc(max(10px, env(safe-area-inset-top)) + 64px); right: 12px; width: min(340px, calc(100vw - 24px));
