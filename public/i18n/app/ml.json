@@ -1358,16 +1358,16 @@
 "Bible versions": "ബൈബിൾ പതിപ്പുകൾ",
 "Switch to {version}. Hold for your Bibles": "{version}ലേക്ക് മാറുക. നിങ്ങളുടെ ബൈബിളുകൾക്കായി അമർത്തിപ്പിടിക്കുക",
 "Switch to {version} · hold for more": "{version}ലേക്ക് മാറുക · കൂടുതലിനായി അമർത്തിപ്പിടിക്കുക",
-"Recent places": "സമീപകാല സ്ഥലങ്ങൾ",
-"Back to {place}": "{place}-ലേക്ക് മടങ്ങുക",
-"Where you were reading": "നിങ്ങൾ വായിച്ചുകൊണ്ടിരുന്ന ഇടം",
-"Tap to switch to the Bible you read before. Tap again to come back.": "മുമ്പ് വായിച്ച ബൈബിളിലേക്ക് മാറാൻ ടാപ്പ് ചെയ്യുക. തിരികെ വരാൻ വീണ്ടും ടാപ്പ് ചെയ്യുക.",
-"Hold to choose from your Bibles, or any of them.": "നിങ്ങളുടെ ബൈബിളുകളിൽ നിന്നോ ഏതെങ്കിലുമോ തിരഞ്ഞെടുക്കാൻ അമർത്തിപ്പിടിക്കുക.",
-"The places you were reading are in Settings → Recent places.": "നിങ്ങൾ വായിച്ച സ്ഥലങ്ങൾ ക്രമീകരണം → സമീപകാല സ്ഥലങ്ങൾ ൽ ഉണ്ട്.",
 "{ref} isn’t in this Bible": "{ref} ഈ ബൈബിളിൽ ഇല്ല",
 "Read it in {version}": "{version}-ൽ വായിക്കുക",
 "Other Bibles that have it": "ഇതുള്ള മറ്റ് ബൈബിളുകൾ",
 "All Bibles that have it ({n})": "ഇതുള്ള എല്ലാ ബൈബിളുകളും ({n})",
 "Here this chapter ends at verse {n}.": "ഇവിടെ ഈ അധ്യായം വാക്യം {n}-ൽ അവസാനിക്കുന്നു.",
-"Go to verse {n}": "വാക്യം {n}-ലേക്ക് പോകുക"
+"Go to verse {n}": "വാക്യം {n}-ലേക്ക് പോകുക",
+"Back to {place}. Hold for recent places": "{place} എന്നതിലേക്ക് മടങ്ങുക. സമീപകാല ഇടങ്ങൾക്കായി അമർത്തിപ്പിടിക്കുക",
+"Reading history": "വായനാ ചരിത്രം",
+"Back to {place} · hold for more": "{place} എന്നതിലേക്ക് മടങ്ങുക · കൂടുതലിനായി അമർത്തിപ്പിടിക്കുക",
+"Go back": "മടങ്ങുക",
+"After you jump somewhere else, tap here to go back to where you were reading.": "മറ്റെവിടേക്കെങ്കിലും പോയ ശേഷം, വായിച്ചുകൊണ്ടിരുന്നിടത്തേക്ക് മടങ്ങാൻ ഇവിടെ ടാപ്പ് ചെയ്യുക.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "മുമ്പ് വായിച്ച ബൈബിളിലേക്ക് മാറാൻ ബൈബിളിന്റെ പേരിൽ തൊടുക. മറ്റൊന്ന് തിരഞ്ഞെടുക്കാൻ അമർത്തിപ്പിടിക്കുക."
 }

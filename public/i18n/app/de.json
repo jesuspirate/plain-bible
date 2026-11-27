@@ -1358,16 +1358,16 @@
 "Bible versions": "Bibelübersetzungen",
 "Switch to {version}. Hold for your Bibles": "Zu {version} wechseln. Gedrückt halten für deine Bibeln",
 "Switch to {version} · hold for more": "Zu {version} wechseln · gedrückt halten für mehr",
-"Recent places": "Letzte Stellen",
-"Back to {place}": "Zurück zu {place}",
-"Where you were reading": "Wo du gelesen hast",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tippe, um zur vorher gelesenen Bibel zu wechseln. Tippe nochmal, um zurückzukehren.",
-"Hold to choose from your Bibles, or any of them.": "Halte gedrückt, um aus deinen Bibeln oder jeder anderen zu wählen.",
-"The places you were reading are in Settings → Recent places.": "Die Stellen, an denen du gelesen hast, findest du unter Einstellungen → Letzte Stellen.",
 "{ref} isn’t in this Bible": "{ref} ist nicht in dieser Bibel",
 "Read it in {version}": "In {version} lesen",
 "Other Bibles that have it": "Andere Bibeln, die es haben",
 "All Bibles that have it ({n})": "Alle Bibeln, die es haben ({n})",
 "Here this chapter ends at verse {n}.": "Hier endet dieses Kapitel mit Vers {n}.",
-"Go to verse {n}": "Zu Vers {n} gehen"
+"Go to verse {n}": "Zu Vers {n} gehen",
+"Back to {place}. Hold for recent places": "Zurück zu {place}. Halten für letzte Stellen",
+"Reading history": "Leseverlauf",
+"Back to {place} · hold for more": "Zurück zu {place} · halten für mehr",
+"Go back": "Zurück",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Wenn du woandershin gesprungen bist, tippe hier, um zu deiner Lesestelle zurückzukehren.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tippe auf den Namen der Bibel, um zu der zu wechseln, die du vorher gelesen hast. Halte ihn, um eine andere zu wählen."
 }

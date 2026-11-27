@@ -1361,16 +1361,16 @@
 "Bible versions": "Μεταφράσεις της Βίβλου",
 "Switch to {version}. Hold for your Bibles": "Αλλαγή σε {version}. Κρατήστε πατημένο για τις Βίβλους σας",
 "Switch to {version} · hold for more": "Αλλαγή σε {version} · κρατήστε πατημένο για περισσότερα",
-"Recent places": "Πρόσφατα σημεία",
-"Back to {place}": "Επιστροφή σε {place}",
-"Where you were reading": "Εκεί που διαβάζατε",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Πατήστε για να αλλάξετε στη Βίβλο που διαβάζατε πριν. Πατήστε ξανά για να επιστρέψετε.",
-"Hold to choose from your Bibles, or any of them.": "Κρατήστε πατημένο για να διαλέξετε από τις Βίβλους σας ή οποιαδήποτε άλλη.",
-"The places you were reading are in Settings → Recent places.": "Τα σημεία όπου διαβάζατε βρίσκονται στις Ρυθμίσεις → Πρόσφατα σημεία.",
 "{ref} isn’t in this Bible": "Το {ref} δεν υπάρχει σε αυτή τη Βίβλο",
 "Read it in {version}": "Ανάγνωση στη {version}",
 "Other Bibles that have it": "Άλλες Βίβλοι που το έχουν",
 "All Bibles that have it ({n})": "Όλες οι Βίβλοι που το έχουν ({n})",
 "Here this chapter ends at verse {n}.": "Εδώ το κεφάλαιο τελειώνει στο εδάφιο {n}.",
-"Go to verse {n}": "Μετάβαση στο εδάφιο {n}"
+"Go to verse {n}": "Μετάβαση στο εδάφιο {n}",
+"Back to {place}. Hold for recent places": "Επιστροφή σε {place}. Πατήστε παρατεταμένα για πρόσφατα σημεία",
+"Reading history": "Ιστορικό ανάγνωσης",
+"Back to {place} · hold for more": "Επιστροφή σε {place} · πατήστε παρατεταμένα για περισσότερα",
+"Go back": "Επιστροφή",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Αφού μεταβείτε κάπου αλλού, αγγίξτε εδώ για να επιστρέψετε εκεί όπου διαβάζατε.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Πατήστε το όνομα της Βίβλου για να πάτε σε αυτή που διαβάζατε πριν. Κρατήστε το για να διαλέξετε άλλη."
 }

@@ -1358,16 +1358,16 @@
 "Bible versions": "Loko mag Muma",
 "Switch to {version}. Hold for your Bibles": "Lok idhi e {version}. Mak mondo ineno Muma magi",
 "Switch to {version} · hold for more": "Lok idhi e {version} · mak mondo ineno mamoko",
-"Recent places": "Kuonde manyien",
-"Back to {place}": "Dok e {place}",
-"Where you were reading": "Kama ne isomo",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Gu mondo ilok idhi e Muma mane isomo motelo. Gu kendo mondo iduogi.",
-"Hold to choose from your Bibles, or any of them.": "Mak mondo iyier e Muma magi, kata moro amora.",
-"The places you were reading are in Settings → Recent places.": "Kuonde mane isomoe nitie e Chenro → Kuonde manyien.",
 "{ref} isn’t in this Bible": "{ref} onge e Muma ma",
 "Read it in {version}": "Som e {version}",
 "Other Bibles that have it": "Muma mamoko man-go",
 "All Bibles that have it ({n})": "Muma duto man-go ({n})",
 "Here this chapter ends at verse {n}.": "Ka, sula ni rumo e ndiko {n}.",
-"Go to verse {n}": "Dhi e ndiko {n}"
+"Go to verse {n}": "Dhi e ndiko {n}",
+"Back to {place}. Hold for recent places": "Dok e {place}. Mak matek mondo ine kuonde ma isesomo machiegni",
+"Reading history": "Kuonde ma isesomo",
+"Back to {place} · hold for more": "Dok e {place} · mak matek mondo ine mamoko",
+"Go back": "Dok chien",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ka isedhi kamachielo, mul ka mondo idog kama ne isomoe.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Gud nying Muma mondo idog e mano ma ne isomo chon. Mak gi mondo iyier machielo."
 }

@@ -1358,16 +1358,16 @@
 "Bible versions": "Kawehwe en Paipel",
 "Switch to {version}. Hold for your Bibles": "Kawilikihla {version}. Kolekol pwe ke en kilang omw Paipel kan",
 "Switch to {version} · hold for more": "Kawilikihla {version} · kolekol pwe ke en kilang tohtohsang",
-"Recent places": "Wasa kaping",
-"Back to {place}": "Pwurala {place}",
-"Where you were reading": "Wasa me ke wia wadawad ie",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Doake pwe ke en kawilikihla Paipel me ke wadek mahs. Doake pahn pwe ke en pwurala.",
-"Hold to choose from your Bibles, or any of them.": "Kolekol pwe ke en pilada sang nan omw Paipel kan, de mehmen.",
-"The places you were reading are in Settings → Recent places.": "Wasa kan me ke wadawad ie mie nan Koasoandi → Wasa kaping.",
 "{ref} isn’t in this Bible": "{ref} sohte mi nan Paipel wet",
 "Read it in {version}": "Wadek nan {version}",
 "Other Bibles that have it": "Paipel teikan me mie loale",
 "All Bibles that have it ({n})": "Paipel koaros me mie loale ({n})",
 "Here this chapter ends at verse {n}.": "Wasaht kisinlikou wet imwisekla ni iretehn {n}.",
-"Go to verse {n}": "Kohla ni iretehn {n}"
+"Go to verse {n}": "Kohla ni iretehn {n}",
+"Back to {place}. Hold for recent places": "Pwurala {place}. Pedikih ahnsou reirei pwehn wasa kan me keieu kamwuri",
+"Reading history": "Wadek kan me mahsenge",
+"Back to {place} · hold for more": "Pwurala {place} · pedikih ahnsou reirei pwehn mehkan tohto",
+"Go back": "Pwurala",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Mwurin komw kohla wasa teio, pedikih met pwe komw en pwurala wasa me komw wadewadek ie.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Doakoahki mwaren Paipel pwe ke en kawilahng me ke wadek mahs. Kolokol pwe ke en pilada emen."
 }

@@ -1358,16 +1358,16 @@
 "Bible versions": "வேதாகம பதிப்புகள்",
 "Switch to {version}. Hold for your Bibles": "{version}க்கு மாறு. உங்கள் வேதாகமங்களுக்கு அழுத்திப் பிடிக்கவும்",
 "Switch to {version} · hold for more": "{version}க்கு மாறு · மேலும் காண அழுத்திப் பிடிக்கவும்",
-"Recent places": "சமீபத்திய இடங்கள்",
-"Back to {place}": "{place} க்குத் திரும்பு",
-"Where you were reading": "நீங்கள் படித்துக்கொண்டிருந்த இடம்",
-"Tap to switch to the Bible you read before. Tap again to come back.": "முன்பு படித்த வேதாகமத்திற்கு மாற தட்டவும். திரும்ப வர மீண்டும் தட்டவும்.",
-"Hold to choose from your Bibles, or any of them.": "உங்கள் வேதாகமங்களில் இருந்து அல்லது எதையும் தேர்ந்தெடுக்க அழுத்திப் பிடிக்கவும்.",
-"The places you were reading are in Settings → Recent places.": "நீங்கள் படித்த இடங்கள் அமைப்புகள் → சமீபத்திய இடங்கள் இல் உள்ளன.",
 "{ref} isn’t in this Bible": "{ref} இந்த வேதாகமத்தில் இல்லை",
 "Read it in {version}": "{version}-இல் வாசிக்க",
 "Other Bibles that have it": "இது உள்ள மற்ற வேதாகமங்கள்",
 "All Bibles that have it ({n})": "இது உள்ள எல்லா வேதாகமங்களும் ({n})",
 "Here this chapter ends at verse {n}.": "இங்கே இந்த அதிகாரம் வசனம் {n}-இல் முடிகிறது.",
-"Go to verse {n}": "வசனம் {n}-க்குச் செல்ல"
+"Go to verse {n}": "வசனம் {n}-க்குச் செல்ல",
+"Back to {place}. Hold for recent places": "{place} க்குத் திரும்பு. சமீபத்திய இடங்களுக்கு அழுத்திப் பிடிக்கவும்",
+"Reading history": "வாசிப்பு வரலாறு",
+"Back to {place} · hold for more": "{place} க்குத் திரும்பு · மேலும் பார்க்க அழுத்திப் பிடிக்கவும்",
+"Go back": "பின் செல்",
+"After you jump somewhere else, tap here to go back to where you were reading.": "வேறு இடத்திற்குச் சென்ற பிறகு, நீங்கள் வாசித்துக்கொண்டிருந்த இடத்திற்குத் திரும்ப இங்கே தட்டவும்.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "முன்பு படித்த வேதாகமத்துக்கு மாற வேதாகமத்தின் பெயரைத் தட்டவும். வேறொன்றைத் தேர்வுசெய்ய அழுத்திப் பிடிக்கவும்."
 }

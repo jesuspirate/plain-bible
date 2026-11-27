@@ -1468,16 +1468,16 @@
 "Bible versions": "Переводы Библии",
 "Switch to {version}. Hold for your Bibles": "Перейти на {version}. Удерживайте для ваших Библий",
 "Switch to {version} · hold for more": "Перейти на {version} · удерживайте для других",
-"Recent places": "Недавние места",
-"Back to {place}": "Назад к {place}",
-"Where you were reading": "Где вы читали",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Нажмите, чтобы перейти на Библию, которую читали раньше. Нажмите снова, чтобы вернуться.",
-"Hold to choose from your Bibles, or any of them.": "Удерживайте, чтобы выбрать из ваших Библий или любую другую.",
-"The places you were reading are in Settings → Recent places.": "Места, где вы читали, находятся в Настройки → Недавние места.",
 "{ref} isn’t in this Bible": "{ref} нет в этой Библии",
 "Read it in {version}": "Читать в {version}",
 "Other Bibles that have it": "Другие Библии, где это есть",
 "All Bibles that have it ({n})": "Все Библии, где это есть ({n})",
 "Here this chapter ends at verse {n}.": "Здесь эта глава заканчивается стихом {n}.",
-"Go to verse {n}": "Перейти к стиху {n}"
+"Go to verse {n}": "Перейти к стиху {n}",
+"Back to {place}. Hold for recent places": "Назад: {place}. Удерживайте, чтобы увидеть недавние места",
+"Reading history": "История чтения",
+"Back to {place} · hold for more": "Назад: {place} · удерживайте, чтобы увидеть больше",
+"Go back": "Назад",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Когда вы перейдёте в другое место, нажмите здесь, чтобы вернуться туда, где вы читали.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Коснитесь названия Библии, чтобы перейти к той, что читали раньше. Удерживайте, чтобы выбрать другую."
 }

@@ -1358,16 +1358,16 @@
 "Bible versions": "ᎪᏪᎵ ᎦᎸᏉᏗ ᏧᏁᏢᏔᏅᏒ",
 "Switch to {version}. Hold for your Bibles": "{version} ᏩᏓᏁᏟᏴᏍᏓ. ᏂᎯ ᏗᏣᏤᎵ ᎪᏪᎵ ᏚᎸᏉᏗ ᏣᏂᏴᏗ",
 "Switch to {version} · hold for more": "{version} ᏩᏓᏁᏟᏴᏍᏓ · ᎤᏟ ᏣᏂᏴᏗ",
-"Recent places": "ᎪᎯ ᎢᏳ ᏗᏓᏁᎸ",
-"Back to {place}": "{place} ᏗᎤᏨ",
-"Where you were reading": "ᎢᎸᎯᏢ ᏣᎪᎵᏰᏍᎬᎩ",
-"Tap to switch to the Bible you read before. Tap again to come back.": "ᏣᏁᏍᏔᏯ ᎩᎳ ᏣᎪᎵᏰᎥ ᎪᏪᎵ ᎦᎸᏉᏗ ᏩᏓᏁᏟᏴᏍᏓ. ᏔᎵᏁ ᏣᏁᏍᏔᏯ ᏗᏣᎷᏤᏗ.",
-"Hold to choose from your Bibles, or any of them.": "ᏣᏂᏴᏗ ᏗᏣᏤᎵ ᎪᏪᎵ ᏚᎸᏉᏗ ᏣᏑᏰᏍᏗ, ᎠᎴ ᎩᎶ ᎢᏳᏍᏗ.",
-"The places you were reading are in Settings → Recent places.": "ᎢᎸᎯᏢ ᏣᎪᎵᏰᏍᎬᎩ ᏗᏛᏅᎢᏍᏗ → ᎪᎯ ᎢᏳ ᏗᏓᏁᎸ ᎠᏂ ᏗᏓᏁᎸ.",
 "{ref} isn’t in this Bible": "{ref} ᎥᏝ ᎠᏂ ᎪᏪᎵ ᎦᎸᏉᏗ",
 "Read it in {version}": "ᎯᎪᎵᏯ {version}",
 "Other Bibles that have it": "ᏅᏩᏓᎴ ᎪᏪᎵ ᎦᎸᏉᏗ",
 "All Bibles that have it ({n})": "ᏂᎦᏛ ᎪᏪᎵ ᎦᎸᏉᏗ ({n})",
 "Here this chapter ends at verse {n}.": "ᎠᏂ ᎯᎠ ᎢᏳᏟᎶᏛ ᎤᎵᏍᏆᏓ {n}.",
-"Go to verse {n}": "ᎮᎾ {n}"
+"Go to verse {n}": "ᎮᎾ {n}",
+"Back to {place}. Hold for recent places": "{place} ᏗᎤᏨ. ᎯᏂᏴ ᎾᎯᏳ ᏣᎪᎵᏰᏍᎬ ᎢᎦᏔᏂᏍᏗ",
+"Reading history": "ᏣᎪᎵᏰᏍᎬ ᎤᏓᏁᏟᏴᏍᏗ",
+"Back to {place} · hold for more": "{place} ᏗᎤᏨ · ᎯᏂᏴ ᎤᏟ ᎢᎦᏔᏂᏍᏗ",
+"Go back": "ᏗᎤᏨ",
+"After you jump somewhere else, tap here to go back to where you were reading.": "ᏐᎢᏢ ᏫᏣᎷᏨᎭ, ᎠᏂ ᎯᏯᏏᎳᏛ ᏣᎪᎵᏰᏍᎬ ᏪᏙᎲᎢ ᏗᎤᏨ.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "ᏣᎪᏪᎵ ᏚᏙᎥ ᏔᏬᏂᏍᎨ ᎢᏳᏍᏗ ᎦᏳᎳ ᏣᎪᎵᏰᎥᎢ. ᏂᏣᏕᏍᏗᏍᎨ ᏅᏩᏓᎴ ᏣᏑᏰᏍᏗ."
 }

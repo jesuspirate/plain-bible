@@ -1358,16 +1358,16 @@
 "Bible versions": "Versi Alkitab",
 "Switch to {version}. Hold for your Bibles": "Beralih ke {version}. Tahan untuk Alkitab Anda",
 "Switch to {version} · hold for more": "Beralih ke {version} · tahan untuk lainnya",
-"Recent places": "Tempat terakhir",
-"Back to {place}": "Kembali ke {place}",
-"Where you were reading": "Tempat Anda membaca",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Ketuk untuk beralih ke Alkitab yang Anda baca sebelumnya. Ketuk lagi untuk kembali.",
-"Hold to choose from your Bibles, or any of them.": "Tahan untuk memilih dari Alkitab Anda, atau yang mana saja.",
-"The places you were reading are in Settings → Recent places.": "Tempat-tempat Anda membaca ada di Pengaturan → Tempat terakhir.",
 "{ref} isn’t in this Bible": "{ref} tidak ada dalam Alkitab ini",
 "Read it in {version}": "Baca di {version}",
 "Other Bibles that have it": "Alkitab lain yang memilikinya",
 "All Bibles that have it ({n})": "Semua Alkitab yang memilikinya ({n})",
 "Here this chapter ends at verse {n}.": "Di sini pasal ini berakhir di ayat {n}.",
-"Go to verse {n}": "Ke ayat {n}"
+"Go to verse {n}": "Ke ayat {n}",
+"Back to {place}. Hold for recent places": "Kembali ke {place}. Tahan untuk tempat terakhir",
+"Reading history": "Riwayat bacaan",
+"Back to {place} · hold for more": "Kembali ke {place} · tahan untuk lainnya",
+"Go back": "Kembali",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Setelah Anda pindah ke tempat lain, ketuk di sini untuk kembali ke tempat Anda membaca.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Ketuk nama Alkitab untuk beralih ke yang Anda baca sebelumnya. Tahan untuk memilih yang lain."
 }

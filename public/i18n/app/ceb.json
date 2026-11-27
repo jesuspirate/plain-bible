@@ -1358,16 +1358,16 @@
 "Bible versions": "Mga bersyon sa Bibliya",
 "Switch to {version}. Hold for your Bibles": "Balhin sa {version}. Kupti para sa imong mga Bibliya",
 "Switch to {version} · hold for more": "Balhin sa {version} · kupti para sa uban pa",
-"Recent places": "Bag-ong mga dapit",
-"Back to {place}": "Balik sa {place}",
-"Where you were reading": "Diin ka nagbasa",
-"Tap to switch to the Bible you read before. Tap again to come back.": "I-tap aron mobalhin sa Bibliya nga imong gibasa kaniadto. I-tap pag-usab aron mobalik.",
-"Hold to choose from your Bibles, or any of them.": "Kupti aron mopili sa imong mga Bibliya, o bisan unsa.",
-"The places you were reading are in Settings → Recent places.": "Ang mga dapit diin ka nagbasa anaa sa Mga Setting → Bag-ong mga dapit.",
 "{ref} isn’t in this Bible": "Wala ang {ref} niining Biblia",
 "Read it in {version}": "Basaha sa {version}",
 "Other Bibles that have it": "Ubang Biblia nga aduna niini",
 "All Bibles that have it ({n})": "Tanang Biblia nga aduna niini ({n})",
 "Here this chapter ends at verse {n}.": "Dinhi, ang kapitulo matapos sa bersikulo {n}.",
-"Go to verse {n}": "Adto sa bersikulo {n}"
+"Go to verse {n}": "Adto sa bersikulo {n}",
+"Back to {place}. Hold for recent places": "Balik sa {place}. Pugngi para sa bag-ohay nga mga dapit",
+"Reading history": "Kasaysayan sa pagbasa",
+"Back to {place} · hold for more": "Balik sa {place} · pugngi para sa uban pa",
+"Go back": "Balik",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Human ka moadto sa laing dapit, i-tap dinhi aron mobalik sa imong gibasa.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Pindota ang ngalan sa Biblia aron mobalhin sa imong gibasa kaniadto. Kupti kini aron mopili og lain."
 }

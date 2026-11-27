@@ -24,6 +24,7 @@ import { ListenPlayer, useReadingAloud } from './listen'
 import { locale, N_, t, tn } from './i18n'
 import { SEARCH_TRAIL, SEARCH_TRAIL_EVENT } from './lib/place'
 import { useRecording } from './lib/recordMode'
+import { VersionSwitch } from './versionswitch'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
@@ -139,8 +140,8 @@ export function SearchBar({ here, mini, above }: {
   const version = here?.version ?? settings.version
   // In recording mode the bar names the version on screen, large.
   const recording = useRecording()
-  // The Bible you read is on the versions button at the top now; the bar
-  // names one only in Teaching mode, when the big one on screen differs.
+  // The Bible you read is the switcher pill at the bar's right end; the
+  // words name one only in Teaching mode, when the big one on screen differs.
   const shown = recording.on && byId.has(recording.version) ? recording.version : version
   const info = byId.get(version)
   // The Bible searched stays the one you searched in while you step through
@@ -853,6 +854,7 @@ export function SearchBar({ here, mini, above }: {
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter}${shown !== version ? ` · ${shown}` : ''}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
+          {!open && !mini && here && <VersionSwitch />}
           {!open && !mini && settings.alongButton && here && <AlongButton />}
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (

@@ -1358,16 +1358,16 @@
 "Bible versions": "مۇقەددەس كىتاب نەشرلىرى",
 "Switch to {version}. Hold for your Bibles": "{version} غا ئالماشتۇرۇش. مۇقەددەس كىتابلىرىڭىز ئۈچۈن بېسىپ تۇرۇڭ",
 "Switch to {version} · hold for more": "{version} غا ئالماشتۇرۇش · تېخىمۇ كۆپ ئۈچۈن بېسىپ تۇرۇڭ",
-"Recent places": "يېقىنقى ئورۇنلار",
-"Back to {place}": "{place} غا قايتىش",
-"Where you were reading": "ئوقۇۋاتقان يېرىڭىز",
-"Tap to switch to the Bible you read before. Tap again to come back.": "ئىلگىرى ئوقۇغان مۇقەددەس كىتابقا ئالماشتۇرۇش ئۈچۈن چېكىڭ. قايتىش ئۈچۈن يەنە چېكىڭ.",
-"Hold to choose from your Bibles, or any of them.": "مۇقەددەس كىتابلىرىڭىزدىن ياكى خالىغان بىرىنى تاللاش ئۈچۈن بېسىپ تۇرۇڭ.",
-"The places you were reading are in Settings → Recent places.": "ئوقۇغان ئورۇنلىرىڭىز تەڭشەك ← يېقىنقى ئورۇنلار دا.",
 "{ref} isn’t in this Bible": "{ref} بۇ مۇقەددەس كىتابتا يوق",
 "Read it in {version}": "{version} دا ئوقۇش",
 "Other Bibles that have it": "بۇ بار باشقا مۇقەددەس كىتابلار",
 "All Bibles that have it ({n})": "بۇ بار بارلىق مۇقەددەس كىتابلار ({n})",
 "Here this chapter ends at verse {n}.": "بۇ يەردە بۇ باب {n}-ئايەتتە ئاخىرلىشىدۇ.",
-"Go to verse {n}": "{n}-ئايەتكە بېرىش"
+"Go to verse {n}": "{n}-ئايەتكە بېرىش",
+"Back to {place}. Hold for recent places": "{place} غا قايتىش. يېقىنقى جايلار ئۈچۈن بېسىپ تۇرۇڭ",
+"Reading history": "ئوقۇش تارىخى",
+"Back to {place} · hold for more": "{place} غا قايتىش · تېخىمۇ كۆپ ئۈچۈن بېسىپ تۇرۇڭ",
+"Go back": "قايتىش",
+"After you jump somewhere else, tap here to go back to where you were reading.": "باشقا يەرگە ئۆتكەندىن كېيىن، ئوقۇۋاتقان يېرىڭىزگە قايتىش ئۈچۈن بۇ يەرنى بېسىڭ.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "ئىلگىرى ئوقۇغان مۇقەددەس كىتابقا ئۆتۈش ئۈچۈن ئۇنىڭ نامىنى چېكىڭ. باشقىسىنى تاللاش ئۈچۈن بېسىپ تۇرۇڭ."
 }

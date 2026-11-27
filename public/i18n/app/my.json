@@ -1358,16 +1358,16 @@
 "Bible versions": "သမ္မာကျမ်းစာ ဘာသာပြန်များ",
 "Switch to {version}. Hold for your Bibles": "{version} သို့ ပြောင်းရန်. သင့်ကျမ်းစာများအတွက် ဖိထားပါ",
 "Switch to {version} · hold for more": "{version} သို့ ပြောင်းရန် · နောက်ထပ်အတွက် ဖိထားပါ",
-"Recent places": "မကြာသေးမီ နေရာများ",
-"Back to {place}": "{place} သို့ ပြန်သွားရန်",
-"Where you were reading": "သင်ဖတ်နေခဲ့သည့်နေရာ",
-"Tap to switch to the Bible you read before. Tap again to come back.": "ယခင်ဖတ်ခဲ့သော ကျမ်းစာသို့ ပြောင်းရန် တို့ပါ။ ပြန်လာရန် ထပ်တို့ပါ။",
-"Hold to choose from your Bibles, or any of them.": "သင့်ကျမ်းစာများ သို့မဟုတ် မည်သည့်ကျမ်းစာမဆို ရွေးရန် ဖိထားပါ။",
-"The places you were reading are in Settings → Recent places.": "သင်ဖတ်ခဲ့သော နေရာများသည် ဆက်တင်များ → မကြာသေးမီ နေရာများ တွင် ရှိသည်။",
 "{ref} isn’t in this Bible": "{ref} သည် ဤကျမ်းစာတွင် မပါပါ",
 "Read it in {version}": "{version} တွင် ဖတ်ရန်",
 "Other Bibles that have it": "၎င်းပါသော အခြားကျမ်းစာများ",
 "All Bibles that have it ({n})": "၎င်းပါသော ကျမ်းစာအားလုံး ({n})",
 "Here this chapter ends at verse {n}.": "ဤနေရာတွင် ဤအခန်းသည် အငယ် {n} တွင် ဆုံးသည်။",
-"Go to verse {n}": "အငယ် {n} သို့ သွားရန်"
+"Go to verse {n}": "အငယ် {n} သို့ သွားရန်",
+"Back to {place}. Hold for recent places": "{place} သို့ ပြန်သွားရန်။ မကြာသေးမီက နေရာများအတွက် ဖိထားပါ",
+"Reading history": "ဖတ်ခဲ့သည့် မှတ်တမ်း",
+"Back to {place} · hold for more": "{place} သို့ ပြန်သွားရန် · နောက်ထပ်အတွက် ဖိထားပါ",
+"Go back": "ပြန်သွားရန်",
+"After you jump somewhere else, tap here to go back to where you were reading.": "အခြားနေရာသို့ သွားပြီးနောက် ဖတ်လက်စနေရာသို့ ပြန်သွားရန် ဤနေရာကို တို့ပါ။",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "ယခင်ဖတ်ခဲ့သော သမ္မာကျမ်းသို့ ပြောင်းရန် ကျမ်းအမည်ကို နှိပ်ပါ။ အခြားတစ်ခု ရွေးရန် ဖိထားပါ။"
 }

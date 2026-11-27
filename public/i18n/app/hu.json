@@ -1358,16 +1358,16 @@
 "Bible versions": "Bibliafordítások",
 "Switch to {version}. Hold for your Bibles": "Váltás erre: {version}. Tartsd nyomva a Bibliáidért",
 "Switch to {version} · hold for more": "Váltás erre: {version} · tartsd nyomva a többiért",
-"Recent places": "Legutóbbi helyek",
-"Back to {place}": "Vissza ide: {place}",
-"Where you were reading": "Ahol olvastál",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Koppints, hogy a korábban olvasott Bibliára válts. Koppints újra a visszatéréshez.",
-"Hold to choose from your Bibles, or any of them.": "Tartsd nyomva, hogy a Bibliáid vagy bármelyik másik közül válassz.",
-"The places you were reading are in Settings → Recent places.": "A helyek, ahol olvastál, itt vannak: Beállítások → Legutóbbi helyek.",
 "{ref} isn’t in this Bible": "{ref} nincs ebben a Bibliában",
 "Read it in {version}": "Olvasás itt: {version}",
 "Other Bibles that have it": "Más Bibliák, amelyekben megvan",
 "All Bibles that have it ({n})": "Minden Biblia, amelyben megvan ({n})",
 "Here this chapter ends at verse {n}.": "Itt ez a fejezet a(z) {n}. versnél ér véget.",
-"Go to verse {n}": "Ugrás a(z) {n}. versre"
+"Go to verse {n}": "Ugrás a(z) {n}. versre",
+"Back to {place}. Hold for recent places": "Vissza ide: {place}. Tartsa lenyomva a legutóbbi helyekhez",
+"Reading history": "Olvasási előzmények",
+"Back to {place} · hold for more": "Vissza ide: {place} · tartsa lenyomva a továbbiakhoz",
+"Go back": "Vissza",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ha máshová ugrott, koppintson ide, hogy visszatérjen oda, ahol olvasott.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Koppintson a Biblia nevére, hogy az előzőleg olvasottra váltson. Tartsa lenyomva, hogy másikat válasszon."
 }

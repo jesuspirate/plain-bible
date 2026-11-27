@@ -1358,16 +1358,16 @@
 "Bible versions": "Diphetolelo tša Beibele",
 "Switch to {version}. Hold for your Bibles": "Fetogela go {version}. Swara go bona Dibeibele tša gago",
 "Switch to {version} · hold for more": "Fetogela go {version} · swara go bona tše dingwe",
-"Recent places": "Mafelo a bjale",
-"Back to {place}": "Boela go {place}",
-"Where you were reading": "Moo o bego o bala",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Kgwatha go fetogela go Beibele yeo o e badilego pele. Kgwatha gape go boela.",
-"Hold to choose from your Bibles, or any of them.": "Swara go kgetha go Dibeibele tša gago, goba efe goba efe.",
-"The places you were reading are in Settings → Recent places.": "Mafelo ao o bego o bala go ona a ka go Dipeakanyo → Mafelo a bjale.",
 "{ref} isn’t in this Bible": "{ref} ga e gona ka Beibeleng ye",
 "Read it in {version}": "Bala ka go {version}",
 "Other Bibles that have it": "Dibeibele tše dingwe tše di nago le yona",
 "All Bibles that have it ({n})": "Dibeibele ka moka tše di nago le yona ({n})",
 "Here this chapter ends at verse {n}.": "Mo kgaolo ye e fela temaneng ya {n}.",
-"Go to verse {n}": "Eya temaneng ya {n}"
+"Go to verse {n}": "Eya temaneng ya {n}",
+"Back to {place}. Hold for recent places": "Boela go {place}. Kgotla o swarelele go bona mafelo a moragorago",
+"Reading history": "Histori ya go bala",
+"Back to {place} · hold for more": "Boela go {place} · swarelela go bona tše dingwe",
+"Go back": "Boela morago",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ka morago ga ge o tshetše go ya felo gongwe, kgotla mo go boela moo o bego o bala gona.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Kgoma leina la Beibele go fetogela go yeo o e badilego pele. E swarelele go kgetha ye nngwe."
 }

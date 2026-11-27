@@ -1358,16 +1358,16 @@
 "Bible versions": "Enkyusa za Baibuli",
 "Switch to {version}. Hold for your Bibles": "Kyusa odde ku {version}. Kwata okulaba Baibuli zo",
 "Switch to {version} · hold for more": "Kyusa odde ku {version} · kwata okulaba ebirala",
-"Recent places": "Ebifo eby'okumpi",
-"Back to {place}": "Ddayo ku {place}",
-"Where you were reading": "Gy'obadde osoma",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Kwatako okukyusa odde ku Baibuli gye wasoma edda. Kwatako nate okudda.",
-"Hold to choose from your Bibles, or any of them.": "Kwata okulonda mu Baibuli zo, oba yonna.",
-"The places you were reading are in Settings → Recent places.": "Ebifo gye wabadde osoma biri mu Ensengeka → Ebifo eby'okumpi.",
 "{ref} isn’t in this Bible": "{ref} teri mu Baibuli eno",
 "Read it in {version}": "Soma mu {version}",
 "Other Bibles that have it": "Baibuli endala ezirina kino",
 "All Bibles that have it ({n})": "Baibuli zonna ezirina kino ({n})",
 "Here this chapter ends at verse {n}.": "Wano essuula eno ekoma ku lunyiriri {n}.",
-"Go to verse {n}": "Genda ku lunyiriri {n}"
+"Go to verse {n}": "Genda ku lunyiriri {n}",
+"Back to {place}. Hold for recent places": "Ddayo ku {place}. Nyigira wansi olabe ebifo by’oyiseemu gye buvuddeko",
+"Reading history": "Ebyafaayo by’okusoma",
+"Back to {place} · hold for more": "Ddayo ku {place} · nyigira wansi olabe ebisingawo",
+"Go back": "Ddayo",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Bw’ogenda awalala, nyiga wano okudda w’obadde osoma.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Kwata ku linnya lya Baibuli okudda ku gye wasoose okusoma. Kikwate okulondako endala."
 }

@@ -2,15 +2,16 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from 'preact/ho
 import { Catalog, DataSource, refreshSaved } from './lib/data'
 import { Reader } from './reader'
 import { Search } from './search'
-import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, SHOW_VERSE_BAR, VERSE_BAR_EVENT, SHOW_SEARCH_WAYS, tourDue, parseHash } from './state'
+import { AppContext, defaultSettings, FONTS, go, loadSettings, prayNow, PRAY_EVENT, readPath, resumePath, Route, saveSettings, Settings, SETTINGS_EVENT, PrayAt, SHARE_EVENT, ShareRequest, inCircles, useApp, useRoute, welcomeTheme, TOUR_EVENT, SHOW_VERSE_BAR, VERSE_BAR_EVENT, SHOW_SEARCH_WAYS, tourDue, parseHash } from './state'
 import { Versions } from './versions'
 import { SearchBar } from './searchbar'
 import { followSettings, ListenPlayer } from './listen'
 import { Saved } from './saved'
-import { RefreshIcon, SpinnerIcon } from './icons'
-import { recentVersions, rememberVersion, VersionPicker } from './ui'
+import { HistoryIcon, RefreshIcon, SpinnerIcon } from './icons'
 import { applyUpdate, COUNTDOWN, readySince, useUpdate } from './lib/update'
-import { visit } from './lib/history'
+import { loadTrail, onTrail, previous, Trail, visit, Visit } from './lib/history'
+import { formatRef } from './lib/refs'
+import { plain } from './lib/text'
 import { loadMarks, Marks, saveMarks } from './lib/marks'
 import { LeftNote, touchSettings, useSync } from './account'
 import { closeSettingsPage, noteSettingsFrom, SettingsSheet, SettingsView } from './settings'
@@ -456,7 +457,7 @@ export function App() {
       <header class="top">
         <a class="brand" href="#/read" title={t('Back to where you were reading')}>My Quiet Bible</a>
         <nav>
-          <VersionButton route={route} />
+          <HistoryButton route={route} />
           <UpdateButton />
           {/* #/settings opened as a page has its own Done, and so do the pages
               Settings opens (Circles, Saved) and the full search page that
@@ -553,38 +554,44 @@ function ProfileButton({ onOpen }: { onOpen: () => void }) {
   )
 }
 
-// The Bible versions button, where the history clock used to be. It shows
-// the Bible you're reading. A tap switches to the one you read before (and
-// a second tap back again: handy to hear a verse in both). Press and hold
-// (or right-click) for the ones you use, and the full list one row below.
-// Either way it's your pick, so it becomes your Bible, as in Settings.
-function VersionButton({ route }: { route: Route }) {
+/** The reading history as it changes. */
+function useTrail() {
+  const [trail, setTrail] = useState<Trail>(loadTrail)
+  useEffect(() => onTrail(setTrail), [])
+  return trail
+}
+
+const placeName = (p: Visit) => formatRef({ book: p.book, chapter: p.chapter, verse: p.verse > 1 ? p.verse : undefined })
+
+// The history button. One tap takes you back to the previous chapter and
+// verse; going back is a jump like any other, so a second tap brings you
+// back again: handy for following a preacher between passages. Press and
+// hold (or right-click) to see your last 3 places.
+function HistoryButton({ route }: { route: Route }) {
   const leave = useLeave()
-  const { settings, update, byId, catalog } = useApp()
+  const { settings, byId, data } = useApp()
+  const trail = useTrail()
   const [peek, setPeek] = useState(false)
-  const [all, setAll] = useState(false)
+  const [lines, setLines] = useState<string[]>([])
   const box = useRef<HTMLDivElement>(null)
   const hold = useRef<{ timer: number; fired: boolean }>()
   const down = () => { hold.current = { fired: false, timer: window.setTimeout(() => { hold.current!.fired = true; setPeek(true) }, 450) } }
   const up = () => clearTimeout(hold.current?.timer)
   const reading = route.path[0] === 'read' && route.path.length >= 4
+  // Away from the reader (Settings, Saved) the first place is the one you're reading.
+  const places = reading ? previous(trail) : trail.items.slice().reverse()
   const version = reading && byId.has(route.path[1]) ? route.path[1] : settings.version
-  const parallel = ((reading && route.params.get('p')?.split(',')) || settings.parallel).filter(id => byId.has(id))
-  const before = recentVersions().find(id => id !== version && byId.has(id))
-  const yours = [...new Set([version, ...recentVersions(), ...settings.myVersions])].filter(id => byId.has(id)).slice(0, 5)
-  const choose = (v: string) => {
-    setPeek(false)
-    if (v === version) return
-    rememberVersion(version); rememberVersion(v)
-    const others = parallel.filter(id => id !== v)
-    update({ version: v, parallel: others })
-    if (reading) go(readPath(v, route.path[2], +route.path[3], +(route.params.get('v') || 0) || undefined, others), true)
-    else go('read/' + v)
-  }
+  const parallel = (reading && route.params.get('p')?.split(',')) || []
+  const goTo = (p: Visit) => { setPeek(false); go(resumePath(version, p.book, p.chapter, p.verse, parallel)) }
 
   useEffect(() => { setPeek(false) }, [route.path.join('/')])
   useEffect(() => {
     if (!peek) return
+    // A line of each place's verse, from the Bible already on the device.
+    data.bible(version).then(b => setLines(places.map(p => {
+      const raw = b.books[p.book]?.[p.chapter - 1]?.[p.verse - 1]
+      return raw ? plain(raw) : ''
+    }))).catch(() => {})
     // A tap outside just closes the list; it doesn't also select the verse
     // or press the button underneath.
     const away = (e: Event) => {
@@ -596,34 +603,37 @@ function VersionButton({ route }: { route: Route }) {
       setTimeout(() => removeEventListener('click', stop, { capture: true }), 600)
     }
     const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setPeek(false) }
+    const timer = setTimeout(() => setPeek(false), 8000)
     addEventListener('pointerdown', away); addEventListener('keydown', esc); addEventListener('scroll', away as never, { passive: true })
-    return () => { removeEventListener('pointerdown', away); removeEventListener('keydown', esc); removeEventListener('scroll', away as never) }
+    return () => { clearTimeout(timer); removeEventListener('pointerdown', away); removeEventListener('keydown', esc); removeEventListener('scroll', away as never) }
   }, [peek])
 
+  const first = places[0]
   return (
     <div class="history" ref={box}>
-      <button class={'version-btn' + (peek ? ' on' : '')} aria-expanded={peek}
-        aria-label={before ? t('Switch to {version}. Hold for your Bibles', { version: before }) : t('Bible versions')}
-        title={before ? t('Switch to {version} · hold for more', { version: before }) : t('Bible versions')}
+      <button class={'history-btn' + (peek ? ' on' : '') + (first ? '' : ' idle')} aria-expanded={peek}
+        aria-label={first ? t('Back to {place}. Hold for recent places', { place: placeName(first) }) : t('Reading history')} title={first ? t('Back to {place} · hold for more', { place: placeName(first) }) : undefined}
         onPointerDown={down} onPointerUp={up} onPointerLeave={up} onPointerCancel={up}
         onContextMenu={e => { e.preventDefault(); up(); setPeek(true) }}
-        onClick={() => { if (hold.current?.fired) return; if (before) choose(before); else setPeek(p => !p) }}>
-        {version}
+        onClick={() => { if (hold.current?.fired) return; if (first) goTo(first); else setPeek(p => !p) }}>
+        <HistoryIcon size={26} />
       </button>
       {peek && (
-        <div ref={leave} class="peek vpeek" role="dialog" aria-label={t('Bible versions')}>
-          {yours.map(id => (
-            <button class={'vpeek-row' + (id === version ? ' on' : '')} aria-current={id === version} onClick={() => choose(id)}>
-              <strong>{id}</strong><span>{byId.get(id)?.name}</span>
-              {id === version && <span class="vpeek-tick" aria-hidden="true">✓</span>}
+        <div ref={leave} class="peek" role="dialog" aria-label={t('Go back')}>
+          {!first ? <p class="peek-empty">{t('When you jump to another passage, the place you left shows here so you can come back with one tap.')}</p> : <>
+            <button class="peek-main" onClick={() => goTo(first)}>
+              <span class="peek-kicker">{t('Back to')}</span>
+              <strong>{placeName(first)}</strong>
+              {lines[0] && <span class="peek-line">{lines[0]}</span>}
             </button>
-          ))}
-          <button class="vpeek-all" onClick={() => { setPeek(false); setAll(true) }}>
-            {t('All {n} versions, by language', { n: catalog.translations.length })} <span aria-hidden="true">›</span>
-          </button>
+            {places.slice(1, 3).map((p, i) => (
+              <button class="peek-row" onClick={() => goTo(p)}>
+                <strong>{placeName(p)}</strong>{lines[i + 1] && <span class="peek-line one">{lines[i + 1]}</span>}
+              </button>
+            ))}
+          </>}
         </div>
       )}
-      {all && <VersionPicker title={t('Version')} startAll selected={[version]} onClose={() => setAll(false)} onChange={([id]) => choose(id)} />}
     </div>
   )
 }

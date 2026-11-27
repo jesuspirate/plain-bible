@@ -1358,16 +1358,16 @@
 "Bible versions": "बायबलच्या आवृत्त्या",
 "Switch to {version}. Hold for your Bibles": "{version} वर जा. तुमच्या बायबलसाठी दाबून ठेवा",
 "Switch to {version} · hold for more": "{version} वर जा · आणखीसाठी दाबून ठेवा",
-"Recent places": "अलीकडील ठिकाणे",
-"Back to {place}": "{place} वर परत जा",
-"Where you were reading": "जिथे तुम्ही वाचत होता",
-"Tap to switch to the Bible you read before. Tap again to come back.": "आधी वाचलेल्या बायबलवर जाण्यासाठी टॅप करा. परत येण्यासाठी पुन्हा टॅप करा.",
-"Hold to choose from your Bibles, or any of them.": "तुमच्या बायबलमधून किंवा कोणतेही निवडण्यासाठी दाबून ठेवा.",
-"The places you were reading are in Settings → Recent places.": "जिथे तुम्ही वाचत होता ती ठिकाणे सेटिंग्ज → अलीकडील ठिकाणे मध्ये आहेत.",
 "{ref} isn’t in this Bible": "{ref} या बायबलमध्ये नाही",
 "Read it in {version}": "{version} मध्ये वाचा",
 "Other Bibles that have it": "हे असलेली इतर बायबल",
 "All Bibles that have it ({n})": "हे असलेली सर्व बायबल ({n})",
 "Here this chapter ends at verse {n}.": "येथे हा अध्याय वचन {n} वर संपतो.",
-"Go to verse {n}": "वचन {n} वर जा"
+"Go to verse {n}": "वचन {n} वर जा",
+"Back to {place}. Hold for recent places": "{place} वर परत जा. अलीकडील ठिकाणांसाठी दाबून ठेवा",
+"Reading history": "वाचनाचा इतिहास",
+"Back to {place} · hold for more": "{place} वर परत · अधिकसाठी दाबून ठेवा",
+"Go back": "मागे जा",
+"After you jump somewhere else, tap here to go back to where you were reading.": "दुसरीकडे गेल्यानंतर, जिथे वाचत होता तिथे परत जाण्यासाठी इथे टॅप करा.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "आधी वाचलेल्या बायबलवर जाण्यासाठी बायबलच्या नावावर टॅप करा. दुसरे निवडण्यासाठी दाबून ठेवा."
 }

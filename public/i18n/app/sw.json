@@ -1358,16 +1358,16 @@
 "Bible versions": "Matoleo ya Biblia",
 "Switch to {version}. Hold for your Bibles": "Badili kwenda {version}. Shikilia kwa Biblia zako",
 "Switch to {version} · hold for more": "Badili kwenda {version} · shikilia kwa zaidi",
-"Recent places": "Mahali pa hivi karibuni",
-"Back to {place}": "Rudi kwenye {place}",
-"Where you were reading": "Ulipokuwa ukisoma",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Gusa ili kubadili kwenda Biblia uliyosoma awali. Gusa tena kurudi.",
-"Hold to choose from your Bibles, or any of them.": "Shikilia ili kuchagua kati ya Biblia zako, au yoyote.",
-"The places you were reading are in Settings → Recent places.": "Mahali ulipokuwa ukisoma pako katika Mipangilio → Mahali pa hivi karibuni.",
 "{ref} isn’t in this Bible": "{ref} haipo katika Biblia hii",
 "Read it in {version}": "Soma katika {version}",
 "Other Bibles that have it": "Biblia nyingine zilizo nayo",
 "All Bibles that have it ({n})": "Biblia zote zilizo nayo ({n})",
 "Here this chapter ends at verse {n}.": "Hapa sura hii inaishia mstari wa {n}.",
-"Go to verse {n}": "Nenda mstari wa {n}"
+"Go to verse {n}": "Nenda mstari wa {n}",
+"Back to {place}. Hold for recent places": "Rudi kwenye {place}. Bonyeza na ushikilie kwa sehemu za karibuni",
+"Reading history": "Historia ya kusoma",
+"Back to {place} · hold for more": "Rudi kwenye {place} · shikilia kwa zaidi",
+"Go back": "Rudi",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Baada ya kwenda mahali pengine, gusa hapa ili urudi ulipokuwa ukisoma.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Gusa jina la Biblia ili kubadili kwenda ile uliyosoma kabla. Ishikilie ili kuchagua nyingine."
 }

@@ -1358,16 +1358,16 @@
 "Bible versions": "성경 번역본",
 "Switch to {version}. Hold for your Bibles": "{version}(으)로 전환. 길게 눌러 내 성경 보기",
 "Switch to {version} · hold for more": "{version}(으)로 전환 · 길게 눌러 더 보기",
-"Recent places": "최근 위치",
-"Back to {place}": "{place}(으)로 돌아가기",
-"Where you were reading": "읽던 곳",
-"Tap to switch to the Bible you read before. Tap again to come back.": "탭하면 이전에 읽던 성경으로 바뀝니다. 다시 탭하면 돌아옵니다.",
-"Hold to choose from your Bibles, or any of them.": "길게 눌러 내 성경이나 다른 어떤 성경이든 고르세요.",
-"The places you were reading are in Settings → Recent places.": "읽던 곳은 설정 → 최근 위치에 있습니다.",
 "{ref} isn’t in this Bible": "이 성경에는 {ref}이(가) 없습니다",
 "Read it in {version}": "{version}에서 읽기",
 "Other Bibles that have it": "이 부분이 있는 다른 성경",
 "All Bibles that have it ({n})": "이 부분이 있는 모든 성경 ({n})",
 "Here this chapter ends at verse {n}.": "이 성경에서는 이 장이 {n}절에서 끝납니다.",
-"Go to verse {n}": "{n}절로 가기"
+"Go to verse {n}": "{n}절로 가기",
+"Back to {place}. Hold for recent places": "{place}(으)로 돌아가기. 길게 누르면 최근 위치 보기",
+"Reading history": "읽기 기록",
+"Back to {place} · hold for more": "{place}(으)로 돌아가기 · 길게 눌러 더 보기",
+"Go back": "돌아가기",
+"After you jump somewhere else, tap here to go back to where you were reading.": "다른 곳으로 이동한 다음 여기를 탭하면 읽던 곳으로 돌아갑니다.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "성경 이름을 누르면 전에 읽던 성경으로 바뀝니다. 길게 누르면 다른 성경을 고를 수 있습니다."
 }

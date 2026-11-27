@@ -1358,16 +1358,16 @@
 "Bible versions": "Các bản Kinh Thánh",
 "Switch to {version}. Hold for your Bibles": "Chuyển sang {version}. Giữ để xem các bản Kinh Thánh của bạn",
 "Switch to {version} · hold for more": "Chuyển sang {version} · giữ để xem thêm",
-"Recent places": "Chỗ đọc gần đây",
-"Back to {place}": "Quay lại {place}",
-"Where you were reading": "Nơi bạn đang đọc",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Chạm để chuyển sang bản Kinh Thánh bạn đọc trước đó. Chạm lần nữa để quay lại.",
-"Hold to choose from your Bibles, or any of them.": "Giữ để chọn trong các bản Kinh Thánh của bạn, hoặc bất kỳ bản nào.",
-"The places you were reading are in Settings → Recent places.": "Những chỗ bạn đã đọc nằm trong Cài đặt → Chỗ đọc gần đây.",
 "{ref} isn’t in this Bible": "{ref} không có trong bản Kinh Thánh này",
 "Read it in {version}": "Đọc trong {version}",
 "Other Bibles that have it": "Bản Kinh Thánh khác có đoạn này",
 "All Bibles that have it ({n})": "Tất cả bản Kinh Thánh có đoạn này ({n})",
 "Here this chapter ends at verse {n}.": "Ở đây chương này kết thúc ở câu {n}.",
-"Go to verse {n}": "Đến câu {n}"
+"Go to verse {n}": "Đến câu {n}",
+"Back to {place}. Hold for recent places": "Quay lại {place}. Chạm và giữ để xem các chỗ gần đây",
+"Reading history": "Lịch sử đọc",
+"Back to {place} · hold for more": "Quay lại {place} · chạm và giữ để xem thêm",
+"Go back": "Quay lại",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Sau khi chuyển đến chỗ khác, hãy chạm vào đây để quay lại chỗ bạn đang đọc.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Chạm vào tên Kinh Thánh để chuyển sang bản bạn đọc trước đó. Nhấn giữ để chọn bản khác."
 }

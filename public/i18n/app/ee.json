@@ -1358,16 +1358,16 @@
 "Bible versions": "Biblia gɔmeɖeɖewo",
 "Switch to {version}. Hold for your Bibles": "Trɔ yi {version}. Lé ɖe te nàkpɔ wò Bibliawo",
 "Switch to {version} · hold for more": "Trɔ yi {version} · lé ɖe te nàkpɔ bubuwo",
-"Recent places": "Teƒe siwo nèyi va yi laa",
-"Back to {place}": "Gbugbɔ yi {place}",
-"Where you were reading": "Afi si nèle xexlẽm",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Zi edzi nàtrɔ yi Biblia si nèxlẽ do ŋgɔ. Zi edzi ake nàtrɔ gbɔ.",
-"Hold to choose from your Bibles, or any of them.": "Lé ɖe te nàtia tso wò Bibliawo me, alo ɖe sia ɖe.",
-"The places you were reading are in Settings → Recent places.": "Teƒe siwo nèle xexlẽm le Ɖoɖowo → Teƒe siwo nèyi va yi laa me.",
 "{ref} isn’t in this Bible": "{ref} mele Biblia sia me o",
 "Read it in {version}": "Xlẽe le {version} me",
 "Other Bibles that have it": "Biblia bubu siwo me wòle",
 "All Bibles that have it ({n})": "Biblia siwo katã me wòle ({n})",
 "Here this chapter ends at verse {n}.": "Afi sia ta sia wua nu le kpukpui {n}.",
-"Go to verse {n}": "Yi kpukpui {n}"
+"Go to verse {n}": "Yi kpukpui {n}",
+"Back to {place}. Hold for recent places": "Gbugbɔ yi {place}. Te edzi ɖi na teƒe siwo nèyi va yi laa",
+"Reading history": "Nuxexlẽ ƒe ŋutinya",
+"Back to {place} · hold for more": "Gbugbɔ yi {place} · te edzi ɖi na bubuwo",
+"Go back": "Gbugbɔ yi megbe",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ne èyi teƒe bubu la, zi afi sia dzi be nàgbugbɔ ayi afi si nèxlẽ nu le.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Ƒo asi Biblia ƒe ŋkɔ dzi be nàtrɔ yi esi nèxlẽ do ŋgɔ la dzi. Lée ɖe asi be nàtia bubu."
 }

@@ -1358,16 +1358,16 @@
 "Bible versions": "聖經譯本",
 "Switch to {version}. Hold for your Bibles": "切換到 {version}。按住查看你的聖經",
 "Switch to {version} · hold for more": "切換到 {version} · 按住查看更多",
-"Recent places": "最近的位置",
-"Back to {place}": "回到{place}",
-"Where you were reading": "你讀到的地方",
-"Tap to switch to the Bible you read before. Tap again to come back.": "輕點切換到你之前讀的聖經。再點一次即可切回。",
-"Hold to choose from your Bibles, or any of them.": "按住可從你的聖經中選擇，或選擇任何一個。",
-"The places you were reading are in Settings → Recent places.": "你讀過的地方在設定 → 最近的位置。",
 "{ref} isn’t in this Bible": "這本聖經沒有{ref}",
 "Read it in {version}": "用{version}閱讀",
 "Other Bibles that have it": "有這一段的其他聖經",
 "All Bibles that have it ({n})": "有這一段的所有聖經（{n}）",
 "Here this chapter ends at verse {n}.": "在這裡，本章到第{n}節結束。",
-"Go to verse {n}": "前往第{n}節"
+"Go to verse {n}": "前往第{n}節",
+"Back to {place}. Hold for recent places": "回到{place}。按住可查看最近的位置",
+"Reading history": "閱讀紀錄",
+"Back to {place} · hold for more": "回到{place} · 按住查看更多",
+"Go back": "返回",
+"After you jump somewhere else, tap here to go back to where you were reading.": "跳到其他地方後，點一下這裡即可回到剛才閱讀的位置。",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "點按聖經名稱，切換到你之前讀的那本。按住可以選擇其他版本。"
 }

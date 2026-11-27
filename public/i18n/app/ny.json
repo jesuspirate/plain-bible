@@ -1358,16 +1358,16 @@
 "Bible versions": "Mabaibulo osiyanasiyana",
 "Switch to {version}. Hold for your Bibles": "Sinthani kupita ku {version}. Gwirani kuti muone Mabaibulo anu",
 "Switch to {version} · hold for more": "Sinthani kupita ku {version} · gwirani kuti muone zina",
-"Recent places": "Malo aposachedwa",
-"Back to {place}": "Bwererani ku {place}",
-"Where you were reading": "Komwe mumawerenga",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Dinani kuti musinthe kupita ku Baibulo lomwe munawerenga kale. Dinaninso kuti mubwerere.",
-"Hold to choose from your Bibles, or any of them.": "Gwirani kuti musankhe pa Mabaibulo anu, kapena lililonse.",
-"The places you were reading are in Settings → Recent places.": "Malo omwe mumawerenga ali mu Zokonda → Malo aposachedwa.",
 "{ref} isn’t in this Bible": "{ref} palibe m’Baibulo ili",
 "Read it in {version}": "Werengani mu {version}",
 "Other Bibles that have it": "Mabaibulo ena amene ali nalo",
 "All Bibles that have it ({n})": "Mabaibulo onse amene ali nalo ({n})",
 "Here this chapter ends at verse {n}.": "Pano mutu uwu umathera pa vesi {n}.",
-"Go to verse {n}": "Pitani ku vesi {n}"
+"Go to verse {n}": "Pitani ku vesi {n}",
+"Back to {place}. Hold for recent places": "Bwererani ku {place}. Gwirani kuti muone malo aposachedwa",
+"Reading history": "Mbiri yowerenga",
+"Back to {place} · hold for more": "Bwererani ku {place} · gwirani kuti muone zina",
+"Go back": "Bwererani",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Mukapita kwina, dinani pano kuti mubwerere kumene mumawerenga.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Dinani dzina la Baibulo kuti mubwerere ku limene munawerenga kale. Gwirani kuti musankhe lina."
 }

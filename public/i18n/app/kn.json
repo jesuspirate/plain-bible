@@ -1358,16 +1358,16 @@
 "Bible versions": "ಬೈಬಲ್ ಆವೃತ್ತಿಗಳು",
 "Switch to {version}. Hold for your Bibles": "{version}ಗೆ ಬದಲಿಸಿ. ನಿಮ್ಮ ಬೈಬಲ್‌ಗಳಿಗಾಗಿ ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
 "Switch to {version} · hold for more": "{version}ಗೆ ಬದಲಿಸಿ · ಇನ್ನಷ್ಟಕ್ಕೆ ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
-"Recent places": "ಇತ್ತೀಚಿನ ಸ್ಥಳಗಳು",
-"Back to {place}": "{place} ಗೆ ಹಿಂತಿರುಗಿ",
-"Where you were reading": "ನೀವು ಓದುತ್ತಿದ್ದ ಸ್ಥಳ",
-"Tap to switch to the Bible you read before. Tap again to come back.": "ಹಿಂದೆ ಓದಿದ ಬೈಬಲ್‌ಗೆ ಬದಲಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ. ಹಿಂದಿರುಗಲು ಮತ್ತೆ ಟ್ಯಾಪ್ ಮಾಡಿ.",
-"Hold to choose from your Bibles, or any of them.": "ನಿಮ್ಮ ಬೈಬಲ್‌ಗಳಿಂದ ಅಥವಾ ಯಾವುದನ್ನಾದರೂ ಆರಿಸಲು ಒತ್ತಿ ಹಿಡಿಯಿರಿ.",
-"The places you were reading are in Settings → Recent places.": "ನೀವು ಓದಿದ ಸ್ಥಳಗಳು ಸೆಟ್ಟಿಂಗ್‌ಗಳು → ಇತ್ತೀಚಿನ ಸ್ಥಳಗಳು ನಲ್ಲಿವೆ.",
 "{ref} isn’t in this Bible": "{ref} ಈ ಬೈಬಲ್‌ನಲ್ಲಿ ಇಲ್ಲ",
 "Read it in {version}": "{version} ನಲ್ಲಿ ಓದಿ",
 "Other Bibles that have it": "ಇದನ್ನು ಹೊಂದಿರುವ ಇತರ ಬೈಬಲ್‌ಗಳು",
 "All Bibles that have it ({n})": "ಇದನ್ನು ಹೊಂದಿರುವ ಎಲ್ಲಾ ಬೈಬಲ್‌ಗಳು ({n})",
 "Here this chapter ends at verse {n}.": "ಇಲ್ಲಿ ಈ ಅಧ್ಯಾಯವು ವಚನ {n} ರಲ್ಲಿ ಕೊನೆಗೊಳ್ಳುತ್ತದೆ.",
-"Go to verse {n}": "ವಚನ {n} ಗೆ ಹೋಗಿ"
+"Go to verse {n}": "ವಚನ {n} ಗೆ ಹೋಗಿ",
+"Back to {place}. Hold for recent places": "{place} ಗೆ ಹಿಂತಿರುಗಿ. ಇತ್ತೀಚಿನ ಸ್ಥಳಗಳಿಗಾಗಿ ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
+"Reading history": "ಓದಿನ ಇತಿಹಾಸ",
+"Back to {place} · hold for more": "{place} ಗೆ ಹಿಂತಿರುಗಿ · ಇನ್ನಷ್ಟಕ್ಕೆ ಒತ್ತಿ ಹಿಡಿಯಿರಿ",
+"Go back": "ಹಿಂತಿರುಗಿ",
+"After you jump somewhere else, tap here to go back to where you were reading.": "ನೀವು ಬೇರೆಡೆಗೆ ಹೋದ ನಂತರ, ನೀವು ಓದುತ್ತಿದ್ದಲ್ಲಿಗೆ ಹಿಂತಿರುಗಲು ಇಲ್ಲಿ ಟ್ಯಾಪ್ ಮಾಡಿ.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "ಮೊದಲು ಓದಿದ ಬೈಬಲ್‌ಗೆ ಹೋಗಲು ಬೈಬಲ್ ಹೆಸರನ್ನು ತಟ್ಟಿ. ಬೇರೆಯದನ್ನು ಆರಿಸಲು ಒತ್ತಿ ಹಿಡಿಯಿರಿ."
 }

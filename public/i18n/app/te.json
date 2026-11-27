@@ -1358,16 +1358,16 @@
 "Bible versions": "బైబిల్ అనువాదాలు",
 "Switch to {version}. Hold for your Bibles": "{version}కు మారండి. మీ బైబిళ్ల కోసం నొక్కి పట్టుకోండి",
 "Switch to {version} · hold for more": "{version}కు మారండి · మరిన్నింటి కోసం నొక్కి పట్టుకోండి",
-"Recent places": "ఇటీవలి స్థలాలు",
-"Back to {place}": "{place} కు తిరిగి వెళ్లు",
-"Where you were reading": "మీరు చదువుతున్న చోటు",
-"Tap to switch to the Bible you read before. Tap again to come back.": "ఇంతకు ముందు చదివిన బైబిల్‌కు మారడానికి నొక్కండి. తిరిగి రావడానికి మళ్లీ నొక్కండి.",
-"Hold to choose from your Bibles, or any of them.": "మీ బైబిళ్ల నుండి లేదా ఏదైనా ఎంచుకోవడానికి నొక్కి పట్టుకోండి.",
-"The places you were reading are in Settings → Recent places.": "మీరు చదివిన స్థలాలు సెట్టింగ్‌లు → ఇటీవలి స్థలాలులో ఉన్నాయి.",
 "{ref} isn’t in this Bible": "{ref} ఈ బైబిల్‌లో లేదు",
 "Read it in {version}": "{version}లో చదవండి",
 "Other Bibles that have it": "ఇది ఉన్న ఇతర బైబిళ్లు",
 "All Bibles that have it ({n})": "ఇది ఉన్న అన్ని బైబిళ్లు ({n})",
 "Here this chapter ends at verse {n}.": "ఇక్కడ ఈ అధ్యాయం వచనం {n}తో ముగుస్తుంది.",
-"Go to verse {n}": "వచనం {n}కు వెళ్లండి"
+"Go to verse {n}": "వచనం {n}కు వెళ్లండి",
+"Back to {place}. Hold for recent places": "{place} కు తిరిగి వెళ్లు. ఇటీవలి స్థలాల కోసం నొక్కి పట్టుకోండి",
+"Reading history": "చదివిన చరిత్ర",
+"Back to {place} · hold for more": "{place} కు తిరిగి వెళ్లు · మరిన్నింటి కోసం నొక్కి పట్టుకోండి",
+"Go back": "వెనుకకు వెళ్లు",
+"After you jump somewhere else, tap here to go back to where you were reading.": "వేరే చోటికి వెళ్లిన తర్వాత, మీరు చదువుతున్న చోటికి తిరిగి రావడానికి ఇక్కడ నొక్కండి.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "ముందు చదివిన బైబిల్‌కు మారడానికి బైబిల్ పేరును నొక్కండి. వేరొకటి ఎంచుకోవడానికి నొక్కి పట్టుకోండి."
 }
