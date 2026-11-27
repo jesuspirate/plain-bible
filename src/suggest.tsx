@@ -8,7 +8,7 @@
 import { useEffect, useState } from 'preact/hooks'
 import { SYNC_URL } from './lib/sync'
 import { recentErrors } from './lib/errors'
-import { inMacApp, inOtherApp, inStoreApp, fromPlayStore, installed } from './lib/install'
+import { inMacApp, inOtherApp, inStoreApp, fromPlayStore, fromMicrosoftStore, installed } from './lib/install'
 import { onStepsChange, recordedSteps, clearSteps, screenOf, stopSteps } from './lib/steps'
 import { currentLang, t } from './i18n'
 import { useLeave } from './motion'
@@ -32,6 +32,7 @@ export function platformLabel(ua = navigator.userAgent): string {
   if (inMacApp()) return 'Mac app'
   if (inStoreApp()) return `${os} App Store app`
   if (fromPlayStore()) return 'Google Play app'
+  if (fromMicrosoftStore()) return 'Microsoft Store app'
   if (inOtherApp()) return `${os} wallet mini app`
   return `${os} ${installed() ? 'Home Screen' : 'browser'}`
 }

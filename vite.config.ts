@@ -16,6 +16,8 @@ const manifest = {
   theme_color: '#2b2a28',
   background_color: '#f4ecd8',
   display: 'standalone' as const,
+  // Store listings read these (the Microsoft Store package via PWABuilder).
+  categories: ['books', 'education', 'lifestyle'],
   // The app's lasting identity (the same address it always had), which the
   // Google Play app (android/) and installed copies share.
   id: '/',

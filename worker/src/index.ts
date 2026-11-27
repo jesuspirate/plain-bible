@@ -1439,7 +1439,7 @@ const TALLIES = ['pr', 'ch', 'sh', 'bm']
 const HEARD_MODES = ['listen', 'along']
 // Who reads aloud (src/lib/recordings.ts ids, the phone's voice, or nobody).
 const VOICES: Record<string, string> = { hays: 'Barry Hays (BSB)', david: 'David (KJV)', tresor: 'Trésor Sonore (LSG)', voice: 'The phone’s voice', silent: 'No voice (highlight only)' }
-const PLATFORMS: [string, string][] = [['ios', 'iPhone & iPad app'], ['mac', 'Mac app'], ['android', 'Android app'], ['fedi', 'In Fedi'], ['phone', 'Phone browser'], ['computer', 'Computer browser']]
+const PLATFORMS: [string, string][] = [['ios', 'iPhone & iPad app'], ['mac', 'Mac app'], ['android', 'Android app'], ['windows', 'Windows app'], ['fedi', 'In Fedi'], ['phone', 'Phone browser'], ['computer', 'Computer browser']]
 const isLang = (l: string | null | undefined): l is string => !!l && /^[a-z]{2,3}(-han[st])?$/.test(l)
 const regionName = (c: string) => { try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(c) ?? c } catch { return c } }
 const langName = (l: string) => { try { return new Intl.DisplayNames(['en'], { type: 'language' }).of(l.replace(/-(han[st])$/, (_, x: string) => '-' + x[0].toUpperCase() + x.slice(1))) ?? l } catch { return l } }
