@@ -260,8 +260,9 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 /* Editing your own request: its words, its verses, + Add a verse. */
 .c-edit { display: grid; gap: 10px; margin: 4px 0 12px; }
 .c-edit-verses { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
-.c-edit-verses li { display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 14px; border-radius: 999px; border: 1px solid var(--line); font-weight: 600; }
-.c-edit-x { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--text); color: var(--bg); cursor: pointer; }
+.c-edit-verses li, .pray-list .c-edit-verses li { display: inline-flex; margin: 0; align-items: center; gap: 10px; padding: 5px; padding-inline-start: 16px; border-radius: 999px; border: 1px solid var(--line); font-weight: 600; line-height: 1; }
+.c-edit-x { all: unset; box-sizing: border-box; flex: none; display: grid; place-items: center; width: 36px; height: 36px; border-radius: 50%; background: var(--text); color: var(--bg); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.c-edit-x svg { display: block; }
 .c-ask-verse { margin: 0 0 10px; }
 /* Shorter cards: long words fold to a few lines (More reads the rest), the
    count sits beside its bar, and your two buttons share one row. */
