@@ -116,6 +116,8 @@ h1 { font-size: 54px; line-height: 1.02; margin: 4px 0 10px; }
 .m-brand { font: 600 18px var(--serif); margin-right: auto; }
 .m-ic { display: grid; place-items: center; width: 42px; height: 42px; border-radius: 50%; color: var(--muted); }
 .m-person { color: var(--text); background: var(--chip); border: 1px solid var(--line); }
+/* The Bible versions button, as in the app: the version you read, in a pill. */
+.m-ver { display: grid; place-items: center; height: 42px; padding: 0 13px; border-radius: 21px; color: var(--text); background: var(--chip); border: 1px solid var(--line); font: 700 15px var(--sans); letter-spacing: .02em; }
 .m-chapter { padding: 8px 20px 100px; font: 17px/1.7 var(--serif); }
 .m-title { text-align: center; margin: 14px 0 16px; line-height: 1.1; }
 .m-book { display: block; font: 600 11px var(--sans); letter-spacing: .14em; text-transform: uppercase; color: var(--muted); }
