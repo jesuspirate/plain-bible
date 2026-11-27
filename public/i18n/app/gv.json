@@ -1359,10 +1359,10 @@
 "Bible versions": "Çhyndaaghyn y Vible",
 "Switch to {version}. Hold for your Bibles": "Caghlaa gys {version}. Cum son dty Vibleyn",
 "Switch to {version} · hold for more": "Caghlaa gys {version} · cum son tooilley",
-"Recent places": "Boayl noa",
-"Back to {place}": "Gow back gys {place}",
-"Where you were reading": "Raad v'ou lhaih",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Bwoaill dy chaghlaa gys y Vible lhaih oo roie. Bwoaill reesht dy hyndaa.",
-"Hold to choose from your Bibles, or any of them.": "Cum dy reih veih dty Vibleyn, ny veg erbee.",
-"The places you were reading are in Settings → Recent places.": "Ta ny boayl v'ou lhaih ayns Reaghyssyn → Boayl noa."
+"Back to {place}. Hold for recent places": "Gow back gys {place}. Cum sheese son ynnydyn noa",
+"Reading history": "Shennaghys lhaih",
+"Back to {place} · hold for more": "Gow back gys {place} · cum sheese son tooilley",
+"Go back": "Gow back",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Lurg dhyt goll gys ynnyd elley, bean rish ayns shoh dy gholl back gys y raad v’ou lhaih.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Bean rish ennym y Vible dy gholl gys yn fer lhaih oo roie. Cum eh dy reih fer elley."
 }

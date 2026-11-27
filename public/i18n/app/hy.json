@@ -1362,10 +1362,10 @@
 "Bible versions": "Աստվածաշնչի թարգմանություններ",
 "Switch to {version}. Hold for your Bibles": "Անցնել {version}. Պահեք ձեր Աստվածաշնչերի համար",
 "Switch to {version} · hold for more": "Անցնել {version} · պահեք ավելիի համար",
-"Recent places": "Վերջին վայրերը",
-"Back to {place}": "Վերադառնալ {place}",
-"Where you were reading": "Որտեղ կարդում էիք",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Հպեք՝ նախկինում կարդացած Աստվածաշնչին անցնելու համար։ Կրկին հպեք՝ վերադառնալու համար։",
-"Hold to choose from your Bibles, or any of them.": "Պահեք՝ ձեր Աստվածաշնչերից կամ ցանկացածից ընտրելու համար։",
-"The places you were reading are in Settings → Recent places.": "Վայրերը, որտեղ կարդում էիք, գտնվում են Կարգավորումներ → Վերջին վայրերը բաժնում։"
+"Back to {place}. Hold for recent places": "Վերադառնալ՝ {place}։ Պահեք սեղմած վերջին վայրերի համար",
+"Reading history": "Ընթերցանության պատմություն",
+"Back to {place} · hold for more": "Վերադառնալ՝ {place} · պահեք սեղմած ավելիի համար",
+"Go back": "Հետ գնալ",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Այլ տեղ անցնելուց հետո հպեք այստեղ՝ վերադառնալու այնտեղ, որտեղ կարդում էիք։",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Հպեք Աստվածաշնչի անվանը՝ նախկինում կարդացածին անցնելու համար։ Պահեք՝ ուրիշն ընտրելու համար։"
 }

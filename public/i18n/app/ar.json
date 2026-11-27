@@ -1506,10 +1506,10 @@
 "Bible versions": "ترجمات الكتاب المقدس",
 "Switch to {version}. Hold for your Bibles": "التبديل إلى {version}. اضغط مطولًا لكتبك المقدسة",
 "Switch to {version} · hold for more": "التبديل إلى {version} · اضغط مطولًا للمزيد",
-"Recent places": "الأماكن الأخيرة",
-"Back to {place}": "العودة إلى {place}",
-"Where you were reading": "حيث كنت تقرأ",
-"Tap to switch to the Bible you read before. Tap again to come back.": "انقر للتبديل إلى الكتاب المقدس الذي قرأته من قبل. انقر مرة أخرى للعودة.",
-"Hold to choose from your Bibles, or any of them.": "اضغط مطولًا للاختيار من كتبك المقدسة أو أي ترجمة أخرى.",
-"The places you were reading are in Settings → Recent places.": "الأماكن التي كنت تقرأ فيها موجودة في الإعدادات ← الأماكن الأخيرة."
+"Back to {place}. Hold for recent places": "العودة إلى {place}. اضغط مطولًا لرؤية الأماكن الأخيرة",
+"Reading history": "سجل القراءة",
+"Back to {place} · hold for more": "العودة إلى {place} · اضغط مطولًا للمزيد",
+"Go back": "رجوع",
+"After you jump somewhere else, tap here to go back to where you were reading.": "بعد الانتقال إلى مكان آخر، اضغط هنا للعودة إلى حيث كنت تقرأ.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "المس اسم الكتاب المقدس للانتقال إلى الذي قرأته قبله. اضغط مطولًا لاختيار غيره."
 }

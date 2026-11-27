@@ -1359,10 +1359,10 @@
 "Bible versions": "ترجمه‌های کتاب مقدس",
 "Switch to {version}. Hold for your Bibles": "رفتن به {version}. برای کتاب‌های مقدس خود نگه دارید",
 "Switch to {version} · hold for more": "رفتن به {version} · برای بیشتر نگه دارید",
-"Recent places": "جاهای اخیر",
-"Back to {place}": "بازگشت به {place}",
-"Where you were reading": "جایی که می‌خواندید",
-"Tap to switch to the Bible you read before. Tap again to come back.": "بزنید تا به کتاب مقدسی که قبلاً می‌خواندید بروید. دوباره بزنید تا برگردید.",
-"Hold to choose from your Bibles, or any of them.": "نگه دارید تا از کتاب‌های مقدس خود یا هر کدام دیگر انتخاب کنید.",
-"The places you were reading are in Settings → Recent places.": "جاهایی که می‌خواندید در تنظیمات ← جاهای اخیر هستند."
+"Back to {place}. Hold for recent places": "بازگشت به {place}. برای جاهای اخیر نگه دارید",
+"Reading history": "تاریخچهٔ خواندن",
+"Back to {place} · hold for more": "بازگشت به {place} · برای بیشتر نگه دارید",
+"Go back": "بازگشت",
+"After you jump somewhere else, tap here to go back to where you were reading.": "پس از رفتن به جای دیگر، اینجا بزنید تا به جایی که می‌خواندید برگردید.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "روی نام کتاب مقدس بزنید تا به همانی بروید که پیش‌تر می‌خواندید. نگه دارید تا دیگری را برگزینید."
 }

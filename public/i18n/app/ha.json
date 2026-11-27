@@ -1359,10 +1359,10 @@
 "Bible versions": "Fassarorin Littafi Mai Tsarki",
 "Switch to {version}. Hold for your Bibles": "Canza zuwa {version}. Riƙe don Littattafanka Masu Tsarki",
 "Switch to {version} · hold for more": "Canza zuwa {version} · riƙe don ƙarin",
-"Recent places": "Wurare na kwanan nan",
-"Back to {place}": "Koma zuwa {place}",
-"Where you were reading": "Inda kake karatu",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Taɓa don canza zuwa Littafi Mai Tsarki da ka karanta a baya. Sake taɓawa don dawowa.",
-"Hold to choose from your Bibles, or any of them.": "Riƙe don zaɓa daga Littattafanka Masu Tsarki, ko kowane.",
-"The places you were reading are in Settings → Recent places.": "Wuraren da kake karatu suna cikin Saituna → Wurare na kwanan nan."
+"Back to {place}. Hold for recent places": "Koma zuwa {place}. Riƙe don wuraren kwanan nan",
+"Reading history": "Tarihin karatu",
+"Back to {place} · hold for more": "Koma zuwa {place} · riƙe don ƙari",
+"Go back": "Koma baya",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Bayan kun tafi wani wuri, taɓa nan don komawa inda kuke karantawa.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Taɓa sunan Littafi Mai Tsarki don komawa wanda ka karanta a baya. Riƙe shi don zaɓar wani."
 }

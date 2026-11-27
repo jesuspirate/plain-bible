@@ -1447,10 +1447,10 @@
 "Bible versions": "Bībeles tulkojumi",
 "Switch to {version}. Hold for your Bibles": "Pārslēgt uz {version}. Turiet, lai redzētu savas Bībeles",
 "Switch to {version} · hold for more": "Pārslēgt uz {version} · turiet, lai redzētu vairāk",
-"Recent places": "Nesenās vietas",
-"Back to {place}": "Atpakaļ uz {place}",
-"Where you were reading": "Kur jūs lasījāt",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Pieskarieties, lai pārslēgtos uz iepriekš lasīto Bībeli. Pieskarieties vēlreiz, lai atgrieztos.",
-"Hold to choose from your Bibles, or any of them.": "Turiet, lai izvēlētos no savām Bībelēm vai jebkuras citas.",
-"The places you were reading are in Settings → Recent places.": "Vietas, kur lasījāt, ir sadaļā Iestatījumi → Nesenās vietas."
+"Back to {place}. Hold for recent places": "Atpakaļ uz {place}. Turiet, lai redzētu nesenās vietas",
+"Reading history": "Lasīšanas vēsture",
+"Back to {place} · hold for more": "Atpakaļ uz {place} · turiet, lai redzētu vairāk",
+"Go back": "Atpakaļ",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Kad esat pārgājis citur, pieskarieties šeit, lai atgrieztos tur, kur lasījāt.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Pieskarieties Bībeles nosaukumam, lai pārietu uz iepriekš lasīto. Turiet, lai izvēlētos citu."
 }

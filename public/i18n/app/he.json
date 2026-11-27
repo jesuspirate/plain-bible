@@ -1363,10 +1363,10 @@
 "Bible versions": "תרגומי התנ״ך",
 "Switch to {version}. Hold for your Bibles": "מעבר אל {version}. לחיצה ארוכה לתנ״כים שלך",
 "Switch to {version} · hold for more": "מעבר אל {version} · לחיצה ארוכה לעוד",
-"Recent places": "מקומות אחרונים",
-"Back to {place}": "חזרה אל {place}",
-"Where you were reading": "איפה שקראת",
-"Tap to switch to the Bible you read before. Tap again to come back.": "הקש כדי לעבור לתנ״ך שקראת קודם. הקש שוב כדי לחזור.",
-"Hold to choose from your Bibles, or any of them.": "לחיצה ארוכה לבחירה מהתנ״כים שלך, או מכל אחד אחר.",
-"The places you were reading are in Settings → Recent places.": "המקומות שבהם קראת נמצאים בהגדרות ← מקומות אחרונים."
+"Back to {place}. Hold for recent places": "חזרה אל {place}. לחיצה ארוכה למקומות אחרונים",
+"Reading history": "היסטוריית קריאה",
+"Back to {place} · hold for more": "חזרה אל {place} · לחיצה ארוכה לעוד",
+"Go back": "חזרה",
+"After you jump somewhere else, tap here to go back to where you were reading.": "אחרי מעבר למקום אחר, הקשה כאן מחזירה למקום שבו קראת.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "הקישו על שם התנ״ך כדי לעבור לזה שקראתם קודם. החזיקו כדי לבחור אחר."
 }

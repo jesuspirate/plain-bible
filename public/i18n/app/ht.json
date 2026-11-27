@@ -1359,10 +1359,10 @@
 "Bible versions": "Vèsyon Bib la",
 "Switch to {version}. Hold for your Bibles": "Chanje pou {version}. Kenbe pou Bib ou yo",
 "Switch to {version} · hold for more": "Chanje pou {version} · kenbe pou plis",
-"Recent places": "Kote resan",
-"Back to {place}": "Retounen nan {place}",
-"Where you were reading": "Kote w t ap li",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Touche pou chanje pou Bib ou te li anvan an. Touche ankò pou retounen.",
-"Hold to choose from your Bibles, or any of them.": "Kenbe pou chwazi nan Bib ou yo, oswa nenpòt lòt.",
-"The places you were reading are in Settings → Recent places.": "Kote w t ap li yo nan Paramèt → Kote resan."
+"Back to {place}. Hold for recent places": "Retounen nan {place}. Kenbe l peze pou kote ou te ye dènyèman",
+"Reading history": "Istwa lekti",
+"Back to {place} · hold for more": "Retounen nan {place} · kenbe l peze pou plis",
+"Go back": "Retounen",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Apre ou ale yon lòt kote, peze isit la pou retounen kote ou t ap li a.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tape non Bib la pou chanje al sou sa ou te li anvan an. Kenbe l pou chwazi yon lòt."
 }

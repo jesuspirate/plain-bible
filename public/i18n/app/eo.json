@@ -1359,10 +1359,10 @@
 "Bible versions": "Bibliaj versioj",
 "Switch to {version}. Hold for your Bibles": "Ŝanĝi al {version}. Tenu por viaj Biblioj",
 "Switch to {version} · hold for more": "Ŝanĝi al {version} · tenu por pli",
-"Recent places": "Lastatempaj lokoj",
-"Back to {place}": "Reen al {place}",
-"Where you were reading": "Kie vi legis",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tuŝu por ŝanĝi al la Biblio, kiun vi legis antaŭe. Tuŝu denove por reveni.",
-"Hold to choose from your Bibles, or any of them.": "Tenu por elekti el viaj Biblioj, aŭ iun ajn.",
-"The places you were reading are in Settings → Recent places.": "La lokoj, kie vi legis, estas en Agordoj → Lastatempaj lokoj."
+"Back to {place}. Hold for recent places": "Reen al {place}. Tenu premita por lastaj lokoj",
+"Reading history": "Leghistorio",
+"Back to {place} · hold for more": "Reen al {place} · tenu premita por pli",
+"Go back": "Reen",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Post kiam vi saltis aliloken, tuŝetu ĉi tie por reveni al kie vi legis.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tuŝu la nomon de la Biblio por ŝanĝi al tiu, kiun vi legis antaŭe. Tenu ĝin por elekti alian."
 }

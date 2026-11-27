@@ -1469,10 +1469,10 @@
 "Bible versions": "Prevodi Svetega pisma",
 "Switch to {version}. Hold for your Bibles": "Preklopi na {version}. Pridržite za vaše Biblije",
 "Switch to {version} · hold for more": "Preklopi na {version} · pridržite za več",
-"Recent places": "Nedavna mesta",
-"Back to {place}": "Nazaj na {place}",
-"Where you were reading": "Kjer ste brali",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tapnite za preklop na Biblijo, ki ste jo brali prej. Tapnite znova za vrnitev.",
-"Hold to choose from your Bibles, or any of them.": "Pridržite za izbiro med vašimi Biblijami ali katero koli drugo.",
-"The places you were reading are in Settings → Recent places.": "Mesta, kjer ste brali, so v Nastavitve → Nedavna mesta."
+"Back to {place}. Hold for recent places": "Nazaj: {place}. Pridržite za nedavna mesta",
+"Reading history": "Zgodovina branja",
+"Back to {place} · hold for more": "Nazaj: {place} · pridržite za več",
+"Go back": "Nazaj",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ko skočite drugam, tapnite tukaj, da se vrnete tja, kjer ste brali.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tapnite ime Svetega pisma za preklop na tisto, ki ste ga brali prej. Pridržite za izbiro drugega."
 }

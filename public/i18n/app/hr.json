@@ -1447,10 +1447,10 @@
 "Bible versions": "Prijevodi Biblije",
 "Switch to {version}. Hold for your Bibles": "Prebaci na {version}. Zadržite za svoje Biblije",
 "Switch to {version} · hold for more": "Prebaci na {version} · zadržite za više",
-"Recent places": "Nedavna mjesta",
-"Back to {place}": "Natrag na {place}",
-"Where you were reading": "Gdje ste čitali",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Dodirnite za prelazak na Bibliju koju ste prije čitali. Dodirnite opet za povratak.",
-"Hold to choose from your Bibles, or any of them.": "Zadržite za odabir među svojim Biblijama ili bilo kojom drugom.",
-"The places you were reading are in Settings → Recent places.": "Mjesta gdje ste čitali nalaze se u Postavke → Nedavna mjesta."
+"Back to {place}. Hold for recent places": "Natrag na {place}. Držite za nedavna mjesta",
+"Reading history": "Povijest čitanja",
+"Back to {place} · hold for more": "Natrag na {place} · držite za više",
+"Go back": "Natrag",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Nakon što odete negdje drugdje, dodirnite ovdje za povratak na mjesto gdje ste čitali.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Dodirnite naziv Biblije za prijelaz na onu koju ste čitali prije. Zadržite za odabir druge."
 }

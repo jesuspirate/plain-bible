@@ -1359,10 +1359,10 @@
 "Bible versions": "聖書の訳",
 "Switch to {version}. Hold for your Bibles": "{version} に切り替え。長押しでいつもの聖書",
 "Switch to {version} · hold for more": "{version} に切り替え · 長押しでその他",
-"Recent places": "最近の場所",
-"Back to {place}": "{place} に戻る",
-"Where you were reading": "読んでいた場所",
-"Tap to switch to the Bible you read before. Tap again to come back.": "タップで前に読んでいた聖書に切り替え。もう一度タップで戻ります。",
-"Hold to choose from your Bibles, or any of them.": "長押しで、いつもの聖書やほかの訳から選べます。",
-"The places you were reading are in Settings → Recent places.": "読んでいた場所は 設定 → 最近の場所 にあります。"
+"Back to {place}. Hold for recent places": "{place} に戻る。長押しで最近の場所を表示",
+"Reading history": "読書の履歴",
+"Back to {place} · hold for more": "{place} に戻る・長押しでさらに表示",
+"Go back": "戻る",
+"After you jump somewhere else, tap here to go back to where you were reading.": "別の場所に移動したあと、ここをタップすると読んでいた場所に戻れます。",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "聖書の名前をタップすると、前に読んでいた聖書に切り替わります。長押しで別の聖書を選べます。"
 }

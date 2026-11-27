@@ -1359,10 +1359,10 @@
 "Bible versions": "বাইবেলের সংস্করণ",
 "Switch to {version}. Hold for your Bibles": "{version}-এ যান. আপনার বাইবেলগুলোর জন্য চেপে ধরুন",
 "Switch to {version} · hold for more": "{version}-এ যান · আরও দেখতে চেপে ধরুন",
-"Recent places": "সাম্প্রতিক জায়গা",
-"Back to {place}": "{place}-এ ফিরে যান",
-"Where you were reading": "যেখানে আপনি পড়ছিলেন",
-"Tap to switch to the Bible you read before. Tap again to come back.": "আগে পড়া বাইবেলে যেতে ট্যাপ করুন। ফিরে আসতে আবার ট্যাপ করুন।",
-"Hold to choose from your Bibles, or any of them.": "আপনার বাইবেলগুলো বা যেকোনোটি বেছে নিতে চেপে ধরুন।",
-"The places you were reading are in Settings → Recent places.": "যেখানে আপনি পড়ছিলেন সেই জায়গাগুলো সেটিংস → সাম্প্রতিক জায়গা-এ আছে।"
+"Back to {place}. Hold for recent places": "{place}-এ ফিরে যান। সাম্প্রতিক জায়গাগুলির জন্য চেপে ধরে রাখুন",
+"Reading history": "পড়ার ইতিহাস",
+"Back to {place} · hold for more": "{place}-এ ফিরে যান · আরও দেখতে চেপে ধরে রাখুন",
+"Go back": "ফিরে যান",
+"After you jump somewhere else, tap here to go back to where you were reading.": "অন্য কোথাও চলে যাওয়ার পর, যেখানে পড়ছিলেন সেখানে ফিরতে এখানে ট্যাপ করুন।",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "আগে পড়া বাইবেলে যেতে বাইবেলের নামে চাপুন। অন্যটি বেছে নিতে চেপে ধরে রাখুন।"
 }

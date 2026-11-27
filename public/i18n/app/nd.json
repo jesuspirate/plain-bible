@@ -1359,10 +1359,10 @@
 "Bible versions": "Izinguqulo zeBhayibhili",
 "Switch to {version}. Hold for your Bibles": "Guqulela ku {version}. Bamba ukuze ubone amaBhayibhili akho",
 "Switch to {version} · hold for more": "Guqulela ku {version} · bamba ukuze ubone okunye",
-"Recent places": "Indawo zakamuva",
-"Back to {place}": "Buyela ku-{place}",
-"Where you were reading": "Lapho obufunda khona",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Thinta ukuze uguqulele kuBhayibhili obulifunda kuqala. Thinta futhi ukuze ubuyele.",
-"Hold to choose from your Bibles, or any of them.": "Bamba ukuze ukhethe kumaBhayibhili akho, loba yiliphi.",
-"The places you were reading are in Settings → Recent places.": "Indawo obufunda kuzo zisemu Izilungiselelo → Indawo zakamuva."
+"Back to {place}. Hold for recent places": "Buyela ku-{place}. Bambani ukuze libone izindawo zakamuva",
+"Reading history": "Umlando wokubala",
+"Back to {place} · hold for more": "Buyela ku-{place} · bambani ukuze libone okunye",
+"Go back": "Buyela",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ngemva kokuya kwenye indawo, thintani lapha ukuze libuyele lapho ebelibala khona.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Thinta ibizo leBhayibhili ukuze uye kuleyo obuyibala ngaphambili. Libambe ukuze ukhethe enye."
 }

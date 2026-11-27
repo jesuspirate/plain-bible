@@ -1359,10 +1359,10 @@
 "Bible versions": "Dagiti bersion ti Biblia",
 "Switch to {version}. Hold for your Bibles": "Agbalin iti {version}. Iggaman para kadagiti Bibliam",
 "Switch to {version} · hold for more": "Agbalin iti {version} · iggaman para kadagiti dadduma",
-"Recent places": "Dagiti naudi a lugar",
-"Back to {place}": "Agsubli iti {place}",
-"Where you were reading": "No sadino ti binasam",
-"Tap to switch to the Bible you read before. Tap again to come back.": "I-tap tapno agbalin iti Biblia a binasam idi. I-tap manen tapno agsubli.",
-"Hold to choose from your Bibles, or any of them.": "Iggaman tapno agpili kadagiti Bibliam, wenno aniaman.",
-"The places you were reading are in Settings → Recent places.": "Dagiti lugar a nagbasaam ket adda iti Dagiti Setting → Dagiti naudi a lugar."
+"Back to {place}. Hold for recent places": "Agsubli iti {place}. Petpetam para kadagiti kaudian a lugar",
+"Reading history": "Pakasaritaan ti panagbasa",
+"Back to {place} · hold for more": "Agsubli iti {place} · petpetam para iti ad-adu pay",
+"Go back": "Agsubli",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Kalpasan ti panagakarmo iti sabali a lugar, i-tap ditoy tapno agsubli iti ayan ti basbasaem.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Taptapen ti nagan ti Biblia tapno umakar iti binasam idi. Iggaman tapno mangpili iti sabali."
 }

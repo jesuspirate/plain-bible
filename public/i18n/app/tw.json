@@ -1359,10 +1359,10 @@
 "Bible versions": "Bible nkyerɛaseɛ",
 "Switch to {version}. Hold for your Bibles": "Sesa kɔ {version}. Kura mu hwɛ wo Bible ahodoɔ",
 "Switch to {version} · hold for more": "Sesa kɔ {version} · kura mu hwɛ foforɔ",
-"Recent places": "Mmeaeɛ a aba nnansa yi",
-"Back to {place}": "San kɔ {place}",
-"Where you were reading": "Baabi a na wokenkan",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Mia so sesa kɔ Bible a wokenkanee kane no so. Mia so bio na san bra.",
-"Hold to choose from your Bibles, or any of them.": "Kura mu na paw fi wo Bible ahodoɔ mu, anaa biara.",
-"The places you were reading are in Settings → Recent places.": "Mmeaeɛ a na wokenkan no wɔ Nhyehyɛe → Mmeaeɛ a aba nnansa yi."
+"Back to {place}. Hold for recent places": "San kɔ {place}. Mia so kyɛ na hu mmeae a woakɔ nnansa yi",
+"Reading history": "Nea woakenkan",
+"Back to {place} · hold for more": "San kɔ {place} · mia so kyɛ na hu pii",
+"Go back": "San kɔ",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Sɛ wokɔ baabi foforo a, mia ha na san kɔ faako a na wokenkan no.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Mia Bible no din so na wo ko nea wokenkanee kan no so. Kura mu na wo yi foforo."
 }

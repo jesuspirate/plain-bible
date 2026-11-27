@@ -1359,10 +1359,10 @@
 "Bible versions": "Àwọn ẹ̀dà Bíbélì",
 "Switch to {version}. Hold for your Bibles": "Yípadà sí {version}. Tẹ mọ́lẹ̀ fún àwọn Bíbélì rẹ",
 "Switch to {version} · hold for more": "Yípadà sí {version} · tẹ mọ́lẹ̀ fún púpọ̀ sí i",
-"Recent places": "Àwọn ibi àìpẹ́",
-"Back to {place}": "Padà sí {place}",
-"Where you were reading": "Ibi tí o ti ń kà",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tẹ̀ láti yípadà sí Bíbélì tí o kà tẹ́lẹ̀. Tẹ̀ lẹ́ẹ̀kan sí i láti padà.",
-"Hold to choose from your Bibles, or any of them.": "Tẹ mọ́lẹ̀ láti yan nínú àwọn Bíbélì rẹ, tàbí èyíkéyìí.",
-"The places you were reading are in Settings → Recent places.": "Àwọn ibi tí o ti ń kà wà ní Ètò → Àwọn ibi àìpẹ́."
+"Back to {place}. Hold for recent places": "Padà sí {place}. Ẹ tẹ̀ ẹ́ mọ́lẹ̀ fún àwọn ibi àìpẹ́ yìí",
+"Reading history": "Ìtàn kíkà",
+"Back to {place} · hold for more": "Padà sí {place} · tẹ̀ ẹ́ mọ́lẹ̀ fún púpọ̀ sí i",
+"Go back": "Padà",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Lẹ́yìn tí ẹ bá lọ síbòmíràn, ẹ tẹ ibí láti padà sí ibi tí ẹ ti ń kà.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tẹ orúkọ Bíbélì láti padà sí èyí tí o kà tẹ́lẹ̀. Dì í mú láti yan òmíràn."
 }

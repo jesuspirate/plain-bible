@@ -1359,10 +1359,10 @@
 "Bible versions": "Bijbelvertalingen",
 "Switch to {version}. Hold for your Bibles": "Naar {version}. Vasthouden voor je Bijbels",
 "Switch to {version} · hold for more": "Naar {version} · vasthouden voor meer",
-"Recent places": "Recente plekken",
-"Back to {place}": "Terug naar {place}",
-"Where you were reading": "Waar je aan het lezen was",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tik om naar de Bijbel te gaan die je eerder las. Tik nog eens om terug te gaan.",
-"Hold to choose from your Bibles, or any of them.": "Houd vast om uit je Bijbels te kiezen, of een andere.",
-"The places you were reading are in Settings → Recent places.": "De plekken waar je las staan bij Instellingen → Recente plekken."
+"Back to {place}. Hold for recent places": "Terug naar {place}. Houd vast voor recente plaatsen",
+"Reading history": "Leesgeschiedenis",
+"Back to {place} · hold for more": "Terug naar {place} · houd vast voor meer",
+"Go back": "Terug",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ben je ergens anders heen gesprongen, tik dan hier om terug te gaan naar waar je las.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tik op de naam van de Bijbel om te wisselen naar de vorige. Houd vast om een andere te kiezen."
 }

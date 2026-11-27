@@ -1359,10 +1359,10 @@
 "Bible versions": "Mga bersyon ng Bibliya",
 "Switch to {version}. Hold for your Bibles": "Lumipat sa {version}. Pindutin nang matagal para sa iyong mga Bibliya",
 "Switch to {version} · hold for more": "Lumipat sa {version} · pindutin nang matagal para sa iba pa",
-"Recent places": "Mga kamakailang lugar",
-"Back to {place}": "Bumalik sa {place}",
-"Where you were reading": "Kung saan ka nagbabasa",
-"Tap to switch to the Bible you read before. Tap again to come back.": "I-tap para lumipat sa Bibliyang binasa mo dati. I-tap muli para bumalik.",
-"Hold to choose from your Bibles, or any of them.": "Pindutin nang matagal para pumili sa iyong mga Bibliya, o alinman.",
-"The places you were reading are in Settings → Recent places.": "Ang mga lugar kung saan ka nagbasa ay nasa Mga Setting → Mga kamakailang lugar."
+"Back to {place}. Hold for recent places": "Bumalik sa {place}. Pindutin nang matagal para sa mga kamakailang lugar",
+"Reading history": "Kasaysayan ng pagbasa",
+"Back to {place} · hold for more": "Bumalik sa {place} · pindutin nang matagal para sa iba pa",
+"Go back": "Bumalik",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Pagkatapos mong pumunta sa ibang lugar, i-tap dito para bumalik sa binabasa mo.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "I-tap ang pangalan ng Bibliya para lumipat sa binasa mo dati. Pindutin nang matagal para pumili ng iba."
 }

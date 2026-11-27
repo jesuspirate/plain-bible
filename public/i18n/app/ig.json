@@ -1359,10 +1359,10 @@
 "Bible versions": "Nsụgharị Baịbụl",
 "Switch to {version}. Hold for your Bibles": "Gbanwee gaa {version}. Jide maka Baịbụl gị",
 "Switch to {version} · hold for more": "Gbanwee gaa {version} · jide maka ndị ọzọ",
-"Recent places": "Ebe ndị na-adịbeghị anya",
-"Back to {place}": "Laghachi na {place}",
-"Where you were reading": "Ebe ị na-agụ",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Pịa ka ịgbanwee gaa na Baịbụl ị gụrụ na mbụ. Pịa ọzọ ka ịlaghachi.",
-"Hold to choose from your Bibles, or any of them.": "Jide ka ịhọrọ site na Baịbụl gị, ma ọ bụ nke ọ bụla.",
-"The places you were reading are in Settings → Recent places.": "Ebe ị na-agụ dị na Ntọala → Ebe ndị na-adịbeghị anya."
+"Back to {place}. Hold for recent places": "Laghachi na {place}. Jide ya maka ebe ndị na-adịbeghị anya",
+"Reading history": "Akụkọ ọgụgụ",
+"Back to {place} · hold for more": "Laghachi na {place} · jide maka ndị ọzọ",
+"Go back": "Laghachi",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Mgbe ị gara ebe ọzọ, pịa ebe a ka ị laghachi ebe ị na-agụ.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Pịa aha Baịbụl ka ị gaa na nke i gụrụ na mbụ. Jide ya ka ị họrọ ọzọ."
 }

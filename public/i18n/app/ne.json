@@ -1359,10 +1359,10 @@
 "Bible versions": "बाइबलका संस्करणहरू",
 "Switch to {version}. Hold for your Bibles": "{version} मा जानुहोस्. आफ्ना बाइबलहरूका लागि थिचिराख्नुहोस्",
 "Switch to {version} · hold for more": "{version} मा जानुहोस् · थपका लागि थिचिराख्नुहोस्",
-"Recent places": "हालका ठाउँहरू",
-"Back to {place}": "{place} मा फर्कनुहोस्",
-"Where you were reading": "जहाँ तपाईं पढ्दै हुनुहुन्थ्यो",
-"Tap to switch to the Bible you read before. Tap again to come back.": "पहिले पढेको बाइबलमा जान ट्याप गर्नुहोस्। फर्कन फेरि ट्याप गर्नुहोस्।",
-"Hold to choose from your Bibles, or any of them.": "आफ्ना बाइबलहरूबाट वा कुनै पनि छान्न थिचिराख्नुहोस्।",
-"The places you were reading are in Settings → Recent places.": "तपाईंले पढेका ठाउँहरू सेटिङ → हालका ठाउँहरू मा छन्।"
+"Back to {place}. Hold for recent places": "{place} मा फर्कनुहोस्। हालका ठाउँहरूका लागि थिचिराख्नुहोस्",
+"Reading history": "पढाइको इतिहास",
+"Back to {place} · hold for more": "{place} मा फर्कनुहोस् · थपका लागि थिचिराख्नुहोस्",
+"Go back": "पछाडि जानुहोस्",
+"After you jump somewhere else, tap here to go back to where you were reading.": "अन्त कतै गएपछि, पढ्दै गरेको ठाउँमा फर्कन यहाँ थिच्नुहोस्।",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "पहिले पढेको बाइबलमा जान बाइबलको नाममा ट्याप गर्नुहोस्। अर्को रोज्न थिचिराख्नुहोस्।"
 }

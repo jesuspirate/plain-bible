@@ -1469,10 +1469,10 @@
 "Bible versions": "Překlady Bible",
 "Switch to {version}. Hold for your Bibles": "Přepnout na {version}. Podržte pro vaše Bible",
 "Switch to {version} · hold for more": "Přepnout na {version} · podržte pro další",
-"Recent places": "Nedávná místa",
-"Back to {place}": "Zpět na {place}",
-"Where you were reading": "Kde jste četli",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Klepněte pro přepnutí na Bibli, kterou jste četli předtím. Klepněte znovu pro návrat.",
-"Hold to choose from your Bibles, or any of them.": "Podržte a vyberte z vašich Biblí nebo jakoukoli jinou.",
-"The places you were reading are in Settings → Recent places.": "Místa, kde jste četli, najdete v Nastavení → Nedávná místa."
+"Back to {place}. Hold for recent places": "Zpět: {place}. Podržením zobrazíte nedávná místa",
+"Reading history": "Historie čtení",
+"Back to {place} · hold for more": "Zpět: {place} · podržením zobrazíte další",
+"Go back": "Zpět",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Když přejdete jinam, klepnutím sem se vrátíte tam, kde jste četli.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Klepnutím na název Bible přepnete na tu, kterou jste četli předtím. Podržením vyberete jinou."
 }

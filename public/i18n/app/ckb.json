@@ -1359,10 +1359,10 @@
 "Bible versions": "وەرگێڕانەکانی کتێبی پیرۆز",
 "Switch to {version}. Hold for your Bibles": "گۆڕین بۆ {version}. بۆ کتێبە پیرۆزەکانت دایبگرە",
 "Switch to {version} · hold for more": "گۆڕین بۆ {version} · بۆ زیاتر دایبگرە",
-"Recent places": "شوێنە دواییەکان",
-"Back to {place}": "گەڕانەوە بۆ {place}",
-"Where you were reading": "ئەو شوێنەی دەتخوێندەوە",
-"Tap to switch to the Bible you read before. Tap again to come back.": "لێی بدە بۆ گۆڕین بۆ ئەو کتێبە پیرۆزەی پێشتر دەتخوێندەوە. دووبارە لێی بدە بۆ گەڕانەوە.",
-"Hold to choose from your Bibles, or any of them.": "دایبگرە بۆ هەڵبژاردن لە کتێبە پیرۆزەکانت یان هەر یەکێکی تر.",
-"The places you were reading are in Settings → Recent places.": "ئەو شوێنانەی دەتخوێندەوە لە ڕێکخستنەکان ← شوێنە دواییەکان دان."
+"Back to {place}. Hold for recent places": "گەڕانەوە بۆ {place}. دایبگرە بۆ شوێنە دوایینەکان",
+"Reading history": "مێژووی خوێندنەوە",
+"Back to {place} · hold for more": "گەڕانەوە بۆ {place} · دایبگرە بۆ زیاتر",
+"Go back": "گەڕانەوە",
+"After you jump somewhere else, tap here to go back to where you were reading.": "دوای چوون بۆ شوێنێکی تر، کرتە لێرە بکە بۆ گەڕانەوە بۆ ئەو شوێنەی دەتخوێندەوە.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "دەست لە ناوی کتێبی پیرۆز بدە بۆ گۆڕین بۆ ئەوەی پێشتر خوێندتەوە. ڕایبگرە بۆ هەڵبژاردنی یەکێکی تر."
 }

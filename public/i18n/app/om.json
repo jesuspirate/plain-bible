@@ -1359,10 +1359,10 @@
 "Bible versions": "Hiikkaawwan Macaafa Qulqulluu",
 "Switch to {version}. Hold for your Bibles": "Gara {version} jijjiiri. Macaafota Qulqulluu keetiif qabadhu",
 "Switch to {version} · hold for more": "Gara {version} jijjiiri · dabalataaf qabadhu",
-"Recent places": "Bakkeewwan dhiyoo",
-"Back to {place}": "Gara {place} tti deebi'i",
-"Where you were reading": "Bakka dubbisaa turte",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Macaafa Qulqulluu kanaan dura dubbifte irratti jijjiiruuf tuqi. Deebi'uuf irra deebi'ii tuqi.",
-"Hold to choose from your Bibles, or any of them.": "Macaafota Qulqulluu kee keessaa ykn kamiyyuu filachuuf qabadhu.",
-"The places you were reading are in Settings → Recent places.": "Bakkeewwan dubbisaa turte Qindaa'ina → Bakkeewwan dhiyoo keessa jiru."
+"Back to {place}. Hold for recent places": "Gara {place} tti deebi'i. Iddoowwan dhiyoo kana dubbiste arguuf qabadhu",
+"Reading history": "Seenaa dubbisaa",
+"Back to {place} · hold for more": "Gara {place} tti deebi'i · dabalataaf qabadhu",
+"Go back": "Duubatti deebi'i",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Erga bakka biraa deemtee booda, gara iddoo itti dubbisaa turteetti deebi'uuf asitti tuqi.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Gara Macaafa Qulqulluu duraan dubbiste deebi’uuf maqaa isaa tuqi. Kan biraa filachuuf qabadhu."
 }

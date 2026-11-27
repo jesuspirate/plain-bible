@@ -1359,10 +1359,10 @@
 "Bible versions": "Dikan-teny ny Baiboly",
 "Switch to {version}. Hold for your Bibles": "Hiova ho amin'ny {version}. Tazomy hahitana ny Baibolinao",
 "Switch to {version} · hold for more": "Hiova ho amin'ny {version} · tazomy hahitana bebe kokoa",
-"Recent places": "Toerana farany",
-"Back to {place}": "Hiverina any amin’ny {place}",
-"Where you were reading": "Teo amin'izay novakianao",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tsindrio hiova amin'ny Baiboly novakianao teo aloha. Tsindrio indray hiverenana.",
-"Hold to choose from your Bibles, or any of them.": "Tazomy hisafidianana amin'ny Baibolinao, na izay rehetra.",
-"The places you were reading are in Settings → Recent places.": "Ny toerana novakianao dia ao amin'ny Fikirana → Toerana farany."
+"Back to {place}. Hold for recent places": "Hiverina any amin’ny {place}. Tsindrio ela raha hahita ireo toerana farany",
+"Reading history": "Tantaran’ny famakiana",
+"Back to {place} · hold for more": "Hiverina any amin’ny {place} · tsindrio ela raha hahita bebe kokoa",
+"Go back": "Hiverina",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Rehefa avy nankany an-kafa ianao, tsindrio eto raha hiverina amin’izay namakianao.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tsindrio ny anaran’ny Baiboly mba hiverina amin’ilay novakianao teo aloha. Tazony mba hisafidianana hafa."
 }

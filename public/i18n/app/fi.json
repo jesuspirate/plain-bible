@@ -1359,10 +1359,10 @@
 "Bible versions": "Raamatunkäännökset",
 "Switch to {version}. Hold for your Bibles": "Vaihda: {version}. Pidä painettuna: omat Raamattusi",
 "Switch to {version} · hold for more": "Vaihda: {version} · pidä painettuna: lisää",
-"Recent places": "Viimeisimmät kohdat",
-"Back to {place}": "Takaisin: {place}",
-"Where you were reading": "Missä luit",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Napauta vaihtaaksesi aiemmin lukemaasi Raamattuun. Napauta uudelleen palataksesi.",
-"Hold to choose from your Bibles, or any of them.": "Pidä painettuna valitaksesi omista Raamatuistasi tai mistä tahansa.",
-"The places you were reading are in Settings → Recent places.": "Kohdat, joissa luit, löytyvät kohdasta Asetukset → Viimeisimmät kohdat."
+"Back to {place}. Hold for recent places": "Takaisin: {place}. Pidä painettuna nähdäksesi viimeisimmät kohdat",
+"Reading history": "Lukuhistoria",
+"Back to {place} · hold for more": "Takaisin: {place} · pidä painettuna nähdäksesi lisää",
+"Go back": "Palaa",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Kun olet siirtynyt muualle, napauta tästä palataksesi kohtaan, jota luit.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Napauta Raamatun nimeä vaihtaaksesi siihen, jota luit aiemmin. Pidä painettuna valitaksesi toisen."
 }

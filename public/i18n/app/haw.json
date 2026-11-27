@@ -1359,10 +1359,10 @@
 "Bible versions": "Nā unuhi Baibala",
 "Switch to {version}. Hold for your Bibles": "Hoʻololi i {version}. Paʻa no kāu mau Baibala",
 "Switch to {version} · hold for more": "Hoʻololi i {version} · paʻa no nā mea hou aʻe",
-"Recent places": "Nā wahi hou",
-"Back to {place}": "Hoʻi iā {place}",
-"Where you were reading": "Kahi āu i heluhelu ai",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Kaomi e hoʻololi i ka Baibala āu i heluhelu mua ai. Kaomi hou e hoʻi.",
-"Hold to choose from your Bibles, or any of them.": "Paʻa e koho mai kāu mau Baibala, a i ʻole kekahi.",
-"The places you were reading are in Settings → Recent places.": "Aia nā wahi āu i heluhelu ai ma Nā Hoʻonohonoho → Nā wahi hou."
+"Back to {place}. Hold for recent places": "Hoʻi iā {place}. E kaomi lōʻihi no nā wahi hou nei",
+"Reading history": "Moʻolelo heluhelu",
+"Back to {place} · hold for more": "Hoʻi iā {place} · e kaomi lōʻihi no nā mea hou aku",
+"Go back": "Hoʻi",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Ma hope o kou lele ʻana i kahi ʻē, e kaomi ma ʻaneʻi e hoʻi i kāu wahi heluhelu.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Kaomi i ka inoa o ka Baibala e hoʻololi i ka mea āu i heluhelu ai ma mua. E paʻa ia e koho i kekahi ʻē aʻe."
 }

@@ -1359,10 +1359,10 @@
 "Bible versions": "Versioni della Bibbia",
 "Switch to {version}. Hold for your Bibles": "Passa a {version}. Tieni premuto per le tue Bibbie",
 "Switch to {version} · hold for more": "Passa a {version} · tieni premuto per altre",
-"Recent places": "Luoghi recenti",
-"Back to {place}": "Torna a {place}",
-"Where you were reading": "Dove stavi leggendo",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tocca per passare alla Bibbia letta prima. Tocca di nuovo per tornare.",
-"Hold to choose from your Bibles, or any of them.": "Tieni premuto per scegliere tra le tue Bibbie, o qualsiasi altra.",
-"The places you were reading are in Settings → Recent places.": "I punti dove stavi leggendo sono in Impostazioni → Luoghi recenti."
+"Back to {place}. Hold for recent places": "Torna a {place}. Tieni premuto per i luoghi recenti",
+"Reading history": "Cronologia di lettura",
+"Back to {place} · hold for more": "Torna a {place} · tieni premuto per altro",
+"Go back": "Indietro",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Dopo essere andato altrove, tocca qui per tornare dove stavi leggendo.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tocca il nome della Bibbia per passare a quella letta prima. Tienilo premuto per sceglierne un’altra."
 }

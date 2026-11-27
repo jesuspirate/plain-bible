@@ -93,6 +93,8 @@ function steps(): Step[] {
     // find, and are told under Settings → Font and layout → Search bar.
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap],
       after: [t('After a search, open it again to go back to your last result.'),
+        // The Bible switcher pill, beside the place you're reading.
+        ...(document.querySelector('.sb-version') ? [t('Tap the Bible’s name to switch to the one you read before. Hold it to choose another.')] : []),
         // Read along, if ticked under Audio, sits at the field's right end.
         ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.'), t('While it reads, tap any verse to read on from there.'), t('Tap the verse being read to highlight or share it.')] : []),
         // With a keyboard, / opens it from anywhere.
@@ -106,13 +108,7 @@ function steps(): Step[] {
         { glyph: 'hold', text: t('Hold 🙏 to choose its skin tone') },
       ], after: hasWidget() ? t('A 🙏 widget for your Home Screen comes with the app.') : undefined,
       moves: [{ kind: 'tap', row: 0 }, { kind: 'hold', row: 1 }] },
-    // Where the history clock was. Its places are in Settings now: one line
-    // here says so, for those who used it.
-    { title: t('Bible versions'), find: onScreen('.version-btn'), rows: [
-        { glyph: 'tap', text: t('Tap to switch to the Bible you read before. Tap again to come back.') },
-        { glyph: 'hold', text: t('Hold to choose from your Bibles, or any of them.') },
-      ], after: t('The places you were reading are in Settings → Recent places.'),
-      moves: [{ kind: 'tap', row: 0 }, { kind: 'hold', row: 1 }] },
+    { title: t('Go back'), body: t('After you jump somewhere else, tap here to go back to where you were reading.'), find: onScreen('.history-btn'), moves: [tap] },
     { title: t('Settings'), body: t('Your Bible, text size, theme, language and account are all here.') + ' ' + (sync ? t('Once signed in, your other devices offer to continue where you stopped reading.') + ' ' : '') + t('You can take this tour again from Settings.'), find: onScreen('.profile-btn'), moves: [tap] },
   ]
   return all.filter((s): s is Step => !!s)

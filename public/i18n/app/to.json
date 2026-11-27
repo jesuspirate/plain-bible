@@ -1359,10 +1359,10 @@
 "Bible versions": "Ngaahi liliu ʻo e Tohi Tapu",
 "Switch to {version}. Hold for your Bibles": "Liliu ki he {version}. Puke ke sio ki hoʻo ngaahi Tohi Tapu",
 "Switch to {version} · hold for more": "Liliu ki he {version} · puke ke sio ki ha toe",
-"Recent places": "Ngaahi feituʻu fakamuimui",
-"Back to {place}": "Foki ki he {place}",
-"Where you were reading": "Feituʻu naʻá ke lau ai",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tā ke liliu ki he Tohi Tapu naʻá ke lau kimuʻa. Toe tā ke foki.",
-"Hold to choose from your Bibles, or any of them.": "Puke ke fili mei hoʻo ngaahi Tohi Tapu, pe ha taha pē.",
-"The places you were reading are in Settings → Recent places.": "ʻOku ʻi he Ngaahi Fokotuʻutuʻu → Ngaahi feituʻu fakamuimui ʻa e ngaahi feituʻu naʻá ke lau ai."
+"Back to {place}. Hold for recent places": "Foki ki he {place}. Lomiʻi fuoloa ki he ngaahi feituʻu fakamuimui",
+"Reading history": "Hisitōlia ʻo e lau",
+"Back to {place} · hold for more": "Foki ki he {place} · lomiʻi fuoloa ki ha meʻa lahi ange",
+"Go back": "Foki",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Hili hoʻo hopo ki ha feituʻu kehe, lomiʻi heni ke foki ki he feituʻu naʻá ke lau ai.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Lomiʻi ʻa e hingoa ʻo e Tohitapú ke foki ki he taha naʻá ke lau kimuʻá. Puke ia ke fili ha taha kehe."
 }

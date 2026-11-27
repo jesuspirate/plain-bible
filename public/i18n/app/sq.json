@@ -1362,10 +1362,10 @@
 "Bible versions": "Përkthimet e Biblës",
 "Switch to {version}. Hold for your Bibles": "Kalo te {version}. Mbaj shtypur për Biblat e tua",
 "Switch to {version} · hold for more": "Kalo te {version} · mbaj shtypur për më shumë",
-"Recent places": "Vendet e fundit",
-"Back to {place}": "Kthehu te {place}",
-"Where you were reading": "Ku po lexoje",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Prek për të kaluar te Bibla që lexove më parë. Prek përsëri për t’u kthyer.",
-"Hold to choose from your Bibles, or any of them.": "Mbaj shtypur për të zgjedhur nga Biblat e tua, ose cilëndo tjetër.",
-"The places you were reading are in Settings → Recent places.": "Vendet ku lexoje janë te Cilësimet → Vendet e fundit."
+"Back to {place}. Hold for recent places": "Kthehu te {place}. Mbajeni shtypur për vendet e fundit",
+"Reading history": "Historiku i leximit",
+"Back to {place} · hold for more": "Kthehu te {place} · mbajeni shtypur për më shumë",
+"Go back": "Kthehu",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Pasi të kaloni diku tjetër, prekni këtu për t’u kthyer aty ku po lexonit.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Prekni emrin e Biblës për të kaluar te ajo që lexuat më parë. Mbajeni për të zgjedhur një tjetër."
 }

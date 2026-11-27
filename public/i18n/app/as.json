@@ -1359,10 +1359,10 @@
 "Bible versions": "বাইবেলৰ সংস্কৰণ",
 "Switch to {version}. Hold for your Bibles": "{version}লৈ যাওক. আপোনাৰ বাইবেলৰ বাবে টিপি ধৰক",
 "Switch to {version} · hold for more": "{version}লৈ যাওক · অধিকৰ বাবে টিপি ধৰক",
-"Recent places": "শেহতীয়া ঠাই",
-"Back to {place}": "{place}লৈ উভতি যাওক",
-"Where you were reading": "য'ত আপুনি পঢ়ি আছিল",
-"Tap to switch to the Bible you read before. Tap again to come back.": "আগতে পঢ়া বাইবেললৈ যাবলৈ টেপ কৰক। উভতি আহিবলৈ পুনৰ টেপ কৰক।",
-"Hold to choose from your Bibles, or any of them.": "আপোনাৰ বাইবেলৰ পৰা বা যিকোনো এখন বাছিবলৈ টিপি ধৰক।",
-"The places you were reading are in Settings → Recent places.": "আপুনি পঢ়া ঠাইবোৰ ছেটিংছ → শেহতীয়া ঠাইত আছে।"
+"Back to {place}. Hold for recent places": "{place}লৈ উভতি যাওক। শেহতীয়া ঠাইবোৰৰ বাবে টিপি ধৰি ৰাখক",
+"Reading history": "পঢ়াৰ ইতিহাস",
+"Back to {place} · hold for more": "{place}লৈ উভতি যাওক · অধিকৰ বাবে টিপি ধৰি ৰাখক",
+"Go back": "উভতি যাওক",
+"After you jump somewhere else, tap here to go back to where you were reading.": "আন ঠাইলৈ যোৱাৰ পিছত, য'ত পঢ়ি আছিল তালৈ উভতিবলৈ ইয়াত টিপক।",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "আগতে পঢ়া বাইবেললৈ যাবলৈ বাইবেলৰ নামটো টিপক। আন এখন বাছিবলৈ টিপি ধৰি ৰাখক।"
 }

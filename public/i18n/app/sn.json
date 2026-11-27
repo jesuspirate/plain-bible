@@ -1359,10 +1359,10 @@
 "Bible versions": "Shanduro dzeBhaibheri",
 "Switch to {version}. Hold for your Bibles": "Chinja kuenda ku {version}. Bata kuti uone maBhaibheri ako",
 "Switch to {version} · hold for more": "Chinja kuenda ku {version} · bata kuti uone zvimwe",
-"Recent places": "Nzvimbo dzichangobva",
-"Back to {place}": "Dzokera ku{place}",
-"Where you were reading": "Pawanga uchiverenga",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Dzvanya kuti uchinje kuenda kuBhaibheri rawaverenga kare. Dzvanya zvakare kudzoka.",
-"Hold to choose from your Bibles, or any of them.": "Bata kuti usarudze pamaBhaibheri ako, kana chero ripi.",
-"The places you were reading are in Settings → Recent places.": "Nzvimbo dzawanga uchiverenga dziri mu Marongero → Nzvimbo dzichangobva."
+"Back to {place}. Hold for recent places": "Dzokera ku{place}. Batai kuti muone nzvimbo dzichangobva",
+"Reading history": "Nhoroondo yekuverenga",
+"Back to {place} · hold for more": "Dzokera ku{place} · batai kuti muone zvimwe",
+"Go back": "Dzokera",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Mushure mekuenda kumwe, bayai pano kuti mudzokere pamaiverenga.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Baya zita reBhaibheri kuti uende kune rawakaverenga kare. Ribate kuti usarudze rimwe."
 }

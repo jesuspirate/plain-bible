@@ -1359,10 +1359,10 @@
 "Bible versions": "Ũtaũri wa Bibilia",
 "Switch to {version}. Hold for your Bibles": "Garũrũka ũthiĩ {version}. Nyiita nĩguo wone Mbibilia ciaku",
 "Switch to {version} · hold for more": "Garũrũka ũthiĩ {version} · nyiita nĩguo wone ingĩ",
-"Recent places": "Handũ ha rĩu",
-"Back to {place}": "Cooka {place}",
-"Where you were reading": "Harĩa warĩ ũgũthoma",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Hũtia nĩguo ũgarũrũke ũthiĩ Bibilia ĩrĩa wathomaga mbere. Hũtia rĩngĩ nĩguo ũcooke.",
-"Hold to choose from your Bibles, or any of them.": "Nyiita nĩguo ũthuure kuuma Mbibilia ciaku, kana o yothe.",
-"The places you were reading are in Settings → Recent places.": "Handũ harĩa warĩ ũgũthoma harĩ Mĩtaratara → Handũ ha rĩu."
+"Back to {place}. Hold for recent places": "Cooka {place}. Hatĩka ihinda nĩguo wone kũndũ wathomire hĩndĩ ĩno",
+"Reading history": "Kũndũ wathomete",
+"Back to {place} · hold for more": "Cooka {place} · hatĩka nĩguo wone makĩria",
+"Go back": "Cooka",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Thutha wa gũthiĩ kũndũ kũngĩ, hutia haha nĩguo ũcooke harĩa warathomaga.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Hutia rĩĩtwa rĩa Bibilia nĩguo ũthiĩ harĩ ĩrĩa wathomete mbere. Rĩnyiite nĩguo ũthuure ĩngĩ."
 }

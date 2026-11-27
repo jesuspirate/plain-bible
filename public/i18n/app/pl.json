@@ -1469,10 +1469,10 @@
 "Bible versions": "Przekłady Biblii",
 "Switch to {version}. Hold for your Bibles": "Przełącz na {version}. Przytrzymaj, aby zobaczyć swoje Biblie",
 "Switch to {version} · hold for more": "Przełącz na {version} · przytrzymaj, aby zobaczyć więcej",
-"Recent places": "Ostatnie miejsca",
-"Back to {place}": "Wróć do {place}",
-"Where you were reading": "Gdzie czytałeś",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Dotknij, aby przełączyć na Biblię czytaną wcześniej. Dotknij ponownie, aby wrócić.",
-"Hold to choose from your Bibles, or any of them.": "Przytrzymaj, aby wybrać spośród swoich Biblii lub dowolnej innej.",
-"The places you were reading are in Settings → Recent places.": "Miejsca, w których czytałeś, są w Ustawienia → Ostatnie miejsca."
+"Back to {place}. Hold for recent places": "Wróć: {place}. Przytrzymaj, aby zobaczyć ostatnie miejsca",
+"Reading history": "Historia czytania",
+"Back to {place} · hold for more": "Wróć: {place} · przytrzymaj, aby zobaczyć więcej",
+"Go back": "Wróć",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Gdy przejdziesz gdzie indziej, stuknij tutaj, aby wrócić do miejsca, w którym czytasz.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Dotknij nazwy Biblii, aby przejść do tej czytanej wcześniej. Przytrzymaj, aby wybrać inną."
 }

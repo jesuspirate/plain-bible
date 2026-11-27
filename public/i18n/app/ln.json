@@ -1359,10 +1359,10 @@
 "Bible versions": "Mabongoli ya Biblia",
 "Switch to {version}. Hold for your Bibles": "Kende na {version}. Simba mpo na Biblia na yo",
 "Switch to {version} · hold for more": "Kende na {version} · simba mpo na mosusu",
-"Recent places": "Bisika ya sika",
-"Back to {place}": "Zonga na {place}",
-"Where you were reading": "Esika ozalaki kotánga",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Finá mpo na kokende na Biblia oyo otángaki liboso. Finá lisusu mpo na kozonga.",
-"Hold to choose from your Bibles, or any of them.": "Simba mpo na kopona na kati ya Biblia na yo, to nyonso.",
-"The places you were reading are in Settings → Recent places.": "Bisika ozalaki kotánga ezali na Bibongiseli → Bisika ya sika."
+"Back to {place}. Hold for recent places": "Zonga na {place}. Simbá mpo na bisika ya sika",
+"Reading history": "Lisolo ya botángi",
+"Back to {place} · hold for more": "Zonga na {place} · simbá mpo na mosusu",
+"Go back": "Zonga",
+"After you jump somewhere else, tap here to go back to where you were reading.": "Sima ya kokende esika mosusu, finá awa mpo na kozonga epai ozalaki kotánga.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Simbá nkómbo ya Biblia mpo na kozonga na oyo otángaki liboso. Simbá yango mpo na kopona mosusu."
 }

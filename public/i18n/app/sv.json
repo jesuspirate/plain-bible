@@ -1359,10 +1359,10 @@
 "Bible versions": "Bibelöversättningar",
 "Switch to {version}. Hold for your Bibles": "Byt till {version}. Håll för dina biblar",
 "Switch to {version} · hold for more": "Byt till {version} · håll för fler",
-"Recent places": "Senaste ställen",
-"Back to {place}": "Tillbaka till {place}",
-"Where you were reading": "Där du läste",
-"Tap to switch to the Bible you read before. Tap again to come back.": "Tryck för att byta till bibeln du läste förut. Tryck igen för att komma tillbaka.",
-"Hold to choose from your Bibles, or any of them.": "Håll för att välja bland dina biblar, eller vilken som helst.",
-"The places you were reading are in Settings → Recent places.": "Ställena där du läste finns under Inställningar → Senaste ställen."
+"Back to {place}. Hold for recent places": "Tillbaka till {place}. Håll ned för senaste ställen",
+"Reading history": "Läshistorik",
+"Back to {place} · hold for more": "Tillbaka till {place} · håll ned för fler",
+"Go back": "Gå tillbaka",
+"After you jump somewhere else, tap here to go back to where you were reading.": "När du har hoppat någon annanstans trycker du här för att komma tillbaka dit du läste.",
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Tryck på Bibelns namn för att byta till den du läste innan. Håll in för att välja en annan."
 }
