@@ -257,7 +257,11 @@ export const shareWithCircle = (r: ShareRequest) => window.dispatchEvent(new Cus
 // until Done. `prayer`: a prayer already kept; without it, the one about to
 // be prayed, which opens again with them.
 export const PICK_EVENT = 'plain-bible:pick-verse'
-export type VersePick = { prayer?: string; verses: PrayerVerse[]; from: PrayerVerse[] }
+export type VersePick = { prayer?: string; verses: PrayerVerse[]; from: PrayerVerse[]
+  /** something you shared in a circle (a request or a prayer): Done changes
+   *  its verses there (`body`: what it holds now, maybe with new words) and
+   *  goes back to the circle */
+  circle?: { id: string; name: string; item: string; body: unknown } }
 let picking: VersePick | undefined
 /** The verses being picked for a prayer, if any. */
 export const versePick = () => picking

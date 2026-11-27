@@ -39,11 +39,12 @@ export type Shared =
   /** a note of yours: `note` is the note itself, `text` the verses it's on */
   | { k: 'note'; verse: PrayerVerse; version: string; text: string; size?: number; note: string }
   /** `prayed`: when it was prayed, which can be long before it was shared */
-  | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; verses?: PrayerVerse[]; note?: string; prayed?: number }
+  | { k: 'prayer'; ms: number; parts: { ms: number; type: string; size: number }[]; verse?: PrayerVerse; verses?: PrayerVerse[]; note?: string; prayed?: number; edited?: number }
   /** a prayer request, in a few words, for the whole circle to pray for.
    *  Each one who prays taps 🙏 (`amens`); nobody marks it answered.
    *  `again`: asked once more, after everyone had prayed. */
-  | { k: 'ask'; note: string; again?: boolean }
+  | { k: 'ask'; note: string; again?: boolean; verses?: PrayerVerse[]; edited?: number }
+/* `edited`: when the one who shared it last changed its words or verses. */
 
 /** `door`: an Open door circle, which you lead or are a member of. */
 export interface CircleInfo { id: string; name: string; members: number; door?: 'lead' | 'member' }
@@ -432,14 +433,18 @@ export function cleanShared(v: unknown): Shared | undefined {
     if (x.k === 'note') return note ? { k: 'note', ...base, note } : undefined
     return { k: x.k, ...base, note }
   }
-  if (x.k === 'ask') return note ? { k: 'ask', note, ...(x.again === true ? { again: true } : {}) } : undefined
+  const edited = Number.isFinite(x.edited) && (x.edited as number) > 0 ? { edited: x.edited as number } : {}
+  if (x.k === 'ask') {
+    const verses = cleanVerses(x.verses)
+    return note ? { k: 'ask', note, ...(x.again === true ? { again: true } : {}), ...(verses.length ? { verses } : {}), ...edited } : undefined
+  }
   if (x.k === 'prayer' && Array.isArray(x.parts)) {
     const parts = x.parts.filter(p => p && Number.isInteger(p.size) && p.size > 0 && typeof p.type === 'string')
       .map(p => ({ ms: Number(p.ms) || 0, type: text(p.type, 60), size: p.size as number }))
     if (!parts.length) return
     const prayed = Number.isFinite(x.prayed) && (x.prayed as number) > 0 ? x.prayed as number : undefined
     const verses = cleanVerses(x.verses)
-    return { k: 'prayer', ms: Number(x.ms) || 0, parts, verse: cleanVerse(x.verse), ...(verses.length > 1 ? { verses } : {}), note, ...(prayed ? { prayed } : {}) }
+    return { k: 'prayer', ms: Number(x.ms) || 0, parts, verse: cleanVerse(x.verse), ...(verses.length > 1 ? { verses } : {}), note, ...(prayed ? { prayed } : {}), ...edited }
   }
 }
 
@@ -588,6 +593,24 @@ async function send(circle: string, body: Shared, audio?: Uint8Array, up: Upload
   return id
 }
 
+/** Change what you shared: a request's words and verses, a prayer's verses.
+ *  Sealed again whole, marked edited; only the one who shared it can. */
+export async function editShared(circle: string, item: string, body: Shared) {
+  const clean = cleanShared({ ...body, edited: Date.now() })
+  if (!clean) return // a request with no words (Save is off then)
+  await api(`/circles/${circle}/items/${item}/body`, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), clean, `${circle}/${item}`) } })
+}
+/** A body with these verses in place of its own (the first one is `verse`
+ *  on a prayer, for apps that show only one). */
+export function withVerses(body: Shared, verses: PrayerVerse[]): Shared {
+  if (body.k === 'ask') { const { verses: _, ...rest } = body; return verses.length ? { ...rest, verses } : rest }
+  if (body.k === 'prayer') { const { verse: _v, verses: _vs, ...rest } = body; return { ...rest, ...(verses[0] ? { verse: verses[0] } : {}), ...(verses.length > 1 ? { verses } : {}) } }
+  return body
+}
+/** The verses on a request or a prayer, all of them. */
+export const sharedVerses = (body: Shared): PrayerVerse[] =>
+  body.k === 'ask' ? body.verses ?? [] : body.k === 'prayer' ? body.verses ?? (body.verse ? [body.verse] : []) : []
+
 /** Verses as they are, as a bookmark (others can bookmark them too with a
  *  tap), or with one of your notes on them. */
 export function shareVerse(circle: string, k: 'verse' | 'bookmark' | 'note', verse: PrayerVerse, version: string, quote: string, note?: string, size?: number, up?: Upload) {
@@ -683,8 +706,8 @@ export async function react(circle: string, item: string, mid: string, e: Reacti
 
 /** A prayer request for the whole circle: everyone in it reads it and
  *  prays. `again`: the same request once more, after everyone prayed. */
-export const askPrayer = (circle: string, note: string, again = false) =>
-  send(circle, { k: 'ask', note: note.trim().slice(0, 2000), ...(again ? { again: true } : {}) })
+export const askPrayer = (circle: string, note: string, again = false, verses: PrayerVerse[] = []) =>
+  send(circle, { k: 'ask', note: note.trim().slice(0, 2000), ...(again ? { again: true } : {}), ...(verses.length ? { verses } : {}) })
 
 /** The same prayer request asked before, by the same person, in the same
  *  words: Ask again is a new request, and these are the earlier rounds. */

@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, canShareInCircles as inCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -348,6 +348,14 @@ export function Reader({ route }: { route: Route }) {
     const p = picking
     pickVerses(undefined)
     if (!p) return
+    // Shared in a circle: changed there, for everyone, then back to it.
+    if (p.circle) {
+      const c = p.circle
+      const m = await import('./lib/circles')
+      const body = m.cleanShared(c.body)
+      if (body) await m.editShared(c.id, c.item, m.withVerses(body, p.verses)).catch(e => setTied((e as Error).message))
+      return openCircles({ id: c.id, name: c.name })
+    }
     // The prayer about to be prayed opens again, with them.
     if (!p.prayer) return prayOver(...p.verses)
     const { prayers } = await import('./lib/prayers')
@@ -361,7 +369,8 @@ export function Reader({ route }: { route: Route }) {
   const pickCancel = () => {
     const p = picking
     pickVerses(undefined)
-    if (p && !p.prayer) prayOver(...p.from)
+    if (p?.circle) openCircles({ id: p.circle.id, name: p.circle.name })
+    else if (p && !p.prayer) prayOver(...p.from)
   }
 
   const nav = (b: string, c: number, v?: number) => go(readPath(version, b, c, v, parallel))
@@ -1310,7 +1319,7 @@ export function Reader({ route }: { route: Route }) {
         onNote={vs => { barHeld.current = false; setSelected([]); openNote(vs) }} onPray={vs => { barHeld.current = false; setSelected([]); prayOver({ book, chapter, verses: vs }) }} />}
       {picking && (
         <div class="pick-verse" ref={pickLeave} role="region" aria-label={t('Verses for your prayer')}>
-          <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{t('Tap verses for your prayer')}</p>
+          <p class="pick-head"><span aria-hidden="true">{'🙏' + settings.prayTone} </span>{(picking.circle?.body as { k?: string } | undefined)?.k === 'ask' ? t('Tap verses for your prayer request') : t('Tap verses for your prayer')}</p>
           {picking.verses.length > 0 && <ul class="pick-list">
             {picking.verses.map(x => <li>
               <span>{verseLabel(x)}</span>

@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { answeredAt, askedOf, earlierAsks, prayedBefore, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
+import { withVerses, sharedVerses, answeredAt, askedOf, earlierAsks, prayedBefore, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -106,5 +106,17 @@ describe('prayer requests', () => {
     expect(prayedBefore(before, 'c')).toBe(1)
     expect(prayedBefore(before, 'b')).toBe(1)
     expect(earlierAsks(f, r2)).toEqual([])
+  })
+  it('keeps a request’s verses and when it was edited, and swaps verses in', () => {
+    const v = { book: 'John', chapter: 3, verses: [16] }, w = { book: 'Ps', chapter: 23, verses: [1] }
+    expect(cleanShared({ k: 'ask', note: 'Peace', verses: [v], edited: 9 })).toEqual({ k: 'ask', note: 'Peace', verses: [v], edited: 9 })
+    const ask = cleanShared({ k: 'ask', note: 'Peace', verses: [v] })!
+    expect(sharedVerses(withVerses(ask, [v, w]))).toEqual([v, w])
+    expect(withVerses(ask, [])).toEqual({ k: 'ask', note: 'Peace' })
+    const prayer = cleanShared({ k: 'prayer', ms: 1, parts: [{ ms: 1, type: 'audio/mp4', size: 3 }], verse: v })!
+    const two = withVerses(prayer, [w, v])
+    expect(two).toMatchObject({ verse: w, verses: [w, v] })
+    expect(sharedVerses(withVerses(two, [v]))).toEqual([v])
+    expect(withVerses(two, [])).not.toHaveProperty('verse')
   })
 })
