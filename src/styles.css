@@ -1576,22 +1576,23 @@ dialog.sheet[open]::backdrop { animation: sb-fade .22s ease-out; }
   .reader.picking .chapter [id^="v"], .pray-verse.picks { cursor: var(--pray-cursor, pointer); }
 }
 
-/* The faint 🙏 by the number of the verse a prayer would be kept with if you
-   prayed now (reader.tsx markPray): the verse you're about to read, else the
-   ones you selected, else the one being read aloud. It sits just above the
-   number, takes no room, and fades in once the page rests. --pray-mark is
-   your 🙏, in your skin tone (app.tsx). */
-:is(.pv, .verse) .vn { position: relative; }
-:is(.pv[data-pray] > .vn, .verse[data-pray] > .cell:first-child > .vn)::before,
-:is(.pv.picked > .vn, .verse.picked > .cell:first-child > .vn)::before,
-.reading-aloud :is(.pv.speaking > .vn, .verse.speaking > .cell:first-child > .vn)::before {
-  content: var(--pray-mark, "🙏"); position: absolute; left: 50%; bottom: 100%; transform: translateX(-50%);
-  font: .95em/1 var(--sans); margin-bottom: 1px; opacity: .32; pointer-events: none; animation: pray-mark-in .7s ease both;
+/* The faint 🙏 of the verse a prayer would be kept with if you prayed now
+   (reader.tsx markPray): the verse you're about to read, else the ones you
+   selected, else the one being read aloud. It sits in the line right after
+   the verse number, beside the bookmark and note marks, at their size, and
+   fades in once the page rests. --pray-mark is your 🙏, in your skin tone
+   (app.tsx). The number is small and raised, so the mark is set back to the
+   text's size and line. */
+:is(.pv[data-pray] > .vn, .verse[data-pray] > .cell:first-child > .vn)::after,
+:is(.pv.picked > .vn, .verse.picked > .cell:first-child > .vn)::after,
+.reading-aloud :is(.pv.speaking > .vn, .verse.speaking > .cell:first-child > .vn)::after {
+  content: var(--pray-mark, "🙏"); display: inline-block; font: 1.35em/1 var(--sans); vertical-align: -.45em;
+  margin: 0 .05em 0 .2em; opacity: .38; pointer-events: none; animation: pray-mark-in .7s ease both;
 }
 @keyframes pray-mark-in { from { opacity: 0 } }
 /* Only one place at a time: reading aloud, then picked verses, then here.
    Never in Teaching mode, so videos stay clean. */
-.reading-aloud :is(.pv, .verse)[data-pray]:not(.speaking) .vn::before,
-.reading-aloud :is(.pv, .verse).picked:not(.speaking) .vn::before,
-.chapter:has(.picked) :is(.pv, .verse)[data-pray]:not(.picked) .vn::before,
-.rec :is(.pv, .verse) .vn::before { content: none !important; }
+.reading-aloud :is(.pv, .verse)[data-pray]:not(.speaking) .vn::after,
+.reading-aloud :is(.pv, .verse).picked:not(.speaking) .vn::after,
+.chapter:has(.picked) :is(.pv, .verse)[data-pray]:not(.picked) .vn::after,
+.rec :is(.pv, .verse) .vn::after { content: none !important; }
