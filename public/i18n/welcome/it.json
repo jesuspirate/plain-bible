@@ -89,5 +89,6 @@
 "listenH": "Ascolta",
 "listenP": "Tocca un versetto, poi Ascolta. Oppure tocca Leggi seguendo nella barra di ricerca, e ogni parola si illumina mentre viene letta. Veri lettori leggono la BSB, la King James e la Louis Segond. Per l’auto, la cucina o gli occhi stanchi.",
 "orMac": "Su Windows o Linux:",
-"macStore": "Su Mac:"
+"macStore": "Su Mac:",
+"msStore": "{svg}<span><small>Scarica da</small> Microsoft Store</span>"
 }

@@ -89,5 +89,6 @@
 "listenH": "Dëgjo",
 "listenP": "Prekni një varg, pastaj Dëgjo. Ose prekni Lexo duke ndjekur te shiriti i kërkimit, dhe çdo fjalë ndizet ndërsa lexohet. Lexues të vërtetë lexojnë BSB, King James dhe Louis Segond. Për makinën, kuzhinën ose sytë e lodhur.",
 "orMac": "Në Windows ose Linux:",
-"macStore": "Në Mac:"
+"macStore": "Në Mac:",
+"msStore": "{svg}<span><small>Shkarkoje në</small> Microsoft Store</span>"
 }

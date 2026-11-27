@@ -89,5 +89,6 @@
 "listenH": "Meghallgatás",
 "listenP": "Koppintson egy versre, majd a Meghallgatás gombra. Vagy koppintson a keresősávban a Követő olvasás ikonra, és minden szó felvillan, ahogy elhangzik. Igazi felolvasók olvassák a BSB-t, a King Jamest és a Louis Segondot. Autóba, konyhába vagy fáradt szemnek.",
 "orMac": "Windowson vagy Linuxon:",
-"macStore": "Macen:"
+"macStore": "Macen:",
+"msStore": "{svg}<span><small>Letöltés a</small> Microsoft Store-ból</span>"
 }

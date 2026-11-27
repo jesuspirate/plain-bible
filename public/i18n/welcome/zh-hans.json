@@ -89,5 +89,6 @@
 "listenH": "收听",
 "listenP": "轻点一节经文，再轻点“收听”。或者轻点搜索栏里的“跟读”，读到的每个字都会亮起来。BSB、King James 和 Louis Segond 由真人朗读。适合在车里、厨房里，或眼睛疲倦的时候。",
 "orMac": "在 Windows 或 Linux 上：",
-"macStore": "在 Mac 上："
+"macStore": "在 Mac 上：",
+"msStore": "{svg}<span><small>获取自</small> Microsoft Store</span>"
 }

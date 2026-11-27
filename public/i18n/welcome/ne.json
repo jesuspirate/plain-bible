@@ -89,5 +89,6 @@
 "listenH": "सुन्नुहोस्",
 "listenP": "कुनै पदमा ट्याप गर्नुहोस्, अनि सुन्नुहोस्. वा खोज पट्टीमा सँगै पढ्नुहोस् मा ट्याप गर्नुहोस्, र पढ्दै गर्दा हरेक शब्द चम्किन्छ. साँचो वाचकहरूले BSB, King James र Louis Segond पढ्छन्. गाडी, भान्सा वा थाकेका आँखाका लागि.",
 "orMac": "Windows वा Linux मा:",
-"macStore": "Mac मा:"
+"macStore": "Mac मा:",
+"msStore": "{svg}<span><small>प्राप्त गर्नुहोस्</small> Microsoft Store बाट</span>"
 }

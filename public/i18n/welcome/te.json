@@ -89,5 +89,6 @@
 "listenH": "వినండి",
 "listenP": "ఒక వచనాన్ని నొక్కి, తర్వాత విను నొక్కండి. లేదా శోధన పట్టీలో కలిసి చదువు నొక్కండి, చదువుతున్నప్పుడు ప్రతి పదం వెలుగుతుంది. నిజమైన పాఠకులు BSB, King James, Louis Segond చదువుతారు. కారు, వంటగది లేదా అలసిన కళ్ళ కోసం.",
 "orMac": "Windows లేదా Linux లో:",
-"macStore": "Mac లో:"
+"macStore": "Mac లో:",
+"msStore": "{svg}<span><small>ఇక్కడ పొందండి</small> Microsoft Store</span>"
 }

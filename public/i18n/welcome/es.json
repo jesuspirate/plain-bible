@@ -102,5 +102,6 @@
 "listenH": "Escuchar",
 "listenP": "Toca un versículo, luego Escuchar. O toca Leer siguiendo en la barra de búsqueda, y cada palabra se ilumina mientras se lee. Narradores de verdad leen la BSB, la King James y la Louis Segond. Para el coche, la cocina o los ojos cansados.",
 "orMac": "En Windows o Linux:",
-"macStore": "En una Mac:"
+"macStore": "En una Mac:",
+"msStore": "{svg}<span><small>Descárgalo en</small> Microsoft Store</span>"
 }

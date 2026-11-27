@@ -89,5 +89,6 @@
 "listenH": "האזנה",
 "listenP": "הקישו על פסוק ואז על „האזנה”. או הקישו על „קריאה עם מעקב” בשורת החיפוש, וכל מילה נדלקת בזמן שהיא נקראת. קריינים אמיתיים קוראים את BSB, King James ו־Louis Segond. לרכב, למטבח, או לעיניים עייפות.",
 "orMac": "ב־Windows או ב־Linux:",
-"macStore": "ב־Mac:"
+"macStore": "ב־Mac:",
+"msStore": "{svg}<span><small>להורדה ב־</small> Microsoft Store</span>"
 }

@@ -89,5 +89,6 @@
 "listenH": "Aŭskulti",
 "listenP": "Tuŝu verson, poste Aŭskulti. Aŭ tuŝu Kunlegi en la serĉa breto, kaj ĉiu vorto lumiĝas dum oni legas ĝin. Veraj legantoj legas la BSB, la King James kaj la Louis Segond. Por la aŭto, la kuirejo aŭ lacaj okuloj.",
 "orMac": "Ĉe Windows aŭ Linukso:",
-"macStore": "Ĉe Mac:"
+"macStore": "Ĉe Mac:",
+"msStore": "{svg}<span><small>Elŝutu el la</small> Microsoft Store</span>"
 }

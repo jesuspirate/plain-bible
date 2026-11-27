@@ -89,5 +89,6 @@
 "listenH": "સાંભળો",
 "listenP": "કોઈ કલમ પર ટેપ કરો, પછી સાંભળો. અથવા શોધ પટ્ટીમાં સાથે વાંચો પર ટેપ કરો, અને વંચાતાં દરેક શબ્દ ઝળકે છે. સાચા વાચકો BSB, King James અને Louis Segond વાંચે છે. ગાડી, રસોડું કે થાકેલી આંખો માટે.",
 "orMac": "Windows અથવા Linux પર:",
-"macStore": "Mac પર:"
+"macStore": "Mac પર:",
+"msStore": "{svg}<span><small>મેળવો</small> Microsoft Store પરથી</span>"
 }

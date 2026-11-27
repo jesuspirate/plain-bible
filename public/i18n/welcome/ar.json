@@ -89,5 +89,6 @@
 "listenH": "استمع",
 "listenP": "اضغط آية، ثم «استماع». أو اضغط «القراءة مع المتابعة» في شريط البحث، فتضيء كل كلمة وهي تُقرأ. قرّاء حقيقيون يقرؤون BSB وKing James وLouis Segond. للسيارة، أو المطبخ، أو العيون المتعبة.",
 "orMac": "على Windows أو Linux:",
-"macStore": "على الماك:"
+"macStore": "على الماك:",
+"msStore": "{svg}<span><small>احصل عليه من</small> Microsoft Store</span>"
 }

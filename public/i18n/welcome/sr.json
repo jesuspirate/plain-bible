@@ -89,5 +89,6 @@
 "listenH": "Слушајте",
 "listenP": "Додирните стих, па Слушај. Или додирните Прати читање у траци за претрагу и свака реч засветли док се чита. Прави читачи читају BSB, King James и Louis Segond. За ауто, кухињу или уморне очи.",
 "orMac": "На Windows-у или Linux-у:",
-"macStore": "На Mac-у:"
+"macStore": "На Mac-у:",
+"msStore": "{svg}<span><small>Преузмите у</small> Microsoft Store</span>"
 }
