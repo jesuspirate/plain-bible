@@ -1345,5 +1345,10 @@
 "Everyone prayed": "Բոլորն աղոթեցին",
 "Ask again": "Կրկին խնդրել",
 "Asked again": "Կրկին խնդրված",
-"Ready for your prayer": "Սպասում է ձեր աղոթքին"
+"Ready for your prayer": "Սպասում է ձեր աղոթքին",
+"Pray for {name}": "Աղոթել {name}-ի համար",
+"I already prayed": "Արդեն աղոթել եմ",
+"Praying for {name}": "Աղոթք {name}-ի համար",
+"Back to {circle}": "Վերադառնալ {circle}",
+"Pray for this": "Աղոթել սրա համար"
 }

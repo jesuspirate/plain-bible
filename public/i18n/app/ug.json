@@ -1342,5 +1342,10 @@
 "Everyone prayed": "ھەممەيلەن دۇئا قىلدى",
 "Ask again": "يەنە سوراش",
 "Asked again": "يەنە سورالدى",
-"Ready for your prayer": "دۇئايىڭىزنى كۈتمەكتە"
+"Ready for your prayer": "دۇئايىڭىزنى كۈتمەكتە",
+"Pray for {name}": "{name} ئۈچۈن دۇئا قىلىڭ",
+"I already prayed": "دۇئا قىلىپ بولدۇم",
+"Praying for {name}": "{name} ئۈچۈن دۇئا",
+"Back to {circle}": "{circle} غا قايتىش",
+"Pray for this": "بۇنىڭ ئۈچۈن دۇئا قىلىڭ"
 }

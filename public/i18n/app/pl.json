@@ -1452,5 +1452,10 @@
 "Everyone prayed": "Wszyscy się modlili",
 "Ask again": "Poproś ponownie",
 "Asked again": "Poproszono ponownie",
-"Ready for your prayer": "Czeka na twoją modlitwę"
+"Ready for your prayer": "Czeka na twoją modlitwę",
+"Pray for {name}": "Pomódl się za {name}",
+"I already prayed": "Już się modliłem/am",
+"Praying for {name}": "Modlitwa za {name}",
+"Back to {circle}": "Wróć do {circle}",
+"Pray for this": "Pomódl się o to"
 }

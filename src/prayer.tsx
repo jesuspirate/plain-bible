@@ -12,7 +12,7 @@ import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, canShareInCircles as inCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
@@ -50,6 +50,11 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [view, setView] = useState<'pray' | 'list' | 'circles'>(at ? 'circles' : 'pray')
   useEffect(() => { if (at) setView('circles') }, [at])
   const [note, setNote] = useState('')
+  // Praying for someone's request in a circle (see prayFor), and whether it
+  // was marked prayed once this prayer was kept.
+  const [forAsk, setForAsk] = useState<PrayFor>()
+  const forRef = useRef<PrayFor>()
+  const [askDone, setAskDone] = useState(false)
   const [elapsed, setElapsed] = useState(0)
   const [list, setList] = useState<PrayerInfo[]>()
   const [bible, setBible] = useState<Bible>()
@@ -260,6 +265,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // verses (by reference, so a circle reads it in their own Bible), and the
   // prayer's own verses, if it has any.
   function heardNow(id?: string) {
+    // Prayed for a request in a circle: it's marked prayed there, by itself.
+    const ask = forRef.current
+    if (id && ask) import('./lib/circles').then(m => m.amen(ask.circle, ask.item, true))
+      .then(() => { if (alive.current) setAskDone(true); dispatchEvent(new Event(ASK_PRAYED)) }, () => {})
     const c = id && given.current?.id === id ? given.current.c : pickComfort()
     setComfort(c)
     setTied([])
@@ -296,6 +305,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     const now = () => {
       if (!takePrayNow()) return
       const { start, phase } = latest.current
+      const ask = takePrayFor()
+      if (phase !== 'recording' && phase !== 'asking' && phase !== 'paused') { forRef.current = ask; setForAsk(ask); setAskDone(false) }
       setView('pray')
       if (phase !== 'recording' && phase !== 'asking') start()
     }
@@ -314,7 +325,13 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     <div class="pray" role="dialog" aria-modal="true" ref={rootLeave} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
       {/* The list has its own Done, so only one close is ever on screen. */}
       {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
-      {view === 'pray' && phase !== 'heard' && (tied.length
+      {view === 'pray' && forAsk && phase !== 'heard' && (
+        <div class="pray-for">
+          <p class="pray-over-head">{forAsk.by ? t('Praying for {name}', { name: forAsk.by }) : t('A prayer request')}</p>
+          <p class="pray-for-said">{forAsk.note}</p>
+        </div>
+      )}
+      {view === 'pray' && !forAsk && phase !== 'heard' && (tied.length
         ? <div class="pray-over">
             <p class="pray-over-head">{t('Praying using')}</p>
             <ul>
@@ -359,8 +376,14 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
                   {(comfortKept || others.length > 0) && (others.length === 1
                     ? <button class="pray-kept" onClick={() => read(others[0])}>✓ {keptLine(<strong>{verseLabel(others[0])}</strong>)} ›</button>
                     : <p class="pray-kept">✓ {keptLine(others.map((v, i) => <>{i ? ', ' : ''}<button class="pray-kept-ref" onClick={() => read(v)}>{verseLabel(v)}</button></>))}</p>)}
+                  {forAsk && <>
+                    {askDone && <p class="pray-kept">✓ {t('You prayed')}</p>}
+                    <button class="pray-pill pray-share-now" onClick={() => openCircles({ id: forAsk.circle, name: forAsk.circleName })}>
+                      <CircleIcon size={22} /> <span>{t('Back to {circle}', { circle: forAsk.circleName })}</span>
+                    </button>
+                  </>}
                   {/* Prayed for a friend: send it to them now, one tap, never by itself. */}
-                  {kept && inCircles() && <button class="pray-pill pray-share-now" onClick={() => shareWithCircle({ prayer: kept.id })}>
+                  {kept && inCircles() && !forAsk && <button class="pray-pill pray-share-now" onClick={() => shareWithCircle({ prayer: kept.id })}>
                     <CircleIcon size={22} /> <span>{t('Share with your circle')}</span>
                   </button>}
                 </>

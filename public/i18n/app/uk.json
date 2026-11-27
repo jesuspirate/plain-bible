@@ -1452,5 +1452,10 @@
 "Everyone prayed": "Усі помолилися",
 "Ask again": "Попросити знову",
 "Asked again": "Попросили знову",
-"Ready for your prayer": "Чекає на вашу молитву"
+"Ready for your prayer": "Чекає на вашу молитву",
+"Pray for {name}": "Помолитися за: {name}",
+"I already prayed": "Я вже помолився(-лася)",
+"Praying for {name}": "Молитва за: {name}",
+"Back to {circle}": "Назад до {circle}",
+"Pray for this": "Помолитися про це"
 }

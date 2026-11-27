@@ -58,8 +58,11 @@ export type Reaction = typeof REACTS[number]
  *  `reacts`: each member's other reactions, and when they last added one. */
 export interface FeedItem {
   id: string; by: string; at: number; body: Shared; chunks: number; amens: string[]; amenAt?: Record<string, number>; replies: Reply[]
-  reacts?: Record<string, { at: number; e: Reaction[] }>
+  reacts?: Record<string, { at: number; e: Reaction[]; a?: number }>
 }
+/** When the one who asked marked their prayer request answered (kept with
+ *  their sealed reactions; anyone else's mark is ignored). */
+export const answeredAt = (i: FeedItem) => i.body.k === 'ask' ? i.reacts?.[i.by]?.a : undefined
 /** When it belongs in the circle's days: a prayer on the day it was prayed
  *  (never later than it was shared), anything else when it was shared. */
 export const dayAt = (i: FeedItem) => i.body.k === 'prayer' && i.body.prayed ? Math.min(i.body.prayed, i.at) : i.at
@@ -465,10 +468,12 @@ export async function loadFeed(circle: string): Promise<Feed> {
     const said = text(await openJson(key, x.body, `${circle}/${x.item}/${x.id}`).catch(() => ''), 2000)
     if (said) replies.set(x.item, [...(replies.get(x.item) ?? []), { id: x.id, by: x.mid, at: x.at, text: said }])
   }
-  const reacts = new Map<string, Record<string, { at: number; e: Reaction[] }>>()
+  const reacts = new Map<string, Record<string, { at: number; e: Reaction[]; a?: number }>>()
   for (const x of r.reacts ?? []) {
-    const e = cleanReacts(await openJson(key, x.body, reactAad(circle, x.item, x.mid)).catch(() => undefined))
-    if (e.length) reacts.set(x.item, { ...reacts.get(x.item), [x.mid]: { at: x.at, e } })
+    const v = await openJson(key, x.body, reactAad(circle, x.item, x.mid)).catch(() => undefined)
+    const e = cleanReacts(v), a = (v as { a?: unknown } | undefined)?.a
+    const answered = typeof a === 'number' && Number.isFinite(a) && a > 0 ? a : undefined
+    if (e.length || answered) reacts.set(x.item, { ...reacts.get(x.item), [x.mid]: { at: x.at, e, ...(answered ? { a: answered } : {}) } })
   }
   const items: FeedItem[] = []
   for (const i of r.items) {
@@ -665,10 +670,10 @@ export const amen = (circle: string, item: string, on: boolean) =>
 
 /** Your reactions on something shared, all of them (none takes them away).
  *  `added`: one was just given, which tells whoever shared it. */
-export async function react(circle: string, item: string, mid: string, e: Reaction[], added: boolean) {
+export async function react(circle: string, item: string, mid: string, e: Reaction[], added: boolean, a?: number) {
   const path = `/circles/${circle}/items/${item}/react`
-  if (!e.length) return api(path, { method: 'DELETE', token: token() })
-  return api(path, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), { e }, reactAad(circle, item, mid)), added } })
+  if (!e.length && !a) return api(path, { method: 'DELETE', token: token() })
+  return api(path, { method: 'PUT', token: token(), body: { body: await sealJson(await keyOf(circle), { e, ...(a ? { a } : {}) }, reactAad(circle, item, mid)), added } })
 }
 
 /** A prayer request for the whole circle: everyone in it reads it and
@@ -687,7 +692,7 @@ export function askedOf(feed: Feed, i: FeedItem) {
 /** Prayer requests from others that you haven't prayed for yet, from the
  *  last two weeks: they wait for you at the top of the circle, gently. */
 export const waitingFor = (feed: Feed, now = Date.now()) =>
-  feed.items.filter(i => i.body.k === 'ask' && i.by !== feed.me && !i.amens.includes(feed.me) && now - i.at < 14 * 86400_000)
+  feed.items.filter(i => i.body.k === 'ask' && i.by !== feed.me && !i.amens.includes(feed.me) && !answeredAt(i) && now - i.at < 14 * 86400_000)
 
 /** A few words back on something shared. */
 export async function reply(circle: string, item: string, said: string) {

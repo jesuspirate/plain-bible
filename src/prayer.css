@@ -188,3 +188,9 @@ button.pray-btn.danger-quiet { background: var(--surface); border: 1.5px solid #
 .pray-new-topic .saved-find { flex: 1; min-width: 0; }
 .pray-new-topic .pray-btn { width: auto; margin: 0; padding: 10px 20px; }
 .pray-pill .news-dot { display: inline-block; width: 8px; height: 8px; margin-left: 8px; border-radius: 50%; background: #9a5a1c; vertical-align: middle; }
+/* Praying for someone's request in a circle: their words, at the top. */
+.pray-for {
+  position: absolute; top: max(14px, calc(var(--cut) + 16px), env(safe-area-inset-top)); left: 74px; right: 74px; margin: 0 auto; max-width: 460px; box-sizing: border-box;
+  padding: 10px 16px 12px; border-radius: 22px; font: 16px/1.4 var(--sans); color: #fff7e6; background: rgba(20, 16, 10, .86); max-height: 38vh; overflow-y: auto;
+}
+.pray-for-said { margin: 2px 0 0; font-size: 18px; color: #ffe3a3; white-space: pre-wrap; }

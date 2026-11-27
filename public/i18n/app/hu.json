@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Mindenki imádkozott",
 "Ask again": "Kérd újra",
 "Asked again": "Újra kérve",
-"Ready for your prayer": "Várja az imádat"
+"Ready for your prayer": "Várja az imádat",
+"Pray for {name}": "Imádkozz érte: {name}",
+"I already prayed": "Már imádkoztam",
+"Praying for {name}": "Ima érte: {name}",
+"Back to {circle}": "Vissza ide: {circle}",
+"Pray for this": "Imádkozz érte"
 }

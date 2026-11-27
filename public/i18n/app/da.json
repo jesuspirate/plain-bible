@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Alle har bedt",
 "Ask again": "Bed igen",
 "Asked again": "Bedt om igen",
-"Ready for your prayer": "Klar til din bøn"
+"Ready for your prayer": "Klar til din bøn",
+"Pray for {name}": "Bed for {name}",
+"I already prayed": "Jeg har allerede bedt",
+"Praying for {name}": "Beder for {name}",
+"Back to {circle}": "Tilbage til {circle}",
+"Pray for this": "Bed for dette"
 }

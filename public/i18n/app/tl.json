@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Nanalangin ang lahat",
 "Ask again": "Humingi muli",
 "Asked again": "Hiniling muli",
-"Ready for your prayer": "Handa para sa iyong panalangin"
+"Ready for your prayer": "Handa para sa iyong panalangin",
+"Pray for {name}": "Ipanalangin si {name}",
+"I already prayed": "Nakapanalangin na ako",
+"Praying for {name}": "Ipinapanalangin si {name}",
+"Back to {circle}": "Bumalik sa {circle}",
+"Pray for this": "Ipanalangin ito"
 }

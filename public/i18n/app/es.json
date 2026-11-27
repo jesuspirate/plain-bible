@@ -1177,5 +1177,10 @@
 "Everyone prayed": "Todos oraron",
 "Ask again": "Pedir de nuevo",
 "Asked again": "Pedida de nuevo",
-"Ready for your prayer": "Lista para tu oración"
+"Ready for your prayer": "Lista para tu oración",
+"Pray for {name}": "Orar por {name}",
+"I already prayed": "Ya oré",
+"Praying for {name}": "Orando por {name}",
+"Back to {circle}": "Volver a {circle}",
+"Pray for this": "Orar por esto"
 }

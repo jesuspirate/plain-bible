@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Kuo lotu kotoa",
 "Ask again": "Toe kole",
 "Asked again": "Toe kole",
-"Ready for your prayer": "'Oku teu ki ho'o lotu"
+"Ready for your prayer": "'Oku teu ki ho'o lotu",
+"Pray for {name}": "Lotu ma'a {name}",
+"I already prayed": "Kuo u 'osi lotu",
+"Praying for {name}": "Lotu ma'a {name}",
+"Back to {circle}": "Foki ki he {circle}",
+"Pray for this": "Lotu ki he me'á ni"
 }

@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Onye ọ bụla ekpeela ekpere",
 "Ask again": "Rịọ ọzọ",
 "Asked again": "A rịọrọ ọzọ",
-"Ready for your prayer": "Na-echere ekpere gị"
+"Ready for your prayer": "Na-echere ekpere gị",
+"Pray for {name}": "Kpee ekpere maka {name}",
+"I already prayed": "Ekpeela m ekpere",
+"Praying for {name}": "Ekpere maka {name}",
+"Back to {circle}": "Laghachi na {circle}",
+"Pray for this": "Kpee ekpere maka nke a"
 }

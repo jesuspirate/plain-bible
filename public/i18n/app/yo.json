@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Gbogbo ènìyàn ti gbàdúrà",
 "Ask again": "Béèrè lẹ́ẹ̀kan sí i",
 "Asked again": "A tún béèrè",
-"Ready for your prayer": "Ó ń dúró de àdúrà rẹ"
+"Ready for your prayer": "Ó ń dúró de àdúrà rẹ",
+"Pray for {name}": "Gbàdúrà fún {name}",
+"I already prayed": "Mo ti gbàdúrà tẹ́lẹ̀",
+"Praying for {name}": "Àdúrà fún {name}",
+"Back to {circle}": "Padà sí {circle}",
+"Pray for this": "Gbàdúrà fún èyí"
 }

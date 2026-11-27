@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Vese vanamata",
 "Ask again": "Kumbira zvakare",
 "Asked again": "Chakumbirwa zvakare",
-"Ready for your prayer": "Chakamirira munamato wako"
+"Ready for your prayer": "Chakamirira munamato wako",
+"Pray for {name}": "Namatira {name}",
+"I already prayed": "Ndatonamata",
+"Praying for {name}": "Kunamatira {name}",
+"Back to {circle}": "Dzokera ku{circle}",
+"Pray for this": "Namatira izvi"
 }

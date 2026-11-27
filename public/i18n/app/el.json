@@ -1345,5 +1345,10 @@
 "Everyone prayed": "Όλοι προσευχήθηκαν",
 "Ask again": "Ζήτα ξανά",
 "Asked again": "Ζητήθηκε ξανά",
-"Ready for your prayer": "Περιμένει την προσευχή σου"
+"Ready for your prayer": "Περιμένει την προσευχή σου",
+"Pray for {name}": "Προσευχήσου για {name}",
+"I already prayed": "Προσευχήθηκα ήδη",
+"Praying for {name}": "Προσευχή για {name}",
+"Back to {circle}": "Πίσω στο {circle}",
+"Pray for this": "Προσευχήσου γι’ αυτό"
 }

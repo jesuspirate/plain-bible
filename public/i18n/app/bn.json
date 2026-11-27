@@ -1342,5 +1342,10 @@
 "Everyone prayed": "সবাই প্রার্থনা করেছেন",
 "Ask again": "আবার চান",
 "Asked again": "আবার চাওয়া হয়েছে",
-"Ready for your prayer": "আপনার প্রার্থনার অপেক্ষায়"
+"Ready for your prayer": "আপনার প্রার্থনার অপেক্ষায়",
+"Pray for {name}": "{name}-এর জন্য প্রার্থনা করুন",
+"I already prayed": "আমি ইতিমধ্যে প্রার্থনা করেছি",
+"Praying for {name}": "{name}-এর জন্য প্রার্থনা",
+"Back to {circle}": "{circle}-এ ফিরে যান",
+"Pray for this": "এর জন্য প্রার্থনা করুন"
 }

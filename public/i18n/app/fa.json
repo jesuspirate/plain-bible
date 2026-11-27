@@ -1342,5 +1342,10 @@
 "Everyone prayed": "همه دعا کردند",
 "Ask again": "دوباره درخواست کنید",
 "Asked again": "دوباره درخواست شد",
-"Ready for your prayer": "آماده برای دعای شما"
+"Ready for your prayer": "آماده برای دعای شما",
+"Pray for {name}": "برای {name} دعا کنید",
+"I already prayed": "قبلاً دعا کردم",
+"Praying for {name}": "دعا برای {name}",
+"Back to {circle}": "بازگشت به {circle}",
+"Pray for this": "برای این دعا کنید"
 }

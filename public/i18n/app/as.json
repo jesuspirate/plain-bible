@@ -1342,5 +1342,10 @@
 "Everyone prayed": "সকলোৱে প্ৰাৰ্থনা কৰিলে",
 "Ask again": "আকৌ বিচাৰক",
 "Asked again": "আকৌ বিচৰা হ'ল",
-"Ready for your prayer": "আপোনাৰ প্ৰাৰ্থনাৰ বাবে সাজু"
+"Ready for your prayer": "আপোনাৰ প্ৰাৰ্থনাৰ বাবে সাজু",
+"Pray for {name}": "{name}ৰ বাবে প্ৰাৰ্থনা কৰক",
+"I already prayed": "মই ইতিমধ্যে প্ৰাৰ্থনা কৰিলোঁ",
+"Praying for {name}": "{name}ৰ বাবে প্ৰাৰ্থনা",
+"Back to {circle}": "{circle}লৈ উভতি যাওক",
+"Pray for this": "ইয়াৰ বাবে প্ৰাৰ্থনা কৰক"
 }

@@ -1452,5 +1452,10 @@
 "Everyone prayed": "Vsi so molili",
 "Ask again": "Prosi znova",
 "Asked again": "Ponovno zaprošeno",
-"Ready for your prayer": "Čaka na vašo molitev"
+"Ready for your prayer": "Čaka na vašo molitev",
+"Pray for {name}": "Moli za {name}",
+"I already prayed": "Sem že molil/a",
+"Praying for {name}": "Molitev za {name}",
+"Back to {circle}": "Nazaj v {circle}",
+"Pray for this": "Moli za to"
 }

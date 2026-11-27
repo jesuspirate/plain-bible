@@ -1342,5 +1342,10 @@
 "Everyone prayed": "လူတိုင်း ဆုတောင်းပြီး",
 "Ask again": "ထပ်မံ တောင်းဆိုရန်",
 "Asked again": "ထပ်မံ တောင်းဆိုထားသည်",
-"Ready for your prayer": "သင့်ဆုတောင်းချက်ကို စောင့်နေသည်"
+"Ready for your prayer": "သင့်ဆုတောင်းချက်ကို စောင့်နေသည်",
+"Pray for {name}": "{name} အတွက် ဆုတောင်းရန်",
+"I already prayed": "ဆုတောင်းပြီးပါပြီ",
+"Praying for {name}": "{name} အတွက် ဆုတောင်းနေသည်",
+"Back to {circle}": "{circle} သို့ ပြန်သွားရန်",
+"Pray for this": "ဤအတွက် ဆုတောင်းရန်"
 }

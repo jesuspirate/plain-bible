@@ -1342,5 +1342,10 @@
 "Everyone prayed": "모두 기도했어요",
 "Ask again": "다시 부탁하기",
 "Asked again": "다시 부탁함",
-"Ready for your prayer": "당신의 기도를 기다려요"
+"Ready for your prayer": "당신의 기도를 기다려요",
+"Pray for {name}": "{name}님을 위해 기도하기",
+"I already prayed": "이미 기도했어요",
+"Praying for {name}": "{name}님을 위한 기도",
+"Back to {circle}": "{circle}(으)로 돌아가기",
+"Pray for this": "이 제목으로 기도하기"
 }

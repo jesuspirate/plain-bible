@@ -1342,5 +1342,10 @@
 "Everyone prayed": "Bato nyonso babondeli",
 "Ask again": "Sɛnga lisusu",
 "Asked again": "Esɛngami lisusu",
-"Ready for your prayer": "Ezali kozela libondeli na yo"
+"Ready for your prayer": "Ezali kozela libondeli na yo",
+"Pray for {name}": "Bondelá {name}",
+"I already prayed": "Nabondelaki kala",
+"Praying for {name}": "Libondeli mpo na {name}",
+"Back to {circle}": "Zonga na {circle}",
+"Pray for this": "Bondelá mpo na yango"
 }

@@ -1489,5 +1489,10 @@
 "Everyone prayed": "صلّى الجميع",
 "Ask again": "اطلب مرة أخرى",
 "Asked again": "طُلبت مرة أخرى",
-"Ready for your prayer": "بانتظار صلاتك"
+"Ready for your prayer": "بانتظار صلاتك",
+"Pray for {name}": "صلِّ لأجل {name}",
+"I already prayed": "صلّيت بالفعل",
+"Praying for {name}": "تصلي لأجل {name}",
+"Back to {circle}": "العودة إلى {circle}",
+"Pray for this": "صلِّ لأجل هذا"
 }
