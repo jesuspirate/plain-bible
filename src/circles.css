@@ -237,6 +237,10 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-item.c-kind-ask:has(.c-asked.all) { box-shadow: inset 0 0 0 2.5px color-mix(in srgb, var(--accent) 60%, transparent); }
 .c-list li.c-waits .c-open { border: 2px solid var(--accent); padding: 13px; }
 .c-prayed-quiet { margin: 6px 0 0; text-align: center; }
+.c-after { margin: 12px 0 0; text-align: center; }
+.c-after-amen { margin: 0; font-weight: 600; }
+.c-after-verse { margin-top: 4px; font-size: 1rem; }
+.c-after .c-quote { text-align: left; margin-top: 8px; }
 /* Answered, marked by the one who asked: green, as in Your prayers. */
 .c-pray-big + .c-pray-big { margin-top: 8px; }
 .c-answered { color: #2f7d4a; }
