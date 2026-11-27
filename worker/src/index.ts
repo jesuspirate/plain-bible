@@ -13,6 +13,7 @@ import { checkNostrEvent, NOSTR_WRAP } from './nostr'
 import { plainBookName } from '../../src/lib/bookList'
 import { suggestionMail } from './suggest'
 import { CARD_ID, CARD_MAX, cardId, isCard } from './card'
+import { litCountries, MAP_DAYS, MAP_FLOOR, prayedIn } from './world'
 
 export interface Env {
   DB: D1Database
@@ -1440,6 +1441,7 @@ const HEARD_MODES = ['listen', 'along']
 const VOICES: Record<string, string> = { hays: 'Barry Hays (BSB)', david: 'David (KJV)', tresor: 'Trésor Sonore (LSG)', voice: 'The phone’s voice', silent: 'No voice (highlight only)' }
 const PLATFORMS: [string, string][] = [['ios', 'iPhone & iPad app'], ['mac', 'Mac app'], ['android', 'Android app'], ['fedi', 'In Fedi'], ['phone', 'Phone browser'], ['computer', 'Computer browser']]
 const isLang = (l: string | null | undefined): l is string => !!l && /^[a-z]{2,3}(-han[st])?$/.test(l)
+const regionName = (c: string) => { try { return new Intl.DisplayNames(['en'], { type: 'region' }).of(c) ?? c } catch { return c } }
 const langName = (l: string) => { try { return new Intl.DisplayNames(['en'], { type: 'language' }).of(l.replace(/-(han[st])$/, (_, x: string) => '-' + x[0].toUpperCase() + x.slice(1))) ?? l } catch { return l } }
 
 async function helloRoute(req: Request, env: Env) {
@@ -1482,9 +1484,31 @@ async function helloRoute(req: Request, env: Env) {
     for (const x of said('ab', id)) adds.push([day, `heardin:${x}`, 1])
     for (const x of said('al', x => /^[a-z]{2,3}(-[A-Za-z]{2,4})?$/.test(x))) adds.push([day, `heardlang:${x}`, 1])
   }
+  // The prayer map: prayed, and counting on the map (at most once in any 7
+  // days, see src/lib/hello.ts). Only the country Cloudflare guesses from the
+  // address is kept, added to that day's count; never the address itself.
+  const cc = prayedIn(req, q)
+  if (cc) adds.push([day, `prayedin:${cc}`, 1])
   await env.DB.batch(adds.map(([period, kind, n]) =>
     env.DB.prepare('INSERT INTO hello (period, kind, n) VALUES (?, ?, ?) ON CONFLICT (period, kind) DO UPDATE SET n = n + excluded.n').bind(period, kind, n)))
   return json({ ok: true })
+}
+
+async function worldRoute(req: Request, env: Env, ctx?: ExecutionContext) {
+  // Everyone sees the same answer, so it's kept at the edge for an hour.
+  const cache = (globalThis as unknown as { caches?: { default?: Cache } }).caches?.default
+  const key = new Request(new URL('/world', req.url).toString())
+  const hit = await cache?.match(key)
+  if (hit) return new Response(hit.body, hit)
+  const since = new Date(Date.now() - (MAP_DAYS - 1) * DAY).toISOString().slice(0, 10)
+  const { results } = await env.DB.prepare(
+    "SELECT kind, SUM(n) AS n FROM hello WHERE kind LIKE 'prayedin:%' AND period >= ? AND period NOT LIKE '%W%' GROUP BY kind"
+  ).bind(since).all<{ kind: string; n: number }>()
+  const res = new Response(JSON.stringify({ c: litCountries(results) }), {
+    headers: { 'Content-Type': 'application/json', 'Cache-Control': 'public, max-age=3600' },
+  })
+  if (cache) { const put = cache.put(key, res.clone()); ctx ? ctx.waitUntil(put) : await put }
+  return res
 }
 
 const esc = (s: string) => s.replace(/[&<>"]/g, c => ({ '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;' })[c]!)
@@ -1744,6 +1768,8 @@ ${reportActs(r)}</div>`).join('')}` : ''
     return best
   }
   const hour = busiest('hour:', 24), weekday = busiest('wd:', 7)
+  const mapRows = [...new Set(rows.results.filter(r => r.kind.startsWith('prayedin:') && r.period >= since7).map(r => r.kind))].map(kind => ({ kind, n: sum(kind, since7) }))
+  const mapLit = litCountries(mapRows), mapAny = mapRows.filter(r => r.n > 0).length
   // Still opening N days after a device's first day under this count, out of
   // the devices whose first day is at least N days ago.
   const kept = (days: number, label: string): Tile => {
@@ -1790,6 +1816,14 @@ ${reportActs(r)}</div>`).join('')}` : ''
       { id: 'heard-by', title: 'Voices', tiles: split('heardby:', id => VOICES[id] ?? id, 6, 'listening day') },
       { id: 'heard-in', title: 'Bibles listened to', tiles: split('heardin:', id => id, 6, 'listening day') },
       { id: 'heard-lang', title: 'Languages listened in', tiles: split('heardlang:', langName, 6, 'listening day') },
+    ] },
+    // The prayer map (worldRoute): countries with praying devices in the
+    // last 7 days, and those with enough of them to light up. No numbers
+    // per country, here either.
+    { title: 'Prayer map', tiles: [
+      { id: 'map-lit', label: 'Countries lit', value: n(mapLit.length), sub: `with ${MAP_FLOOR}+ praying devices, last ${MAP_DAYS} days`, zero: !mapLit.length },
+      { id: 'map-any', label: 'Countries praying', value: n(mapAny), sub: `any praying device, last ${MAP_DAYS} days`, zero: !mapAny },
+      { id: 'map-names', label: 'Lit now', value: mapLit.length ? mapLit.map(regionName).join(', ') : 'None yet', sub: 'what everyone sees after Amen', zero: !mapLit.length },
     ] },
     { title: 'Lifetime', tiles: [
       { id: 'ever', label: 'All devices ever', value: n(ever), sub: own ? `since the count began, not counting your own ${n(own)}` : 'counted since the count began' },
@@ -1957,6 +1991,7 @@ async function route(req: Request, env: Env, ctx: ExecutionContext): Promise<Res
 
   switch (key) {
     case 'GET /hello': return helloRoute(req, env)
+    case 'GET /world': return worldRoute(req, env, ctx)
     case 'POST /suggest': return suggestRoute(req, env)
     case 'POST /card': return cardSend(req, env)
     case 'GET /stats': case 'POST /stats': return statsRoute(req, env)

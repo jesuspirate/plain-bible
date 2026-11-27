@@ -1355,5 +1355,12 @@
 "You prayed for this before": "כבר התפללת על זה בעבר",
 "{name} asked again": "{name} ביקש/ה שוב",
 "Edited": "נערך",
-"Tap verses for your prayer request": "הקש על פסוקים לבקשת התפילה שלך"
+"Tap verses for your prayer request": "הקש על פסוקים לבקשת התפילה שלך",
+"Praying with people around the world": "מתפללים עם אנשים בכל העולם",
+"Countries this week: {n}": "מדינות השבוע: {n}",
+"Prayers around the world": "תפילות ברחבי העולם",
+"Countries where people prayed with My Quiet Bible this week": "מדינות שבהן התפללו עם My Quiet Bible השבוע",
+"Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.": "רק מדינות. לעולם לא עיר, שם או מילה מתפילה. מדינה נדלקת כשלפחות 5 טלפונים התפללו בה השבוע.",
+"Count my prayers on the map": "לספור את התפילות שלי במפה",
+"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "אחרי אמן, מפה מראה את המדינות שבהן התפללו השבוע. התפילות שלך נספרות לפי מדינה בלבד: לעולם לא עיר, שם או מילה."
 }

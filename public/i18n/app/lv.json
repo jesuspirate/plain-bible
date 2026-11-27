@@ -1439,5 +1439,12 @@
 "You prayed for this before": "Tu jau esi lūdzis par šo",
 "{name} asked again": "{name} lūdz vēlreiz",
 "Edited": "Rediģēts",
-"Tap verses for your prayer request": "Pieskaries pantiem savam lūgšanu lūgumam"
+"Tap verses for your prayer request": "Pieskaries pantiem savam lūgšanu lūgumam",
+"Praying with people around the world": "Lūgt kopā ar cilvēkiem visā pasaulē",
+"Countries this week: {n}": "Valstis šonedēļ: {n}",
+"Prayers around the world": "Lūgšanas visā pasaulē",
+"Countries where people prayed with My Quiet Bible this week": "Valstis, kur šonedēļ lūdza ar My Quiet Bible",
+"Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.": "Tikai valstis. Nekad pilsēta, vārds vai lūgšanas vārds. Valsts iedegas, kad tajā šonedēļ lūguši vismaz 5 tālruņi.",
+"Count my prayers on the map": "Skaitīt manas lūgšanas kartē",
+"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "Pēc Āmen karte rāda valstis, kur šonedēļ lūdza. Tavas lūgšanas skaita tikai pēc valsts: nekad pilsēta, vārds vai vārds no lūgšanas."
 }

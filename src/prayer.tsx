@@ -28,6 +28,7 @@ import { addDays, dayBefore, dayOf, loadDays, markDay, PRAY, streak } from './li
 import './prayer.css'
 import { locale, N_, t, tj, tn } from './i18n'
 import { tally } from './lib/tally'
+import { loadWorld, savedWorld } from './lib/world'
 
 // paused: the phone locked, or the microphone stopped, mid-prayer. What was said is kept, and the next
 // tap carries on in the same prayer.
@@ -47,7 +48,18 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // Why the last pause happened.
   const [pausedBy, setPausedBy] = useState<Cut>('lock')
   // Praying, Your prayers, or Circles (opened from its own button beside 🙏).
-  const [view, setView] = useState<'pray' | 'list' | 'circles'>(at ? 'circles' : 'pray')
+  const [view, setView] = useState<'pray' | 'list' | 'circles' | 'world'>(at ? 'circles' : 'pray')
+  // Prayers around the world (src/world.tsx): the lit countries, kept on this
+  // device, and the map's code, loaded only when there's a country to show.
+  const [lit, setLit] = useState(() => savedWorld()?.c ?? [])
+  const [world, setWorld] = useState<typeof import('./world')>()
+  useEffect(() => {
+    loadWorld().then(w => {
+      if (!w?.c.length || !alive.current) return
+      setLit(w.c)
+      import('./world').then(m => alive.current && setWorld(() => m), () => {})
+    })
+  }, [])
   useEffect(() => { if (at) setView('circles') }, [at])
   const [note, setNote] = useState('')
   // Praying for someone's request in a circle (see prayFor), and whether it
@@ -394,6 +406,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
                   {(comfortKept || others.length > 0) && (others.length === 1
                     ? <button class="pray-kept" onClick={() => read(others[0])}>✓ {keptLine(<strong>{verseLabel(others[0])}</strong>)} ›</button>
                     : <p class="pray-kept">✓ {keptLine(others.map((v, i) => <>{i ? ', ' : ''}<button class="pray-kept-ref" onClick={() => read(v)}>{verseLabel(v)}</button></>))}</p>)}
+                  {world && lit.length > 0 && !forAsk && <world.WorldLine lit={lit} onOpen={() => setView('world')} />}
                   {forAsk && <>
                     {askDone && <p class="pray-kept">✓ {t('You prayed')}</p>}
                     <button class="pray-pill pray-share-now" onClick={() => openCircles({ id: forAsk.circle, name: forAsk.circleName })}>
@@ -408,14 +421,15 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
               : <p>{t('Tap and speak to God. Only you will hear this again.')}</p>}
           </div>
         </div>
-      ) : view === 'list' ? <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} onPick={pickFor} />
+      ) : view === 'world' && world ? <world.WorldCard lit={lit} onBack={() => setView('pray')} />
+        : view === 'list' ? <PrayerList list={list} onChange={refresh} onClose={onClose} onRead={read} onPick={pickFor} />
         : <CirclesCard at={at} onClose={onClose} />}
       <div class="pray-foot">
         {view === 'list'
           ? <button class="pray-pill" onClick={() => setView('pray')}>{t('Pray')}</button>
           : view === 'pray' && phase !== 'recording' && phase !== 'paused' &&
             <button class="pray-pill" onClick={() => setView('list')}>{t('Your prayers')}{count ? ` · ${count}` : ''}</button>}
-        {view !== 'circles' && <p class="pray-private">{prayerSyncOn() ? t('Encrypted on this device, then synced.') : t('Kept on this device only.')}</p>}
+        {(view === 'pray' || view === 'list') && <p class="pray-private">{prayerSyncOn() ? t('Encrypted on this device, then synced.') : t('Kept on this device only.')}</p>}
       </div>
     </div>
   )

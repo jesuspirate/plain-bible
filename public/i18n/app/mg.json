@@ -1351,5 +1351,12 @@
 "You prayed for this before": "Efa nivavaka ho amin’izany ianao",
 "{name} asked again": "Nangataka indray i {name}",
 "Edited": "Novaina",
-"Tap verses for your prayer request": "Tsindrio ny andininy ho an’ny fangatahana vavaka"
+"Tap verses for your prayer request": "Tsindrio ny andininy ho an’ny fangatahana vavaka",
+"Praying with people around the world": "Mivavaka miaraka amin’ny olona manerana izao tontolo izao",
+"Countries this week: {n}": "Firenena tamin’ity herinandro ity: {n}",
+"Prayers around the world": "Vavaka manerana izao tontolo izao",
+"Countries where people prayed with My Quiet Bible this week": "Firenena nivavahan’ny olona tamin’ny My Quiet Bible tamin’ity herinandro ity",
+"Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.": "Firenena ihany. Tsy misy tanàna, anarana na teny avy amin’ny vavaka mihitsy. Mirehitra ny firenena iray rehefa telefaonina 5 farafahakeliny no nivavaka tao tamin’ity herinandro ity.",
+"Count my prayers on the map": "Isaina amin’ny sarintany ny vavako",
+"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "Aorian’ny Amena, misy sarintany mampiseho ireo firenena nivavahana tamin’ity herinandro ity. Isaina araka ny firenena ihany ny vavakao: tsy misy tanàna, anarana na teny mihitsy."
 }
