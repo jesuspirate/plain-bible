@@ -208,6 +208,7 @@ button.pray-btn.danger-quiet { background: var(--surface); border: 1.5px solid #
 .world-line-words small { white-space: nowrap; font-size: 14px; color: rgba(255, 247, 230, .7); }
 .world-line-go { font: 300 30px/1 var(--sans); color: rgba(255, 247, 230, .7); }
 .pray-list.world-card { max-height: min(88vh, 100%); padding-bottom: 16px; }
+.world-card .back-name { white-space: normal; text-align: start; line-height: 1.15; } /* the whole title, on two lines if needed */
 .world-num { margin: 12px 10px 14px; font-size: 17px; line-height: 1.4; color: var(--muted); }
 .world-num strong { display: block; font: 700 52px/1 var(--serif); color: var(--accent); margin-bottom: 4px; }
 .world-card .world-map { display: block; width: 100%; margin: 0 0 12px; }

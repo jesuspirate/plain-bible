@@ -8,6 +8,7 @@ import { COLS, DOTS, ROWS, SMALL } from './lib/worldDots'
 import { useApp } from './state'
 import { slideAway } from './settings'
 import { locale, t } from './i18n'
+import { BackIcon } from './icons'
 
 const STEP = 10
 
@@ -44,7 +45,8 @@ export function WorldLine({ lit, onOpen }: { lit: string[]; onOpen: () => void }
 }
 
 /** The map, on a card like Your prayers: the number, the map, the promise,
- *  and the tick to count or not. Done goes back to Amen. */
+ *  and the tick to count or not. ‹ back goes back to Amen (one layer in, so
+ *  no Done). */
 export function WorldCard({ lit, onBack }: { lit: string[]; onBack: () => void }) {
   const { settings, update } = useApp()
   const box = useRef<HTMLDivElement>(null)
@@ -54,8 +56,7 @@ export function WorldCard({ lit, onBack }: { lit: string[]; onBack: () => void }
       <div class="pray-head">
         <button type="button" class="settings-grabber" aria-label={t('Close')} onClick={done} />
         <div class="pray-title">
-          <h2>{t('Prayers around the world')}</h2>
-          <button class="done-btn" onClick={done}>{t('Done')}</button>
+          <button class="settings-back" onClick={done}><BackIcon class="back-ico" /> <span class="back-name">{t('Prayers around the world')}</span></button>
         </div>
       </div>
       <p class="world-num"><strong>{lit.length.toLocaleString(locale())}</strong>{t('Countries where people prayed with My Quiet Bible this week')}</p>
