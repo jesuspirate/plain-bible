@@ -266,9 +266,15 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // prayer's own verses, if it has any.
   function heardNow(id?: string) {
     // Prayed for a request in a circle: it's marked prayed there, by itself.
+    // Once only: a later prayer on this same screen is a prayer of its own.
+    // Your own request isn't marked: 🙏 there is for the others.
     const ask = forRef.current
-    if (id && ask) import('./lib/circles').then(m => m.amen(ask.circle, ask.item, true))
-      .then(() => { if (alive.current) setAskDone(true); dispatchEvent(new Event(ASK_PRAYED)) }, () => {})
+    if (id && ask) {
+      forRef.current = undefined
+      if (!ask.by) setAskDone(true)
+      else import('./lib/circles').then(m => m.amen(ask.circle, ask.item, true))
+        .then(() => { if (alive.current) setAskDone(true); dispatchEvent(new Event(ASK_PRAYED)) }, () => {})
+    }
     const c = id && given.current?.id === id ? given.current.c : pickComfort()
     setComfort(c)
     setTied([])
@@ -303,8 +309,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const latest = useRef({ start, phase }); latest.current = { start, phase }
   useEffect(() => {
     const now = () => {
-      if (!takePrayNow()) return
       const { start, phase } = latest.current
+      const still = phase === 'recording' || phase === 'asking' || phase === 'paused'
+      // The 🙏 button itself: a prayer of your own, for no one's request.
+      if (!takePrayNow()) { if (!still) { forRef.current = undefined; setForAsk(undefined) } return }
       const ask = takePrayFor()
       if (phase !== 'recording' && phase !== 'asking' && phase !== 'paused') { forRef.current = ask; setForAsk(ask); setAskDone(false) }
       setView('pray')
