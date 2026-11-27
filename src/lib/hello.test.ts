@@ -47,4 +47,17 @@ describe('hello', () => {
     expect(next.q).toBe('lang=fr&am=along%2Clisten&as=tresor&ab=LSG&al=fr')
     expect(helloQuery(last, now, false, 'fr', { heard: {} })!.q).toBe('lang=fr')
   })
+  it('says a praying device counts on the prayer map, at most once in any 7 days', () => {
+    const now = periods(new Date('2026-11-27T09:00:00Z'))
+    const last: Kept = { ...periods(new Date('2026-11-26T09:00:00Z')), first: '2026-08-01', kept: [7, 30, 90] }
+    const r = helloQuery(last, now, false, 'en', { tally: { pr: 1 }, map: true })!
+    expect(r.q).toBe('lang=en&pr=1&pw=1')
+    expect(r.keep.mapDay).toBe('2026-11-27')
+    // Six days later: not yet; seven: again.
+    expect(helloQuery({ ...r.keep, day: '2026-12-02' }, periods(new Date('2026-12-03T09:00:00Z')), false, 'en', { tally: { pr: 1 }, map: true })!.q).toBe('week=1&month=1&lang=en&pr=1')
+    expect(helloQuery({ ...r.keep, day: '2026-12-03' }, periods(new Date('2026-12-04T09:00:00Z')), false, 'en', { tally: { pr: 1 }, map: true })!.q).toBe('week=1&month=1&lang=en&pr=1&pw=1')
+    // Unticked, or no prayer: never.
+    expect(helloQuery(last, now, false, 'en', { tally: { pr: 1 }, map: false })!.q).toBe('lang=en&pr=1')
+    expect(helloQuery(last, now, false, 'en', { tally: { ch: 3 }, map: true })!.q).toBe('lang=en&ch=3')
+  })
 })

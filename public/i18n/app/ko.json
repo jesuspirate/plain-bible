@@ -1351,5 +1351,12 @@
 "You prayed for this before": "전에 이 기도제목을 위해 기도했어요",
 "{name} asked again": "{name}님이 다시 부탁했어요",
 "Edited": "수정됨",
-"Tap verses for your prayer request": "기도 제목에 넣을 말씀을 누르세요"
+"Tap verses for your prayer request": "기도 제목에 넣을 말씀을 누르세요",
+"Praying with people around the world": "전 세계 사람들과 함께 기도하고 있어요",
+"Countries this week: {n}": "이번 주 나라 수: {n}",
+"Prayers around the world": "세계의 기도",
+"Countries where people prayed with My Quiet Bible this week": "이번 주 My Quiet Bible로 기도한 나라",
+"Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.": "나라만 표시됩니다. 도시, 이름, 기도의 단어는 절대 없습니다. 이번 주 그 나라에서 휴대폰 5대 이상이 기도하면 불이 켜집니다.",
+"Count my prayers on the map": "지도에 내 기도 세기",
+"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "아멘 후에 이번 주 기도한 나라를 지도로 보여 줍니다. 내 기도는 나라 단위로만 세어지며, 도시, 이름, 단어는 절대 포함되지 않습니다."
 }

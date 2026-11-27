@@ -7,7 +7,7 @@ import { useRef } from 'preact/hooks'
 import { COLS, DOTS, ROWS, SMALL } from './lib/worldDots'
 import { useApp } from './state'
 import { slideAway } from './settings'
-import { t, tn } from './i18n'
+import { locale, t } from './i18n'
 
 const STEP = 10
 
@@ -35,8 +35,8 @@ export function WorldLine({ lit, onOpen }: { lit: string[]; onOpen: () => void }
     <button class="world-line" onClick={onOpen}>
       <WorldMap lit={lit} mini />
       <span class="world-line-words">
-        <strong>{tn(lit.length, 'Praying with people in {n} country', 'Praying with people in {n} countries')}</strong>
-        <small>{t('this week')}</small>
+        <strong>{t('Praying with people around the world')}</strong>
+        <small>{t('Countries this week: {n}', { n: lit.length.toLocaleString(locale()) })}</small>
       </span>
       <span class="world-line-go" aria-hidden="true">›</span>
     </button>
@@ -58,7 +58,7 @@ export function WorldCard({ lit, onBack }: { lit: string[]; onBack: () => void }
           <button class="done-btn" onClick={done}>{t('Done')}</button>
         </div>
       </div>
-      <p class="world-num"><strong>{lit.length}</strong>{tn(lit.length, 'country prayed with My Quiet Bible this week', 'countries prayed with My Quiet Bible this week')}</p>
+      <p class="world-num"><strong>{lit.length.toLocaleString(locale())}</strong>{t('Countries where people prayed with My Quiet Bible this week')}</p>
       <WorldMap lit={lit} />
       <p class="world-note">🔒 {t('Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.')}</p>
       <label class="check world-tick"><input type="checkbox" checked={settings.worldMap} onChange={e => update({ worldMap: (e.target as HTMLInputElement).checked })} />

@@ -1351,5 +1351,12 @@
 "You prayed for this before": "ဒီအတွက် အရင်က ဆုတောင်းခဲ့ပြီးပြီ",
 "{name} asked again": "{name} ထပ်မံ တောင်းဆိုသည်",
 "Edited": "ပြင်ဆင်ထားသည်",
-"Tap verses for your prayer request": "သင့်ဆုတောင်းချက်တောင်းဆိုမှုအတွက် ကျမ်းချက်များကို နှိပ်ပါ"
+"Tap verses for your prayer request": "သင့်ဆုတောင်းချက်တောင်းဆိုမှုအတွက် ကျမ်းချက်များကို နှိပ်ပါ",
+"Praying with people around the world": "ကမ္ဘာတစ်ဝှမ်းရှိ လူများနှင့်အတူ ဆုတောင်းနေသည်",
+"Countries this week: {n}": "ဤအပတ် နိုင်ငံများ- {n}",
+"Prayers around the world": "ကမ္ဘာတစ်ဝှမ်း ဆုတောင်းချက်များ",
+"Countries where people prayed with My Quiet Bible this week": "ဤအပတ် My Quiet Bible ဖြင့် ဆုတောင်းခဲ့သော နိုင်ငံများ",
+"Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.": "နိုင်ငံများသာ။ မြို့၊ အမည် သို့မဟုတ် ဆုတောင်းချက်၏ စကားလုံးတစ်လုံးမျှ ဘယ်တော့မှ မပါ။ ဤအပတ် ဖုန်းအနည်းဆုံး ၅ လုံး ဆုတောင်းပြီးမှ နိုင်ငံတစ်ခု လင်းလာသည်။",
+"Count my prayers on the map": "ကျွန်ုပ်၏ ဆုတောင်းချက်များကို မြေပုံပေါ်တွင် ရေတွက်ပါ",
+"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "အာမင်ပြီးနောက် ဤအပတ် ဆုတောင်းခဲ့သော နိုင်ငံများကို မြေပုံတွင် ပြသည်။ သင့်ဆုတောင်းချက်များကို နိုင်ငံအလိုက်သာ ရေတွက်သည်- မြို့၊ အမည် သို့မဟုတ် စကားလုံး ဘယ်တော့မှ မပါ။"
 }
