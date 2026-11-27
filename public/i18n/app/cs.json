@@ -612,8 +612,6 @@
 "Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "Označená slova lze klepnutím otevřít (KJV, BSB, LSG, hebrejské a řecké texty)",
 "Show the numbers inline": "Zobrazovat čísla v textu",
 "Search bar": "Vyhledávací pole",
-"Top bar": "Horní lišta",
-"Prayer and Circles buttons": "Tlačítka Modlit se a Kruhy",
 "Show the bars": "Zobrazit lišty",
 "Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.": "Zobrazovat celé vyhledávací pole dole na obrazovce. Když je vypnuté, v rohu je místo něj malé kulaté tlačítko hledání.",
 "Reset font, theme, layout and version choices to their defaults?": "Obnovit výchozí písmo, motiv, rozvržení a volbu překladu?",
@@ -1416,7 +1414,6 @@
 "Other ways to open search": "Další způsoby, jak otevřít hledání",
 "You can also press / to open it.": "Hledání otevřete také klávesou /.",
 "Listen: hear the verses you picked": "Poslechnout: uslyšíte vybrané verše",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaškrtnuté položky se při čtení dolů po stránce odsunou, aby text vyplnil obrazovku. Vrátíte je, když trochu posunete nahoru nebo klepnete na horní okraj.",
 "Getting your prayers…": "Načítám vaše modlitby…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitba z vašeho účtu ještě není na tomto zařízení, takže není v souboru .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1428,14 +1425,11 @@
 "Open Your prayers and tap Sync my prayers, then download again.": "Otevřete Vaše modlitby, klepněte na Synchronizovat mé modlitby a pak stáhněte znovu.",
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tomto zařízení máte: zvýrazněné verše {h}, záložky {b}, poznámky {n}, modlitby {p}.",
 "On": "Zapnuto",
-"Phone on its side": "Telefon na šířku",
-"Nothing hidden": "Nic skryto",
 "Tap the verse being read to highlight or share it.": "Klepněte na právě čtený verš a můžete ho zvýraznit nebo sdílet.",
 "Topics: {topic}": "Témata: {topic}",
 "Other apps": "Jiné aplikace",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook přijme jen odkaz, proto je zkopírován i verš: vložte ho do svého příspěvku.",
 "Hide bars while scrolling": "Skrýt lišty při posouvání",
-"Always, not only with the phone on its side": "Vždy, nejen s telefonem na šířku",
 "Prayer request": "Prosba o modlitbu",
 "What can we pray for?": "Za co se můžeme modlit?",
 "Ask for prayer": "Požádat o modlitbu",
@@ -1478,5 +1472,7 @@
 "Back to {place} · hold for more": "Zpět: {place} · podržením zobrazíte další",
 "Go back": "Zpět",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Když přejdete jinam, klepnutím sem se vrátíte tam, kde jste četli.",
-"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Klepnutím na název Bible přepnete na tu, kterou jste četli předtím. Podržením vyberete jinou."
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Klepnutím na název Bible přepnete na tu, kterou jste četli předtím. Podržením vyberete jinou.",
+"As you read on, the bars slide away. Scroll up a little to bring them back.": "Při čtení lišty zmizí. Trochu posuňte nahoru a vrátí se.",
+"Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Trochu posuňte nahoru a vrátí se. S telefonem na šířku zmizí vždy."
 }

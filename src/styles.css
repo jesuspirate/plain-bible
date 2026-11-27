@@ -651,6 +651,10 @@ mark.hl-part { color: inherit; background: color-mix(in srgb, var(--hl) var(--hl
 .set-sub { display: block; overflow: hidden; text-overflow: ellipsis; font-size: 14px; font-weight: 400; color: var(--muted); }
 .set-value { color: var(--muted); font-weight: 400; max-width: 45%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .set-static { cursor: default; }
+/* A row that is one tick: the words may wrap, the box sits at its end. */
+.set-check .set-label { white-space: normal; }
+.set-check .set-sub { white-space: normal; line-height: 1.35; margin-top: 2px; }
+.set-check input[type=checkbox] { flex: none; width: 28px; height: 28px; margin: 0 2px 0 4px; accent-color: var(--accent); }
 @media (hover: hover) { .set-static:hover { background: none !important; } }
 .set-static .size-btn { width: 52px; height: 46px; border-radius: 12px; }
 .size-row { gap: 8px; }

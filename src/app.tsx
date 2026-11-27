@@ -421,16 +421,16 @@ export function App() {
     return () => clearTimeout(t)
   }, [sync.account?.token])
 
-  // The phone on its side: the bars slide away as you read on.
-  // In recording mode, upright too, and all the bars go, so the video shows
-  // the word; scrolling back up a little brings them back.
-  // "Hide bars while scrolling" (Settings → Font and layout), with "Always"
-  // ticked, does it upright too, for the bars picked there.
+  // The phone on its side: all the bars slide away as you read on, no
+  // questions asked. Upright they stay, so newcomers learn their buttons,
+  // unless "Hide bars while scrolling" is ticked in Settings (or in
+  // recording mode, so the video shows the word). Scrolling back up a
+  // little brings them back.
   const recording = useRecording().on
   const always = recording || !!settings?.hideBars
   useLayoutEffect(() => { document.documentElement.classList.toggle('recording', recording) }, [recording])
   useLayoutEffect(() => { document.documentElement.classList.toggle('away-always', always) }, [always])
-  const sidewaysEdge = useSideways(page === 'read' && !!settings, recording ? AWAY : (Array.isArray(settings?.sideways) ? settings!.sideways : []).filter(a => AWAY.includes(a)), always)
+  const sidewaysEdge = useSideways(page === 'read' && !!settings, AWAY, always)
 
   if (error) return (
     <div class="center">

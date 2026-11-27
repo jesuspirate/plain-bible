@@ -60,6 +60,7 @@ const hasWidget = () => inStoreApp() && isIPhone() && !!nativeNotify() && typeof
 // only where they apply, so the tour never grows a step for them.
 // Each step shows its gesture, softly, on the real thing: a fingertip on a
 // phone or tablet, the arrow with a mouse.
+const AWAY_ALL = ['top']
 function steps(): Step[] {
   const settings = loadSettings()
   const version = settings.version ?? defaultSettings().version
@@ -97,6 +98,8 @@ function steps(): Step[] {
         ...(document.querySelector('.sb-version') ? [t('Tap the Bible’s name to switch to the one you read before. Hold it to choose another.')] : []),
         // Read along, if ticked under Audio, sits at the field's right end.
         ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.'), t('While it reads, tap any verse to read on from there.'), t('Tap the verse being read to highlight or share it.')] : []),
+        // The bars slide away as you read on (on by default): say how they come back.
+        ...((settings.hideBars ?? true) && (settings.sideways ?? AWAY_ALL).length ? [t('As you read on, the bars slide away. Scroll up a little to bring them back.')] : []),
         // With a keyboard, / opens it from anywhere.
         ...(fine ? [t('You can also press / to open it.')] : [])].join(' ') },
     // Not signed in yet: one more sentence on how easy the free account is

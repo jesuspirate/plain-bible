@@ -612,8 +612,6 @@
 "Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "Słowa z oznaczeniami można stuknąć (KJV, BSB, LSG, teksty hebrajskie i greckie)",
 "Show the numbers inline": "Pokazuj numery w tekście",
 "Search bar": "Pasek wyszukiwania",
-"Top bar": "Górny pasek",
-"Prayer and Circles buttons": "Przyciski Módl się i Kręgi",
 "Show the bars": "Pokaż paski",
 "Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.": "Pokazuj pełny pasek wyszukiwania na dole ekranu. Gdy wyłączone, w rogu jest mały okrągły przycisk wyszukiwania.",
 "Reset font, theme, layout and version choices to their defaults?": "Przywrócić domyślne ustawienia czcionki, motywu, układu i przekładu?",
@@ -1416,7 +1414,6 @@
 "Other ways to open search": "Inne sposoby otwierania wyszukiwania",
 "You can also press / to open it.": "Możesz je też otworzyć klawiszem /.",
 "Listen: hear the verses you picked": "Słuchaj: posłuchaj wybranych wersetów",
-"Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.": "Zaznaczone elementy odsuwają się, gdy czytasz w dół strony, żeby tekst wypełnił ekran. Przewiń trochę w górę albo stuknij górną krawędź, by wróciły.",
 "Getting your prayers…": "Pobieram twoje modlitwy…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitwa z twojego konta nie jest jeszcze na tym urządzeniu, więc nie ma jej w pliku .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1428,14 +1425,11 @@
 "Open Your prayers and tap Sync my prayers, then download again.": "Otwórz Twoje modlitwy i dotknij Synchronizuj moje modlitwy, a potem pobierz ponownie.",
 "You have {h} highlighted verses, {b} bookmarks, {n} notes and {p} prayers on this device.": "Na tym urządzeniu masz: zakreślone wersety – {h}, zakładki – {b}, notatki – {n}, modlitwy – {p}.",
 "On": "Wł.",
-"Phone on its side": "Telefon bokiem",
-"Nothing hidden": "Nic nie jest ukryte",
 "Tap the verse being read to highlight or share it.": "Stuknij czytany werset, aby go zaznaczyć lub udostępnić.",
 "Topics: {topic}": "Tematy: {topic}",
 "Other apps": "Inne aplikacje",
 "Facebook takes only the link, so the verse is copied too: paste it into your post.": "Facebook przyjmuje tylko link, dlatego werset też został skopiowany: wklej go do swojego posta.",
 "Hide bars while scrolling": "Ukrywaj paski podczas przewijania",
-"Always, not only with the phone on its side": "Zawsze, nie tylko z telefonem poziomo",
 "Prayer request": "Prośba o modlitwę",
 "What can we pray for?": "O co możemy się modlić?",
 "Ask for prayer": "Poproś o modlitwę",
@@ -1478,5 +1472,7 @@
 "Back to {place} · hold for more": "Wróć: {place} · przytrzymaj, aby zobaczyć więcej",
 "Go back": "Wróć",
 "After you jump somewhere else, tap here to go back to where you were reading.": "Gdy przejdziesz gdzie indziej, stuknij tutaj, aby wrócić do miejsca, w którym czytasz.",
-"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Dotknij nazwy Biblii, aby przejść do tej czytanej wcześniej. Przytrzymaj, aby wybrać inną."
+"Tap the Bible’s name to switch to the one you read before. Hold it to choose another.": "Dotknij nazwy Biblii, aby przejść do tej czytanej wcześniej. Przytrzymaj, aby wybrać inną.",
+"As you read on, the bars slide away. Scroll up a little to bring them back.": "Podczas czytania paski się chowają. Przewiń trochę w górę, by wróciły.",
+"Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Przewiń trochę w górę, by wróciły. Przy telefonie poziomo chowają się zawsze."
 }
