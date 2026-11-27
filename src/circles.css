@@ -292,3 +292,38 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-respond-row:has(.c-prayed-quiet) .c-respond { min-width: 0; padding: 6px 14px; }
 .c-ask-verses { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: -2px 0 10px; }
 .c-ask-verses .c-ref { margin: 0; font-size: 16px; }
+/* Reply / React row: ⋯ on the left, always there; React pops its emojis
+   up over the card in a glass bubble (tap or hold). */
+.c-respond-row { align-items: center; }
+.c-respond-row .spacer { flex: 1; }
+.c-more-btn { all: unset; box-sizing: border-box; flex: none; display: grid; place-items: center; width: 46px; height: 46px; border-radius: 50%;
+  border: 1px solid var(--line); background: var(--surface); color: var(--text); cursor: pointer; -webkit-tap-highlight-color: transparent; }
+.c-more-btn.on { border-color: var(--accent); background: color-mix(in srgb, var(--accent) 16%, var(--surface)); }
+.c-respond-row .c-prayed-quiet { flex: 0 1 auto; margin-right: 0; }
+.c-react-at { position: relative; flex: none; }
+.c-respond { -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; }
+.c-react-pop { position: absolute; right: 0; bottom: calc(100% + 10px); z-index: 3; display: flex; gap: 8px; padding: 8px; border-radius: 999px;
+  background: var(--surface); box-shadow: 0 12px 32px rgba(0, 0, 0, .22), 0 0 0 100vmax rgba(0, 0, 0, .28); /* the rest dims, so the eyes land on the faces */
+  border: 1.5px solid; border-color: var(--rim-light, var(--line)) var(--rim-dark, var(--line)) color-mix(in srgb, var(--rim-light, var(--line)) 70%, transparent) var(--rim-dark, var(--line));
+  animation: c-pop .16s cubic-bezier(.2, .8, .2, 1); transform-origin: bottom right; }
+@keyframes c-pop { from { opacity: 0; transform: translateY(6px) scale(.92); } }
+.c-react-pop .c-react { width: 56px; height: 56px; }
+.c-react-pop .c-react-emoji { font-size: 30px; }
+.c-menu { display: grid; gap: 8px; margin-top: 10px; padding: 10px; border-radius: 14px; background: color-mix(in srgb, var(--accent) 6%, var(--surface)); }
+.c-menu-btn { width: 100%; min-height: 46px; font-size: 17px; }
+.c-menu-danger { color: #b3261e; }
+button.c-btn.danger-quiet { background: transparent; border-color: #b3261e; color: #b3261e; }
+:root[data-theme='dark'] .c-menu-danger, :root[data-theme='dark'] button.c-btn.danger-quiet { color: #ff8a80; border-color: #ff8a80; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .c-menu-danger, :root[data-theme='system'] button.c-btn.danger-quiet { color: #ff8a80; border-color: #ff8a80; } }
+.c-edit-verses li.c-edit-add-at, .pray-list .c-edit-verses li.c-edit-add-at { padding: 0; border: 0; }
+.c-edit-add { min-height: 46px; border-radius: 999px; padding: 0 18px; }
+
+/* Change the order: each circle with big up and down buttons. */
+.c-arrange li, .pray-list .c-arrange li { display: block; padding: 0; }
+.c-arrange-done { width: 100%; min-height: 50px; font-size: 18px; }
+.c-arrange-row { box-sizing: border-box; width: 100%; background: var(--surface); display: flex; align-items: center; gap: 10px; padding: 8px 8px 8px 16px; border: 1px solid var(--line); border-radius: 14px; }
+.c-arrange-row strong { flex: 1; min-width: 0; overflow-wrap: anywhere; }
+.c-move { all: unset; box-sizing: border-box; cursor: pointer; width: 46px; height: 46px; border-radius: 50%; display: grid; place-items: center; font-size: 22px; font-weight: 700; border: 1px solid var(--line); background: var(--glass, transparent); color: var(--text); }
+.c-move:disabled { opacity: .25; cursor: default; }
+:root[data-theme='dark'] .c-react-pop { box-shadow: 0 12px 32px rgba(0, 0, 0, .5), 0 0 0 100vmax rgba(0, 0, 0, .55); }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .c-react-pop { box-shadow: 0 12px 32px rgba(0, 0, 0, .5), 0 0 0 100vmax rgba(0, 0, 0, .55); } }

@@ -1358,5 +1358,8 @@
 "Countries where people prayed with My Quiet Bible this week": "本週有人用 My Quiet Bible 禱告的國家",
 "Countries only. Never a city, a name or a word of any prayer. A country lights up once at least 5 phones prayed there this week.": "只顯示國家。絕不顯示城市、名字或禱告中的任何字。本週某國至少有 5 支手機禱告後，該國才會亮起。",
 "Count my prayers on the map": "在地圖上計入我的禱告",
-"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "說完阿們後，地圖會顯示本週有人禱告的國家。你的禱告只按國家計數：絕不包括城市、名字或任何字。"
+"After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.": "說完阿們後，地圖會顯示本週有人禱告的國家。你的禱告只按國家計數：絕不包括城市、名字或任何字。",
+"Change the order": "更改順序",
+"Move up": "上移",
+"Move down": "下移"
 }
