@@ -180,7 +180,7 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-door.open { border-color: var(--accent); }
 .c-door-link { margin: 8px 0; padding: 8px 10px; border-radius: 10px; background: var(--bg); border: 1px solid var(--line); overflow-wrap: anywhere; font-size: 13px; }
 .c-ask-btn { width: 100%; }
-.c-ask textarea, .c-lead-ask textarea { width: 100%; box-sizing: border-box; font: 400 17px/1.4 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
+.c-ask textarea, .c-edit textarea, .c-lead-ask textarea { width: 100%; box-sizing: border-box; font: 400 17px/1.4 var(--sans); padding: 10px 12px; border: 1px solid var(--line); border-radius: 10px; background: var(--bg); color: var(--text); }
 .c-my-asks { list-style: none; margin: 14px 0 0; padding: 0; }
 .c-my-asks > li { border-top: 1px solid var(--line); padding: 10px 0 4px; }
 .c-my-asks p { margin: 0 0 4px; }
@@ -257,3 +257,9 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
   :root[data-theme='system'] .c-answered-btn[aria-pressed='true'] { background: #7fd39b; color: #10301b; }
   :root[data-theme='system'] .c-item.c-kind-ask:has(.c-asked.answered) { box-shadow: inset 0 0 0 2.5px #7fd39b; }
 }
+/* Editing your own request: its words, its verses, + Add a verse. */
+.c-edit { display: grid; gap: 10px; margin: 4px 0 12px; }
+.c-edit-verses { list-style: none; margin: 0; padding: 0; display: flex; flex-wrap: wrap; gap: 8px; }
+.c-edit-verses li { display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 14px; border-radius: 999px; border: 1px solid var(--line); font-weight: 600; }
+.c-edit-x { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--text); color: var(--bg); cursor: pointer; }
+.c-ask-verse { margin: 0 0 10px; }

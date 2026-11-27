@@ -1192,6 +1192,16 @@ async function circleRoute(req: Request, env: Env, parts: string[], ctx: Executi
       return json({ ok: true })
     }
   }
+  // Its words or verses changed by the one who shared it: sealed again
+  // whole, under the same address. Quiet: nobody is told.
+  if (d === 'body' && !e && req.method === 'PUT') {
+    leaderOnly()
+    const { body } = await readJson<{ body: string }>(req)
+    if (!sealedText(body)) throw new HttpError(400, 'Bad request')
+    const res = await db.prepare('UPDATE circle_items SET body = ? WHERE circle_id = ? AND id = ? AND user_id = ?').bind(body, circle, item, userId).run()
+    if (!res.meta.changes) throw new HttpError(404, 'Not found')
+    return json({ ok: true })
+  }
   // Replies: anyone in the circle may write one; only its writer removes it.
   if (d === 'replies' && e && CIRCLE_ID.test(e)) {
     if (req.method === 'PUT') {

@@ -7,7 +7,7 @@ import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
   type Sending, type Upload, askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
-  askPrayer, askedOf, waitingFor, answeredAt, askerPrayedAt, earlierAsks, prayedBefore,
+  askPrayer, askedOf, waitingFor, answeredAt, askerPrayedAt, earlierAsks, prayedBefore, editShared, withVerses, sharedVerses,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -24,7 +24,7 @@ import { AskApproval } from './approve'
 import { startOver } from './lib/prayerSync'
 import { markKey, newNoteId, notesCovering, setNote, tidy } from './lib/marks'
 import { canShare, copyText } from './lib/native'
-import { ASK_PRAYED, go, openCircles, openSettings, prayFor, prayedNowFor, readPath, Route, ShareRequest, useApp } from './state'
+import { ASK_PRAYED, go, openCircles, openSettings, pickVerses, prayFor, prayedNowFor, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, CloseIcon, NoteIcon, PlayIcon, ReturnIcon } from './icons'
@@ -69,6 +69,18 @@ function MoreVerse({ verse }: { verse: PrayerVerse }) {
   return <button class="link c-ref c-ref-more" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>
     {t('With {verse}', { verse: verseLabel(at) })}{shown && <span class="muted small"> ({shown.version})</span>}
   </button>
+}
+
+/** A verse on a prayer request: its words in your own Bible, and a link. */
+function AskVerse({ verse, from }: { verse: PrayerVerse; from: string }) {
+  const { settings } = useApp()
+  const shown = usePassage(verse)
+  const nav = useNav()
+  const at = shown?.at ?? verse
+  return <div class="c-ask-verse">
+    <Passage shown={shown} small from={from} />
+    <button class="link c-ref" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>{verseLabel(at)}</button>
+  </div>
 }
 
 /** The passage's words, said plainly when they had to be the sender's. */
@@ -1074,6 +1086,16 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
   // One pill for each person: the signs they gave, then their name. Those
   // new since you last looked come first, and stand out.
   const isNew = (m: string) => !!(news?.amens.has(m) || news?.reacts.has(m))
+  // Your own request or prayer: its words (a request) and verses can change.
+  // Verses are picked on the page, as for Your prayers, then back here.
+  const [editing, setEditing] = useState<{ note: string; verses: PrayerVerse[] }>()
+  const pickFor = (body: Shared, verses: PrayerVerse[]) => {
+    pickVerses({ verses, from: verses, circle: { id: circle, name: circleName ?? '', item: item.id, body } })
+    nav.away()
+  }
+  const saveEdit = () => editing && act(async () => {
+    await editShared(circle, item.id, withVerses({ ...b, note: editing.note.trim() } as Shared, editing.verses)); setEditing(undefined)
+  })()
   const givers = [...new Set(who.flatMap(([, ms]) => ms))].sort((x, y) => +isNew(y) - +isNew(x))
     .map(m => ({ m, gave: who.filter(([, ms]) => ms.includes(m)).map(([r]) => r) }))
   // Open door: how many pray with it, never who (the leader sees who on People).
@@ -1110,13 +1132,27 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
         </span>
         <div class="c-item-who">
           <p class="c-item-by"><strong>{nameOf(item.by)}</strong>{news?.item && <span class="c-new-tag">{t('New')}</span>}</p>
-          <p class="c-item-what"><span class="c-item-kind">{kind}</span><span class="muted"> · {when(dayAt(item), !!news || dayOf(dayAt(item)) !== dayOf(item.at))}</span></p>
+          <p class="c-item-what"><span class="c-item-kind">{kind}</span><span class="muted"> · {when(dayAt(item), !!news || dayOf(dayAt(item)) !== dayOf(item.at))}{(b.k === 'ask' || b.k === 'prayer') && b.edited ? ` · ${t('Edited')}` : ''}</span></p>
         </div>
       </div>
       {b.k === 'ask' ? <>
         {b.again && <p class="c-ask-again"><AgainIcon /> {t('Asked again')}</p>}
-        <p class="c-note c-note-main c-ask-said">{b.note}</p>
-        <Prayed others={others ?? []} amens={amens} mine={mine} prayed={prayed} onPray={pray} again={act(() => askPrayer(circle, b.note, true))} busy={busy} emoji={emoji('pray')}
+        {editing ? <div class="c-edit">
+          <label class="c-label">{t('What can we pray for?')}
+            <textarea rows={3} maxLength={2000} value={editing.note} autoFocus onInput={e => setEditing({ ...editing, note: (e.target as HTMLTextAreaElement).value })} /></label>
+          {editing.verses.length > 0 && <ul class="c-edit-verses">{editing.verses.map(v => (
+            <li><span>{verseLabel(v)}</span><button class="c-edit-x" aria-label={t('Remove')} onClick={() => setEditing({ ...editing, verses: editing.verses.filter(x => x !== v) })}><CloseIcon size={18} /></button></li>
+          ))}</ul>}
+          <button class="c-btn c-edit-add" onClick={() => pickFor({ ...b, note: editing.note.trim() || b.note }, editing.verses)}>+ {t('Add a verse')}</button>
+          <div class="c-row c-two">
+            <button class="c-btn" onClick={() => setEditing(undefined)}>{t('Cancel')}</button>
+            <button class="c-btn primary" disabled={busy || !editing.note.trim()} onClick={saveEdit}>{busy ? t('Sending…') : t('Save')}</button>
+          </div>
+        </div> : <>
+          <p class="c-note c-note-main c-ask-said">{b.note}</p>
+          {b.verses?.map(v => <AskVerse verse={v} from={nameOf(item.by)} />)}
+        </>}
+        <Prayed others={others ?? []} amens={amens} mine={mine} prayed={prayed} onPray={pray} again={act(() => askPrayer(circle, b.note, true, b.verses))} busy={busy} emoji={emoji('pray')}
           by={nameOf(item.by)} onPrayNow={() => prayFor({ circle, circleName: circleName ?? '', item: item.id, by: mine ? '' : nameOf(item.by), note: b.note,
             ...(mine ? { own: { me, e: myReacts, ...(answered ? { a: answered } : {}) } } : {}) })}
           answered={answered} onAnswered={markAnswered} before={prayedBefore(earlier, me)} />
@@ -1196,6 +1232,9 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
               ? <button class="c-amen" onClick={() => { keepNote(); setTray(false) }}>{t('Keep note')}</button>
               : !bookmarked && <button class="c-amen" onClick={() => { bookmark(); setTray(false) }}>{t('Bookmark')}</button>)}
             <span class="spacer" />
+            {/* Your own request: its words and verses; your prayer: its verses. */}
+            {mine && !confirm && b.k === 'ask' && <button class="link small" onClick={() => { setEditing({ note: b.note, verses: b.verses ?? [] }); setTray(false) }}>{t('Edit')}</button>}
+            {mine && !confirm && b.k === 'prayer' && <button class="link small" onClick={() => { setTray(false); pickFor(b, sharedVerses(b)) }}>{t('Change verses')}</button>}
             {mine && (confirm
               ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
               : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
