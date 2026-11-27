@@ -9,8 +9,15 @@
 // since the last hello (see tally.ts), and whether anything was listened to,
 // with what kind of voice, in which Bible and language (see heard.ts). The service adds
 // one to a few counters and keeps nothing else, not even the address it
-// came from. That's enough to tell how many devices open the app each
+// came from (on the prayer map, below, only its country). That's enough to tell how many devices open the app each
 // day, week and month, and how many are new.
+//
+// The prayer map (src/world.tsx): when this device prayed since the last
+// hello, and "Count my prayers on the map" is ticked, the hello also says
+// "pw=1", at most once in any 7 days. The service then adds one to that
+// day's count for the country the request comes from (Cloudflare's guess
+// from the address, which isn't kept). Summed over 7 days, that counts each
+// praying device once per country.
 import { savedLang } from '../i18n'
 import { fromPlayStore, inMacApp, inStoreApp, installed, isAndroid, isIPhone } from './install'
 import { inFedi } from './nostr'
@@ -33,7 +40,7 @@ export interface Seen { day: string; week: string; month: string }
 /** What this device keeps: the last hello, the day of its first hello under
  *  this count (devices from before it start the day they get it), and which
  *  "still opening after N days" it already told. */
-export interface Kept extends Seen { first?: string; kept?: number[]; heardWeek?: string; heardMonth?: string }
+export interface Kept extends Seen { first?: string; kept?: number[]; heardWeek?: string; heardMonth?: string; mapDay?: string }
 export const periods = (d: Date): Seen => {
   const day = d.toISOString().slice(0, 10)
   return { day, week: isoWeek(d), month: day.slice(0, 7) }
@@ -49,7 +56,7 @@ export function platform(): string {
   return isIPhone() || isAndroid() ? 'phone' : 'computer'
 }
 
-export interface Extra { version?: string; platform?: string; hour?: number; weekday?: number; tally?: Tally; heard?: Heard }
+export interface Extra { version?: string; platform?: string; hour?: number; weekday?: number; tally?: Tally; heard?: Heard; map?: boolean }
 
 /** What to tell the service today, or nothing if this device already said
  *  hello today. Also what to keep once it has been told. */
@@ -80,12 +87,16 @@ export function helloQuery(last: Kept | null, now: Seen, home: boolean, lang = '
     if (heardWeek !== now.week) { q.set('aw', '1'); heardWeek = now.week }
     if (heardMonth !== now.month) { q.set('amo', '1'); heardMonth = now.month }
   }
-  return { q: q.toString(), keep: { ...now, first, ...(kept.length ? { kept } : {}), ...(heardWeek ? { heardWeek } : {}), ...(heardMonth ? { heardMonth } : {}) } }
+  // Prayed, and counting on the prayer map: once in any 7 days.
+  let mapDay = last?.mapDay
+  if (extra.map && (extra.tally?.pr ?? 0) > 0 && (!mapDay || Date.parse(now.day) - Date.parse(mapDay) >= 7 * 86_400_000)) { q.set('pw', '1'); mapDay = now.day }
+  return { q: q.toString(), keep: { ...now, first, ...(kept.length ? { kept } : {}), ...(heardWeek ? { heardWeek } : {}), ...(heardMonth ? { heardMonth } : {}), ...(mapDay ? { mapDay } : {}) } }
 }
 
-const savedVersion = () => {
-  try { const v = JSON.parse(localStorage.getItem('plain-bible:settings') || '{}').version; return typeof v === 'string' ? v : undefined } catch { return undefined }
-}
+const saved = () => { try { return JSON.parse(localStorage.getItem('plain-bible:settings') || '{}') } catch { return {} } }
+const savedVersion = () => { const v = saved().version; return typeof v === 'string' ? v : undefined }
+/** "Count my prayers on the map": on unless unticked. */
+const mapOn = () => saved().worldMap !== false
 
 /** Say hello, at most once a day, and only once the app has settled, so it
  *  never slows the start. Offline, it waits for another day it's online. */
@@ -94,7 +105,7 @@ export function hello() {
   let last: Kept | null = null
   try { last = JSON.parse(localStorage.getItem(KEY) || 'null') } catch { return }
   const at = new Date(), now = periods(at), tally = tallies(), heard = heardSince()
-  const said = helloQuery(last, now, installed(), savedLang(), { version: savedVersion(), platform: platform(), hour: at.getHours(), weekday: at.getDay(), tally, heard })
+  const said = helloQuery(last, now, installed(), savedLang(), { version: savedVersion(), platform: platform(), hour: at.getHours(), weekday: at.getDay(), tally, heard, map: mapOn() })
   if (said === null) return
   fetch(`${SYNC_URL}/hello?${said.q}`, { cache: 'no-store', credentials: 'omit', keepalive: true })
     .then(res => {

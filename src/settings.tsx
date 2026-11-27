@@ -457,7 +457,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
 
   // Grouped like the Settings page itself: a small heading over each kind of
   // choice. A tick box has a short bold name, and what it does in quiet words under it.
-  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'strongs' | 'strongsNumbers' | 'searchBar' | 'hideBars', label: string, note?: string) => (
+  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'worldMap' | 'strongs' | 'strongsNumbers' | 'searchBar' | 'hideBars', label: string, note?: string) => (
     <label class="check"><input type="checkbox" checked={settings[k]} onChange={e => update({ [k]: (e.target as HTMLInputElement).checked } as Partial<Settings>)} />
       <span class="check-text"><span class={note ? "check-name" : undefined}>{label}</span>{note && <span class="muted small">{note}</span>}</span></label>
   )
@@ -550,6 +550,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'extras') return <div class="layout-page">
     <div class="field">{check('noteReminders', t('Notes'), t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.'))}</div>
     <div class="field">{check('streaks', t('Streaks'), t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.'))}</div>
+    <div class="field">{check('worldMap', t('Count my prayers on the map'), t('After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.'))}</div>
     <div class="field"><div class="col">
       {check('strongs', t("Strong's numbers"), t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)'))}
       {check('strongsNumbers', t('Show the numbers inline'))}

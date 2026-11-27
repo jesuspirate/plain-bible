@@ -194,3 +194,26 @@ button.pray-btn.danger-quiet { background: var(--surface); border: 1.5px solid #
   padding: 10px 16px 12px; border-radius: 22px; font: 16px/1.4 var(--sans); color: #fff7e6; background: rgba(20, 16, 10, .86); max-height: 38vh; overflow-y: auto;
 }
 .pray-for-said { margin: 2px 0 0; font-size: 18px; color: #ffe3a3; white-space: pre-wrap; }
+
+/* Prayers around the world (world.tsx): a line on the Amen card, then the map. */
+.world-line { all: unset; box-sizing: border-box; cursor: pointer; display: flex; align-items: center; gap: 12px; width: 100%; margin: 6px 0 4px; padding: 10px 12px;
+  border-radius: 16px; background: rgba(255, 240, 210, .08); border: 1px solid rgba(255, 228, 170, .22); color: #fff7e6; text-align: left; }
+.world-line:active { transform: scale(.98); }
+.world-line .world-map.mini { flex: none; width: 112px; }
+.world-line .world-off { stroke: rgba(255, 247, 230, .2); }
+.world-line .world-on { stroke: #ffd98a; }
+.world-line .world-on-dot { fill: #ffd98a; }
+.world-line-words { flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 2px; font: 16px/1.3 var(--sans); }
+.world-line-words strong { font-weight: 600; }
+.world-line-words small { font-size: 14px; color: rgba(255, 247, 230, .7); }
+.world-line-go { font: 300 30px/1 var(--sans); color: rgba(255, 247, 230, .7); }
+.world-card { padding-bottom: 16px; }
+.world-num { margin: 12px 10px 14px; font-size: 17px; line-height: 1.4; color: var(--muted); }
+.world-num strong { display: block; font: 700 60px/1 var(--serif); color: var(--accent); margin-bottom: 4px; }
+.world-card .world-map { display: block; width: 100%; margin: 4px 0 16px; }
+.world-card .world-off { stroke: color-mix(in srgb, var(--text) 16%, transparent); }
+.world-card .world-on { stroke: var(--accent); }
+.world-card .world-on-dot { fill: var(--accent); }
+.world-note { margin: 0 6px 14px; padding: 12px 14px; border-radius: 14px; border: 1px solid var(--line); background: var(--bg); color: var(--muted); font-size: 15px; line-height: 1.5; }
+.world-tick { display: flex; align-items: center; gap: 12px; min-height: 48px; margin: 0 8px; font-size: 17px; }
+.world-tick input { width: 26px; height: 26px; flex: none; accent-color: var(--accent); }
