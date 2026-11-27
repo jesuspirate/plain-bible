@@ -263,3 +263,31 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-edit-verses li { display: inline-flex; align-items: center; gap: 6px; padding: 4px 6px 4px 14px; border-radius: 999px; border: 1px solid var(--line); font-weight: 600; }
 .c-edit-x { display: grid; place-items: center; width: 34px; height: 34px; border-radius: 50%; border: 0; background: var(--text); color: var(--bg); cursor: pointer; }
 .c-ask-verse { margin: 0 0 10px; }
+/* Shorter cards: long words fold to a few lines (More reads the rest), the
+   count sits beside its bar, and your two buttons share one row. */
+.c-clamp { display: -webkit-box; -webkit-box-orient: vertical; -webkit-line-clamp: var(--lines, 4); overflow: hidden; }
+.c-more-row { display: flex; align-items: baseline; gap: 14px; margin: -2px 0 8px; }
+.c-more-row .c-ref { margin: 0; }
+.c-more { font-weight: 600; }
+.c-quote.small.c-quote-short { max-height: none; overflow: hidden; }
+.c-quote.small.c-quote-short:not(.c-clamp) { max-height: none; }
+.c-asked-line { display: flex; align-items: center; gap: 12px; margin: 2px 0 10px; }
+.c-asked-line .c-asked-said { margin: 0; flex: none; }
+.c-asked-line .c-asked-bar { flex: 1; min-width: 60px; }
+.c-asked-two { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+.c-asked-two .c-pray-big { font-size: 16px; padding-left: 8px; padding-right: 8px; }
+.c-asked-two .c-pray-big + .c-pray-big { margin-top: 0; }
+.c-asked-two + .c-pray-big { margin-top: 8px; }
+.c-kind-ask .c-item-head { margin-bottom: 6px; }
+
+
+.c-respond-row .c-prayed-quiet { margin-right: auto; align-self: center; padding: 6px 0; font-size: 15px; line-height: 1.25; text-align: left; flex: 1 1 auto; min-width: 0; text-decoration: underline; }
+.c-kind-ask .c-respond-row { margin-top: 8px; }
+/* On a computer: Circles get a little more room, wide and tall. */
+@media (min-width: 900px) and (min-height: 760px) {
+  .pray-list.pray-circles { width: min(560px, 100%); max-height: min(80vh, 100%); }
+}
+.c-respond-row:has(.c-prayed-quiet) { gap: 8px; }
+.c-respond-row:has(.c-prayed-quiet) .c-respond { min-width: 0; padding: 6px 14px; }
+.c-ask-verses { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: -2px 0 10px; }
+.c-ask-verses .c-ref { margin: 0; font-size: 16px; }

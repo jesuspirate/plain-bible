@@ -269,9 +269,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     // Once only: a later prayer on this same screen is a prayer of its own.
     // Your own request isn't marked: 🙏 there is for the others.
     // Your own request: your 🙏 shows on it from now, as the proof you prayed.
-    // Then straight back to the circle: the prayer stays in Your prayers, and
-    // the verse is offered there, folded, if wanted.
+    // Then straight back to the circle: the prayer stays in Your prayers, with
+    // no verse added to it by itself (it's a prayer for someone's request).
     const ask = forRef.current
+    const forSomeone = !!(id && ask)
     const c = id && given.current?.id === id ? given.current.c : pickComfort()
     if (id && ask) {
       forRef.current = undefined
@@ -292,7 +293,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     const v = { book: c.book, chapter: c.chapter, verses: c.verses }
     return prayers.get(id).then(async p => {
       if (!p) return
-      const verses = withVerse(versesOf(p), v)
+      const verses = forSomeone ? versesOf(p) : withVerse(versesOf(p), v)
       if (verses !== versesOf(p)) await prayers.tie(id, verses).catch(() => {})
       const now = await prayers.get(id).catch(() => p)
       if (alive.current && now) setKept({ id, verses: versesOf(now) })
