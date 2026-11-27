@@ -16,7 +16,7 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, WhatsAppIcon, XIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, TurnIcon, WhatsAppIcon, XIcon } from './icons'
 import { canSharePicture, drawPicture, pictureName, sheetHasApps } from './lib/versePicture'
 import { SYNC_URL } from './lib/sync'
 import { cardLink, facebookUrl, SHARE_ORIGIN, whatsappUrl, xUrl } from './lib/shareTo'
@@ -1283,8 +1283,8 @@ export function Reader({ route }: { route: Route }) {
           </article>
           <div class="leaf-box" ref={leafBox} />
           <div class="spread-fold" aria-hidden="true" />
-          <button class="spread-turn back" aria-label={t('Previous')} onClick={() => flip(-1)}><span aria-hidden="true">‹</span></button>
-          <button class="spread-turn on" aria-label={t('Next')} onClick={() => flip(1)}><span aria-hidden="true">›</span></button>
+          <button class="spread-turn back" aria-label={t('Previous')} onClick={() => flip(-1)}><TurnIcon back /></button>
+          <button class="spread-turn on" aria-label={t('Next')} onClick={() => flip(1)}><TurnIcon /></button>
         </div>
       )}
 

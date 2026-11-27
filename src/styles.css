@@ -1231,11 +1231,11 @@ article.chapter.spread {
 /* the round buttons below the book, at its outer corners */
 .spread-turn {
   position: absolute; top: calc(100% + 12px); width: 50px; height: 50px; padding: 0; border-radius: 50%;
-  display: grid; place-items: center; font: 400 30px/1 var(--serif); color: var(--text);
+  display: grid; place-items: center; font-size: 26px; color: var(--text);
   background: var(--surface); border: 1px solid var(--line); box-shadow: 0 4px 14px rgba(0,0,0,.10);
   -webkit-tap-highlight-color: transparent;
 }
-.spread-turn span { margin-top: -4px; }
+.spread-turn svg { display: block; }
 .spread-turn.back { left: 0; }
 .spread-turn.on { right: 0; }
 .spread-turn:active { transform: scale(.94); }
@@ -1302,7 +1302,7 @@ body.selecting .spread-turn { display: none; }
   .sb:not(.sb-mini) { left: calc(50vw / 1.25 - 300px); }
   .sb.sb-open { top: calc(var(--vv-top) / 1.25); height: calc(var(--vv-h) / 1.25); }
   .spread-box { --book-h: calc(100dvh - 216px - env(safe-area-inset-top) - env(safe-area-inset-bottom)); }
-  .spread-turn { width: 62px; height: 62px; font-size: 36px; }
+  .spread-turn { width: 62px; height: 62px; font-size: 32px; }
 }
 
 /* ---- the phone on its side (src/sideways.tsx) ----
