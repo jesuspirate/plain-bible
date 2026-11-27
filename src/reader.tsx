@@ -42,11 +42,18 @@ let glowAudioUntil = 0
  *  Read along starts from it, so both land in the same place. */
 function verseHere(): number {
   const from = headerBottom() + 12, to = innerHeight - 90
+  // In the open book the pages before and after the two open ones sit hidden
+  // to its sides, still inside the window: only the book itself counts.
+  const book = document.querySelector('.reader article.chapter.spread')?.getBoundingClientRect()
+  const left = book ? book.left - 2 : 0, right = book ? book.right + 2 : innerWidth
   let cut = 0
   for (const el of document.querySelectorAll('.reader article.chapter :is(.verse, .pv)[id]')) {
-    const r = el.getBoundingClientRect()
-    if (!r.height || r.right <= 0 || r.left >= innerWidth || r.bottom <= from || r.top >= to) continue
-    if (r.top >= from - 16) return +el.id.slice(1)
+    // Each line of the verse (in the open book a verse can run on from one
+    // page to the next): it starts on screen if its first line does.
+    const seen = (r: DOMRect) => r.height > 0 && r.right > left && r.left < right && r.bottom > from && r.top < to
+    const lines = [...el.getClientRects()]
+    if (!lines.some(seen)) continue
+    if (seen(lines[0]) && lines[0].top >= from - 16) return +el.id.slice(1)
     cut ||= +el.id.slice(1)
   }
   // One long verse fills the screen: that one.
