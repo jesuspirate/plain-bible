@@ -273,7 +273,8 @@ export const warmList = () => lastList ? Promise.resolve() : keptCircles().then(
 
 function CircleList() {
   const nav = useNav()
-  const { settings } = useApp()
+  const { settings, update } = useApp()
+  const [arranging, setArranging] = useState(false)
   useCircleNews()
   const [list, setList] = useState<CircleInfo[] | undefined>(lastList)
   const [msg, setMsg] = useState('')
@@ -351,7 +352,18 @@ function CircleList() {
     })()
     return () => { live = false }
   }, [list])
-  const shown = list && [...list].sort((a, b) => +!!waits[b.id] - +!!waits[a.id])
+  // The person's own order first (new circles go to the bottom), then any
+  // circle with a prayer waiting floats to the top until it's prayed for.
+  const order = settings.circleOrder ?? []
+  const at = (id: string) => { const i = order.indexOf(id); return i < 0 ? order.length : i }
+  const arranged = list && [...list].sort((a, b) => at(a.id) - at(b.id))
+  const shown = arranging ? arranged : arranged && [...arranged].sort((a, b) => +!!waits[b.id] - +!!waits[a.id])
+  const move = (i: number, by: number) => {
+    const ids = arranged!.map(c => c.id), j = i + by
+    if (j < 0 || j >= ids.length) return
+    ;[ids[i], ids[j]] = [ids[j], ids[i]]
+    update({ circleOrder: ids })
+  }
 
   const create = async (code?: string) => {
     if (!name.trim() || !me.trim()) return
@@ -391,7 +403,18 @@ function CircleList() {
               <p class="c-paste"><button class="link small" onClick={leadSeen}>{t('Later')}</button></p>
             </div>
           )}
-          {list?.length ? (
+          {list?.length && arranging ? (<>
+            <ul class="c-list c-arrange">
+              {shown!.map((c, i) => (
+                <li><div class="c-arrange-row">
+                  <strong>{c.name}</strong>
+                  <button class="c-move" disabled={i === 0} aria-label={t('Move up')} onClick={() => move(i, -1)}>↑</button>
+                  <button class="c-move" disabled={i === shown!.length - 1} aria-label={t('Move down')} onClick={() => move(i, 1)}>↓</button>
+                </div></li>
+              ))}
+            </ul>
+            <button class="c-btn primary c-arrange-done" onClick={() => setArranging(false)}>{t('Save')}</button>
+          </>) : list?.length ? (<>
             <ul class="c-list">
               {shown!.map(c => (
                 <li class={waits[c.id] ? 'c-waits' : ''}><button class="c-open" onClick={() => nav.open(c)}>
@@ -400,8 +423,9 @@ function CircleList() {
                 </button></li>
               ))}
             </ul>
-          ) : list && !busy && !locked && <p>{t('You’re not in a circle yet. Join one with a code, or make your own.')}</p>}
-          {making ? (
+            {list.length > 1 && <p class="c-paste"><button class="link small" onClick={() => setArranging(true)}>{t('Change the order')}</button></p>}
+          </>) : list && !busy && !locked && <p>{t('You’re not in a circle yet. Join one with a code, or make your own.')}</p>}
+          {arranging ? null : making ? (
             <div class="c-card">
               <label class="c-label">{t('Name of the circle')}<input ref={nameField} value={name} maxLength={60} placeholder={t('Family, Tuesday group…')} onInput={e => setName((e.target as HTMLInputElement).value)} /></label>
               <label class="c-label">{t('Your name')}<input value={me} maxLength={40} placeholder={t('How the others will see you')} onInput={e => setMe((e.target as HTMLInputElement).value)} /></label>
@@ -425,7 +449,7 @@ function CircleList() {
               <button class="c-btn" onClick={startForm}>{t('New circle')}</button>
             </div>
           )}
-          {!joining && !making && <PasteInvite />}
+          {!joining && !making && !arranging && <PasteInvite />}
         </>}
       {msg && <p class="note small">{msg} {!needCode && <button class="link" onClick={() => load()}>{t('Try again')}</button>}</p>}
       <div class="c-foot">
@@ -1030,7 +1054,31 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
   const emoji = (r: Reaction | 'pray') => reactEmoji(r, settings.prayTone)
   const [busy, setBusy] = useState(false)
   const [confirm, setConfirm] = useState(false)
-  const [tray, setTray] = useState(false)
+  // React's emojis, popped up over the card; ⋯ and what it holds.
+  const [pop, setPop] = useState(false)
+  const [menu, setMenu] = useState(false)
+  const popBox = useRef<HTMLDivElement>(null), menuBox = useRef<HTMLDivElement>(null)
+  const held = useRef(false)
+  // Held down, React opens at once (as holding 🙏 picks a skin tone).
+  const holdToOpen = (open: () => void) => {
+    let timer = 0
+    const stop = () => clearTimeout(timer)
+    return {
+      onPointerDown: () => { held.current = false; timer = window.setTimeout(() => { held.current = true; open() }, 380) },
+      onPointerUp: stop, onPointerLeave: stop, onPointerCancel: stop,
+      onContextMenu: (e: Event) => e.preventDefault(),
+    }
+  }
+  // What opens comes into view, so the emojis are where your eyes are.
+  useEffect(() => { if (pop) popBox.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [pop])
+  useEffect(() => { if (menu) menuBox.current?.scrollIntoView({ block: 'nearest', behavior: 'smooth' }) }, [menu])
+  // A tap anywhere else closes the emojis.
+  useEffect(() => {
+    if (!pop) return
+    const away = (e: PointerEvent) => { if (!(e.target as Element).closest?.('.c-react-at')) setPop(false) }
+    document.addEventListener('pointerdown', away)
+    return () => document.removeEventListener('pointerdown', away)
+  }, [pop])
   const [writing, setWriting] = useState(false)
   const [said, setSaid] = useState('')
   const [err, setErr] = useState('')
@@ -1149,10 +1197,10 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
         {editing ? <div class="c-edit">
           <label class="c-label">{t('What can we pray for?')}
             <textarea rows={3} maxLength={2000} value={editing.note} autoFocus onInput={e => setEditing({ ...editing, note: (e.target as HTMLTextAreaElement).value })} /></label>
-          {editing.verses.length > 0 && <ul class="c-edit-verses">{editing.verses.map(v => (
+          {/* The verses as chips, and + Add a verse right after them on the same line. */}
+          <ul class="c-edit-verses">{editing.verses.map(v => (
             <li><span>{verseLabel(v)}</span><button class="c-edit-x" aria-label={t('Remove')} onClick={() => setEditing({ ...editing, verses: editing.verses.filter(x => x !== v) })}><CloseIcon size={18} /></button></li>
-          ))}</ul>}
-          <button class="c-btn c-edit-add" onClick={() => pickFor({ ...b, note: editing.note.trim() || b.note }, editing.verses)}>+ {t('Add a verse')}</button>
+          ))}<li class="c-edit-add-at"><button class="c-btn c-edit-add" onClick={() => pickFor({ ...b, note: editing.note.trim() || b.note }, editing.verses)}>+ {t('Add a verse')}</button></li></ul>
           <div class="c-row c-two">
             <button class="c-btn" onClick={() => setEditing(undefined)}>{t('Cancel')}</button>
             <button class="c-btn primary" disabled={busy || !editing.note.trim()} onClick={saveEdit}>{busy ? t('Sending…') : t('Save')}</button>
@@ -1186,7 +1234,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
           {item.replies.map(r => (
             <li class={news?.replies.has(r.id) ? 'c-new-reply' : ''}>{news?.replies.has(r.id) && <span class="c-new-tag">{t('New')}</span>}<strong>{nameOf(r.by)}</strong> {r.text}
               {r.by === me && <button class="link small" disabled={busy} aria-label={t('Remove your reply')} onClick={act(() => removeReply(circle, item.id, r.id))}>{t('Remove')}</button>}
-              {r.by !== me && <button class="link small c-report" onClick={() => { setReporting({ reply: r }); setTray(false) }}>{t('Report')}</button>}</li>
+              {r.by !== me && <button class="link small c-report" onClick={() => { setReporting({ reply: r }); setMenu(false) }}>{t('Report')}</button>}</li>
           ))}
         </ul>
       )}
@@ -1213,44 +1261,50 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
         </div>
         <p class="c-guest-foot"><button class="link small c-report" onClick={() => setReporting({})}>{t('Report')}</button></p>
       </>}
-      {/* Two plain buttons: write back, or open the reactions and the rest. */}
+      {/* ⋯ (edit, remove, report, keep) on the left; Reply and React on the
+          right. React pops the emojis up over the card, tapped or held. */}
       {!guest && !writing && (
         <div class="c-respond-row">
+          <button class={'c-more-btn' + (menu ? ' on' : '')} aria-expanded={menu} aria-label={t('More')} title={t('More')}
+            onClick={() => { setMenu(!menu); setPop(false); setConfirm(false) }}><DotsIcon /></button>
           {/* Prayed already, in silence? One quiet tap says so, beside Reply. */}
           {b.k === 'ask' && !mine && !prayed && !answered && <button class="link c-prayed-quiet" onClick={pray}>{t('I already prayed')}</button>}
-          <button class="c-respond" onClick={() => { setWriting(true); setTray(false) }}>{t('Reply')}</button>
-          <button class={'c-respond' + (tray ? ' on' : '')} aria-expanded={tray} onClick={() => { setTray(!tray); setConfirm(false) }}>{tray ? t('Done') : t('React')}</button>
+          <span class="spacer" />
+          <button class="c-respond" onClick={() => { setWriting(true); setPop(false); setMenu(false) }}>{t('Reply')}</button>
+          <span class="c-react-at">
+            <button class={'c-respond' + (pop ? ' on' : '')} aria-expanded={pop} {...holdToOpen(() => { setPop(true); setMenu(false) })}
+              onClick={() => { if (held.current) { held.current = false; return } setPop(!pop); setMenu(false) }}>{t('React')}</button>
+            {pop && (
+              <div class="c-react-pop" role="group" aria-label={t('Reactions')} ref={popBox}>
+                {b.k !== 'ask' && <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={() => { pray(); setPop(false) }}
+                  aria-label={prayed ? t('Praying') : t('Pray with')} title={prayed ? t('Praying') : t('Pray with')}>
+                  <span class="c-react-emoji" aria-hidden="true">{emoji('pray')}</span>
+                </button>}
+                {REACTS.map(r => {
+                  const on = myReacts.includes(r)
+                  return (
+                    <button class={'c-react' + (on ? ' on' : '')} aria-pressed={on} onClick={() => { toggle(r); setPop(false) }} aria-label={REACT_WORDS[r]()} title={REACT_WORDS[r]()}>
+                      <span class="c-react-emoji" aria-hidden="true">{emoji(r)}</span>
+                    </button>
+                  )
+                })}
+              </div>
+            )}
+          </span>
         </div>
       )}
-      {tray && !writing && !guest && (
-        <div class="c-tray">
-          <div class="c-reacts" role="group" aria-label={t('Reactions')}>
-            {b.k !== 'ask' && <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={() => { pray(); setTray(false) }}
-              aria-label={prayed ? t('Praying') : t('Pray with')} title={prayed ? t('Praying') : t('Pray with')}>
-              <span class="c-react-emoji" aria-hidden="true">{emoji('pray')}</span>
-            </button>}
-            {REACTS.map(r => {
-              const on = myReacts.includes(r)
-              return (
-                <button class={'c-react' + (on ? ' on' : '')} aria-pressed={on} onClick={() => { toggle(r); setTray(false) }} aria-label={REACT_WORDS[r]()} title={REACT_WORDS[r]()}>
-                  <span class="c-react-emoji" aria-hidden="true">{emoji(r)}</span>
-                </button>
-              )
-            })}
-          </div>
-          <div class="c-item-foot">
-            {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
-              ? <button class="c-amen" onClick={() => { keepNote(); setTray(false) }}>{t('Keep note')}</button>
-              : !bookmarked && <button class="c-amen" onClick={() => { bookmark(); setTray(false) }}>{t('Bookmark')}</button>)}
-            <span class="spacer" />
-            {/* Your own request: its words and verses; your prayer: its verses. */}
-            {mine && !confirm && b.k === 'ask' && <button class="link small" onClick={() => { setEditing({ note: b.note, verses: b.verses ?? [] }); setTray(false) }}>{t('Edit')}</button>}
-            {mine && !confirm && b.k === 'prayer' && <button class="link small" onClick={() => { setTray(false); pickFor(b, sharedVerses(b)) }}>{t('Change verses')}</button>}
-            {mine && (confirm
-              ? <><button class="c-btn small" onClick={() => setConfirm(false)}>{t('Keep')}</button><button class="c-btn small danger" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button></>
-              : <button class="link small" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
-            {!mine && <button class="link small c-report" onClick={() => { setReporting({}); setTray(false) }}>{t('Report')}</button>}
-          </div>
+      {menu && !writing && !guest && (
+        <div class="c-menu" ref={menuBox}>
+          {!mine && verse && b.k !== 'prayer' && (b.k === 'note'
+            ? <button class="c-btn c-menu-btn" onClick={() => { keepNote(); setMenu(false) }}>{t('Keep note')}</button>
+            : !bookmarked && <button class="c-btn c-menu-btn" onClick={() => { bookmark(); setMenu(false) }}>{t('Bookmark')}</button>)}
+          {/* Your own request: its words and verses; your prayer: its verses. */}
+          {mine && !confirm && b.k === 'ask' && <button class="c-btn c-menu-btn" onClick={() => { setEditing({ note: b.note, verses: b.verses ?? [] }); setMenu(false) }}>{t('Edit')}</button>}
+          {mine && !confirm && b.k === 'prayer' && <button class="c-btn c-menu-btn" onClick={() => { setMenu(false); pickFor(b, sharedVerses(b)) }}>{t('Change verses')}</button>}
+          {mine && (confirm
+            ? <div class="c-row c-two"><button class="c-btn danger-quiet" disabled={busy} onClick={act(() => removeShared(circle, item.id))}>{t('Remove for everyone')}</button><button class="c-btn primary" onClick={() => setConfirm(false)}>{t('Keep')}</button></div>
+            : <button class="c-btn c-menu-btn c-menu-danger" onClick={() => setConfirm(true)}>{t('Remove')}</button>)}
+          {!mine && <button class="c-btn c-menu-btn" onClick={() => { setReporting({}); setMenu(false) }}>{t('Report')}</button>}
         </div>
       )}
       {reporting && <ReportCard circle={circle} item={item} reply={reporting.reply} nameOf={nameOf}
@@ -1424,6 +1478,11 @@ function AfterPrayer() {
     </div>
   )
 }
+
+/** ⋯: more you can do with something shared. */
+const DotsIcon = () => (
+  <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true" fill="currentColor"><circle cx="5" cy="12" r="2.3" /><circle cx="12" cy="12" r="2.3" /><circle cx="19" cy="12" r="2.3" /></svg>
+)
 
 /** Asked again: a round arrow. */
 const AgainIcon = () => (

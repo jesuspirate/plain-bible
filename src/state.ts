@@ -63,6 +63,8 @@ export interface Settings {
   worldMap: boolean
   /** the circles that see your streaks (ids); none unless you turn it on */
   shareStreaks: string[]
+  // Circles list order the person arranged (circle ids, top first).
+  circleOrder: string[]
   strongs: boolean
   strongsNumbers: boolean
   myVersions: string[]
@@ -95,7 +97,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => (t.lang === lang || t.lang.split('-')[0] === lang) && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], hideBars: false, layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, alongButton: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, worldMap: true, shareStreaks: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], hideBars: false, layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, alongButton: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', noteReminders: true, streaks: true, worldMap: true, shareStreaks: [], circleOrder: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
