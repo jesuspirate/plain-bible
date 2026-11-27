@@ -106,7 +106,13 @@ function steps(): Step[] {
         { glyph: 'hold', text: t('Hold 🙏 to choose its skin tone') },
       ], after: hasWidget() ? t('A 🙏 widget for your Home Screen comes with the app.') : undefined,
       moves: [{ kind: 'tap', row: 0 }, { kind: 'hold', row: 1 }] },
-    { title: t('Go back'), body: t('After you jump somewhere else, tap here to go back to where you were reading.'), find: onScreen('.history-btn'), moves: [tap] },
+    // Where the history clock was. Its places are in Settings now: one line
+    // here says so, for those who used it.
+    { title: t('Bible versions'), find: onScreen('.version-btn'), rows: [
+        { glyph: 'tap', text: t('Tap to switch to the Bible you read before. Tap again to come back.') },
+        { glyph: 'hold', text: t('Hold to choose from your Bibles, or any of them.') },
+      ], after: t('The places you were reading are in Settings → Recent places.'),
+      moves: [{ kind: 'tap', row: 0 }, { kind: 'hold', row: 1 }] },
     { title: t('Settings'), body: t('Your Bible, text size, theme, language and account are all here.') + ' ' + (sync ? t('Once signed in, your other devices offer to continue where you stopped reading.') + ' ' : '') + t('You can take this tour again from Settings.'), find: onScreen('.profile-btn'), moves: [tap] },
   ]
   return all.filter((s): s is Step => !!s)
