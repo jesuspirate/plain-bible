@@ -108,15 +108,17 @@ const when = (at: number, day = false) => new Date(at).toLocaleString(locale(), 
 /** How the circles move between their pages. Inside the prayer screen it
  *  keeps track (its back button steps out), and anything that leads to the
  *  Bible closes it first; as #/circles pages, the URL does. */
-interface Nav { sheet: boolean; open: (c?: { id: string; name: string }) => void; away: () => void }
+interface Nav { sheet: boolean; open: (c?: { id: string; name: string }) => void; away: () => void
+  /** Change the order: the card's header shows ‹ back instead of Done. */
+  arranging?: boolean; setArranging?: (on: boolean) => void }
 const NavCtx = createContext<Nav>({ sheet: false, open: c => go(c ? `circles/${c.id}` : 'circles'), away: () => {} })
 const useNav = () => useContext(NavCtx)
 
 /** Circles inside the prayer screen: the list, or one circle. */
-export function CirclesPanel({ circle, onOpen, onAway }: { circle?: string; onOpen: (c?: { id: string; name: string }) => void; onAway: () => void }) {
+export function CirclesPanel({ circle, onOpen, onAway, arranging, setArranging }: { circle?: string; onOpen: (c?: { id: string; name: string }) => void; onAway: () => void; arranging?: boolean; setArranging?: (on: boolean) => void }) {
   if (!SYNC_URL) return <p class="muted">{t('Circles aren’t available in this copy of the app.')}</p>
   return (
-    <NavCtx.Provider value={{ sheet: true, open: onOpen, away: onAway }}>
+    <NavCtx.Provider value={{ sheet: true, open: onOpen, away: onAway, arranging, setArranging }}>
       {!loadAccount() ? <SignedOut /> : circle ? <CircleView key={circle} id={circle} /> : <CircleList />}
     </NavCtx.Provider>
   )
@@ -274,7 +276,12 @@ export const warmList = () => lastList ? Promise.resolve() : keptCircles().then(
 function CircleList() {
   const nav = useNav()
   const { settings, update } = useApp()
-  const [arranging, setArranging] = useState(false)
+  // Change the order: moves stay a draft until Save; ‹ back leaves them.
+  const [arrangingHere, setArrangingHere] = useState(false)
+  const arranging = nav.setArranging ? !!nav.arranging : arrangingHere
+  const [draft, setDraft] = useState<string[]>([])
+  const setArranging = (on: boolean) => { if (on) setDraft(arranged?.map(c => c.id) ?? []); (nav.setArranging ?? setArrangingHere)(on) }
+  useEffect(() => () => nav.setArranging?.(false), [])
   useCircleNews()
   const [list, setList] = useState<CircleInfo[] | undefined>(lastList)
   const [msg, setMsg] = useState('')
@@ -354,7 +361,7 @@ function CircleList() {
   }, [list])
   // The person's own order first (new circles go to the bottom), then any
   // circle with a prayer waiting floats to the top until it's prayed for.
-  const order = settings.circleOrder ?? []
+  const order = arranging ? draft : settings.circleOrder ?? []
   const at = (id: string) => { const i = order.indexOf(id); return i < 0 ? order.length : i }
   const arranged = list && [...list].sort((a, b) => at(a.id) - at(b.id))
   const shown = arranging ? arranged : arranged && [...arranged].sort((a, b) => +!!waits[b.id] - +!!waits[a.id])
@@ -362,8 +369,9 @@ function CircleList() {
     const ids = arranged!.map(c => c.id), j = i + by
     if (j < 0 || j >= ids.length) return
     ;[ids[i], ids[j]] = [ids[j], ids[i]]
-    update({ circleOrder: ids })
+    setDraft(ids)
   }
+  const saveOrder = () => { update({ circleOrder: arranged!.map(c => c.id) }); setArranging(false) }
 
   const create = async (code?: string) => {
     if (!name.trim() || !me.trim()) return
@@ -378,8 +386,10 @@ function CircleList() {
 
   return (
     <div class="circles">
-      {!nav.sheet && <h1 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h1>}
-      <p class="muted">{t('Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.')}</p>
+      {!nav.sheet && (arranging
+        ? <h1><button class="settings-back" onClick={() => setArranging(false)}><BackIcon class="back-ico" /> {t('Change the order')}</button></h1>
+        : <h1 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h1>)}
+      {!arranging && <p class="muted">{t('Share verses and prayers with a few people you choose. Everything is encrypted on your device; only your circle can read or hear it.')}</p>}
       {needCode
         ? <CodeEntry busy={busy} onCode={c => needCode === 'create' ? create(c) : load(true, c)} onCancel={() => setNeedCode('')}
           onApproved={() => needCode === 'create' ? create() : load(true)} />
@@ -413,7 +423,7 @@ function CircleList() {
                 </div></li>
               ))}
             </ul>
-            <button class="c-btn primary c-arrange-done" onClick={() => setArranging(false)}>{t('Save')}</button>
+            <button class="c-btn primary c-arrange-done" onClick={saveOrder}>{t('Save')}</button>
           </>) : list?.length ? (<>
             <ul class="c-list">
               {shown!.map(c => (
@@ -452,12 +462,12 @@ function CircleList() {
           {!joining && !making && !arranging && <PasteInvite />}
         </>}
       {msg && <p class="note small">{msg} {!needCode && <button class="link" onClick={() => load()}>{t('Try again')}</button>}</p>}
-      <div class="c-foot">
+      {!arranging && <div class="c-foot">
         {key
           ? <><p class="c-key"><code>{key.replace(/-/g, '-​')}</code></p>
             <p class="muted small">{t('Only needed on a device whose passkey can’t unlock your circles. Keep it private: it opens your circles and your synced prayers.')}</p></>
           : <button class="link small" onClick={() => accountKeyCode().then(k => setKey(k || t('Open a circle on this device first.')))}>{t('Show my key')}</button>}
-      </div>
+      </div>}
     </div>
   )
 }

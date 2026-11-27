@@ -449,6 +449,7 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [mod, setMod] = useState(() => circlesMod)
   useEffect(() => { if (!mod) warmCircles().then(() => setMod(() => circlesMod), () => {}) }, [])
   const [circle, setShown] = useState(at?.circle)
+  const [arranging, setArranging] = useState(false)
   // A circle opens once what it holds is ready (it's kept on this phone, so
   // that's a moment), not as a bare title that then fills in.
   const setCircle = (c?: { id: string; name: string }) => {
@@ -469,11 +470,14 @@ function CirclesCard({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         <div class="pray-title">
           {circle
             ? <button class="settings-back" onClick={() => setCircle(undefined)}><BackIcon class="back-ico" /> <span class="back-name">{circle.name}</span></button>
-            : <h2 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h2>}
-          <button class="done-btn" onClick={done}>{t('Done')}</button>
+            : arranging
+              // Change the order: only ‹ back (leaves it as it was) and Save below.
+              ? <button class="settings-back" onClick={() => setArranging(false)}><BackIcon class="back-ico" /> <span class="back-name">{t('Change the order')}</span></button>
+              : <h2 class="title-with-icon"><CircleIcon size="1.3em" /> {t('Circles')}</h2>}
+          {!(arranging && !circle) && <button class="done-btn" onClick={done}>{t('Done')}</button>}
         </div>
       </div>
-      {mod ? <mod.CirclesPanel circle={circle?.id} onOpen={setCircle} onAway={onClose} /> : <p class="muted">{t('Opening…')}</p>}
+      {mod ? <mod.CirclesPanel circle={circle?.id} onOpen={setCircle} onAway={onClose} arranging={arranging} setArranging={setArranging} /> : <p class="muted">{t('Opening…')}</p>}
     </div>
   )
 }

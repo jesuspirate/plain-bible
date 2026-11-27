@@ -327,3 +327,5 @@ button.c-btn.danger-quiet { background: transparent; border-color: #b3261e; colo
 .c-move:disabled { opacity: .25; cursor: default; }
 :root[data-theme='dark'] .c-react-pop { box-shadow: 0 12px 32px rgba(0, 0, 0, .5), 0 0 0 100vmax rgba(0, 0, 0, .55); }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .c-react-pop { box-shadow: 0 12px 32px rgba(0, 0, 0, .5), 0 0 0 100vmax rgba(0, 0, 0, .55); } }
+/* Change the order as a page: its ‹ back and Save are the only ways out. */
+body:has(.c-arrange) header.top .done-btn { visibility: hidden; }
