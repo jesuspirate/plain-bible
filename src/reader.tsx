@@ -60,7 +60,7 @@ function verseHere(): number {
   return cut || 1
 }
 
-/** That verse gets a faint 🙏 after its number once the page rests
+/** That verse gets a faint 🙏 at its end once the page rests
  *  (styles.css): where you stopped, so you know where to pick up (here, or
  *  on another device), and the verse a prayer would be kept with if you prayed now.
  *  Verses you selected, or the one being read aloud, take its place.
@@ -72,8 +72,8 @@ function markPray() {
   setPrayHere(r[0] === 'read' ? { book: r[2], chapter: +r[3], verse: v } : undefined)
   // It's also where you stopped: what your other devices offer to continue from.
   if (r[0] === 'read') savePlaceHere(r[2], +r[3], v)
-  // The mark takes a little room in its line, so a verse can gain or lose a
-  // line as it moves: keep the verse you're on exactly where it was.
+  // The mark takes no room, but should a verse ever reflow as it moves,
+  // keep the verse you're on exactly where it was.
   const el = document.getElementById('v' + v)
   if (el?.hasAttribute('data-pray')) return
   const before = el?.getBoundingClientRect().top
