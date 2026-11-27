@@ -403,7 +403,6 @@
 "Note on verse {v}": "Нотатка до вірша {v}",
 "{n} elsewhere": "В інших місцях: {n}",
 "Verse {v} options": "Дії з віршем {v}",
-"{version} does not include {book} {chapter}.": "У перекладі {version} немає: {book} {chapter}.",
 "Previous": "Назад",
 "Next": "Далі",
 "Your notes": "Ваші нотатки",
@@ -1474,5 +1473,11 @@
 "Where you were reading": "Де ви читали",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Торкніться, щоб перейти на Біблію, яку читали раніше. Торкніться знову, щоб повернутися.",
 "Hold to choose from your Bibles, or any of them.": "Утримуйте, щоб вибрати з ваших Біблій або будь-яку іншу.",
-"The places you were reading are in Settings → Recent places.": "Місця, де ви читали, знаходяться в Параметри → Недавні місця."
+"The places you were reading are in Settings → Recent places.": "Місця, де ви читали, знаходяться в Параметри → Недавні місця.",
+"{ref} isn’t in this Bible": "{ref} немає в цій Біблії",
+"Read it in {version}": "Читати в {version}",
+"Other Bibles that have it": "Інші Біблії, де це є",
+"All Bibles that have it ({n})": "Усі Біблії, де це є ({n})",
+"Here this chapter ends at verse {n}.": "Тут цей розділ закінчується віршем {n}.",
+"Go to verse {n}": "Перейти до вірша {n}"
 }

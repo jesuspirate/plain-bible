@@ -353,7 +353,6 @@
 "Note on verse {v}": "Σημείωση στο εδάφιο {v}",
 "{n} elsewhere": "{n} αλλού",
 "Verse {v} options": "Επιλογές εδαφίου {v}",
-"{version} does not include {book} {chapter}.": "Η μετάφραση {version} δεν περιλαμβάνει το {book} {chapter}.",
 "Previous": "Προηγούμενο",
 "Next": "Επόμενο",
 "Your notes": "Οι σημειώσεις σας",
@@ -1367,5 +1366,11 @@
 "Where you were reading": "Εκεί που διαβάζατε",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Πατήστε για να αλλάξετε στη Βίβλο που διαβάζατε πριν. Πατήστε ξανά για να επιστρέψετε.",
 "Hold to choose from your Bibles, or any of them.": "Κρατήστε πατημένο για να διαλέξετε από τις Βίβλους σας ή οποιαδήποτε άλλη.",
-"The places you were reading are in Settings → Recent places.": "Τα σημεία όπου διαβάζατε βρίσκονται στις Ρυθμίσεις → Πρόσφατα σημεία."
+"The places you were reading are in Settings → Recent places.": "Τα σημεία όπου διαβάζατε βρίσκονται στις Ρυθμίσεις → Πρόσφατα σημεία.",
+"{ref} isn’t in this Bible": "Το {ref} δεν υπάρχει σε αυτή τη Βίβλο",
+"Read it in {version}": "Ανάγνωση στη {version}",
+"Other Bibles that have it": "Άλλες Βίβλοι που το έχουν",
+"All Bibles that have it ({n})": "Όλες οι Βίβλοι που το έχουν ({n})",
+"Here this chapter ends at verse {n}.": "Εδώ το κεφάλαιο τελειώνει στο εδάφιο {n}.",
+"Go to verse {n}": "Μετάβαση στο εδάφιο {n}"
 }

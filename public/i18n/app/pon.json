@@ -353,7 +353,6 @@
 "Note on verse {v}": "Nting ong iretik {v}",
 "{n} elsewhere": "{n} ni wasa teio",
 "Verse {v} options": "Mehkan me komw kak wia ong iretik {v}",
-"{version} does not include {book} {chapter}.": "{version} sohte audaudki {book} {chapter}.",
 "Previous": "Mahs",
 "Next": "Kohkohdo",
 "Your notes": "Noumw nting kan",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Wasa me ke wia wadawad ie",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Doake pwe ke en kawilikihla Paipel me ke wadek mahs. Doake pahn pwe ke en pwurala.",
 "Hold to choose from your Bibles, or any of them.": "Kolekol pwe ke en pilada sang nan omw Paipel kan, de mehmen.",
-"The places you were reading are in Settings → Recent places.": "Wasa kan me ke wadawad ie mie nan Koasoandi → Wasa kaping."
+"The places you were reading are in Settings → Recent places.": "Wasa kan me ke wadawad ie mie nan Koasoandi → Wasa kaping.",
+"{ref} isn’t in this Bible": "{ref} sohte mi nan Paipel wet",
+"Read it in {version}": "Wadek nan {version}",
+"Other Bibles that have it": "Paipel teikan me mie loale",
+"All Bibles that have it ({n})": "Paipel koaros me mie loale ({n})",
+"Here this chapter ends at verse {n}.": "Wasaht kisinlikou wet imwisekla ni iretehn {n}.",
+"Go to verse {n}": "Kohla ni iretehn {n}"
 }

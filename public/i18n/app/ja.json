@@ -353,7 +353,6 @@
 "Note on verse {v}": "{v} 節のメモ",
 "{n} elsewhere": "ほかに {n} 件",
 "Verse {v} options": "{v} 節のオプション",
-"{version} does not include {book} {chapter}.": "{version} には{book} {chapter} 章が含まれていません。",
 "Previous": "前へ",
 "Next": "次へ",
 "Your notes": "あなたのメモ",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "読んでいた場所",
 "Tap to switch to the Bible you read before. Tap again to come back.": "タップで前に読んでいた聖書に切り替え。もう一度タップで戻ります。",
 "Hold to choose from your Bibles, or any of them.": "長押しで、いつもの聖書やほかの訳から選べます。",
-"The places you were reading are in Settings → Recent places.": "読んでいた場所は 設定 → 最近の場所 にあります。"
+"The places you were reading are in Settings → Recent places.": "読んでいた場所は 設定 → 最近の場所 にあります。",
+"{ref} isn’t in this Bible": "この聖書には{ref}がありません",
+"Read it in {version}": "{version}で読む",
+"Other Bibles that have it": "これを含む他の聖書",
+"All Bibles that have it ({n})": "これを含むすべての聖書（{n}）",
+"Here this chapter ends at verse {n}.": "この聖書では、この章は{n}節で終わります。",
+"Go to verse {n}": "{n}節へ移動"
 }

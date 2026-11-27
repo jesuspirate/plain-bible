@@ -353,7 +353,6 @@
 "Note on verse {v}": "Manaʻo kākau ma ka paukū {v}",
 "{n} elsewhere": "{n} ma nā wahi ʻē aʻe",
 "Verse {v} options": "Nā koho no ka paukū {v}",
-"{version} does not include {book} {chapter}.": "ʻAʻole i loko o {version} ʻo {book} {chapter}.",
 "Previous": "Ma mua",
 "Next": "Ma hope",
 "Your notes": "Kāu mau manaʻo kākau",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Kahi āu i heluhelu ai",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Kaomi e hoʻololi i ka Baibala āu i heluhelu mua ai. Kaomi hou e hoʻi.",
 "Hold to choose from your Bibles, or any of them.": "Paʻa e koho mai kāu mau Baibala, a i ʻole kekahi.",
-"The places you were reading are in Settings → Recent places.": "Aia nā wahi āu i heluhelu ai ma Nā Hoʻonohonoho → Nā wahi hou."
+"The places you were reading are in Settings → Recent places.": "Aia nā wahi āu i heluhelu ai ma Nā Hoʻonohonoho → Nā wahi hou.",
+"{ref} isn’t in this Bible": "ʻAʻole ʻo {ref} i loko o kēia Baibala",
+"Read it in {version}": "Heluhelu ma {version}",
+"Other Bibles that have it": "Nā Baibala ʻē aʻe i loaʻa ia",
+"All Bibles that have it ({n})": "Nā Baibala a pau i loaʻa ia ({n})",
+"Here this chapter ends at verse {n}.": "Ma ʻaneʻi, pau kēia mokuna ma ka paukū {n}.",
+"Go to verse {n}": "E hele i ka paukū {n}"
 }

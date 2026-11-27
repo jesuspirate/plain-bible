@@ -353,7 +353,6 @@
 "Note on verse {v}": "വാക്യം {v}-ലെ കുറിപ്പ്",
 "{n} elsewhere": "മറ്റിടങ്ങളിൽ {n}",
 "Verse {v} options": "വാക്യം {v} ഓപ്ഷനുകൾ",
-"{version} does not include {book} {chapter}.": "{version}-ൽ {book} {chapter} ഇല്ല.",
 "Previous": "മുമ്പത്തേത്",
 "Next": "അടുത്തത്",
 "Your notes": "നിങ്ങളുടെ കുറിപ്പുകൾ",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "നിങ്ങൾ വായിച്ചുകൊണ്ടിരുന്ന ഇടം",
 "Tap to switch to the Bible you read before. Tap again to come back.": "മുമ്പ് വായിച്ച ബൈബിളിലേക്ക് മാറാൻ ടാപ്പ് ചെയ്യുക. തിരികെ വരാൻ വീണ്ടും ടാപ്പ് ചെയ്യുക.",
 "Hold to choose from your Bibles, or any of them.": "നിങ്ങളുടെ ബൈബിളുകളിൽ നിന്നോ ഏതെങ്കിലുമോ തിരഞ്ഞെടുക്കാൻ അമർത്തിപ്പിടിക്കുക.",
-"The places you were reading are in Settings → Recent places.": "നിങ്ങൾ വായിച്ച സ്ഥലങ്ങൾ ക്രമീകരണം → സമീപകാല സ്ഥലങ്ങൾ ൽ ഉണ്ട്."
+"The places you were reading are in Settings → Recent places.": "നിങ്ങൾ വായിച്ച സ്ഥലങ്ങൾ ക്രമീകരണം → സമീപകാല സ്ഥലങ്ങൾ ൽ ഉണ്ട്.",
+"{ref} isn’t in this Bible": "{ref} ഈ ബൈബിളിൽ ഇല്ല",
+"Read it in {version}": "{version}-ൽ വായിക്കുക",
+"Other Bibles that have it": "ഇതുള്ള മറ്റ് ബൈബിളുകൾ",
+"All Bibles that have it ({n})": "ഇതുള്ള എല്ലാ ബൈബിളുകളും ({n})",
+"Here this chapter ends at verse {n}.": "ഇവിടെ ഈ അധ്യായം വാക്യം {n}-ൽ അവസാനിക്കുന്നു.",
+"Go to verse {n}": "വാക്യം {n}-ലേക്ക് പോകുക"
 }

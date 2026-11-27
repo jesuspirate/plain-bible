@@ -353,7 +353,6 @@
 "Note on verse {v}": "ਆਇਤ {v} ’ਤੇ ਨੋਟ",
 "{n} elsewhere": "ਹੋਰ ਥਾਂ {n}",
 "Verse {v} options": "ਆਇਤ {v} ਦੇ ਵਿਕਲਪ",
-"{version} does not include {book} {chapter}.": "{version} ਵਿੱਚ {book} {chapter} ਨਹੀਂ ਹੈ।",
 "Previous": "ਪਿਛਲਾ",
 "Next": "ਅਗਲਾ",
 "Your notes": "ਤੁਹਾਡੇ ਨੋਟ",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "ਜਿੱਥੇ ਤੁਸੀਂ ਪੜ੍ਹ ਰਹੇ ਸੀ",
 "Tap to switch to the Bible you read before. Tap again to come back.": "ਪਹਿਲਾਂ ਪੜ੍ਹੀ ਬਾਈਬਲ ’ਤੇ ਜਾਣ ਲਈ ਟੈਪ ਕਰੋ। ਵਾਪਸ ਆਉਣ ਲਈ ਫਿਰ ਟੈਪ ਕਰੋ।",
 "Hold to choose from your Bibles, or any of them.": "ਆਪਣੀਆਂ ਬਾਈਬਲਾਂ ਵਿੱਚੋਂ ਜਾਂ ਕੋਈ ਵੀ ਚੁਣਨ ਲਈ ਦਬਾ ਕੇ ਰੱਖੋ।",
-"The places you were reading are in Settings → Recent places.": "ਜਿੱਥੇ ਤੁਸੀਂ ਪੜ੍ਹ ਰਹੇ ਸੀ ਉਹ ਥਾਵਾਂ ਸੈਟਿੰਗਾਂ → ਹਾਲੀਆ ਥਾਵਾਂ ਵਿੱਚ ਹਨ।"
+"The places you were reading are in Settings → Recent places.": "ਜਿੱਥੇ ਤੁਸੀਂ ਪੜ੍ਹ ਰਹੇ ਸੀ ਉਹ ਥਾਵਾਂ ਸੈਟਿੰਗਾਂ → ਹਾਲੀਆ ਥਾਵਾਂ ਵਿੱਚ ਹਨ।",
+"{ref} isn’t in this Bible": "{ref} ਇਸ ਬਾਈਬਲ ਵਿੱਚ ਨਹੀਂ ਹੈ",
+"Read it in {version}": "{version} ਵਿੱਚ ਪੜ੍ਹੋ",
+"Other Bibles that have it": "ਹੋਰ ਬਾਈਬਲਾਂ ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਇਹ ਹੈ",
+"All Bibles that have it ({n})": "ਸਾਰੀਆਂ ਬਾਈਬਲਾਂ ਜਿਨ੍ਹਾਂ ਵਿੱਚ ਇਹ ਹੈ ({n})",
+"Here this chapter ends at verse {n}.": "ਇੱਥੇ ਇਹ ਅਧਿਆਇ ਆਇਤ {n} ’ਤੇ ਖ਼ਤਮ ਹੁੰਦਾ ਹੈ।",
+"Go to verse {n}": "ਆਇਤ {n} ’ਤੇ ਜਾਓ"
 }

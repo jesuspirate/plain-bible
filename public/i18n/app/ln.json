@@ -353,7 +353,6 @@
 "Note on verse {v}": "Noti na vɛrsɛ {v}",
 "{n} elsewhere": "{n} na esika mosusu",
 "Verse {v} options": "Makambo ya vɛrsɛ {v}",
-"{version} does not include {book} {chapter}.": "{version} ezali na {book} {chapter} te.",
 "Previous": "Oyo ya liboso",
 "Next": "Oyo elandi",
 "Your notes": "Noti na yo",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Esika ozalaki kotánga",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Finá mpo na kokende na Biblia oyo otángaki liboso. Finá lisusu mpo na kozonga.",
 "Hold to choose from your Bibles, or any of them.": "Simba mpo na kopona na kati ya Biblia na yo, to nyonso.",
-"The places you were reading are in Settings → Recent places.": "Bisika ozalaki kotánga ezali na Bibongiseli → Bisika ya sika."
+"The places you were reading are in Settings → Recent places.": "Bisika ozalaki kotánga ezali na Bibongiseli → Bisika ya sika.",
+"{ref} isn’t in this Bible": "{ref} ezali te na Biblia oyo",
+"Read it in {version}": "Tánga yango na {version}",
+"Other Bibles that have it": "Biblia mosusu oyo ezali na yango",
+"All Bibles that have it ({n})": "Biblia nyonso oyo ezali na yango ({n})",
+"Here this chapter ends at verse {n}.": "Awa, mokapo oyo esuki na vɛrsɛ {n}.",
+"Go to verse {n}": "Kende na vɛrsɛ {n}"
 }

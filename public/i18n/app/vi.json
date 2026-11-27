@@ -353,7 +353,6 @@
 "Note on verse {v}": "Ghi chú cho câu {v}",
 "{n} elsewhere": "{n} ở chỗ khác",
 "Verse {v} options": "Tùy chọn cho câu {v}",
-"{version} does not include {book} {chapter}.": "{version} không có {book} {chapter}.",
 "Previous": "Trước",
 "Next": "Tiếp",
 "Your notes": "Ghi chú của bạn",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Nơi bạn đang đọc",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Chạm để chuyển sang bản Kinh Thánh bạn đọc trước đó. Chạm lần nữa để quay lại.",
 "Hold to choose from your Bibles, or any of them.": "Giữ để chọn trong các bản Kinh Thánh của bạn, hoặc bất kỳ bản nào.",
-"The places you were reading are in Settings → Recent places.": "Những chỗ bạn đã đọc nằm trong Cài đặt → Chỗ đọc gần đây."
+"The places you were reading are in Settings → Recent places.": "Những chỗ bạn đã đọc nằm trong Cài đặt → Chỗ đọc gần đây.",
+"{ref} isn’t in this Bible": "{ref} không có trong bản Kinh Thánh này",
+"Read it in {version}": "Đọc trong {version}",
+"Other Bibles that have it": "Bản Kinh Thánh khác có đoạn này",
+"All Bibles that have it ({n})": "Tất cả bản Kinh Thánh có đoạn này ({n})",
+"Here this chapter ends at verse {n}.": "Ở đây chương này kết thúc ở câu {n}.",
+"Go to verse {n}": "Đến câu {n}"
 }

@@ -353,7 +353,6 @@
 "Note on verse {v}": "Tala sa talata {v}",
 "{n} elsewhere": "{n} sa ibang lugar",
 "Verse {v} options": "Mga opsiyon sa talata {v}",
-"{version} does not include {book} {chapter}.": "Walang {book} {chapter} sa {version}.",
 "Previous": "Nakaraan",
 "Next": "Susunod",
 "Your notes": "Iyong mga tala",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Kung saan ka nagbabasa",
 "Tap to switch to the Bible you read before. Tap again to come back.": "I-tap para lumipat sa Bibliyang binasa mo dati. I-tap muli para bumalik.",
 "Hold to choose from your Bibles, or any of them.": "Pindutin nang matagal para pumili sa iyong mga Bibliya, o alinman.",
-"The places you were reading are in Settings → Recent places.": "Ang mga lugar kung saan ka nagbasa ay nasa Mga Setting → Mga kamakailang lugar."
+"The places you were reading are in Settings → Recent places.": "Ang mga lugar kung saan ka nagbasa ay nasa Mga Setting → Mga kamakailang lugar.",
+"{ref} isn’t in this Bible": "Wala ang {ref} sa Bibliyang ito",
+"Read it in {version}": "Basahin sa {version}",
+"Other Bibles that have it": "Ibang Bibliya na mayroon nito",
+"All Bibles that have it ({n})": "Lahat ng Bibliya na mayroon nito ({n})",
+"Here this chapter ends at verse {n}.": "Dito, nagtatapos ang kabanata sa talata {n}.",
+"Go to verse {n}": "Pumunta sa talata {n}"
 }

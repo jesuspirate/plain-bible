@@ -353,7 +353,6 @@
 "Note on verse {v}": "Ndetu na amaokwu {v}",
 "{n} elsewhere": "{n} n’ebe ọzọ",
 "Verse {v} options": "Nhọrọ amaokwu {v}",
-"{version} does not include {book} {chapter}.": "{version} enweghị {book} {chapter}.",
 "Previous": "Nke gara aga",
 "Next": "Nke na-esote",
 "Your notes": "Ndetu gị",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Ebe ị na-agụ",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Pịa ka ịgbanwee gaa na Baịbụl ị gụrụ na mbụ. Pịa ọzọ ka ịlaghachi.",
 "Hold to choose from your Bibles, or any of them.": "Jide ka ịhọrọ site na Baịbụl gị, ma ọ bụ nke ọ bụla.",
-"The places you were reading are in Settings → Recent places.": "Ebe ị na-agụ dị na Ntọala → Ebe ndị na-adịbeghị anya."
+"The places you were reading are in Settings → Recent places.": "Ebe ị na-agụ dị na Ntọala → Ebe ndị na-adịbeghị anya.",
+"{ref} isn’t in this Bible": "{ref} adịghị na Baịbụl a",
+"Read it in {version}": "Gụọ ya na {version}",
+"Other Bibles that have it": "Baịbụl ndị ọzọ nwere ya",
+"All Bibles that have it ({n})": "Baịbụl niile nwere ya ({n})",
+"Here this chapter ends at verse {n}.": "N’ebe a, isi a na-akwụsị n’amaokwu {n}.",
+"Go to verse {n}": "Gaa n’amaokwu {n}"
 }

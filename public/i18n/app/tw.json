@@ -353,7 +353,6 @@
 "Note on verse {v}": "Nkaeɛ wɔ nkyekyɛm {v} so",
 "{n} elsewhere": "{n} wɔ baabi foforo",
 "Verse {v} options": "Nkyekyɛm {v} ho nneɛma",
-"{version} does not include {book} {chapter}.": "{book} {chapter} nni {version} mu.",
 "Previous": "Nea ɛdi kan",
 "Next": "Nea edi hɔ",
 "Your notes": "Wo nkaeɛ",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Baabi a na wokenkan",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Mia so sesa kɔ Bible a wokenkanee kane no so. Mia so bio na san bra.",
 "Hold to choose from your Bibles, or any of them.": "Kura mu na paw fi wo Bible ahodoɔ mu, anaa biara.",
-"The places you were reading are in Settings → Recent places.": "Mmeaeɛ a na wokenkan no wɔ Nhyehyɛe → Mmeaeɛ a aba nnansa yi."
+"The places you were reading are in Settings → Recent places.": "Mmeaeɛ a na wokenkan no wɔ Nhyehyɛe → Mmeaeɛ a aba nnansa yi.",
+"{ref} isn’t in this Bible": "{ref} nni Bible yi mu",
+"Read it in {version}": "Kenkan wɔ {version} mu",
+"Other Bibles that have it": "Bible foforo a ɛwɔ mu",
+"All Bibles that have it ({n})": "Bible a ɛwɔ mu nyinaa ({n})",
+"Here this chapter ends at verse {n}.": "Ɛha no, ti yi ba awiei wɔ nkyekyem {n}.",
+"Go to verse {n}": "Kɔ nkyekyem {n}"
 }

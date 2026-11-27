@@ -353,7 +353,6 @@
 "Note on verse {v}": "Նշում {v} համարի վերաբերյալ",
 "{n} elsewhere": "{n}՝ այլ տեղերում",
 "Verse {v} options": "{v} համարի ընտրանքներ",
-"{version} does not include {book} {chapter}.": "{version}-ը չի պարունակում {book} {chapter}։",
 "Previous": "Նախորդ",
 "Next": "Հաջորդ",
 "Your notes": "Ձեր նշումները",
@@ -1367,5 +1366,11 @@
 "Where you were reading": "Որտեղ կարդում էիք",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Հպեք՝ նախկինում կարդացած Աստվածաշնչին անցնելու համար։ Կրկին հպեք՝ վերադառնալու համար։",
 "Hold to choose from your Bibles, or any of them.": "Պահեք՝ ձեր Աստվածաշնչերից կամ ցանկացածից ընտրելու համար։",
-"The places you were reading are in Settings → Recent places.": "Վայրերը, որտեղ կարդում էիք, գտնվում են Կարգավորումներ → Վերջին վայրերը բաժնում։"
+"The places you were reading are in Settings → Recent places.": "Վայրերը, որտեղ կարդում էիք, գտնվում են Կարգավորումներ → Վերջին վայրերը բաժնում։",
+"{ref} isn’t in this Bible": "{ref}-ը այս Աստվածաշնչում չկա",
+"Read it in {version}": "Կարդալ {version}-ում",
+"Other Bibles that have it": "Այլ Աստվածաշնչեր, որոնցում կա",
+"All Bibles that have it ({n})": "Բոլոր Աստվածաշնչերը, որոնցում կա ({n})",
+"Here this chapter ends at verse {n}.": "Այստեղ այս գլուխն ավարտվում է {n}-րդ համարով։",
+"Go to verse {n}": "Գնալ {n}-րդ համարին"
 }

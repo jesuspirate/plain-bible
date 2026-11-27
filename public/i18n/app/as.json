@@ -353,7 +353,6 @@
 "Note on verse {v}": "{v} পদত টোকা",
 "{n} elsewhere": "আন ঠাইত {n}টা",
 "Verse {v} options": "{v} পদৰ বিকল্প",
-"{version} does not include {book} {chapter}.": "{version}ত {book} {chapter} নাই।",
 "Previous": "আগৰ",
 "Next": "পিছৰ",
 "Your notes": "আপোনাৰ টোকা",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "য'ত আপুনি পঢ়ি আছিল",
 "Tap to switch to the Bible you read before. Tap again to come back.": "আগতে পঢ়া বাইবেললৈ যাবলৈ টেপ কৰক। উভতি আহিবলৈ পুনৰ টেপ কৰক।",
 "Hold to choose from your Bibles, or any of them.": "আপোনাৰ বাইবেলৰ পৰা বা যিকোনো এখন বাছিবলৈ টিপি ধৰক।",
-"The places you were reading are in Settings → Recent places.": "আপুনি পঢ়া ঠাইবোৰ ছেটিংছ → শেহতীয়া ঠাইত আছে।"
+"The places you were reading are in Settings → Recent places.": "আপুনি পঢ়া ঠাইবোৰ ছেটিংছ → শেহতীয়া ঠাইত আছে।",
+"{ref} isn’t in this Bible": "{ref} এই বাইবেলত নাই",
+"Read it in {version}": "{version}ত পঢ়ক",
+"Other Bibles that have it": "ইয়াক থকা আন বাইবেল",
+"All Bibles that have it ({n})": "ইয়াক থকা সকলো বাইবেল ({n})",
+"Here this chapter ends at verse {n}.": "ইয়াত এই অধ্যায় পদ {n}ত শেষ হয়।",
+"Go to verse {n}": "পদ {n}লৈ যাওক"
 }

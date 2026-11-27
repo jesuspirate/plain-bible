@@ -353,7 +353,6 @@
 "Note on verse {v}": "Nota iti bersikulo {v}",
 "{n} elsewhere": "{n} iti sabali a lugar",
 "Verse {v} options": "Dagiti pagpilian iti bersikulo {v}",
-"{version} does not include {book} {chapter}.": "Awan ti {book} {chapter} iti {version}.",
 "Previous": "Napalabas",
 "Next": "Sumaruno",
 "Your notes": "Dagiti nota-mo",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "No sadino ti binasam",
 "Tap to switch to the Bible you read before. Tap again to come back.": "I-tap tapno agbalin iti Biblia a binasam idi. I-tap manen tapno agsubli.",
 "Hold to choose from your Bibles, or any of them.": "Iggaman tapno agpili kadagiti Bibliam, wenno aniaman.",
-"The places you were reading are in Settings → Recent places.": "Dagiti lugar a nagbasaam ket adda iti Dagiti Setting → Dagiti naudi a lugar."
+"The places you were reading are in Settings → Recent places.": "Dagiti lugar a nagbasaam ket adda iti Dagiti Setting → Dagiti naudi a lugar.",
+"{ref} isn’t in this Bible": "Awan ti {ref} iti daytoy a Biblia",
+"Read it in {version}": "Basaen iti {version}",
+"Other Bibles that have it": "Dadduma a Biblia nga adda daytoy",
+"All Bibles that have it ({n})": "Amin a Biblia nga adda daytoy ({n})",
+"Here this chapter ends at verse {n}.": "Ditoy, agpatingga daytoy a kapitulo iti bersikulo {n}.",
+"Go to verse {n}": "Mapan iti bersikulo {n}"
 }

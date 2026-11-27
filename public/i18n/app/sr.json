@@ -393,7 +393,6 @@
 "Note on verse {v}": "Белешка уз стих {v}",
 "{n} elsewhere": "На другим местима: {n}",
 "Verse {v} options": "Опције за стих {v}",
-"{version} does not include {book} {chapter}.": "Превод {version} не садржи {book} {chapter}.",
 "Previous": "Претходно",
 "Next": "Следеће",
 "Your notes": "Ваше белешке",
@@ -1452,5 +1451,11 @@
 "Where you were reading": "Где сте читали",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Додирните да пређете на Библију коју сте раније читали. Додирните поново да се вратите.",
 "Hold to choose from your Bibles, or any of them.": "Задржите да изаберете између својих Библија или било које друге.",
-"The places you were reading are in Settings → Recent places.": "Места где сте читали налазе се у Подешавања → Недавна места."
+"The places you were reading are in Settings → Recent places.": "Места где сте читали налазе се у Подешавања → Недавна места.",
+"{ref} isn’t in this Bible": "{ref} није у овој Библији",
+"Read it in {version}": "Читај у {version}",
+"Other Bibles that have it": "Друге Библије које га имају",
+"All Bibles that have it ({n})": "Све Библије које га имају ({n})",
+"Here this chapter ends at verse {n}.": "Овде се ово поглавље завршава стихом {n}.",
+"Go to verse {n}": "Иди на стих {n}"
 }

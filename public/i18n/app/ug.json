@@ -353,7 +353,6 @@
 "Note on verse {v}": "{v}-ئايەتتىكى خاتىرە",
 "{n} elsewhere": "باشقا يەردە {n}",
 "Verse {v} options": "{v}-ئايەتنىڭ تاللانمىلىرى",
-"{version} does not include {book} {chapter}.": "{version} دا {book} {chapter} يوق.",
 "Previous": "ئالدىنقى",
 "Next": "كېيىنكى",
 "Your notes": "خاتىرىلىرىڭىز",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "ئوقۇۋاتقان يېرىڭىز",
 "Tap to switch to the Bible you read before. Tap again to come back.": "ئىلگىرى ئوقۇغان مۇقەددەس كىتابقا ئالماشتۇرۇش ئۈچۈن چېكىڭ. قايتىش ئۈچۈن يەنە چېكىڭ.",
 "Hold to choose from your Bibles, or any of them.": "مۇقەددەس كىتابلىرىڭىزدىن ياكى خالىغان بىرىنى تاللاش ئۈچۈن بېسىپ تۇرۇڭ.",
-"The places you were reading are in Settings → Recent places.": "ئوقۇغان ئورۇنلىرىڭىز تەڭشەك ← يېقىنقى ئورۇنلار دا."
+"The places you were reading are in Settings → Recent places.": "ئوقۇغان ئورۇنلىرىڭىز تەڭشەك ← يېقىنقى ئورۇنلار دا.",
+"{ref} isn’t in this Bible": "{ref} بۇ مۇقەددەس كىتابتا يوق",
+"Read it in {version}": "{version} دا ئوقۇش",
+"Other Bibles that have it": "بۇ بار باشقا مۇقەددەس كىتابلار",
+"All Bibles that have it ({n})": "بۇ بار بارلىق مۇقەددەس كىتابلار ({n})",
+"Here this chapter ends at verse {n}.": "بۇ يەردە بۇ باب {n}-ئايەتتە ئاخىرلىشىدۇ.",
+"Go to verse {n}": "{n}-ئايەتكە بېرىش"
 }

@@ -353,7 +353,6 @@
 "Note on verse {v}": "Cholemba pa vesi {v}",
 "{n} elsewhere": "{n} kwina",
 "Verse {v} options": "Zosankha za vesi {v}",
-"{version} does not include {book} {chapter}.": "{version} ilibe {book} {chapter}.",
 "Previous": "Zam'mbuyo",
 "Next": "Zotsatira",
 "Your notes": "Zolemba zanu",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Komwe mumawerenga",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Dinani kuti musinthe kupita ku Baibulo lomwe munawerenga kale. Dinaninso kuti mubwerere.",
 "Hold to choose from your Bibles, or any of them.": "Gwirani kuti musankhe pa Mabaibulo anu, kapena lililonse.",
-"The places you were reading are in Settings → Recent places.": "Malo omwe mumawerenga ali mu Zokonda → Malo aposachedwa."
+"The places you were reading are in Settings → Recent places.": "Malo omwe mumawerenga ali mu Zokonda → Malo aposachedwa.",
+"{ref} isn’t in this Bible": "{ref} palibe m’Baibulo ili",
+"Read it in {version}": "Werengani mu {version}",
+"Other Bibles that have it": "Mabaibulo ena amene ali nalo",
+"All Bibles that have it ({n})": "Mabaibulo onse amene ali nalo ({n})",
+"Here this chapter ends at verse {n}.": "Pano mutu uwu umathera pa vesi {n}.",
+"Go to verse {n}": "Pitani ku vesi {n}"
 }

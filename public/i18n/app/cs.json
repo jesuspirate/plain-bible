@@ -403,7 +403,6 @@
 "Note on verse {v}": "Poznámka k verši {v}",
 "{n} elsewhere": "Jinde: {n}",
 "Verse {v} options": "Možnosti verše {v}",
-"{version} does not include {book} {chapter}.": "Překlad {version} neobsahuje {book} {chapter}.",
 "Previous": "Předchozí",
 "Next": "Další",
 "Your notes": "Vaše poznámky",
@@ -1474,5 +1473,11 @@
 "Where you were reading": "Kde jste četli",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Klepněte pro přepnutí na Bibli, kterou jste četli předtím. Klepněte znovu pro návrat.",
 "Hold to choose from your Bibles, or any of them.": "Podržte a vyberte z vašich Biblí nebo jakoukoli jinou.",
-"The places you were reading are in Settings → Recent places.": "Místa, kde jste četli, najdete v Nastavení → Nedávná místa."
+"The places you were reading are in Settings → Recent places.": "Místa, kde jste četli, najdete v Nastavení → Nedávná místa.",
+"{ref} isn’t in this Bible": "{ref} v této Bibli není",
+"Read it in {version}": "Číst v {version}",
+"Other Bibles that have it": "Jiné Bible, které to mají",
+"All Bibles that have it ({n})": "Všechny Bible, které to mají ({n})",
+"Here this chapter ends at verse {n}.": "Zde tato kapitola končí veršem {n}.",
+"Go to verse {n}": "Přejít na verš {n}"
 }

@@ -353,7 +353,6 @@
 "Note on verse {v}": "Muistiinpano jakeessa {v}",
 "{n} elsewhere": "{n} muualla",
 "Verse {v} options": "Jakeen {v} valinnat",
-"{version} does not include {book} {chapter}.": "{version} ei sisällä kohtaa {book} {chapter}.",
 "Previous": "Edellinen",
 "Next": "Seuraava",
 "Your notes": "Muistiinpanosi",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Missä luit",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Napauta vaihtaaksesi aiemmin lukemaasi Raamattuun. Napauta uudelleen palataksesi.",
 "Hold to choose from your Bibles, or any of them.": "Pidä painettuna valitaksesi omista Raamatuistasi tai mistä tahansa.",
-"The places you were reading are in Settings → Recent places.": "Kohdat, joissa luit, löytyvät kohdasta Asetukset → Viimeisimmät kohdat."
+"The places you were reading are in Settings → Recent places.": "Kohdat, joissa luit, löytyvät kohdasta Asetukset → Viimeisimmät kohdat.",
+"{ref} isn’t in this Bible": "{ref} ei ole tässä Raamatussa",
+"Read it in {version}": "Lue: {version}",
+"Other Bibles that have it": "Muut Raamatut, joissa se on",
+"All Bibles that have it ({n})": "Kaikki Raamatut, joissa se on ({n})",
+"Here this chapter ends at verse {n}.": "Tässä luku päättyy jakeeseen {n}.",
+"Go to verse {n}": "Siirry jakeeseen {n}"
 }

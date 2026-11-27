@@ -353,7 +353,6 @@
 "Note on verse {v}": "Jegyzet a(z) {v}. vershez",
 "{n} elsewhere": "{n} máshol",
 "Verse {v} options": "A(z) {v}. vers lehetőségei",
-"{version} does not include {book} {chapter}.": "A(z) {version} nem tartalmazza ezt: {book} {chapter}.",
 "Previous": "Előző",
 "Next": "Következő",
 "Your notes": "Jegyzetei",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Ahol olvastál",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Koppints, hogy a korábban olvasott Bibliára válts. Koppints újra a visszatéréshez.",
 "Hold to choose from your Bibles, or any of them.": "Tartsd nyomva, hogy a Bibliáid vagy bármelyik másik közül válassz.",
-"The places you were reading are in Settings → Recent places.": "A helyek, ahol olvastál, itt vannak: Beállítások → Legutóbbi helyek."
+"The places you were reading are in Settings → Recent places.": "A helyek, ahol olvastál, itt vannak: Beállítások → Legutóbbi helyek.",
+"{ref} isn’t in this Bible": "{ref} nincs ebben a Bibliában",
+"Read it in {version}": "Olvasás itt: {version}",
+"Other Bibles that have it": "Más Bibliák, amelyekben megvan",
+"All Bibles that have it ({n})": "Minden Biblia, amelyben megvan ({n})",
+"Here this chapter ends at verse {n}.": "Itt ez a fejezet a(z) {n}. versnél ér véget.",
+"Go to verse {n}": "Ugrás a(z) {n}. versre"
 }

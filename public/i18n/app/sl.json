@@ -403,7 +403,6 @@
 "Note on verse {v}": "Opomba pri vrstici {v}",
 "{n} elsewhere": "Drugje: {n}",
 "Verse {v} options": "Možnosti za vrstico {v}",
-"{version} does not include {book} {chapter}.": "Prevod {version} ne vsebuje: {book} {chapter}.",
 "Previous": "Prejšnje",
 "Next": "Naslednje",
 "Your notes": "Vaše opombe",
@@ -1474,5 +1473,11 @@
 "Where you were reading": "Kjer ste brali",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Tapnite za preklop na Biblijo, ki ste jo brali prej. Tapnite znova za vrnitev.",
 "Hold to choose from your Bibles, or any of them.": "Pridržite za izbiro med vašimi Biblijami ali katero koli drugo.",
-"The places you were reading are in Settings → Recent places.": "Mesta, kjer ste brali, so v Nastavitve → Nedavna mesta."
+"The places you were reading are in Settings → Recent places.": "Mesta, kjer ste brali, so v Nastavitve → Nedavna mesta.",
+"{ref} isn’t in this Bible": "{ref} ni v tem Svetem pismu",
+"Read it in {version}": "Beri v {version}",
+"Other Bibles that have it": "Druge Biblije, ki ga imajo",
+"All Bibles that have it ({n})": "Vse Biblije, ki ga imajo ({n})",
+"Here this chapter ends at verse {n}.": "Tukaj se to poglavje konča z vrstico {n}.",
+"Go to verse {n}": "Pojdi na vrstico {n}"
 }

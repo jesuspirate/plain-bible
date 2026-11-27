@@ -353,7 +353,6 @@
 "Note on verse {v}": "{v} ஆம் வசனத்தில் குறிப்பு",
 "{n} elsewhere": "வேறு இடங்களில் {n}",
 "Verse {v} options": "{v} ஆம் வசனத்திற்கான விருப்பங்கள்",
-"{version} does not include {book} {chapter}.": "{version} இல் {book} {chapter} இல்லை.",
 "Previous": "முந்தையது",
 "Next": "அடுத்தது",
 "Your notes": "உங்கள் குறிப்புகள்",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "நீங்கள் படித்துக்கொண்டிருந்த இடம்",
 "Tap to switch to the Bible you read before. Tap again to come back.": "முன்பு படித்த வேதாகமத்திற்கு மாற தட்டவும். திரும்ப வர மீண்டும் தட்டவும்.",
 "Hold to choose from your Bibles, or any of them.": "உங்கள் வேதாகமங்களில் இருந்து அல்லது எதையும் தேர்ந்தெடுக்க அழுத்திப் பிடிக்கவும்.",
-"The places you were reading are in Settings → Recent places.": "நீங்கள் படித்த இடங்கள் அமைப்புகள் → சமீபத்திய இடங்கள் இல் உள்ளன."
+"The places you were reading are in Settings → Recent places.": "நீங்கள் படித்த இடங்கள் அமைப்புகள் → சமீபத்திய இடங்கள் இல் உள்ளன.",
+"{ref} isn’t in this Bible": "{ref} இந்த வேதாகமத்தில் இல்லை",
+"Read it in {version}": "{version}-இல் வாசிக்க",
+"Other Bibles that have it": "இது உள்ள மற்ற வேதாகமங்கள்",
+"All Bibles that have it ({n})": "இது உள்ள எல்லா வேதாகமங்களும் ({n})",
+"Here this chapter ends at verse {n}.": "இங்கே இந்த அதிகாரம் வசனம் {n}-இல் முடிகிறது.",
+"Go to verse {n}": "வசனம் {n}-க்குச் செல்ல"
 }

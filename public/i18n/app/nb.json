@@ -353,7 +353,6 @@
 "Note on verse {v}": "Notat til vers {v}",
 "{n} elsewhere": "{n} andre steder",
 "Verse {v} options": "Valg for vers {v}",
-"{version} does not include {book} {chapter}.": "{version} inneholder ikke {book} {chapter}.",
 "Previous": "Forrige",
 "Next": "Neste",
 "Your notes": "Notatene dine",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Der du leste",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Trykk for å bytte til bibelen du leste før. Trykk igjen for å gå tilbake.",
 "Hold to choose from your Bibles, or any of them.": "Hold for å velge blant biblene dine, eller hvilken som helst.",
-"The places you were reading are in Settings → Recent places.": "Stedene der du leste, finner du under Innstillinger → Nylige steder."
+"The places you were reading are in Settings → Recent places.": "Stedene der du leste, finner du under Innstillinger → Nylige steder.",
+"{ref} isn’t in this Bible": "{ref} finnes ikke i denne bibelen",
+"Read it in {version}": "Les i {version}",
+"Other Bibles that have it": "Andre bibler som har det",
+"All Bibles that have it ({n})": "Alle bibler som har det ({n})",
+"Here this chapter ends at verse {n}.": "Her slutter kapitlet ved vers {n}.",
+"Go to verse {n}": "Gå til vers {n}"
 }
