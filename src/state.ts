@@ -175,11 +175,10 @@ export type PrayFor = { circle: string; circleName: string; item: string; by: st
 let prayingFor: PrayFor | undefined
 export const prayFor = (ask: PrayFor) => { prayingFor = ask; prayNow() }
 export const takePrayFor = () => { const a = prayingFor; prayingFor = undefined; return a }
-/** Just prayed for a request: the circle shows it prayed at once, and offers
- *  the verse the prayer screen would have, quietly, if wanted. */
-let prayedNow: { item: string; verse: PrayerVerse & { kjv?: string }; at: number } | undefined
-export const setPrayedNow = (item: string, verse: PrayerVerse & { kjv?: string }) => { prayedNow = { item, verse, at: Date.now() } }
-export const prayedNowFor = (item: string) => prayedNow?.item === item && Date.now() - prayedNow.at < 30 * 60_000 ? prayedNow.verse : undefined
+/** Just prayed for a request: the circle shows it prayed at once. */
+let prayedNow: { item: string; at: number } | undefined
+export const setPrayedNow = (item: string) => { prayedNow = { item, at: Date.now() } }
+export const prayedNowFor = (item: string) => prayedNow?.item === item && Date.now() - prayedNow.at < 30 * 60_000
 /** Sent once a request was marked prayed this way, so the circle shows it. */
 export const ASK_PRAYED = 'plain-bible:ask-prayed'
 
@@ -214,6 +213,11 @@ export const showSearchWays = () => window.dispatchEvent(new Event(SHOW_SEARCH_W
  *  verse you picked, or else the verse at the top of the screen. */
 export const READ_HERE_EVENT = 'plain-bible:read-here'
 export const readHere = () => window.dispatchEvent(new Event(READ_HERE_EVENT))
+/** The verse the page marks with a faint 🙏 (reader.tsx markPray): a prayer
+ *  started now is kept with it. */
+let prayHereAt: { book: string; chapter: number; verse: number } | undefined
+export const setPrayHere = (p: typeof prayHereAt) => { prayHereAt = p }
+export const prayHere = () => prayHereAt
 export const TOUR_EVENT = 'plain-bible:tour'
 export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
 const TOUR = 'plain-bible:tour'

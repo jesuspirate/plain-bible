@@ -119,6 +119,14 @@ export function App() {
   useEffect(() => {
     if (tone !== undefined && inStoreApp()) import('./lib/watch').then(m => m.tellWatchTone(tone)).catch(() => {})
   }, [tone])
+  // Your 🙏, in your skin tone, for styles.css: the faint mark by the verse a
+  // prayer would keep, and on a computer the mouse over something that ties
+  // verses to a prayer.
+  useEffect(() => {
+    const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="32" height="32"><text x="16" y="25" font-size="24" text-anchor="middle">🙏${tone ?? ''}</text></svg>`
+    document.documentElement.style.setProperty('--pray-cursor', `url("data:image/svg+xml,${encodeURIComponent(svg)}") 16 16, pointer`)
+    document.documentElement.style.setProperty('--pray-mark', JSON.stringify('🙏' + (tone ?? '')))
+  }, [tone])
   if (settings) followSettings(settings)
 
   // A new language in Settings (or from another device): its words load,

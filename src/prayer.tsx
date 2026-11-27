@@ -12,13 +12,12 @@ import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
 import { byMonth, finds, longDuration, TOPICS, topicsOf, topicsOfPrayer } from './lib/prayerJournal'
-import { holdsVerse, MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
-import { Comfort, pickComfort } from './lib/comfort'
+import { MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
 import type { Bible } from './lib/data'
 import { deletedHere, prayerKeyCode, prayerSyncOn, syncPrayers, turnOffPrayerSync, turnOnPrayerSync } from './lib/prayerSync'
 import { loadAccount, SYNC_URL } from './lib/sync'
@@ -70,12 +69,19 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const [elapsed, setElapsed] = useState(0)
   const [list, setList] = useState<PrayerInfo[]>()
   const [bible, setBible] = useState<Bible>()
-  // Said back once a prayer is kept: a verse picked at random, in the Bible you read.
-  const [comfort, setComfort] = useState<Comfort>(pickComfort)
-  // The verse a prayer is given when it is first kept, so it has one even if
-  // it ends without Amen (paused by a call or the phone locking, then closed,
-  // or the app reloaded). Amen then shows this same verse.
-  const given = useRef<{ id: string; c: Comfort }>()
+  // After Amen the card shows the prayer's own verses, never one we chose,
+  // and no verse at all when it has none.
+  // The verse you were on when you tapped 🙏: the one the page marks with a
+  // faint 🙏 (reader.tsx). Nothing when not reading a chapter.
+  const [here] = useState<PrayerVerse | undefined>(() => {
+    const r = parseHash().path, p = prayHere()
+    return r[0] === 'read' && p && p.book === r[2] && p.chapter === +r[3] ? { book: p.book, chapter: p.chapter, verses: [p.verse] } : undefined
+  })
+  // The verse a prayer with none of its own is given when it is first kept,
+  // so it has one even if it ends without Amen (paused by a call or the phone
+  // locking, then closed, or the app reloaded): a verse you had selected,
+  // else the verse you were reading (the faint 🙏 on the page marks it).
+  const given = useRef<{ id: string; c: PrayerVerse }>()
   const withGiven = (id: string | undefined, list: PrayerVerse[]) => {
     const c = id && given.current?.id === id ? given.current.c : undefined
     return c ? withVerse(list, { book: c.book, chapter: c.chapter, verses: c.verses }) : list
@@ -226,7 +232,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         if (!id) {
           tally('pr')
           id = started.toString(36) + Math.random().toString(36).slice(2, 6)
-          given.current = { id, c: pickComfort() }
+          // Verses picked before praying are the prayer's verses, nothing
+          // added. A prayer for someone's request gets none by itself.
+          const c = offer?.verses[0] ?? here
+          if (!tie.length && !forRef.current && c) given.current = { id, c }
           tie = withGiven(id, tie)
           await prayers.put({ id, at: started, ...part, verse: tie[0], verses: tie, vrev: 1, vdirty: true })
         }
@@ -273,9 +282,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     else r.stream.getTracks().forEach(track => track.stop())
   }
 
-  // Amen: a new verse to take away, kept with the prayer as one of its
-  // verses (by reference, so a circle reads it in their own Bible), and the
-  // prayer's own verses, if it has any.
+  // Amen: the prayer's own verses said back (the first in full), read in
+  // your Bible. Tapping them picks verses for it again.
   function heardNow(id?: string) {
     // Prayed for a request in a circle: it's marked prayed there, by itself.
     // Once only: a later prayer on this same screen is a prayer of its own.
@@ -285,12 +293,11 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     // no verse added to it by itself (it's a prayer for someone's request).
     const ask = forRef.current
     const forSomeone = !!(id && ask)
-    const c = id && given.current?.id === id ? given.current.c : pickComfort()
     if (id && ask) {
       forRef.current = undefined
       setAskDone(true)
       const own = ask.own
-      setPrayedNow(ask.item, { book: c.book, chapter: c.chapter, verses: c.verses, kjv: c.kjv })
+      setPrayedNow(ask.item)
       import('./lib/circles').then(m => own
         ? m.react(ask.circle, ask.item, own.me, own.e as never, false, { a: own.a, p: Date.now() })
         : m.amen(ask.circle, ask.item, true))
@@ -298,18 +305,13 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
       setForAsk(undefined)
       openCircles({ id: ask.circle, name: ask.circleName })
     }
-    setComfort(c)
     setTied([])
-    setPhase('heard')
-    if (!id) return Promise.resolve()
-    const v = { book: c.book, chapter: c.chapter, verses: c.verses }
-    return prayers.get(id).then(async p => {
-      if (!p) return
-      const verses = forSomeone ? versesOf(p) : withVerse(versesOf(p), v)
-      if (verses !== versesOf(p)) await prayers.tie(id, verses).catch(() => {})
-      const now = await prayers.get(id).catch(() => p)
-      if (alive.current && now) setKept({ id, verses: versesOf(now) })
-    }, () => {})
+    // With a prayer, the card waits for its verses, so a stand-in verse
+    // never flashes up first.
+    if (!id) { setPhase('heard'); return Promise.resolve() }
+    return prayers.get(id).then(p => {
+      if (alive.current && p) setKept({ id, verses: forSomeone ? [] : versesOf(p) })
+    }, () => {}).then(() => { if (alive.current) setPhase('heard') })
   }
   // Amen while paused: verses changed meanwhile are kept with the prayer.
   const amen = () => {
@@ -345,11 +347,13 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     return () => removeEventListener(PRAY_EVENT, now)
   }, [])
   const count = list?.length ?? 0
-  const others = (kept?.verses ?? []).filter(v => !(v.book === comfort.book && v.chapter === comfort.chapter && v.verses.join() === comfort.verses.join()))
-  const comfortKept = !!kept && holdsVerse(kept.verses, comfort)
+  // After Amen: the prayer's first verse in full, its others named below.
+  const own = kept?.verses ?? []
+  const shown = own[0] as PrayerVerse | undefined
+  const shownWords = shown && wordsOf(bible, shown)
+  const others = own.slice(1)
   const keptLine = (refs: ComponentChildren) => !others.length ? t('Kept with this prayer')
-    : comfortKept ? tj('Kept with this prayer, along with {verses}', { verses: refs })
-    : tj('Prayed using {verse}', { verse: refs })
+    : tj('Kept with this prayer, along with {verses}', { verses: refs })
 
   return (
     <div class="pray" role="dialog" aria-modal="true" ref={rootLeave} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
@@ -398,12 +402,14 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
               : phase === 'heard' ? <>
                   <p class="pray-amen">{t('Amen. He heard you.')}</p>
                   {settings.streaks && <PrayStreak />}
-                  <button class="pray-verse" onClick={() => read(comfort)}>
-                    “{wordsOf(bible, comfort) ?? comfort.kjv}” <span class="pray-ref">{verseLabel(comfort)}</span>
-                  </button>
+                  {/* The verse is the button: the prayer's verses can be added
+                      to or taken off, on the page, with Add a verse's picker. */}
+                  {kept && shown && <button class="pray-verse picks" onClick={() => pickFor(own, kept.id)}>
+                    {shownWords && <>“{shownWords}” </>}<span class="pray-ref">{verseLabel(shown)}</span>
+                  </button>}
                   {/* One line says where the verses went: the verse above is
-                      kept with the prayer, and so are any picked before it. */}
-                  {(comfortKept || others.length > 0) && (others.length === 1
+                      kept with the prayer, and so are the others named here. */}
+                  {own.length > 0 && (others.length === 1
                     ? <button class="pray-kept" onClick={() => read(others[0])}>✓ {keptLine(<strong>{verseLabel(others[0])}</strong>)} ›</button>
                     : <p class="pray-kept">✓ {keptLine(others.map((v, i) => <>{i ? ', ' : ''}<button class="pray-kept-ref" onClick={() => read(v)}>{verseLabel(v)}</button></>))}</p>)}
                   {world && lit.length > 0 && !forAsk && <world.WorldLine lit={lit} onOpen={() => setView('world')} />}

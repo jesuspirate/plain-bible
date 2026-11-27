@@ -41,7 +41,7 @@ export function ContinueOffer({ mini }: { mini: boolean }) {
     answerOffer(offer); setOffer(undefined)
     // In the Bible it was read in, if this device has it; else in yours.
     const version = offer.version && byId.has(offer.version) && (navigator.onLine !== false || offer.version === settings.version) ? offer.version : settings.version
-    // The verse that was at the top there, not marked: with a search, the
+    // The verse the faint 🙏 was on there (else the one at the top), not marked: with a search, the
     // strip lights the result's own verse, and only that one.
     if (offer.s) continueSearch(offer.s)
     go(resumePath(version, offer.book, offer.chapter, offer.verse))
