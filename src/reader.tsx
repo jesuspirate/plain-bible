@@ -150,12 +150,12 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => {
     if (parallel.join() !== settings.parallel.join()) update({ parallel })
     setError('')
-    Promise.all(versions.map(v => data.bible(v)))
+    Promise.all(versions.map(v => data.bible(v, settings.strongs && !!byId.get(v)?.strongsFile)))
       .then(bs => setBibles(Object.fromEntries(bs.map(b => [b.id, b]))))
       .catch(e => setError(navigator.onLine === false || e instanceof TypeError
         ? t('{version} isn’t saved on this device yet. Connect to the internet once and it stays available offline.', { version: versions.filter(v => !bibles[v]).join(', ') || version })
         : String(e.message || e)))
-  }, [versions.join(), retry])
+  }, [versions.join(), retry, settings.strongs])
   useEffect(() => {
     if (!error) return
     const again = () => setRetry(n => n + 1)
@@ -1644,7 +1644,7 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
 
   const showCompare = () => {
     const ids = settings.myVersions.filter(id => byId.get(id)?.books.includes(book))
-    Promise.all(ids.map(id => data.bible(id))).then(setCompare)
+    Promise.all(ids.map(id => data.bible(id, settings.strongs && !!byId.get(id)?.strongsFile))).then(setCompare)
   }
 
   return (

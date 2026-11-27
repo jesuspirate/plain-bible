@@ -28,6 +28,31 @@ export function strongsOf(verse: string): string[] {
   return out
 }
 
+// Words as the build counts them for a Bible whose Strong's numbers come in a
+// file of their own (scripts/lsg_strongs.py, WORD_LETTERS): runs of letters,
+// a hyphenated word as one ("lui-même"), an elided word with its apostrophe
+// ("l'"). Keep the two in step.
+const LETTER_WORD = /[\p{L}\p{M}]+(?:-[\p{L}\p{M}]+)*['\u2019]?/gu
+
+/** One verse with its Strong's numbers put in: tags is the verse's line in a
+ *  <id>.strongs.json file, "1H7225 H430 H1254+H853": for each tagged word,
+ *  how many words to skip since the last one, then its numbers. */
+export function withTags(verse: string, tags: string): string {
+  if (!tags || !verse || verse.indexOf('{') >= 0) return verse
+  const words = [...verse.matchAll(LETTER_WORD)]
+  let out = '', last = 0, at = -1
+  for (const tag of tags.split(' ')) {
+    const m = /^(\d*)(.+)$/.exec(tag)
+    if (!m) continue
+    at += 1 + (m[1] ? Number(m[1]) : 0)
+    const w = words[at]
+    if (!w) break
+    out += verse.slice(last, w.index) + '{' + w[0] + '|' + m[2].replace(/\+/g, ' ') + '}'
+    last = w.index! + w[0].length
+  }
+  return out + verse.slice(last)
+}
+
 export interface NormOptions { caseSensitive: boolean; accentSensitive: boolean }
 
 const MARKS = /\p{M}/gu

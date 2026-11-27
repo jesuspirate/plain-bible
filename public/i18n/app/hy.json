@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "Յուրաքանչյուր գլխի վերնագրի տակ ցույց տալ, թե քանի նշում ունեք դրա վերաբերյալ, ներառյալ այլ տեղերի նշումները, որոնք հիշատակում են այն (օրինակ՝ «տես Հովհաննես 3:16») կամ ունեն ընդհանուր #պիտակ այստեղի որևէ նշման հետ։",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "Կարգավորումների վերևում ցույց տալ, թե քանի օր անընդմեջ եք կարդացել Խոսքը և աղոթել։ Ոչինչ երբեք չի հիշեցնում։",
 "Strong's numbers": "Սթրոնգի համարներ",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Դարձնել նշագրված բառերը հպելի (KJV, BSB, եբրայերեն և հունարեն տեքստեր)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "Դարձնել նշագրված բառերը հպելի (KJV, BSB, LSG, եբրայերեն և հունարեն տեքստեր)",
 "Show the numbers inline": "Ցույց տալ համարները տեքստի մեջ",
 "Search bar": "Որոնման տող",
 "Top bar": "Վերին գոտի",

@@ -23,6 +23,8 @@ import re
 import sys
 import xml.etree.ElementTree as ET
 
+import lsg_strongs
+
 ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SRC = os.path.join(ROOT, "sources")
 OUT = os.path.join(ROOT, "public", "data")
@@ -781,9 +783,20 @@ def main():
         books = build_beblia(fname)
         apply_corrections(tid, books)
         write_json(os.path.join(OUT, "bibles", tid + ".json"), {"id": tid, "books": books})
-        catalog.append({"id": tid, "name": name, "lang": lang, "license": "Public Domain",
-                        "strongs": False, "rtl": False, "books": list(books.keys()),
-                        "source": "https://github.com/Beblia/Holy-Bible-XML-Format"})
+        entry = {"id": tid, "name": name, "lang": lang, "license": "Public Domain",
+                 "strongs": False, "rtl": False, "books": list(books.keys()),
+                 "source": "https://github.com/Beblia/Holy-Bible-XML-Format"}
+        if tid == "LSG" and os.path.isdir(os.path.join(SRC, "Alignments")):
+            # Strong's numbers from Clear Bible's word alignments, in a file of
+            # their own so the text everyone downloads stays as it was.
+            tagged = json.loads(json.dumps(books))
+            stats = lsg_strongs.tag_lsg(tagged, [b[0] for b in BOOKS[:66]], SRC, ebible_numbering()[0])
+            print("  Strong's: %(placed)d of %(links)d links placed" % stats, file=sys.stderr)
+            write_json(os.path.join(OUT, "bibles", tid + ".strongs.json"),
+                       {"id": tid, "books": lsg_strongs.strongs_file(tagged)})
+            entry.update({"strongs": True, "strongsFile": True,
+                          "license": "Public Domain; Strong's numbers CC BY 4.0, Clear Bible word alignments"})
+        catalog.append(entry)
 
     numbering = None
     for tid, (ebid, lang, name, lic) in EBIBLE.items():

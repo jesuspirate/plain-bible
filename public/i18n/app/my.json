@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "အခန်းကြီး ခေါင်းစဉ်တိုင်း၏ အောက်တွင် ထိုအခန်းကြီးအပေါ် သင့်မှတ်စု မည်မျှရှိသည်ကို ပြပါ၊ ၎င်းကို ဖော်ပြသော (“ယောဟန် 3:16 ကိုကြည့်” ကဲ့သို့) သို့မဟုတ် ဤနေရာရှိ မှတ်စုနှင့် #tag တူသော အခြားနေရာရှိ မှတ်စုများ အပါအဝင်။",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "ဆက်တင်များ ၏ ထိပ်တွင် နှုတ်ကပတ်တော်ကို ဆက်တိုက် ရက်ပေါင်းမည်မျှ ဖတ်ပြီး ဆုတောင်းခဲ့သည်ကို ပြပါ။ မည်သည့်အခါမျှ သတိပေးခြင်း မရှိပါ။",
 "Strong's numbers": "Strong နံပါတ်များ",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "tag ပါသော စကားလုံးများကို တို့နိုင်အောင် လုပ်ရန် (KJV၊ BSB၊ ဟေဗြဲနှင့် ဂရိ စာသားများ)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "tag ပါသော စကားလုံးများကို တို့နိုင်အောင် လုပ်ရန် (KJV၊ BSB၊ LSG၊ ဟေဗြဲနှင့် ဂရိ စာသားများ)",
 "Show the numbers inline": "နံပါတ်များကို စာသားထဲတွင် ပြရန်",
 "Search bar": "ရှာဖွေရေးဘား",
 "Top bar": "အပေါ်ဘား",

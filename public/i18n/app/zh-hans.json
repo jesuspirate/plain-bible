@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "在每章标题下显示你在这一章的笔记数，包括其他地方提到这一章的笔记（例如“参见约翰福音 3:16”），或与这里的笔记有相同 #标签 的笔记。",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "在“设置”顶部显示你连续读经和祷告了多少天。从不提醒你。",
 "Strong's numbers": "斯特朗编号",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "让带标记的字词可以轻点（KJV、BSB、希伯来文和希腊文经文）",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "让带标记的字词可以轻点（KJV、BSB、LSG、希伯来文和希腊文经文）",
 "Show the numbers inline": "在经文中显示编号",
 "Search bar": "搜索栏",
 "Top bar": "顶部栏",

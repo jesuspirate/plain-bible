@@ -23,6 +23,16 @@ fi
 # Ge'ez (Ethiopic) scripture, from Beta Masaheft TEI transcriptions (CC BY-SA 4.0).
 [ -d ethiopian-bible ] || git clone --depth 1 https://github.com/LPettay/ethiopian-bible.git
 
+# Strong's numbers for the Louis Segond 1910 (scripts/lsg_strongs.py): Clear
+# Bible's hand-made word alignments of the LSG with the Hebrew and Greek, and the
+# Hebrew and Greek word lists with each word's Strong's number (CC BY 4.0),
+# pinned so a rebuild reads the same.
+CLEAR=https://raw.githubusercontent.com/Clear-Bible/Alignments/c99bd0ae6946775f932517656308ca19fc706921/data
+for f in sources/WLCM.tsv sources/SBLGNT.tsv fra/alignments/LSG/WLCM-LSG-manual.json fra/alignments/LSG/SBLGNT-LSG-manual.json; do
+  mkdir -p "Alignments/data/$(dirname $f)"
+  [ -f "Alignments/data/$f" ] || curl -fsSL --retry 3 -o "Alignments/data/$f" "$CLEAR/$f"
+done
+
 mkdir -p beblia
 for f in FrenchBible; do
   [ -f beblia/$f.xml ] || curl -fsSL -o beblia/$f.xml https://raw.githubusercontent.com/Beblia/Holy-Bible-XML-Format/master/$f.xml
@@ -36,6 +46,11 @@ VRS=https://raw.githubusercontent.com/BibleNLP/ebible/2bde52b4c2cfd7056cf4ed07c4
 for f in eng.vrs org.vrs; do
   [ -f ebible/$f ] || curl -fsSL -o ebible/$f $VRS/$f
 done
+# eBible's Louis Segond 1910 (public domain) verse by verse, which the LSG
+# word alignments count words in, and the reference of each line.
+CORPUS=https://raw.githubusercontent.com/BibleNLP/ebible/2bde52b4c2cfd7056cf4ed07c48969647df79744
+[ -f ebible/vref.txt ] || curl -fsSL -o ebible/vref.txt $CORPUS/metadata/vref.txt
+[ -f ebible/fra-fraLSG.txt ] || curl -fsSL -o ebible/fra-fraLSG.txt $CORPUS/corpus/fra-fraLSG.txt
 for id in swhonen swhulb arbnav arb-vd cmn-cu89s hincv hin2017 benirv pan guj2017 mar tel2017 \
   tam2017 kanokcv ory asmfb npiulb pesopcb pesOPV heb ita1927 ita1885 ind hausa yor ibo gaz nya \
   sna lin lug kik luo twi twiasante ewe nde ckb uigara haw1868 ton iloulb; do

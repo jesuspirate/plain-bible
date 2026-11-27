@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "E bwo wi sula ka sula, nyis paro adi ma in godo e iye, kaachiel gi paro mamoko ma wuoyo kuom sula no (kaka “ne Johana 3:16”) kata ma nigi #tag machal gi moro man ka.",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "E wi Chenro, nyis ndalo adi ma isesomo Wach Nyasaye kendo ilamo maluwore. Onge gima biro paro ni.",
 "Strong's numbers": "Nambe mag Strong",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Mi weche mondik alama obed ma inyalo mulo (KJV, BSB, ndiko mag Hibru kod Grik)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "Mi weche mondik alama obed ma inyalo mulo (KJV, BSB, LSG, ndiko mag Hibru kod Grik)",
 "Show the numbers inline": "Nyis nambe e ndiko",
 "Search bar": "Bar mar manyo",
 "Top bar": "Bar mar malo",

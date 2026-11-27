@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "ஒவ்வொரு அதிகாரத் தலைப்பின் கீழும் அதில் உங்களுக்கு எத்தனை குறிப்புகள் உள்ளன என்பதைக் காட்டு; அதைக் குறிப்பிடும் (“யோவான் 3:16 ஐப் பார்க்கவும்” போன்ற) அல்லது இங்குள்ள ஒன்றுடன் ஒரே #குறிச்சொல்லைக் கொண்ட பிற இடக் குறிப்புகளும் அடங்கும்.",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "அமைப்புகளின் மேலே, நீங்கள் தொடர்ந்து எத்தனை நாட்கள் தேவ வசனத்தை வாசித்து ஜெபித்தீர்கள் என்பதைக் காட்டு. எதுவும் உங்களுக்கு நினைவூட்டாது.",
 "Strong's numbers": "ஸ்ட்ராங் எண்கள்",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "குறியிடப்பட்ட சொற்களைத் தட்டக்கூடியதாக்கு (KJV, BSB, எபிரெய, கிரேக்கப் பாடங்கள்)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "குறியிடப்பட்ட சொற்களைத் தட்டக்கூடியதாக்கு (KJV, BSB, LSG, எபிரெய, கிரேக்கப் பாடங்கள்)",
 "Show the numbers inline": "எண்களை வரிக்குள்ளேயே காட்டு",
 "Search bar": "தேடல் பட்டி",
 "Top bar": "மேல் பட்டி",

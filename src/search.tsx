@@ -58,6 +58,11 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
     to('search?' + p.toString(), replace)
   }
 
+  // A version that keeps its Strong's numbers in a file of their own is read
+  // with them when they are shown, or when the search asks for a number.
+  const tagged = settings.strongs || queryStrongs(parseQuery(q).node).length
+    ? versions.filter(v => byId.get(v)?.strongsFile) : []
+
   // Run the search when the query, versions, scope, or options change.
   useEffect(() => {
     setResult(undefined); setShown([]); setLimit(PAGE); setError('')
@@ -69,11 +74,11 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
     if (bookFilter) books = [bookFilter]
     setBusy(t('Searching…'))
     let stale = false
-    call<SearchResponse>({ type: 'search', base: data.url(''), query: q, versions, langs, options: opts, books }, m => !stale && setBusy(searchText(m)))
+    call<SearchResponse>({ type: 'search', base: data.url(''), query: q, versions, langs, options: opts, books, strongs: tagged }, m => !stale && setBusy(searchText(m)))
       .then(r => { if (!stale) { setResult(r); setBusy('') } })
       .catch(e => { if (!stale) { setError(searchText(e.message)); setBusy('') } })
     return () => { stale = true }
-  }, [q, versions.join(), scope, bookFilter, JSON.stringify(opts)])
+  }, [q, versions.join(), scope, bookFilter, JSON.stringify(opts), tagged.join()])
 
   const total = result ? result.hits.length / 4 : 0
 
@@ -85,7 +90,7 @@ export function Search({ route, onGo }: { route: Route; onGo?: (path: string, re
     const refs: [string, number, number, number][] = []
     for (let i = from; i < to; i++) refs.push([BOOKS[result.hits[i * 4]].id, result.hits[i * 4 + 1], result.hits[i * 4 + 2], result.hits[i * 4 + 3]])
     let stale = false
-    call<PageResponse>({ type: 'page', base: data.url(''), query: q, versions, langs, options: opts, refs })
+    call<PageResponse>({ type: 'page', base: data.url(''), query: q, versions, langs, options: opts, refs, strongs: tagged })
       .then(r => { if (!stale) setShown(s => [...s, ...r.verses]) })
     return () => { stale = true }
   }, [result, limit])

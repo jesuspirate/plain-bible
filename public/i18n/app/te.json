@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "ప్రతి అధ్యాయం శీర్షిక కింద దానిపై మీకు ఎన్ని నోట్‌లు ఉన్నాయో చూపు; దాన్ని ప్రస్తావించే (“యోహాను 3:16 చూడండి” లాంటి) లేదా ఇక్కడి నోట్‌తో అదే #ట్యాగ్ ఉన్న ఇతర చోట్ల నోట్‌లతో సహా.",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "సెట్టింగ్‌ల పైభాగంలో, మీరు వరుసగా ఎన్ని రోజులు దేవుని వాక్యం చదివి ప్రార్థించారో చూపు. ఏదీ మీకు గుర్తు చేయదు.",
 "Strong's numbers": "స్ట్రాంగ్ సంఖ్యలు",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "ట్యాగ్ చేసిన పదాలను నొక్కగలిగేలా చేయి (KJV, BSB, హీబ్రూ, గ్రీకు పాఠాలు)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "ట్యాగ్ చేసిన పదాలను నొక్కగలిగేలా చేయి (KJV, BSB, LSG, హీబ్రూ, గ్రీకు పాఠాలు)",
 "Show the numbers inline": "సంఖ్యలను పాఠంలోనే చూపు",
 "Search bar": "సెర్చ్ బార్",
 "Top bar": "పై బార్",

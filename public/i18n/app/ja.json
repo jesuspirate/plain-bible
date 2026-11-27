@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "各章の見出しの下に、その章についてのメモの数を表示します。ほかの場所にあるメモで、その章に触れているもの（「ヨハネ 3:16 参照」など）や、ここにあるメモと同じ #タグ を持つものも含みます。",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "「設定」の上部に、みことばを読み、祈った連続日数を表示します。通知が届くことはありません。",
 "Strong's numbers": "ストロング番号",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "タグ付きの語をタップできるようにする（KJV、BSB、ヘブライ語とギリシャ語の本文）",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "タグ付きの語をタップできるようにする（KJV、BSB、LSG、ヘブライ語とギリシャ語の本文）",
 "Show the numbers inline": "本文中に番号を表示",
 "Search bar": "検索バー",
 "Top bar": "上部のバー",

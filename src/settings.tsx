@@ -560,7 +560,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     <div class="field">{check('streaks', t('Streaks'), t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.'))}</div>
     <div class="field">{check('worldMap', t('Count my prayers on the map'), t('After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.'))}</div>
     <div class="field"><div class="col">
-      {check('strongs', t("Strong's numbers"), t('Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)'))}
+      {check('strongs', t("Strong's numbers"), t('Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)'))}
       {check('strongsNumbers', t('Show the numbers inline'))}
     </div></div>
   </div>
