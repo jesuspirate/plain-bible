@@ -139,6 +139,8 @@ export function SearchBar({ here, mini, above }: {
   const version = here?.version ?? settings.version
   // In recording mode the bar names the version on screen, large.
   const recording = useRecording()
+  // The Bible you read is on the versions button at the top now; the bar
+  // names one only in Teaching mode, when the big one on screen differs.
   const shown = recording.on && byId.has(recording.version) ? recording.version : version
   const info = byId.get(version)
   // The Bible searched stays the one you searched in while you step through
@@ -848,7 +850,7 @@ export function SearchBar({ here, mini, above }: {
         ) : <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
           <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
-            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter} · ${shown}` : t('Words or John 3:16')}
+            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter}${shown !== version ? ` · ${shown}` : ''}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {!open && !mini && settings.alongButton && here && <AlongButton />}
