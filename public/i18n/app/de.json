@@ -1348,5 +1348,7 @@
 "Praying for {name}": "Gebet für {name}",
 "Back to {circle}": "Zurück zu {circle}",
 "Pray for this": "Dafür beten",
-"A verse for you": "Ein Vers für dich"
+"A verse for you": "Ein Vers für dich",
+"You prayed for this before": "Du hast schon einmal dafür gebetet",
+"{name} asked again": "{name} bittet noch einmal"
 }

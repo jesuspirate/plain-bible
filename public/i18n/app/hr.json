@@ -1436,5 +1436,7 @@
 "Praying for {name}": "Molitva za {name}",
 "Back to {circle}": "Natrag u {circle}",
 "Pray for this": "Moli za to",
-"A verse for you": "Stih za tebe"
+"A verse for you": "Stih za tebe",
+"You prayed for this before": "Već ste molili za ovo",
+"{name} asked again": "{name} ponovno moli"
 }

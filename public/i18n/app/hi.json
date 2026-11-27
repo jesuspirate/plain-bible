@@ -1348,5 +1348,7 @@
 "Praying for {name}": "{name} के लिए प्रार्थना",
 "Back to {circle}": "{circle} पर वापस",
 "Pray for this": "इसके लिए प्रार्थना करें",
-"A verse for you": "आपके लिए एक पद"
+"A verse for you": "आपके लिए एक पद",
+"You prayed for this before": "आपने पहले इसके लिए प्रार्थना की थी",
+"{name} asked again": "{name} ने फिर से माँगा"
 }

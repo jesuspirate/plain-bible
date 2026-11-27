@@ -1,5 +1,5 @@
 import { describe, expect, it } from 'vitest'
-import { answeredAt, askedOf, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
+import { answeredAt, askedOf, earlierAsks, prayedBefore, cleanShared, type Feed, type FeedItem, inviteMessage, parseInviteLink, waitingFor } from './circles'
 
 describe('cleanShared', () => {
   it('keeps a shared verse', () => {
@@ -93,5 +93,18 @@ describe('prayer requests', () => {
     expect(answeredAt(byOther)).toBeUndefined()
     expect(answeredAt(byAsker)).toBe(7)
     expect(waitingFor(feed([byOther, byAsker]))).toHaveLength(1)
+  })
+  it('finds the earlier rounds of a request asked again, and who prayed then', () => {
+    const r1 = { ...ask('b', ['a', 'c'], 1), id: 'r1', reacts: { b: { at: 1, e: [], p: 2 } } }
+    const r2 = { ...ask('b', ['a'], 2), id: 'r2' }
+    const other = { ...ask('b', ['a'], 1), id: 'x', body: { k: 'ask' as const, note: 'Something else' } }
+    const now = { ...ask('b', [], 3), id: 'r3', body: { k: 'ask' as const, note: 'Peace', again: true } }
+    const f = feed([now, r2, r1, other])
+    const before = earlierAsks(f, now)
+    expect(before.map(i => i.id)).toEqual(['r2', 'r1'])
+    expect(prayedBefore(before, 'a')).toBe(2)
+    expect(prayedBefore(before, 'c')).toBe(1)
+    expect(prayedBefore(before, 'b')).toBe(1)
+    expect(earlierAsks(f, r2)).toEqual([])
   })
 })

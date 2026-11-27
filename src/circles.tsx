@@ -7,7 +7,7 @@ import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
   leaveCircle, listCircles, renameCircle, type News, type Shared, openInvited, react, type Reaction, REACTS, makeCode, dropCode, doneWithCode, codeAsk, allowCode, typeCode, stopWaiting, joinWithCode, Typed, loadFeed, newsIn, parseInviteLink, prayerAudio, readInvite, removeReply, removeShared, reply, sharePrayer, shareStreak, shareVerse,
   type Sending, type Upload, askToLead, closeDoor, type Door, type DoorRequest, doorLink, keptLead, type Lead, leaderRequests, markPrayed, myRequests, openDoor, removeMember, removeRequest, sendRequest,
-  askPrayer, askedOf, waitingFor, answeredAt, askerPrayedAt,
+  askPrayer, askedOf, waitingFor, answeredAt, askerPrayedAt, earlierAsks, prayedBefore,
 } from './lib/circles'
 import { streaks } from './lib/streaks'
 import { useDays } from './streaks'
@@ -312,17 +312,21 @@ function CircleList() {
   // they're seen. Counted from what's kept on this device; a circle with
   // something new is fetched first (quietly), so a fresh request counts too.
   const [waits, setWaits] = useState<Record<string, number>>({})
+  // One waiting request, asked again: who asked, said on the row.
+  const [again, setAgain] = useState<Record<string, string>>({})
   useEffect(() => {
     let live = true
     ;(async () => {
-      const out: Record<string, number> = {}
+      const out: Record<string, number> = {}, by: Record<string, string> = {}
       for (const c of list ?? []) {
         if (c.door) continue
         const f = (hasNews(c.id) && navigator.onLine !== false ? await loadFeed(c.id).catch(() => undefined) : undefined) ?? await keptFeed(c.id).catch(() => undefined)
-        const n = f ? waitingFor(f).length : 0
-        if (n) out[c.id] = n
+        const w = f ? waitingFor(f) : []
+        if (w.length) out[c.id] = w.length
+        const one = w.length === 1 && w[0].body.k === 'ask' && w[0].body.again ? f!.members.find(m => m.mid === w[0].by)?.name : undefined
+        if (one) by[c.id] = one
       }
-      if (live) setWaits(out)
+      if (live) { setWaits(out); setAgain(by) }
     })()
     return () => { live = false }
   }, [list])
@@ -371,7 +375,7 @@ function CircleList() {
               {shown!.map(c => (
                 <li class={waits[c.id] ? 'c-waits' : ''}><button class="c-open" onClick={() => nav.open(c)}>
                   <strong>{c.name}{hasNews(c.id) && <span class="news-dot" aria-label={t(', something new')} />}</strong>
-                  <span class="muted">{waits[c.id] ? <span class="c-new-word">{reactEmoji('pray', settings.prayTone)} {t('Ready for your prayer')}{waits[c.id] > 1 ? ` · ${waits[c.id]}` : ''}</span> : hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.door ? `${t('Open door')} · ${tn(c.members, '{n} person', '{n} people')}` : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
+                  <span class="muted">{waits[c.id] ? <span class="c-new-word">{reactEmoji('pray', settings.prayTone)} {again[c.id] ? t('{name} asked again', { name: again[c.id] }) : t('Ready for your prayer')}{waits[c.id] > 1 ? ` · ${waits[c.id]}` : ''}</span> : hasNews(c.id) ? <span class="c-new-word">{t('Something new')}</span> : c.door ? `${t('Open door')} · ${tn(c.members, '{n} person', '{n} people')}` : c.members === 1 ? t('Just you so far') : tn(c.members, '{n} person', '{n} people')} ›</span>
                 </button></li>
               ))}
             </ul>
@@ -720,7 +724,7 @@ function CircleView({ id }: { id: string }) {
     {waiting.length > 0 && (
       <section class="c-day c-day-new c-waiting">
         <h3 class="c-day-name">{t('Ready for your prayer')}</h3>
-        <ol class="c-feed">{waiting.map(item => <Item circle={id} item={item} mine={false} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} others={askedOf(feed, item).others} circleName={info?.name} />)}</ol>
+        <ol class="c-feed">{waiting.map(item => <Item circle={id} item={item} mine={false} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} others={askedOf(feed, item).others} earlier={earlierAsks(feed, item)} circleName={info?.name} />)}</ol>
       </section>
     )}
     {!feed.items.length && <p class="muted c-empty">{guest ? t('Nothing shared yet. When {name} shares a verse or a prayer, it shows here.', { name: leader })
@@ -741,7 +745,7 @@ function CircleView({ id }: { id: string }) {
           )}
           {isOpen && (
             <ol class="c-feed">
-              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} door={door} others={item.body.k === 'ask' ? askedOf(feed, item).others : undefined} circleName={info?.name} />)}
+              {d.items.map(item => <Item circle={id} item={item} mine={item.by === feed.me} me={feed.me} nameOf={nameOf} fav={fav} onChange={load} news={news!.get(item.id)} door={door} others={item.body.k === 'ask' ? askedOf(feed, item).others : undefined} earlier={earlierAsks(feed, item)} circleName={info?.name} />)}
             </ol>
           )}
         </section>
@@ -978,11 +982,13 @@ function StreakBoard({ circle, name, feed, onChange }: { circle: string; name?: 
   )
 }
 
-function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, others, circleName }: {
+function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, others, circleName, earlier = [] }: {
   circle: string; item: FeedItem; mine: boolean; me: string; nameOf: (mid: string) => string; fav: string; onChange: () => void
   /** a prayer request: everyone it waits on (all but the one who asked) */
   others?: string[]
   circleName?: string
+  /** Asked again: the same request's earlier rounds, to show who prayed before */
+  earlier?: FeedItem[]
   /** what's new on it since you last looked */
   news?: News
   /** an Open door circle: 🙏 shows as a count, and only its leader writes back */
@@ -1088,7 +1094,11 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
         <ul class="c-on-top" aria-label={t('Reactions')}>
           {givers.map(({ m, gave }) => (
             <li class={'c-pill' + (isNew(m) ? ' new' : '')}>
-              {gave.map(r => <span class="c-pill-emoji" role="img" aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span>)}
+              {gave.map(r => <>
+                <span class="c-pill-emoji" role="img" aria-label={r === 'pray' ? t('Praying') : REACT_WORDS[r]()}>{emoji(r)}</span>
+                {/* Asked again: prayed for it before too, so 🙏×2, ×3… */}
+                {r === 'pray' && earlier.length > 0 && prayedBefore(earlier, m) > 0 && <span class="c-pill-times">×{prayedBefore(earlier, m) + 1}</span>}
+              </>)}
               <span class="c-pill-name">{nameOf(m)}</span>
             </li>
           ))}
@@ -1104,12 +1114,12 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
         </div>
       </div>
       {b.k === 'ask' ? <>
-        {b.again && <p class="muted small c-ask-again">{t('Asked again')}</p>}
+        {b.again && <p class="c-ask-again"><AgainIcon /> {t('Asked again')}</p>}
         <p class="c-note c-note-main c-ask-said">{b.note}</p>
         <Prayed others={others ?? []} amens={amens} mine={mine} prayed={prayed} onPray={pray} again={act(() => askPrayer(circle, b.note, true))} busy={busy} emoji={emoji('pray')}
           by={nameOf(item.by)} onPrayNow={() => prayFor({ circle, circleName: circleName ?? '', item: item.id, by: mine ? '' : nameOf(item.by), note: b.note,
             ...(mine ? { own: { me, e: myReacts, ...(answered ? { a: answered } : {}) } } : {}) })}
-          answered={answered} onAnswered={markAnswered} />
+          answered={answered} onAnswered={markAnswered} before={prayedBefore(earlier, me)} />
         {justNow && <AfterPrayer verse={justNow} />}
       </> : b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
@@ -1305,13 +1315,15 @@ const AskIcon = ({ size, class: c }: { size: number; class?: string }) => (
 /** Who prayed for a prayer request: a quiet bar and "2 of 3 prayed", and
  *  one big button. Nobody is named for not praying. Only the one who asked
  *  marks it answered, and once it is, they can ask again. */
-function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, onPrayNow, answered, onAnswered }: {
+function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, onPrayNow, answered, onAnswered, before }: {
   others: string[]; amens: string[]; mine: boolean; prayed: boolean; onPray: () => void; again: () => void; busy: boolean; emoji: string
   /** who asked, and praying for it out loud now (marked prayed once kept) */
   by: string; onPrayNow: () => void
   /** when the one who asked marked it answered (0: not yet). God can answer
    *  before everyone has prayed, so they can mark it at any time. */
   answered: number; onAnswered: (on: boolean) => void
+  /** asked again: how many earlier rounds you prayed for */
+  before: number
 }) {
   const n = others.filter(m => amens.includes(m)).length, all = others.length > 0 && n === others.length
   const count = t('{n} of {total} prayed', { n, total: others.length })
@@ -1338,6 +1350,7 @@ function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, o
       {!mine && (prayed
         ? <button class="c-btn c-pray-big on" aria-pressed="true" onClick={onPray}>✓ {t('You prayed')}</button>
         : <>
+          {before > 0 && <p class="c-prayed-before">{emoji} {t('You prayed for this before')}</p>}
           <button class="c-btn c-pray-big primary" onClick={onPrayNow}>{emoji} {t('Pray for {name}', { name: by })}</button>
           <p class="c-prayed-quiet"><button class="link small" onClick={onPray}>{t('I already prayed')}</button></p>
         </>)}
@@ -1366,6 +1379,13 @@ function AfterPrayer({ verse }: { verse: PrayerVerse & { kjv?: string } }) {
     </div>
   )
 }
+
+/** Asked again: a round arrow. */
+const AgainIcon = () => (
+  <svg viewBox="0 0 24 24" width="16" height="16" fill="none" stroke="currentColor" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">
+    <path d="M20 12a8 8 0 1 1-2.6-5.9" /><path d="M20 4v4.5h-4.5" />
+  </svg>
+)
 
 /** Ask the whole circle to pray: a few words everyone in it reads. */
 function AskCircle({ circle, name, onSent }: { circle: string; name: string; onSent: () => void }) {

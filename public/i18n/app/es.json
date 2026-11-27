@@ -1183,5 +1183,7 @@
 "Praying for {name}": "Orando por {name}",
 "Back to {circle}": "Volver a {circle}",
 "Pray for this": "Orar por esto",
-"A verse for you": "Un versículo para ti"
+"A verse for you": "Un versículo para ti",
+"You prayed for this before": "Ya oraste por esto antes",
+"{name} asked again": "{name} pidió de nuevo"
 }

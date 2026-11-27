@@ -1348,5 +1348,7 @@
 "Praying for {name}": "Ber for {name}",
 "Back to {circle}": "Tilbake til {circle}",
 "Pray for this": "Be for dette",
-"A verse for you": "Eit vers til deg"
+"A verse for you": "Eit vers til deg",
+"You prayed for this before": "Du har bede for dette før",
+"{name} asked again": "{name} ber igjen"
 }

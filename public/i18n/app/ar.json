@@ -1495,5 +1495,7 @@
 "Praying for {name}": "تصلي لأجل {name}",
 "Back to {circle}": "العودة إلى {circle}",
 "Pray for this": "صلِّ لأجل هذا",
-"A verse for you": "آية لك"
+"A verse for you": "آية لك",
+"You prayed for this before": "صلّيت لأجل هذا من قبل",
+"{name} asked again": "طلب {name} مرة أخرى"
 }

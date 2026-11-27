@@ -1348,5 +1348,7 @@
 "Praying for {name}": "Lapriyè pou {name}",
 "Back to {circle}": "Retounen nan {circle}",
 "Pray for this": "Priye pou sa",
-"A verse for you": "Yon vèsè pou ou"
+"A verse for you": "Yon vèsè pou ou",
+"You prayed for this before": "Ou te deja priye pou sa",
+"{name} asked again": "{name} mande ankò"
 }

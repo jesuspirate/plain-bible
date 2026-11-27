@@ -1348,5 +1348,7 @@
 "Praying for {name}": "Umkhuleko ka-{name}",
 "Back to {circle}": "Buyela ku-{circle}",
 "Pray for this": "Khulekela lokhu",
-"A verse for you": "Ivesi yakho"
+"A verse for you": "Ivesi yakho",
+"You prayed for this before": "Wake wakhulekela lokhu",
+"{name} asked again": "{name} ucela futhi"
 }

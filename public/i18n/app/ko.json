@@ -1348,5 +1348,7 @@
 "Praying for {name}": "{name}님을 위한 기도",
 "Back to {circle}": "{circle}(으)로 돌아가기",
 "Pray for this": "이 제목으로 기도하기",
-"A verse for you": "당신을 위한 말씀"
+"A verse for you": "당신을 위한 말씀",
+"You prayed for this before": "전에 이 기도제목을 위해 기도했어요",
+"{name} asked again": "{name}님이 다시 부탁했어요"
 }

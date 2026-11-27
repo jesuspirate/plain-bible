@@ -686,6 +686,15 @@ export async function react(circle: string, item: string, mid: string, e: Reacti
 export const askPrayer = (circle: string, note: string, again = false) =>
   send(circle, { k: 'ask', note: note.trim().slice(0, 2000), ...(again ? { again: true } : {}) })
 
+/** The same prayer request asked before, by the same person, in the same
+ *  words: Ask again is a new request, and these are the earlier rounds. */
+export const earlierAsks = (feed: Feed, i: FeedItem) => i.body.k !== 'ask' || !i.body.again ? []
+  : feed.items.filter(x => x.id !== i.id && x.body.k === 'ask' && x.by === i.by && x.at < i.at && x.body.note === (i.body as { note: string }).note)
+/** How many of those earlier rounds someone prayed for (the one who asked:
+ *  those they prayed for themselves, from the prayer screen). */
+export const prayedBefore = (earlier: FeedItem[], mid: string) =>
+  earlier.filter(x => mid === x.by ? !!askerPrayedAt(x) : x.amens.includes(mid)).length
+
 /** Who in the circle a prayer request waits on: everyone but the one who
  *  asked. `prayed`: those of them who tapped 🙏. */
 export function askedOf(feed: Feed, i: FeedItem) {

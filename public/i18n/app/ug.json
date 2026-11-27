@@ -1348,5 +1348,7 @@
 "Praying for {name}": "{name} ئۈچۈن دۇئا",
 "Back to {circle}": "{circle} غا قايتىش",
 "Pray for this": "بۇنىڭ ئۈچۈن دۇئا قىلىڭ",
-"A verse for you": "سىز ئۈچۈن بىر ئايەت"
+"A verse for you": "سىز ئۈچۈن بىر ئايەت",
+"You prayed for this before": "بۇنىڭ ئۈچۈن ئىلگىرى دۇئا قىلغانسىز",
+"{name} asked again": "{name} يەنە سورىدى"
 }
