@@ -157,6 +157,11 @@ async function applyLang(l: Lang, remember: boolean) {
     if (n === '105') p.appendChild(document.createElement('mark')).textContent = text
     else p.appendChild(document.createTextNode(text))
   })
+  // The search bar names the place; the Bible's short name sits on the
+  // versions button at the top, as in the app.
+  const [place, version] = word('mbar').split(' · ')
+  $('[data-mplace]')!.textContent = place
+  $('[data-mver]')!.textContent = version ?? 'KJV'
   closing.textContent = word('closing')
   // The lamp verse in the page's language, when it's one of the few shown.
   showVerse(l in VERSES ? l : l === 'zh-hant' ? 'zh' : chip === 'fr' || chip === 'es' ? 'en' : chip)
