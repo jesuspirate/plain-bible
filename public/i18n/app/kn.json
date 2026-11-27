@@ -353,7 +353,6 @@
 "Note on verse {v}": "ವಚನ {v} ರ ಮೇಲೆ ಟಿಪ್ಪಣಿ",
 "{n} elsewhere": "ಬೇರೆಡೆ {n}",
 "Verse {v} options": "ವಚನ {v} ಆಯ್ಕೆಗಳು",
-"{version} does not include {book} {chapter}.": "{version} ನಲ್ಲಿ {book} {chapter} ಇಲ್ಲ.",
 "Previous": "ಹಿಂದಿನದು",
 "Next": "ಮುಂದಿನದು",
 "Your notes": "ನಿಮ್ಮ ಟಿಪ್ಪಣಿಗಳು",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "ನೀವು ಓದುತ್ತಿದ್ದ ಸ್ಥಳ",
 "Tap to switch to the Bible you read before. Tap again to come back.": "ಹಿಂದೆ ಓದಿದ ಬೈಬಲ್‌ಗೆ ಬದಲಿಸಲು ಟ್ಯಾಪ್ ಮಾಡಿ. ಹಿಂದಿರುಗಲು ಮತ್ತೆ ಟ್ಯಾಪ್ ಮಾಡಿ.",
 "Hold to choose from your Bibles, or any of them.": "ನಿಮ್ಮ ಬೈಬಲ್‌ಗಳಿಂದ ಅಥವಾ ಯಾವುದನ್ನಾದರೂ ಆರಿಸಲು ಒತ್ತಿ ಹಿಡಿಯಿರಿ.",
-"The places you were reading are in Settings → Recent places.": "ನೀವು ಓದಿದ ಸ್ಥಳಗಳು ಸೆಟ್ಟಿಂಗ್‌ಗಳು → ಇತ್ತೀಚಿನ ಸ್ಥಳಗಳು ನಲ್ಲಿವೆ."
+"The places you were reading are in Settings → Recent places.": "ನೀವು ಓದಿದ ಸ್ಥಳಗಳು ಸೆಟ್ಟಿಂಗ್‌ಗಳು → ಇತ್ತೀಚಿನ ಸ್ಥಳಗಳು ನಲ್ಲಿವೆ.",
+"{ref} isn’t in this Bible": "{ref} ಈ ಬೈಬಲ್‌ನಲ್ಲಿ ಇಲ್ಲ",
+"Read it in {version}": "{version} ನಲ್ಲಿ ಓದಿ",
+"Other Bibles that have it": "ಇದನ್ನು ಹೊಂದಿರುವ ಇತರ ಬೈಬಲ್‌ಗಳು",
+"All Bibles that have it ({n})": "ಇದನ್ನು ಹೊಂದಿರುವ ಎಲ್ಲಾ ಬೈಬಲ್‌ಗಳು ({n})",
+"Here this chapter ends at verse {n}.": "ಇಲ್ಲಿ ಈ ಅಧ್ಯಾಯವು ವಚನ {n} ರಲ್ಲಿ ಕೊನೆಗೊಳ್ಳುತ್ತದೆ.",
+"Go to verse {n}": "ವಚನ {n} ಗೆ ಹೋಗಿ"
 }

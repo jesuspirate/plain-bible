@@ -353,7 +353,6 @@
 "Note on verse {v}": "Noti ki he veesi {v}",
 "{n} elsewhere": "{n} ʻi ha feituʻu kehe",
 "Verse {v} options": "Ngaahi fili ki he veesi {v}",
-"{version} does not include {book} {chapter}.": "ʻOku ʻikai ʻi he {version} ʻa e {book} {chapter}.",
 "Previous": "Kimuʻa",
 "Next": "Hoko",
 "Your notes": "Hoʻo ngaahi noti",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Feituʻu naʻá ke lau ai",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Tā ke liliu ki he Tohi Tapu naʻá ke lau kimuʻa. Toe tā ke foki.",
 "Hold to choose from your Bibles, or any of them.": "Puke ke fili mei hoʻo ngaahi Tohi Tapu, pe ha taha pē.",
-"The places you were reading are in Settings → Recent places.": "ʻOku ʻi he Ngaahi Fokotuʻutuʻu → Ngaahi feituʻu fakamuimui ʻa e ngaahi feituʻu naʻá ke lau ai."
+"The places you were reading are in Settings → Recent places.": "ʻOku ʻi he Ngaahi Fokotuʻutuʻu → Ngaahi feituʻu fakamuimui ʻa e ngaahi feituʻu naʻá ke lau ai.",
+"{ref} isn’t in this Bible": "ʻOku ʻikai ʻi he Tohi Tapu ko ʻeni ʻa e {ref}",
+"Read it in {version}": "Lau ʻi he {version}",
+"Other Bibles that have it": "Ngaahi Tohi Tapu kehe ʻoku ʻi ai",
+"All Bibles that have it ({n})": "Ngaahi Tohi Tapu kotoa ʻoku ʻi ai ({n})",
+"Here this chapter ends at verse {n}.": "Heni ʻoku ngata ʻa e vahe ni ʻi he veesi {n}.",
+"Go to verse {n}": "ʻAlu ki he veesi {n}"
 }

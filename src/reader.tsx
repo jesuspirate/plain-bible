@@ -30,6 +30,7 @@ import { addSpan, caretAt, coversAll, offsetIn, rangeOf, textNodes, toWords } fr
 import { copyOf, firstVerseOn, Leaf, leaf, pageWidth, sheetOf, sheetsOf, useWide } from './lib/spread'
 import { tally } from './lib/tally'
 import { useLeave } from './motion'
+import { MissingChapter, MissingVerse } from './missing'
 
 // After Try it now (Audio in Settings), the next verse bar shows which two
 // buttons are the audio ones: the fingertip taps each, with what it does.
@@ -1191,6 +1192,9 @@ export function Reader({ route }: { route: Route }) {
     return () => window.removeEventListener('wheel', onWheel)
   })
 
+  // The verse you went to, past the end of this chapter in your Bible.
+  const lastVerse = primary?.books[book]?.[chapter - 1]?.length ?? 0
+  const [missClosed, setMissClosed] = useState('')
   const rows = loaded ? Math.max(...versions.map(v => bibles[v].books[book]?.[chapter - 1]?.length ?? 0)) : 0
   const showStrongs = settings.strongs
   // Hold a word (or double click it) and "Define" offers its meaning.
@@ -1330,7 +1334,11 @@ export function Reader({ route }: { route: Route }) {
     <div class={'reader' + (picking ? ' picking' : '')} ref={readerEl}>
       {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>{t('Try again')}</button></p></div>}
       {!loaded && !error && <p class="muted center wait">{t('Loading…')}</p>}
-      {loaded && rows === 0 && <p class="muted center">{t('{version} does not include {book} {chapter}.', { version: info?.name ?? version, book: bookName(book), chapter: String(chapter) })}</p>}
+      {loaded && rows === 0 && <MissingChapter version={version} bible={primary} book={book} chapter={chapter} verse={target || undefined} parallel={parallel} />}
+      {loaded && rows > 0 && target > lastVerse && missClosed !== `${version}/${book}/${chapter}/${target}` && (
+        <MissingVerse version={version} book={book} chapter={chapter} verse={target} last={lastVerse} parallel={parallel}
+          onClose={() => setMissClosed(`${version}/${book}/${chapter}/${target}`)} />
+      )}
 
       {loaded && rows > 0 && !spread && (
         <article key={`${book}.${chapter}`} ref={article}

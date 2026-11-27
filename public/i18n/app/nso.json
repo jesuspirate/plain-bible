@@ -353,7 +353,6 @@
 "Note on verse {v}": "Sengwalo temaneng ya {v}",
 "{n} elsewhere": "{n} mafelong a mangwe",
 "Verse {v} options": "Dikgetho tša temana ya {v}",
-"{version} does not include {book} {chapter}.": "{version} ga e na {book} {chapter}.",
 "Previous": "Ya pele",
 "Next": "Ye e latelago",
 "Your notes": "Dingwalo tša gago",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Moo o bego o bala",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Kgwatha go fetogela go Beibele yeo o e badilego pele. Kgwatha gape go boela.",
 "Hold to choose from your Bibles, or any of them.": "Swara go kgetha go Dibeibele tša gago, goba efe goba efe.",
-"The places you were reading are in Settings → Recent places.": "Mafelo ao o bego o bala go ona a ka go Dipeakanyo → Mafelo a bjale."
+"The places you were reading are in Settings → Recent places.": "Mafelo ao o bego o bala go ona a ka go Dipeakanyo → Mafelo a bjale.",
+"{ref} isn’t in this Bible": "{ref} ga e gona ka Beibeleng ye",
+"Read it in {version}": "Bala ka go {version}",
+"Other Bibles that have it": "Dibeibele tše dingwe tše di nago le yona",
+"All Bibles that have it ({n})": "Dibeibele ka moka tše di nago le yona ({n})",
+"Here this chapter ends at verse {n}.": "Mo kgaolo ye e fela temaneng ya {n}.",
+"Go to verse {n}": "Eya temaneng ya {n}"
 }

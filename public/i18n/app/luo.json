@@ -353,7 +353,6 @@
 "Note on verse {v}": "Paro e ndiko {v}",
 "{n} elsewhere": "{n} kamoro machielo",
 "Verse {v} options": "Gik mitimo gi ndiko {v}",
-"{version} does not include {book} {chapter}.": "{version} onge gi {book} {chapter}.",
 "Previous": "Mokalo",
 "Next": "Maluwo",
 "Your notes": "Paro mari",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Kama ne isomo",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Gu mondo ilok idhi e Muma mane isomo motelo. Gu kendo mondo iduogi.",
 "Hold to choose from your Bibles, or any of them.": "Mak mondo iyier e Muma magi, kata moro amora.",
-"The places you were reading are in Settings → Recent places.": "Kuonde mane isomoe nitie e Chenro → Kuonde manyien."
+"The places you were reading are in Settings → Recent places.": "Kuonde mane isomoe nitie e Chenro → Kuonde manyien.",
+"{ref} isn’t in this Bible": "{ref} onge e Muma ma",
+"Read it in {version}": "Som e {version}",
+"Other Bibles that have it": "Muma mamoko man-go",
+"All Bibles that have it ({n})": "Muma duto man-go ({n})",
+"Here this chapter ends at verse {n}.": "Ka, sula ni rumo e ndiko {n}.",
+"Go to verse {n}": "Dhi e ndiko {n}"
 }

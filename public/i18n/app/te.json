@@ -353,7 +353,6 @@
 "Note on verse {v}": "{v} వ వచనంపై నోట్",
 "{n} elsewhere": "ఇతర చోట్ల {n}",
 "Verse {v} options": "{v} వ వచనం ఎంపికలు",
-"{version} does not include {book} {chapter}.": "{version} లో {book} {chapter} లేదు.",
 "Previous": "మునుపటి",
 "Next": "తర్వాతి",
 "Your notes": "మీ నోట్‌లు",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "మీరు చదువుతున్న చోటు",
 "Tap to switch to the Bible you read before. Tap again to come back.": "ఇంతకు ముందు చదివిన బైబిల్‌కు మారడానికి నొక్కండి. తిరిగి రావడానికి మళ్లీ నొక్కండి.",
 "Hold to choose from your Bibles, or any of them.": "మీ బైబిళ్ల నుండి లేదా ఏదైనా ఎంచుకోవడానికి నొక్కి పట్టుకోండి.",
-"The places you were reading are in Settings → Recent places.": "మీరు చదివిన స్థలాలు సెట్టింగ్‌లు → ఇటీవలి స్థలాలులో ఉన్నాయి."
+"The places you were reading are in Settings → Recent places.": "మీరు చదివిన స్థలాలు సెట్టింగ్‌లు → ఇటీవలి స్థలాలులో ఉన్నాయి.",
+"{ref} isn’t in this Bible": "{ref} ఈ బైబిల్‌లో లేదు",
+"Read it in {version}": "{version}లో చదవండి",
+"Other Bibles that have it": "ఇది ఉన్న ఇతర బైబిళ్లు",
+"All Bibles that have it ({n})": "ఇది ఉన్న అన్ని బైబిళ్లు ({n})",
+"Here this chapter ends at verse {n}.": "ఇక్కడ ఈ అధ్యాయం వచనం {n}తో ముగుస్తుంది.",
+"Go to verse {n}": "వచనం {n}కు వెళ్లండి"
 }

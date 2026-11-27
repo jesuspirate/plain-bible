@@ -353,7 +353,6 @@
 "Note on verse {v}": "Catatan pada ayat {v}",
 "{n} elsewhere": "{n} di tempat lain",
 "Verse {v} options": "Pilihan ayat {v}",
-"{version} does not include {book} {chapter}.": "{version} tidak memuat {book} {chapter}.",
 "Previous": "Sebelumnya",
 "Next": "Berikutnya",
 "Your notes": "Catatan Anda",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Tempat Anda membaca",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Ketuk untuk beralih ke Alkitab yang Anda baca sebelumnya. Ketuk lagi untuk kembali.",
 "Hold to choose from your Bibles, or any of them.": "Tahan untuk memilih dari Alkitab Anda, atau yang mana saja.",
-"The places you were reading are in Settings → Recent places.": "Tempat-tempat Anda membaca ada di Pengaturan → Tempat terakhir."
+"The places you were reading are in Settings → Recent places.": "Tempat-tempat Anda membaca ada di Pengaturan → Tempat terakhir.",
+"{ref} isn’t in this Bible": "{ref} tidak ada dalam Alkitab ini",
+"Read it in {version}": "Baca di {version}",
+"Other Bibles that have it": "Alkitab lain yang memilikinya",
+"All Bibles that have it ({n})": "Semua Alkitab yang memilikinya ({n})",
+"Here this chapter ends at verse {n}.": "Di sini pasal ini berakhir di ayat {n}.",
+"Go to verse {n}": "Ke ayat {n}"
 }

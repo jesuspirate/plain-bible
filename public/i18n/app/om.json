@@ -353,7 +353,6 @@
 "Note on verse {v}": "Yaadannoo caqasa {v} irratti",
 "{n} elsewhere": "{n} bakka biraa",
 "Verse {v} options": "Filannoowwan caqasa {v}",
-"{version} does not include {book} {chapter}.": "{version} {book} {chapter} hin qabu.",
 "Previous": "Kan duraa",
 "Next": "Kan itti aanu",
 "Your notes": "Yaadannoowwan kee",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Bakka dubbisaa turte",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Macaafa Qulqulluu kanaan dura dubbifte irratti jijjiiruuf tuqi. Deebi'uuf irra deebi'ii tuqi.",
 "Hold to choose from your Bibles, or any of them.": "Macaafota Qulqulluu kee keessaa ykn kamiyyuu filachuuf qabadhu.",
-"The places you were reading are in Settings → Recent places.": "Bakkeewwan dubbisaa turte Qindaa'ina → Bakkeewwan dhiyoo keessa jiru."
+"The places you were reading are in Settings → Recent places.": "Bakkeewwan dubbisaa turte Qindaa'ina → Bakkeewwan dhiyoo keessa jiru.",
+"{ref} isn’t in this Bible": "{ref} Macaafa Qulqulluu kana keessa hin jiru",
+"Read it in {version}": "{version} keessatti dubbisi",
+"Other Bibles that have it": "Macaafota Qulqulluu biroo kan qaban",
+"All Bibles that have it ({n})": "Macaafota Qulqulluu hunda kan qaban ({n})",
+"Here this chapter ends at verse {n}.": "Asitti boqonnaan kun lakkoofsa {n} irratti xumurama.",
+"Go to verse {n}": "Gara lakkoofsa {n} deemi"
 }

@@ -353,7 +353,6 @@
 "Note on verse {v}": "Notitie bij vers {v}",
 "{n} elsewhere": "{n} elders",
 "Verse {v} options": "Opties voor vers {v}",
-"{version} does not include {book} {chapter}.": "{version} bevat {book} {chapter} niet.",
 "Previous": "Vorige",
 "Next": "Volgende",
 "Your notes": "Je notities",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Waar je aan het lezen was",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Tik om naar de Bijbel te gaan die je eerder las. Tik nog eens om terug te gaan.",
 "Hold to choose from your Bibles, or any of them.": "Houd vast om uit je Bijbels te kiezen, of een andere.",
-"The places you were reading are in Settings → Recent places.": "De plekken waar je las staan bij Instellingen → Recente plekken."
+"The places you were reading are in Settings → Recent places.": "De plekken waar je las staan bij Instellingen → Recente plekken.",
+"{ref} isn’t in this Bible": "{ref} staat niet in deze Bijbel",
+"Read it in {version}": "Lezen in {version}",
+"Other Bibles that have it": "Andere Bijbels die het hebben",
+"All Bibles that have it ({n})": "Alle Bijbels die het hebben ({n})",
+"Here this chapter ends at verse {n}.": "Hier eindigt dit hoofdstuk bij vers {n}.",
+"Go to verse {n}": "Naar vers {n}"
 }

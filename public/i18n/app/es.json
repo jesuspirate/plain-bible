@@ -353,7 +353,6 @@
 "Note on verse {v}": "Nota en el versículo {v}",
 "{n} elsewhere": "{n} en otros lugares",
 "Verse {v} options": "Opciones del versículo {v}",
-"{version} does not include {book} {chapter}.": "{version} no incluye {book} {chapter}.",
 "Previous": "Anterior",
 "Next": "Siguiente",
 "Your notes": "Tus notas",
@@ -1199,5 +1198,11 @@
 "Where you were reading": "Donde estabas leyendo",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Toca para cambiar a la Biblia que leíste antes. Toca otra vez para volver.",
 "Hold to choose from your Bibles, or any of them.": "Mantén pulsado para elegir entre tus Biblias, o cualquier otra.",
-"The places you were reading are in Settings → Recent places.": "Los lugares donde leías están en Ajustes → Lugares recientes."
+"The places you were reading are in Settings → Recent places.": "Los lugares donde leías están en Ajustes → Lugares recientes.",
+"{ref} isn’t in this Bible": "{ref} no está en esta Biblia",
+"Read it in {version}": "Leer en {version}",
+"Other Bibles that have it": "Otras Biblias que lo tienen",
+"All Bibles that have it ({n})": "Todas las Biblias que lo tienen ({n})",
+"Here this chapter ends at verse {n}.": "Aquí este capítulo termina en el versículo {n}.",
+"Go to verse {n}": "Ir al versículo {n}"
 }

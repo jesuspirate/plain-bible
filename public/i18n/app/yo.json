@@ -353,7 +353,6 @@
 "Note on verse {v}": "Àkọsílẹ̀ lórí ẹsẹ {v}",
 "{n} elsewhere": "{n} níbòmíràn",
 "Verse {v} options": "Àwọn àṣàyàn ẹsẹ {v}",
-"{version} does not include {book} {chapter}.": "{version} kò ní {book} {chapter}.",
 "Previous": "Ti tẹ́lẹ̀",
 "Next": "Tó kàn",
 "Your notes": "Àwọn àkọsílẹ̀ yín",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Ibi tí o ti ń kà",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Tẹ̀ láti yípadà sí Bíbélì tí o kà tẹ́lẹ̀. Tẹ̀ lẹ́ẹ̀kan sí i láti padà.",
 "Hold to choose from your Bibles, or any of them.": "Tẹ mọ́lẹ̀ láti yan nínú àwọn Bíbélì rẹ, tàbí èyíkéyìí.",
-"The places you were reading are in Settings → Recent places.": "Àwọn ibi tí o ti ń kà wà ní Ètò → Àwọn ibi àìpẹ́."
+"The places you were reading are in Settings → Recent places.": "Àwọn ibi tí o ti ń kà wà ní Ètò → Àwọn ibi àìpẹ́.",
+"{ref} isn’t in this Bible": "{ref} kò sí nínú Bíbélì yìí",
+"Read it in {version}": "Kà á nínú {version}",
+"Other Bibles that have it": "Àwọn Bíbélì mìíràn tó ní i",
+"All Bibles that have it ({n})": "Gbogbo Bíbélì tó ní i ({n})",
+"Here this chapter ends at verse {n}.": "Níbí orí yìí parí ní ẹsẹ {n}.",
+"Go to verse {n}": "Lọ sí ẹsẹ {n}"
 }

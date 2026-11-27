@@ -353,7 +353,6 @@
 "Note on verse {v}": "הערה על פסוק {v}",
 "{n} elsewhere": "{n} במקומות אחרים",
 "Verse {v} options": "אפשרויות לפסוק {v}",
-"{version} does not include {book} {chapter}.": "{version} אינו כולל את {book} {chapter}.",
 "Previous": "הקודם",
 "Next": "הבא",
 "Your notes": "ההערות שלך",
@@ -1368,5 +1367,11 @@
 "Where you were reading": "איפה שקראת",
 "Tap to switch to the Bible you read before. Tap again to come back.": "הקש כדי לעבור לתנ״ך שקראת קודם. הקש שוב כדי לחזור.",
 "Hold to choose from your Bibles, or any of them.": "לחיצה ארוכה לבחירה מהתנ״כים שלך, או מכל אחד אחר.",
-"The places you were reading are in Settings → Recent places.": "המקומות שבהם קראת נמצאים בהגדרות ← מקומות אחרונים."
+"The places you were reading are in Settings → Recent places.": "המקומות שבהם קראת נמצאים בהגדרות ← מקומות אחרונים.",
+"{ref} isn’t in this Bible": "{ref} לא נמצא בתנ״ך הזה",
+"Read it in {version}": "לקרוא ב־{version}",
+"Other Bibles that have it": "תרגומים אחרים שיש בהם",
+"All Bibles that have it ({n})": "כל התרגומים שיש בהם ({n})",
+"Here this chapter ends at verse {n}.": "כאן הפרק מסתיים בפסוק {n}.",
+"Go to verse {n}": "מעבר לפסוק {n}"
 }

@@ -353,7 +353,6 @@
 "Note on verse {v}": "Noat er rann {v}",
 "{n} elsewhere": "{n} ayns ynnyd elley",
 "Verse {v} options": "Reihyn son rann {v}",
-"{version} does not include {book} {chapter}.": "Cha nel {book} {chapter} ayns {version}.",
 "Previous": "Roish",
 "Next": "Nah",
 "Your notes": "Dty noatyn",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Raad v'ou lhaih",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Bwoaill dy chaghlaa gys y Vible lhaih oo roie. Bwoaill reesht dy hyndaa.",
 "Hold to choose from your Bibles, or any of them.": "Cum dy reih veih dty Vibleyn, ny veg erbee.",
-"The places you were reading are in Settings → Recent places.": "Ta ny boayl v'ou lhaih ayns Reaghyssyn → Boayl noa."
+"The places you were reading are in Settings → Recent places.": "Ta ny boayl v'ou lhaih ayns Reaghyssyn → Boayl noa.",
+"{ref} isn’t in this Bible": "Cha nel {ref} ’sy Vible shoh",
+"Read it in {version}": "Lhaih ayns {version}",
+"Other Bibles that have it": "Biblyn elley ta echey",
+"All Bibles that have it ({n})": "Dagh Bible ta echey ({n})",
+"Here this chapter ends at verse {n}.": "Ayns shoh ta’n chabdil jerrey ec rann {n}.",
+"Go to verse {n}": "Gow gys rann {n}"
 }

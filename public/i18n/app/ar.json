@@ -423,7 +423,6 @@
 "Note on verse {v}": "ملاحظة على الآية {v}",
 "{n} elsewhere": "{n} في مواضع أخرى",
 "Verse {v} options": "خيارات الآية {v}",
-"{version} does not include {book} {chapter}.": "{version} لا تتضمن {book} {chapter}.",
 "Previous": "السابق",
 "Next": "التالي",
 "Your notes": "ملاحظاتك",
@@ -1511,5 +1510,11 @@
 "Where you were reading": "حيث كنت تقرأ",
 "Tap to switch to the Bible you read before. Tap again to come back.": "انقر للتبديل إلى الكتاب المقدس الذي قرأته من قبل. انقر مرة أخرى للعودة.",
 "Hold to choose from your Bibles, or any of them.": "اضغط مطولًا للاختيار من كتبك المقدسة أو أي ترجمة أخرى.",
-"The places you were reading are in Settings → Recent places.": "الأماكن التي كنت تقرأ فيها موجودة في الإعدادات ← الأماكن الأخيرة."
+"The places you were reading are in Settings → Recent places.": "الأماكن التي كنت تقرأ فيها موجودة في الإعدادات ← الأماكن الأخيرة.",
+"{ref} isn’t in this Bible": "{ref} غير موجود في هذا الكتاب المقدس",
+"Read it in {version}": "اقرأه في {version}",
+"Other Bibles that have it": "كتب مقدسة أخرى تحتويه",
+"All Bibles that have it ({n})": "كل الكتب المقدسة التي تحتويه ({n})",
+"Here this chapter ends at verse {n}.": "هنا ينتهي هذا الأصحاح عند الآية {n}.",
+"Go to verse {n}": "انتقل إلى الآية {n}"
 }

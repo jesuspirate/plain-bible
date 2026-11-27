@@ -353,7 +353,6 @@
 "Note on verse {v}": "ᎪᏪᎳᏅ ᎧᏃᎮᏛ {v}",
 "{n} elsewhere": "{n} ᏐᎢᏢ",
 "Verse {v} options": "ᎧᏃᎮᏛ {v} ᏗᏑᏰᏍᏗ",
-"{version} does not include {book} {chapter}.": "{version} Ꮭ ᏳᏪᎭ {book} {chapter}.",
 "Previous": "ᎢᎬᏱᏢ",
 "Next": "ᎣᏂᏢ",
 "Your notes": "ᏣᏤᎵ ᎪᏪᎳᏅ",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "ᎢᎸᎯᏢ ᏣᎪᎵᏰᏍᎬᎩ",
 "Tap to switch to the Bible you read before. Tap again to come back.": "ᏣᏁᏍᏔᏯ ᎩᎳ ᏣᎪᎵᏰᎥ ᎪᏪᎵ ᎦᎸᏉᏗ ᏩᏓᏁᏟᏴᏍᏓ. ᏔᎵᏁ ᏣᏁᏍᏔᏯ ᏗᏣᎷᏤᏗ.",
 "Hold to choose from your Bibles, or any of them.": "ᏣᏂᏴᏗ ᏗᏣᏤᎵ ᎪᏪᎵ ᏚᎸᏉᏗ ᏣᏑᏰᏍᏗ, ᎠᎴ ᎩᎶ ᎢᏳᏍᏗ.",
-"The places you were reading are in Settings → Recent places.": "ᎢᎸᎯᏢ ᏣᎪᎵᏰᏍᎬᎩ ᏗᏛᏅᎢᏍᏗ → ᎪᎯ ᎢᏳ ᏗᏓᏁᎸ ᎠᏂ ᏗᏓᏁᎸ."
+"The places you were reading are in Settings → Recent places.": "ᎢᎸᎯᏢ ᏣᎪᎵᏰᏍᎬᎩ ᏗᏛᏅᎢᏍᏗ → ᎪᎯ ᎢᏳ ᏗᏓᏁᎸ ᎠᏂ ᏗᏓᏁᎸ.",
+"{ref} isn’t in this Bible": "{ref} ᎥᏝ ᎠᏂ ᎪᏪᎵ ᎦᎸᏉᏗ",
+"Read it in {version}": "ᎯᎪᎵᏯ {version}",
+"Other Bibles that have it": "ᏅᏩᏓᎴ ᎪᏪᎵ ᎦᎸᏉᏗ",
+"All Bibles that have it ({n})": "ᏂᎦᏛ ᎪᏪᎵ ᎦᎸᏉᏗ ({n})",
+"Here this chapter ends at verse {n}.": "ᎠᏂ ᎯᎠ ᎢᏳᏟᎶᏛ ᎤᎵᏍᏆᏓ {n}.",
+"Go to verse {n}": "ᎮᎾ {n}"
 }

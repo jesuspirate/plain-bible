@@ -403,7 +403,6 @@
 "Note on verse {v}": "Заметка к стиху {v}",
 "{n} elsewhere": "В других местах: {n}",
 "Verse {v} options": "Действия со стихом {v}",
-"{version} does not include {book} {chapter}.": "В переводе {version} нет: {book} {chapter}.",
 "Previous": "Назад",
 "Next": "Далее",
 "Your notes": "Ваши заметки",
@@ -1474,5 +1473,11 @@
 "Where you were reading": "Где вы читали",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Нажмите, чтобы перейти на Библию, которую читали раньше. Нажмите снова, чтобы вернуться.",
 "Hold to choose from your Bibles, or any of them.": "Удерживайте, чтобы выбрать из ваших Библий или любую другую.",
-"The places you were reading are in Settings → Recent places.": "Места, где вы читали, находятся в Настройки → Недавние места."
+"The places you were reading are in Settings → Recent places.": "Места, где вы читали, находятся в Настройки → Недавние места.",
+"{ref} isn’t in this Bible": "{ref} нет в этой Библии",
+"Read it in {version}": "Читать в {version}",
+"Other Bibles that have it": "Другие Библии, где это есть",
+"All Bibles that have it ({n})": "Все Библии, где это есть ({n})",
+"Here this chapter ends at verse {n}.": "Здесь эта глава заканчивается стихом {n}.",
+"Go to verse {n}": "Перейти к стиху {n}"
 }

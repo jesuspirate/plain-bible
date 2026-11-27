@@ -353,7 +353,6 @@
 "Note on verse {v}": "Kĩandĩko mũhari-inĩ {v}",
 "{n} elsewhere": "{n} kũndũ kũngĩ",
 "Verse {v} options": "Maũndũ ma mũhari {v}",
-"{version} does not include {book} {chapter}.": "{version} ndĩrĩ na {book} {chapter}.",
 "Previous": "Kĩa mbere",
 "Next": "Kĩrũmĩrĩru",
 "Your notes": "Iandĩko ciaku",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Harĩa warĩ ũgũthoma",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Hũtia nĩguo ũgarũrũke ũthiĩ Bibilia ĩrĩa wathomaga mbere. Hũtia rĩngĩ nĩguo ũcooke.",
 "Hold to choose from your Bibles, or any of them.": "Nyiita nĩguo ũthuure kuuma Mbibilia ciaku, kana o yothe.",
-"The places you were reading are in Settings → Recent places.": "Handũ harĩa warĩ ũgũthoma harĩ Mĩtaratara → Handũ ha rĩu."
+"The places you were reading are in Settings → Recent places.": "Handũ harĩa warĩ ũgũthoma harĩ Mĩtaratara → Handũ ha rĩu.",
+"{ref} isn’t in this Bible": "{ref} ndĩrĩ Bibilia-inĩ ĩno",
+"Read it in {version}": "Thoma na {version}",
+"Other Bibles that have it": "Bibilia ingĩ irĩ naguo",
+"All Bibles that have it ({n})": "Bibilia ciothe irĩ naguo ({n})",
+"Here this chapter ends at verse {n}.": "Haha gĩcunjĩ gĩkĩ nĩ kĩrathirĩra mũhari-inĩ wa {n}.",
+"Go to verse {n}": "Thiĩ mũhari-inĩ wa {n}"
 }

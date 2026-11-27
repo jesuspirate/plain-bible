@@ -353,7 +353,6 @@
 "Note on verse {v}": "Akawandiiko ku lunyiriri {v}",
 "{n} elsewhere": "{n} awalala",
 "Verse {v} options": "Ebikwata ku lunyiriri {v}",
-"{version} does not include {book} {chapter}.": "{version} terimu {book} {chapter}.",
 "Previous": "Ekyayita",
 "Next": "Ekiddako",
 "Your notes": "Obuwandiiko bwo",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Gy'obadde osoma",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Kwatako okukyusa odde ku Baibuli gye wasoma edda. Kwatako nate okudda.",
 "Hold to choose from your Bibles, or any of them.": "Kwata okulonda mu Baibuli zo, oba yonna.",
-"The places you were reading are in Settings → Recent places.": "Ebifo gye wabadde osoma biri mu Ensengeka → Ebifo eby'okumpi."
+"The places you were reading are in Settings → Recent places.": "Ebifo gye wabadde osoma biri mu Ensengeka → Ebifo eby'okumpi.",
+"{ref} isn’t in this Bible": "{ref} teri mu Baibuli eno",
+"Read it in {version}": "Soma mu {version}",
+"Other Bibles that have it": "Baibuli endala ezirina kino",
+"All Bibles that have it ({n})": "Baibuli zonna ezirina kino ({n})",
+"Here this chapter ends at verse {n}.": "Wano essuula eno ekoma ku lunyiriri {n}.",
+"Go to verse {n}": "Genda ku lunyiriri {n}"
 }

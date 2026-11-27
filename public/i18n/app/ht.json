@@ -353,7 +353,6 @@
 "Note on verse {v}": "Nòt sou vèsè {v}",
 "{n} elsewhere": "{n} lòt kote",
 "Verse {v} options": "Opsyon vèsè {v}",
-"{version} does not include {book} {chapter}.": "{version} pa gen {book} {chapter}.",
 "Previous": "Anvan",
 "Next": "Apre",
 "Your notes": "Nòt ou yo",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Kote w t ap li",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Touche pou chanje pou Bib ou te li anvan an. Touche ankò pou retounen.",
 "Hold to choose from your Bibles, or any of them.": "Kenbe pou chwazi nan Bib ou yo, oswa nenpòt lòt.",
-"The places you were reading are in Settings → Recent places.": "Kote w t ap li yo nan Paramèt → Kote resan."
+"The places you were reading are in Settings → Recent places.": "Kote w t ap li yo nan Paramèt → Kote resan.",
+"{ref} isn’t in this Bible": "{ref} pa nan Bib sa a",
+"Read it in {version}": "Li l nan {version}",
+"Other Bibles that have it": "Lòt Bib ki genyen l",
+"All Bibles that have it ({n})": "Tout Bib ki genyen l ({n})",
+"Here this chapter ends at verse {n}.": "Isit la, chapit la fini nan vèsè {n}.",
+"Go to verse {n}": "Ale nan vèsè {n}"
 }

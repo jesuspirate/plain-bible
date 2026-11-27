@@ -353,7 +353,6 @@
 "Note on verse {v}": "تێبینی لەسەر ئایەتی {v}",
 "{n} elsewhere": "{n} لە شوێنی تر",
 "Verse {v} options": "هەڵبژاردەکانی ئایەتی {v}",
-"{version} does not include {book} {chapter}.": "{version} {book} {chapter}ی تێدا نییە.",
 "Previous": "پێشوو",
 "Next": "دواتر",
 "Your notes": "تێبینییەکانت",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "ئەو شوێنەی دەتخوێندەوە",
 "Tap to switch to the Bible you read before. Tap again to come back.": "لێی بدە بۆ گۆڕین بۆ ئەو کتێبە پیرۆزەی پێشتر دەتخوێندەوە. دووبارە لێی بدە بۆ گەڕانەوە.",
 "Hold to choose from your Bibles, or any of them.": "دایبگرە بۆ هەڵبژاردن لە کتێبە پیرۆزەکانت یان هەر یەکێکی تر.",
-"The places you were reading are in Settings → Recent places.": "ئەو شوێنانەی دەتخوێندەوە لە ڕێکخستنەکان ← شوێنە دواییەکان دان."
+"The places you were reading are in Settings → Recent places.": "ئەو شوێنانەی دەتخوێندەوە لە ڕێکخستنەکان ← شوێنە دواییەکان دان.",
+"{ref} isn’t in this Bible": "{ref} لەم کتێبی پیرۆزەدا نییە",
+"Read it in {version}": "لە {version} بیخوێنەوە",
+"Other Bibles that have it": "کتێبی پیرۆزی تر کە ئەمەیان تێدایە",
+"All Bibles that have it ({n})": "هەموو ئەوانەی ئەمەیان تێدایە ({n})",
+"Here this chapter ends at verse {n}.": "لێرەدا ئەم بەشە لە ئایەتی {n} کۆتایی دێت.",
+"Go to verse {n}": "بڕۆ بۆ ئایەتی {n}"
 }

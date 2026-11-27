@@ -353,7 +353,6 @@
 "Note on verse {v}": "{v}절의 메모",
 "{n} elsewhere": "다른 곳에 {n}개",
 "Verse {v} options": "{v}절 옵션",
-"{version} does not include {book} {chapter}.": "{version}에는 {book} {chapter}장이 없습니다.",
 "Previous": "이전",
 "Next": "다음",
 "Your notes": "내 메모",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "읽던 곳",
 "Tap to switch to the Bible you read before. Tap again to come back.": "탭하면 이전에 읽던 성경으로 바뀝니다. 다시 탭하면 돌아옵니다.",
 "Hold to choose from your Bibles, or any of them.": "길게 눌러 내 성경이나 다른 어떤 성경이든 고르세요.",
-"The places you were reading are in Settings → Recent places.": "읽던 곳은 설정 → 최근 위치에 있습니다."
+"The places you were reading are in Settings → Recent places.": "읽던 곳은 설정 → 최근 위치에 있습니다.",
+"{ref} isn’t in this Bible": "이 성경에는 {ref}이(가) 없습니다",
+"Read it in {version}": "{version}에서 읽기",
+"Other Bibles that have it": "이 부분이 있는 다른 성경",
+"All Bibles that have it ({n})": "이 부분이 있는 모든 성경 ({n})",
+"Here this chapter ends at verse {n}.": "이 성경에서는 이 장이 {n}절에서 끝납니다.",
+"Go to verse {n}": "{n}절로 가기"
 }

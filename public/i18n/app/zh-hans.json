@@ -353,7 +353,6 @@
 "Note on verse {v}": "第 {v} 节的笔记",
 "{n} elsewhere": "其他位置 {n} 条",
 "Verse {v} options": "第 {v} 节选项",
-"{version} does not include {book} {chapter}.": "{version} 不包含{book} {chapter} 章。",
 "Previous": "上一页",
 "Next": "下一页",
 "Your notes": "你的笔记",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "你读到的地方",
 "Tap to switch to the Bible you read before. Tap again to come back.": "轻点切换到你之前读的圣经。再点一次即可切回。",
 "Hold to choose from your Bibles, or any of them.": "按住可从你的圣经中选择，或选择任何一个。",
-"The places you were reading are in Settings → Recent places.": "你读过的地方在设置 → 最近的位置。"
+"The places you were reading are in Settings → Recent places.": "你读过的地方在设置 → 最近的位置。",
+"{ref} isn’t in this Bible": "这本圣经没有{ref}",
+"Read it in {version}": "用{version}阅读",
+"Other Bibles that have it": "有这一段的其他圣经",
+"All Bibles that have it ({n})": "有这一段的所有圣经（{n}）",
+"Here this chapter ends at verse {n}.": "在这里，本章到第{n}节结束。",
+"Go to verse {n}": "前往第{n}节"
 }

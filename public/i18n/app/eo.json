@@ -353,7 +353,6 @@
 "Note on verse {v}": "Noto pri verso {v}",
 "{n} elsewhere": "{n} aliloke",
 "Verse {v} options": "Opcioj por verso {v}",
-"{version} does not include {book} {chapter}.": "{version} ne enhavas {book} {chapter}.",
 "Previous": "Antaŭa",
 "Next": "Sekva",
 "Your notes": "Viaj notoj",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Kie vi legis",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Tuŝu por ŝanĝi al la Biblio, kiun vi legis antaŭe. Tuŝu denove por reveni.",
 "Hold to choose from your Bibles, or any of them.": "Tenu por elekti el viaj Biblioj, aŭ iun ajn.",
-"The places you were reading are in Settings → Recent places.": "La lokoj, kie vi legis, estas en Agordoj → Lastatempaj lokoj."
+"The places you were reading are in Settings → Recent places.": "La lokoj, kie vi legis, estas en Agordoj → Lastatempaj lokoj.",
+"{ref} isn’t in this Bible": "{ref} ne estas en ĉi tiu Biblio",
+"Read it in {version}": "Legi en {version}",
+"Other Bibles that have it": "Aliaj Biblioj, kiuj havas ĝin",
+"All Bibles that have it ({n})": "Ĉiuj Biblioj, kiuj havas ĝin ({n})",
+"Here this chapter ends at verse {n}.": "Ĉi tie la ĉapitro finiĝas ĉe verso {n}.",
+"Go to verse {n}": "Iri al verso {n}"
 }

@@ -353,7 +353,6 @@
 "Note on verse {v}": "Nota sa bersikulo {v}",
 "{n} elsewhere": "{n} sa ubang dapit",
 "Verse {v} options": "Mga opsiyon sa bersikulo {v}",
-"{version} does not include {book} {chapter}.": "Ang {version} walay {book} {chapter}.",
 "Previous": "Miagi",
 "Next": "Sunod",
 "Your notes": "Imong mga nota",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Diin ka nagbasa",
 "Tap to switch to the Bible you read before. Tap again to come back.": "I-tap aron mobalhin sa Bibliya nga imong gibasa kaniadto. I-tap pag-usab aron mobalik.",
 "Hold to choose from your Bibles, or any of them.": "Kupti aron mopili sa imong mga Bibliya, o bisan unsa.",
-"The places you were reading are in Settings → Recent places.": "Ang mga dapit diin ka nagbasa anaa sa Mga Setting → Bag-ong mga dapit."
+"The places you were reading are in Settings → Recent places.": "Ang mga dapit diin ka nagbasa anaa sa Mga Setting → Bag-ong mga dapit.",
+"{ref} isn’t in this Bible": "Wala ang {ref} niining Biblia",
+"Read it in {version}": "Basaha sa {version}",
+"Other Bibles that have it": "Ubang Biblia nga aduna niini",
+"All Bibles that have it ({n})": "Tanang Biblia nga aduna niini ({n})",
+"Here this chapter ends at verse {n}.": "Dinhi, ang kapitulo matapos sa bersikulo {n}.",
+"Go to verse {n}": "Adto sa bersikulo {n}"
 }

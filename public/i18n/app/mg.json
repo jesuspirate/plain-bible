@@ -353,7 +353,6 @@
 "Note on verse {v}": "Naoty momba ny andininy {v}",
 "{n} elsewhere": "{n} any an-kafa",
 "Verse {v} options": "Safidy ho an’ny andininy {v}",
-"{version} does not include {book} {chapter}.": "Tsy misy {book} {chapter} ao amin’ny {version}.",
 "Previous": "Teo aloha",
 "Next": "Manaraka",
 "Your notes": "Ny naotinao",
@@ -1364,5 +1363,11 @@
 "Where you were reading": "Teo amin'izay novakianao",
 "Tap to switch to the Bible you read before. Tap again to come back.": "Tsindrio hiova amin'ny Baiboly novakianao teo aloha. Tsindrio indray hiverenana.",
 "Hold to choose from your Bibles, or any of them.": "Tazomy hisafidianana amin'ny Baibolinao, na izay rehetra.",
-"The places you were reading are in Settings → Recent places.": "Ny toerana novakianao dia ao amin'ny Fikirana → Toerana farany."
+"The places you were reading are in Settings → Recent places.": "Ny toerana novakianao dia ao amin'ny Fikirana → Toerana farany.",
+"{ref} isn’t in this Bible": "Tsy ao amin’ity Baiboly ity ny {ref}",
+"Read it in {version}": "Vakio amin’ny {version}",
+"Other Bibles that have it": "Baiboly hafa misy azy",
+"All Bibles that have it ({n})": "Baiboly rehetra misy azy ({n})",
+"Here this chapter ends at verse {n}.": "Eto dia mifarana amin’ny andininy {n} ity toko ity.",
+"Go to verse {n}": "Mankany amin’ny andininy {n}"
 }
