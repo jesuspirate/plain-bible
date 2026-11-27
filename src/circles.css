@@ -42,6 +42,9 @@ button.c-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
   font-family: var(--reading); font-size: calc(var(--font-size) * .95); line-height: 1.55; white-space: pre-wrap; }
 .c-quote.small { font-size: calc(var(--font-size) * .8); max-height: 9em; overflow: auto; }
 .c-quote-wait { min-height: 2.4em; opacity: .5; }
+.c-quote-open { cursor: pointer; -webkit-tap-highlight-color: transparent; border-radius: 0 8px 8px 0; transition: background-color .15s; }
+.c-quote-open:active { background: color-mix(in srgb, var(--accent) 10%, transparent); }
+.c-quote-open:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
 .c-note { margin: 8px 0 0; white-space: pre-wrap; }
 /* A note shared with a prayer sits right under it, as part of it. */
 .c-prayer-note { margin: 2px 0 8px 58px; font-size: 17px; }
