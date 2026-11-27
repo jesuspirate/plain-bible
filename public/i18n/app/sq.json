@@ -1350,5 +1350,8 @@
 "I already prayed": "Jam lutur tashmë",
 "Praying for {name}": "Lutje për {name}",
 "Back to {circle}": "Kthehu te {circle}",
-"Pray for this": "Lutu për këtë"
+"Pray for this": "Lutu për këtë",
+"A verse for you": "Një varg për ty",
+"You prayed for this before": "Ke lutur për këtë më parë",
+"{name} asked again": "{name} kërkoi përsëri"
 }

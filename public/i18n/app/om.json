@@ -1347,5 +1347,8 @@
 "I already prayed": "Duraanuun kadhadheera",
 "Praying for {name}": "{name}f kadhachaa",
 "Back to {circle}": "Gara {circle} deebi'i",
-"Pray for this": "Kanaaf kadhadhu"
+"Pray for this": "Kanaaf kadhadhu",
+"A verse for you": "Lakkoofsa siif",
+"You prayed for this before": "Kana dura kadhattee turte",
+"{name} asked again": "{name} irra deebiin gaafate"
 }

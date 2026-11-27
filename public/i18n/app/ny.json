@@ -1347,5 +1347,8 @@
 "I already prayed": "Ndapemphera kale",
 "Praying for {name}": "Kupempherera {name}",
 "Back to {circle}": "Bwererani ku {circle}",
-"Pray for this": "Pemphererani ichi"
+"Pray for this": "Pemphererani ichi",
+"A verse for you": "Vesi yanu",
+"You prayed for this before": "Munapemphererapo izi kale",
+"{name} asked again": "{name} wapemphanso"
 }

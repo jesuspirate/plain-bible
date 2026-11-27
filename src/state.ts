@@ -165,10 +165,17 @@ export const takePrayNow = () => { const n = listenNow; listenNow = false; retur
 /** Pray for someone's prayer request in a circle: the prayer screen opens
  *  listening, with their words on top, and once the prayer is kept the
  *  request is marked prayed. */
-export type PrayFor = { circle: string; circleName: string; item: string; by: string; note: string }
+export type PrayFor = { circle: string; circleName: string; item: string; by: string; note: string
+  /** your own request: what's already in your sealed row on it, kept as is */
+  own?: { me: string; e: string[]; a?: number } }
 let prayingFor: PrayFor | undefined
 export const prayFor = (ask: PrayFor) => { prayingFor = ask; prayNow() }
 export const takePrayFor = () => { const a = prayingFor; prayingFor = undefined; return a }
+/** Just prayed for a request: the circle shows it prayed at once, and offers
+ *  the verse the prayer screen would have, quietly, if wanted. */
+let prayedNow: { item: string; verse: PrayerVerse & { kjv?: string }; at: number } | undefined
+export const setPrayedNow = (item: string, verse: PrayerVerse & { kjv?: string }) => { prayedNow = { item, verse, at: Date.now() } }
+export const prayedNowFor = (item: string) => prayedNow?.item === item && Date.now() - prayedNow.at < 30 * 60_000 ? prayedNow.verse : undefined
 /** Sent once a request was marked prayed this way, so the circle shows it. */
 export const ASK_PRAYED = 'plain-bible:ask-prayed'
 

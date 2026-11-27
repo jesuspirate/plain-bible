@@ -1350,5 +1350,8 @@
 "I already prayed": "Արդեն աղոթել եմ",
 "Praying for {name}": "Աղոթք {name}-ի համար",
 "Back to {circle}": "Վերադառնալ {circle}",
-"Pray for this": "Աղոթել սրա համար"
+"Pray for this": "Աղոթել սրա համար",
+"A verse for you": "Մի համար քեզ համար",
+"You prayed for this before": "Դուք արդեն աղոթել եք սրա համար",
+"{name} asked again": "{name}-ը կրկին խնդրեց"
 }

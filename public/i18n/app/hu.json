@@ -1347,5 +1347,8 @@
 "I already prayed": "Már imádkoztam",
 "Praying for {name}": "Ima érte: {name}",
 "Back to {circle}": "Vissza ide: {circle}",
-"Pray for this": "Imádkozz érte"
+"Pray for this": "Imádkozz érte",
+"A verse for you": "Egy ige neked",
+"You prayed for this before": "Már imádkoztál ezért korábban",
+"{name} asked again": "{name} újra kéri"
 }

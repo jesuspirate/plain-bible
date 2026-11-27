@@ -1350,5 +1350,8 @@
 "I already prayed": "Προσευχήθηκα ήδη",
 "Praying for {name}": "Προσευχή για {name}",
 "Back to {circle}": "Πίσω στο {circle}",
-"Pray for this": "Προσευχήσου γι’ αυτό"
+"Pray for this": "Προσευχήσου γι’ αυτό",
+"A verse for you": "Ένα εδάφιο για σένα",
+"You prayed for this before": "Έχεις προσευχηθεί γι’ αυτό ξανά",
+"{name} asked again": "Ο/Η {name} ζήτησε ξανά"
 }

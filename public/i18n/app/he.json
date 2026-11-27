@@ -1351,5 +1351,8 @@
 "I already prayed": "כבר התפללתי",
 "Praying for {name}": "תפילה עבור {name}",
 "Back to {circle}": "חזרה אל {circle}",
-"Pray for this": "להתפלל על זה"
+"Pray for this": "להתפלל על זה",
+"A verse for you": "פסוק בשבילך",
+"You prayed for this before": "כבר התפללת על זה בעבר",
+"{name} asked again": "{name} ביקש/ה שוב"
 }

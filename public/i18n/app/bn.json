@@ -1347,5 +1347,8 @@
 "I already prayed": "আমি ইতিমধ্যে প্রার্থনা করেছি",
 "Praying for {name}": "{name}-এর জন্য প্রার্থনা",
 "Back to {circle}": "{circle}-এ ফিরে যান",
-"Pray for this": "এর জন্য প্রার্থনা করুন"
+"Pray for this": "এর জন্য প্রার্থনা করুন",
+"A verse for you": "আপনার জন্য একটি পদ",
+"You prayed for this before": "আপনি আগে এর জন্য প্রার্থনা করেছিলেন",
+"{name} asked again": "{name} আবার অনুরোধ করেছেন"
 }

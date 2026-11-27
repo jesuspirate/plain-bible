@@ -226,7 +226,9 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-ask-btn { display: inline-flex; align-items: center; justify-content: center; gap: 8px; }
 .c-ask-top { margin: 4px 0 14px; }
 .c-ask-said { font-size: 18px; }
-.c-ask-again { margin: 0 0 4px; }
+.c-ask-again { display: inline-flex; align-items: center; gap: 6px; margin: 0 0 8px; padding: 4px 12px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 14%, transparent); color: var(--accent); font-weight: 700; font-size: 0.95rem; }
+.c-pill-times { font-weight: 800; font-size: 0.95rem; margin-left: -3px; }
+.c-prayed-before { margin: 2px 0 8px; text-align: center; font-weight: 600; color: var(--accent); }
 .c-asked { margin-top: 10px; }
 .c-asked-bar { height: 8px; border-radius: 999px; background: color-mix(in srgb, var(--accent) 14%, var(--surface)); overflow: hidden; }
 .c-asked-bar span { display: block; height: 100%; border-radius: 999px; background: var(--accent); transition: width .25s ease; }
@@ -237,6 +239,10 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-item.c-kind-ask:has(.c-asked.all) { box-shadow: inset 0 0 0 2.5px color-mix(in srgb, var(--accent) 60%, transparent); }
 .c-list li.c-waits .c-open { border: 2px solid var(--accent); padding: 13px; }
 .c-prayed-quiet { margin: 6px 0 0; text-align: center; }
+.c-after { margin: 12px 0 0; text-align: center; }
+.c-after-amen { margin: 0; font-weight: 600; }
+.c-after-verse { margin-top: 4px; font-size: 1rem; }
+.c-after .c-quote { text-align: left; margin-top: 8px; }
 /* Answered, marked by the one who asked: green, as in Your prayers. */
 .c-pray-big + .c-pray-big { margin-top: 8px; }
 .c-answered { color: #2f7d4a; }

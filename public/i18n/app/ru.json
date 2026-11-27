@@ -1457,5 +1457,8 @@
 "I already prayed": "Я уже помолился(ась)",
 "Praying for {name}": "Молитва за: {name}",
 "Back to {circle}": "Назад в {circle}",
-"Pray for this": "Помолиться об этом"
+"Pray for this": "Помолиться об этом",
+"A verse for you": "Стих для вас",
+"You prayed for this before": "Вы уже молились об этом",
+"{name} asked again": "{name} просит снова"
 }

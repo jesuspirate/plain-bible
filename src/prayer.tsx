@@ -12,7 +12,7 @@ import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
@@ -268,14 +268,23 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
     // Prayed for a request in a circle: it's marked prayed there, by itself.
     // Once only: a later prayer on this same screen is a prayer of its own.
     // Your own request isn't marked: 🙏 there is for the others.
+    // Your own request: your 🙏 shows on it from now, as the proof you prayed.
+    // Then straight back to the circle: the prayer stays in Your prayers, and
+    // the verse is offered there, folded, if wanted.
     const ask = forRef.current
+    const c = id && given.current?.id === id ? given.current.c : pickComfort()
     if (id && ask) {
       forRef.current = undefined
-      if (!ask.by) setAskDone(true)
-      else import('./lib/circles').then(m => m.amen(ask.circle, ask.item, true))
-        .then(() => { if (alive.current) setAskDone(true); dispatchEvent(new Event(ASK_PRAYED)) }, () => {})
+      setAskDone(true)
+      const own = ask.own
+      setPrayedNow(ask.item, { book: c.book, chapter: c.chapter, verses: c.verses, kjv: c.kjv })
+      import('./lib/circles').then(m => own
+        ? m.react(ask.circle, ask.item, own.me, own.e as never, false, { a: own.a, p: Date.now() })
+        : m.amen(ask.circle, ask.item, true))
+        .then(() => dispatchEvent(new Event(ASK_PRAYED)), () => {})
+      setForAsk(undefined)
+      openCircles({ id: ask.circle, name: ask.circleName })
     }
-    const c = id && given.current?.id === id ? given.current.c : pickComfort()
     setComfort(c)
     setTied([])
     setPhase('heard')

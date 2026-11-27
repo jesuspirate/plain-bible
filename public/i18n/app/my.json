@@ -1347,5 +1347,8 @@
 "I already prayed": "ဆုတောင်းပြီးပါပြီ",
 "Praying for {name}": "{name} အတွက် ဆုတောင်းနေသည်",
 "Back to {circle}": "{circle} သို့ ပြန်သွားရန်",
-"Pray for this": "ဤအတွက် ဆုတောင်းရန်"
+"Pray for this": "ဤအတွက် ဆုတောင်းရန်",
+"A verse for you": "သင့်အတွက် ကျမ်းချက်တစ်ခု",
+"You prayed for this before": "ဒီအတွက် အရင်က ဆုတောင်းခဲ့ပြီးပြီ",
+"{name} asked again": "{name} ထပ်မံ တောင်းဆိုသည်"
 }

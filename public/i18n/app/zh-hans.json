@@ -1347,5 +1347,8 @@
 "I already prayed": "我已经祷告了",
 "Praying for {name}": "为 {name} 祷告中",
 "Back to {circle}": "返回 {circle}",
-"Pray for this": "为此祷告"
+"Pray for this": "为此祷告",
+"A verse for you": "给你的一节经文",
+"You prayed for this before": "你以前为此祷告过",
+"{name} asked again": "{name}再次请求代祷"
 }
