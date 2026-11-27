@@ -1303,8 +1303,8 @@ const AskIcon = ({ size, class: c }: { size: number; class?: string }) => (
 )
 
 /** Who prayed for a prayer request: a quiet bar and "2 of 3 prayed", and
- *  one big button. Nobody marks it answered, and nobody is named for not
- *  praying. When everyone has, the one who asked can ask again. */
+ *  one big button. Nobody is named for not praying. Only the one who asked
+ *  marks it answered, and once it is, they can ask again. */
 function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, onPrayNow, answered, onAnswered }: {
   others: string[]; amens: string[]; mine: boolean; prayed: boolean; onPray: () => void; again: () => void; busy: boolean; emoji: string
   /** who asked, and praying for it out loud now (marked prayed once kept) */
@@ -1319,6 +1319,8 @@ function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, o
     <div class="c-asked answered">
       <p class="c-asked-said"><strong class="c-answered">✓ {t('Answered')}</strong>{others.length > 0 && <span class="muted small"> · {all ? t('Everyone prayed') : count}</span>}</p>
       {mine && <button class="c-btn c-pray-big c-answered-btn" aria-pressed="true" onClick={() => onAnswered(false)}>✓ {t('Answered')}</button>}
+      {/* Answered once, and needed again later: the same words, asked anew. */}
+      {mine && <button class="c-btn c-pray-big" disabled={busy} onClick={again}>{busy ? t('Sending…') : t('Ask again')}</button>}
     </div>
   )
   return (
@@ -1339,7 +1341,6 @@ function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, o
           <button class="c-btn c-pray-big primary" onClick={onPrayNow}>{emoji} {t('Pray for {name}', { name: by })}</button>
           <p class="c-prayed-quiet"><button class="link small" onClick={onPray}>{t('I already prayed')}</button></p>
         </>)}
-      {mine && all && <button class="c-btn c-pray-big" disabled={busy} onClick={again}>{busy ? t('Sending…') : t('Ask again')}</button>}
     </div>
   )
 }
