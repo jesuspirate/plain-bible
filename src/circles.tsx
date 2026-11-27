@@ -1032,7 +1032,9 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
     tap(() => react(circle, item.id, me, myReacts, false, a || undefined), () => setTapped(x => ({ ...x, answered: undefined })))()
   }
   // Who gave what, in the order of the buttons; nobody, nothing.
-  const who = [['pray', amens] as const, ...REACTS.map(r => [r, Object.keys(reacts).filter(m => reacts[m].includes(r))] as const)].filter(([, ms]) => ms.length)
+  // On a prayer request, 🙏 is for the others: the one who asked is never
+  // shown as having prayed for their own request.
+  const who = [['pray', b.k === 'ask' ? amens.filter(m => m !== item.by) : amens] as const, ...REACTS.map(r => [r, Object.keys(reacts).filter(m => reacts[m].includes(r))] as const)].filter(([, ms]) => ms.length)
   // Never the sender's Bible: the reader's own, unless theirs lacks it.
   const shown = usePassage(b.k === 'ask' ? undefined : b.verse, b.k === 'prayer' || b.k === 'ask' ? undefined : { text: b.text, version: b.version, size: b.size })
   // The passage as your Bible numbers it (the Psalms differ in some).
@@ -1161,10 +1163,10 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
       {tray && !writing && !guest && (
         <div class="c-tray">
           <div class="c-reacts" role="group" aria-label={t('Reactions')}>
-            <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={() => { pray(); setTray(false) }}
+            {b.k !== 'ask' && <button class={'c-react' + (prayed ? ' on' : '')} aria-pressed={prayed} onClick={() => { pray(); setTray(false) }}
               aria-label={prayed ? t('Praying') : t('Pray with')} title={prayed ? t('Praying') : t('Pray with')}>
               <span class="c-react-emoji" aria-hidden="true">{emoji('pray')}</span>
-            </button>
+            </button>}
             {REACTS.map(r => {
               const on = myReacts.includes(r)
               return (
