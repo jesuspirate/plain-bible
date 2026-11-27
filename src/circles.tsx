@@ -1,7 +1,7 @@
 // Circles: a few people sharing what they read and pray. #/circles lists
 // yours, #/circles/<id> shows one, and #/join?… is an invite link. Loaded
 // only when one of these opens, or when something is shared.
-import { createContext } from 'preact'
+import { createContext, type ComponentChildren } from 'preact'
 import { useContext, useEffect, useRef, useState } from 'preact/hooks'
 import {
   accountKeyCode, amen, block, report, type Reply, dayAt, CircleInfo, createCircle, Feed, FeedItem, Invite, inviteLink, inviteMessage, joinCircle, keptCircles, keptFeed,
@@ -71,6 +71,19 @@ function MoreVerse({ verse }: { verse: PrayerVerse }) {
   </button>
 }
 
+/** Long words folded to a few lines, with More to read the rest (shown
+ *  only when there is more). Keeps cards short enough to scroll past. */
+function Clamp({ lines, children, class: cls, after }: { lines: number; children: ComponentChildren; class: string; after?: ComponentChildren }) {
+  const [open, setOpen] = useState(false)
+  const [more, setMore] = useState(false)
+  const box = useRef<HTMLParagraphElement>(null)
+  useEffect(() => { const el = box.current; if (el && !open) setMore(el.scrollHeight > el.clientHeight + 2) })
+  return <>
+    <p ref={box} class={cls + (open ? '' : ' c-clamp')} style={{ '--lines': lines }}>{children}</p>
+    {(more || after) && <p class="c-more-row">{after}{more && <button class="link small c-more" aria-expanded={open} onClick={() => setOpen(!open)}>{open ? t('Show less') : t('More')}</button>}</p>}
+  </>
+}
+
 /** A verse on a prayer request: its words in your own Bible, and a link. */
 function AskVerse({ verse, from }: { verse: PrayerVerse; from: string }) {
   const { settings } = useApp()
@@ -78,8 +91,10 @@ function AskVerse({ verse, from }: { verse: PrayerVerse; from: string }) {
   const nav = useNav()
   const at = shown?.at ?? verse
   return <div class="c-ask-verse">
-    <Passage shown={shown} small from={from} />
-    <button class="link c-ref" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>{verseLabel(at)}</button>
+    {/* The words folded to two lines; the reference and More on one line. */}
+    {(() => { const ref = <button class="link c-ref" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>{verseLabel(at)}</button>
+      return shown === null ? ref : <Clamp class={'c-quote small c-quote-short' + (shown ? '' : ' c-quote-wait')} lines={2} after={ref}>{shown?.text}</Clamp> })()}
+    {shown && !shown.yours && <p class="muted small">{t('Your {version} doesn’t have this here, so it’s shown as {name} shared it ({theirs}).', { version: settings.version, name: from, theirs: shown.version })}</p>}
   </div>
 }
 
@@ -1149,14 +1164,14 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
             <button class="c-btn primary" disabled={busy || !editing.note.trim()} onClick={saveEdit}>{busy ? t('Sending…') : t('Save')}</button>
           </div>
         </div> : <>
-          <p class="c-note c-note-main c-ask-said">{b.note}</p>
+          <Clamp class="c-note c-note-main c-ask-said" lines={4}>{b.note}</Clamp>
           {b.verses?.map(v => <AskVerse verse={v} from={nameOf(item.by)} />)}
         </>}
         <Prayed others={others ?? []} amens={amens} mine={mine} prayed={prayed} onPray={pray} again={act(() => askPrayer(circle, b.note, true, b.verses))} busy={busy} emoji={emoji('pray')}
           by={nameOf(item.by)} onPrayNow={() => prayFor({ circle, circleName: circleName ?? '', item: item.id, by: mine ? '' : nameOf(item.by), note: b.note,
             ...(mine ? { own: { me, e: myReacts, ...(answered ? { a: answered } : {}) } } : {}) })}
           answered={answered} onAnswered={markAnswered} before={prayedBefore(earlier, me)} />
-        {justNow && <AfterPrayer verse={justNow} />}
+        {justNow && <AfterPrayer />}
       </> : b.k === 'prayer' ? <>
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
@@ -1207,6 +1222,8 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
       {/* Two plain buttons: write back, or open the reactions and the rest. */}
       {!guest && !writing && (
         <div class="c-respond-row">
+          {/* Prayed already, in silence? One quiet tap says so, beside Reply. */}
+          {b.k === 'ask' && !mine && !prayed && !answered && <button class="link c-prayed-quiet" onClick={pray}>{t('I already prayed')}</button>}
           <button class="c-respond" onClick={() => { setWriting(true); setTray(false) }}>{t('Reply')}</button>
           <button class={'c-respond' + (tray ? ' on' : '')} aria-expanded={tray} onClick={() => { setTray(!tray); setConfirm(false) }}>{tray ? t('Done') : t('React')}</button>
         </div>
@@ -1369,21 +1386,26 @@ function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, o
   if (answered) return (
     <div class="c-asked answered">
       <p class="c-asked-said"><strong class="c-answered">✓ {t('Answered')}</strong>{others.length > 0 && <span class="muted small"> · {all ? t('Everyone prayed') : count}</span>}</p>
-      {mine && <button class="c-btn c-pray-big c-answered-btn" aria-pressed="true" onClick={() => onAnswered(false)}>✓ {t('Answered')}</button>}
       {/* Answered once, and needed again later: the same words, asked anew. */}
-      {mine && <button class="c-btn c-pray-big" disabled={busy} onClick={again}>{busy ? t('Sending…') : t('Ask again')}</button>}
+      {mine && <div class="c-asked-two">
+        <button class="c-btn c-pray-big c-answered-btn" aria-pressed="true" onClick={() => onAnswered(false)}>✓ {t('Answered')}</button>
+        <button class="c-btn c-pray-big" disabled={busy} onClick={again}>{busy ? t('Sending…') : t('Ask again')}</button>
+      </div>}
     </div>
   )
   return (
     <div class={'c-asked' + (all ? ' all' : '')}>
-      {others.length > 0 && <div class="c-asked-bar" aria-hidden="true"><span style={{ width: `${Math.round(100 * n / others.length)}%` }} /></div>}
-      <p class="c-asked-said"><strong>{all ? `${t('Everyone prayed')} ${emoji}` : count}</strong></p>
+      {/* One line: how many prayed, and the bar beside it. */}
+      <div class="c-asked-line">
+        <p class="c-asked-said"><strong>{all ? `${t('Everyone prayed')} ${emoji}` : count}</strong></p>
+        {others.length > 0 && <div class="c-asked-bar" aria-hidden="true"><span style={{ width: `${Math.round(100 * n / others.length)}%` }} /></div>}
+      </div>
       {/* The one who asked prays for it too, and marks it answered when God
           answers, even before everyone has prayed. */}
-      {mine && <>
+      {mine && <div class="c-asked-two">
         <button class="c-btn c-pray-big primary" onClick={onPrayNow}>{emoji} {t('Pray for this')}</button>
         <button class="c-btn c-pray-big c-answered-btn" onClick={() => onAnswered(true)}>✓ {t('Mark answered')}</button>
-      </>}
+      </div>}
       {/* Pray for it now, out loud: it's marked prayed once the prayer is
           kept. Prayed already, in silence? One quiet tap says so. */}
       {!mine && (prayed
@@ -1391,30 +1413,20 @@ function Prayed({ others, amens, mine, prayed, onPray, again, busy, emoji, by, o
         : <>
           {before > 0 && <p class="c-prayed-before">{emoji} {t('You prayed for this before')}</p>}
           <button class="c-btn c-pray-big primary" onClick={onPrayNow}>{emoji} {t('Pray for {name}', { name: by })}</button>
-          <p class="c-prayed-quiet"><button class="link small" onClick={onPray}>{t('I already prayed')}</button></p>
         </>)}
     </div>
   )
 }
 
-/** Back from praying for a request: Amen, and a verse for you, folded away
- *  until you want it, in your own Bible. */
-function AfterPrayer({ verse }: { verse: PrayerVerse & { kjv?: string } }) {
-  const [open, setOpen] = useState(false)
-  const { settings } = useApp()
-  const nav = useNav()
-  const shown = usePassage(open ? verse : undefined)
-  const at = shown?.at ?? verse
+/** Back from praying for a request: Amen, and nothing more (no verse is
+ *  added to a prayer for someone's request). */
+function AfterPrayer() {
   // Lands where you prayed: the request comes into view.
   const box = useRef<HTMLDivElement>(null)
   useEffect(() => { const id = setTimeout(() => box.current?.closest('.c-item')?.scrollIntoView({ block: 'center', behavior: 'smooth' }), 350); return () => clearTimeout(id) }, [])
   return (
     <div class="c-after" ref={box}>
       <p class="c-after-amen">{t('Amen. He heard you.')}</p>
-      {!open ? <button class="link c-after-verse" onClick={() => setOpen(true)}>{t('A verse for you')} ›</button> : <>
-        {shown === null ? (verse.kjv && <p class="c-quote small">{verse.kjv}</p>) : <Passage shown={shown} small from="" />}
-        <button class="link c-ref" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>{verseLabel(at)}</button>
-      </>}
     </div>
   )
 }
