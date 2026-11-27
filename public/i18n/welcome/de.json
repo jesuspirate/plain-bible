@@ -89,5 +89,6 @@
 "listenH": "Anhören",
 "listenP": "Tippe auf einen Vers und dann auf „Anhören“. Oder tippe in der Suchleiste auf „Mitlesen“, und jedes Wort leuchtet auf, während es gelesen wird. Echte Sprecher lesen die BSB, die King James und die Louis Segond. Für das Auto, die Küche oder müde Augen.",
 "orMac": "Unter Windows oder Linux:",
-"macStore": "Auf dem Mac:"
+"macStore": "Auf dem Mac:",
+"msStore": "{svg}<span><small>Herunterladen im</small> Microsoft Store</span>"
 }

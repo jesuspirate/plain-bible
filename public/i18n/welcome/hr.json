@@ -89,5 +89,6 @@
 "listenH": "Slušajte",
 "listenP": "Dodirnite redak, zatim Slušaj. Ili dodirnite Prati čitanje u traci za pretraživanje i svaka riječ zasvijetli dok se čita. Pravi čitači čitaju BSB, King James i Louis Segond. Za auto, kuhinju ili umorne oči.",
 "orMac": "Na Windowsima ili Linuxu:",
-"macStore": "Na Macu:"
+"macStore": "Na Macu:",
+"msStore": "{svg}<span><small>Preuzmite u</small> Microsoft Store</span>"
 }

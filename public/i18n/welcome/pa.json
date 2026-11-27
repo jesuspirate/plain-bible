@@ -89,5 +89,6 @@
 "listenH": "ਸੁਣੋ",
 "listenP": "ਕਿਸੇ ਆਇਤ 'ਤੇ ਟੈਪ ਕਰੋ, ਫਿਰ ਸੁਣੋ. ਜਾਂ ਖੋਜ ਪੱਟੀ ਵਿੱਚ ਨਾਲ-ਨਾਲ ਪੜ੍ਹੋ 'ਤੇ ਟੈਪ ਕਰੋ, ਅਤੇ ਪੜ੍ਹਦੇ ਸਮੇਂ ਹਰ ਸ਼ਬਦ ਚਮਕਦਾ ਹੈ. ਅਸਲੀ ਪਾਠਕ BSB, King James ਅਤੇ Louis Segond ਪੜ੍ਹਦੇ ਹਨ. ਗੱਡੀ, ਰਸੋਈ ਜਾਂ ਥੱਕੀਆਂ ਅੱਖਾਂ ਲਈ.",
 "orMac": "Windows ਜਾਂ Linux 'ਤੇ:",
-"macStore": "Mac 'ਤੇ:"
+"macStore": "Mac 'ਤੇ:",
+"msStore": "{svg}<span><small>ਪ੍ਰਾਪਤ ਕਰੋ</small> Microsoft Store ਤੋਂ</span>"
 }

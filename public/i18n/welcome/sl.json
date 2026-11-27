@@ -89,5 +89,6 @@
 "listenH": "Poslušajte",
 "listenP": "Tapnite vrstico, nato Poslušaj. Ali pa v iskalni vrstici tapnite Sledi branju in vsaka beseda zasveti, ko je prebrana. Pravi bralci berejo BSB, King James in Louis Segond. Za avto, kuhinjo ali utrujene oči.",
 "orMac": "V sistemu Windows ali Linux:",
-"macStore": "Na Macu:"
+"macStore": "Na Macu:",
+"msStore": "{svg}<span><small>Prenesite iz</small> Microsoft Store</span>"
 }

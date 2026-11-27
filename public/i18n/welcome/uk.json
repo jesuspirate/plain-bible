@@ -89,5 +89,6 @@
 "listenH": "Слухайте",
 "listenP": "Торкніться вірша, потім «Слухати». Або торкніться «Читання з підсвічуванням» у рядку пошуку, і кожне слово засвічується, поки його читають. Справжні читці читають BSB, King James і Louis Segond. Для машини, кухні чи втомлених очей.",
 "orMac": "На Windows або Linux:",
-"macStore": "На Mac:"
+"macStore": "На Mac:",
+"msStore": "{svg}<span><small>Завантажте з</small> Microsoft Store</span>"
 }

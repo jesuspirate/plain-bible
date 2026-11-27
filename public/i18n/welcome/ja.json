@@ -89,5 +89,6 @@
 "listenH": "聞く",
 "listenP": "節をタップしてから「聞く」をタップします。または検索バーの「目で追って読む」をタップすると、読まれている言葉が一語ずつ光ります。BSB、King James、Louis Segond は本物の朗読者が読みます。車の中や台所で、また目が疲れたときに。",
 "orMac": "Windows や Linux では：",
-"macStore": "Mac では："
+"macStore": "Mac では：",
+"msStore": "{svg}<span><small>入手先</small> Microsoft Store</span>"
 }

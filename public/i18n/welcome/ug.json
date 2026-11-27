@@ -89,5 +89,6 @@
 "listenH": "ئاڭلاش",
 "listenP": "بىر ئايەتنى چېكىڭ، ئاندىن «ئاڭلاش». ياكى ئىزدەش بالدىقىدىكى «ئەگىشىپ ئوقۇش» نى چېكىڭ، ھەر بىر سۆز ئوقۇلغاندا يورۇيدۇ. ھەقىقىي ئوقۇغۇچىلار BSB، King James ۋە Louis Segond نى ئوقۇيدۇ. ماشىنا، ئاشخانا ياكى چارچىغان كۆزلەر ئۈچۈن.",
 "orMac": "Windows ياكى Linux دا:",
-"macStore": "Mac دا:"
+"macStore": "Mac دا:",
+"msStore": "{svg}<span><small>چۈشۈرۈش:</small> Microsoft Store</span>"
 }

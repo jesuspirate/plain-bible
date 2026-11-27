@@ -89,5 +89,6 @@
 "listenH": "Lyssna",
 "listenP": "Tryck på en vers och sedan på Lyssna. Eller tryck på Läs med i sökfältet, så lyser varje ord upp medan det läses. Riktiga uppläsare läser BSB, King James och Louis Segond. För bilen, köket eller trötta ögon.",
 "orMac": "På Windows eller Linux:",
-"macStore": "På en Mac:"
+"macStore": "På en Mac:",
+"msStore": "{svg}<span><small>Hämta i</small> Microsoft Store</span>"
 }

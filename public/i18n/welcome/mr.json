@@ -89,5 +89,6 @@
 "listenH": "ऐका",
 "listenP": "एखाद्या वचनावर टॅप करा, मग ऐका. किंवा शोध पट्टीतील सोबत वाचा वर टॅप करा, आणि वाचताना प्रत्येक शब्द उजळतो. खरे वाचक BSB, King James आणि Louis Segond वाचतात. गाडीसाठी, स्वयंपाकघरासाठी किंवा थकलेल्या डोळ्यांसाठी.",
 "orMac": "Windows किंवा Linux वर:",
-"macStore": "Mac वर:"
+"macStore": "Mac वर:",
+"msStore": "{svg}<span><small>मिळवा</small> Microsoft Store वरून</span>"
 }

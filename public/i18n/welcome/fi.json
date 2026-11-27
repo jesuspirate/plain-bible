@@ -89,5 +89,6 @@
 "listenH": "Kuuntele",
 "listenP": "Napauta jaetta ja sitten Kuuntele. Tai napauta hakupalkin Lue mukana -kuvaketta, niin jokainen sana syttyy sitä luettaessa. Oikeat lukijat lukevat BSB:n, King Jamesin ja Louis Segondin. Autoon, keittiöön tai väsyneille silmille.",
 "orMac": "Windowsissa tai Linuxissa:",
-"macStore": "Macilla:"
+"macStore": "Macilla:",
+"msStore": "{svg}<span><small>Lataa</small> Microsoft Storesta</span>"
 }

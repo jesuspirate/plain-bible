@@ -89,5 +89,6 @@
 "listenH": "Pakinggan",
 "listenP": "I-tap ang isang talata, saka ang Pakinggan. O i-tap ang Sabayang pagbasa sa search bar, at umiilaw ang bawat salita habang binabasa. Totoong tagapagbasa ang bumabasa ng BSB, King James at Louis Segond. Para sa sasakyan, kusina, o pagod na mata.",
 "orMac": "Sa Windows o Linux:",
-"macStore": "Sa Mac:"
+"macStore": "Sa Mac:",
+"msStore": "{svg}<span><small>Kunin sa</small> Microsoft Store</span>"
 }

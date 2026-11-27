@@ -89,5 +89,6 @@
 "listenH": "듣기",
 "listenP": "구절을 누른 다음 듣기를 누르세요. 또는 검색창의 따라 읽기를 누르면 읽히는 단어마다 불이 켜집니다. BSB, King James, Louis Segond는 실제 낭독자가 읽어 줍니다. 차 안에서, 부엌에서, 또는 눈이 피곤할 때.",
 "orMac": "Windows나 Linux에서는:",
-"macStore": "Mac에서는:"
+"macStore": "Mac에서는:",
+"msStore": "{svg}<span><small>다운로드:</small> Microsoft Store</span>"
 }

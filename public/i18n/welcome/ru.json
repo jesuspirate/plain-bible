@@ -89,5 +89,6 @@
 "listenH": "Слушайте",
 "listenP": "Нажмите на стих, затем «Слушать». Или нажмите «Чтение с подсветкой» в строке поиска, и каждое слово загорается, пока его читают. Настоящие чтецы читают BSB, King James и Louis Segond. Для машины, кухни или усталых глаз.",
 "orMac": "На Windows или Linux:",
-"macStore": "На Mac:"
+"macStore": "На Mac:",
+"msStore": "{svg}<span><small>Загрузите в</small> Microsoft Store</span>"
 }

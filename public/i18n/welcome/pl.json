@@ -89,5 +89,6 @@
 "listenH": "Słuchaj",
 "listenP": "Dotknij wersetu, a potem Słuchaj. Albo dotknij Czytaj z podświetleniem na pasku wyszukiwania, a każde słowo rozświetli się podczas czytania. Prawdziwi lektorzy czytają BSB, King James i Louis Segond. Do auta, do kuchni albo dla zmęczonych oczu.",
 "orMac": "W systemie Windows lub Linux:",
-"macStore": "Na Macu:"
+"macStore": "Na Macu:",
+"msStore": "{svg}<span><small>Pobierz ze sklepu</small> Microsoft Store</span>"
 }

@@ -89,5 +89,6 @@
 "listenH": "Lytt",
 "listenP": "Trykk på et vers og deretter på Lytt. Eller trykk på Les med i søkefeltet, så lyser hvert ord opp mens det blir lest. Ekte opplesere leser BSB, King James og Louis Segond. For bilen, kjøkkenet eller slitne øyne.",
 "orMac": "På Windows eller Linux:",
-"macStore": "På en Mac:"
+"macStore": "På en Mac:",
+"msStore": "{svg}<span><small>Last ned fra</small> Microsoft Store</span>"
 }
