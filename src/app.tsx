@@ -168,19 +168,22 @@ export function App() {
   }, [settings])
 
   // Keep your Bible saved for offline use, and ask the browser not to clear saved Bibles.
-  // With Strong's numbers on, the Hebrew and Greek lexicons are kept too.
+  // With Strong's numbers on, the Hebrew and Greek lexicons are kept too, and
+  // your Bible's numbers when they come in a file of their own.
   const offlineId = settings?.version
   const strongs = !!settings?.strongs
+  const offlineTags = !!catalog?.translations.find(v => v.id === offlineId)?.strongsFile
   useEffect(() => {
     if (!offlineId) return
     if (!('caches' in window)) return
     navigator.storage?.persist?.().catch(() => {})
-    const paths = [`bibles/${offlineId}.json`, ...(strongs ? ['strongs-hebrew.json', 'strongs-greek.json'] : [])]
+    const paths = [`bibles/${offlineId}.json`, ...(strongs ? ['strongs-hebrew.json', 'strongs-greek.json'] : []),
+      ...(strongs && offlineTags ? [`bibles/${offlineId}.strongs.json`] : [])]
     caches.open('bible-data').then(c => Promise.all(paths.map(async p => {
       const url = data.url(p)
       if (!(await c.match(url))) await c.add(url)
     }))).catch(() => {})
-  }, [offlineId, strongs])
+  }, [offlineId, strongs, offlineTags])
 
   // A fixed text reaches Bibles already saved on this device (src/lib/data.ts),
   // and the day's anonymous hello is counted (src/lib/hello.ts).

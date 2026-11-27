@@ -610,7 +610,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "Pod naslovom vsakega poglavja pokaži, koliko opomb imate k njemu, vključno z opombami drugje, ki ga omenjajo (na primer „glej Janez 3:16“) ali imajo isto #oznako kot opomba tukaj.",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "Na vrhu Nastavitev pokaži, koliko dni zapored ste brali Božjo besedo in molili. Nič vas nikoli ne opominja.",
 "Strong's numbers": "Strongove številke",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "Označene besede naj bodo tapljive (KJV, BSB, hebrejska in grška besedila)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "Označene besede naj bodo tapljive (KJV, BSB, LSG, hebrejska in grška besedila)",
 "Show the numbers inline": "Pokaži številke v besedilu",
 "Search bar": "Iskalna vrstica",
 "Top bar": "Zgornja vrstica",

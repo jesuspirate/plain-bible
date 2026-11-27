@@ -12,10 +12,14 @@ export interface SearchRequest {
   type: 'search'; seq: number; base: string; query: string; versions: string[]; options: SearchOptions; books?: string[]
   /** Language of each version, for forgiving search of plain words. */
   langs?: string[]
+  /** Versions to read with their Strong's numbers, for those that keep them
+   *  in a file of their own (Translation.strongsFile). */
+  strongs?: string[]
 }
 export interface PageRequest {
   type: 'page'; seq: number; base: string; query: string; versions: string[]; options: SearchOptions; langs?: string[]
   refs: [string, number, number, number][]
+  strongs?: string[]
 }
 export interface SearchResponse {
   type: 'search'; seq: number; errors: string[]
@@ -111,7 +115,7 @@ async function search(req: SearchRequest): Promise<SearchResponse> {
   const perVersion = req.versions.map(() => 0)
   for (let vi = 0; vi < req.versions.length; vi++) {
     post({ type: 'progress', seq: req.seq, message: `Searching ${req.versions[vi]}…` })
-    const bible = await data.bible(req.versions[vi])
+    const bible = await data.bible(req.versions[vi], !!req.strongs?.includes(req.versions[vi]))
     if (loose) {
       const idx = looseIndex(bible, req.langs?.[vi])
       const allow = allowed && ((ref: number) => allowed!.has(BOOKS[ref >> 20].id))
@@ -156,7 +160,7 @@ async function page(req: PageRequest): Promise<PageResponse> {
   req.options = FORGIVE
   const loose = forgiving(req.query)
   data ??= new DataSource(req.base)
-  const bibles = await Promise.all(req.versions.map(v => data!.bible(v)))
+  const bibles = await Promise.all(req.versions.map(v => data!.bible(v, !!req.strongs?.includes(v))))
   const verses: PageVerse[] = req.refs.map(([book, chapter, verse, mask]) => ({
     book, chapter, verse,
     texts: bibles.flatMap((b, vi) => {

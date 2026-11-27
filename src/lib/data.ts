@@ -1,7 +1,14 @@
+import { withTags } from './text'
+
 export interface Translation {
   id: string; name: string; lang: string; langName: string; langNative: string
   license: string; strongs: boolean; rtl: boolean; books: string[]; source: string
+  /** Its Strong's numbers come in bibles/<id>.strongs.json, loaded only when
+   *  they are shown, so the Bible itself stays as light as before. */
+  strongsFile?: boolean
 }
+/** books[bookId][chapter - 1][verse - 1]: the verse's tags (see withTags). */
+interface StrongsFile { id: string; books: Record<string, string[][]> }
 export interface Catalog { translations: Translation[] }
 /** books[bookId][chapter - 1][verse - 1] */
 export interface Bible { id: string; books: Record<string, string[][]> }
@@ -80,7 +87,26 @@ export class DataSource {
     } catch { /* nothing kept */ }
   }
 
-  bible(id: string): Promise<Bible> {
+  /** strongs: with its Strong's numbers, for a version that keeps them in a
+   *  file of their own (Translation.strongsFile). If that file can't be had
+   *  (offline, the first time), the plain text comes back, and the numbers
+   *  are tried again next time. */
+  bible(id: string, strongs = false): Promise<Bible> {
+    if (strongs) {
+      const key = id + '#strongs'
+      let p = this.bibles.get(key)
+      if (!p) {
+        const tags = this.json<StrongsFile>(`bibles/${id}.strongs.json`)
+        p = Promise.all([this.bible(id), tags]).then(([b, s]) => ({
+          id: b.id,
+          books: Object.fromEntries(Object.entries(b.books).map(([book, chs]) =>
+            [book, chs.map((vs, c) => vs.map((v, i) => withTags(v, s.books[book]?.[c]?.[i] ?? '')))])),
+        }))
+        p.catch(() => this.bibles.delete(key))
+        this.bibles.set(key, p)
+      }
+      return p.catch(() => this.bible(id))
+    }
     let p = this.bibles.get(id)
     if (!p) {
       p = this.json<Bible>(`bibles/${id}.json`)

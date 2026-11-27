@@ -12,7 +12,7 @@ async function cachedIds(): Promise<Set<string>> {
   if (!('caches' in window)) return new Set()
   try {
     const keys = await (await caches.open(CACHE)).keys()
-    return new Set(keys.map(r => r.url.match(/bibles\/([^/]+)\.json$/)?.[1]).filter(Boolean) as string[])
+    return new Set(keys.map(r => r.url.match(/bibles\/([^/]+)\.json$/)?.[1]).filter(id => id && !id.endsWith('.strongs')) as string[])
   } catch { return new Set() }
 }
 
@@ -49,7 +49,9 @@ export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
     } catch { /* offline: the button stays, so they can try again */ } finally { setBusy(b => ({ ...b, [id]: false })) }
   }
   const remove = async (id: string) => {
-    await (await caches.open(CACHE)).delete(data.url(`bibles/${id}.json`))
+    const c = await caches.open(CACHE)
+    await c.delete(data.url(`bibles/${id}.json`))
+    await c.delete(data.url(`bibles/${id}.strongs.json`))
     setOffline(await cachedIds())
   }
 

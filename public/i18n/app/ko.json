@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "각 장 제목 아래에 그 장에 대한 메모 수를 보여 줍니다. 다른 곳에서 그 장을 언급하는 메모(예: “요한복음 3:16 참조”)나 여기 있는 메모와 같은 #태그가 있는 메모도 포함합니다.",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "설정 맨 위에 며칠 연속으로 말씀을 읽고 기도했는지 보여 줍니다. 알림은 절대 보내지 않습니다.",
 "Strong's numbers": "스트롱 번호",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "태그가 있는 단어를 탭할 수 있게 하기(KJV, BSB, 히브리어 및 그리스어 본문)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "태그가 있는 단어를 탭할 수 있게 하기(KJV, BSB, LSG, 히브리어 및 그리스어 본문)",
 "Show the numbers inline": "본문 안에 번호 표시",
 "Search bar": "검색 막대",
 "Top bar": "상단 막대",

@@ -629,7 +629,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "تحت عنوان كل أصحاح، اعرض عدد ملاحظاتك عليه، بما فيها الملاحظات في مواضع أخرى التي تذكره (مثل «انظر يوحنا 3:16») أو تشترك في #وسم مع ملاحظة هنا.",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "في أعلى الإعدادات، اعرض عدد الأيام المتتالية التي قرأت فيها الكلمة وصلّيت. لا شيء يذكّرك أبدًا.",
 "Strong's numbers": "أرقام سترونغ",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "جعل الكلمات الموسومة قابلة للضغط (KJV وBSB والنصوص العبرية واليونانية)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "جعل الكلمات الموسومة قابلة للضغط (KJV وBSB وLSG والنصوص العبرية واليونانية)",
 "Show the numbers inline": "إظهار الأرقام داخل النص",
 "Search bar": "شريط البحث",
 "Top bar": "الشريط العلوي",

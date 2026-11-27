@@ -545,7 +545,7 @@
 "Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.": "প্রতিটি অধ্যায়ের শিরোনামের নিচে দেখান তাতে আপনার কতগুলি নোট আছে, অন্য জায়গার সেইসব নোট সহ যেগুলিতে এর উল্লেখ আছে (যেমন “দেখুন যোহন 3:16”) বা এখানকার কোনো নোটের সঙ্গে একই #ট্যাগ আছে।",
 "At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.": "সেটিংসের ওপরে দেখান, আপনি টানা কত দিন ঈশ্বরের বাক্য পড়েছেন ও প্রার্থনা করেছেন। কোনো কিছুই আপনাকে মনে করিয়ে দেবে না।",
 "Strong's numbers": "স্ট্রং নম্বর",
-"Make tagged words tappable (KJV, BSB, Hebrew and Greek texts)": "ট্যাগ করা শব্দগুলিতে ট্যাপ করা যাবে (KJV, BSB, হিব্রু ও গ্রিক পাঠ)",
+"Make tagged words tappable (KJV, BSB, LSG, Hebrew and Greek texts)": "ট্যাগ করা শব্দগুলিতে ট্যাপ করা যাবে (KJV, BSB, LSG, হিব্রু ও গ্রিক পাঠ)",
 "Show the numbers inline": "নম্বরগুলি লেখার মধ্যেই দেখান",
 "Search bar": "খোঁজার বার",
 "Top bar": "ওপরের বার",
