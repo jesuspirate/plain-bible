@@ -278,9 +278,7 @@ export function App() {
           return r.width > 0 && r.right > 0 && r.left < innerWidth && r.bottom > 0 && r.top < innerHeight
         })
         if (!title) return
-        showTapHints(fine
-          ? [{ el: title, label: t('Click the chapter title, or press /') }]
-          : [{ el: title, label: t('Tap the chapter title') }, { el: title, label: t('Pull down at the top of a chapter, then let go'), kind: 'pull' }])
+        showTapHints([{ el: title, label: fine ? t('Click the chapter title, or press /') : t('Tap the chapter title') }])
       }, 450)
     }
     addEventListener(SHOW_SEARCH_WAYS, on)

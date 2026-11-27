@@ -89,7 +89,7 @@ function steps(): Step[] {
         ...(hear ? [{ glyph: 'bar' } as Row] : []),
       ], moves: [{ kind: 'tap', row: 0, at: onNumber }, { kind: fine ? 'triple' : 'double', row: 1, at: onNumber }] },
     // The search bar is always there, so the tour points only to it; the
-    // other ways in (the chapter title, a pull down, /) are for people to
+    // other ways in (the chapter title, /) are for people to
     // find, and are told under Settings → Font and layout → Search bar.
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap],
       after: [t('After a search, open it again to go back to your last result.'),

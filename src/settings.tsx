@@ -426,10 +426,7 @@ function SearchWays() {
     <h3>{t('Other ways to open search')}</h3>
     {fine
       ? <p class="audio-also"><Glyph kind="tap" />{t('Click the chapter title, or press /')}</p>
-      : <>
-          <p class="audio-also"><Glyph kind="tap" />{t('Tap the chapter title')}</p>
-          <p class="audio-also"><Glyph kind="pull" />{t('Pull down at the top of a chapter, then let go')}</p>
-        </>}
+      : <p class="audio-also"><Glyph kind="tap" />{t('Tap the chapter title')}</p>}
     <p class="audio-note">{t('After a search, open it again to go back to your last result.')}</p>
     <button class="primary audio-show" onClick={showSearchWays}><Glyph kind="tap" /> {t('Try it now')}</button>
   </div>

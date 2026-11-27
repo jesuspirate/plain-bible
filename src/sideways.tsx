@@ -20,7 +20,10 @@ const DOWN = 24, UP = 70
 export function step(away: boolean, y: number, dy: number, moved: number, view: number, page: number): { away: boolean; moved: number } {
   // A jump (a new chapter, a search result, a link) isn't you reading on.
   if (Math.abs(dy) > view * .8) return { away, moved: 0 }
-  moved = dy === 0 ? moved : Math.sign(dy) === Math.sign(moved) ? moved + dy : dy
+  // A pixel or two back the other way is the finger resting or the page
+  // settling (slow readers make lots of these), not a change of mind: it
+  // doesn't undo the way you were going.
+  moved = dy === 0 || (Math.abs(dy) < 3 && Math.sign(dy) !== Math.sign(moved)) ? moved : Math.sign(dy) === Math.sign(moved) ? moved + dy : dy
   // At the end of the chapter they come back, with Next and search.
   if (y + view >= page - 4) return { away: false, moved }
   if (moved > DOWN && y > 40) return { away: true, moved }

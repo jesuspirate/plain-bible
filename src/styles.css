@@ -138,16 +138,6 @@ main { max-width: 1200px; margin: 0 auto; padding: 0 16px 64px; }
 /* A tap anywhere on the title row opens search: the whole row, with a
    little more room above and below than it looks. */
 .reader .chapter-title { cursor: pointer; -webkit-tap-highlight-color: transparent; padding: 10px 0; margin-top: 10px; margin-bottom: 12px; -webkit-user-select: none; user-select: none; }
-/* Pull down from the top of the chapter: a round search button follows the
-   finger down and fills in once letting go opens search. */
-.pull-search {
-  position: fixed; left: 50%; z-index: 20; width: 52px; height: 52px; border-radius: 50%;
-  display: grid; place-items: center; pointer-events: none;
-  background: var(--surface); color: var(--text); border: 1.5px solid var(--line);
-  box-shadow: 0 4px 14px rgba(0,0,0,.14); transition: background .15s, color .15s, opacity .2s;
-}
-.pull-search.ready { background: var(--accent); color: var(--accent-ink); border-color: var(--accent); }
-.pull-search.gone { opacity: 0 !important; }
 .vrow-head, .chapter:not(.cols-1) .verse { display: grid; grid-template-columns: repeat(var(--cols), minmax(0, 1fr)); gap: 0 28px; }
 .colhead { font: 600 13px var(--sans); color: var(--muted); border-bottom: 1px solid var(--line); padding-bottom: 4px; margin-bottom: 8px; }
 .verse { padding: 2px 0; scroll-margin-top: 80px; }
@@ -360,14 +350,20 @@ main.with-bar { padding-bottom: 120px; }
 @media (hover: hover) { .sb-version:hover { background: color-mix(in srgb, var(--text) 14%, transparent); } }
 .sb-version.on { color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
 .sb-version:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
-.sb-version + .sb-along { margin-left: -4px; }
+/* Read along wears the same quiet pill as the Bible's name, so the two sit
+   together at the field's end like a pair, and the bar stays muted: 🙏 and
+   Circles are what catch the eye. */
+.sb-version, .sb-along { color: color-mix(in srgb, var(--text) 78%, transparent); }
+.sb-version + .sb-along { margin-left: -2px; }
 .sb-along {
-  all: unset; cursor: pointer; flex: none; position: relative; display: grid; place-items: center; width: 40px; height: 40px; margin-right: -2px;
-  border-radius: 50%; color: var(--text); -webkit-tap-highlight-color: transparent;
+  all: unset; cursor: pointer; flex: none; position: relative; box-sizing: border-box; display: grid; place-items: center;
+  width: 48px; height: 38px; margin-right: -2px; border-radius: 19px;
+  background: color-mix(in srgb, var(--text) 9%, transparent); color: color-mix(in srgb, var(--text) 78%, transparent);
+  -webkit-tap-highlight-color: transparent;
 }
-.sb-along::before { content: ''; position: absolute; inset: -3px; border-radius: 50%; }
-.sb-along:active { background: var(--chip); }
-@media (hover: hover) { .sb-along:hover { background: var(--chip); } }
+.sb-along::before { content: ''; position: absolute; inset: -7px -3px; }
+.sb-along:active { transform: scale(.94); }
+@media (hover: hover) { .sb-along:hover { background: color-mix(in srgb, var(--text) 14%, transparent); } }
 .sb-along:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
 .sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
@@ -1335,20 +1331,25 @@ body.selecting .spread-turn { display: none; }
 /* ---- the phone on its side (src/sideways.tsx) ----
    The bars picked in Settings slide away as you read on, so the words fill
    the screen; only moved and faded, nothing redrawn, so it stays smooth. */
-header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .3s cubic-bezier(.2, .8, .2, 1), opacity .25s; }
+/* Sliding away is one smooth glide: only a move (no fading, which makes
+   frosted glass redraw on every frame and stutter on iPhones), the same
+   speed both ways, eased like iOS sheets. Each piece is kept on its own
+   layer while bars can slide, so the first move doesn't hitch either. */
+header.top, .sb-field, .listen, .sb-circles, .sb-pray { transition: translate .42s cubic-bezier(.32, .72, 0, 1); }
+:root.away-always :is(header.top, .sb-field, .listen, .sb-circles, .sb-pray) { will-change: translate; }
 @media (orientation: landscape) and (max-height: 500px) and (hover: none) {
-  :root.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
+  :root.away-top header.top { translate: 0 calc(-100% - 8px); pointer-events: none; }
   :root.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
   :root.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
-    translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
+    translate: 0 calc(100% + 40px + env(safe-area-inset-bottom)); pointer-events: none;
   }
 }
 /* Recording mode, and "Hide bars while scrolling", do the same whichever way
    the phone is held. */
-:root.away-always.away-top header.top { translate: 0 -100%; opacity: 0; pointer-events: none; }
+:root.away-always.away-top header.top { translate: 0 calc(-100% - 8px); pointer-events: none; }
 :root.away-always.away-search .sb:not(.sb-open) :is(.sb-field, .listen),
 :root.away-always.away-pray .sb:not(.sb-open) :is(.sb-circles, .sb-pray) {
-  translate: 0 calc(100% + 24px + env(safe-area-inset-bottom)); opacity: 0; pointer-events: none;
+  translate: 0 calc(100% + 40px + env(safe-area-inset-bottom)); pointer-events: none;
 }
 
 /* ---- recording mode (src/lib/recordMode.ts) ----

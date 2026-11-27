@@ -521,8 +521,7 @@ export function SearchBar({ here, mini, above }: {
     input.current.focus({ preventScroll: true })
     setOpen(true)
   }
-  // A tap on the chapter's title, or a pull down from the top of the
-  // chapter, opens search just as a tap on the bar (or the round button)
+  // A tap on the chapter's title opens search just as a tap on the bar (or the round button)
   // does. Not while reading aloud (its bar stands in the field's place) or
   // with verses picked (the bar for them is up instead).
   const opener = useRef(openHere)
