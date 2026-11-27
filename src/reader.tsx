@@ -60,11 +60,20 @@ function verseHere(): number {
   return cut || 1
 }
 
-/** That verse gets a faint 🙏 after its number once the page rests
+/** That verse gets a faint 🙏 at its end once the page rests
  *  (styles.css): where you stopped, so you know where to pick up (here, or
  *  on another device), and the verse a prayer would be kept with if you prayed now.
  *  Verses you selected, or the one being read aloud, take its place.
  *  Set on the page itself, as it moves often and redrawing a chapter isn't free. */
+/** Whether the 🙏 has room after the verse's last word. When the last line
+ *  runs to the edge it would be cut off, so it rests just above instead. */
+function fits(el: HTMLElement | null) {
+  const vt = el?.querySelector('.vt'), lines = vt?.getClientRects()
+  if (!el || !lines?.length) return true
+  const box = (el.querySelector('.cell') ?? el).getBoundingClientRect()
+  return box.right - lines[lines.length - 1].right > parseFloat(getComputedStyle(el).fontSize) * 1.5
+}
+
 function markPray() {
   if (!document.querySelector('.reader article.chapter')) return
   const r = parseHash().path
@@ -72,13 +81,13 @@ function markPray() {
   setPrayHere(r[0] === 'read' ? { book: r[2], chapter: +r[3], verse: v } : undefined)
   // It's also where you stopped: what your other devices offer to continue from.
   if (r[0] === 'read') savePlaceHere(r[2], +r[3], v)
-  // The mark takes a little room in its line, so a verse can gain or lose a
-  // line as it moves: keep the verse you're on exactly where it was.
+  // The mark takes no room, but should a verse ever reflow as it moves,
+  // keep the verse you're on exactly where it was.
   const el = document.getElementById('v' + v)
-  if (el?.hasAttribute('data-pray')) return
+  if (el?.hasAttribute('data-pray')) return void el.setAttribute('data-pray', fits(el) ? '' : 'tight')
   const before = el?.getBoundingClientRect().top
   document.querySelectorAll('[data-pray]').forEach(x => x.removeAttribute('data-pray'))
-  el?.setAttribute('data-pray', '')
+  el?.setAttribute('data-pray', fits(el) ? '' : 'tight')
   const after = el?.getBoundingClientRect().top
   if (before !== undefined && after !== undefined && Math.abs(after - before) > .5 && !document.querySelector('.reader article.chapter.spread')) window.scrollBy(0, after - before)
 }
@@ -223,12 +232,16 @@ export function Reader({ route }: { route: Route }) {
       else if (topVerse.current) seek.current(topVerse.current)
     }
     const onHide = (e: Event) => { if (e.type === 'pagehide' || document.visibilityState !== 'visible') save() }
+    // Lines wrap again once a reading font arrives: the 🙏 may need to move.
+    const fonts = () => { clearTimeout(rest); rest = window.setTimeout(markPray, 100) }
+    document.fonts?.addEventListener('loadingdone', fonts)
     addEventListener('scroll', onScroll, { passive: true })
     addEventListener('resize', onResize)
     document.addEventListener('visibilitychange', onHide)
     addEventListener('pagehide', onHide)
     return () => {
       save(); cancelAnimationFrame(frame); clearTimeout(rest)
+      document.fonts?.removeEventListener('loadingdone', fonts)
       removeEventListener('scroll', onScroll)
       removeEventListener('resize', onResize)
       document.removeEventListener('visibilitychange', onHide)
