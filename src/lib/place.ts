@@ -11,6 +11,9 @@ export interface Place {
   book: string; chapter: number; verse: number
   /** the version it was read in, and when you last moved there yourself */
   version?: string; t?: number
+  /** the verse marked with the faint 🙏, the one you were about to read
+   *  (reader.tsx verseHere): where your other devices continue from */
+  here?: number
 }
 
 const KEY = 'plain-bible:last'
@@ -27,6 +30,7 @@ export function parsePlace(raw: string | null): Place | undefined {
       const p: Place = { book: v.book, chapter: Math.max(1, +v.chapter || 1), verse: Math.max(1, +v.verse || 1) }
       if (typeof v.version === 'string') p.version = v.version
       if (typeof v.t === 'number') p.t = v.t
+      if (Number.isInteger(v.here) && v.here > 0) p.here = v.here
       return p
     }
   } catch { /* fall through */ }
@@ -51,14 +55,26 @@ if (typeof addEventListener !== 'undefined') {
 export function stamp(p: Place, last: Place | undefined, moved: boolean, now = Date.now()): Place {
   const same = !!last && last.book === p.book && last.chapter === p.chapter && last.verse === p.verse
   const t = same || !moved ? last?.t : now
-  const version = p.version ?? (last && last.book === p.book && last.chapter === p.chapter ? last.version : undefined)
-  return { book: p.book, chapter: p.chapter, verse: p.verse, ...(version ? { version } : {}), ...(t ? { t } : {}) }
+  const was = last && last.book === p.book && last.chapter === p.chapter ? last : undefined
+  const version = p.version ?? was?.version
+  const here = p.here ?? was?.here
+  return { book: p.book, chapter: p.chapter, verse: p.verse, ...(version ? { version } : {}), ...(t ? { t } : {}), ...(here ? { here } : {}) }
 }
 
 export function savePlace(p: Place) {
   const last = loadPlace(), next = stamp(p, last, touched)
   try { localStorage.setItem(KEY, JSON.stringify(next)) } catch { /* private mode */ }
   if (next.t !== last?.t) changed()
+}
+
+/** The page came to rest with the faint 🙏 on verse `here` of the chapter
+ *  you're on: kept with your place, for your other devices to continue from.
+ *  Quietly: it never moves this device, or another, by itself. */
+export function savePlaceHere(book: string, chapter: number, here: number) {
+  const last = loadPlace()
+  if (!last || last.book !== book || last.chapter !== chapter || last.here === here) return
+  try { localStorage.setItem(KEY, JSON.stringify({ ...last, here })) } catch { /* private mode */ }
+  changed()
 }
 
 // ---- the place that travels with the account -------------------------------
@@ -118,7 +134,8 @@ const read = (key: string) => { try { return JSON.parse(localStorage.getItem(key
 export function ownPlace(): SyncedPlace | undefined {
   const p = loadPlace()
   if (!p?.t) return undefined
-  const out: SyncedPlace = { book: p.book, chapter: p.chapter, verse: p.verse, t: p.t, dev: deviceId(), on: deviceKind() }
+  // Another device continues from the verse the 🙏 marked, if there was one.
+  const out: SyncedPlace = { book: p.book, chapter: p.chapter, verse: p.here ?? p.verse, t: p.t, dev: deviceId(), on: deviceKind() }
   if (p.version) out.version = p.version
   const s = read(SEARCH_TRAIL)
   if (s && str(s.q, 200) && str(s.base, 40) && Number.isInteger(s.at)) out.s = parseSynced({ ...out, s })?.s

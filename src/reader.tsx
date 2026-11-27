@@ -3,13 +3,13 @@ import { useEffect, useLayoutEffect, useRef, useState } from 'preact/hooks'
 import { BOOKS, BOOK_INDEX, bookName } from './lib/books'
 import { Bible } from './lib/data'
 import { formatRef, verseRanges } from './lib/refs'
-import { loadPlace, savePlace, withoutVerse } from './lib/place'
+import { loadPlace, savePlace, savePlaceHere, withoutVerse } from './lib/place'
 import { afterUsing, colorsByUse, FoundNote, hlVars, lastColor, markKey, newNoteId, notesCovering, notesOf, setNote, tidy } from './lib/marks'
 import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, parseHash, setPrayHere, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -34,6 +34,40 @@ import { useLeave } from './motion'
 // After Try it now (Audio in Settings), the next verse bar shows which two
 // buttons are the audio ones: the fingertip taps each, with what it does.
 let glowAudioUntil = 0
+
+/** The verse you're about to read: the first one that starts on screen
+ *  (on a two-page book, of the pages open now). A verse cut off at the top is
+ *  passed over, so the eye never goes back above the page's top edge; at
+ *  the top of a chapter that's verse 1. A prayer now is kept with it, and
+ *  Read along starts from it, so both land in the same place. */
+function verseHere(): number {
+  const from = headerBottom() + 12, to = innerHeight - 90
+  let cut = 0
+  for (const el of document.querySelectorAll('.reader article.chapter :is(.verse, .pv)[id]')) {
+    const r = el.getBoundingClientRect()
+    if (!r.height || r.right <= 0 || r.left >= innerWidth || r.bottom <= from || r.top >= to) continue
+    if (r.top >= from - 16) return +el.id.slice(1)
+    cut ||= +el.id.slice(1)
+  }
+  // One long verse fills the screen: that one.
+  return cut || 1
+}
+
+/** That verse gets a faint 🙏 by its number once the page rests
+ *  (styles.css): where you stopped, so you know where to pick up (here, or
+ *  on another device), and the verse a prayer would be kept with if you prayed now.
+ *  Verses you selected, or the one being read aloud, take its place.
+ *  Set on the page itself, as it moves often and redrawing a chapter isn't free. */
+function markPray() {
+  if (!document.querySelector('.reader article.chapter')) return
+  const r = parseHash().path
+  const v = verseHere()
+  setPrayHere(r[0] === 'read' ? { book: r[2], chapter: +r[3], verse: v } : undefined)
+  // It's also where you stopped: what your other devices offer to continue from.
+  if (r[0] === 'read') savePlaceHere(r[2], +r[3], v)
+  document.querySelectorAll('[data-pray]').forEach(el => el.removeAttribute('data-pray'))
+  document.getElementById('v' + v)?.setAttribute('data-pray', '')
+}
 
 export function Reader({ route }: { route: Route }) {
   const { settings, update, byId, data, marks, setMarks } = useApp()
@@ -161,7 +195,9 @@ export function Reader({ route }: { route: Route }) {
         return
       }
     }
-    const onScroll = () => { frame ||= requestAnimationFrame(measure) }
+    // Once the page rests, the faint 🙏 moves to the verse a prayer would keep.
+    let rest = 0
+    const onScroll = () => { frame ||= requestAnimationFrame(measure); clearTimeout(rest); rest = window.setTimeout(markPray, 300) }
     // Turning the phone (or resizing the window) re-flows the text; stay on
     // the verse you were reading rather than wherever that pixel lands.
     let width = innerWidth
@@ -178,7 +214,7 @@ export function Reader({ route }: { route: Route }) {
     document.addEventListener('visibilitychange', onHide)
     addEventListener('pagehide', onHide)
     return () => {
-      save(); cancelAnimationFrame(frame)
+      save(); cancelAnimationFrame(frame); clearTimeout(rest)
       removeEventListener('scroll', onScroll)
       removeEventListener('resize', onResize)
       document.removeEventListener('visibilitychange', onHide)
@@ -209,6 +245,7 @@ export function Reader({ route }: { route: Route }) {
       else if (spreadOn.current) toSheet(0)
       else window.scrollTo(0, 0)
       settling.current = false
+      setTimeout(markPray, 400)
       if (peekDir.current) { close(); settle() }
       const l = landing.current
       landing.current = undefined
@@ -251,8 +288,8 @@ export function Reader({ route }: { route: Route }) {
     return () => removeEventListener(VERSE_BAR_EVENT, on)
   }, [])
   // The Read along button above 🙏: from the verse you picked, else the verse
-  // a search or link landed on while it's still in view, else the first
-  // verse at the top of the screen (on a two-page book, of the pages open now).
+  // a search or link landed on while it's still in view, else the verse the
+  // faint 🙏 is on (see verseHere).
   const latest = useRef({ selected, target, version, book, chapter, bibles })
   latest.current = { selected, target, version, book, chapter, bibles }
   useEffect(() => {
@@ -267,10 +304,7 @@ export function Reader({ route }: { route: Route }) {
       }
       let v = selected.length ? Math.min(...selected) : 0
       if (!v && target && inView(document.getElementById('v' + target))) v = target
-      if (!v) for (const el of document.querySelectorAll('.reader article.chapter :is(.verse, .pv)[id]')) {
-        if (inView(el)) { v = +el.id.slice(1); break }
-      }
-      if (!v) v = 1
+      if (!v) v = verseHere()
       setSelected([])
       startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible)
     }
@@ -416,6 +450,7 @@ export function Reader({ route }: { route: Route }) {
     k = Math.max(0, Math.min(k, sheetsOf(f, pw) - 1))
     sheet.current = k
     f.style.transform = k ? `translateX(${-k * 2 * pw}px)` : ''
+    setTimeout(markPray, 400)
     const v = firstVerseOn(f, k, pw)
     if (!v) return
     topVerse.current = v
@@ -1265,7 +1300,7 @@ export function Reader({ route }: { route: Route }) {
   })
 
   return (
-    <div class="reader" ref={readerEl}>
+    <div class={'reader' + (picking ? ' picking' : '')} ref={readerEl}>
       {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>{t('Try again')}</button></p></div>}
       {!loaded && !error && <p class="muted center wait">{t('Loading…')}</p>}
       {loaded && rows === 0 && <p class="muted center">{t('{version} does not include {book} {chapter}.', { version: info?.name ?? version, book: bookName(book), chapter: String(chapter) })}</p>}

@@ -6,6 +6,12 @@ describe('reading place', () => {
   it('reads the saved verse', () => {
     expect(parsePlace('{"book":"John","chapter":3,"verse":16}')).toEqual({ book: 'John', chapter: 3, verse: 16 })
   })
+  it('keeps the verse the faint 🙏 marked, in the same chapter only', () => {
+    expect(parsePlace('{"book":"John","chapter":3,"verse":14,"here":16}')).toEqual({ book: 'John', chapter: 3, verse: 14, here: 16 })
+    const last = { book: 'John', chapter: 3, verse: 14, here: 16, t: 5 }
+    expect(stamp({ book: 'John', chapter: 3, verse: 15 }, last, true, 9).here).toBe(16)
+    expect(stamp({ book: 'John', chapter: 4, verse: 1 }, last, true, 9).here).toBeUndefined()
+  })
   it('reads the older book-and-chapter format as verse 1', () => {
     expect(parsePlace('["Ps",23]')).toEqual({ book: 'Ps', chapter: 23, verse: 1 })
   })
