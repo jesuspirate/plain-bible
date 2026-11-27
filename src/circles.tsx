@@ -84,18 +84,12 @@ function Clamp({ lines, children, class: cls, after }: { lines: number; children
   </>
 }
 
-/** A verse on a prayer request: its words in your own Bible, and a link. */
-function AskVerse({ verse, from }: { verse: PrayerVerse; from: string }) {
+/** A verse on a prayer request: its reference, which opens it in your own Bible. */
+function AskVerse({ verse }: { verse: PrayerVerse; from?: string }) {
   const { settings } = useApp()
-  const shown = usePassage(verse)
   const nav = useNav()
-  const at = shown?.at ?? verse
-  return <div class="c-ask-verse">
-    {/* The words folded to two lines; the reference and More on one line. */}
-    {(() => { const ref = <button class="link c-ref" onClick={() => { nav.away(); go(readPath(shown?.version ?? settings.version, at.book, at.chapter, at.verses[0])) }}>{verseLabel(at)}</button>
-      return shown === null ? ref : <Clamp class={'c-quote small c-quote-short' + (shown ? '' : ' c-quote-wait')} lines={2} after={ref}>{shown?.text}</Clamp> })()}
-    {shown && !shown.yours && <p class="muted small">{t('Your {version} doesn’t have this here, so it’s shown as {name} shared it ({theirs}).', { version: settings.version, name: from, theirs: shown.version })}</p>}
-  </div>
+  // Only the reference: tap it to read the verse in your own Bible.
+  return <button class="link c-ref c-ask-verse" onClick={() => { nav.away(); go(readPath(settings.version, verse.book, verse.chapter, verse.verses[0])) }}>📖 {verseLabel(verse)}</button>
 }
 
 /** The passage's words, said plainly when they had to be the sender's. */
@@ -1165,7 +1159,7 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
           </div>
         </div> : <>
           <Clamp class="c-note c-note-main c-ask-said" lines={4}>{b.note}</Clamp>
-          {b.verses?.map(v => <AskVerse verse={v} from={nameOf(item.by)} />)}
+          {b.verses && b.verses.length > 0 && <p class="c-ask-verses">{b.verses.map(v => <AskVerse verse={v} />)}</p>}
         </>}
         <Prayed others={others ?? []} amens={amens} mine={mine} prayed={prayed} onPray={pray} again={act(() => askPrayer(circle, b.note, true, b.verses))} busy={busy} emoji={emoji('pray')}
           by={nameOf(item.by)} onPrayNow={() => prayFor({ circle, circleName: circleName ?? '', item: item.id, by: mine ? '' : nameOf(item.by), note: b.note,

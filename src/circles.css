@@ -279,8 +279,8 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 .c-asked-two .c-pray-big + .c-pray-big { margin-top: 0; }
 .c-asked-two + .c-pray-big { margin-top: 8px; }
 .c-kind-ask .c-item-head { margin-bottom: 6px; }
-.c-ask-verse { margin: 0 0 8px; }
-.c-ask-verse .c-ref { margin-top: 2px; }
+
+
 .c-respond-row .c-prayed-quiet { margin-right: auto; align-self: center; padding: 6px 0; font-size: 15px; line-height: 1.25; text-align: left; flex: 1 1 auto; min-width: 0; text-decoration: underline; }
 .c-kind-ask .c-respond-row { margin-top: 8px; }
 /* On a computer: Circles get a little more room, wide and tall. */
@@ -289,3 +289,5 @@ button.c-btn.c-del-quiet { background: var(--surface); border: 1.5px solid #b326
 }
 .c-respond-row:has(.c-prayed-quiet) { gap: 8px; }
 .c-respond-row:has(.c-prayed-quiet) .c-respond { min-width: 0; padding: 6px 14px; }
+.c-ask-verses { display: flex; flex-wrap: wrap; gap: 4px 16px; margin: -2px 0 10px; }
+.c-ask-verses .c-ref { margin: 0; font-size: 16px; }
