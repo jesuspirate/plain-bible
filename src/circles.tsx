@@ -93,11 +93,16 @@ function AskVerse({ verse }: { verse: PrayerVerse; from?: string }) {
 }
 
 /** The passage's words, said plainly when they had to be the sender's. */
-function Passage({ shown, small, from }: { shown: Shown | null | undefined; small?: boolean; from: string }) {
+function Passage({ shown, small, from, onOpen }: { shown: Shown | null | undefined; small?: boolean; from: string; onOpen?: () => void }) {
   const { settings } = useApp()
   if (shown === null) return null
+  // Tap the words themselves to read them in your Bible (same place as the
+  // reference under them). Not when the finger was selecting text.
+  const tap = shown && onOpen ? () => { if (!String(window.getSelection?.() ?? '')) onOpen() } : undefined
   return <>
-    <p class={'c-quote' + (small ? ' small' : '') + (shown ? '' : ' c-quote-wait')} aria-busy={!shown}>{shown?.text}</p>
+    <p class={'c-quote' + (small ? ' small' : '') + (shown ? '' : ' c-quote-wait') + (tap ? ' c-quote-open' : '')} aria-busy={!shown}
+      role={tap ? 'link' : undefined} tabIndex={tap ? 0 : undefined} onClick={tap}
+      onKeyDown={tap ? (e => { if (e.key === 'Enter' || e.key === ' ') { e.preventDefault(); tap() } }) : undefined}>{shown?.text}</p>
     {shown && !shown.yours && <p class="muted small">{t('Your {version} doesn’t have this here, so it’s shown as {name} shared it ({theirs}).', { version: settings.version, name: from, theirs: shown.version })}</p>}
   </>
 }
@@ -1228,14 +1233,14 @@ function Item({ circle, item, mine, me, nameOf, fav, onChange, news, door, other
         <PrayerPlayer circle={circle} item={item} onError={setErr} />
         {b.note && <p class="c-note c-prayer-note">{b.note}</p>}
         {verse && <button class="link c-ref" onClick={() => open(verse)}>{t('With {verse}', { verse: verseLabel(verse) })}{shown && <span class="muted small"> ({shown.version})</span>}</button>}
-        {verse && <Passage shown={shown} small from={nameOf(item.by)} />}
+        {verse && <Passage shown={shown} small from={nameOf(item.by)} onOpen={() => open(verse)} />}
         {b.verses?.slice(1).map(v => <MoreVerse verse={v} />)}
       </> : b.k === 'note' ? <>
         <p class="c-note c-note-main">{b.note}</p>
-        <Passage shown={shown} small from={nameOf(item.by)} />
+        <Passage shown={shown} small from={nameOf(item.by)} onOpen={() => open(verse!)} />
         {ref(verse!)}
       </> : <>
-        <Passage shown={shown} from={nameOf(item.by)} />
+        <Passage shown={shown} from={nameOf(item.by)} onOpen={() => open(verse!)} />
         {ref(verse!)}
         {b.note && <p class="c-note">{b.note}</p>}
       </>}
