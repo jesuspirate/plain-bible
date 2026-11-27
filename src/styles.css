@@ -1581,8 +1581,7 @@ dialog.sheet[open]::backdrop { animation: sb-fade .22s ease-out; }
    selected, else the one being read aloud. It sits at the end of the verse,
    just after the last word, and fades in once the page rests. Like the
    ribbon there on computers it takes no room: a box with no width, the 🙏
-   spilling out of it, so no word ever moves. On a computer it sits just past
-   the ribbon's spot, so the two sit side by side. In a paragraph the next
+   spilling out of it, so no word ever moves. In a paragraph the next
    verse follows on the same line, so there it rests just above the line's
    end instead. --pray-mark is your 🙏, in your skin tone (app.tsx). */
 :is(.pv[data-pray], .pv.picked, .reading-aloud .pv.speaking) > .vt::after,
@@ -1590,10 +1589,13 @@ dialog.sheet[open]::backdrop { animation: sb-fade .22s ease-out; }
   content: var(--pray-mark, "🙏"); display: inline-block; width: 0; white-space: nowrap;
   font: .9em/1 var(--sans); transform: translateX(.35em); opacity: .38; pointer-events: none; animation: pray-mark-in .7s ease both;
 }
-@media (hover: hover) and (pointer: fine) {
-  .verse > .cell:first-child > .vt::after { transform: translateX(calc(.3em + 38px)) !important; }
-}
+/* On a computer the ribbon of the verse under the mouse (.verse-tab) makes
+   room for it: the 🙏 stays tucked after the last word, the ribbon just past it. */
+:is(.verse[data-pray], .reading-aloud .verse.speaking) > .cell:first-child .verse-tab { left: 1.6em; }
 .pv > .vt::after { transform: translate(.1em, -.95em) !important; font-size: .75em; }
+/* No room left after the last word: just above the line's end, inside the page. */
+.verse[data-pray="tight"] > .cell:first-child > .vt::after { transform: translate(-.75em, -1.2em) !important; font-size: .7em !important; }
+.verse[data-pray="tight"] > .cell:first-child .verse-tab { left: .3em; }
 @keyframes pray-mark-in { from { opacity: 0 } }
 /* Only one place at a time: reading aloud, then picked verses, then here.
    Never in Teaching mode, so videos stay clean. */
