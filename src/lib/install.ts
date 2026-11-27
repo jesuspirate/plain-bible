@@ -19,11 +19,12 @@ export const inStoreApp = () => /QuietBibleApp\//.test(nav.userAgent ?? '')
 export const inMacApp = () => /QuietBibleMac\//.test(nav.userAgent ?? '')
 export const installed = () => nav.standalone === true || mode('standalone') || mode('fullscreen') || mode('minimal-ui')
 /** Inside an app that shows the site in its own window, where "Add to Home
- *  Screen" isn't there or means nothing: the App Store and Google Play apps,
+ *  Screen" isn't there or means nothing: the App Store, Google Play and
+ *  Microsoft Store apps,
  *  and wallet apps with mini apps (Fedi), which bring Nostr or Lightning. */
 export const inOtherApp = () => {
   const w = (typeof window === 'undefined' ? {} : window) as { nostr?: unknown; webln?: unknown; fedi?: unknown; fediInternal?: unknown }
-  return inStoreApp() || inMacApp() || fromPlayStore() || !!(w.nostr || w.webln || w.fedi || w.fediInternal)
+  return inStoreApp() || inMacApp() || fromPlayStore() || fromMicrosoftStore() || !!(w.nostr || w.webln || w.fedi || w.fediInternal)
 }
 /** Putting it on the Home Screen helps: a phone's own browser, not yet there. */
 export const homeScreenHelps = () => !installed() && !inOtherApp()
@@ -36,6 +37,17 @@ export const fromPlayStore = () => {
   try {
     if (typeof document !== 'undefined' && document.referrer.startsWith('android-app://com.myquietbible.app')) sessionStorage.setItem(PLAY_KEY, '1')
     return sessionStorage.getItem(PLAY_KEY) === '1'
+  } catch { return false }
+}
+
+// Opened from the Microsoft Store app on Windows (a PWABuilder package that
+// opens the site in Edge's own window): Windows sends this referrer on launch.
+// A session note for reloads, as for Google Play.
+const MS_KEY = 'plain-bible:ms-store-app'
+export const fromMicrosoftStore = () => {
+  try {
+    if (typeof document !== 'undefined' && document.referrer.startsWith('app-info://platform/microsoft-store')) sessionStorage.setItem(MS_KEY, '1')
+    return sessionStorage.getItem(MS_KEY) === '1'
   } catch { return false }
 }
 

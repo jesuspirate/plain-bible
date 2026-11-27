@@ -19,7 +19,7 @@
 // from the address, which isn't kept). Summed over 7 days, that counts each
 // praying device once per country.
 import { savedLang } from '../i18n'
-import { fromPlayStore, inMacApp, inStoreApp, installed, isAndroid, isIPhone } from './install'
+import { fromMicrosoftStore, fromPlayStore, inMacApp, inStoreApp, installed, isAndroid, isIPhone } from './install'
 import { inFedi } from './nostr'
 import { tallies, untally, type Tally } from './tally'
 import { HEARD_KINDS, heardSince, unheard, type Heard } from './heard'
@@ -52,6 +52,7 @@ export function platform(): string {
   if (inMacApp()) return 'mac'
   if (inStoreApp()) return 'ios'
   if (fromPlayStore()) return 'android'
+  if (fromMicrosoftStore()) return 'windows'
   if (inFedi()) return 'fedi'
   return isIPhone() || isAndroid() ? 'phone' : 'computer'
 }
