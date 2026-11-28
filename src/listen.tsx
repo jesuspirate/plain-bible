@@ -479,16 +479,29 @@ function hear(my: number, flow = false) {
   // then takes the sound away and stops the app before the next chapter can
   // start, so it never did, and the bar said Pause over nothing.
   const opening = flow ? timesNow(rec, n.book)?.[n.chapter - 1]?.opening : undefined
+  const known = !resume && !flow ? timesNow(rec, n.book)?.[n.chapter - 1] : undefined
+  let placed = false
   if (!resume) {
     held = { rec, url }
     if (flow) {
       a.src = opening ? `${url}#t=${opening}` : url
       a.muted = false
+    } else if (a.src === url && a.readyState >= 1 && known) {
+      // The same chapter, its times at hand (another verse tapped, or Listen
+      // after a pause): moved to the verse BEFORE it's asked to play. Moved
+      // while it plays or starts, an iPhone can keep playing from where it
+      // was while saying it's at the verse, so the words lit up and the
+      // voice part ways (or it falls back to the top of the chapter).
+      held = { rec, url, times: known }
+      const start = startOf(known, n)
+      if (start) {
+        if (!a.paused) a.pause()
+        a.currentTime = start.at
+        a.muted = false
+        placed = true
+      } else a.muted = true
     } else {
       if (a.src !== url) a.src = url
-      // The same chapter again: from its top, never from where it was left
-      // (at its end, it would end at once and read the next chapter instead).
-      else if (!a.ended) try { a.currentTime = 0 } catch { /* not ready: plays from the top anyway */ }
       // Start inside the tap (iPhones ask for that), silently, until the verse's place is known.
       a.muted = true
     }
@@ -507,19 +520,15 @@ function hear(my: number, flow = false) {
     if (my !== run || held?.url !== url || !now) return
     const times = all?.[n.chapter - 1]
     if (!times) return lost(my)
-    // Listen: the first of the verses picked; otherwise the verse asked for.
-    const verse = n.only ? n.only.find(x => x >= n.verse && times[x - 1]) : nextTimed(times, n.verse)
-    if (verse === undefined) return chapterDone()
-    held = { rec, url, times }
-    // From the top of a chapter, the recording's own announcement of it ("John
-    // chapter 3") is heard first, as when one chapter runs into the next, but
-    // not what some recordings say before that (the name of the Bible).
-    const at = verse === nextTimed(times, 1) && !n.only ? times.opening ?? 0 : jump(verse)
+    const from = held?.from
+    held = { rec, url, times, from }
+    const start = placed ? { verse: nextTimedOrPicked(times, n), at: 0 } : startOf(times, n)
+    if (!start || start.verse === undefined) return chapterDone()
+    const { verse, at } = start
     const go = () => { if (my === run && held?.url === url) { a.currentTime = at; a.muted = false } }
     // Already playing from the top (on from the chapter before): only past
     // what's said before the chapter's name, if the times came late.
-    const placed = flow && (opening !== undefined || !times.opening)
-    if (placed) { /* playing from the right place already */ }
+    if (placed || (flow && (opening !== undefined || !times.opening))) { /* playing from the right place already */ }
     else if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true })
     // The last chapter of a book: the next book's times are fetched now,
     // while the app is surely awake, so the next chapter needs no wait.
@@ -533,6 +542,21 @@ function hear(my: number, flow = false) {
     emit()
     following()
   })
+}
+
+/** Listen: the first of the verses picked; otherwise the verse asked for. */
+function nextTimedOrPicked(times: ChapterTimes, n: Now): number | undefined {
+  return n.only ? n.only.find(x => x >= n.verse && times[x - 1]) : nextTimed(times, n.verse)
+}
+
+/** The verse to start at and where the player goes for it. From the top of a
+ * chapter, the recording's own announcement of it ("John chapter 3") is heard
+ * first, as when one chapter runs into the next, but not what some recordings
+ * say before that (the name of the Bible). Needs `held.times` set. */
+function startOf(times: ChapterTimes, n: Now): { verse: number; at: number } | undefined {
+  const verse = nextTimedOrPicked(times, n)
+  if (verse === undefined) return
+  return { verse, at: verse === nextTimed(times, 1) && !n.only ? times.opening ?? 0 : jump(verse) }
 }
 
 /** Where to put the player for a verse: a breath before its first word. Until
