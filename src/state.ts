@@ -56,7 +56,7 @@ export interface Settings {
   spread: 'double' | 'single'
   /** skin tone of the 🙏 on the prayer button: a modifier character, or '' for the plain one */
   prayTone: string
-  /** The look of 🙏 and Circles in Light and Sepia: quiet (dark brown) or honey, the same for every skin tone. ('brown' was a choice for a day; it now reads as quiet.) */
+  /** The look of 🙏 and Circles: quiet (their glass look, the default), or a disc with a gold ring, brown or honey, the same for every skin tone. */
   discs: 'quiet' | 'brown' | 'honey'
   /** a quiet line under the chapter title when you have notes on it */
   noteReminders: boolean

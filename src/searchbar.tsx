@@ -28,9 +28,9 @@ import { VersionSwitch } from './versionswitch'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
-// Every skin tone sits on the same disc (11-28, Jet: no difference between
-// skin colours). Honey is the lighter choice in Settings → Extras.
-const discClass = (discs: string) => discs === 'honey' ? ' disc-honey' : ''
+// 🙏 and Circles keep their glass look unless Settings → Extras → Prayer
+// buttons picks a disc: Brown or Honey, the same for every skin tone.
+const discClass = (discs: string) => discs === 'brown' ? ' disc disc-brown' : discs === 'honey' ? ' disc disc-honey' : ''
 
 /** 🙏: tap to pray. Press and hold for the skin tones. */
 function PrayButton() {

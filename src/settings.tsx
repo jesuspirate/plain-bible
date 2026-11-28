@@ -536,7 +536,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'extras') return <div class="layout-page">
     <div class="field"><span>{t('Prayer buttons')}</span>
       <div class="col">
-        {sel('discs', [['quiet', t('Quiet')], ['honey', t('Honey')]])}
+        {sel('discs', [['quiet', t('Quiet')], ['brown', t('Brown')], ['honey', t('Honey')]])}
         <span class="muted small">{t('How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.')}</span>
       </div>
     </div>
