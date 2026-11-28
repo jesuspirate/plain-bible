@@ -140,7 +140,12 @@ export function Reader({ route }: { route: Route }) {
     return () => document.documentElement.classList.remove('spread-on')
   }, [spread])
 
-  const [bibles, setBibles] = useState<Record<string, Bible>>({})
+  const [fetched, setBibles] = useState<Record<string, Bible>>({})
+  // A Bible already loaded this session (the one you switch back to with a
+  // tap) shows in the same frame: no blank page, no jump to the top.
+  const tagsFor = (v: string) => settings.strongs && !!byId.get(v)?.strongsFile
+  const now = versions.every(v => fetched[v]) ? undefined : versions.map(v => data.bibleNow(v, tagsFor(v)))
+  const bibles = now?.every(Boolean) ? Object.fromEntries(now.map(b => [b!.id, b!])) as Record<string, Bible> : fetched
   const [error, setError] = useState('')
   const [lex, setLex] = useState<string>()
   const [selected, setSelected] = useState<number[]>([])
@@ -175,7 +180,7 @@ export function Reader({ route }: { route: Route }) {
   useEffect(() => {
     if (parallel.join() !== settings.parallel.join()) update({ parallel })
     setError('')
-    Promise.all(versions.map(v => data.bible(v, settings.strongs && !!byId.get(v)?.strongsFile)))
+    Promise.all(versions.map(v => data.bible(v, tagsFor(v))))
       .then(bs => setBibles(Object.fromEntries(bs.map(b => [b.id, b]))))
       .catch(e => setError(navigator.onLine === false || e instanceof TypeError
         ? t('{version} isn’t saved on this device yet. Connect to the internet once and it stays available offline.', { version: versions.filter(v => !bibles[v]).join(', ') || version })
@@ -265,22 +270,36 @@ export function Reader({ route }: { route: Route }) {
     }
   }, [])
 
-  const shown = useRef<{ book: string; chapter: number; target: number; at: number }>()
-  useEffect(() => {
+  // While a Bible you haven't opened yet this session loads, the page keeps
+  // its height: the screen doesn't fall to the chapter's top in between.
+  const tall = useRef(0)
+  useLayoutEffect(() => { if (loaded && readerEl.current) tall.current = readerEl.current.offsetHeight }, [loaded, book, chapter, versions.join(), settings.layout, settings.fontSize, settings.font, spread])
+  const shown = useRef<{ book: string; chapter: number; target: number; at: number; version: string }>()
+  // A layout effect: when you only switch Bibles (or the text size), your
+  // verse is put back before the screen is drawn, so the chapter's top
+  // never flashes by.
+  useLayoutEffect(() => {
     document.title = `${formatRef({ book, chapter })} (${version}) · My Quiet Bible`
     if (!loaded) return
     const prev = shown.current
-    shown.current = { book, chapter, target, at: resumeAt }
+    shown.current = { book, chapter, target, at: resumeAt, version }
     landedOn = target
     const same = prev && prev.book === book && prev.chapter === chapter
     if (!same) topVerse.current = 0
+    // Same chapter in another Bible (the switcher): stay on the verse you're
+    // reading, even when you came here from a search result or your
+    // history and have read on since (the switcher doesn't carry those).
+    const switched = same && prev.version !== version && (!target || target === prev.target) && (!resumeAt || resumeAt === prev.at)
+    const keep = same && topVerse.current > 0 && (switched || (prev.target === target && prev.at === resumeAt))
+    if (keep) seek.current(topVerse.current)
     requestAnimationFrame(() => {
       // Turned to here from the chapter before (or after) in the open book:
       // its first two pages (or its last two).
       const into = arriving.current
       arriving.current = 0
       // Same chapter, different version, columns, layout or text size: keep your verse.
-      if (same && prev.target === target && prev.at === resumeAt) seek.current(topVerse.current)
+      if (keep) { if (!spreadOn.current) seek.current(topVerse.current) }
+      else if (same && prev.target === target && prev.at === resumeAt) seek.current(topVerse.current)
       else if (target) spreadOn.current ? seek.current(target) : document.getElementById('v' + target)?.scrollIntoView({ block: 'center' })
       else if (resumeAt) seek.current(resumeAt)
       // Opening the app, or coming back from Settings: the verse you were on.
@@ -1266,7 +1285,7 @@ export function Reader({ route }: { route: Route }) {
   })
 
   return (
-    <div class={'reader' + (picking ? ' picking' : '')} ref={readerEl}>
+    <div class={'reader' + (picking ? ' picking' : '')} ref={readerEl} style={!loaded && tall.current ? { minHeight: tall.current + 'px' } : undefined}>
       {error && <div class="center"><p class="error">{error}</p><p><button onClick={() => setRetry(n => n + 1)}>{t('Try again')}</button></p></div>}
       {!loaded && !error && <p class="muted center wait">{t('Loading…')}</p>}
       {loaded && rows === 0 && <MissingChapter version={version} bible={primary} book={book} chapter={chapter} verse={target || undefined} parallel={parallel} />}

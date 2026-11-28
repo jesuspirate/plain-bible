@@ -13,7 +13,7 @@ import { t } from './i18n'
 
 export function VersionSwitch() {
   const route = useRoute()
-  const { settings, update, byId, catalog } = useApp()
+  const { settings, update, byId, catalog, data } = useApp()
   const [peek, setPeek] = useState<{ bottom: number; right: number }>()
   const [all, setAll] = useState(false)
   const btn = useRef<HTMLButtonElement>(null)
@@ -33,7 +33,9 @@ export function VersionSwitch() {
     const w = Math.min(340, innerWidth - 24)
     setPeek({ bottom: innerHeight - r.top + 10, right: Math.max(12, Math.min(innerWidth - r.right - 60, innerWidth - w - 12)) })
   }
-  const down = () => { hold.current = { fired: false, timer: window.setTimeout(() => { hold.current!.fired = true; show() }, 450) } }
+  // Start reading the other Bible as the finger lands, so it's ready by the
+  // time the tap ends and the chapter swaps without a blank page.
+  const down = () => { if (before) data.bible(before, settings.strongs && !!byId.get(before)?.strongsFile).catch(() => {}); hold.current = { fired: false, timer: window.setTimeout(() => { hold.current!.fired = true; show() }, 450) } }
   const up = () => clearTimeout(hold.current?.timer)
   const choose = (v: string) => {
     setPeek(undefined)
