@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "সার্চ বারে বাইবেল বদলের বোতাম",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "সেই পদ থেকে, অধ্যায়ের পর অধ্যায়, শব্দগুলো জ্বলে উঠতে উঠতে পড়ে যায়, যতক্ষণ না আপনি থামান।",
 "Listen: reads on from there until you stop it": "শুনুন: সেখান থেকে পড়ে যায়, যতক্ষণ না আপনি থামান",
-"Brown": "বাদামি"
+"Brown": "বাদামি",
+"Show the Read along icon in the search bar": "সার্চ বারে “সঙ্গে পড়ুন” আইকন দেখান",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "এর ডান প্রান্তের “সঙ্গে পড়ুন” আইকনটি স্ক্রিনের উপরের পদ থেকে পড়ে।"
 }

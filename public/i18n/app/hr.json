@@ -1456,5 +1456,7 @@
 "Bible switcher in the search bar": "Izmjenjivač Biblije u traci za pretraživanje",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Čita od tog retka dalje, poglavlje za poglavljem, dok riječi svijetle, dok ga ne zaustavite.",
 "Listen: reads on from there until you stop it": "Slušaj: čita odande dalje dok ga ne zaustavite",
-"Brown": "Smeđe"
+"Brown": "Smeđe",
+"Show the Read along icon in the search bar": "Prikaži ikonu „Prati čitanje” u traci za pretraživanje",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Prati čitanje” na desnom kraju čita od retka na vrhu zaslona."
 }

@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "శోధన పట్టీలో బైబిల్ మార్పు బటన్",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "ఆ వచనం నుండి, అధ్యాయం తర్వాత అధ్యాయం, పదాలు వెలుగుతూ, మీరు ఆపే వరకు చదువుతుంది.",
 "Listen: reads on from there until you stop it": "వినండి: అక్కడి నుండి మీరు ఆపే వరకు చదువుతుంది",
-"Brown": "గోధుమ"
+"Brown": "గోధుమ",
+"Show the Read along icon in the search bar": "శోధన పట్టీలో “కలిసి చదువు” చిహ్నం చూపించు",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "దాని కుడి చివరన ఉన్న “కలిసి చదువు” చిహ్నం తెర పైభాగంలోని వచనం నుండి చదువుతుంది."
 }

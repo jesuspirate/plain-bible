@@ -1478,5 +1478,7 @@
 "Bible switcher in the search bar": "Przełącznik Biblii na pasku wyszukiwania",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Czyta od tego wersetu dalej, rozdział po rozdziale, słowa się podświetlają, dopóki nie zatrzymasz.",
 "Listen: reads on from there until you stop it": "Słuchaj: czyta stamtąd dalej, dopóki nie zatrzymasz",
-"Brown": "Brązowy"
+"Brown": "Brązowy",
+"Show the Read along icon in the search bar": "Pokaż ikonę „Czytaj z podświetleniem” w pasku wyszukiwania",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Czytaj z podświetleniem” na jego prawym końcu czyta od wersetu na górze ekranu."
 }

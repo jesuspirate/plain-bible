@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "Chishanduri cheBhaibheri pabhawa rekutsvaga",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Inoverenga kubva pandima iyoyo, chitsauko nechitsauko, mazwi achipenya, kusvikira waimisa.",
 "Listen: reads on from there until you stop it": "Teerera: inoverenga kubva ipapo kusvikira waimisa",
-"Brown": "Tsvuku"
+"Brown": "Tsvuku",
+"Show the Read along icon in the search bar": "Ratidza kamucherechedzo ka “Verenga uchitevera” mubhawa rekutsvaga",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Kamucherechedzo ka “Verenga uchitevera” kumagumo aro kurudyi kanoverenga kubva pandima iri pamusoro pechiratidziro."
 }

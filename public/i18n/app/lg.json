@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "Ekikyusa Baibuli mu bbaala y’okunoonya",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Esoma okuva ku lunyiriri olwo, essuula oluvannyuma lw’essuula, ebigambo nga byaka, okutuusa lw’ogiyimiriza.",
 "Listen: reads on from there until you stop it": "Wuliriza: esoma okuva awo okutuusa lw’ogiyimiriza",
-"Brown": "Kitaka"
+"Brown": "Kitaka",
+"Show the Read along icon in the search bar": "Laga akabonero “Soma ng’ogoberera” mu muwaatwa gw’okunoonya",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Akabonero “Soma ng’ogoberera” ku nkomerero yaagwo eya ddyo kasoma okuva ku lunyiriri oluli waggulu ku ssirini."
 }

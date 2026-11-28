@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "Kibadilisha Biblia kwenye upau wa kutafuta",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Inasoma kuanzia mstari huo, sura baada ya sura, maneno yakiwaka, hadi uisimamishe.",
 "Listen: reads on from there until you stop it": "Sikiliza: inasoma kuanzia hapo hadi uisimamishe",
-"Brown": "Kahawia"
+"Brown": "Kahawia",
+"Show the Read along icon in the search bar": "Onyesha aikoni ya “Soma ukifuatisha” kwenye upau wa kutafuta",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Aikoni ya “Soma ukifuatisha” mwisho wake wa kulia inasoma kuanzia mstari ulio juu ya skrini."
 }

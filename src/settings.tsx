@@ -536,10 +536,12 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'extras') return <div class="layout-page">
     <div class="field"><span>{t('Prayer buttons')}</span>
       <div class="col">
-        {sel('discs', [['quiet', t('Quiet')], ['brown', t('Brown')], ['honey', t('Honey')]])}
+        {sel('discs', [['quiet', t('Quiet')], ['honey', t('Honey')], ['brown', t('Brown')]])}
         <span class="muted small">{t('How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.')}</span>
       </div>
     </div>
+    <div class="field"><label class="check"><input type="checkbox" checked={settings.alongPill} onChange={e => update({ alongPill: (e.target as HTMLInputElement).checked })} />
+      <span class="check-text"><span class="check-name">{t('Read along')}</span><span class="muted small">{t('Show the Read along icon in the search bar')}</span></span></label></div>
     <div class="field">{check('noteReminders', t('Notes'), t('Under each chapter title, show how many notes you have on it, including notes elsewhere that mention it (like “see John 3:16”) or share a #tag with one here.'))}</div>
     <div class="field">{check('streaks', t('Streaks'), t('At the top of Settings, show how many days in a row you’ve read the word and prayed. Nothing ever reminds you.'))}</div>
     <div class="field">{check('worldMap', t('Count my prayers on the map'), t('After Amen, a map shows the countries where people prayed this week. Your prayers count by country only: never a city, a name or a word.'))}</div>

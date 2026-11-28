@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "Bibelbytar i søkjefeltet",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Les vidare frå det verset, kapittel etter kapittel, medan orda lyser opp, til du stoppar det.",
 "Listen: reads on from there until you stop it": "Lytt: les vidare derifrå til du stoppar det",
-"Brown": "Brun"
+"Brown": "Brun",
+"Show the Read along icon in the search bar": "Vis «Les med»-ikonet i søkjefeltet",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "«Les med»-ikonet i høgre ende les frå verset øvst på skjermen."
 }

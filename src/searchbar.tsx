@@ -12,10 +12,10 @@ import { parseRef, formatRef, Ref, spoken } from './lib/refs'
 import { plain } from './lib/text'
 import { call } from './searchClient'
 import type { PageResponse, PageVerse, SearchResponse } from './search.worker'
-import { go, inCircles, openCircles, openPrayer, readPath, SEARCH_EVENT, TONES, useApp } from './state'
+import { go, inCircles, openCircles, openPrayer, readHere, readPath, SEARCH_EVENT, TONES, useApp } from './state'
 import { circlesWithNews, useCircleNews } from './lib/circleNews'
 import { SYNC_URL } from './lib/sync'
-import { CircleIcon, CloseIcon } from './icons'
+import { CircleIcon, CloseIcon, ReadIcon } from './icons'
 import { VerseText, VersionPicker } from './ui'
 import type { Translation } from './lib/data'
 import { useHoldPick } from './hold'
@@ -50,8 +50,17 @@ function PrayButton() {
   )
 }
 
-/* Read along left the search bar (11-28): Listen on a verse's bar now reads
-   on until you stop it, so the bar stays uncrowded. */
+/** Read along at the field's end, only if ticked under Extras (11-28: off by
+ *  default; Listen on a verse reads on too). It reads on from the verse you
+ *  picked, or else the verse at the top of the screen. */
+function AlongButton() {
+  return (
+    <button type="button" class="sb-along" aria-label={t('Read along')} title={t('Read along')} onClick={readHere}>
+      <ReadIcon size={24} />
+    </button>
+  )
+}
+
 /** Circles: the people you read and pray with, one tap away beside 🙏.
  *  A dot when someone shared, replied or prayed with you since you last looked. */
 function CirclesButton() {
@@ -849,6 +858,7 @@ export function SearchBar({ here, mini, above }: {
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
           {!open && !mini && here && settings.versionPill && <VersionSwitch />}
+          {!open && !mini && here && settings.alongPill && <AlongButton />}
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}

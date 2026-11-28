@@ -96,6 +96,8 @@ function steps(): Step[] {
       after: [t('After a search, open it again to go back to your last result.'),
         // The Bible switcher pill, beside the place you're reading.
         ...(document.querySelector('.sb-version') ? [t('Tap the Bible’s name to switch to the one you read before. Hold it to choose another.')] : []),
+        // Read along, if ticked under Extras, sits at the field's right end.
+        ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.')] : []),
         // The bars slide away as you read on (on by default): say how they come back.
         ...((settings.hideBars ?? true) && (settings.sideways ?? AWAY_ALL).length ? [t('As you read on, the bars slide away. Scroll up a little to bring them back.')] : []),
         // With a keyboard, / opens it from anywhere.

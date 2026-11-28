@@ -1368,5 +1368,7 @@
 "Bible switcher in the search bar": "검색창의 성경 바꾸기",
 "Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "그 절부터 장에서 장으로, 단어가 밝게 빛나며 멈출 때까지 계속 읽어 줍니다.",
 "Listen: reads on from there until you stop it": "듣기: 거기서부터 멈출 때까지 읽어 줍니다",
-"Brown": "갈색"
+"Brown": "갈색",
+"Show the Read along icon in the search bar": "검색창에 ‘따라 읽기’ 아이콘 보이기",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "오른쪽 끝의 ‘따라 읽기’ 아이콘은 화면 맨 위 절부터 읽습니다."
 }

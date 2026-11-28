@@ -48,6 +48,8 @@ export interface Settings {
   /** a small Read along button just above 🙏 (off unless picked under Audio) */
   /** The Bible switcher pill in the search bar (11-28: a choice, off by default). */
   versionPill: boolean
+  /** Read along's icon in the search bar, joined to the Bible switcher when that's on (Extras; off by default). */
+  alongPill: boolean
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'
   /** how the page turns when you swipe to another chapter: over the next one, or side by side */
@@ -99,7 +101,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => (t.lang === lang || t.lang.split('-')[0] === lang) && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], hideBars: false, layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, versionPill: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', discs: 'quiet', noteReminders: true, streaks: true, worldMap: true, shareStreaks: [], circleOrder: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], hideBars: false, layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, versionPill: false, alongPill: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', discs: 'quiet', noteReminders: true, streaks: true, worldMap: true, shareStreaks: [], circleOrder: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -179,6 +181,8 @@ export const prayedNowFor = (item: string) => prayedNow?.item === item && Date.n
 export const ASK_PRAYED = 'plain-bible:ask-prayed'
 
 /** Open Settings (the sheet behind the button in the top right corner). */
+export const READ_HERE_EVENT = 'plain-bible:read-here'
+export const readHere = () => window.dispatchEvent(new Event(READ_HERE_EVENT))
 export const SETTINGS_EVENT = 'plain-bible:settings'
 let settingsAt: string | undefined
 /** With a page (say 'sync', Account), Settings open on it. */
