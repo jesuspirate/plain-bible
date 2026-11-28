@@ -89,6 +89,9 @@ function spotHere(): number {
 
 function markPray() {
   if (!document.querySelector('.reader article.chapter')) return
+  // Scrolling while you pray is only to read: the 🙏 stays on the verse the
+  // prayer is about.
+  if (document.documentElement.classList.contains('praying')) return
   const r = parseHash().path
   const v = spotHere()
   setPrayHere(r[0] === 'read' ? { book: r[2], chapter: +r[3], verse: v } : undefined)
