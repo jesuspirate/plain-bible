@@ -211,6 +211,10 @@ button.pray-btn.danger-quiet { background: var(--surface); border: 1.5px solid #
 :root[data-theme='dark'] .pray-tag.answered, :root[data-theme='dark'] .pray-act.answered, :root[data-theme='dark'] .pray-list strong.answered { color: #7fd39b; }
 @media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-tag.answered, :root[data-theme='system'] .pray-act.answered, :root[data-theme='system'] .pray-list strong.answered { color: #7fd39b; } }
 .pray-back { display: flex; align-items: center; gap: 8px; min-height: 50px; padding: 0 12px 0 8px; border: none; border-radius: 14px; background: var(--chip); color: var(--text); font: 18px var(--sans); text-align: left; }
+/* A topic's page: its name, and a round pencil to rename it. */
+.pray-topic-head { display: flex; align-items: center; gap: 8px; }
+.pray-topic-head .pray-back { flex: 1; min-width: 0; }
+.pray-rename { flex: none; width: 50px; height: 50px; border-radius: 50%; }
 .pray-edit { flex-basis: 100%; min-width: 0; max-width: 100%; display: flex; flex-direction: column; gap: 8px; padding-top: 4px; }
 .pray-edit .saved-find { flex: none; min-height: 50px; font-size: 17px; border-radius: 14px; }
 .pray-edit .pray-btn, .pray-edit .saved-find { box-sizing: border-box; }
