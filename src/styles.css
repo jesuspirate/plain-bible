@@ -340,7 +340,7 @@ main.with-bar { padding-bottom: 120px; }
    right end of the search field, before Read along. Its touch area fills
    the bar's height. */
 .sb-version {
-  all: unset; cursor: pointer; flex: none; position: relative; box-sizing: border-box; display: grid; place-items: center;
+  all: unset; cursor: pointer; flex: none; position: relative; box-sizing: border-box; display: block; text-align: center; line-height: 38px;
   min-width: 52px; max-width: 96px; height: 38px; padding: 0 12px; border-radius: 19px;
   background: color-mix(in srgb, var(--text) 9%, transparent); color: var(--text);
   font: 700 15px var(--sans); letter-spacing: .03em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
@@ -378,7 +378,9 @@ main.with-bar { padding-bottom: 120px; }
 @media (hover: hover) { .sb-along:hover { background: color-mix(in srgb, var(--text) 14%, transparent); } }
 .sb-along:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
 /* Settings → Bible: the switcher's tick shows a tiny version of the pill. */
-.set-pill { display: grid; place-items: center; height: 18px; padding: 0 5px; border-radius: 9px; background: color-mix(in srgb, var(--text) 10%, transparent); font: 700 10px var(--sans); letter-spacing: .02em; max-width: 34px; overflow: hidden; white-space: nowrap; }
+/* A long name (FreOltramare1874) ends in "…" here and on the pill itself,
+   instead of being cut off mid-letter: an ellipsis needs a block, not a grid. */
+.set-pill { display: block; box-sizing: border-box; height: 18px; line-height: 18px; text-align: center; padding: 0 5px; border-radius: 9px; background: color-mix(in srgb, var(--text) 10%, transparent); font: 700 10px var(--sans); letter-spacing: .02em; max-width: 34px; overflow: hidden; white-space: nowrap; text-overflow: ellipsis; }
 .sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
 /* Buttons you can press and hold (hold.tsx): no text selection, no callout, no scrolling away. */
