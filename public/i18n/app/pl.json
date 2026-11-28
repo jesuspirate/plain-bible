@@ -1392,7 +1392,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Używaj aplikacji jak zwykle, a potem dotknij Zatrzymaj. Każdy krok jest zapisywany słowami, nic nie jest filmowane.",
 "Steps recorded: {n} ✓": "Nagrane kroki: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Wysyłane razem: wersja aplikacji, rodzaj urządzenia, jego język, ekran, na którym byłeś, nagrane kroki i każdy błąd zauważony przez aplikację. Nic więcej.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Czytaj z podświetleniem” na jego prawym końcu czyta od wersetu na górze ekranu.",
 "New here? Start here": "Jesteś tu nowy? Zacznij tutaj",
 "Or use your email": "Albo użyj e-maila",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bezpłatne i opcjonalne. Zaloguj się, aby dołączyć do Kręgów i mieć zakreślenia, notatki, ustawienia i modlitwy na wszystkich urządzeniach.",
@@ -1406,14 +1405,11 @@
 "Free. Needed for Circles": "Bezpłatne. Potrzebne do Kręgów",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Potrzebują bezpłatnego konta: klucza dostępu lub kodu z e-maila, w Ustawienia → Konto. To chwila.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kręgi wymagają darmowego konta. Najprościej z kluczem dostępu: Face ID, odcisk palca lub blokada ekranu. Bez hasła.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "W pasku wyszukiwania, na prawym końcu: czyta od góry ekranu, a słowa się podświetlają.",
 "While it reads, tap any verse to read on from there.": "Podczas czytania stuknij dowolny werset, aby czytać dalej od niego.",
-"Show the Read along icon in the search bar": "Pokaż ikonę „Czytaj z podświetleniem” w pasku wyszukiwania",
 "Turning pages": "Przewracanie stron",
 "Extras": "Dodatki",
 "Other ways to open search": "Inne sposoby otwierania wyszukiwania",
 "You can also press / to open it.": "Możesz je też otworzyć klawiszem /.",
-"Listen: hear the verses you picked": "Słuchaj: posłuchaj wybranych wersetów",
 "Getting your prayers…": "Pobieram twoje modlitwy…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitwa z twojego konta nie jest jeszcze na tym urządzeniu, więc nie ma jej w pliku .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1477,7 +1473,12 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Przewiń trochę w górę, by wróciły. Przy telefonie poziomo chowają się zawsze.",
 "Prayer buttons": "Przyciski modlitwy",
 "Quiet": "Cichy",
-"All brown": "Wszystko brązowe",
 "Honey": "Miodowy",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Jak wyglądają 🙏 i Kręgi na dole ekranu, w motywach Jasny i Sepia."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Jak wyglądają 🙏 i Kręgi na dole ekranu, w motywach Jasny i Sepia.",
+"Bible switcher in the search bar": "Przełącznik Biblii na pasku wyszukiwania",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Czyta od tego wersetu dalej, rozdział po rozdziale, słowa się podświetlają, dopóki nie zatrzymasz.",
+"Listen: reads on from there until you stop it": "Słuchaj: czyta stamtąd dalej, dopóki nie zatrzymasz",
+"Brown": "Brązowy",
+"Show the Read along icon in the search bar": "Pokaż ikonę „Czytaj z podświetleniem” w pasku wyszukiwania",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Czytaj z podświetleniem” na jego prawym końcu czyta od wersetu na górze ekranu."
 }

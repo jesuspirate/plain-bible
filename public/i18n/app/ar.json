@@ -1427,7 +1427,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "استخدم التطبيق كالمعتاد، ثم اضغط «إيقاف». تُكتب كل خطوة كتابةً، ولا تُصوَّر.",
 "Steps recorded: {n} ✓": "الخطوات المسجلة: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "يُرسل معه: إصدار التطبيق ونوع الجهاز ولغته والشاشة التي كنت عليها والخطوات التي سجلتها وأي خطأ لاحظه التطبيق. لا شيء غير ذلك.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "أيقونة «القراءة مع المتابعة» في طرفه تقرأ من الآية في أعلى الشاشة.",
 "New here? Start here": "جديد هنا؟ ابدأ من هنا",
 "Or use your email": "أو استخدم بريدك الإلكتروني",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "مجاني واختياري. سجّل الدخول لتنضم إلى الدوائر وتحتفظ بتظليلاتك وملاحظاتك وإعداداتك وصلواتك على كل أجهزتك.",
@@ -1441,14 +1440,11 @@
 "Free. Needed for Circles": "مجاني. مطلوب للدوائر",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "تحتاج إلى حساب مجاني: مفتاح مرور أو رمز بالبريد الإلكتروني، في الإعدادات ← الحساب. لا يستغرق سوى لحظة.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "تحتاج الدوائر إلى حساب مجاني. الأسهل بمفتاح مرور: Face ID أو بصمة الإصبع أو قفل الشاشة. بلا كلمة سر.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "في شريط البحث، عند طرفه: يقرأ من أعلى الشاشة بينما تضيء الكلمات.",
 "While it reads, tap any verse to read on from there.": "أثناء القراءة، اضغط أي آية ليتابع القراءة من هناك.",
-"Show the Read along icon in the search bar": "إظهار أيقونة «القراءة مع المتابعة» في شريط البحث",
 "Turning pages": "تقليب الصفحات",
 "Extras": "إضافات",
 "Other ways to open search": "طرق أخرى لفتح البحث",
 "You can also press / to open it.": "يمكنك أيضًا الضغط على / لفتحه.",
-"Listen: hear the verses you picked": "استماع: اسمع الآيات التي اخترتها",
 "Getting your prayers…": "جارٍ جلب صلواتك…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "صلاة واحدة في حسابك ليست على هذا الجهاز بعد، لذلك ليست في ملف ‎.zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1514,7 +1510,12 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "مرّر للأعلى قليلًا لإعادتها. عندما يكون الهاتف أفقيًا، تختفي دائمًا.",
 "Prayer buttons": "أزرار الصلاة",
 "Quiet": "هادئ",
-"All brown": "بنّي للكل",
 "Honey": "عسلي",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "شكل 🙏 والدوائر أسفل الشاشة، في فاتح وبنّي داكن."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "شكل 🙏 والدوائر أسفل الشاشة، في فاتح وبنّي داكن.",
+"Bible switcher in the search bar": "مبدّل الكتاب المقدس في شريط البحث",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "يقرأ من تلك الآية، أصحاحًا بعد أصحاح، والكلمات تضيء، حتى توقفه.",
+"Listen: reads on from there until you stop it": "استمع: يقرأ من هناك حتى توقفه",
+"Brown": "بنّي",
+"Show the Read along icon in the search bar": "إظهار أيقونة «القراءة مع المتابعة» في شريط البحث",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "أيقونة «القراءة مع المتابعة» في طرفه تقرأ من الآية في أعلى الشاشة."
 }

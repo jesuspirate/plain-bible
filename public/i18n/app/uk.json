@@ -1392,7 +1392,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Користуйтеся застосунком як завжди, потім натисніть «Зупинити». Кожен крок записується словами, нічого не знімається на відео.",
 "Steps recorded: {n} ✓": "Записано кроків: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Разом надсилається: версія застосунку, тип пристрою, його мова, екран, на якому ви були, записані кроки та будь-яка помилка, яку помітив застосунок. Більше нічого.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Читання з підсвічуванням» біля його правого краю читає з вірша вгорі екрана.",
 "New here? Start here": "Ви тут уперше? Почніть тут",
 "Or use your email": "Або увійти через ел. пошту",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Безкоштовно й за бажанням. Увійдіть, щоб приєднуватися до Кіл і мати виділення, нотатки, параметри й молитви на всіх своїх пристроях.",
@@ -1406,14 +1405,11 @@
 "Free. Needed for Circles": "Безкоштовно. Потрібно для Кіл",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Для них потрібен безкоштовний обліковий запис: ключ доступу або код ел. поштою, у Параметри → Обліковий запис. Це хвилинна справа.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Для кіл потрібен безкоштовний обліковий запис. Найпростіше з ключем доступу: Face ID, відбиток пальця або блокування екрана. Без пароля.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "У рядку пошуку, біля правого краю: читає з верху екрана, а слова підсвічуються.",
 "While it reads, tap any verse to read on from there.": "Під час читання торкніться будь-якого вірша, щоб читати далі з нього.",
-"Show the Read along icon in the search bar": "Показувати значок «Читання з підсвічуванням» у рядку пошуку",
 "Turning pages": "Гортання сторінок",
 "Extras": "Додатково",
 "Other ways to open search": "Інші способи відкрити пошук",
 "You can also press / to open it.": "Його також можна відкрити клавішею /.",
-"Listen: hear the verses you picked": "Слухати: прослухати вибрані вірші",
 "Getting your prayers…": "Завантажуємо ваші молитви…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Однієї молитви з вашого облікового запису ще немає на цьому пристрої, тому її немає в .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1477,7 +1473,12 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Прокрутіть трохи вгору, щоб повернути їх. Коли телефон лежить боком, вони ховаються завжди.",
 "Prayer buttons": "Кнопки молитви",
 "Quiet": "Спокійно",
-"All brown": "Усе коричневе",
 "Honey": "Мед",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Як виглядають 🙏 і Кола унизу екрана в темах «Світла» і «Сепія»."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Як виглядають 🙏 і Кола унизу екрана в темах «Світла» і «Сепія».",
+"Bible switcher in the search bar": "Перемикач Біблії в рядку пошуку",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Читає з цього вірша далі, розділ за розділом, слова підсвічуються, доки ви не зупините.",
+"Listen: reads on from there until you stop it": "Слухати: читає звідти далі, доки ви не зупините",
+"Brown": "Коричневий",
+"Show the Read along icon in the search bar": "Показувати значок «Читання з підсвічуванням» у рядку пошуку",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Читання з підсвічуванням» біля його правого краю читає з вірша вгорі екрана."
 }

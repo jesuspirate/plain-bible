@@ -1371,7 +1371,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Lietojiet lietotni kā parasti, tad pieskarieties Apturēt. Katrs solis tiek pierakstīts vārdos, nekas netiek filmēts.",
 "Steps recorded: {n} ✓": "Ierakstītie soļi: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Kopā tiek nosūtīts: lietotnes versija, ierīces veids, tās valoda, ekrāns, kurā bijāt, ierakstītie soļi un jebkura kļūda, ko lietotne pamanīja. Nekas cits.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lasīt līdzi” tās labajā galā lasa no panta ekrāna augšā.",
 "New here? Start here": "Šeit pirmo reizi? Sāciet šeit",
 "Or use your email": "Vai izmantojiet e-pastu",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Bez maksas un pēc izvēles. Pierakstieties, lai pievienotos Lokiem un turētu izcēlumus, piezīmes, iestatījumus un lūgšanas visās savās ierīcēs.",
@@ -1385,14 +1384,11 @@
 "Free. Needed for Circles": "Bez maksas. Vajadzīgs Lokiem",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Tiem vajag bezmaksas kontu: piekļuves atslēgu vai kodu pa e-pastu, sadaļā Iestatījumi → Konts. Tas aizņem mirkli.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Lokiem vajag bezmaksas kontu. Visvieglāk ar piekļuves atslēgu: Face ID, pirksta nospiedums vai ekrāna bloķēšana. Bez paroles.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Meklēšanas joslā, tās labajā galā: lasa no ekrāna augšas, kamēr vārdi iedegas.",
 "While it reads, tap any verse to read on from there.": "Kamēr tā lasa, pieskarieties jebkuram pantam, lai turpinātu no tā.",
-"Show the Read along icon in the search bar": "Rādīt ikonu “Lasīt līdzi” meklēšanas joslā",
 "Turning pages": "Lapu šķiršana",
 "Extras": "Papildus",
 "Other ways to open search": "Citi veidi, kā atvērt meklēšanu",
 "You can also press / to open it.": "To var atvērt arī ar taustiņu /.",
-"Listen: hear the verses you picked": "Klausīties: dzirdēt izvēlētos pantus",
 "Getting your prayers…": "Ielādē jūsu lūgšanas…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Viena jūsu konta lūgšana vēl nav šajā ierīcē, tāpēc tā nav .zip failā.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1455,7 +1451,12 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Nedaudz ritiniet uz augšu, lai tās atgrieztos. Ar tālruni horizontāli tās vienmēr paslēpjas.",
 "Prayer buttons": "Lūgšanas pogas",
 "Quiet": "Kluss",
-"All brown": "Viss brūns",
 "Honey": "Medus",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Kā 🙏 un Loki izskatās ekrāna apakšā, režīmos Gaišs un Sēpija."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Kā 🙏 un Loki izskatās ekrāna apakšā, režīmos Gaišs un Sēpija.",
+"Bible switcher in the search bar": "Bībeles pārslēdzējs meklēšanas joslā",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Lasa no tā panta tālāk, nodaļu pēc nodaļas, vārdiem iedegoties, līdz to apturat.",
+"Listen: reads on from there until you stop it": "Klausīties: lasa no turienes tālāk, līdz to apturat",
+"Brown": "Brūns",
+"Show the Read along icon in the search bar": "Rādīt ikonu “Lasīt līdzi” meklēšanas joslā",
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lasīt līdzi” tās labajā galā lasa no panta ekrāna augšā."
 }

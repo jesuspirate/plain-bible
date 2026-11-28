@@ -334,8 +334,6 @@ main.with-bar { padding-bottom: 120px; }
    border that 🙏 doesn't have: keep it as it is at rest. */
 @media (hover: hover) { .sb-circles:hover { border-color: var(--line); } }
 .sb-circles:focus-visible, .sb-pray:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
-/* Read along, if ticked under Audio: a plain icon at the right end of the
-   search field, like the microphone when it's open. 🙏 keeps its corner. */
 /* The Bible switcher: the Bible you read, a soft round-ended pill at the
    right end of the search field, before Read along. Its touch area fills
    the bar's height. */
@@ -351,10 +349,13 @@ main.with-bar { padding-bottom: 120px; }
 @media (hover: hover) { .sb-version:hover { background: color-mix(in srgb, var(--text) 14%, transparent); } }
 .sb-version.on { color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }
 .sb-version:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
+.sb-version { color: color-mix(in srgb, var(--text) 78%, transparent); }
 /* Read along wears the same quiet pill as the Bible's name, so the two sit
    together at the field's end like a pair, and the bar stays muted: 🙏 and
    Circles are what catch the eye. */
-.sb-version, .sb-along { color: color-mix(in srgb, var(--text) 78%, transparent); }
+/* Read along in the search bar, a tick under Settings → Extras (11-28,
+   off by default), for people who listen all the time. */
+.sb-along { color: color-mix(in srgb, var(--text) 78%, transparent); }
 /* Together they make one capsule (11-28, Jet's idea): the Bible's name and
    Read along joined, a hairline between them, so they read as part of the
    search bar and apart from Circles and 🙏, yet still two buttons. */
@@ -374,6 +375,8 @@ main.with-bar { padding-bottom: 120px; }
 .sb-along:active { transform: scale(.94); }
 @media (hover: hover) { .sb-along:hover { background: color-mix(in srgb, var(--text) 14%, transparent); } }
 .sb-along:focus-visible { outline: 3px solid color-mix(in srgb, var(--accent) 45%, transparent); outline-offset: 2px; }
+/* Settings → Bible: the switcher's tick shows a tiny version of the pill. */
+.set-pill { display: grid; place-items: center; height: 18px; padding: 0 5px; border-radius: 9px; background: color-mix(in srgb, var(--text) 10%, transparent); font: 700 10px var(--sans); letter-spacing: .02em; max-width: 34px; overflow: hidden; white-space: nowrap; }
 .sb-news-dot { position: absolute; top: 1px; right: 1px; width: 14px; height: 14px; border-radius: 50%; background: var(--accent); box-shadow: 0 0 0 2.5px var(--bg); pointer-events: none; }
 /* The skin tones, held up above 🙏 like the iPhone emoji keyboard. Solid, no blur. */
 /* Buttons you can press and hold (hold.tsx): no text selection, no callout, no scrolling away. */
@@ -868,49 +871,39 @@ html.sb-floor .sb.sb-open { padding-bottom: max(10px, env(safe-area-inset-bottom
   }
 }
 
-/* The pair at the end of the bar (11-27): in light and sepia, 🙏 and
-   Circles sit on warm dark brown discs (the colour of the words), the
-   inverse of dark mode, so the emoji and the orange Circles glow and win
-   over the page while the search bar stays muted. 🙏 keeps its gold rim
-   and glow, so it still leads. Dark mode keeps its own 🙏, and Circles there
-   sits on a light stone disc. Solid, no blur. */
-.sb .sb-pray, .sb .sb-circles {
+/* The pair at the end of the bar. By default 🙏 and Circles keep their
+   glass look (11-28: Jet doesn't want to impose his taste on everyone).
+   Settings → Extras → Prayer buttons offers his discs: "Brown", warm dark
+   brown discs (the colour of the words) with a thick gold ring, only 🙏
+   glowing, and "Honey", the same on a lighter warm disc. Same disc for
+   every skin tone. In Dark, both choices keep the cream 🙏 and put Circles
+   on a light stone disc. Solid, no blur. */
+.sb .sb-pray.disc, .sb .sb-circles.disc {
   background: radial-gradient(circle at 50% 38%, #5a4330 0%, #2e2116 100%); border: none;
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
-.sb .sb-pray::after, .sb .sb-circles::after { display: none; }
-/* A thick gold ring round both (11-28); only 🙏 glows, because prayer comes
-   before joining a circle. */
-.sb .sb-pray { box-shadow: 0 0 0 3px rgba(240,180,70,.95), 0 0 22px 7px rgba(245,190,80,.7); }
-.sb .sb-circles { color: #e8a55a; box-shadow: 0 0 0 3px rgba(240,180,70,.95), 0 4px 12px rgba(0,0,0,.18); }
-@media (hover: hover) { .sb .sb-circles:hover { border-color: transparent; } }
-/* 🙏 in the two darkest skin tones: a light stone disc, so the hands stand
-   out, and Circles takes the same disc so the pair still matches. */
-.sb .sb-pray.deep, .sb .sb-circles.deep { background: radial-gradient(circle at 50% 40%, #f3ede1 0%, #e2d8c4 60%, #d0c2a6 100%); }
-.sb .sb-circles.deep { color: var(--accent); }
-/* Settings → Extras → Prayer buttons: "All brown" keeps the brown disc for
-   every tone; "Honey" is a lighter warm disc for all. Before the dark rules,
-   so Dark keeps its own look. */
-.sb .sb-pray.deep.disc-brown, .sb .sb-circles.deep.disc-brown { background: radial-gradient(circle at 50% 38%, #5a4330 0%, #2e2116 100%); }
-.sb .sb-circles.deep.disc-brown { color: #e8a55a; }
+.sb .sb-pray.disc::after, .sb .sb-circles.disc::after { display: none; }
+.sb .sb-pray.disc { box-shadow: 0 0 0 3px rgba(240,180,70,.95), 0 0 22px 7px rgba(245,190,80,.7); }
+.sb .sb-circles.disc { color: #e8a55a; box-shadow: 0 0 0 3px rgba(240,180,70,.95), 0 4px 12px rgba(0,0,0,.18); }
+@media (hover: hover) { .sb .sb-circles.disc:hover { border-color: transparent; } }
 .sb .sb-pray.disc-honey, .sb .sb-circles.disc-honey { background: radial-gradient(circle at 50% 38%, #e2c49a 0%, #c49a68 100%); }
 .sb .sb-circles.disc-honey { color: #5a3a1c; }
-:root[data-theme='dark'] .sb .sb-pray {
+:root[data-theme='dark'] .sb .sb-pray.disc {
   background: radial-gradient(circle at 50% 40%, rgba(255,253,246,.84) 0%, rgba(255,241,204,.8) 55%, rgba(255,217,138,.88) 100%);
   -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
   box-shadow: 0 0 14px 3px rgba(245, 190, 95, .5);
 }
-:root[data-theme='dark'] .sb .sb-circles {
+:root[data-theme='dark'] .sb .sb-circles.disc {
   background: radial-gradient(circle at 50% 40%, #ece6da 0%, #ddd3c0 60%, #cbbda2 100%); color: var(--accent);
   box-shadow: 0 0 0 1.5px rgba(200,140,60,.55), 0 6px 16px rgba(0,0,0,.16);
 }
 @media (prefers-color-scheme: dark) {
-  :root[data-theme='system'] .sb .sb-pray {
+  :root[data-theme='system'] .sb .sb-pray.disc {
     background: radial-gradient(circle at 50% 40%, rgba(255,253,246,.84) 0%, rgba(255,241,204,.8) 55%, rgba(255,217,138,.88) 100%);
     -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
     box-shadow: 0 0 14px 3px rgba(245, 190, 95, .5);
   }
-  :root[data-theme='system'] .sb .sb-circles {
+  :root[data-theme='system'] .sb .sb-circles.disc {
     background: radial-gradient(circle at 50% 40%, #ece6da 0%, #ddd3c0 60%, #cbbda2 100%); color: var(--accent);
     box-shadow: 0 0 0 1.5px rgba(200,140,60,.55), 0 6px 16px rgba(0,0,0,.16);
   }

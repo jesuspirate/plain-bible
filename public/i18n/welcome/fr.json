@@ -100,7 +100,7 @@
 "circlesAsk": "Demandez à votre cercle de prier pour vous, et voyez combien ont déjà prié.",
 "circlesTicks": "<li>Jamais obligatoire. Rien ne quitte votre téléphone tant que vous ne touchez pas Partager.</li><li>Chaque cercle a sa propre clé. Seuls ses membres peuvent ouvrir ce qu’il contient ; nous non plus, nous ne le pouvons pas.</li><li>Les cercles demandent une connexion gratuite, avec une clé d’accès ou un code envoyé par e-mail.</li>",
 "listenH": "Écouter",
-"listenP": "Touchez un verset, puis Écouter. Ou touchez Lire en suivant dans la barre de recherche : chaque mot s’allume pendant la lecture. De vrais lecteurs lisent la BSB, la King James et la Louis Segond. Pour la voiture, la cuisine, ou les yeux fatigués.",
+"listenP": "Touchez un verset, puis Écouter. La lecture continue de là jusqu’à ce que vous l’arrêtiez, et chaque mot s’allume pendant la lecture. De vrais lecteurs lisent la BSB, la King James et la Louis Segond. Pour la voiture, la cuisine, ou les yeux fatigués.",
 "orMac": "Sur Windows ou Linux :",
 "macStore": "Sur Mac :",
 "msStore": "{svg}<span><small>Télécharger dans le</small> Microsoft Store</span>"

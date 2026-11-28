@@ -373,7 +373,7 @@ function verseWords(n: Now, verse: number) {
 // One player for the app. It holds a chapter's recording and, once they've
 // come, the times of its words.
 let player: HTMLAudioElement | undefined
-let held: { rec: Recording; url: string; times?: ChapterTimes; from?: number; tries?: number } | undefined
+let held: { rec: Recording; url: string; times?: ChapterTimes; from?: number; tries?: number; ends?: number } | undefined
 let keep = false // paused in the middle of a recording: play goes on from that very moment
 let frame = 0
 // Where the recording was the last time the highlight followed it, and when.
@@ -382,13 +382,15 @@ const followedNow = (a: HTMLAudioElement) => { followed = { t: a.currentTime, at
 // Once caught out that way, the player's time is believed over its flags
 // until the reading is next started.
 let overrule = false
+// When the reading was last started or moved to a verse.
+let moved = 0
 
 function audio(): HTMLAudioElement {
   if (player) return player
   const a = player = new Audio()
   a.preload = 'auto'
   a.addEventListener('timeupdate', track) // also keeps the verse right while the screen is off
-  a.addEventListener('ended', () => { if (now?.playing && held) chapterDone() })
+  a.addEventListener('ended', () => { if (now?.playing && held && !endedEarly(a)) chapterDone() })
   // Stopped by the phone itself (a call, another app's sound): wait, paused, where it was.
   a.addEventListener('pause', () => { if (a.paused && !a.ended && now?.playing && held && recorded()) pauseListening() })
   // …and started again by the phone itself once the interruption is over:
@@ -396,17 +398,34 @@ function audio(): HTMLAudioElement {
   // carrying on alone while the app thinks it's paused.
   a.addEventListener('playing', () => {
     if (!now || now.playing || !held?.times || !recorded() || a.muted) return
-    noteError('read along: the player started again by itself')
-    run++; keep = false
-    now = { ...now, playing: true, trouble: undefined }
-    emit()
-    followedNow(a); following()
+    playsAlone('the player started again by itself')
   })
   a.addEventListener('error', () => { if (now?.playing && held) lost(run) })
   // A steady beat besides: the page's own timers can stop calling (seen on
   // iPhone), and then the highlight stood still while the voice went on.
-  setInterval(() => { if (now?.playing && held && !a.paused) track() }, 400)
+  // And the other way round (11-28, seen on an iPhone after Listen on a
+  // verse): the voice heard, the bar on Play and the highlight standing
+  // still, because the app took itself for paused while the player went on
+  // (it was still starting, muted, when it was told to wait). Two beats of
+  // that in a row and the reading follows the voice again.
+  let alone = 0
+  setInterval(() => {
+    if (now?.playing && held && !a.paused) { alone = 0; return track() }
+    alone = now && !now.playing && held?.times && recorded() && !a.paused && !a.muted && !a.ended ? alone + 1 : 0
+    if (alone >= 2) { alone = 0; playsAlone('the voice went on while paused') }
+  }, 400)
   return a
+}
+
+/** The player is playing while the reading says paused: follow it again. */
+function playsAlone(why: string) {
+  const a = player
+  if (!now || !a) return
+  noteError('read along: ' + why)
+  run++; keep = false
+  now = { ...now, playing: true, trouble: undefined }
+  emit()
+  followedNow(a); following()
 }
 
 /** Follow the recording on every frame while it plays. */
@@ -460,11 +479,27 @@ function hear(my: number, flow = false) {
   // then takes the sound away and stops the app before the next chapter can
   // start, so it never did, and the bar said Pause over nothing.
   const opening = flow ? timesNow(rec, n.book)?.[n.chapter - 1]?.opening : undefined
+  const known = !resume && !flow ? timesNow(rec, n.book)?.[n.chapter - 1] : undefined
+  let placed = false
   if (!resume) {
     held = { rec, url }
     if (flow) {
       a.src = opening ? `${url}#t=${opening}` : url
       a.muted = false
+    } else if (a.src === url && a.readyState >= 1 && known) {
+      // The same chapter, its times at hand (another verse tapped, or Listen
+      // after a pause): moved to the verse BEFORE it's asked to play. Moved
+      // while it plays or starts, an iPhone can keep playing from where it
+      // was while saying it's at the verse, so the words lit up and the
+      // voice part ways (or it falls back to the top of the chapter).
+      held = { rec, url, times: known }
+      const start = startOf(known, n)
+      if (start) {
+        if (!a.paused) a.pause()
+        a.currentTime = start.at
+        a.muted = false
+        placed = true
+      } else a.muted = true
     } else {
       if (a.src !== url) a.src = url
       // Start inside the tap (iPhones ask for that), silently, until the verse's place is known.
@@ -478,26 +513,22 @@ function hear(my: number, flow = false) {
     if (e?.name === 'NotAllowedError') pauseListening(t('Tap play to start.'))
     else if (e?.name !== 'AbortError') lost(my)
   })
-  followedNow(a); overrule = false
+  followedNow(a); overrule = false; moved = performance.now()
   cancelAnimationFrame(frame)
   if (resume) return following()
   loadTimes(rec, n.book).then(all => {
     if (my !== run || held?.url !== url || !now) return
     const times = all?.[n.chapter - 1]
     if (!times) return lost(my)
-    // Listen: the first of the verses picked; otherwise the verse asked for.
-    const verse = n.only ? n.only.find(x => x >= n.verse && times[x - 1]) : nextTimed(times, n.verse)
-    if (verse === undefined) return chapterDone()
-    held = { rec, url, times }
-    // From the top of a chapter, the recording's own announcement of it ("John
-    // chapter 3") is heard first, as when one chapter runs into the next, but
-    // not what some recordings say before that (the name of the Bible).
-    const at = verse === nextTimed(times, 1) && !n.only ? times.opening ?? 0 : jump(verse)
+    const from = held?.from
+    held = { rec, url, times, from }
+    const start = placed ? { verse: nextTimedOrPicked(times, n), at: 0 } : startOf(times, n)
+    if (!start || start.verse === undefined) return chapterDone()
+    const { verse, at } = start
     const go = () => { if (my === run && held?.url === url) { a.currentTime = at; a.muted = false } }
     // Already playing from the top (on from the chapter before): only past
     // what's said before the chapter's name, if the times came late.
-    const placed = flow && (opening !== undefined || !times.opening)
-    if (placed) { /* playing from the right place already */ }
+    if (placed || (flow && (opening !== undefined || !times.opening))) { /* playing from the right place already */ }
     else if (a.readyState >= 1) go(); else a.addEventListener('loadedmetadata', go, { once: true })
     // The last chapter of a book: the next book's times are fetched now,
     // while the app is surely awake, so the next chapter needs no wait.
@@ -513,11 +544,27 @@ function hear(my: number, flow = false) {
   })
 }
 
+/** Listen: the first of the verses picked; otherwise the verse asked for. */
+function nextTimedOrPicked(times: ChapterTimes, n: Now): number | undefined {
+  return n.only ? n.only.find(x => x >= n.verse && times[x - 1]) : nextTimed(times, n.verse)
+}
+
+/** The verse to start at and where the player goes for it. From the top of a
+ * chapter, the recording's own announcement of it ("John chapter 3") is heard
+ * first, as when one chapter runs into the next, but not what some recordings
+ * say before that (the name of the Bible). Needs `held.times` set. */
+function startOf(times: ChapterTimes, n: Now): { verse: number; at: number } | undefined {
+  const verse = nextTimedOrPicked(times, n)
+  if (verse === undefined) return
+  return { verse, at: verse === nextTimed(times, 1) && !n.only ? times.opening ?? 0 : jump(verse) }
+}
+
 /** Where to put the player for a verse: a breath before its first word. Until
  * that word, the tail of the verse before isn't taken for where we are. */
 function jump(verse: number): number {
   const start = held!.times![verse - 1]!.starts[0]
   held!.from = start
+  moved = performance.now()
   return Math.max(0, start - 0.08)
 }
 
@@ -568,6 +615,24 @@ function track() {
   if (starts.length !== cur.spans.length) return
   const gap = at.word + 1 < starts.length ? (starts[at.word + 1] - starts[at.word]) * 1000 : Infinity
   showWord(at.word, Math.round(Math.min(gap, sweep(cur.spans[at.word], 1, true) * 1.5) / a.playbackRate))
+}
+
+/** The player said the chapter was over moments after it was started or
+ * moved to a verse: before the verse's place was known, or after a jump past
+ * where the phone thinks the recording ends. Then it's played again from that
+ * verse rather than reading the next chapter from the top. Twice at most, so
+ * a real end always goes on. */
+function endedEarly(a: HTMLAudioElement): boolean {
+  const h = held, n = now
+  if (!h || !n || (h.ends ?? 0) >= 2) return false
+  const t = h.times
+  if (t && (performance.now() - moved > 4000 || n.verse >= t.reduce((m, v, i) => (v ? i + 1 : m), 0))) return false
+  h.ends = (h.ends ?? 0) + 1
+  noteError(`read along: the player ended early (at ${a.currentTime.toFixed(1)}s, verse ${n.verse}${t ? '' : ', no times yet'})`)
+  if (t?.[n.verse - 1]) a.currentTime = jump(n.verse)
+  followedNow(a)
+  a.play()?.catch(() => { /* the next tap on play carries on */ })
+  return true
 }
 
 /** The chapter's recording ran out: on into the next chapter. */

@@ -5,7 +5,7 @@
 // A ✓ ends it, and a small "More" opens the full tour (tour.tsx) for readers.
 import { useEffect, useLayoutEffect, useState } from 'preact/hooks'
 import { t } from './i18n'
-import { CheckIcon, CircleIcon, CloseIcon, ReadIcon } from './icons'
+import { CheckIcon, CircleIcon, CloseIcon } from './icons'
 import { loadSettings, markTourSeen as markSeen } from './state'
 import { Gesture, GESTURE_MS, stillMotion } from './gesture'
 import { useLeave } from './motion'
@@ -15,7 +15,6 @@ type Box = { top: number; left: number; width: number; height: number }
 
 /** The bottom bar's buttons the habits are about, in their order, as shown. */
 export const STOPS = [
-  { sel: '.sb-along', label: 'Read along', icon: () => <ReadIcon size={34} /> },
   { sel: '.sb-pray', label: 'Pray', icon: () => <span class="hb-emoji">{'🙏' + loadSettings().prayTone}</span> },
   { sel: '.sb-circles', label: 'Circles', icon: () => <CircleIcon size={38} /> },
 ]

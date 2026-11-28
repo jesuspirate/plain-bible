@@ -16,7 +16,7 @@ import { LexiconSheet, Sheet, VerseText } from './ui'
 import { DefinePill, DefineSheet, dictLangFor, useSelectedWord } from './define'
 import { toStandard } from './lib/versification'
 import { useRecording } from './lib/recordMode'
-import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ShareIcon, SpeakerIcon, TurnIcon, WhatsAppIcon, XIcon } from './icons'
+import { BookmarkIcon, CircleIcon, CloseIcon, CompareIcon, CopyIcon, FacebookIcon, LinkIcon, NoteIcon, ReadIcon, ShareIcon, SpeakerIcon, TurnIcon, WhatsAppIcon, XIcon } from './icons'
 import { canSharePicture, drawPicture, pictureName, sheetHasApps } from './lib/versePicture'
 import { SYNC_URL } from './lib/sync'
 import { cardLink, facebookUrl, SHARE_ORIGIN, whatsappUrl, xUrl } from './lib/shareTo'
@@ -323,15 +323,14 @@ export function Reader({ route }: { route: Route }) {
         if (r.top >= from && r.bottom <= to) { first = el; break }
       }
       if (!first) return
-      // Read along first, at the search field's end, then a verse for Listen.
-      const along = document.querySelector('.sb-along')
-      showTapHints([...(along ? [{ el: along, label: t('Read along') }] : []), { el: first, label: t('Tap a verse'), times: 3 }])
+      // A verse, then Listen on its bar.
+      showTapHints([{ el: first, label: t('Tap a verse'), times: 3 }])
       glowAudioUntil = Date.now() + 60_000
     }
     addEventListener(VERSE_BAR_EVENT, on)
     return () => removeEventListener(VERSE_BAR_EVENT, on)
   }, [])
-  // The Read along button above 🙏: from the verse you picked, else the verse
+  // Read along in the search bar (a tick under Extras): from the verse you picked, else the verse
   // a search or link landed on while it's still in view, else the verse the
   // faint 🙏 is on (see verseHere).
   const latest = useRef({ selected, target, version, book, chapter, bibles })
@@ -1663,9 +1662,15 @@ function SelectionBar({ book, chapter, verses, versions, bibles, onClose, onNote
               <BookmarkIcon size={22} class="bm-icon" filled={allBookmarked} /><span>{allBookmarked ? t('Saved') : t('Bookmark')}</span>
             </button>
             <button class={hasNote ? 'on' : ''} onClick={() => onNote(verses)}><NoteIcon size={22} /><span>{t('Note')}</span></button>
-            {/* Listen: just these verses, then it stops. (Read along, in the search bar, goes on.) */}
-            {canHear(version, spot.lang) && !settings.readSilent && !aloud && <button ref={listenBtn} onClick={() => { startListening({ ...spot, only: [...verses].sort((a, b) => a - b) }, bibles[version]); onClose() }}>
-              <SpeakerIcon size={22} /><span>{t('Listen')}</span></button>}
+            {/* Listen: from the first verse picked, it reads on (chapter after
+                chapter) until you stop it, the words lighting up (11-28: Read
+                along moved here from the search bar). With no voice for this
+                Bible, or "No voice" ticked, it's Read along: the highlight
+                moves through the words by itself. */}
+            {!aloud && <button ref={listenBtn} onClick={() => { startListening({ ...spot, verse: Math.min(...verses) }, bibles[version]); onClose() }}>
+              {canHear(version, spot.lang) && !settings.readSilent
+                ? <><SpeakerIcon size={22} /><span>{t('Listen')}</span></>
+                : <><ReadIcon size={22} /><span>{t('Read along')}</span></>}</button>}
             <button onClick={() => copy(quote)}><CopyIcon size={22} /><span>{t('Copy')}</span></button>
             <button onClick={showCompare}><CompareIcon size={22} /><span>{t('Compare')}</span></button>
             {/* Share last: it closes the row like a button of its own. */}

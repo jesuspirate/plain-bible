@@ -28,10 +28,9 @@ import { VersionSwitch } from './versionswitch'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
-// The two darkest skin tones would melt into the dark brown disc; they get
-// the light stone disc instead, and Circles beside it too, so the pair
-// always matches (see styles.css, "The pair at the end").
-const DEEP_TONES = ['\u{1F3FE}', '\u{1F3FF}']
+// 🙏 and Circles keep their glass look unless Settings → Extras → Prayer
+// buttons picks a disc: Brown or Honey, the same for every skin tone.
+const discClass = (discs: string) => discs === 'brown' ? ' disc disc-brown' : discs === 'honey' ? ' disc disc-honey' : ''
 
 /** 🙏: tap to pray. Press and hold for the skin tones. */
 function PrayButton() {
@@ -43,7 +42,7 @@ function PrayButton() {
   })
   return (
     <>
-      <button {...button} type="button" class={'sb-pray holdable' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '') + (settings.discs !== 'quiet' ? ' disc-' + settings.discs : '')} aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
+      <button {...button} type="button" class={'sb-pray holdable' + discClass(settings.discs)} aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
       </button>
       {picker}
@@ -51,10 +50,9 @@ function PrayButton() {
   )
 }
 
-/** Read along, if ticked under Audio: a plain icon at the right end of the
- *  search field, no button of its own, so 🙏 keeps its corner. It reads on
- *  from the verse you picked, or else the verse at the top of the screen.
- *  While reading aloud the reading bar takes the field's place anyway. */
+/** Read along at the field's end, only if ticked under Extras (11-28: off by
+ *  default; Listen on a verse reads on too). It reads on from the verse you
+ *  picked, or else the verse at the top of the screen. */
 function AlongButton() {
   return (
     <button type="button" class="sb-along" aria-label={t('Read along')} title={t('Read along')} onClick={readHere}>
@@ -69,9 +67,8 @@ function CirclesButton() {
   useCircleNews()
   const { settings } = useApp()
   const news = inCircles() && circlesWithNews() > 0
-  // Beside a dark-toned 🙏 it takes the same light stone disc, so the pair matches.
   return (
-    <button type="button" class={'sb-circles' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '') + (settings.discs !== 'quiet' ? ' disc-' + settings.discs : '')} onClick={() => openCircles()}
+    <button type="button" class={'sb-circles' + discClass(settings.discs)} onClick={() => openCircles()}
       aria-label={news ? t('Circles · something new') : t('Circles')} title={t('Circles')}>
       <CircleIcon size={30} />
       {news && <span class="sb-news-dot" aria-hidden="true" />}
@@ -860,8 +857,8 @@ export function SearchBar({ here, mini, above }: {
             placeholder={here && !open ? `${shortName(here.book)} ${here.chapter}${shown !== version ? ` · ${shown}` : ''}` : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
-          {!open && !mini && here && <VersionSwitch />}
-          {!open && !mini && settings.alongButton && here && <AlongButton />}
+          {!open && !mini && here && settings.versionPill && <VersionSwitch />}
+          {!open && !mini && here && settings.alongPill && <AlongButton />}
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
           {(!q || listening) && open && (IOS_APP || speechRecognition()) && (
             <button type="button" class={'sb-mic' + (listening ? ' on' : '')} onClick={listen}
