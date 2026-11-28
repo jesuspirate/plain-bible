@@ -9,9 +9,13 @@ import { LANGS } from './src/i18n'
 const sha = (process.env.GITHUB_SHA || '').slice(0, 7)
 const BUILD = new Date().toISOString().slice(0, 10) + (sha ? ' · ' + sha : '')
 
+// The test site (scripts/deploy_test_site.sh): named so it can't be mistaken
+// for the real app, in a browser tab or on a Home Screen.
+const TEST_SITE = !!process.env.VITE_TEST_SITE
+
 const manifest = {
-  name: 'My Quiet Bible',
-  short_name: 'My Quiet Bible',
+  name: TEST_SITE ? 'TEST My Quiet Bible' : 'My Quiet Bible',
+  short_name: TEST_SITE ? 'MQB Test' : 'My Quiet Bible',
   description: 'Read, pray, share, repeat. The Bible in many versions and languages, prayer with one button, and private circles to share it.',
   theme_color: '#2b2a28',
   background_color: '#f4ecd8',
@@ -61,6 +65,7 @@ const themedManifests: Plugin = {
   transformIndexHtml: {
     order: 'post',
     handler(html, ctx) {
+      if (TEST_SITE) html = html.replace('<title>', '<title>TEST · ').replace(/(<meta name="apple-mobile-web-app-title" content=")[^"]*/, '$1MQB Test')
       html = html.replaceAll('{{versions}}', String(counts.versions)).replaceAll('{{languages}}', String(counts.languages))
         // The languages the welcome and support pages speak, for their first paint.
         .replaceAll('{{langIds}}', LANGS.map(l => l.id).join('|')).replaceAll('{{rtlIds}}', LANGS.filter(l => l.rtl).map(l => l.id).join('|') || '-')

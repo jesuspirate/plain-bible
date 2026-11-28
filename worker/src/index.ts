@@ -2,6 +2,7 @@
 // email, and one small JSON document per account (highlights, bookmarks,
 // settings). No passwords, no tracking, and email addresses are never
 // stored, only a fingerprint of them. The app works fully without it.
+import { originAllowed } from './origins'
 import {
   generateAuthenticationOptions, generateRegistrationOptions,
   verifyAuthenticationResponse, verifyRegistrationResponse,
@@ -97,7 +98,7 @@ const ipKey = (req: Request) => sha256('ip:' + (req.headers.get('CF-Connecting-I
 
 function cors(req: Request, env: Env): Record<string, string> {
   const origin = req.headers.get('Origin') ?? ''
-  if (!origins(env).includes(origin)) return {}
+  if (!allowed(env, origin)) return {}
   return {
     'Access-Control-Allow-Origin': origin,
     'Access-Control-Allow-Methods': 'GET, POST, PUT, DELETE, OPTIONS',
@@ -107,12 +108,13 @@ function cors(req: Request, env: Env): Record<string, string> {
   }
 }
 const origins = (env: Env) => env.ORIGINS.split(',').map(s => s.trim()).filter(Boolean)
+const allowed = (env: Env, origin: string) => originAllowed(origins(env), origin)
 /** The calling address and its passkey domain. Passkeys belong to one
  *  domain, so the old and new addresses each have their own; both sign in
  *  to the same accounts. */
 function site(req: Request, env: Env) {
   const origin = req.headers.get('Origin') ?? ''
-  if (!origins(env).includes(origin)) return { origin: origins(env), rpID: env.RP_ID }
+  if (!allowed(env, origin)) return { origin: origins(env), rpID: env.RP_ID }
   return { origin, rpID: new URL(origin).hostname }
 }
 const json = (body: unknown, status = 200) =>
