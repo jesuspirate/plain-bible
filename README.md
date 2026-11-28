@@ -170,3 +170,9 @@ Pages build.
 `.github/workflows/deploy.yml` builds the data and the app and publishes to GitHub Pages on every push to `main`.
 In the repository settings, set **Pages → Source** to **GitHub Actions**, and add a custom domain there if you like.
 The app uses relative paths, so it works on a custom domain or under `/plain-bible/`.
+
+### Test site
+
+Every pull request is also put on its own test address, `https://pr-<number>.myquietbible-test.pages.dev` (Cloudflare Pages), shown on the pull request as **View deployment**, so a change can be tried on a phone before it is merged.
+It keeps its own storage (another address), talks to its own sync service and database (`plain-bible-sync-test`), so test accounts, circles and counts never touch real ones, and is hidden from search engines.
+On a Home Screen it is called **MQB Test**. See `scripts/deploy_test_site.sh`.
