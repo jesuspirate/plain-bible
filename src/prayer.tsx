@@ -14,7 +14,9 @@ import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
 import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, MARK_HERE, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow, setPrayingOver } from './state'
 import { pauseListening, readingAt } from './listen'
-import { BackIcon, CircleIcon, CloseIcon } from './icons'
+import { BackIcon, CircleIcon, CloseIcon, PauseIcon } from './icons'
+import { playParts, type PartsPlayer } from './lib/parts'
+import { SeekBar } from './seekbar'
 import type { Journal } from './lib/prayerJournal'
 import { byMonth, finds, longDuration, TOPICS, topicsOf, topicsOfPrayer } from './lib/prayerJournal'
 import { MAX_TIED, PrayerVerse, verseLabel, versesOf, withVerse } from './lib/prayerVerses'
@@ -557,15 +559,16 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const [inTurn, setInTurn] = useState(false)
   const [pos, setPos] = useState(0)
   const [confirm, setConfirm] = useState<string>()
-  const audio = useRef<{ el: HTMLAudioElement; urls: string[] }>()
+  const [paused, setPaused] = useState(false)
+  const audio = useRef<{ el: HTMLAudioElement; urls: string[]; ctl?: PartsPlayer }>()
   // Counts every start and stop, so a recording still being read when
   // something else was tapped doesn't start after all.
   const turn = useRef(0)
   const release = () => {
     turn.current++
     const a = audio.current
-    if (a) { a.el.pause(); a.urls.forEach(dropAudioUrl); audio.current = undefined }
-    setPlaying(undefined); setPos(0); setInTurn(false)
+    if (a) { a.ctl ? a.ctl.stop() : a.el.pause(); a.urls.forEach(dropAudioUrl); audio.current = undefined }
+    setPlaying(undefined); setPos(0); setPaused(false); setInTurn(false)
   }
   useEffect(() => release, [])
   // Where each prayer was shared already: a circle that has it isn't offered
@@ -595,26 +598,20 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     // A prayer picked up again after the phone locked plays its parts in turn.
     const parts = partsOf(full)
     const urls = parts.map(x => audioUrl(playable(x.audio, x.type), x.type))
-    let i = 0, offset = 0
-    el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
-    el.onended = () => {
-      if (++i >= urls.length) { next(); return }
-      offset += parts[i - 1].ms
-      el.src = urls[i]; el.play().catch(release)
-    }
     audio.current = { el, urls }
-    setPlaying(id); setPos(0)
+    setPlaying(id); setPos(0); setPaused(false)
     nowPlaying(t('Prayer'))
     if (rest.length || inTurnRef.current) document.getElementById(`pray-${id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-    el.src = urls[0]
-    el.play().catch(release)
+    audio.current.ctl = playParts(el, urls, parts.map(x => x.ms), { time: setPos, playing: on => setPaused(!on), end: next, fail: release })
   }
   const inTurnRef = useRef(false)
   inTurnRef.current = inTurn
+  // The prayer playing: a tap pauses it, and the next tap carries on from there.
   const play = (p: PrayerInfo) => {
-    const was = playing === p.id && !inTurn
+    const ctl = playing === p.id && audio.current?.ctl
+    if (ctl) { paused ? ctl.resume() : ctl.pause(); return }
     release()
-    if (!was) start(p.id, [], new Audio())
+    start(p.id, [], new Audio())
   }
   const playAll = (ps: PrayerInfo[]) => {
     const was = inTurn
@@ -750,11 +747,11 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   const total = (ps: PrayerInfo[]) => longDuration(ps.reduce((n, p) => n + p.ms, 0))
   const row = (p: PrayerInfo, dated = flat) => (
     <li id={`pray-${p.id}`} class={'pray-row' + (playing === p.id ? ' on' : '') + (open === p.id ? ' open' : '')}>
-      <button class="pray-play" aria-label={playing === p.id ? t('Stop') : t('Play prayer from {when}', { when: when(p.at) })} onClick={() => play(p)}>
-        {playing === p.id ? <StopIcon /> : <PlayIcon />}
+      <button class="pray-play" aria-label={playing === p.id && !paused ? t('Pause') : t('Play prayer from {when}', { when: when(p.at) })} onClick={() => play(p)}>
+        {playing === p.id && !paused ? <PauseIcon size={24} /> : <PlayIcon />}
       </button>
       <span class="pray-when">{p.name && <strong class="pray-name">{p.name}</strong>}
-        {dated ? date(p.at) : time(p.at)}<span class="muted"> · {playing === p.id ? `${duration(pos)} / ` : ''}{duration(p.ms)}</span>
+        {dated ? date(p.at) : time(p.at)}<span class="muted"> · {duration(p.ms)}</span>
         {versesOf(p).map(v => <button class="link pray-list-verse" onClick={() => onRead(v)}>{verseLabel(v)}</button>)}
         {(topicsOfPrayer(p).length > 0 || p.answered) && <span class="pray-tags">
           {topicsOfPrayer(p).map(name => <span class="pray-tag">{topicName(name)}</span>)}
@@ -770,6 +767,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
         : <button class="pray-icon pray-more" aria-expanded="false" aria-label={t('More')} onClick={() => { setConfirm(undefined); setEdit(undefined); setOpen(p.id) }}>
           <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor" /><circle cx="12" cy="12" r="2" fill="currentColor" /><circle cx="19" cy="12" r="2" fill="currentColor" /></svg>
         </button>}
+      {playing === p.id && <SeekBar pos={pos} total={p.ms} onSeek={ms => audio.current?.ctl?.seek(ms)} />}
       {open === p.id && edit?.id === p.id && edit.what === 'name' && <form class="pray-edit" onSubmit={e => { e.preventDefault(); note(p, { name: edit.text }) }}>
         <input class="saved-find" value={edit.text} maxLength={80} placeholder={t('Name of this prayer')} aria-label={t('Name of this prayer')} enterkeyhint="done"
           ref={el => { if (el && !el.dataset.on) { el.dataset.on = '1'; el.focus() } }} onInput={e => setEdit({ ...edit, text: (e.target as HTMLInputElement).value })} />

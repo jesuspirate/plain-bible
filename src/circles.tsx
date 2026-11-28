@@ -27,7 +27,9 @@ import { canShare, copyText } from './lib/native'
 import { ASK_PRAYED, go, openCircles, openSettings, pickVerses, prayFor, prayedNowFor, readPath, Route, ShareRequest, useApp } from './state'
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
-import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, CloseIcon, NoteIcon, PlayIcon, ReturnIcon } from './icons'
+import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, CloseIcon, NoteIcon, PauseIcon, PlayIcon, ReturnIcon } from './icons'
+import { playParts, type PartsPlayer } from './lib/parts'
+import { SeekBar } from './seekbar'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
 import { nowPlaying } from './lib/nowplaying'
@@ -1541,17 +1543,20 @@ const REACT_WORDS: Record<Reaction, () => string> = {
 }
 
 function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedItem; onError: (m: string) => void }) {
-  const [state, setState] = useState<'idle' | 'loading' | 'playing'>('idle')
+  const [state, setState] = useState<'idle' | 'loading' | 'playing' | 'paused'>('idle')
   const [pos, setPos] = useState(0)
-  const audio = useRef<{ el: HTMLAudioElement; urls: string[] }>()
+  const audio = useRef<{ el: HTMLAudioElement; urls: string[]; ctl: PartsPlayer }>()
   const release = () => {
     const a = audio.current
-    if (a) { a.el.pause(); a.urls.forEach(dropAudioUrl); audio.current = undefined }
+    if (a) { a.ctl ? a.ctl.stop() : a.el.pause(); a.urls.forEach(dropAudioUrl); audio.current = undefined }
     setState('idle'); setPos(0)
   }
   useEffect(() => release, [])
   const play = async () => {
-    if (state !== 'idle') { release(); return }
+    // Playing: a tap pauses, the next carries on from there.
+    const ctl = audio.current?.ctl
+    if (ctl) { state === 'paused' ? ctl.resume() : ctl.pause(); return }
+    if (state !== 'idle') return
     setState('loading')
     let parts
     try { parts = await prayerAudio(circle, item) } catch (e) { setState('idle'); onError(message(e)); return }
@@ -1560,27 +1565,20 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
     const urls = parts.map(p => audioUrl(playable(p.audio, p.type), p.type))
     const el = new Audio()
     nowPlaying(t('Prayer'))
-    let i = 0, offset = 0
-    el.ontimeupdate = () => setPos(offset + el.currentTime * 1000)
-    el.onended = () => {
-      if (++i >= urls.length) { release(); return }
-      offset += ms[i - 1] ?? 0
-      el.src = urls[i]; el.play().catch(release)
-    }
-    audio.current = { el, urls }
     setState('playing')
-    el.src = urls[0]
-    el.play().catch(release)
+    const player = playParts(el, urls, urls.map((_, i) => ms[i] ?? 0), { time: setPos, playing: on => setState(on ? 'playing' : 'paused'), end: release, fail: release })
+    audio.current = { el, urls, ctl: player }
   }
   const total = item.body.k === 'prayer' ? item.body.ms : 0
   return (
     <div class="c-prayer">
-      <button class="c-play" aria-label={state === 'idle' ? t('Play this prayer') : t('Stop')} onClick={play}>
-        {state === 'idle'
-          ? <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>
-          : <svg viewBox="0 0 24 24" width="22" height="22" aria-hidden="true"><rect x="6" y="6" width="12" height="12" rx="2" fill="currentColor" /></svg>}
+      <button class="c-play" aria-label={state === 'playing' ? t('Pause') : t('Play this prayer')} onClick={play}>
+        {state === 'playing'
+          ? <PauseIcon size={22} />
+          : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
       </button>
-      <span>{t('A prayer')} <span class="muted">· {state === 'loading' ? t('Opening…') : state === 'playing' ? `${duration(pos)} / ${duration(total)}` : duration(total)}</span></span>
+      <span>{t('A prayer')} <span class="muted">· {state === 'loading' ? t('Opening…') : duration(total)}</span></span>
+      {(state === 'playing' || state === 'paused') && <SeekBar pos={pos} total={total} onSeek={ms => audio.current?.ctl.seek(ms)} />}
     </div>
   )
 }
