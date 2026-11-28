@@ -6,7 +6,9 @@
  *  With a `spot` name, where you are is kept on this device: leave the app (or
  *  it reloads) and the prayer carries on from there next time. Played to the
  *  end, the spot is forgotten. */
-export interface PartsPlayer { pause(): void; resume(): void; seek(ms: number): void; stop(): void }
+export interface PartsPlayer { pause(): void; resume(): void; seek(ms: number): void; stop(): void
+  /** Where it is right now, in ms of the whole prayer (for a bar that glides). */
+  at(): number }
 
 const SPOTS = 'plain-bible:prayer-spots'
 const KEEP = 40
@@ -83,6 +85,7 @@ export function playParts(el: HTMLAudioElement, urls: string[], ms: number[], on
   else { el.src = urls[0]; play() }
   return {
     pause: () => el.pause(),
+    at: () => want !== undefined ? now : starts[i] + el.currentTime * 1000,
     resume: play,
     seek: to => seek(to),
     // Done with: nothing it says afterwards (a late pause) reaches the page.

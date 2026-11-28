@@ -1572,6 +1572,8 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
     audio.current = { el, urls, ctl: player }
   }
   const total = item.body.k === 'prayer' ? item.body.ms : 0
+  // Where the sound is right now, for a bar that glides (kept the same between renders).
+  const glide = useRef(() => audio.current?.ctl?.at() ?? 0).current
   // Left partway (here, or before the app was closed): it shows where, and carries on from there.
   const left = state === 'idle' ? spotOf(spot) : undefined
   const [, bump] = useState(0)
@@ -1584,7 +1586,7 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
       </button>
       <span>{t('A prayer')} <span class="muted">· {state === 'loading' ? t('Opening…') : duration(total)}</span></span>
       {(state === 'playing' || state === 'paused')
-        ? <SeekBar pos={pos} total={total} onSeek={ms => audio.current?.ctl.seek(ms)} />
+        ? <SeekBar pos={pos} total={total} onSeek={ms => audio.current?.ctl.seek(ms)} live={state === 'playing' ? glide : undefined} />
         : left !== undefined && <SeekBar pos={left} total={total} onSeek={ms => { keepSpot(spot, ms); bump(n => n + 1) }} />}
     </div>
   )

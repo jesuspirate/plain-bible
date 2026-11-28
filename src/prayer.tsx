@@ -750,6 +750,8 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   // Prayers paused partway (here, or before the app was closed) show where.
   const [, bump] = useState(0)
   const spots = allSpots()
+  // Where the sound is right now, for a bar that glides (kept the same between renders).
+  const glide = useRef(() => audio.current?.ctl?.at() ?? 0).current
   const total = (ps: PrayerInfo[]) => longDuration(ps.reduce((n, p) => n + p.ms, 0))
   const row = (p: PrayerInfo, dated = flat) => (
     <li id={`pray-${p.id}`} class={'pray-row' + (playing === p.id ? ' on' : '') + (open === p.id ? ' open' : '')}>
@@ -774,7 +776,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor" /><circle cx="12" cy="12" r="2" fill="currentColor" /><circle cx="19" cy="12" r="2" fill="currentColor" /></svg>
         </button>}
       {playing === p.id
-        ? <SeekBar pos={pos} total={p.ms} onSeek={ms => audio.current?.ctl?.seek(ms)} />
+        ? <SeekBar pos={pos} total={p.ms} onSeek={ms => audio.current?.ctl?.seek(ms)} live={paused ? undefined : glide} />
         : spots[`p:${p.id}`] !== undefined && <SeekBar pos={spots[`p:${p.id}`]} total={p.ms} onSeek={ms => { keepSpot(`p:${p.id}`, ms); bump(n => n + 1) }} />}
       {open === p.id && edit?.id === p.id && edit.what === 'name' && <form class="pray-edit" onSubmit={e => { e.preventDefault(); note(p, { name: edit.text }) }}>
         <input class="saved-find" value={edit.text} maxLength={80} placeholder={t('Name of this prayer')} aria-label={t('Name of this prayer')} enterkeyhint="done"
