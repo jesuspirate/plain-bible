@@ -10,7 +10,7 @@ import { canHear } from './listen'
 import { fine, Glyph } from './gesture'
 import { DataTools } from './import'
 import { VersionPicker } from './ui'
-import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon } from './icons'
+import { AddHomeIcon, BackIcon, BookIcon, BookmarkIcon, BooksIcon, CompareIcon, CompassIcon, DataIcon, GlobeIcon, InfoIcon, LayoutIcon, RefreshIcon, ReturnIcon, SpinnerIcon, SearchIcon, SpeakerIcon, ReadIcon, SuggestIcon, TextSizeIcon, ThemeIcon, VideoIcon, HideBarsIcon } from './icons'
 import type { ComponentChildren } from 'preact'
 import { copyText } from './lib/native'
 import { fromPlayStore, inStoreApp, homeScreenHelps, isAndroid, isIPhone, openHomeScreen } from './lib/install'
@@ -24,7 +24,6 @@ import { Search } from './search'
 import { Versions } from './versions'
 import { saveRecording, useRecording } from './lib/recordMode'
 import { StreakRow } from './streaks'
-import { AWAY } from './sideways'
 import { UNFOLDED, useWide } from './lib/spread'
 import { clearSteps } from './lib/steps'
 import { currentLang, deviceLang, intlTag, LANGS, locale, N_, t, tj } from './i18n'
@@ -156,16 +155,16 @@ export function usePullDown(box: { current: HTMLElement | null }, scrollTop: () 
 // leaves it.
 // Font and layout is a short list too: each of its rows opens a page with
 // just that one thing, and ‹ back goes to the list.
-type LayoutPage = 'font' | 'layout' | 'verseNums' | 'highlights' | 'turning' | 'searchBar' | 'sideways' | 'extras'
+type LayoutPage = 'font' | 'layout' | 'verseNums' | 'highlights' | 'turning' | 'searchBar' | 'extras'
 type Page = 'home' | 'sync' | 'reading' | 'audio' | 'saved' | 'search' | 'versions' | 'data' | 'about' | 'language' | 'recording' | 'suggest' | LayoutPage
 const PAGE_TITLE: Record<Page, string> = {
   home: N_('Settings'), sync: N_('Account'), reading: N_('Font and layout'), audio: N_('Audio'), saved: N_('Saved'), search: N_('Advanced search'),
   versions: N_('Versions'), data: N_('Your data'), about: N_('About'), language: N_('Language'), recording: N_('Teaching mode'),
   suggest: N_('Report a problem'),
   font: N_('Font'), layout: N_('Layout'), verseNums: N_('Verse numbers'), highlights: N_('Highlights'), turning: N_('Turning pages'),
-  searchBar: N_('Search bar'), sideways: N_('Hide bars while scrolling'), extras: N_('Extras'),
+  searchBar: N_('Search bar'), extras: N_('Extras'),
 }
-const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turning', 'searchBar', 'sideways', 'extras']
+const LAYOUT_PAGES: Page[] = ['font', 'layout', 'verseNums', 'highlights', 'turning', 'searchBar', 'extras']
 
 /** Where you are in Settings: the first page, one page in, or (under Font and layout) two. */
 function useSettingsNav() {
@@ -426,10 +425,7 @@ function SearchWays() {
     <h3>{t('Other ways to open search')}</h3>
     {fine
       ? <p class="audio-also"><Glyph kind="tap" />{t('Click the chapter title, or press /')}</p>
-      : <>
-          <p class="audio-also"><Glyph kind="tap" />{t('Tap the chapter title')}</p>
-          <p class="audio-also"><Glyph kind="pull" />{t('Pull down at the top of a chapter, then let go')}</p>
-        </>}
+      : <p class="audio-also"><Glyph kind="tap" />{t('Tap the chapter title')}</p>}
     <p class="audio-note">{t('After a search, open it again to go back to your last result.')}</p>
     <button class="primary audio-show" onClick={showSearchWays}><Glyph kind="tap" /> {t('Try it now')}</button>
   </div>
@@ -457,15 +453,13 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
 
   // Grouped like the Settings page itself: a small heading over each kind of
   // choice. A tick box has a short bold name, and what it does in quiet words under it.
-  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'worldMap' | 'strongs' | 'strongsNumbers' | 'searchBar' | 'hideBars', label: string, note?: string) => (
+  const check = (k: 'penSlow' | 'noteReminders' | 'streaks' | 'worldMap' | 'strongs' | 'strongsNumbers' | 'searchBar', label: string, note?: string) => (
     <label class="check"><input type="checkbox" checked={settings[k]} onChange={e => update({ [k]: (e.target as HTMLInputElement).checked } as Partial<Settings>)} />
       <span class="check-text"><span class={note ? "check-name" : undefined}>{label}</span>{note && <span class="muted small">{note}</span>}</span></label>
   )
   // Font and layout: a short list, one row for each kind of choice with what
   // it's set to now. Each row opens a page with only that choice on it.
   const turnName = bookOn ? t('Two pages') : t(settings.turn === 'slide' ? 'Side by side' : settings.turn === 'off' ? 'None' : 'Stack')
-  const awayNames = ([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const)
-    .filter(([a]) => settings.sideways.includes(a)).map(([, l]) => l)
   const extras = [settings.noteReminders && t('Notes'), settings.streaks && t('Streaks'), settings.strongs && t("Strong's numbers")].filter(Boolean).join(', ')
   if (page === 'reading') return <div class="layout-page">
     <section class="set-group"><div class="set-list">
@@ -477,7 +471,6 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
       <Row label={t('Highlights')} value={t(settings.highlight === 'text' ? 'Colored text' : settings.highlight === 'block' ? 'Block' : 'Marker')} onClick={() => setPage('highlights')} />
       {(!bookOn || bigScreen) && <Row label={t('Turning pages')} value={turnName} onClick={() => setPage('turning')} />}
       <Row label={t('Search bar')} value={settings.searchBar ? t('On') : t('Off')} onClick={() => setPage('searchBar')} />
-      <Row label={t('Hide bars while scrolling')} sub={!awayNames.length ? t('Nothing hidden') : settings.hideBars ? awayNames.join(', ') : `${t('Phone on its side')}: ${awayNames.join(', ')}`} onClick={() => setPage('sideways')} />
     </div></section>
     <section class="set-group"><div class="set-list">
       <Row label={t('Extras')} sub={extras || t('Off')} onClick={() => setPage('extras')} />
@@ -533,18 +526,6 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'searchBar') return <div class="layout-page">
     <div class="field">{check('searchBar', t('Search bar'), t('Show the full search bar at the bottom of the screen. When off, a small round search button sits in the corner instead.'))}</div>
     <SearchWays />
-  </div>
-
-  // Which bars slide away as you read down, and when: with the phone on its
-  // side only (the first choice, #205), or always, as in Teaching mode.
-  if (page === 'sideways') return <div class="layout-page">
-    <p class="muted small">{t('Ticked items slide away as you read down the page, so the words fill the screen. Scroll up a little, or tap the top edge, to bring them back.')}</p>
-    {([['top', t('Top bar')], ['search', t('Search bar')], ['pray', t('Prayer and Circles buttons')]] as const).map(([a, label]) => (
-      <div class="field"><label class="check"><input type="checkbox" checked={settings.sideways.includes(a)}
-        onChange={e => update({ sideways: AWAY.filter(x => x === a ? (e.target as HTMLInputElement).checked : settings.sideways.includes(x)) })} />
-        <span class="check-text"><span class="check-name">{label}</span></span></label></div>
-    ))}
-    <div class="field">{check('hideBars', t('Always, not only with the phone on its side'))}</div>
   </div>
 
   if (page === 'extras') return <div class="layout-page">
@@ -640,6 +621,14 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
             <button class="size-reset" onClick={() => update({ fontSize: DEFAULT_FONT_SIZE })}>{t('Back to default size ({n})', { n: DEFAULT_FONT_SIZE })}</button>
           </div>}
           <div class="set-row set-static set-theme"><span class="set-icon" aria-hidden="true"><ThemeIcon size={24} /></span>{sel('theme', [['light', t('Light')], ['sepia', t('Sepia')], ['dark', t('Dark')], ['system', t('Auto')]])}</div>
+          {/* Right here, one tick: whether the bars slide away as you read
+              upright. (With the phone on its side they always do.) */}
+          <label class="set-row set-check">
+            <span class="set-icon" aria-hidden="true"><HideBarsIcon size={24} /></span>
+            <span class="set-label">{t('Hide bars while scrolling')}
+              <span class="set-sub">{t('Scroll up a little to bring them back. With the phone on its side, they always slide away.')}</span></span>
+            <input type="checkbox" checked={settings.hideBars} onChange={e => update({ hideBars: (e.target as HTMLInputElement).checked })} />
+          </label>
           <Row icon={<SpeakerIcon size={24} />} label={t('Audio')} sub={t('Hear the Bible read aloud')} onClick={() => setPage('audio')} />
           <Row icon={<LayoutIcon size={24} />} label={t('Font and layout')} value={fontName && t(fontName)} onClick={() => setPage('reading')} />
         </div>

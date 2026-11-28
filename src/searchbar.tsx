@@ -28,6 +28,10 @@ import { VersionSwitch } from './versionswitch'
 
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
+// The two darkest skin tones would melt into the dark brown disc; they get
+// the light stone disc instead (see styles.css, "The pair at the end").
+const DEEP_TONES = ['\u{1F3FE}', '\u{1F3FF}']
+
 /** 🙏: tap to pray. Press and hold for the skin tones. */
 function PrayButton() {
   const { settings, update } = useApp()
@@ -38,7 +42,7 @@ function PrayButton() {
   })
   return (
     <>
-      <button {...button} type="button" class="sb-pray holdable" aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
+      <button {...button} type="button" class={'sb-pray holdable' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '')} aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
       </button>
       {picker}
@@ -521,8 +525,7 @@ export function SearchBar({ here, mini, above }: {
     input.current.focus({ preventScroll: true })
     setOpen(true)
   }
-  // A tap on the chapter's title, or a pull down from the top of the
-  // chapter, opens search just as a tap on the bar (or the round button)
+  // A tap on the chapter's title opens search just as a tap on the bar (or the round button)
   // does. Not while reading aloud (its bar stands in the field's place) or
   // with verses picked (the bar for them is up instead).
   const opener = useRef(openHere)

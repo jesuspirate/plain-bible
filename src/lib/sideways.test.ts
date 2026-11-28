@@ -14,6 +14,7 @@ describe('sideways bars', () => {
   it('stay for a tiny nudge down', () => expect(run([10, 10])).toBe(false))
   it('stay away for a small nudge back up to reread a line', () => expect(run([-30, -30], true)).toBe(true))
   it('come back when you scroll back up a bit more', () => expect(run([-40, -40], true)).toBe(false))
+  it('go away for a slow reader, finger wobbling a pixel back now and then', () => expect(run([4, 5, -1, 4, 6, -2, 5, 4])).toBe(true))
   it('ignore a jump to another chapter or verse', () => expect(run([-380], true)).toBe(true))
   it('come back at the end of the chapter', () => expect(run([10, 10, 10], true, P - V - 25)).toBe(false))
   it('stay at the very top of the page', () => expect(run([10, 10, 10], false, -10)).toBe(false))

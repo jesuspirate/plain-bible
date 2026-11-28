@@ -60,6 +60,7 @@ const hasWidget = () => inStoreApp() && isIPhone() && !!nativeNotify() && typeof
 // only where they apply, so the tour never grows a step for them.
 // Each step shows its gesture, softly, on the real thing: a fingertip on a
 // phone or tablet, the arrow with a mouse.
+const AWAY_ALL = ['top']
 function steps(): Step[] {
   const settings = loadSettings()
   const version = settings.version ?? defaultSettings().version
@@ -89,7 +90,7 @@ function steps(): Step[] {
         ...(hear ? [{ glyph: 'bar' } as Row] : []),
       ], moves: [{ kind: 'tap', row: 0, at: onNumber }, { kind: fine ? 'triple' : 'double', row: 1, at: onNumber }] },
     // The search bar is always there, so the tour points only to it; the
-    // other ways in (the chapter title, a pull down, /) are for people to
+    // other ways in (the chapter title, /) are for people to
     // find, and are told under Settings → Font and layout → Search bar.
     { title: t('Search'), body: t('Type words you remember, or a passage like John 3:16. Tap here to pick a book and chapter too.'), find: onScreen('.sb-field'), moves: [tap],
       after: [t('After a search, open it again to go back to your last result.'),
@@ -97,6 +98,8 @@ function steps(): Step[] {
         ...(document.querySelector('.sb-version') ? [t('Tap the Bible’s name to switch to the one you read before. Hold it to choose another.')] : []),
         // Read along, if ticked under Audio, sits at the field's right end.
         ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.'), t('While it reads, tap any verse to read on from there.'), t('Tap the verse being read to highlight or share it.')] : []),
+        // The bars slide away as you read on (on by default): say how they come back.
+        ...((settings.hideBars ?? true) && (settings.sideways ?? AWAY_ALL).length ? [t('As you read on, the bars slide away. Scroll up a little to bring them back.')] : []),
         // With a keyboard, / opens it from anywhere.
         ...(fine ? [t('You can also press / to open it.')] : [])].join(' ') },
     // Not signed in yet: one more sentence on how easy the free account is

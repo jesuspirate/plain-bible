@@ -113,6 +113,11 @@ export const LayoutIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M4 5.5h16M4 10h16M4 14.5h16M4 19h10" {...line} /></svg>
 )
 
+/** A phone whose bars slide out, up and down, leaving the words: hide bars while scrolling. */
+export const HideBarsIcon = ({ size, class: c }: P) => (
+  <svg {...svg(size, c)}><rect x="5.5" y="2.5" width="13" height="19" rx="2.6" {...line} /><path d="M9.5 7.2 12 4.9l2.5 2.3M9.5 16.8l2.5 2.3 2.5-2.3M9 10.6h6M9 13.4h6" {...line} /></svg>
+)
+
 /** Into a tray: your data, to bring in or keep. */
 export const DataIcon = ({ size, class: c }: P) => (
   <svg {...svg(size, c)}><path d="M12 3.5v10.5M7.5 9.5l4.5 4.5 4.5-4.5M4 14.5v4A1.5 1.5 0 0 0 5.5 20h13a1.5 1.5 0 0 0 1.5-1.5v-4" {...line} /></svg>
@@ -190,10 +195,10 @@ export const SpeakerIcon = ({ size, class: c }: P) => (
 )
 
 /** Read along: an open book, its pages dipping at the spine over the curve of
- *  its cover, with a big play cut out of it. Solid and tall so it still reads
- *  as a book at search bar size, for tired eyes (Jet's pick, 2026-11-24). */
+ *  its cover, a play on its pages. Drawn in outline (it was solid, 11-24) so
+ *  it sits as quietly as the Bible's name beside it (Jet's pick, 2026-11-27). */
 export const ReadIcon = ({ size, class: c }: P) => (
-  <svg {...svg(size, c)}><path fill-rule="evenodd" d="M12 5.2C10.1 3.2 7 2.4 3.4 2.8v14.8c3.6-.4 6.8.4 8.6 2.2 1.8-1.8 5-2.6 8.6-2.2V2.8C17 2.4 13.9 3.2 12 5.2zM8.9 6.4v10l8.2-5z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
+  <svg {...svg(size, c)}><path d="M12 5.2C10.1 3.2 7 2.4 3.4 2.8v14.8c3.6-.4 6.8.4 8.6 2.2 1.8-1.8 5-2.6 8.6-2.2V2.8C17 2.4 13.9 3.2 12 5.2z" fill="none" stroke="currentColor" stroke-width="1.7" stroke-linejoin="round" /><path d="M9.4 7.4v8l6.6-4z" fill="currentColor" stroke="currentColor" stroke-width="1.2" stroke-linejoin="round" />
     <path d="M1.6 5.6v14.4c4.4-.3 8 .3 10.4 2.2 2.4-1.9 6-2.5 10.4-2.2V5.6" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" /></svg>
 )
 
