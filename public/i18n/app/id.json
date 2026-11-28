@@ -1371,5 +1371,7 @@
 "Brown": "Cokelat",
 "Show the Read along icon in the search bar": "Tampilkan ikon “Baca bersama” di bilah pencarian",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikon “Baca bersama” di ujung kanannya membaca dari ayat di bagian atas layar.",
-"Rename topic": "Ganti nama topik"
+"Rename topic": "Ganti nama topik",
+"Find in your highlights": "Cari di sorotan Anda",
+"No highlight has “{words}” in it.": "Tidak ada sorotan yang memuat “{words}”."
 }

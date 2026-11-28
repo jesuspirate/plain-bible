@@ -1481,5 +1481,7 @@
 "Brown": "Коричневий",
 "Show the Read along icon in the search bar": "Показувати значок «Читання з підсвічуванням» у рядку пошуку",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Читання з підсвічуванням» біля його правого краю читає з вірша вгорі екрана.",
-"Rename topic": "Перейменувати тему"
+"Rename topic": "Перейменувати тему",
+"Find in your highlights": "Пошук у виділеннях",
+"No highlight has “{words}” in it.": "Немає виділень зі словами «{words}»."
 }

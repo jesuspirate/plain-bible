@@ -1371,5 +1371,7 @@
 "Brown": "Tsvuku",
 "Show the Read along icon in the search bar": "Ratidza kamucherechedzo ka “Verenga uchitevera” mubhawa rekutsvaga",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Kamucherechedzo ka “Verenga uchitevera” kumagumo aro kurudyi kanoverenga kubva pandima iri pamusoro pechiratidziro.",
-"Rename topic": "Chinja zita remusoro"
+"Rename topic": "Chinja zita remusoro",
+"Find in your highlights": "Tsvaga muzvakapendwa zvenyu",
+"No highlight has “{words}” in it.": "Hapana chakapendwa chine “{words}”."
 }

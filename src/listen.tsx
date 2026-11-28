@@ -306,9 +306,13 @@ function walkWords(my: number, i: number, then: () => void) {
 
 const NO_SOUND = N_('No sound? Flip the side switch off Silent, then tap play.')
 
+// The verse being spoken, held here: a browser can drop an utterance nothing
+// refers to, and then it never says it has finished.
+let speaking: SpeechSynthesisUtterance | undefined
+
 function say(text: string, lang: string, my: number, then: () => void, spans?: Span[]) {
   if (!synth || my !== run) return
-  const u = new SpeechSynthesisUtterance(text)
+  const u = speaking = new SpeechSynthesisUtterance(text)
   // No voice is named: the phone speaks with the one picked in its own settings.
   u.lang = speechTag(lang)
   u.rate = rate()
@@ -322,16 +326,33 @@ function say(text: string, lang: string, my: number, then: () => void, spans?: S
     showWord(i, sweep(spans[i], u.rate, true))
     if (i + 1 < spans.length) ticker = setTimeout(() => tick(i + 1), pace(text, spans[i], u.rate, true))
   }
-  u.onstart = () => { clearTimeout(quiet); if (spans?.length) tick(0) }
+  // Safety timer: once talking, if the phone never says the verse is done
+  // (it can lose track, and reading would sit on one verse for good), go on
+  // to the next one after well over the time the verse takes. Any word the
+  // phone reports moves the deadline on, so a slow voice is never cut off.
+  let done = false, stuck: ReturnType<typeof setTimeout> | undefined
+  const finish = () => { if (done) return; done = true; clearTimeout(quiet); clearTimeout(ticker); clearTimeout(stuck); if (speaking === u) speaking = undefined }
+  const watch = () => {
+    clearTimeout(stuck)
+    stuck = setTimeout(() => {
+      if (done || my !== run) return
+      // Paused by the phone itself: that's not stuck.
+      if (synth?.paused) return watch()
+      finish(); synth?.cancel(); then()
+    }, Math.max(8000, text.length * 160 / u.rate))
+  }
+  u.onstart = () => { clearTimeout(quiet); watch(); if (spans?.length) tick(0) }
   u.onboundary = e => {
+    if (!done) watch()
     if (!spans?.length || my !== run || (e.name && e.name !== 'word')) return
     heard = true; clearTimeout(ticker)
     const w = wordAt(spans, e.charIndex)
     showWord(w, sweep(spans[w], u.rate, true))
   }
-  u.onend = () => { clearTimeout(quiet); clearTimeout(ticker); if (my === run) then() }
+  u.onend = () => { if (done) return; finish(); if (my === run) then() }
   u.onerror = e => {
-    clearTimeout(quiet); clearTimeout(ticker)
+    if (done) return
+    finish()
     if (my !== run) return
     // Stopped by the phone itself (a call, another app's sound): wait, paused, where it was.
     if (e.error === 'interrupted' || e.error === 'canceled') return pauseListening()
@@ -452,13 +473,16 @@ function lockButtons(on: boolean) {
  * phone's own voice goes on from the same verse, or the highlight alone. */
 function lost(my: number) {
   if (my !== run || !now) return
+  // One failure can report twice (the player's error and play() refusing):
+  // only the first goes on, or the verse is queued twice.
+  const mine = ++run
   unreachable = true
   hush(); held = undefined; keep = false; lockButtons(false)
   cur = undefined; resumeAt = 0
   if (typeof navigator !== 'undefined' && navigator.onLine === false) listenNote(t('No connection: the phone’s own voice'))
   counted(silentNow() || !synth ? 'silent' : 'voice')
   emit()
-  next(my)
+  next(mine)
 }
 
 /** Play the recording of the chapter from the verse we're at; `flow`: on
@@ -788,7 +812,9 @@ export function followPage(spot: Spot, bible: Bible) {
     return
   }
   const playing = now.playing
-  now = { ...spot, verse: spot.verse || 1, bible, playing }
+  // Only the Bible changed: go on from the same verse in it, not from verse 1.
+  const sameChapter = now.book === spot.book && now.chapter === spot.chapter
+  now = { ...spot, verse: spot.verse || (sameChapter ? now.verse : 1), bible, playing }
   resumeAt = 0; cur = undefined; wordNow = 0; keep = false
   if (playing) begin()
   else { run++; synth?.cancel(); clearWord(); emit() }
@@ -842,7 +868,8 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
       if (box.top < 90 || box.bottom > innerHeight - 170) scrollTo({ top: scrollY + box.top - innerHeight / 3, behavior: 'smooth' })
     }, 120)
     return () => clearTimeout(timer)
-  }, [n?.book, n?.chapter, n?.verse, !!n])
+  // (Again when it plays on: the page redrawn under an open verse bar loses the mark.)
+  }, [n?.version, n?.book, n?.chapter, n?.verse, !!n, n?.playing])
   useEffect(() => () => { document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking')); clearWord() }, [])
 
   // iPhones mute web speech in Silent mode, so say so gently the first few

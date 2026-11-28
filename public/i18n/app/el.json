@@ -1374,5 +1374,7 @@
 "Brown": "Καφέ",
 "Show the Read along icon in the search bar": "Εμφάνιση του εικονιδίου «Ανάγνωση με παρακολούθηση» στη γραμμή αναζήτησης",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Το εικονίδιο «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης.",
-"Rename topic": "Μετονομασία θέματος"
+"Rename topic": "Μετονομασία θέματος",
+"Find in your highlights": "Αναζήτηση στις επισημάνσεις σας",
+"No highlight has “{words}” in it.": "Καμία επισήμανση δεν περιέχει «{words}»."
 }

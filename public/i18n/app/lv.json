@@ -1459,5 +1459,7 @@
 "Brown": "Brūns",
 "Show the Read along icon in the search bar": "Rādīt ikonu “Lasīt līdzi” meklēšanas joslā",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lasīt līdzi” tās labajā galā lasa no panta ekrāna augšā.",
-"Rename topic": "Pārdēvēt tēmu"
+"Rename topic": "Pārdēvēt tēmu",
+"Find in your highlights": "Meklēt jūsu izcēlumos",
+"No highlight has “{words}” in it.": "Nevienā izcēlumā nav „{words}”."
 }

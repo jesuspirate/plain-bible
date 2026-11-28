@@ -1371,5 +1371,7 @@
 "Brown": "Nsundu",
 "Show the Read along icon in the search bar": "Tshengisa uphawu oluthi “Bala ulandela” emugqeni wokudinga",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Uphawu oluthi “Bala ulandela” ekucineni kwalo kwesokudla lubala kusukela evesini eliphezulu kusikrini.",
-"Rename topic": "Qamba isihloko kutsha"
+"Rename topic": "Qamba isihloko kutsha",
+"Find in your highlights": "Dinga kokugqanyisiweyo kwenu",
+"No highlight has “{words}” in it.": "Akukho okugqanyisiweyo okulokuthi “{words}”."
 }

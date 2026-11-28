@@ -1371,5 +1371,7 @@
 "Brown": "Brun",
 "Show the Read along icon in the search bar": "Vis «Les med»-ikonet i søkefeltet",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "«Les med»-ikonet i høyre ende leser fra verset øverst på skjermen.",
-"Rename topic": "Gi emnet nytt navn"
+"Rename topic": "Gi emnet nytt navn",
+"Find in your highlights": "Søk i markeringene dine",
+"No highlight has “{words}” in it.": "Ingen markeringer inneholder «{words}»."
 }

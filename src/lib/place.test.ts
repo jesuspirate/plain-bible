@@ -76,6 +76,9 @@ describe('the place that travels with the account', () => {
     expect(worthOffering(phone, { ...phone, t: 10, verse: 2 }, 0)).toBe(false)
     expect(worthOffering({ ...phone, s: { q: 'riche', base: 'LSG', at: 6 } }, { ...phone, t: 10 }, 0)).toBe(true)
     expect(worthOffering(undefined, mac, 0)).toBe(false)
+    // The same search already open here, bounced back from the other device: not offered.
+    expect(worthOffering({ ...phone, s: { q: 'riche', base: 'LSG', at: 6 } }, { ...phone, t: 10 }, 0, { q: 'riche', base: 'LSG' })).toBe(false)
+    expect(worthOffering({ ...phone, s: { q: 'riche', base: 'LSG', at: 6 } }, { ...phone, t: 10 }, 0, { q: 'pauvre', base: 'LSG' })).toBe(true)
   })
   it('names the kind of device', () => {
     expect(deviceKind('Mozilla/5.0 (iPhone; CPU iPhone OS 18_0 like Mac OS X)', 5)).toBe('iphone')

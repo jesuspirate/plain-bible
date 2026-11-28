@@ -1371,5 +1371,7 @@
 "Brown": "قوڭۇر",
 "Show the Read along icon in the search bar": "ئىزدەش بالدىقىدا «ئەگىشىپ ئوقۇش» سىنبەلگىسىنى كۆرسىتىش",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "ئۇچىدىكى «ئەگىشىپ ئوقۇش» سىنبەلگىسى ئېكران ئۈستىدىكى ئايەتتىن باشلاپ ئوقۇيدۇ.",
-"Rename topic": "تېمىنىڭ نامىنى ئۆزگەرتىش"
+"Rename topic": "تېمىنىڭ نامىنى ئۆزگەرتىش",
+"Find in your highlights": "گەۋدىلەندۈرۈشلىرىڭىزدىن ئىزدەش",
+"No highlight has “{words}” in it.": "«{words}» بار گەۋدىلەندۈرۈش يوق."
 }

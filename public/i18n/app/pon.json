@@ -1371,5 +1371,7 @@
 "Brown": "Brown",
 "Show the Read along icon in the search bar": "Kasansalehda kilel “Wadek iangahki” nan pwehl en rapahk",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Kilel “Wadek iangahki” ni imwin palio maun kin wadek sang iretikin pohn sikirin.",
-"Rename topic": "Wekidala mwaren ire"
+"Rename topic": "Wekidala mwaren ire",
+"Find in your highlights": "Rapahki nan noumw kasansal kan",
+"No highlight has “{words}” in it.": "Sohte kasansal me audaudki “{words}”."
 }

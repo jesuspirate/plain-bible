@@ -1371,5 +1371,7 @@
 "Brown": "Brun",
 "Show the Read along icon in the search bar": "Lakisa elembo “Tánga elongo” na esika ya koluka",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Elembo “Tánga elongo” na nsuka na yango ya mobali etángaka banda vɛrsɛ oyo ezali likoló ya écran.",
-"Rename topic": "Bongola nkombo ya motó ya likambo"
+"Rename topic": "Bongola nkombo ya motó ya likambo",
+"Find in your highlights": "Luká na langi na yo",
+"No highlight has “{words}” in it.": "Langi moko te ezali na “{words}”."
 }

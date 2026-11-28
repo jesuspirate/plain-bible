@@ -216,6 +216,9 @@ export const showSearchWays = () => window.dispatchEvent(new Event(SHOW_SEARCH_W
 let prayHereAt: { book: string; chapter: number; verse: number } | undefined
 export const setPrayHere = (p: typeof prayHereAt) => { prayHereAt = p }
 export const prayHere = () => prayHereAt
+/** Asks the page to mark its verse now, not once it rests: 🙏 tapped right
+ *  after a scroll or a chapter turn keeps the verse on screen. */
+export const MARK_HERE = 'plain-bible:mark-here'
 export const TOUR_EVENT = 'plain-bible:tour'
 export const openTour = () => window.dispatchEvent(new Event(TOUR_EVENT))
 const TOUR = 'plain-bible:tour'

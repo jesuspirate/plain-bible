@@ -1371,5 +1371,7 @@
 "Brown": "বাদামি",
 "Show the Read along icon in the search bar": "সার্চ বারে “সঙ্গে পড়ুন” আইকন দেখান",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "এর ডান প্রান্তের “সঙ্গে পড়ুন” আইকনটি স্ক্রিনের উপরের পদ থেকে পড়ে।",
-"Rename topic": "বিষয়ের নাম পরিবর্তন করুন"
+"Rename topic": "বিষয়ের নাম পরিবর্তন করুন",
+"Find in your highlights": "আপনার হাইলাইটে খুঁজুন",
+"No highlight has “{words}” in it.": "কোনো হাইলাইটে “{words}” নেই।"
 }

@@ -50,6 +50,8 @@ export async function refreshSaved(base: string, now = Date.now()) {
 
 export class DataSource {
   private bibles = new Map<string, Promise<Bible>>()
+  /** The Bibles already loaded, to hand over at once (no empty frame). */
+  private ready = new Map<string, Bible>()
   private lex = new Map<string, Promise<Record<string, LexEntry>>>()
   constructor(private base: string) {}
 
@@ -102,7 +104,7 @@ export class DataSource {
           books: Object.fromEntries(Object.entries(b.books).map(([book, chs]) =>
             [book, chs.map((vs, c) => vs.map((v, i) => withTags(v, s.books[book]?.[c]?.[i] ?? '')))])),
         }))
-        p.catch(() => this.bibles.delete(key))
+        p.then(b => this.ready.set(key, b), () => this.bibles.delete(key))
         this.bibles.set(key, p)
       }
       return p.catch(() => this.bible(id))
@@ -110,10 +112,16 @@ export class DataSource {
     let p = this.bibles.get(id)
     if (!p) {
       p = this.json<Bible>(`bibles/${id}.json`)
-      p.catch(() => this.bibles.delete(id))
+      p.then(b => this.ready.set(id, b), () => this.bibles.delete(id))
       this.bibles.set(id, p)
     }
     return p
+  }
+
+  /** The Bible if it has already loaded this session, else undefined. Switching
+   *  back to it then shows the chapter in the same frame, with no blank page. */
+  bibleNow(id: string, strongs = false): Bible | undefined {
+    return (strongs && this.ready.get(id + '#strongs')) || (strongs && this.bibles.has(id + '#strongs') ? undefined : this.ready.get(id))
   }
 
   lexicon(num: string): Promise<LexEntry | undefined> {

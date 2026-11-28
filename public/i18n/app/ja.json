@@ -1371,5 +1371,7 @@
 "Brown": "ブラウン",
 "Show the Read along icon in the search bar": "検索バーに「目で追って読む」アイコンを表示",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "右端の「目で追って読む」アイコンで、画面の一番上の節から読みます。",
-"Rename topic": "テーマの名前を変更"
+"Rename topic": "テーマの名前を変更",
+"Find in your highlights": "ハイライトを検索",
+"No highlight has “{words}” in it.": "「{words}」を含むハイライトはありません。"
 }

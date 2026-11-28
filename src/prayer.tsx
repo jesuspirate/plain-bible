@@ -12,7 +12,7 @@ import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow, setPrayingOver } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, MARK_HERE, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow, setPrayingOver } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
@@ -74,10 +74,12 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // and no verse at all when it has none.
   // The verse you were on when you tapped 🙏: the one the page marks with a
   // faint 🙏 (reader.tsx). Nothing when not reading a chapter.
-  const [here] = useState<PrayerVerse | undefined>(() => {
+  const hereNow = (): PrayerVerse | undefined => {
     const r = parseHash().path, p = prayHere()
     return r[0] === 'read' && p && p.book === r[2] && p.chapter === +r[3] ? { book: p.book, chapter: p.chapter, verses: [p.verse] } : undefined
-  })
+  }
+  // Marked now, so a tap right after scrolling keeps the verse on screen.
+  const [here] = useState<PrayerVerse | undefined>(() => { dispatchEvent(new Event(MARK_HERE)); return hereNow() })
   // The verse a prayer with none of its own is given when it is first kept,
   // so it has one even if it ends without Amen (paused by a call or the phone
   // locking, then closed, or the app reloaded): a verse you had selected,
@@ -242,7 +244,9 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
           id = started.toString(36) + Math.random().toString(36).slice(2, 6)
           // Verses picked before praying are the prayer's verses, nothing
           // added. A prayer for someone's request gets none by itself.
-          const c = offer?.verses[0] ?? here
+          // Opened before the page had its verse (the Home Screen widget):
+          // the one marked since.
+          const c = offer?.verses[0] ?? here ?? hereNow()
           if (!tie.length && !forRef.current && c) given.current = { id, c }
           tie = withGiven(id, tie)
           await prayers.put({ id, at: started, ...part, verse: tie[0], verses: tie, vrev: 1, vdirty: true })
@@ -393,6 +397,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
       d.v = .8 * ((d.y - y) / dt) + .2 * d.v; d.y = y; d.t = e.timeStamp
       e.preventDefault()
     },
+    // A touch the phone takes away (a call, a system gesture): the light comes back.
+    onTouchCancel: (e: TouchEvent) => { drag.current = undefined; reading(e) },
     // Let go: it glides on a little, as the page itself would.
     onTouchEnd: (e: TouchEvent) => {
       const d = drag.current
@@ -870,7 +876,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
             <button class="pray-btn primary" disabled={!renaming.trim()}>{t('Save')}</button>
           </div>
         </form>}
-        {all.length >= 4 && (view !== 'topics' || within) && renaming === undefined && <input type="search" class="saved-find" placeholder={t('Find by name, verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined); setEdit(undefined) }} />}
+        {all.length >= 4 && (view !== 'topics' || within) && renaming === undefined && <form class="filter-form" onSubmit={e => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur?.() }}><input enterKeyHint="done" type="search" class="saved-find" placeholder={t('Find by name, verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined); setEdit(undefined) }} /></form>}
       </div>}
       {view === 'topics' && !within ? (shelves.length ? <ol>
         {shelves.map(name => <li class="pray-month"><button onClick={() => { setTopic(name); setFind('') }}>

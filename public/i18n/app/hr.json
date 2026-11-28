@@ -1459,5 +1459,7 @@
 "Brown": "Smeđe",
 "Show the Read along icon in the search bar": "Prikaži ikonu „Prati čitanje” u traci za pretraživanje",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Prati čitanje” na desnom kraju čita od retka na vrhu zaslona.",
-"Rename topic": "Preimenuj temu"
+"Rename topic": "Preimenuj temu",
+"Find in your highlights": "Traži u isticanjima",
+"No highlight has “{words}” in it.": "Nijedno isticanje ne sadrži „{words}”."
 }

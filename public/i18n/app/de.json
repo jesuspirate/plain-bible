@@ -1371,5 +1371,7 @@
 "Brown": "Braun",
 "Show the Read along icon in the search bar": "Das Symbol „Mitlesen“ in der Suchleiste zeigen",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Das Symbol „Mitlesen“ am rechten Ende liest ab dem Vers oben auf dem Bildschirm.",
-"Rename topic": "Thema umbenennen"
+"Rename topic": "Thema umbenennen",
+"Find in your highlights": "In deinen Markierungen suchen",
+"No highlight has “{words}” in it.": "Keine Markierung enthält „{words}“."
 }

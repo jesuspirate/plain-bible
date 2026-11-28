@@ -1206,5 +1206,7 @@
 "Brown": "Marrón",
 "Show the Read along icon in the search bar": "Mostrar el icono «Leer siguiendo» en la barra de búsqueda",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "El icono «Leer siguiendo» de su extremo derecho lee desde el versículo de arriba de la pantalla.",
-"Rename topic": "Cambiar nombre del tema"
+"Rename topic": "Cambiar nombre del tema",
+"Find in your highlights": "Buscar en tus resaltados",
+"No highlight has “{words}” in it.": "Ningún resaltado contiene «{words}»."
 }

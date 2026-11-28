@@ -1371,5 +1371,7 @@
 "Brown": "भूरा",
 "Show the Read along icon in the search bar": "खोज पट्टी में “साथ-साथ पढ़ें” चिह्न दिखाएँ",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "इसके दाएँ सिरे का “साथ-साथ पढ़ें” चिह्न स्क्रीन के ऊपर वाले पद से पढ़ता है।",
-"Rename topic": "विषय का नाम बदलें"
+"Rename topic": "विषय का नाम बदलें",
+"Find in your highlights": "अपने हाइलाइट में खोजें",
+"No highlight has “{words}” in it.": "किसी हाइलाइट में “{words}” नहीं है।"
 }

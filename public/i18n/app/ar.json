@@ -1518,5 +1518,7 @@
 "Brown": "بنّي",
 "Show the Read along icon in the search bar": "إظهار أيقونة «القراءة مع المتابعة» في شريط البحث",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "أيقونة «القراءة مع المتابعة» في طرفه تقرأ من الآية في أعلى الشاشة.",
-"Rename topic": "إعادة تسمية الموضوع"
+"Rename topic": "إعادة تسمية الموضوع",
+"Find in your highlights": "البحث في تمييزاتك",
+"No highlight has “{words}” in it.": "لا يوجد تمييز يحتوي على «{words}»."
 }

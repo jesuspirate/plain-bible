@@ -1371,5 +1371,7 @@
 "Brown": "Rangi wa ndoro",
 "Show the Read along icon in the search bar": "Onania kamũhiano ka “Thoma ũkĩrũmĩrĩra” mũhari-inĩ wa gũcaria",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "Kamũhiano ka “Thoma ũkĩrũmĩrĩra” mũthia wa ũrĩo gathomaga kuuma mũhari ũrĩa ũrĩ igũrũ wa skrini.",
-"Rename topic": "Garũra rĩĩtwa rĩa mũtwe"
+"Rename topic": "Garũra rĩĩtwa rĩa mũtwe",
+"Find in your highlights": "Caria thĩinĩ wa rangi ciaku",
+"No highlight has “{words}” in it.": "Gũtirĩ rangi ĩrĩ na “{words}”."
 }

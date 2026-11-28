@@ -1375,5 +1375,7 @@
 "Brown": "חום",
 "Show the Read along icon in the search bar": "הצגת הסמל „קריאה עם מעקב” בשורת החיפוש",
 "The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך.",
-"Rename topic": "שינוי שם הנושא"
+"Rename topic": "שינוי שם הנושא",
+"Find in your highlights": "חיפוש בהדגשות שלך",
+"No highlight has “{words}” in it.": "אין הדגשה שמכילה \"{words}\"."
 }
