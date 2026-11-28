@@ -60,7 +60,7 @@ export function Versions({ inSheet }: { inSheet?: boolean } = {}) {
       {!inSheet && <h1>{t('Versions')}</h1>}
       <p class="muted">{t('{n} versions in {langs} languages. All are public domain or openly licensed.', { n: catalog.translations.length, langs })}{' '}
         {t('Star a version to keep it at the top of every list. Save it for offline use and it works without a connection.')}</p>
-      <input enterKeyHint="done" class="filter" type="search" placeholder={t('Filter by name or language')} value={filter} onInput={e => setFilter((e.target as HTMLInputElement).value)} />
+      <form class="filter-form" onSubmit={e => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur?.() }}><input enterKeyHint="done" class="filter" type="search" placeholder={t('Filter by name or language')} value={filter} onInput={e => setFilter((e.target as HTMLInputElement).value)} /></form>
       {groups.map(([lang, ts]) => (
         <section>
           <h2>{lang}{ts[0].langNative.toLowerCase() !== lang.toLowerCase() && <span class="muted"> · {ts[0].langNative}</span>}</h2>

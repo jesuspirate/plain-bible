@@ -200,10 +200,12 @@ export function VersionPicker({ title, selected, multi, onChange, onClose, max =
   )
   return (
     <Sheet title={title} onClose={() => { if (multi) onChange(sel); onClose() }} wide>
-      <input class="filter" type="search" placeholder={t('Search {n} versions or a language', { n: catalog.translations.length })} value={filter}
-        onInput={e => setFilter((e.target as HTMLInputElement).value)} autoFocus={!matchMedia('(pointer: coarse)').matches}
-        // Enter: the top match is your pick (choosing one Bible); the keyboard goes either way.
-        enterKeyHint={multi ? 'done' : 'go'} onKeyDown={e => { if (e.key === 'Enter' && !e.isComposing) { e.preventDefault(); if (!multi && f && list[0]) toggle(list[0].id) } }} />
+      {/* In a form, so the keyboard's Go (Enter) always arrives, as a submit: the
+          top match is your pick when choosing one Bible, and the keyboard goes. */}
+      <form class="filter-form" onSubmit={e => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur?.(); if (!multi && f && list[0]) toggle(list[0].id) }}>
+        <input class="filter" type="search" placeholder={t('Search {n} versions or a language', { n: catalog.translations.length })} value={filter}
+          onInput={e => setFilter((e.target as HTMLInputElement).value)} autoFocus={!matchMedia('(pointer: coarse)').matches} enterKeyHint={multi ? 'done' : 'go'} />
+      </form>
       {multi && <p class="muted small">{t('{n} selected (up to {max}). Close to apply.', { n: sel.length, max })}</p>}
       {f || all
         ? <>{[...byLang.entries()].map(([lang, ts]) => <section><h3>{lang}</h3>{ts.map(row)}</section>)}
