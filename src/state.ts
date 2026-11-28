@@ -236,6 +236,12 @@ export const versesPicked = (verse: PrayerVerse) => { picked = { verses: [verse]
  *  was kept with the next prayer while the faint 🙏 sat elsewhere. */
 export const versesUnpicked = () => { if (picked && !picked.sure) picked = undefined }
 /** Pray using these verses. */
+/** The verses a prayer is about while it's open: the page lights them up so
+ *  you can read them as you pray. */
+let prayingOn: PrayerVerse[] = []
+export const PRAYING_EVENT = 'plain-bible:praying-over'
+export const prayingOver = () => prayingOn
+export const setPrayingOver = (verses: PrayerVerse[]) => { prayingOn = verses; dispatchEvent(new Event(PRAYING_EVENT)) }
 export const prayOver = (...verses: PrayerVerse[]) => { picked = { verses, at: Date.now(), sure: true }; openPrayer() }
 /** What to offer as the prayer opens: verses selected in the last two
  *  minutes, and whether they were chosen for this prayer. Asked once. */

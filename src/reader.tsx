@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, parseHash, setPrayHere, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked, versesUnpicked } from './state'
+import { go, parseHash, setPrayHere, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked, versesUnpicked, prayingOver, PRAYING_EVENT } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -408,6 +408,14 @@ export function Reader({ route }: { route: Route }) {
   // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
   const [picking, setPicking] = useState(versePick)
   const [tied, setTied] = useState('')
+  // While you pray, the verses you picked for the prayer stay lit.
+  const [over, setOver] = useState(prayingOver)
+  useEffect(() => {
+    const on = () => setOver(prayingOver())
+    addEventListener(PRAYING_EVENT, on)
+    return () => removeEventListener(PRAYING_EVENT, on)
+  }, [])
+  const overHere = over.find(x => x.book === book && x.chapter === chapter)?.verses ?? []
   useEffect(() => {
     const on = () => setPicking(versePick())
     addEventListener(PICK_EVENT, on)
@@ -1152,7 +1160,7 @@ export function Reader({ route }: { route: Route }) {
     // drawn in; in other versions the whole verse is highlighted.
     const partial = (v: number) => { const m = mark(v); return !!(m?.c && m.r?.length && versions.includes(m.v!)) }
     const part = (v: number, ver: string) => { const m = mark(v); return partial(v) && m!.v === ver ? m!.r : undefined }
-    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow && v >= glow && v <= targetEnd && (targetEnd > glow || !mark(v)?.c) && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (live && target && v >= target && v <= targetEnd ? ' vmark' : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v)) ? ' picked' : '')
+    const cls = (base: string, v: number) => base + (live && pen && mark(v)?.c && penOn(markKey(b, c, v)) ? ' hl-draw' : '') + (live && glow && v >= glow && v <= targetEnd && (targetEnd > glow || !mark(v)?.c) && !selected.includes(v) ? (leaving ? ' target leaving' : ' target') : '') + (live && target && v >= target && v <= targetEnd ? ' vmark' : '') + (mark(v)?.c ? (partial(v) ? ' hlp' : ' hl') : '') + (mark(v)?.b ? ' bm' : '') + (live && (selected.includes(v) || pickedHere.includes(v) || overHere.includes(v)) ? ' picked' : '') + (live && overHere.includes(v) ? ' praying-over' : '')
     const verse = (v: number) => live
       ? { id: 'v' + v, onClick: (e: MouseEvent) => tapVerse(e, v), onMouseDown: fine ? (e: MouseEvent) => { if (e.detail === 3) e.preventDefault() } : undefined }
       : { id: undefined, onClick: undefined, onMouseDown: undefined }

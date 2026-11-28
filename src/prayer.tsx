@@ -12,7 +12,7 @@ import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow, setPrayingOver } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
@@ -105,6 +105,9 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // Reading aloud waits, paused on its verse, while you pray.
   useEffect(() => { if (readingAt()) pauseListening() }, [])
   const [tied, setTiedNow] = useState<PrayerVerse[]>(offer?.sure ? offer.verses : [])
+  // The page lights up the verses this prayer is about while it's open.
+  useEffect(() => { setPrayingOver(tied.length ? tied : offer?.verses ?? []) }, [tied])
+  useEffect(() => () => setPrayingOver([]), [])
   const tiedRef = useRef(tied)
   const setTied = (v: PrayerVerse[]) => { tiedRef.current = v; setTiedNow(v) }
   // The prayer just kept, and the verses it's tied to.
