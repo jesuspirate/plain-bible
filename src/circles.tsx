@@ -28,7 +28,7 @@ import { ASK_PRAYED, go, openCircles, openSettings, pickVerses, prayFor, prayedN
 import { hasNews, leadNews, leadSeen, markSeen, seenAt, useCircleNews } from './lib/circleNews'
 import { byDay, dayOf } from './lib/circleDays'
 import { BackIcon, BellIcon, BookIcon, BookmarkIcon, CircleIcon, CloseIcon, NoteIcon, PauseIcon, PlayIcon, ReturnIcon } from './icons'
-import { playParts, type PartsPlayer } from './lib/parts'
+import { keepSpot, playParts, spotOf, type PartsPlayer } from './lib/parts'
 import { SeekBar } from './seekbar'
 import { blockedHelp, clearNotifications, prepareKey, pushOn, pushSupport, turnOff, turnOn } from './lib/push'
 import { Sheet } from './ui'
@@ -1546,6 +1546,7 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
   const [state, setState] = useState<'idle' | 'loading' | 'playing' | 'paused'>('idle')
   const [pos, setPos] = useState(0)
   const audio = useRef<{ el: HTMLAudioElement; urls: string[]; ctl: PartsPlayer }>()
+  const spot = `c:${circle}:${item.id}`
   const release = () => {
     const a = audio.current
     if (a) { a.ctl ? a.ctl.stop() : a.el.pause(); a.urls.forEach(dropAudioUrl); audio.current = undefined }
@@ -1566,10 +1567,14 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
     const el = new Audio()
     nowPlaying(t('Prayer'))
     setState('playing')
-    const player = playParts(el, urls, urls.map((_, i) => ms[i] ?? 0), { time: setPos, playing: on => setState(on ? 'playing' : 'paused'), end: release, fail: release })
+    const player = playParts(el, urls, urls.map((_, i) => ms[i] ?? 0), { time: setPos, playing: on => setState(on ? 'playing' : 'paused'), end: release, fail: release },
+      { spot, from: spotOf(spot) })
     audio.current = { el, urls, ctl: player }
   }
   const total = item.body.k === 'prayer' ? item.body.ms : 0
+  // Left partway (here, or before the app was closed): it shows where, and carries on from there.
+  const left = state === 'idle' ? spotOf(spot) : undefined
+  const [, bump] = useState(0)
   return (
     <div class="c-prayer">
       <button class="c-play" aria-label={state === 'playing' ? t('Pause') : t('Play this prayer')} onClick={play}>
@@ -1578,7 +1583,9 @@ function PrayerPlayer({ circle, item, onError }: { circle: string; item: FeedIte
           : <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M8 5.5v13l11-6.5z" fill="currentColor" /></svg>}
       </button>
       <span>{t('A prayer')} <span class="muted">· {state === 'loading' ? t('Opening…') : duration(total)}</span></span>
-      {(state === 'playing' || state === 'paused') && <SeekBar pos={pos} total={total} onSeek={ms => audio.current?.ctl.seek(ms)} />}
+      {(state === 'playing' || state === 'paused')
+        ? <SeekBar pos={pos} total={total} onSeek={ms => audio.current?.ctl.seek(ms)} />
+        : left !== undefined && <SeekBar pos={left} total={total} onSeek={ms => { keepSpot(spot, ms); bump(n => n + 1) }} />}
     </div>
   )
 }

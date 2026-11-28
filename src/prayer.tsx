@@ -15,7 +15,7 @@ import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './li
 import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, MARK_HERE, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow, setPrayingOver } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon, PauseIcon } from './icons'
-import { playParts, type PartsPlayer } from './lib/parts'
+import { allSpots, keepSpot, playParts, spotOf, type PartsPlayer } from './lib/parts'
 import { SeekBar } from './seekbar'
 import type { Journal } from './lib/prayerJournal'
 import { byMonth, finds, longDuration, TOPICS, topicsOf, topicsOfPrayer } from './lib/prayerJournal'
@@ -602,7 +602,9 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     setPlaying(id); setPos(0); setPaused(false)
     nowPlaying(t('Prayer'))
     if (rest.length || inTurnRef.current) document.getElementById(`pray-${id}`)?.scrollIntoView({ block: 'nearest', behavior: 'smooth' })
-    audio.current.ctl = playParts(el, urls, parts.map(x => x.ms), { time: setPos, playing: on => setPaused(!on), end: next, fail: release })
+    // Alone, it carries on from where it was left; in turn, each from its start.
+    audio.current.ctl = playParts(el, urls, parts.map(x => x.ms), { time: setPos, playing: on => setPaused(!on), end: next, fail: release },
+      { spot: `p:${id}`, from: rest.length || inTurnRef.current ? undefined : spotOf(`p:${id}`) })
   }
   const inTurnRef = useRef(false)
   inTurnRef.current = inTurn
@@ -648,6 +650,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
   }
   const remove = async (p: PrayerInfo) => {
     if (playing === p.id) release()
+    keepSpot(`p:${p.id}`)
     setConfirm(undefined)
     await prayers.delete(p.id).catch(() => {})
     await deletedHere(p.id).catch(() => {})
@@ -744,6 +747,9 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
       {stars > 0 && <span class="pray-mark fav">★ {stars}</span>}
     </span>
   }
+  // Prayers paused partway (here, or before the app was closed) show where.
+  const [, bump] = useState(0)
+  const spots = allSpots()
   const total = (ps: PrayerInfo[]) => longDuration(ps.reduce((n, p) => n + p.ms, 0))
   const row = (p: PrayerInfo, dated = flat) => (
     <li id={`pray-${p.id}`} class={'pray-row' + (playing === p.id ? ' on' : '') + (open === p.id ? ' open' : '')}>
@@ -767,7 +773,9 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
         : <button class="pray-icon pray-more" aria-expanded="false" aria-label={t('More')} onClick={() => { setConfirm(undefined); setEdit(undefined); setOpen(p.id) }}>
           <svg viewBox="0 0 24 24" width="26" height="26" aria-hidden="true"><circle cx="5" cy="12" r="2" fill="currentColor" /><circle cx="12" cy="12" r="2" fill="currentColor" /><circle cx="19" cy="12" r="2" fill="currentColor" /></svg>
         </button>}
-      {playing === p.id && <SeekBar pos={pos} total={p.ms} onSeek={ms => audio.current?.ctl?.seek(ms)} />}
+      {playing === p.id
+        ? <SeekBar pos={pos} total={p.ms} onSeek={ms => audio.current?.ctl?.seek(ms)} />
+        : spots[`p:${p.id}`] !== undefined && <SeekBar pos={spots[`p:${p.id}`]} total={p.ms} onSeek={ms => { keepSpot(`p:${p.id}`, ms); bump(n => n + 1) }} />}
       {open === p.id && edit?.id === p.id && edit.what === 'name' && <form class="pray-edit" onSubmit={e => { e.preventDefault(); note(p, { name: edit.text }) }}>
         <input class="saved-find" value={edit.text} maxLength={80} placeholder={t('Name of this prayer')} aria-label={t('Name of this prayer')} enterkeyhint="done"
           ref={el => { if (el && !el.dataset.on) { el.dataset.on = '1'; el.focus() } }} onInput={e => setEdit({ ...edit, text: (e.target as HTMLInputElement).value })} />
