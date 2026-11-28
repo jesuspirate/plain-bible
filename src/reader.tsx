@@ -9,7 +9,7 @@ import { touch as touchTrail } from './lib/history'
 import { chapterNotes, LinkedNote, linkNotes, NoteLinks, related } from './lib/notelinks'
 import { plain } from './lib/text'
 import { canShare, copyText, share, shareLink } from './lib/native'
-import { go, parseHash, setPrayHere, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked } from './state'
+import { go, parseHash, setPrayHere, canShareInCircles as inCircles, openCircles, openSearch, PICK_EVENT, pickVerses, READ_HERE_EVENT, VERSE_BAR_EVENT, prayOver, versePick, readPath, Route, sharedPath, shareWithCircle, useApp, versesPicked, versesUnpicked } from './state'
 import { TURN_EVENT, watchReading } from './lib/streaks'
 import { toggleVerse, verseLabel } from './lib/prayerVerses'
 import { LexiconSheet, Sheet, VerseText } from './ui'
@@ -75,10 +75,22 @@ function fits(el: HTMLElement | null) {
   return box.right - lines[lines.length - 1].right > parseFloat(getComputedStyle(el).fontSize) * 1.5
 }
 
+/** The one spot the faint 🙏 marks, a prayer keeps and Read along starts
+ *  from: a verse you landed on (from search or a link) while it's still on
+ *  screen, else the first verse that starts on screen. */
+let landedOn = 0
+function spotHere(): number {
+  const r = landedOn ? document.getElementById('v' + landedOn)?.getBoundingClientRect() : undefined
+  if (r && r.height > 0 && r.right > 0 && r.left < innerWidth && r.bottom > headerBottom() + 12 && r.top < innerHeight - 90) return landedOn
+  // Scrolled off: from now on it's wherever you read.
+  landedOn = 0
+  return verseHere()
+}
+
 function markPray() {
   if (!document.querySelector('.reader article.chapter')) return
   const r = parseHash().path
-  const v = verseHere()
+  const v = spotHere()
   setPrayHere(r[0] === 'read' ? { book: r[2], chapter: +r[3], verse: v } : undefined)
   // It's also where you stopped: what your other devices offer to continue from.
   if (r[0] === 'read') savePlaceHere(r[2], +r[3], v)
@@ -256,6 +268,7 @@ export function Reader({ route }: { route: Route }) {
     if (!loaded) return
     const prev = shown.current
     shown.current = { book, chapter, target, at: resumeAt }
+    landedOn = target
     const same = prev && prev.book === book && prev.chapter === chapter
     if (!same) topVerse.current = 0
     requestAnimationFrame(() => {
@@ -325,14 +338,7 @@ export function Reader({ route }: { route: Route }) {
       const { selected, target, version, book, chapter, bibles } = latest.current
       const bible = bibles[version]
       if (!bible) return
-      const from = headerBottom() + 12
-      const inView = (el: Element | null) => {
-        const r = el?.getBoundingClientRect()
-        return !!r && r.height > 0 && r.right > 0 && r.left < innerWidth && r.bottom > from && r.top < innerHeight - 90
-      }
-      let v = selected.length ? Math.min(...selected) : 0
-      if (!v && target && inView(document.getElementById('v' + target))) v = target
-      if (!v) v = verseHere()
+      const v = selected.length ? Math.min(...selected) : spotHere()
       setSelected([])
       startListening({ version, lang: byId.get(version)?.lang ?? 'en', book, chapter, verse: v }, bible)
     }
@@ -395,7 +401,7 @@ export function Reader({ route }: { route: Route }) {
   }, [marks])
   // Turning the page puts the pen down at once.
   useEffect(() => () => { for (const p of [...pens.current]) p.stop() }, [book, chapter])
-  useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }) }, [selected])
+  useEffect(() => { if (selected.length) versesPicked({ book, chapter, verses: selected }); else versesUnpicked() }, [selected])
   // "Add a verse" for a prayer: verses you tap are added to it, or taken off.
   const [picking, setPicking] = useState(versePick)
   const [tied, setTied] = useState('')

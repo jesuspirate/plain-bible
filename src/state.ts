@@ -230,6 +230,11 @@ export const markTourSeen = () => { try { localStorage.setItem(TOUR, 'seen') } c
 let picked: { verses: PrayerVerse[]; at: number; sure: boolean } | undefined
 /** The reader calls this as verses are selected. */
 export const versesPicked = (verse: PrayerVerse) => { picked = { verses: [verse], at: Date.now(), sure: false } }
+/** The selection closed (or a double tap highlighted the verse and let it
+ *  go): it's no longer what a prayer is about. A verse handed over by Pray
+ *  on the selection bar stays. Kept, a verse picked a minute ago and let go
+ *  was kept with the next prayer while the faint 🙏 sat elsewhere. */
+export const versesUnpicked = () => { if (picked && !picked.sure) picked = undefined }
 /** Pray using these verses. */
 export const prayOver = (...verses: PrayerVerse[]) => { picked = { verses, at: Date.now(), sure: true }; openPrayer() }
 /** What to offer as the prayer opens: verses selected in the last two
