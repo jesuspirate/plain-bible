@@ -294,6 +294,17 @@ main.with-bar { padding-bottom: 120px; }
 }
 .sb-field input::-webkit-search-cancel-button { display: none; }
 .sb-field input::placeholder { color: var(--muted); }
+/* The Bible you're reading, named quietly at the field's end when the
+   switcher pill is off: smaller and softer than the place, never a button. */
+.sb-ver {
+  flex: none; max-width: 30%; padding-inline-end: 2px; cursor: text;
+  font: 600 14px var(--sans); letter-spacing: .01em; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;
+  color: color-mix(in srgb, var(--text) 66%, transparent); text-shadow: 0 0 6px var(--surface), 0 0 2px var(--surface);
+  -webkit-user-select: none; user-select: none; -webkit-tap-highlight-color: transparent;
+}
+/* The closed field gives the place every pixel it can: a little less room
+   round the magnifier, so "1 Thessalonians 3" fits whole beside the Bible's name. */
+.sb:not(.sb-open):not(.sb-mini) .sb-field { padding-inline-start: 12px; gap: 4px; }
 .sb-clear { all: unset; cursor: pointer; display: grid; place-items: center; width: 22px; height: 22px; border-radius: 50%; font-size: 11px; background: color-mix(in srgb, var(--muted) 45%, transparent); color: var(--surface); }
 .sb-mic { all: unset; cursor: pointer; flex: none; display: grid; place-items: center; width: 40px; height: 40px; margin-right: -8px; border-radius: 50%; color: var(--text); -webkit-tap-highlight-color: transparent; }
 .sb-mic:active { background: var(--chip); }

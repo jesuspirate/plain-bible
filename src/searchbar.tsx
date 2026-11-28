@@ -80,6 +80,20 @@ function CirclesButton() {
 // names are abbreviated (Gen, Éphé) to keep the version in view.
 const shortName = (id: string) => innerWidth < 430 ? bookAbbr(id) : bookName(id)
 
+// The place in the closed bar: the book's full name whenever it fits in the
+// space the field really has, its short form only when it doesn't, so it is
+// never cut ("Joh…"). Measured in the field's own font.
+let ruler: CanvasRenderingContext2D | null | undefined
+function fitPlace(el: HTMLInputElement | null, width: number, book: string, rest: string) {
+  const full = bookName(book) + rest, short = bookAbbr(book) + rest
+  if (!el || !width) return innerWidth < 430 ? short : full
+  if (ruler === undefined) ruler = document.createElement('canvas').getContext('2d')
+  if (!ruler) return short
+  const cs = getComputedStyle(el)
+  ruler.font = `${cs.fontWeight} ${cs.fontSize} ${cs.fontFamily}`
+  return ruler.measureText(full).width <= width - 1 ? full : short
+}
+
 // This page came from a reload (an update, a sign-in), not from opening the app.
 const reloaded = () => { try { return (performance.getEntriesByType('navigation')[0] as PerformanceNavigationTiming | undefined)?.type === 'reload' } catch { return false } }
 const RECENT = 'plain-bible:recent'
@@ -141,11 +155,35 @@ export function SearchBar({ here, mini, above }: {
   const [pickIn, setPickIn] = useState(false)
   const [preview, setPreview] = useState<{ ref: Ref; lines: [number, string][] }>()
   const input = useRef<HTMLInputElement>(null)
+  // The field's width, followed so the place shown fits it (see fitPlace).
+  const [fieldW, setFieldW] = useState(0)
+  const watched = useRef<{ el: HTMLInputElement; ro: ResizeObserver }>()
+  useLayoutEffect(() => {
+    const el = input.current
+    if (watched.current?.el === el || typeof ResizeObserver === 'undefined') return
+    watched.current?.ro.disconnect()
+    watched.current = undefined
+    if (!el) return
+    const ro = new ResizeObserver(() => setFieldW(el.clientWidth))
+    ro.observe(el)
+    watched.current = { el, ro }
+    setFieldW(el.clientWidth)
+  })
+  // Measured again once the fonts arrive: the fallback font is narrower or wider.
+  const [, setFontsIn] = useState(0)
+  useEffect(() => {
+    const fonts = (document as any).fonts as FontFaceSet | undefined
+    const again = () => setFontsIn(n => n + 1)
+    fonts?.ready.then(again, () => {})
+    fonts?.addEventListener?.('loadingdone', again)
+    return () => { fonts?.removeEventListener?.('loadingdone', again); watched.current?.ro.disconnect() }
+  }, [])
   const version = here?.version ?? settings.version
   // In recording mode the bar names the version on screen, large.
   const recording = useRecording()
-  // The Bible you read is the switcher pill at the bar's right end; the
-  // words name one only in Teaching mode, when the big one on screen differs.
+  // The Bible you read: quiet letters at the bar's right end, or the switcher
+  // pill there when it is ticked in Settings (then the words name a Bible only
+  // in Teaching mode, when the big one on screen differs).
   const shown = recording.on && byId.has(recording.version) ? recording.version : version
   const info = byId.get(version)
   // The Bible searched stays the one you searched in while you step through
@@ -853,10 +891,14 @@ export function SearchBar({ here, mini, above }: {
           </div>
         ) : <form class="sb-field" onSubmit={submit} role="search">
           <Glass />
-          <input ref={input} type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
-            placeholder={here && !open ? `${shortName(here.book)} ${here.chapter}${shown !== version ? ` · ${shown}` : ''}` : t('Words or John 3:16')}
+          <input ref={input} id="sb-input" type="search" enterKeyHint={ref ? 'go' : 'search'} value={q} aria-label={mini && !open ? t('Search') : t('Search {version} or go to a passage', { version })}
+            placeholder={here && !open ? fitPlace(input.current, fieldW, here.book, ` ${here.chapter}${settings.versionPill && shown !== version ? ` · ${shown}` : ''}`) : t('Words or John 3:16')}
             onFocus={() => setOpen(true)} onTouchStart={onFieldTouchStart} onTouchEnd={onFieldTouchEnd} onInput={e => setQ((e.target as HTMLInputElement).value)}
             onKeyDown={onFieldKeyDown} onKeyUp={onFieldKeyUp} autoComplete="off" autoCorrect="off" autoCapitalize="off" spellcheck={false} />
+          {/* Without the switcher (the usual case), the Bible you're reading
+              is named here in quiet letters, so it is always in view. A tap
+              on it opens search like the rest of the field. */}
+          {!open && !mini && here && !settings.versionPill && <label for="sb-input" class="sb-ver" dir="ltr">{shown}</label>}
           {!open && !mini && here && settings.versionPill && <VersionSwitch />}
           {!open && !mini && here && settings.alongPill && <AlongButton />}
           {q && !listening && <button type="button" class="sb-clear" aria-label={t('Clear')} onClick={() => { setQ(''); input.current?.focus() }}>✕</button>}
