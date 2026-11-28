@@ -43,7 +43,7 @@ function PrayButton() {
   })
   return (
     <>
-      <button {...button} type="button" class={'sb-pray holdable' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '')} aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
+      <button {...button} type="button" class={'sb-pray holdable' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '') + (settings.discs !== 'quiet' ? ' disc-' + settings.discs : '')} aria-label={t('Pray')} title={t('Pray · hold for skin tones')}>
         <span class="sb-pray-emoji" aria-hidden="true">{'🙏' + settings.prayTone}</span>
       </button>
       {picker}
@@ -71,7 +71,7 @@ function CirclesButton() {
   const news = inCircles() && circlesWithNews() > 0
   // Beside a dark-toned 🙏 it takes the same light stone disc, so the pair matches.
   return (
-    <button type="button" class={'sb-circles' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '')} onClick={() => openCircles()}
+    <button type="button" class={'sb-circles' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '') + (settings.discs !== 'quiet' ? ' disc-' + settings.discs : '')} onClick={() => openCircles()}
       aria-label={news ? t('Circles · something new') : t('Circles')} title={t('Circles')}>
       <CircleIcon size={30} />
       {news && <span class="sb-news-dot" aria-hidden="true" />}

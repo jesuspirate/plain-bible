@@ -871,13 +871,22 @@ html.sb-floor .sb.sb-open { padding-bottom: max(10px, env(safe-area-inset-bottom
   -webkit-backdrop-filter: none; backdrop-filter: none;
 }
 .sb .sb-pray::after, .sb .sb-circles::after { display: none; }
-.sb .sb-pray { box-shadow: 0 0 0 1.5px rgba(235,175,80,.85), 0 0 16px 4px rgba(240,180,80,.55); }
-.sb .sb-circles { color: #e8a55a; box-shadow: 0 0 0 1.5px rgba(235,175,80,.5), 0 6px 16px rgba(0,0,0,.22); }
+/* A thick gold ring round both (11-28); only 🙏 glows, because prayer comes
+   before joining a circle. */
+.sb .sb-pray { box-shadow: 0 0 0 3px rgba(240,180,70,.95), 0 0 22px 7px rgba(245,190,80,.7); }
+.sb .sb-circles { color: #e8a55a; box-shadow: 0 0 0 3px rgba(240,180,70,.95), 0 4px 12px rgba(0,0,0,.18); }
 @media (hover: hover) { .sb .sb-circles:hover { border-color: transparent; } }
 /* 🙏 in the two darkest skin tones: a light stone disc, so the hands stand
    out, and Circles takes the same disc so the pair still matches. */
 .sb .sb-pray.deep, .sb .sb-circles.deep { background: radial-gradient(circle at 50% 40%, #f3ede1 0%, #e2d8c4 60%, #d0c2a6 100%); }
-.sb .sb-circles.deep { color: var(--accent); box-shadow: 0 0 0 1.5px rgba(200,140,60,.55), 0 6px 16px rgba(0,0,0,.16); }
+.sb .sb-circles.deep { color: var(--accent); }
+/* Settings → Extras → Prayer buttons: "All brown" keeps the brown disc for
+   every tone; "Honey" is a lighter warm disc for all. Before the dark rules,
+   so Dark keeps its own look. */
+.sb .sb-pray.deep.disc-brown, .sb .sb-circles.deep.disc-brown { background: radial-gradient(circle at 50% 38%, #5a4330 0%, #2e2116 100%); }
+.sb .sb-circles.deep.disc-brown { color: #e8a55a; }
+.sb .sb-pray.disc-honey, .sb .sb-circles.disc-honey { background: radial-gradient(circle at 50% 38%, #e2c49a 0%, #c49a68 100%); }
+.sb .sb-circles.disc-honey { color: #5a3a1c; }
 :root[data-theme='dark'] .sb .sb-pray {
   background: radial-gradient(circle at 50% 40%, rgba(255,253,246,.84) 0%, rgba(255,241,204,.8) 55%, rgba(255,217,138,.88) 100%);
   -webkit-backdrop-filter: blur(16px) saturate(180%); backdrop-filter: blur(16px) saturate(180%);
