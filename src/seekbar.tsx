@@ -10,9 +10,10 @@ import './seekbar.css'
  *  the frames when the app is in the background or the screen is off). */
 export function SeekBar({ pos, total, onSeek, live }: { pos: number; total: number; onSeek: (ms: number) => void; live?: () => number }) {
   // While a finger is on it, the bar follows the finger, not the sound.
-  const [held, setHeld] = useState<number>()
   const heldRef = useRef<number>()
-  heldRef.current = held
+  const [, redraw] = useState(0)
+  const setHeld = (v?: number) => { heldRef.current = v; redraw(n => n + 1) }
+  const held = heldRef.current
   const input = useRef<HTMLInputElement>(null)
   const at = Math.max(0, Math.min(total, held ?? pos))
   const fill = total ? (at / total) * 100 : 0
@@ -31,13 +32,25 @@ export function SeekBar({ pos, total, onSeek, live }: { pos: number; total: numb
     frame = requestAnimationFrame(step)
     return () => cancelAnimationFrame(frame)
   }, [live, total])
-  const go = (e: Event) => { const v = +(e.target as HTMLInputElement).value; setHeld(undefined); onSeek(v) }
+  // Listened to directly, not with onInput/onChange: once preact/compat is
+  // loaded, onChange on an input means every move, and the two raced, leaving
+  // the bar held where the finger let go while the sound went on.
+  const seekRef = useRef(onSeek)
+  seekRef.current = onSeek
+  useEffect(() => {
+    const el = input.current
+    if (!el) return
+    const move = () => setHeld(+el.value)
+    const done = () => { const v = +el.value; setHeld(undefined); seekRef.current(v) }
+    el.addEventListener('input', move)
+    el.addEventListener('change', done)
+    return () => { el.removeEventListener('input', move); el.removeEventListener('change', done) }
+  }, [])
   return (
     <div class="seek">
       <input ref={input} type="range" min={0} max={Math.max(1, Math.round(total))} step="any" value={at}
         style={{ '--fill': `${fill}%` }}
         aria-label={t('Prayer')} aria-valuetext={`${duration(at)} / ${duration(total)}`}
-        onInput={e => setHeld(+(e.target as HTMLInputElement).value)} onChange={go}
         onKeyDown={e => {
           // Arrow keys: 5 seconds a press.
           const by = e.key === 'ArrowRight' || e.key === 'ArrowUp' ? 5000 : e.key === 'ArrowLeft' || e.key === 'ArrowDown' ? -5000 : 0
