@@ -29,7 +29,8 @@ import { VersionSwitch } from './versionswitch'
 const TONE_NAMES = [N_('Yellow'), N_('Light skin tone'), N_('Medium-light skin tone'), N_('Medium skin tone'), N_('Medium-dark skin tone'), N_('Dark skin tone')]
 
 // The two darkest skin tones would melt into the dark brown disc; they get
-// the light stone disc instead (see styles.css, "The pair at the end").
+// the light stone disc instead, and Circles beside it too, so the pair
+// always matches (see styles.css, "The pair at the end").
 const DEEP_TONES = ['\u{1F3FE}', '\u{1F3FF}']
 
 /** 🙏: tap to pray. Press and hold for the skin tones. */
@@ -66,9 +67,11 @@ function AlongButton() {
  *  A dot when someone shared, replied or prayed with you since you last looked. */
 function CirclesButton() {
   useCircleNews()
+  const { settings } = useApp()
   const news = inCircles() && circlesWithNews() > 0
+  // Beside a dark-toned 🙏 it takes the same light stone disc, so the pair matches.
   return (
-    <button type="button" class="sb-circles" onClick={() => openCircles()}
+    <button type="button" class={'sb-circles' + (DEEP_TONES.includes(settings.prayTone) ? ' deep' : '')} onClick={() => openCircles()}
       aria-label={news ? t('Circles · something new') : t('Circles')} title={t('Circles')}>
       <CircleIcon size={30} />
       {news && <span class="sb-news-dot" aria-hidden="true" />}
