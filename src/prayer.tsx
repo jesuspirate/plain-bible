@@ -842,7 +842,7 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
           <button role="radio" aria-checked={view === 'fav'} class={view === 'fav' ? 'on' : ''} onClick={() => go('fav')}>★ {t('Favorites')}</button>
           <button role="radio" aria-checked={view === 'topics'} class={view === 'topics' ? 'on' : ''} onClick={() => go('topics')}>{t('Topics')}</button>
         </div>}
-        {all.length >= 4 && (view !== 'topics' || within) && <input type="search" class="saved-find" placeholder={t('Find by name, verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined); setEdit(undefined) }} />}
+        {all.length >= 4 && (view !== 'topics' || within) && <input enterKeyHint="done" type="search" class="saved-find" placeholder={t('Find by name, verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined); setEdit(undefined) }} />}
       </div>}
       {view === 'topics' && !within ? (shelves.length ? <ol>
         {shelves.map(name => <li class="pray-month"><button onClick={() => { setTopic(name); setFind('') }}>

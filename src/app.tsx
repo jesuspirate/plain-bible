@@ -30,6 +30,7 @@ import { currentLang, pickLang, setLang, t } from './i18n'
 import { showTapHints } from './taphint'
 import { fine } from './gesture'
 import { overlayOpen } from './lib/overlay'
+import { enterPutsKeyboardAway } from './lib/enter'
 import { fediWelcomeDue } from './lib/nostr'
 import { HOME_SCREEN_EVENT, homeScreenDue, inStoreApp, markHomeScreenShown } from './lib/install'
 import { nativeNotify } from './lib/nativeNotify'
@@ -79,6 +80,8 @@ const FIRST_START = (() => { try { return !localStorage.getItem('plain-bible:set
 const data = new DataSource(new URL('data/', document.baseURI).href)
 
 export function App() {
+  // Enter on a phone keyboard puts it away and does the box's main action (lib/enter.ts).
+  useEffect(() => enterPutsKeyboardAway(), [])
   const [catalog, setCatalog] = useState<Catalog>()
   const [error, setError] = useState('')
   const [settings, setSettings] = useState<Settings>()

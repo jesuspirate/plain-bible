@@ -286,7 +286,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   /** Find box and order, on the notes and bookmarks tabs. */
   const tools = (placeholder: string, active: boolean) => (
     <div class="saved-tools">
-      <input type="search" class="saved-find" placeholder={placeholder} value={active ? find : ''} onInput={e => setFind((e.target as HTMLInputElement).value)} />
+      <input enterKeyHint="done" type="search" class="saved-find" placeholder={placeholder} value={active ? find : ''} onInput={e => setFind((e.target as HTMLInputElement).value)} />
       <div class="seg" role="radiogroup" aria-label={t('Order')}>
         <button role="radio" aria-checked={recent} class={recent ? 'on' : ''} onClick={() => setRecent(true)}>{t('Recent')}</button>
         <button role="radio" aria-checked={!recent} class={!recent ? 'on' : ''} onClick={() => setRecent(false)}>{t('Bible order')}</button>
