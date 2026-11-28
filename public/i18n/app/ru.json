@@ -1392,7 +1392,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Пользуйтесь приложением как обычно, затем нажмите «Остановить». Каждый шаг записывается словами, ничего не снимается на видео.",
 "Steps recorded: {n} ✓": "Записано шагов: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Вместе с ним отправляется: версия приложения, тип устройства, его язык, экран, на котором вы были, записанные шаги и любая ошибка, замеченная приложением. Больше ничего.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Чтение с подсветкой» у её правого края читает со стиха вверху экрана.",
 "New here? Start here": "Вы здесь впервые? Начните здесь",
 "Or use your email": "Или войти по эл. почте",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Бесплатно и по желанию. Войдите, чтобы вступать в Круги и хранить выделения, заметки, настройки и молитвы на всех своих устройствах.",
@@ -1406,14 +1405,11 @@
 "Free. Needed for Circles": "Бесплатно. Нужно для Кругов",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Для них нужен бесплатный аккаунт: ключ доступа или код по эл. почте, в Настройки → Аккаунт. Это минутное дело.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Для кругов нужен бесплатный аккаунт. Проще всего с ключом доступа: Face ID, отпечаток пальца или блокировка экрана. Без пароля.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "В строке поиска, у правого края: читает с верха экрана, а слова подсвечиваются.",
 "While it reads, tap any verse to read on from there.": "Во время чтения нажмите на любой стих, чтобы читать дальше с него.",
-"Show the Read along icon in the search bar": "Показывать значок «Чтение с подсветкой» в строке поиска",
 "Turning pages": "Перелистывание",
 "Extras": "Дополнительно",
 "Other ways to open search": "Другие способы открыть поиск",
 "You can also press / to open it.": "Его также можно открыть клавишей /.",
-"Listen: hear the verses you picked": "Слушать: прослушать выбранные стихи",
 "Getting your prayers…": "Загружаем ваши молитвы…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Одной молитвы из вашего аккаунта ещё нет на этом устройстве, поэтому её нет в .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1477,7 +1473,9 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Прокрутите немного вверх, чтобы вернуть их. Если телефон повёрнут набок, они скрываются всегда.",
 "Prayer buttons": "Кнопки молитвы",
 "Quiet": "Спокойно",
-"All brown": "Всё коричневое",
 "Honey": "Мёд",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Как выглядят 🙏 и Круги внизу экрана в темах «Светлая» и «Сепия»."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Как выглядят 🙏 и Круги внизу экрана в темах «Светлая» и «Сепия».",
+"Bible switcher in the search bar": "Переключатель Библии в строке поиска",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Читает с этого стиха дальше, глава за главой, слова подсвечиваются, пока вы не остановите.",
+"Listen: reads on from there until you stop it": "Слушать: читает оттуда дальше, пока вы не остановите"
 }

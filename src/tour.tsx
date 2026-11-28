@@ -86,7 +86,7 @@ function steps(): Step[] {
         { glyph: 'tap', text: fine ? t('Click: highlight, note, bookmark') : t('Tap: highlight, note, bookmark') },
         { glyph: fine ? 'triple' : 'double', text: fine ? t('Triple click: quick highlight') : t('Double tap: quick highlight') },
         // Listen lives in that verse's bar, where people miss it: a line like
-        // the others, with its speaker. (Read along is on the Search step.)
+        // the others, with its speaker. It reads on until you stop it.
         ...(hear ? [{ glyph: 'bar' } as Row] : []),
       ], moves: [{ kind: 'tap', row: 0, at: onNumber }, { kind: fine ? 'triple' : 'double', row: 1, at: onNumber }] },
     // The search bar is always there, so the tour points only to it; the
@@ -96,8 +96,6 @@ function steps(): Step[] {
       after: [t('After a search, open it again to go back to your last result.'),
         // The Bible switcher pill, beside the place you're reading.
         ...(document.querySelector('.sb-version') ? [t('Tap the Bible’s name to switch to the one you read before. Hold it to choose another.')] : []),
-        // Read along, if ticked under Audio, sits at the field's right end.
-        ...(document.querySelector('.sb-along') ? [t('The Read along icon at its right end reads on from the verse at the top of the screen.'), t('While it reads, tap any verse to read on from there.'), t('Tap the verse being read to highlight or share it.')] : []),
         // The bars slide away as you read on (on by default): say how they come back.
         ...((settings.hideBars ?? true) && (settings.sideways ?? AWAY_ALL).length ? [t('As you read on, the bars slide away. Scroll up a little to bring them back.')] : []),
         // With a keyboard, / opens it from anywhere.
@@ -221,7 +219,7 @@ function Full({ onClose, more }: { onClose: () => void; more: boolean }) {
             {step.rows.map((r, n) => (
               <li class={move?.row === n ? 'on' : undefined}>
                 {r.glyph === 'bar'
-                  ? <><span class="tour-icon"><SpeakerIcon size={24} /></span><span>{t('Listen: hear the verses you picked')}</span></>
+                  ? <><span class="tour-icon"><SpeakerIcon size={24} /></span><span>{t('Listen: reads on from there until you stop it')}</span></>
                   : <><Glyph kind={r.glyph} /><span>{r.text}</span></>}
               </li>
             ))}

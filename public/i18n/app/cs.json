@@ -1392,7 +1392,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Používejte aplikaci jako obvykle, pak klepněte na Zastavit. Každý krok se zapíše slovy, nic se nenatáčí.",
 "Steps recorded: {n} ✓": "Zaznamenané kroky: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Posílá se s tím: verze aplikace, druh zařízení, jeho jazyk, obrazovka, na které jste byli, zaznamenané kroky a každá chyba, kterou aplikace zaznamenala. Nic jiného.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Čtení se zvýrazněním“ na jeho pravém konci čte od verše nahoře na obrazovce.",
 "New here? Start here": "Jste tu nově? Začněte zde",
 "Or use your email": "Nebo použít e-mail",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Zdarma a nepovinné. Přihlaste se, abyste se mohli přidat do Kruhů a mít zvýraznění, poznámky, nastavení a modlitby na všech zařízeních.",
@@ -1406,14 +1405,11 @@
 "Free. Needed for Circles": "Zdarma. Potřebné pro Kruhy",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Potřebují bezplatný účet: přístupový klíč nebo kód e-mailem, v Nastavení → Účet. Zabere to chvilku.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Kruhy potřebují bezplatný účet. Nejjednodušší je přístupový klíč: Face ID, otisk prstu nebo zámek obrazovky. Žádné heslo.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "Ve vyhledávacím poli, na jeho pravém konci: čte od horní části obrazovky a slova se rozsvěcují.",
 "While it reads, tap any verse to read on from there.": "Během čtení klepněte na libovolný verš a čtení pokračuje od něj.",
-"Show the Read along icon in the search bar": "Zobrazit ikonu „Čtení se zvýrazněním“ ve vyhledávacím poli",
 "Turning pages": "Otáčení stránek",
 "Extras": "Další",
 "Other ways to open search": "Další způsoby, jak otevřít hledání",
 "You can also press / to open it.": "Hledání otevřete také klávesou /.",
-"Listen: hear the verses you picked": "Poslechnout: uslyšíte vybrané verše",
 "Getting your prayers…": "Načítám vaše modlitby…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna modlitba z vašeho účtu ještě není na tomto zařízení, takže není v souboru .zip.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1477,7 +1473,9 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Trochu posuňte nahoru a vrátí se. S telefonem na šířku zmizí vždy.",
 "Prayer buttons": "Tlačítka modlitby",
 "Quiet": "Tiché",
-"All brown": "Vše hnědé",
 "Honey": "Medové",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Jak vypadají 🙏 a Kruhy dole na obrazovce, v režimu Světlý a Sépie."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Jak vypadají 🙏 a Kruhy dole na obrazovce, v režimu Světlý a Sépie.",
+"Bible switcher in the search bar": "Přepínač Bible ve vyhledávacím řádku",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Čte od toho verše dál, kapitolu po kapitole, slova se rozsvěcují, dokud to nezastavíte.",
+"Listen: reads on from there until you stop it": "Poslechnout: čte odtud dál, dokud to nezastavíte"
 }

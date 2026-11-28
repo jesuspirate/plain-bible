@@ -326,6 +326,15 @@ function BibleGroup({ setPage }: { setPage: (p: Page) => void }) {
           <Row icon={<ReturnIcon size={24} />} label={t('Back to {version}', { version: settings.version })} sub={t('Your Bible')} onClick={() => goTo(settings.version, parallel)} />}
         <Row icon={<CompareIcon size={24} />} label={t('Compare side by side')} value={parallel.length ? parallel.join(', ') : t('Off')} onClick={() => setOpen('compare')} />
         <Row icon={<BooksIcon size={24} />} label={t('Manage versions')} onClick={() => setPage('versions')} />
+        {/* The Bible's name in the search bar, beside the place you're
+            reading: tap for the Bible you read before. Off by default
+            (11-28), for a quiet bar; a tick here for those who switch a lot. */}
+        <label class="set-row set-check">
+          <span class="set-icon" aria-hidden="true"><span class="set-pill">{version}</span></span>
+          <span class="set-label">{t('Bible switcher in the search bar')}
+            <span class="set-sub">{t('Tap the Bible’s name to switch to the one you read before. Hold it to choose another.')}</span></span>
+          <input type="checkbox" checked={settings.versionPill} onChange={e => update({ versionPill: (e.target as HTMLInputElement).checked })} />
+        </label>
         <Row icon={<VideoIcon size={24} />} label={t('Teaching mode')} value={recording.on ? recording.version : t('Off')} onClick={() => setPage('recording')} />
       </div>
       {open === 'version' && <VersionPicker title={t('Version')} selected={[version]} onClose={() => setOpen('')} onChange={([id]) => choose(id)} />}
@@ -390,10 +399,10 @@ function RecordingPage() {
   </>
 }
 
-// Read along and Listen, shown more than told: each drawn as it looks
-// where you find it (the icon at the search field's end, Listen on a verse's
-// bar). Try it now closes Settings and the tour's fingertip taps the icon,
-// then a verse in view, then Listen (taphint); the choice stays theirs.
+// Listen, shown more than told: drawn as it looks on a verse's bar, where
+// it reads on until you stop it (11-28: Read along left the search bar and
+// lives in Listen). Try it now closes Settings and the tour's fingertip taps
+// a verse in view, then Listen (taphint); the choice stays theirs.
 function AudioHow() {
   const { settings, byId } = useApp()
   const route = useRoute()
@@ -401,15 +410,11 @@ function AudioHow() {
   const hear = canHear(version, byId.get(version)?.lang)
   return <>
     <div class="audio-how">
-      <span class="audio-pick audio-stack"><span class="like-btn"><ReadIcon size={24} />{t('Read along')}</span>
-        <span class="what">{t('In the search bar, at its right end: reads on from the top of the screen as the words light up.')}</span></span>
+      <p class="audio-also"><Glyph kind="tap" />{t('Tap a verse')}</p>
+      <span class="audio-pick audio-stack"><span class="like-btn">{hear ? <><SpeakerIcon size={22} />{t('Listen')}</> : <><ReadIcon size={24} />{t('Read along')}</>}</span>
+        <span class="what">{t('Reads on from that verse, chapter after chapter, as the words light up, until you stop it.')}</span></span>
       <p class="audio-also"><Glyph kind="tap" />{t('While it reads, tap any verse to read on from there.')}</p>
       <p class="audio-also"><Glyph kind="tap" />{t('Tap the verse being read to highlight or share it.')}</p>
-      {hear && <>
-        <p class="audio-also audio-first"><Glyph kind="tap" />{t('Tap a verse')}</p>
-        <span class="audio-pick"><span class="like-btn"><SpeakerIcon size={22} />{t('Listen')}</span>
-          <span class="what">{t('Only the verses you picked')}</span></span>
-      </>}
     </div>
     {!hear && <p class="audio-note">{t('No voice for this Bible on this device: the words light up so you can read quietly.')}</p>}
     {/* Doesn't start anything for you: it shows you where to tap. */}
@@ -531,7 +536,7 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
   if (page === 'extras') return <div class="layout-page">
     <div class="field"><span>{t('Prayer buttons')}</span>
       <div class="col">
-        {sel('discs', [['quiet', t('Quiet')], ['brown', t('All brown')], ['honey', t('Honey')]])}
+        {sel('discs', [['quiet', t('Quiet')], ['honey', t('Honey')]])}
         <span class="muted small">{t('How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.')}</span>
       </div>
     </div>
@@ -544,13 +549,9 @@ function SettingsBody({ nav }: { nav: SettingsNav }) {
     </div></div>
   </div>
 
-  // Read along is the icon at the search field's end, Listen is on a verse's
-  // bar, where people don't think to look: this page shows both.
+  // Listen is on a verse's bar, where people don't think to look: this page shows it.
   if (page === 'audio') return <>
     <AudioHow />
-    <div class="field"><span>{t('Read along')}</span>
-      <label><input type="checkbox" checked={settings.alongButton} onChange={e => update({ alongButton: (e.target as HTMLInputElement).checked })} /> {t('Show the Read along icon in the search bar')}</label>
-    </div>
     <div class="field"><span>{t('Read aloud')}</span>
       <div class="col">
         {sel('follow', [['words', t('Word by word')], ['verse', t('Verse by verse')]])}

@@ -46,7 +46,8 @@ export interface Settings {
   /** read along with no voice: the highlight moves through the words by itself */
   readSilent: boolean
   /** a small Read along button just above 🙏 (off unless picked under Audio) */
-  alongButton: boolean
+  /** The Bible switcher pill in the search bar (11-28: a choice, off by default). */
+  versionPill: boolean
   /** verse number size */
   verseNumbers: 'small' | 'medium' | 'large'
   /** how the page turns when you swipe to another chapter: over the next one, or side by side */
@@ -55,7 +56,7 @@ export interface Settings {
   spread: 'double' | 'single'
   /** skin tone of the 🙏 on the prayer button: a modifier character, or '' for the plain one */
   prayTone: string
-  /** The look of 🙏 and Circles in Light and Sepia: quiet (brown, a light disc for the darkest tones), all brown, or honey. */
+  /** The look of 🙏 and Circles in Light and Sepia: quiet (dark brown) or honey, the same for every skin tone. ('brown' was a choice for a day; it now reads as quiet.) */
   discs: 'quiet' | 'brown' | 'honey'
   /** a quiet line under the chapter title when you have notes on it */
   noteReminders: boolean
@@ -85,7 +86,6 @@ export const DEFAULT_FONT_SIZE = 22
 export const TONES = ['', '\u{1F3FB}', '\u{1F3FC}', '\u{1F3FD}', '\u{1F3FE}', '\u{1F3FF}']
 
 const KEY = 'plain-bible:settings'
-const ALONG_ON = 'plain-bible:along-on'
 
 // The Bible a newcomer starts in, for languages with more than one: the
 // usual one, not whichever sorts first (for French that was the Ethiopian
@@ -99,7 +99,7 @@ export function defaultSettings(catalog?: Catalog): Settings {
   const local = catalog?.translations.filter(t => (t.lang === lang || t.lang.split('-')[0] === lang) && lang !== 'en')
     .sort((a, b) => rank(a.id) - rank(b.id)).slice(0, 3).map(t => t.id) ?? []
   return {
-    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], hideBars: false, layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, alongButton: true, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', discs: 'quiet', noteReminders: true, streaks: true, worldMap: true, shareStreaks: [], circleOrder: [], strongs: false, strongsNumbers: false,
+    language: picked ?? 'auto', theme: 'sepia', fontSize: DEFAULT_FONT_SIZE, font: 'literata', searchBar: true, sideways: ['top', 'search', 'pray'], hideBars: false, layout: 'verses', highlight: 'marker', penSlow: false, recentColors: [], follow: 'words', readSilent: false, versionPill: false, verseNumbers: 'medium', turn: 'stack', spread: 'double', prayTone: '', discs: 'quiet', noteReminders: true, streaks: true, worldMap: true, shareStreaks: [], circleOrder: [], strongs: false, strongsNumbers: false,
     myVersions: ['BSB', 'NHEB', 'KJV', 'ASV', 'DRC', 'YLT', ...local, 'OSHB', 'StatResGNT'],
     version: local[0] ?? 'KJV', parallel: [], searchVersions: [local[0] ?? 'KJV'],
     searchOptions: { caseSensitive: false, accentSensitive: false, partialWords: false },
@@ -130,12 +130,6 @@ export function loadSettings(): Partial<Settings> {
     if (s.font && !FONTS.some(f => f.id === s.font)) delete s.font
     // The fold turn was tried and dropped.
     if (s.turn === 'fold') s.turn = 'stack'
-    // Read along was off by default until its icon moved into the search
-    // field (#380). Switch it on once for everyone; untick it after and it stays off.
-    if (!localStorage.getItem(ALONG_ON)) {
-      if (s.alongButton === false) { s.alongButton = true; localStorage.setItem(KEY, JSON.stringify(s)) }
-      localStorage.setItem(ALONG_ON, '1')
-    }
     return s
   } catch { return {} }
 }
@@ -213,8 +207,6 @@ export const SHOW_SEARCH_WAYS = 'plain-bible:show-search-ways'
 export const showSearchWays = () => window.dispatchEvent(new Event(SHOW_SEARCH_WAYS))
 /** The Read along button above 🙏: the reader starts reading along from the
  *  verse you picked, or else the verse at the top of the screen. */
-export const READ_HERE_EVENT = 'plain-bible:read-here'
-export const readHere = () => window.dispatchEvent(new Event(READ_HERE_EVENT))
 /** The verse the page marks with a faint 🙏 (reader.tsx markPray): a prayer
  *  started now is kept with it. */
 let prayHereAt: { book: string; chapter: number; verse: number } | undefined

@@ -1371,7 +1371,6 @@
 "Use the app as usual, then tap Stop. Each step is written down, not filmed.": "Koristite aplikaciju kao inače, a zatim dodirnite Zaustavi. Svaki korak se zapisuje riječima, ništa se ne snima kamerom.",
 "Steps recorded: {n} ✓": "Snimljeni koraci: {n} ✓",
 "Sent with it: the app’s version, the kind of device, its language, the screen you were on, the steps you recorded, and any error the app noticed. Nothing else.": "Šalje se uz to: verzija aplikacije, vrsta uređaja, njegov jezik, zaslon na kojem ste bili, snimljeni koraci i svaka greška koju je aplikacija primijetila. Ništa drugo.",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona „Prati čitanje” na desnom kraju čita od retka na vrhu zaslona.",
 "New here? Start here": "Novi ste? Počnite ovdje",
 "Or use your email": "Ili upotrijebite e-poštu",
 "Free and optional. Sign in to join Circles, and keep your highlights, notes, settings and prayers on all your devices.": "Besplatno i neobavezno. Prijavite se da biste se pridružili Krugovima i imali označke, bilješke, postavke i molitve na svim uređajima.",
@@ -1385,14 +1384,11 @@
 "Free. Needed for Circles": "Besplatno. Potrebno za Krugove",
 "They need a free account: a passkey or a code by email, in Settings → Account. It takes a moment.": "Za njih treba besplatan račun: pristupni ključ ili kôd e-poštom, u Postavke → Račun. Traje tren.",
 "Circles need a free account. Easiest with a passkey: Face ID, a fingerprint or your screen lock. No password.": "Krugovi trebaju besplatan račun. Najlakše s pristupnim ključem: Face ID, otisak prsta ili zaključavanje zaslona. Bez lozinke.",
-"In the search bar, at its right end: reads on from the top of the screen as the words light up.": "U traci za pretraživanje, na desnom kraju: čita od vrha zaslona dok riječi svijetle.",
 "While it reads, tap any verse to read on from there.": "Dok čita, dodirnite bilo koji redak da nastavi odande.",
-"Show the Read along icon in the search bar": "Prikaži ikonu „Prati čitanje” u traci za pretraživanje",
 "Turning pages": "Okretanje stranica",
 "Extras": "Dodatno",
 "Other ways to open search": "Drugi načini otvaranja pretraživanja",
 "You can also press / to open it.": "Možete ga otvoriti i tipkom /.",
-"Listen: hear the verses you picked": "Slušaj: čujte odabrane retke",
 "Getting your prayers…": "Dohvaćam vaše molitve…",
 "One prayer in your account isn’t on this device yet, so it isn’t in the .zip.": "Jedna molitva s vašeg računa još nije na ovom uređaju, pa nije u .zip datoteci.",
 "{n} prayers in your account aren’t on this device yet, so they aren’t in the .zip.": {
@@ -1455,7 +1451,9 @@
 "Scroll up a little to bring them back. With the phone on its side, they always slide away.": "Pomaknite se malo gore da se vrate. S mobitelom položenim vodoravno uvijek nestanu.",
 "Prayer buttons": "Gumbi molitve",
 "Quiet": "Tiho",
-"All brown": "Sve smeđe",
 "Honey": "Med",
-"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Kako 🙏 i Krugovi izgledaju na dnu zaslona, u temama Svijetla i Sepija."
+"How 🙏 and Circles look at the bottom of the screen, in Light and Sepia.": "Kako 🙏 i Krugovi izgledaju na dnu zaslona, u temama Svijetla i Sepija.",
+"Bible switcher in the search bar": "Izmjenjivač Biblije u traci za pretraživanje",
+"Reads on from that verse, chapter after chapter, as the words light up, until you stop it.": "Čita od tog retka dalje, poglavlje za poglavljem, dok riječi svijetle, dok ga ne zaustavite.",
+"Listen: reads on from there until you stop it": "Slušaj: čita odande dalje dok ga ne zaustavite"
 }
