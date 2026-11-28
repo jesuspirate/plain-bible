@@ -1480,5 +1480,7 @@
 "Listen: reads on from there until you stop it": "Слушать: читает оттуда дальше, пока вы не остановите",
 "Brown": "Коричневый",
 "Show the Read along icon in the search bar": "Показывать значок «Чтение с подсветкой» в строке поиска",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Чтение с подсветкой» у её правого края читает со стиха вверху экрана."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Значок «Чтение с подсветкой» у её правого края читает со стиха вверху экрана.",
+"Find in your highlights": "Поиск в выделениях",
+"No highlight has “{words}” in it.": "Нет выделений со словами «{words}»."
 }

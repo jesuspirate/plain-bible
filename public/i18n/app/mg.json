@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "Henoy: mamaky manomboka eo mandra-pijanonanao azy",
 "Brown": "Volontany",
 "Show the Read along icon in the search bar": "Asehoy ny kisary “Hamaky miaraka” ao amin’ny tsipika fikarohana",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ny kisary “Hamaky miaraka” eo amin’ny farany havanana dia mamaky manomboka amin’ny andininy eo ambony amin’ny efijery."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ny kisary “Hamaky miaraka” eo amin’ny farany havanana dia mamaky manomboka amin’ny andininy eo ambony amin’ny efijery.",
+"Find in your highlights": "Hikaroka ao amin’ny fanasongadinanao",
+"No highlight has “{words}” in it.": "Tsy misy fanasongadinana misy hoe “{words}”."
 }

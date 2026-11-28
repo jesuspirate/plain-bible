@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "ಆಲಿಸಿ: ಅಲ್ಲಿಂದ ನೀವು ನಿಲ್ಲಿಸುವವರೆಗೆ ಓದುತ್ತದೆ",
 "Brown": "ಕಂದು",
 "Show the Read along icon in the search bar": "ಹುಡುಕು ಪಟ್ಟಿಯಲ್ಲಿ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ತೋರಿಸಿ",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ಅದರ ಬಲ ತುದಿಯ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ ಓದುತ್ತದೆ."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ಅದರ ಬಲ ತುದಿಯ “ಜೊತೆಯಲ್ಲಿ ಓದಿ” ಚಿಹ್ನೆ ಪರದೆಯ ಮೇಲಿನ ವಚನದಿಂದ ಓದುತ್ತದೆ.",
+"Find in your highlights": "ನಿಮ್ಮ ಹೈಲೈಟ್‌ಗಳಲ್ಲಿ ಹುಡುಕಿ",
+"No highlight has “{words}” in it.": "ಯಾವ ಹೈಲೈಟ್‌ನಲ್ಲೂ “{words}” ಇಲ್ಲ."
 }

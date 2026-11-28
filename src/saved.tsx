@@ -284,13 +284,13 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   }[which])
 
   /** Find box and order, on the notes and bookmarks tabs. */
-  const tools = (placeholder: string, active: boolean) => (
+  const tools = (placeholder: string, active: boolean, order = true) => (
     <div class="saved-tools">
       <form class="filter-form" onSubmit={e => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur?.() }}><input enterKeyHint="done" type="search" class="saved-find" placeholder={placeholder} value={active ? find : ''} onInput={e => setFind((e.target as HTMLInputElement).value)} /></form>
-      <div class="seg" role="radiogroup" aria-label={t('Order')}>
+      {order && <div class="seg" role="radiogroup" aria-label={t('Order')}>
         <button role="radio" aria-checked={recent} class={recent ? 'on' : ''} onClick={() => setRecent(true)}>{t('Recent')}</button>
         <button role="radio" aria-checked={!recent} class={!recent ? 'on' : ''} onClick={() => setRecent(false)}>{t('Bible order')}</button>
-      </div>
+      </div>}
     </div>
   )
   /** One tab's list. The lists beside the one you're on are drawn too, a
@@ -302,8 +302,11 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
   if (which === 'highlights') {
     const used = colorsByUse(settings.recentColors).map(p => p.color).filter(c => runs.some(r => r.color === c))
     const colors = [...used, ...[...new Set(runs.map(r => r.color))].filter(c => !used.includes(c))]
-    const shown = runs.filter(r => color === 'all' || r.color === color)
+    const q = fold(f.trim())
+    const shown = runs.filter(r => (color === 'all' || r.color === color) && (!q || fold(refOf(r.book, r.chapter, r.verses)).includes(q) || fold(verseText(r.book, r.chapter, r.verses)).includes(q)))
     body = <>
+      {/* The find box only: highlights keep their order (the Bible's), as before. */}
+      {runs.length > 3 && tools(t('Find in your highlights'), active, false)}
       {colors.length > 1 && (
         <div class="chips saved-colors">
           <button class={'chip' + (color === 'all' ? ' on' : '')} onClick={() => setColor('all')}>{t('All')}</button>
@@ -314,6 +317,7 @@ export function Saved({ onImport }: { onImport?: () => void } = {}) {
           ))}
         </div>
       )}
+      {!shown.length && q && <p class="muted">{t('No highlight has “{words}” in it.', { words: f.trim() })}</p>}
       <ol class="saved-list">
         {shown.slice(0, lim).map(r => {
           const id = r.keys[0], ref = refOf(r.book, r.chapter, r.verses)

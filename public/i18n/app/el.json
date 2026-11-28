@@ -1373,5 +1373,7 @@
 "Listen: reads on from there until you stop it": "Άκου: διαβάζει από εκεί μέχρι να το σταματήσεις",
 "Brown": "Καφέ",
 "Show the Read along icon in the search bar": "Εμφάνιση του εικονιδίου «Ανάγνωση με παρακολούθηση» στη γραμμή αναζήτησης",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Το εικονίδιο «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Το εικονίδιο «Ανάγνωση με παρακολούθηση» στη δεξιά άκρη διαβάζει από το εδάφιο στο πάνω μέρος της οθόνης.",
+"Find in your highlights": "Αναζήτηση στις επισημάνσεις σας",
+"No highlight has “{words}” in it.": "Καμία επισήμανση δεν περιέχει «{words}»."
 }

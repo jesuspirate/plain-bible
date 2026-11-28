@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "Nghe: đọc tiếp từ đó cho đến khi bạn dừng",
 "Brown": "Nâu",
 "Show the Read along icon in the search bar": "Hiện biểu tượng “Đọc theo” trong thanh tìm kiếm",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Biểu tượng “Đọc theo” ở đầu bên phải đọc từ câu ở đầu màn hình."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Biểu tượng “Đọc theo” ở đầu bên phải đọc từ câu ở đầu màn hình.",
+"Find in your highlights": "Tìm trong phần tô sáng của bạn",
+"No highlight has “{words}” in it.": "Không có phần tô sáng nào chứa “{words}”."
 }

@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "শুনক: তাৰ পৰা পঢ়ি যায়, যেতিয়ালৈকে আপুনি বন্ধ নকৰে",
 "Brown": "মাটিয়া",
 "Show the Read along icon in the search bar": "সন্ধান বাৰত “লগে লগে পঢ়ক” চিহ্ন দেখুৱাওক",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "ইয়াৰ সোঁফালৰ মূৰৰ “লগে লগে পঢ়ক” চিহ্নই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা পঢ়ে।"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "ইয়াৰ সোঁফালৰ মূৰৰ “লগে লগে পঢ়ক” চিহ্নই স্ক্ৰীণৰ ওপৰৰ পদৰ পৰা পঢ়ে।",
+"Find in your highlights": "আপোনাৰ হাইলাইটত বিচাৰক",
+"No highlight has “{words}” in it.": "কোনো হাইলাইটত “{words}” নাই।"
 }

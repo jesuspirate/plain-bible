@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "Sikiliza: inasoma kuanzia hapo hadi uisimamishe",
 "Brown": "Kahawia",
 "Show the Read along icon in the search bar": "Onyesha aikoni ya “Soma ukifuatisha” kwenye upau wa kutafuta",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Aikoni ya “Soma ukifuatisha” mwisho wake wa kulia inasoma kuanzia mstari ulio juu ya skrini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Aikoni ya “Soma ukifuatisha” mwisho wake wa kulia inasoma kuanzia mstari ulio juu ya skrini.",
+"Find in your highlights": "Tafuta kwenye alama zako za rangi",
+"No highlight has “{words}” in it.": "Hakuna alama ya rangi yenye “{words}”."
 }

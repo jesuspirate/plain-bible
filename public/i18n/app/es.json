@@ -1205,5 +1205,7 @@
 "Listen: reads on from there until you stop it": "Escuchar: lee desde ahí hasta que lo detengas",
 "Brown": "Marrón",
 "Show the Read along icon in the search bar": "Mostrar el icono «Leer siguiendo» en la barra de búsqueda",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "El icono «Leer siguiendo» de su extremo derecho lee desde el versículo de arriba de la pantalla."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "El icono «Leer siguiendo» de su extremo derecho lee desde el versículo de arriba de la pantalla.",
+"Find in your highlights": "Buscar en tus resaltados",
+"No highlight has “{words}” in it.": "Ningún resaltado contiene «{words}»."
 }

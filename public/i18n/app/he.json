@@ -1374,5 +1374,7 @@
 "Listen: reads on from there until you stop it": "האזנה: קורא משם והלאה עד שתעצור",
 "Brown": "חום",
 "Show the Read along icon in the search bar": "הצגת הסמל „קריאה עם מעקב” בשורת החיפוש",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "הסמל „קריאה עם מעקב” בקצה קורא מהפסוק שבראש המסך.",
+"Find in your highlights": "חיפוש בהדגשות שלך",
+"No highlight has “{words}” in it.": "אין הדגשה שמכילה \"{words}\"."
 }

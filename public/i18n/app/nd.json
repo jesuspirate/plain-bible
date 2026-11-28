@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "Lalela: ibala kusukela lapho uze uyimise",
 "Brown": "Nsundu",
 "Show the Read along icon in the search bar": "Tshengisa uphawu oluthi “Bala ulandela” emugqeni wokudinga",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Uphawu oluthi “Bala ulandela” ekucineni kwalo kwesokudla lubala kusukela evesini eliphezulu kusikrini."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Uphawu oluthi “Bala ulandela” ekucineni kwalo kwesokudla lubala kusukela evesini eliphezulu kusikrini.",
+"Find in your highlights": "Dinga kokugqanyisiweyo kwenu",
+"No highlight has “{words}” in it.": "Akukho okugqanyisiweyo okulokuthi “{words}”."
 }

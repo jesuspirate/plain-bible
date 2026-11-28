@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "सुन्नुहोस्: त्यहाँबाट तपाईंले नरोकेसम्म पढ्छ",
 "Brown": "खैरो",
 "Show the Read along icon in the search bar": "खोज पट्टीमा “सँगै पढ्नुहोस्” चिह्न देखाउनुहोस्",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "यसको दायाँ छेउको “सँगै पढ्नुहोस्” चिह्नले स्क्रिनको माथिको पदबाट पढ्छ।"
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "यसको दायाँ छेउको “सँगै पढ्नुहोस्” चिह्नले स्क्रिनको माथिको पदबाट पढ्छ।",
+"Find in your highlights": "आफ्ना हाइलाइटहरूमा खोज्नुहोस्",
+"No highlight has “{words}” in it.": "कुनै हाइलाइटमा “{words}” छैन।"
 }

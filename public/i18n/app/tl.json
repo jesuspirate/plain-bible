@@ -1370,5 +1370,7 @@
 "Listen: reads on from there until you stop it": "Makinig: nagbabasa mula roon hanggang ihinto mo",
 "Brown": "Kayumanggi",
 "Show the Read along icon in the search bar": "Ipakita ang icon na “Sabayang pagbasa” sa search bar",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon na “Sabayang pagbasa” sa kanang dulo nito ay bumabasa mula sa talata sa itaas ng screen."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ang icon na “Sabayang pagbasa” sa kanang dulo nito ay bumabasa mula sa talata sa itaas ng screen.",
+"Find in your highlights": "Maghanap sa mga highlight mo",
+"No highlight has “{words}” in it.": "Walang highlight na may “{words}”."
 }

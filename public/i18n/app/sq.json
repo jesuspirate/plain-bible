@@ -1373,5 +1373,7 @@
 "Listen: reads on from there until you stop it": "Dëgjo: lexon prej andej derisa ta ndalosh",
 "Brown": "Kafe",
 "Show the Read along icon in the search bar": "Shfaq ikonën “Lexo duke ndjekur” në shiritin e kërkimit",
-"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lexo duke ndjekur” në skajin e djathtë lexon nga vargu në krye të ekranit."
+"The Read along icon at its right end reads on from the verse at the top of the screen.": "Ikona “Lexo duke ndjekur” në skajin e djathtë lexon nga vargu në krye të ekranit.",
+"Find in your highlights": "Kërko te theksimet tuaja",
+"No highlight has “{words}” in it.": "Asnjë theksim nuk përmban «{words}»."
 }
