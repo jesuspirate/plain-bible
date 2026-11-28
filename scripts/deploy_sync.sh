@@ -4,11 +4,19 @@
 # VITE_SYNC_URL=<url> for the app build. Needs CLOUDFLARE_API_TOKEN and
 # CLOUDFLARE_ACCOUNT_ID in the environment; RESEND_API_KEY turns on email sign-in.
 # Makes the notifications key (VAPID_KEY) on the first run that can.
+#
+# The test site's own sync service (scripts/deploy_test_site.sh) comes from
+# here too: SYNC_NAME names it and its database (a separate Worker and D1, so
+# nothing tested touches real accounts), and SYNC_ORIGINS lists its addresses.
 set -euo pipefail
 cd "$(dirname "$0")/../worker"
 export CI=1
-DB=plain-bible-sync
+DB=${SYNC_NAME:-plain-bible-sync}
 npm ci --silent >&2
+if [ "$DB" != plain-bible-sync ]; then
+  sed -i "s/^name = .*/name = \"$DB\"/; s/^database_name = .*/database_name = \"$DB\"/" wrangler.toml
+  [ -n "${SYNC_ORIGINS:-}" ] && sed -i "s|^ORIGINS = .*|ORIGINS = \"$SYNC_ORIGINS\"|" wrangler.toml
+fi
 
 db_id() { npx wrangler d1 list --json | node -e 'let s="";process.stdin.on("data",d=>s+=d).on("end",()=>{const r=JSON.parse(s).find(d=>d.name===process.argv[1]);process.stdout.write(r?r.uuid:"")})' "$DB"; }
 id=$(db_id)
@@ -37,6 +45,9 @@ echo "$out" >&2
 # Only when the list really came back and really lacks it: a failed list
 # once made a new one (2026-11-20) and every saved address stopped matching.
 secrets=$(npx wrangler secret list 2>/dev/null || echo '[]')
+# A brand-new test service has no secrets yet, so its list holds no names;
+# its keys can be made at once (losing one there costs only test accounts).
+if [ "$DB" != plain-bible-sync ] && ! echo "$secrets" | grep -q '"name"'; then secrets='[{"name":"-"}]'; fi
 if [ -n "${RESEND_API_KEY:-}" ]; then
   printf '%s' "$RESEND_API_KEY" | npx wrangler secret put RESEND_API_KEY >&2
   if echo "$secrets" | grep -q '"name"'; then
