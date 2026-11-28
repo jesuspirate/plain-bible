@@ -14,6 +14,8 @@ const DIM = 'rgba(0,0,0,.35)'
 /** Close a card the quiet way: a fading copy stays a moment, the card itself goes at once. */
 function shut(d: HTMLDialogElement | null) { if (d?.open) { ghostOut(d, 'sink', DIM); d.close() } }
 
+const TYPED = new Set(['', 'text', 'search', 'email', 'url', 'tel', 'number', 'password'])
+
 export function Sheet({ title, onClose, children, wide }: { title: string; onClose: () => void; children: ComponentChildren; wide?: boolean }) {
   const ref = useRef<HTMLDialogElement>(null)
   // Keep the latest onClose: callers close over state that changes while open.
@@ -55,8 +57,24 @@ export function Sheet({ title, onClose, children, wide }: { title: string; onClo
   // Only a tap that starts and ends on the dimmed area closes the sheet, not
   // a drag (say, selecting text in a note) that happens to end there.
   const downOutside = useRef(false)
+  // A tap on a box in the sheet (the version search): iPhone would focus it
+  // and then slide the whole screen to show it above the keyboard, so the
+  // sheet jumped. The tap focuses the box itself, without scrolling; the
+  // sheet then lifts above the keyboard on its own (fit, above).
+  const boxTap = useRef<{ x: number; y: number }>()
+  const onTouchStart = (e: TouchEvent) => {
+    const el = e.target as HTMLElement
+    boxTap.current = el instanceof HTMLInputElement && TYPED.has(el.type) && document.activeElement !== el ? { x: e.touches[0].clientX, y: e.touches[0].clientY } : undefined
+  }
+  const onTouchEnd = (e: TouchEvent) => {
+    const start = boxTap.current, el = e.target as HTMLInputElement, end = e.changedTouches[0]
+    boxTap.current = undefined
+    if (!start || !end || Math.hypot(end.clientX - start.x, end.clientY - start.y) > 10) return
+    e.preventDefault()
+    el.focus({ preventScroll: true })
+  }
   return (
-    <dialog ref={ref} class={'sheet' + (wide ? ' wide' : '')} onPointerDown={e => { downOutside.current = e.target === ref.current }}
+    <dialog ref={ref} class={'sheet' + (wide ? ' wide' : '')} onTouchStart={onTouchStart} onTouchEnd={onTouchEnd} onPointerDown={e => { downOutside.current = e.target === ref.current }}
       onClick={e => { if (e.target === ref.current && downOutside.current) shut(ref.current) }}>
       <div class="sheet-inner">
         <header class="sheet-head">
