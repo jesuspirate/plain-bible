@@ -38,6 +38,39 @@ html.praying { overflow: hidden; }
 .pray-mic.on { color: #fff; background: radial-gradient(circle at 50% 35%, #ffd98a 0%, #f2a541 55%, #d9822b 100%); }
 .pray-mic.on::before { animation-duration: 2.2s; }
 .pray-mic.on::after { animation: pray-ripple 2.2s ease-out infinite; }
+/* Candlelight while you pray: a warm glow that wavers unevenly, never
+   regular, like a flame in a still room. Opacity and scale only. */
+.pray-candle {
+  position: absolute; inset: -46px; border-radius: 50%; pointer-events: none; opacity: 0;
+  background: radial-gradient(circle at 50% 46%, rgba(255, 176, 72, .55) 0%, rgba(255, 140, 40, .22) 42%, transparent 70%);
+  transition: opacity 1.2s ease; will-change: transform, opacity;
+}
+.pray-mic.on .pray-candle { opacity: 1; animation: pray-flicker 3.7s linear infinite; }
+:root[data-theme='dark'] .pray-mic.on .pray-candle { inset: -64px; animation-name: pray-flicker-dark; }
+@media (prefers-color-scheme: dark) { :root[data-theme='system'] .pray-mic.on .pray-candle { inset: -64px; animation-name: pray-flicker-dark; } }
+@keyframes pray-flicker {
+  0% { opacity: .85; transform: scale(1) translateY(0); } 9% { opacity: .62; transform: scale(.96) translateY(1px); }
+  17% { opacity: .95; transform: scale(1.03) translateY(-2px); } 24% { opacity: .78; transform: scale(.99); }
+  38% { opacity: 1; transform: scale(1.05) translateY(-3px); } 46% { opacity: .7; transform: scale(.97) translateY(1px); }
+  55% { opacity: .9; transform: scale(1.02) translateY(-1px); } 63% { opacity: .58; transform: scale(.95) translateY(2px); }
+  71% { opacity: .92; transform: scale(1.04) translateY(-2px); } 84% { opacity: .75; transform: scale(.98); }
+  92% { opacity: .97; transform: scale(1.03) translateY(-2px); } 100% { opacity: .85; transform: scale(1) translateY(0); }
+}
+/* In the dark the candle is the light in the room: a little brighter, a little wider. */
+@keyframes pray-flicker-dark {
+  0% { opacity: .9; transform: scale(1); } 11% { opacity: .55; transform: scale(.94) translateY(2px); }
+  19% { opacity: 1; transform: scale(1.06) translateY(-3px); } 33% { opacity: .72; transform: scale(.98); }
+  41% { opacity: .98; transform: scale(1.07) translateY(-4px); } 52% { opacity: .6; transform: scale(.95) translateY(2px); }
+  66% { opacity: .93; transform: scale(1.04) translateY(-2px); } 74% { opacity: .5; transform: scale(.93) translateY(3px); }
+  86% { opacity: 1; transform: scale(1.05) translateY(-3px); } 100% { opacity: .9; transform: scale(1); }
+}
+/* Scrolling to read while you pray: the light and the dimming step back
+   so the verses read clearly, and come back once the page rests. */
+@property --dim { syntax: '<color>'; inherits: true; initial-value: rgba(12, 10, 6, .38); }
+.pray { transition: --dim .45s ease; }
+.pray > :not(.pray-close) { transition: opacity .45s ease; }
+.pray.scrolling { --dim: rgba(12, 10, 6, .04) !important; }
+.pray.scrolling > :not(.pray-close) { opacity: .1; }
 @keyframes pray-breathe { 0%, 100% { opacity: .6; transform: scale(.9); } 50% { opacity: 1; transform: scale(1.06); } }
 @keyframes pray-ripple { from { opacity: .9; transform: scale(1); } to { opacity: 0; transform: scale(1.7); } }
 /* A soft dark card keeps the words readable over the text behind. */
@@ -94,7 +127,7 @@ button.pray-kept { cursor: pointer; }
 .pray-btn.quiet { background: none; color: var(--muted); }
 a.pray-btn { box-sizing: border-box; background: var(--surface); border: 1px solid var(--line); color: var(--text); text-align: center; text-decoration: none; line-height: 28px; }
 button.pray-btn.danger { background: #b3261e; border-color: #b3261e; color: #fff; }
-@media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after { animation: none; } }
+@media (prefers-reduced-motion: reduce) { .pray, .pray-list { animation: none; } .pray-mic::before, .pray-mic.on::after, .pray-mic.on .pray-candle { animation: none; } }
 .pray-amen-btn { margin: 4px 0 6px; }
 .pray-share-now { display: inline-flex; align-items: center; gap: 8px; margin: 14px 0 4px; }
 .pray-sync { margin: 10px 4px 2px; padding: 12px 8px 4px; border-top: 1px solid var(--line); }

@@ -12,7 +12,7 @@ import { plain } from './lib/text'
 import { lengthMs, playable } from './lib/mp4'
 import { audioUrl, dropAudioUrl } from './lib/audioUrl'
 import { Circle, circlesWithAll, loadShared, SHARED_EVENT, SharedIn } from './lib/prayerShared'
-import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow } from './state'
+import { go, canShareInCircles as inCircles, openCircles, openSettings, parseHash, pickVerses, PrayAt, PRAY_EVENT, readPath, prayHere, shareWithCircle, takePrayNow, useApp, verseToPrayOver, takePrayFor, type PrayFor, ASK_PRAYED, setPrayedNow, setPrayingOver } from './state'
 import { pauseListening, readingAt } from './listen'
 import { BackIcon, CircleIcon, CloseIcon } from './icons'
 import type { Journal } from './lib/prayerJournal'
@@ -65,6 +65,7 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // was marked prayed once this prayer was kept.
   const [forAsk, setForAsk] = useState<PrayFor>()
   const forRef = useRef<PrayFor>()
+  const drag = useRef<{ y: number; t: number; v: number; spin: number }>()
   const [askDone, setAskDone] = useState(false)
   const [elapsed, setElapsed] = useState(0)
   const [list, setList] = useState<PrayerInfo[]>()
@@ -104,6 +105,9 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   // Reading aloud waits, paused on its verse, while you pray.
   useEffect(() => { if (readingAt()) pauseListening() }, [])
   const [tied, setTiedNow] = useState<PrayerVerse[]>(offer?.sure ? offer.verses : [])
+  // The page lights up the verses this prayer is about while it's open.
+  useEffect(() => { setPrayingOver(tied.length ? tied : offer?.verses ?? []) }, [tied])
+  useEffect(() => () => setPrayingOver([]), [])
   const tiedRef = useRef(tied)
   const setTied = (v: PrayerVerse[]) => { tiedRef.current = v; setTiedNow(v) }
   // The prayer just kept, and the verses it's tied to.
@@ -173,6 +177,10 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
       removeEventListener('quietbible:watch:kept', refresh)
       stop()
       document.documentElement.classList.remove('praying')
+      // Scrolled while praying: the 🙏 finds where you are now.
+      if (drag.current) cancelAnimationFrame(drag.current.spin)
+      clearTimeout(calm.current)
+      dispatchEvent(new Event('scroll'))
       removeEventListener('keydown', esc)
       document.removeEventListener('visibilitychange', hidden)
     }
@@ -355,8 +363,53 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
   const keptLine = (refs: ComponentChildren) => !others.length ? t('Kept with this prayer')
     : tj('Kept with this prayer, along with {verses}', { verses: refs })
 
+  // While you pray, the page behind still scrolls up and down, so the verse
+  // the prayer is about (its faint 🙏) or the verses you picked can be read
+  // the whole time. Taps never reach the page, and the kept verse stays put.
+  const ownScroll = (e: Event) => {
+    for (let el = e.target as HTMLElement | null; el && !el.classList.contains('pray'); el = el.parentElement)
+      if (el.scrollHeight > el.clientHeight + 1 && /auto|scroll/.test(getComputedStyle(el).overflowY)) return true
+    return view !== 'pray'
+  }
+  // While the page moves, the light and the dimming step back so the verses
+  // read clearly, and come back once it rests.
+  const calm = useRef(0)
+  const reading = (e: Event, held = false) => {
+    const el = e.currentTarget as HTMLElement
+    el.classList.add('scrolling'); clearTimeout(calm.current)
+    if (!held) calm.current = window.setTimeout(() => el.classList.remove('scrolling'), 900)
+  }
+  const pageScroll = {
+    onWheel: (e: WheelEvent) => { if (!ownScroll(e)) { window.scrollBy(0, e.deltaY); reading(e) } },
+    onTouchStart: (e: TouchEvent) => {
+      if (drag.current) cancelAnimationFrame(drag.current.spin)
+      drag.current = ownScroll(e) ? undefined : { y: e.touches[0].clientY, t: e.timeStamp, v: 0, spin: 0 }
+    },
+    onTouchMove: (e: TouchEvent) => {
+      const d = drag.current
+      if (!d) return
+      const y = e.touches[0].clientY, dt = Math.max(1, e.timeStamp - d.t)
+      window.scrollBy(0, d.y - y); reading(e, true)
+      d.v = .8 * ((d.y - y) / dt) + .2 * d.v; d.y = y; d.t = e.timeStamp
+      e.preventDefault()
+    },
+    // Let go: it glides on a little, as the page itself would.
+    onTouchEnd: (e: TouchEvent) => {
+      const d = drag.current
+      if (d && (e.currentTarget as HTMLElement).classList.contains('scrolling')) reading(e)
+      if (!d || Math.abs(d.v) < .05) return
+      let v = d.v * 16, last = performance.now()
+      const step = (now: number) => {
+        const k = (now - last) / 16; last = now
+        window.scrollBy(0, v * k); v *= Math.pow(.95, k)
+        if (Math.abs(v) > .5) d.spin = requestAnimationFrame(step)
+      }
+      d.spin = requestAnimationFrame(step)
+    },
+  }
+
   return (
-    <div class="pray" role="dialog" aria-modal="true" ref={rootLeave} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }}>
+    <div class="pray" role="dialog" aria-modal="true" ref={rootLeave} aria-label={t('Prayer')} style={{ '--cut': `${cut}px` }} {...pageScroll}>
       {/* The list has its own Done, so only one close is ever on screen. */}
       {view === 'pray' && <button class="pray-close" aria-label={t('Close')} onClick={onClose}><CloseIcon size={26} /></button>}
       {view === 'pray' && forAsk && phase !== 'heard' && (
@@ -385,6 +438,8 @@ export function Prayer({ at, onClose }: { at?: PrayAt; onClose: () => void }) {
         <div class="pray-center">
           <button class={'pray-mic' + (phase === 'recording' ? ' on' : '')} onClick={toggle}
             aria-label={phase === 'recording' ? t('Amen: stop and keep this prayer') : phase === 'paused' ? t('Keep praying') : t('Start praying out loud')}>
+            {/* candlelight: a warm glow that flickers, softly, while you pray */}
+            <span class="pray-candle" aria-hidden="true" />
             <svg viewBox="0 0 24 24" width="52" height="52" aria-hidden="true"><rect x="8.5" y="2.5" width="7" height="12.5" rx="3.5" fill="currentColor" /><path d="M5 11a7 7 0 0 0 14 0M12 18v3.5" stroke="currentColor" stroke-width="1.9" fill="none" stroke-linecap="round" /></svg>
           </button>
           <div class="pray-words" aria-live="polite">
