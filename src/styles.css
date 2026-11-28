@@ -204,8 +204,10 @@ html:has(dialog[open]) { overflow: hidden; }
 .vrow { display: flex; gap: 10px; align-items: baseline; padding: 7px 6px; border-radius: 8px; cursor: pointer; }
 .vrow.on { background: var(--chip); }
 @media (hover: hover) { .vrow:hover { background: var(--chip); } }
-.vid { font-weight: 600; min-width: 92px; }
-.vname { color: var(--muted); }
+/* The id keeps its own width: a long one (FreOltramare1874) pushes the name
+   over instead of running into it, and wraps only if it's very long. */
+.vid { flex: none; font-weight: 600; min-width: 92px; max-width: 48%; overflow-wrap: anywhere; }
+.vname { flex: 1; min-width: 0; color: var(--muted); }
 /* "Reads like NIV, ESV, CSB": for readers who know a Bible we can't include. */
 .vlike { display: block; font-size: .88em; font-weight: 600; color: var(--accent); }
 .lex-lemma { font-size: 32px; margin: 0; font-family: var(--reading); }
