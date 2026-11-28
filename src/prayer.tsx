@@ -703,7 +703,10 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     return !names.length ? t('Topic') : names.length > 1 ? t('Topics: {topic}', { topic }) : t('Topic: {topic}', { topic })
   }
   // A topic emptied while it was open (its last prayer moved or deleted) closes.
-  const within = view === 'topics' && topic && inTopic(topic).length ? topic : undefined
+  // A topic just renamed stays open while the list catches up with its new name.
+  const [fresh, setFresh] = useState<string>()
+  useEffect(() => setFresh(undefined), [list])
+  const within = view === 'topics' && topic && (inTopic(topic).length || topic === fresh) ? topic : undefined
   const typed = find.trim()
   const flat = view !== 'all' || !!typed
   const shown = (view === 'fav' ? favs : within ? inTopic(within) : all).filter(p => !typed || finds(typed, [
@@ -716,7 +719,24 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
     onChange()
     syncPrayers().catch(() => {})
   }
-  const go = (v: 'all' | 'fav' | 'topics') => { setView(v); setTopic(undefined); setOpen(undefined); setEdit(undefined) }
+  // Renaming a topic: the words being typed, while the box is open.
+  const [renaming, setRenaming] = useState<string>()
+  const renameTopic = async (from: string, typed: string) => {
+    setRenaming(undefined)
+    const words = typed.trim().slice(0, 40)
+    // Typed the name of an offered topic as it shows here? Keep it as that one.
+    const to = TOPICS.find(k => k === words || t(k) === words) ?? words
+    if (!to || to === from) return
+    for (const p of inTopic(from)) {
+      const topics = [...new Set(topicsOfPrayer(p).map(x => x === from ? to : x))]
+      await prayers.note(p.id, { topics }).catch(() => {})
+    }
+    setFresh(to)
+    setTopic(to)
+    onChange()
+    syncPrayers().catch(() => {})
+  }
+  const go = (v: 'all' | 'fav' | 'topics') => { setRenaming(undefined); setView(v); setTopic(undefined); setOpen(undefined); setEdit(undefined) }
   const { days, months } = flat ? { days: [], months: [] } : byMonth(shown)
   // What matters most when looking back: answered prayers, then favorites. Big and in color on the folded row.
   const marks = (some: typeof shown) => {
@@ -835,14 +855,28 @@ function PrayerList({ list, onChange, onClose, onRead, onPick }: {
       </div>
       {/* Once there are a few: your favorites by themselves, and a box to find one. */}
       {(all.length >= 4 || favs.length > 0 || shelves.length > 0) && <div class="pray-tools">
-        {within ? <button class="pray-back" onClick={() => { setTopic(undefined); setOpen(undefined); setEdit(undefined); setFind('') }} aria-label={t('Back')}>
-          <BackIcon size={22} /> <strong class={within === ANSWERED ? 'answered' : ''}>{topicName(within)}</strong><span class="muted"> · {tn(inTopic(within).length, '{n} prayer', '{n} prayers')}</span>
-        </button> : <div class="seg" role="radiogroup" aria-label={t('Your prayers')}>
+        {within ? <div class="pray-topic-head">
+          <button class="pray-back" onClick={() => { setTopic(undefined); setOpen(undefined); setEdit(undefined); setRenaming(undefined); setFind('') }} aria-label={t('Back')}>
+            <BackIcon size={22} /> <strong class={within === ANSWERED ? 'answered' : ''}>{topicName(within)}</strong><span class="muted"> · {tn(inTopic(within).length, '{n} prayer', '{n} prayers')}</span>
+          </button>
+          {/* Your own word for it, on every prayer that has it. Answered is not a topic. */}
+          {within !== ANSWERED && renaming === undefined && <button class="pray-icon pray-rename" aria-label={t('Rename topic')} onClick={() => { setOpen(undefined); setEdit(undefined); setRenaming(topicName(within)) }}>
+            <svg viewBox="0 0 24 24" width="24" height="24" aria-hidden="true"><path d="M4 20l1-4.5L16.5 4a2.1 2.1 0 0 1 3 3L8 18.5zM14.5 6l3 3" fill="none" stroke="currentColor" stroke-width="1.9" stroke-linecap="round" stroke-linejoin="round" /></svg>
+          </button>}
+        </div> : <div class="seg" role="radiogroup" aria-label={t('Your prayers')}>
           <button role="radio" aria-checked={view === 'all'} class={view === 'all' ? 'on' : ''} onClick={() => go('all')}>{t('Recent')}</button>
           <button role="radio" aria-checked={view === 'fav'} class={view === 'fav' ? 'on' : ''} onClick={() => go('fav')}>★ {t('Favorites')}</button>
           <button role="radio" aria-checked={view === 'topics'} class={view === 'topics' ? 'on' : ''} onClick={() => go('topics')}>{t('Topics')}</button>
         </div>}
-        {all.length >= 4 && (view !== 'topics' || within) && <form class="filter-form" onSubmit={e => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur?.() }}><input enterKeyHint="done" type="search" class="saved-find" placeholder={t('Find by name, verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined); setEdit(undefined) }} /></form>}
+        {within && renaming !== undefined && <form class="pray-edit" onSubmit={e => { e.preventDefault(); renameTopic(within, renaming) }}>
+          <input class="saved-find" value={renaming} maxLength={40} placeholder={t('Rename topic')} aria-label={t('Rename topic')} enterkeyhint="done"
+            ref={el => { if (el && !el.dataset.on) { el.dataset.on = '1'; el.focus(); el.select() } }} onInput={e => setRenaming((e.target as HTMLInputElement).value)} />
+          <div class="pray-confirm">
+            <button type="button" class="pray-btn" onClick={() => setRenaming(undefined)}>{t('Cancel')}</button>
+            <button class="pray-btn primary" disabled={!renaming.trim()}>{t('Save')}</button>
+          </div>
+        </form>}
+        {all.length >= 4 && (view !== 'topics' || within) && renaming === undefined && <form class="filter-form" onSubmit={e => { e.preventDefault(); (document.activeElement as HTMLElement | null)?.blur?.() }}><input enterKeyHint="done" type="search" class="saved-find" placeholder={t('Find by name, verse or date')} value={find} onInput={e => { setFind((e.target as HTMLInputElement).value); setOpen(undefined); setEdit(undefined) }} /></form>}
       </div>}
       {view === 'topics' && !within ? (shelves.length ? <ol>
         {shelves.map(name => <li class="pray-month"><button onClick={() => { setTopic(name); setFind('') }}>
