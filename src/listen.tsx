@@ -452,13 +452,16 @@ function lockButtons(on: boolean) {
  * phone's own voice goes on from the same verse, or the highlight alone. */
 function lost(my: number) {
   if (my !== run || !now) return
+  // One failure can report twice (the player's error and play() refusing):
+  // only the first goes on, or the verse is queued twice.
+  const mine = ++run
   unreachable = true
   hush(); held = undefined; keep = false; lockButtons(false)
   cur = undefined; resumeAt = 0
   if (typeof navigator !== 'undefined' && navigator.onLine === false) listenNote(t('No connection: the phone’s own voice'))
   counted(silentNow() || !synth ? 'silent' : 'voice')
   emit()
-  next(my)
+  next(mine)
 }
 
 /** Play the recording of the chapter from the verse we're at; `flow`: on
@@ -788,7 +791,9 @@ export function followPage(spot: Spot, bible: Bible) {
     return
   }
   const playing = now.playing
-  now = { ...spot, verse: spot.verse || 1, bible, playing }
+  // Only the Bible changed: go on from the same verse in it, not from verse 1.
+  const sameChapter = now.book === spot.book && now.chapter === spot.chapter
+  now = { ...spot, verse: spot.verse || (sameChapter ? now.verse : 1), bible, playing }
   resumeAt = 0; cur = undefined; wordNow = 0; keep = false
   if (playing) begin()
   else { run++; synth?.cancel(); clearWord(); emit() }
@@ -842,7 +847,8 @@ export function ListenPlayer({ floating = false }: { floating?: boolean }) {
       if (box.top < 90 || box.bottom > innerHeight - 170) scrollTo({ top: scrollY + box.top - innerHeight / 3, behavior: 'smooth' })
     }, 120)
     return () => clearTimeout(timer)
-  }, [n?.book, n?.chapter, n?.verse, !!n])
+  // (Again when it plays on: the page redrawn under an open verse bar loses the mark.)
+  }, [n?.version, n?.book, n?.chapter, n?.verse, !!n, n?.playing])
   useEffect(() => () => { document.querySelectorAll('.speaking').forEach(el => el.classList.remove('speaking')); clearWord() }, [])
 
   // iPhones mute web speech in Silent mode, so say so gently the first few

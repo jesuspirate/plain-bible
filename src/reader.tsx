@@ -735,6 +735,8 @@ export function Reader({ route }: { route: Route }) {
       const open = selected.includes(v)
       aloudTap.current = { v, t: at, timer: window.setTimeout(() => {
         aloudTap.current = undefined
+        // Stopped in the meantime (X): the tap doesn't start it again.
+        if (!readingAloud()) return
         // Its bar already open: the tap closes it. The verse being read
         // (playing or paused): its bar opens, for colors, sharing, copy...,
         // and reading waits until it closes. Any other verse: read from there.
