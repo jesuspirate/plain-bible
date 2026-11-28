@@ -41,7 +41,8 @@ export function VersionSwitch() {
     setPeek(undefined)
     if (v === version) return
     rememberVersion(version); rememberVersion(v)
-    const others = parallel.filter(id => id !== v)
+    // Comparing with the one you pick: the two trade places, the comparison stays.
+    const others = parallel.map(id => id === v ? version : id).filter(id => id !== v)
     update({ version: v, parallel: others })
     if (reading) go(readPath(v, route.path[2], +route.path[3], +(route.params.get('v') || 0) || undefined, others), true)
     else go('read/' + v)
@@ -56,13 +57,16 @@ export function VersionSwitch() {
       const n = e.target as Node
       if (box.current?.contains(n) || btn.current?.contains(n)) return
       setPeek(undefined)
+      // Only a finger landing outside needs its click swallowed; the page
+      // scrolling (your verse being put back after a pick) must not eat taps.
+      if (e.type !== 'pointerdown') return
       const stop = (ev: Event) => { ev.stopPropagation(); ev.preventDefault() }
       addEventListener('click', stop, { capture: true, once: true })
       setTimeout(() => removeEventListener('click', stop, { capture: true }), 600)
     }
     const esc = (e: KeyboardEvent) => { if (e.key === 'Escape') setPeek(undefined) }
-    addEventListener('pointerdown', away); addEventListener('keydown', esc); addEventListener('scroll', away as never, { passive: true })
-    return () => { removeEventListener('pointerdown', away); removeEventListener('keydown', esc); removeEventListener('scroll', away as never) }
+    addEventListener('pointerdown', away); addEventListener('keydown', esc); addEventListener('scroll', away as never, { passive: true }); addEventListener('resize', away as never)
+    return () => { removeEventListener('pointerdown', away); removeEventListener('keydown', esc); removeEventListener('scroll', away as never); removeEventListener('resize', away as never) }
   }, [peek])
 
   return (
@@ -72,8 +76,8 @@ export function VersionSwitch() {
         title={before ? t('Switch to {version} · hold for more', { version: before }) : t('Bible versions')}
         onPointerDown={down} onPointerUp={up} onPointerLeave={up} onPointerCancel={up}
         onContextMenu={e => { e.preventDefault(); up(); show() }}
-        onClick={() => { if (hold.current?.fired) return; if (before) choose(before); else if (peek) setPeek(undefined); else show() }}>
-        {version}
+        onClick={() => { const held = hold.current?.fired; hold.current = undefined; if (held) return; if (before) choose(before); else if (peek) setPeek(undefined); else show() }}>
+        <span class="sb-version-id">{version}</span>
       </button>
       {/* Out of the bar: its glass would hold anything fixed inside it. */}
       {peek && createPortal(

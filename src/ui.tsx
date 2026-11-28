@@ -138,7 +138,7 @@ export function LexiconSheet({ num, onClose, onSearch }: { num: string; onClose:
 }
 
 const RECENT_VERSIONS = 'plain-bible:recent-versions'
-export const recentVersions = (): string[] => { try { return JSON.parse(localStorage.getItem(RECENT_VERSIONS) || '[]') } catch { return [] } }
+export const recentVersions = (): string[] => { try { const r = JSON.parse(localStorage.getItem(RECENT_VERSIONS) || '[]'); return Array.isArray(r) ? r.filter(x => typeof x === 'string') : [] } catch { return [] } }
 export function rememberVersion(id: string) {
   try { localStorage.setItem(RECENT_VERSIONS, JSON.stringify([id, ...recentVersions().filter(x => x !== id)].slice(0, 5))) } catch { /* private mode */ }
 }

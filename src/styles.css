@@ -359,6 +359,7 @@ main.with-bar { padding-bottom: 120px; }
   -webkit-user-select: none; user-select: none; -webkit-touch-callout: none; -webkit-tap-highlight-color: transparent;
 }
 .sb-version::before { content: ''; position: absolute; inset: -7px -4px; }
+.sb-version-id { display: block; max-width: 100%; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
 .sb-version:active { transform: scale(.94); }
 @media (hover: hover) { .sb-version:hover { background: color-mix(in srgb, var(--text) 14%, transparent); } }
 .sb-version.on { color: var(--accent); box-shadow: inset 0 0 0 1.5px var(--accent); }

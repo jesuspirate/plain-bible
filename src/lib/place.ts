@@ -159,14 +159,18 @@ export function takePlace(remote: unknown) {
 /** Whether to offer `from` to someone whose own place is `own`: only a later
  *  place, not one already answered, and not the chapter they're already on
  *  (unless it brings a search along). */
-export function worthOffering(from: SyncedPlace | undefined, own: Place | undefined, seen: number) {
+export function worthOffering(from: SyncedPlace | undefined, own: Place | undefined, seen: number, search?: { q?: unknown; base?: unknown }) {
   if (!from || from.t <= (own?.t ?? 0) || from.t <= seen) return false
-  return !!from.s || !own || own.book !== from.book || own.chapter !== from.chapter
+  const sameChapter = !!own && own.book === from.book && own.chapter === from.chapter
+  // The search you already have open here, coming back from a device that
+  // took it from you, is nothing new.
+  const sameSearch = !!from.s && from.s.q === search?.q && from.s.base === search?.base
+  return !sameChapter || (!!from.s && !sameSearch)
 }
 /** Another device's later place to offer here, if any. */
 export function placeOffer(): SyncedPlace | undefined {
   const from = parseSynced(read(FROM))
-  return worthOffering(from, loadPlace(), placeOffer.answered()) ? from : undefined
+  return worthOffering(from, loadPlace(), placeOffer.answered(), read(SEARCH_TRAIL) ?? undefined) ? from : undefined
 }
 /** The time of the last offer answered. */
 placeOffer.answered = () => +read(SEEN) || 0
